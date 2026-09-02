@@ -7,9 +7,9 @@ Script di acquisizione, estrazione e verifica delle fonti reali (AUDIT CHECKPOIN
 3. Confini amministrativi ISTAT 2026 ufficiali (Limiti01012026.zip)
 4. Matrice del pendolarismo ISTAT 2011 reale (matrix_pendo2011_10112014.txt)
 5. Trenord GTFS reale da Open Data Regione Lombardia (trenord_gtfs.zip)
-6. OpenStreetMap fermate bus, percorsi e POI reali estratti via Overpass API
+6. OpenStreetMap fermate bus, percorsi e POI reali estratti dal PBF planet locale ed Overpass API
 7. Trasparenza GTFS Agenzia TPL Como-Lecco-Varese (dichiarazione formale indisponibilità open data)
-8. Calcolo checksum SHA256 e aggiornamento data/manifest.csv
+8. Calcolo checksum SHA256 e generazione data/manifest.csv conforme a COLLABORATION_PROTOCOL.md
 """
 
 import os
@@ -23,7 +23,6 @@ import pandas as pd
 import geopandas as gpd
 import rasterio
 import rasterio.mask
-import networkx as nx
 
 # Bounding box dei 5 comuni core
 BBOX_CORE = {
@@ -42,22 +41,24 @@ def compute_sha256(filepath: str) -> str:
             h.update(chunk)
     return h.hexdigest()
 
-def record_manifest(dataset_id, ente, url, anno, licenza, filepath, note=""):
+def record_manifest(dataset_id, ente, url, anno, licenza, filepath, trasformazioni="Nessuna (fonte primaria grezza)", stato_epistemico="FACT", note=""):
     sha = compute_sha256(filepath) if os.path.exists(filepath) else "FILE_NOT_FOUND"
     size = os.path.getsize(filepath) if os.path.exists(filepath) else 0
     MANIFEST_ROWS.append({
         "dataset_id": dataset_id,
         "ente_fonte": ente,
         "url_ufficiale": url,
-        "anno_riferimento": anno,
         "data_accesso": "2026-09-02",
+        "anno_riferimento": anno,
         "licenza": licenza,
-        "sha256_hash": sha,
         "filepath_locale": filepath.replace("\\", "/"),
+        "sha256_hash": sha,
         "dimensione_bytes": size,
+        "stato_epistemico": stato_epistemico,
+        "trasformazioni": trasformazioni,
         "note_provenance": note
     })
-    print(f"[MANIFEST] {dataset_id}: {filepath} (SHA256: {sha[:12]}..., {size:,} bytes)")
+    print(f"[MANIFEST] {dataset_id}: {filepath} ({stato_epistemico}, SHA256: {sha[:12]}..., {size:,} bytes)")
 
 def step_1_istat_boundaries():
     print("\n--- STEP 1: CONFINI AMMINISTRATIVI ISTAT 2026 UFFICIALI ---")
@@ -95,7 +96,9 @@ def step_1_istat_boundaries():
         "2026",
         "CC BY 3.0 IT",
         geojson_out,
-        "Confini amministrativi ufficiali WGS84 per Olgiate, Calco, Brivio, S.Maria Hoè, La Valletta Brianza"
+        trasformazioni="Filtro per codici PRO_COM_T dei 5 comuni core ed esportazione GeoJSON/Shapefile WGS84 EPSG:4326",
+        stato_epistemico="FACT",
+        note="Confini amministrativi ufficiali WGS84 per Olgiate, Calco, Brivio, S.Maria Hoè, La Valletta Brianza"
     )
     return core_gdf
 
@@ -129,7 +132,9 @@ def step_2_worldpop_raster(gdf_boundaries):
         "2020",
         "CC BY 4.0",
         raw_src,
-        "Raster nazionale WorldPop 100m unconstrained UN-adjusted originale (160 MB)"
+        trasformazioni="Nessuna (GeoTIFF nazionale 100m unconstrained UN-adjusted originale)",
+        stato_epistemico="FACT",
+        note="Raster nazionale WorldPop 100m originale (160 MB)"
     )
     record_manifest(
         "worldpop_core_unadj_clipped",
@@ -138,7 +143,9 @@ def step_2_worldpop_raster(gdf_boundaries):
         "2020",
         "CC BY 4.0",
         clipped_out,
-        "Ritaglio esatto sui confini amministrativi dei 5 comuni core senza alcuna ponderazione sintetica"
+        trasformazioni="Ritaglio spaziale deterministico rasterio.mask sui poligoni ISTAT 2026 dei 5 comuni core",
+        stato_epistemico="DERIVED",
+        note="Ritaglio esatto sui confini amministrativi dei 5 comuni core senza alcuna ponderazione o modifica artificiale dei valori di cella"
     )
 
 def step_3_copernicus_dem(gdf_boundaries):
@@ -179,7 +186,9 @@ def step_3_copernicus_dem(gdf_boundaries):
         "2021",
         "Copernicus Open Access / Public Domain",
         dem_tile_path,
-        "Tile DEM COG GLO-30 a 30m di risoluzione latitudine 45N-46N, longitudine 9E-10E (44 MB)"
+        trasformazioni="Nessuna (Tile DEM COG GLO-30 originale a 30m di risoluzione)",
+        stato_epistemico="FACT",
+        note="Tile DEM COG GLO-30 a 30m di risoluzione latitudine 45N-46N, longitudine 9E-10E (44 MB)"
     )
     record_manifest(
         "copernicus_dem_core_clipped",
@@ -188,7 +197,9 @@ def step_3_copernicus_dem(gdf_boundaries):
         "2021",
         "Copernicus Open Access / Public Domain",
         dem_clipped_out,
-        "Elevazione reale 30m campionata sui 5 comuni core per penalizzazione pendenze"
+        trasformazioni="Ritaglio spaziale deterministico rasterio.mask sui poligoni ISTAT 2026",
+        stato_epistemico="DERIVED",
+        note="Elevazione reale 30m campionata sui 5 comuni core per penalizzazione pendenze e profilo altimetrico percorsi"
     )
 
 def step_4_istat_commuting_matrix():
@@ -251,7 +262,9 @@ def step_4_istat_commuting_matrix():
         "2011",
         "IODL 2.0",
         out_csv,
-        "Flussi di spostamento sistematici lavoro e studio reali estratti dal file matrix_pendo2011_10112014.txt"
+        trasformazioni="Estrazione deterministica dei record di tipo S con origine o destinazione nei 5 comuni core dal file matrix_pendo2011_10112014.txt",
+        stato_epistemico="FACT",
+        note="Flussi di spostamento sistematici lavoro e studio reali estratti dal censimento ISTAT"
     )
 
 def step_5_trenord_gtfs():
@@ -268,7 +281,6 @@ def step_5_trenord_gtfs():
             for chunk in r.iter_content(chunk_size=65536):
                 f.write(chunk)
                 
-    # Estrai GTFS
     with zipfile.ZipFile(zip_path) as z:
         z.extractall(out_dir)
         
@@ -280,7 +292,9 @@ def step_5_trenord_gtfs():
         "2026",
         "CC BY 4.0",
         zip_path,
-        "Feed GTFS ufficiale Trenord con orari e fermate SFR S8 Milano-Lecco (stazione Olgiate S01514)"
+        trasformazioni="Download feed GTFS ufficiale da portale Socrata Open Data Regione Lombardia ed estrazione tabelle",
+        stato_epistemico="FACT",
+        note="Feed GTFS ufficiale Trenord con orari e fermate SFR S8 Milano-Lecco (stazione Olgiate S01514)"
     )
 
 def step_6_osm_real_data():
@@ -288,50 +302,11 @@ def step_6_osm_real_data():
     out_dir = "data/raw/osm"
     os.makedirs(out_dir, exist_ok=True)
     
-    headers = {"User-Agent": "AntigravityTPLResearch/1.0 (contact: simoneghezzi24@gmail.com)"}
-    overpass_url = "https://overpass-api.de/api/interpreter"
-    
-    # 1. Fermate bus reali
-    print("Scaricamento fermate bus reali da Overpass...")
-    q_stops = f"""
-    [out:json][timeout:30];
-    (
-      node["highway"="bus_stop"]({BBOX_CORE['south']},{BBOX_CORE['west']},{BBOX_CORE['north']},{BBOX_CORE['east']});
-      node["public_transport"="platform"]({BBOX_CORE['south']},{BBOX_CORE['west']},{BBOX_CORE['north']},{BBOX_CORE['east']});
-    );
-    out body;
-    """
-    r_stops = requests.post(overpass_url, data={"data": q_stops}, headers=headers, timeout=40)
-    stops_file = os.path.join(out_dir, "osm_bus_stops_core.json")
-    with open(stops_file, "w", encoding="utf-8") as f:
-        f.write(r_stops.text)
-    n_stops = len(r_stops.json().get("elements", []))
-    print(f"Salvate {n_stops} fermate bus reali OSM in {stops_file}.")
-    
-    # 2. POI reali
-    print("Scaricamento POI reali (scuole, municipi, sanità, commercio)...")
-    q_pois = f"""
-    [out:json][timeout:30];
-    (
-      node["amenity"]({BBOX_CORE['south']},{BBOX_CORE['west']},{BBOX_CORE['north']},{BBOX_CORE['east']});
-      way["amenity"]({BBOX_CORE['south']},{BBOX_CORE['west']},{BBOX_CORE['north']},{BBOX_CORE['east']});
-      node["shop"]({BBOX_CORE['south']},{BBOX_CORE['west']},{BBOX_CORE['north']},{BBOX_CORE['east']});
-      node["leisure"]({BBOX_CORE['south']},{BBOX_CORE['west']},{BBOX_CORE['north']},{BBOX_CORE['east']});
-    );
-    out center;
-    """
-    r_pois = requests.post(overpass_url, data={"data": q_pois}, headers=headers, timeout=40)
-    pois_file = os.path.join(out_dir, "osm_pois_core.json")
-    with open(pois_file, "w", encoding="utf-8") as f:
-        f.write(r_pois.text)
-    n_pois = len(r_pois.json().get("elements", []))
-    print(f"Salvati {n_pois} POI reali OSM in {pois_file}.")
-    
-    # Registra i file OSM reali estratti
     highways_file = os.path.join(out_dir, "osm_highways_core.geojson")
     points_file = os.path.join(out_dir, "osm_points_core.geojson")
     stops_file = os.path.join(out_dir, "osm_bus_stops_core.json")
     pois_file = os.path.join(out_dir, "osm_pois_core.json")
+    pbf_source = r"D:\Utente\Downloads\planet_8.872,45.469_9.833,45.883.osm.pbf"
     
     record_manifest(
         "osm_planet_pbf_extract",
@@ -339,8 +314,10 @@ def step_6_osm_real_data():
         "https://download.geofabrik.de / OpenStreetMap",
         "2026",
         "ODbL 1.0",
-        r"D:\Utente\Downloads\planet_8.872,45.469_9.833,45.883.osm.pbf",
-        "Estratto planet PBF reale centrato sull'area di Lecco, Como e Brianza (103 MB)"
+        pbf_source,
+        trasformazioni="Nessuna (estratto planet PBF originale)",
+        stato_epistemico="FACT",
+        note="Estratto planet PBF reale centrato sull'area di Lecco, Como e Brianza (103 MB)"
     )
     record_manifest(
         "osm_highways_core_geojson",
@@ -349,7 +326,9 @@ def step_6_osm_real_data():
         "2026",
         "ODbL 1.0",
         highways_file,
-        "4.477 segmenti stradali e pedonali reali nel core a 5 comuni estratti dal PBF ufficiale"
+        trasformazioni="Estrazione deterministica pyogrio su layer lines per bounding box [9.355, 45.710, 9.460, 45.760]",
+        stato_epistemico="DERIVED",
+        note="4.477 segmenti stradali e pedonali reali nel core a 5 comuni estratti dal PBF ufficiale"
     )
     record_manifest(
         "osm_points_core_geojson",
@@ -358,7 +337,9 @@ def step_6_osm_real_data():
         "2026",
         "ODbL 1.0",
         points_file,
-        "1.762 punti reali (fermate bus, servizi civici, commercio) estratti dal PBF ufficiale"
+        trasformazioni="Estrazione deterministica pyogrio su layer points per bounding box [9.355, 45.710, 9.460, 45.760]",
+        stato_epistemico="DERIVED",
+        note="1.762 punti reali (fermate bus, servizi civici, commercio) estratti dal PBF ufficiale"
     )
     if os.path.exists(stops_file):
         record_manifest(
@@ -368,7 +349,9 @@ def step_6_osm_real_data():
             "2026",
             "ODbL 1.0",
             stops_file,
-            "Fermate bus e piazzole TPL georeferenziate nel bacino dei 5 comuni"
+            trasformazioni="Interrogazione Overpass su nodi highway=bus_stop e public_transport=platform nel core",
+            stato_epistemico="FACT",
+            note="Fermate bus e piazzole TPL georeferenziate nel bacino dei 5 comuni"
         )
     if os.path.exists(pois_file):
         record_manifest(
@@ -378,24 +361,15 @@ def step_6_osm_real_data():
             "2026",
             "ODbL 1.0",
             pois_file,
-            "Poli di attrazione e generatori di domanda (585 POI) nel bacino dei 5 comuni"
+            trasformazioni="Interrogazione Overpass su tag amenity, shop, leisure nel core",
+            stato_epistemico="FACT",
+            note="Poli di attrazione e generatori di domanda (585 POI) nel bacino dei 5 comuni"
         )
 
 def step_7_archive_synthetic_legacy():
     print("\n--- STEP 7: SEGREGAZIONE E MARCATURA DEI FILE SINTETICI PRECEDENTI ---")
     legacy_dir = "data/legacy_synthetic"
     os.makedirs(legacy_dir, exist_ok=True)
-    
-    # File sintetici da marcare e archiviare
-    to_archive = [
-        "data/processed/population_grid_calibrated.csv",
-        "data/processed/walk_isochrones_cells.csv",
-        "outputs/current_service_baseline.csv",
-        "outputs/od_matrix_core.csv",
-        "outputs/route_variants.csv",
-        "outputs/pareto_frontier.csv",
-        "outputs/scenario_comparison.csv"
-    ]
     
     readme_legacy = os.path.join(legacy_dir, "README_SYNTHETIC_ARCHIVE.md")
     with open(readme_legacy, "w", encoding="utf-8") as f:
@@ -441,7 +415,9 @@ def main():
         "2025",
         "IODL 2.0",
         "data/raw/istat/POSAS_2025_it_097_Lecco.csv",
-        "Microdati ufficiali della popolazione residente per età e sesso al 1° gennaio 2025"
+        trasformazioni="Nessuna (microdati comunali ufficiali per età e genere al 01/01/2025)",
+        stato_epistemico="FACT",
+        note="Microdati ufficiali della popolazione residente per età e sesso al 1° gennaio 2025"
     )
     record_manifest(
         "sfr_trenord_serie_storica_2015_2025",
@@ -450,7 +426,9 @@ def main():
         "2025",
         "Dati Ufficiali Esercizio",
         "data/raw/sfr/stazioni_s8_indice_2015_2025.csv",
-        "Serie storica passeggeri saliti/giorno feriale SFR Lombardia (Olgiate FS: 1.420 nel 2019 -> 2.400 nel 2025)"
+        trasformazioni="Aggregazione conteggi ufficiali saliti giorno feriale per stazione SFR S8",
+        stato_epistemico="FACT",
+        note="Serie storica passeggeri saliti/giorno feriale SFR Lombardia (Olgiate FS: 1.420 nel 2019 -> 2.400 nel 2025)"
     )
     record_manifest(
         "pdb_agenzia_tpl_como_lecco_varese_2025",
@@ -459,7 +437,9 @@ def main():
         "2025",
         "Atto Pubblico",
         "data/external/PdB_Aggiornamento_2025_Relazione_generale.pdf",
-        "Relazione generale e schede di linea (D184: 52.560 km/anno, D185: 58.859 km/anno; Circolari Merate D201+D202: 90.372 km/anno)"
+        trasformazioni="Nessuna (documento di pianificazione ufficiale di bacino)",
+        stato_epistemico="FACT",
+        note="Relazione generale e schede di linea (D184: 52.560 km/anno, D185: 58.859 km/anno; Circolari Merate D201+D202: 90.372 km/anno)"
     )
     record_manifest(
         "tpl_agenzia_gtfs_open_data_status",
@@ -468,14 +448,16 @@ def main():
         "2026",
         "Dichiarazione Trasparenza",
         "docs/fonti.md",
-        "DATA NOT PUBLICLY AVAILABLE AS OPEN DATA GTFS FEED. L'Agenzia non pubblica un feed GTFS aperto; i dati FACT derivano da orari ufficiali Arriva/LineeLecco e fermate OSM."
+        trasformazioni="Dichiarazione metodologica trasparente",
+        stato_epistemico="FACT",
+        note="DATA NOT PUBLICLY AVAILABLE AS OPEN DATA GTFS FEED. L'Agenzia non pubblica un feed GTFS aperto; i dati FACT derivano da orari ufficiali Arriva/LineeLecco e fermate OSM."
     )
     
-    # Salva manifest completo
+    # Salva manifest completo conforme al COLLABORATION_PROTOCOL
     manifest_df = pd.DataFrame(MANIFEST_ROWS)
     out_manifest = "data/manifest.csv"
     manifest_df.to_csv(out_manifest, index=False)
-    print(f"\n[OK] Manifest ufficiale delle fonti reali aggiornato in {out_manifest} ({len(manifest_df)} fonti tracciate con SHA256).")
+    print(f"\n[OK] Manifest ufficiale delle fonti reali aggiornato in {out_manifest} ({len(manifest_df)} fonti tracciate con SHA256 ed epistemologia).")
 
 if __name__ == "__main__":
     main()
