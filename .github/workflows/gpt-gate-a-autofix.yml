@@ -4,7 +4,7 @@ on:
   push:
     branches: [antigravity-real-data]
     paths:
-      - tools/gpt_gate_a_autofix.py
+      - tools/gpt_gate_a_autofix_2.py
 
 permissions:
   contents: write
@@ -25,10 +25,10 @@ jobs:
 
       - name: Apply audited Gate A patch
         run: |
-          python tools/gpt_gate_a_autofix.py
+          python tools/gpt_gate_a_autofix_2.py
           python -m py_compile scripts/audit_01_fetch_real_inputs.py
           git diff --check
-          git diff -- scripts/audit_01_fetch_real_inputs.py tests/test_audit_provenance.py
+          git diff -- scripts/audit_01_fetch_real_inputs.py
 
       - name: Commit patch
         run: |
@@ -38,6 +38,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/audit_01_fetch_real_inputs.py tests/test_audit_provenance.py
-          git commit -m "fix(gate-a): normalize SFR schema and refresh Overpass fallbacks"
+          git add scripts/audit_01_fetch_real_inputs.py
+          git commit -m "fix(gate-a): clarify automated POSAS provenance"
           git push origin HEAD:antigravity-real-data
