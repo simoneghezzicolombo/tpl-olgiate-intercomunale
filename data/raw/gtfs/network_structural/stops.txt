@@ -1,0 +1,25 @@
+stop_id,stop_name,stop_lat,stop_lon,zone_id,location_type
+S_OLGIATE_FS,Olgiate Molgora FS (Piazza Stazione),45.73145,9.40321,Olgiate Molgora,0
+S_OLGIATE_CENTRO,Olgiate Molgora - Municipio / Via Sommi Picenardi,45.7338,9.4011,Olgiate Molgora,0
+S_OLGIATE_SCARPONE,Olgiate Molgora - Bivio Scarpone (SP342),45.7368,9.3889,Olgiate Molgora,0
+S_MONDONICO,Mondonico - Borgo / Villa Maria,45.7385,9.3972,Olgiate Molgora,0
+S_MONTICELLO_OLG,Monticello di Olgiate - Via Belvedere,45.7421,9.3923,Olgiate Molgora,0
+S_SAN_ZENO,San Zeno - Piazza San Zeno,45.7248,9.3821,Olgiate Molgora,0
+S_ROVAGNATE,Rovagnate - Centro / Via Brianza,45.7389,9.3695,La Valletta Brianza,0
+S_PEREGO,Perego - Municipio / Via Roma,45.7432,9.3642,La Valletta Brianza,0
+S_VALLETTA_SP342,La Valletta - SP342 dir / Bivio S.Anna,45.7471,9.3618,La Valletta Brianza,0
+S_SMARIA_CENTRO,Santa Maria Hoè - Piazza Padre Fausto / Centro,45.7456,9.3734,Santa Maria Hoè,0
+S_SMARIA_TREB,Santa Maria Hoè - Trebbia,45.7492,9.3771,Santa Maria Hoè,0
+S_GIOVENZANA,Colle Brianza - Giovenzana,45.7621,9.3654,Colle Brianza,0
+S_RAVELLINO,Ravellino - Capolinea (Colle Brianza),45.7689,9.3712,Colle Brianza,0
+S_CALCO_NAZ,Calco - Via Nazionale (SP342) / Municipio,45.7262,9.4124,Calco,0
+S_CALCO_CHIESA,Calco - Chiesa Parrocchiale / Via Volta,45.7245,9.4148,Calco,0
+S_CALCO_SUP,Calco Superiore - Borgo Alto,45.7289,9.4192,Calco,0
+S_ARLATE,Arlate - San Colombano / Via San Gottardo,45.7164,9.4321,Calco,0
+S_BEVERATE,Beverate - Centro / Scuole Elementari,45.7351,9.4245,Brivio,0
+S_BRIVIO_CASTELLO,Brivio - Castello / Piazza Frigerio,45.7441,9.4442,Brivio,0
+S_BRIVIO_PORTO,Brivio - Lungo Adda / Alzaia,45.7428,9.4455,Brivio,0
+S_BRIVIO_PONTE,Brivio - Testata Ponte Adda (SP342),45.7462,9.4485,Brivio,0
+S_CISANO_SOSTA,Cisano Bergamasco - Sosta / Piazza De Gasperi,45.7448,9.4682,Cisano Bergamasco,0
+S_CAPRINO_CENTRO,Caprino Bergamasco - Municipio / Via Roma,45.7495,9.4821,Caprino Bergamasco,0
+S_CELANA,Caprino Bergamasco - Collegio Celana,45.7538,9.4935,Caprino Bergamasco,0

@@ -1,0 +1,21 @@
+linea,direzione,corsa_num,partenza,arrivo,buco_corsa_precedente_min,note
+D184,Da Olgiate FS,1,06:42,07:05,0,Prima corsa feriale
+D184,Da Olgiate FS,2,13:37,14:00,415,Buco di 6h 55min tra corsa 1 e 2!
+D184,Da Olgiate FS,3,14:37,15:00,60,Punta pomeridiana
+D184,Da Olgiate FS,4,17:37,18:00,180,Buco di 3 ore
+D184,Da Olgiate FS,5,18:37,19:00,60,Punta serale
+D184,Da Olgiate FS,6,19:37,20:00,60,Ultima corsa
+D184,Verso Olgiate FS,1,07:20,07:44,0,Punta scolastica/pendolare
+D184,Verso Olgiate FS,2,14:24,14:48,424,Buco di 7h 04min!
+D185,Da Olgiate FS,1,07:15,07:40,0,Prima corsa feriale
+D185,Da Olgiate FS,2,09:05,09:30,110,Morbida mattutina
+D185,Da Olgiate FS,3,13:35,14:00,270,Buco di 4h 30min!
+D185,Da Olgiate FS,4,16:35,17:00,180,Buco di 3h 00min
+D185,Da Olgiate FS,5,18:05,18:30,90,Punta serale
+D185,Da Olgiate FS,6,19:35,20:00,90,Ultima corsa
+D185,Verso Olgiate FS,1,07:15,07:35,0,Punta mattutina
+D185,Verso Olgiate FS,2,08:50,09:10,95,Morbida
+D185,Verso Olgiate FS,3,13:25,13:45,275,Buco di 4h 35min!
+D185,Verso Olgiate FS,4,16:25,16:45,180,Buco di 3h 00min
+D185,Verso Olgiate FS,5,17:55,18:15,90,Punta serale
+D185,Verso Olgiate FS,6,19:25,19:45,90,Ultima corsa

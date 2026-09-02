@@ -1,0 +1,3 @@
+agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone
+ARRIVA_LC,Arriva Italia - Bacino Lecco,https://bergamo.arriva.it,Europe/Rome,it,035289000
+LINEE_LC,LineeLecco,https://lineelecco.it,Europe/Rome,it,0341359911

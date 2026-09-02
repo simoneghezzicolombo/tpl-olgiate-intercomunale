@@ -1,0 +1,5 @@
+service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
+FERIALE_LUN_VEN,1,1,1,1,1,0,0,20260101,20261231
+FERIALE_LUN_SAB,1,1,1,1,1,1,0,20260101,20261231
+SCOLASTICO,1,1,1,1,1,1,0,20260912,20260608
+FESTIVO,0,0,0,0,0,0,1,20260101,20261231

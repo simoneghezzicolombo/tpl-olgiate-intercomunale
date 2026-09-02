@@ -1,0 +1,20 @@
+{
+  "giorni_esercizio_annui": 303,
+  "coppie_giorno_attuali": 6,
+  "coppie_giorno_linea_8": 13,
+  "incremento_corse_core_pct": 116.67,
+  "cicli_anno_13corse": 3939,
+  "budget_totale_pdb_km": 111419.0,
+  "budget_morbida_pdb_km": 77010.0,
+  "budget_punta_pdb_km": 34408.0,
+  "soglia_verde_km_ciclo": 19.55,
+  "soglia_gialla_max_km_ciclo": 28.29,
+  "lunghezza_scenario0_km": 22.4,
+  "fascia_scenario0": "GIALLO",
+  "confronto_circolari_merate_km": 90372.4,
+  "delta_vs_merate_pct": 23.29,
+  "stazione_olgiate_saliti_2019": 1420,
+  "stazione_olgiate_saliti_2025": 2400,
+  "crescita_ferroviaria_pct": 69.01,
+  "popolazione_core_5comuni": 22914
+}

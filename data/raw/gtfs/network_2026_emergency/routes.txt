@@ -1,0 +1,5 @@
+route_id,agency_id,route_short_name,route_long_name,route_type,route_color,route_text_color
+D184,ARRIVA_LC,D184,Olgiate Molgora FS - Perego - Santa Maria Hoè - Ravellino,3,0284c7,ffffff
+D185,ARRIVA_LC,D185,Olgiate Molgora FS - Calco - Brivio - Cisano - Caprino - Celana,3,10b981,ffffff
+D150,ARRIVA_LC,D150,Lecco - Olginate - Calco - Merate,3,f59e0b,ffffff
+D170,LINEE_LC,D170,Merate - Olgiate Molgora FS - Monticello Brianza,3,8b5cf6,ffffff

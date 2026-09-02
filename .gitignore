@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Large binary external data (documented in data/manifest.csv with SHA256 and URL)
+data/external/*.pdf
+data/external/*.zip
+data/raw/dem/*.tif
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# OS
+.DS_Store
+Thumbs.db
+*.bak

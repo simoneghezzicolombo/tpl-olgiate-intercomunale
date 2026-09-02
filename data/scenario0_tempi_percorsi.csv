@@ -1,0 +1,10 @@
+ramo,tratta,tempo_min,km_stimati,tipo_percorso,note
+Ovest,Olgiate FS -> Rovagnate -> Perego -> S.Maria Hoè centro,13,5.2,Andata,Percorso attuale D184 core
+Ovest,S.Maria Hoè centro -> Perego -> Rovagnate -> Olgiate FS,12,5.2,Ritorno,Percorso attuale D184 core
+Ovest Ciclo,Anello/Spola Ovest Completo,25,10.4,Ciclo Ovest,25 minuti ciclo
+Est,Olgiate FS -> Calco -> Beverate -> Brivio centro,15,6.0,Andata,Percorso attuale D185 core
+Est,Brivio centro -> Beverate -> Calco -> Olgiate FS,15,6.0,Ritorno,Percorso attuale D185 core
+Est Ciclo,Anello/Spola Est Completo,30,12.0,Ciclo Est,30 minuti ciclo
+Otto Completo,Ciclo completo Ovest (25m) + Est (30m),55,22.4,Ciclo Base 8,Margine 5 min su ciclo orario di 60 min
+Coda Ravellino (Ovest),S.Maria Hoè -> Ravellino (A/R),19,9.8,Coda Rurale D184,"Porta ciclo a 74 min, incompatibile con 1 bus orario"
+Coda Caprino (Est),Brivio -> Caprino/Celana (A/R),20,10.2,Coda Rurale D185,Incompatibile con ciclo base orario

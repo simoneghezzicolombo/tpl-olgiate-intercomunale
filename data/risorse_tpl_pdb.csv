@@ -1,0 +1,7 @@
+linea,ambito_territoriale,km_punta_anno,km_morbida_anno,km_totali_anno,coppie_giorno_pdb,cadenzamento_morbida_min,lunghezza_media_dir_km,nodo_interscambio
+D184,Ovest (Olgiate - Rovagnate - S.Maria - Ravellino),15264.0,37296.0,52560.0,6,120,10.26,Olgiate Molgora FS (.30)
+D185,Est (Olgiate - Calco - Beverate - Brivio - Caprino/Celana),19144.0,39714.0,58859.0,6,120,10.92,Olgiate Molgora FS (.30)
+D184+D185,Totale Bacino Olgiate (risorse attuali),34408.0,77010.0,111419.0,12,120,10.59,Olgiate Molgora FS (.30)
+D201,Circolare Merate (Ramo Ovest),,,34946.2,,,,Cernusco-Merate FS / Ospedale Merate
+D202,Circolare Merate (Ramo Est),,,55426.2,,,,Cernusco-Merate FS / Ospedale Merate
+D201+D202,Circolari Merate Totale,,,90372.4,,,,Rete bidirezionale Merate

@@ -1,0 +1,9 @@
+frazione_localita,ramo,comune,status_baseline,popolazione_stimata_worldpop,delta_tempo_min,rendimento_pop_su_minuto,fattibilita_ciclo_60min,tipologia_tracciato,esito_valutazione
+Perego,Ovest,La Valletta Brianza,Gia sul corridoio,1850,0.0,Infinito (0 min),SI,Asse centrale D184,CONFERMATO D'UFFICIO
+Beverate,Est,Brivio,Gia sul corridoio,1600,0.0,Infinito (0 min),SI,Asse centrale D185,CONFERMATO D'UFFICIO
+Mondonico / Monticello,Ovest,Olgiate Molgora,Esterno (Ovest),920,2.5,368 pax/min,SI (in anello),Chiusura anello Ovest via Mondonico,VARIANTE RACCOMANDATA OVEST
+Arlate,Est,Calco,Esterno (Est),1150,3.5,328 pax/min,SI (in anello),Chiusura anello Est via Arlate/Brivio,VARIANTE RACCOMANDATA EST
+Calco Superiore,Est,Calco,Esterno collinare,580,4.5,129 pax/min,AL LIMITE (+4.5m rischia di sforare 30m),Deviazione colle Calco Superiore,SUBORDINATA A TEST ROUTING
+San Zeno,Ovest,Olgiate Molgora,Esterno isolato,710,7.5,95 pax/min,"NO (ciclo Ovest sale a 32-33m, totale >60m)",Deviazione a spola,BOCCIATA DA LINEA 8 FISSA (servizio a chiamata)
+Ravellino,Ovest (Coda),Colle Brianza,Capolinea D184,520,19.0,27 pax/min,NO (ciclo totale sale a 74m),Prolungamento rurale esterno,FUORI DAL CICLO CORE (corse prolungate/scolastiche)
+Caprino / Celana,Est (Coda),Caprino Bergamasco,Capolinea D185,1400,20.0,70 pax/min,NO (ciclo totale sale a 75m),Prolungamento extra-provinciale,FUORI DAL CICLO CORE (navetta / prolungamento dedicato)
