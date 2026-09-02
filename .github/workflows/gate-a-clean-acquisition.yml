@@ -36,6 +36,9 @@ jobs:
             tests/test_audit_provenance.py::test_posas_rebuild_has_no_local_dependency \
             tests/test_audit_provenance.py::test_sfr_rebuild_uses_both_official_datasets
 
+      - name: Run full offline Gate A suite
+        run: python -m pytest -q -m "not network" tests/test_audit_provenance.py
+
       - name: Run real clean-acquisition tests
         run: |
           python -m pytest -v -m network \
