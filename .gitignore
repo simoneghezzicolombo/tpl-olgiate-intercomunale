@@ -22,6 +22,7 @@ cache/
 .agent_bridge_state.json
 .agent_bridge_state.json.tmp
 .agent_bridge.lock
+.agent_bridge_logs/
 
 # Environments
 .env
