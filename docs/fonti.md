@@ -1,8 +1,8 @@
 # Repertorio delle fonti e provenance — Gate A
 
 Questo documento descrive le fonti attive del progetto `tpl-olgiate-intercomunale`.
-Lo stato **Gate A PASS** può essere assegnato solo dopo l'esecuzione dei test locali e dei test
-di clean acquisition. Il documento non sostituisce `data/manifest.csv`, che resta il registro
+**Gate A è PASS** sulla base della clean acquisition indipendente registrata nel run GitHub Actions
+`33695160621`. Il documento non sostituisce `data/manifest.csv`, che resta il registro
 machine-readable di URL, checksum, dimensioni, stato epistemico e trasformazioni.
 
 ## Regole epistemiche
@@ -72,7 +72,7 @@ La licenza formale non è dichiarata nel materiale acquisito, quindi il manifest
 
 ## 7. OpenStreetMap
 
-- Provider operativo: Overpass API con endpoint primario Kumi e fallback pubblici.
+- Provider operativo: Overpass API con endpoint primario `overpass.private.coffee` e fallback pubblici `overpass-api.de` e `maps.mail.ru`.
 - Funzione riproducibile: `fetch_osm_xml()`.
 - Bounding box core: sud 45.710, ovest 9.355, nord 45.760, est 9.460.
 - Snapshot raw corrente: `data/raw/osm/osm_core_bbox.osm`, `FACT`.
@@ -116,12 +116,16 @@ Endpoint CSV usati dalla pipeline:
 Pagina istituzionale di raccordo:
 `https://dati.lombardia.it/stories/s/SFR-dati-di-frequentazione/52uy-dgwp/`
 
-La funzione `fetch_sfr_from_socrata()` scarica entrambi, seleziona campagne di novembre feriale,
-armonizza i nomi stazione e `Saliti24H`, aggrega per anno e calcola `Indice_2019_100`.
+La funzione `fetch_sfr_from_socrata()` scarica entrambi. Per il dataset 2015-2023 usa le campagne
+di novembre, che la documentazione regionale descrive già come media del giorno feriale; per
+2024-2025 filtra esplicitamente `TipoGiorno = Feriale`. Poi armonizza i nomi stazione e
+`Saliti24H`, aggrega per anno e calcola `Indice_2019_100`.
 L'output `data/raw/sfr/stazioni_s8_indice_2015_2025.csv` è `DERIVED`.
 
-Il cambio di sorgente/metodologia dal 2024 resta esplicito: non va nascosto quando si interpretano
-variazioni nella serie temporale.
+Il cambio di sorgente e metodologia resta esplicito. Regione Lombardia segnala inoltre che dal 2023
+la misurazione passa ai contatori automatici e i livelli non sono necessariamente confrontabili in
+modo diretto con le precedenti rilevazioni manuali. Le variazioni 2019-2025 non vanno quindi lette
+come pura crescita della domanda senza questa cautela metodologica.
 
 ## 10. Programma di Bacino Como-Lecco-Varese rev. 7.2
 
@@ -155,4 +159,6 @@ Comando clean acquisition reale:
 
 `python -m pytest tests/test_audit_provenance.py -m network -v`
 
-Gate B/C/D/E/F restano bloccati finché Gate A non riceve un PASS esterno.
+### Esito
+
+**PASS.** Run GitHub Actions `33695160621`, job `100462353597`: pipeline completa ricostruita da clone pulito, 16/16 test offline superati e 3/3 test di acquisizione reale via rete superati senza skip. Gate B è sbloccato; Gate C/D/E/F restano soggetti ai rispettivi checkpoint.

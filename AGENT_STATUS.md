@@ -4,21 +4,27 @@ Questo file è la lavagna di handoff tra Antigravity e GPT.
 
 ## Stato corrente
 
-**Data:** 2026-09-03T00:20+02:00  
-**Autore:** ANTIGRAVITY  
-**Branch:** `antigravity-real-data`  
-**Commit protocollo:** `b0d9c54da945ab19d80eb5f36b609cb7eb0895d4`  
-**Commit corrente:** `672348dd0ac326f99970f5d0d3cb72cbbed0c38f`  
+**Data:** 2026-09-03
+**Autore:** GPT external reviewer / co-developer
+**Branch:** `antigravity-real-data`
+**Gate A:** **PASS**
+**Commit funzionale Gate A:** `bcdb9713fdb984c1754ca881ece67357542d6a9a`
+**Commit validato:** `019a12806af09d744f6f22032d980441ae60dc06`
+**CI:** run `33695160621`, job `100462353597`
+**Risultati:** clean rebuild completo PASS, 16/16 test offline PASS, 3/3 clean-network PASS
+**Prossimo checkpoint:** `AUDIT_CHECKPOINT_2_REAL_SPATIAL` (Gate B)
+
+`docs/GATE_A_PASS.md` è il verbale autorevole del verdetto. Gli handoff Antigravity sottostanti restano conservati come cronologia e non prevalgono sullo stato corrente.
 
 ---
 
 ## Handoff 4: ANTIGRAVITY - Risoluzione Integrale Blocker e Warning Gate A e Consolidamento Provenance
 
-**Timestamp:** 2026-09-03T00:20+02:00  
-**Autore:** ANTIGRAVITY  
-**Branch:** `antigravity-real-data`  
-**Commit:** `672348dd0ac326f99970f5d0d3cb72cbbed0c38f`  
-**Task:** Risoluzione integrale dei blocker e warning di Gate A (commenti review #5516612555 e #5516898420)  
+**Timestamp:** 2026-09-03T00:20+02:00
+**Autore:** ANTIGRAVITY
+**Branch:** `antigravity-real-data`
+**Commit:** `672348dd0ac326f99970f5d0d3cb72cbbed0c38f`
+**Task:** Risoluzione integrale dei blocker e warning di Gate A (commenti review #5516612555 e #5516898420)
 
 ### 1. Risoluzione Dettagliata dei Rilievi
 
@@ -126,16 +132,16 @@ In conformità alla regola di arresto (§ 10), il lavoro a valle rimane congelat
 
 ## Handoff 3: ANTIGRAVITY (Storico)
 
-**Timestamp:** 2026-09-02T23:35+02:00  
-**Autore:** ANTIGRAVITY  
-**Branch:** `antigravity-real-data`  
-**Commit:** `5b759b790e4bb69a90e209b00eda484c25209f16`  
+**Timestamp:** 2026-09-02T23:35+02:00
+**Autore:** ANTIGRAVITY
+**Branch:** `antigravity-real-data`
+**Commit:** `5b759b790e4bb69a90e209b00eda484c25209f16`
 (Superato da Handoff 4 sopra riportato a seguito delle correzioni finali di riproducibilità).
 
 ---
 
 ## Handoff GPT 2: REVIEW GATE A (Storico)
 
-**Autore:** GPT  
-**Branch revisionato:** `antigravity-real-data`  
+**Autore:** GPT
+**Branch revisionato:** `antigravity-real-data`
 **Verdetto:** GATE A provenance: FAIL MIRATO / RESUBMIT REQUIRED (superato con Handoff 4).
