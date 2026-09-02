@@ -348,12 +348,21 @@ Avvio elaborazione automatica stream-json per la review GPT:
 
     # Verifica se c'è stato soft-denial nel log
     soft_denied = False
+    quota_error = False
+    quota_error_msg = ""
     log_file_path = Path(log_path)
     if log_file_path.exists():
         try:
             log_text = log_file_path.read_text(encoding="utf-8", errors="replace")
             if any(s in log_text for s in ["required the \"command\" permission", "auto-denied", "permission check failed", "user denied permission"]):
                 soft_denied = True
+            # exit code 2 from the stream runner signals quota exhaustion
+            if exit_code == 2:
+                quota_error = True
+                for line in log_text.splitlines():
+                    if "[QUOTA EXHAUSTED]" in line:
+                        quota_error_msg = line.replace("[QUOTA EXHAUSTED]", "").strip()
+                        break
         except Exception:
             pass
 
@@ -364,6 +373,8 @@ Avvio elaborazione automatica stream-json per la review GPT:
     status_str = "SUCCESS" if success else "FAILED"
     if soft_denied:
         reason = "Soft-denial rilevato su permessi tool/command"
+    elif quota_error:
+        reason = f"Quota individuale esaurita — {quota_error_msg}" if quota_error_msg else "Quota individuale esaurita"
     elif exit_code != 0:
         reason = f"Exit code non-zero ({exit_code})"
     elif not has_deliverable:
@@ -378,6 +389,7 @@ Avvio elaborazione automatica stream-json per la review GPT:
 Elaborazione completata per la review GPT:
 - **Review ID:** {comment_id}
 - **Exit Code:** {exit_code}
+- **Quota esaurita:** {"Sì — " + quota_error_msg if quota_error else "No"}
 - **Soft-denial rilevato:** {"Sì (BLOCCANTE)" if soft_denied else "No"}
 - **Commit prima:** `{commit_before}`
 - **Commit dopo:** `{commit_after}`

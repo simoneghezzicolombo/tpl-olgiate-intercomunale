@@ -193,7 +193,19 @@ def main() -> int:
                         res = event_data.get("result", {})
                         status = res.get("status", "UNKNOWN")
                         dur = res.get("duration_seconds", 0.0)
-                        print(f"\n{BOLD}{CYAN}[RESULT] Stato finale: {status} ({dur:.1f}s){RESET}")
+                        error_msg = res.get("error", "")
+
+                        # Detect quota exhaustion specifically
+                        quota_keywords = ["quota reached", "quota exceeded", "upgrade your subscription", "resets in"]
+                        if status == "ERROR" and any(kw in error_msg.lower() for kw in quota_keywords):
+                            print(f"\n{BOLD}{RED}[QUOTA ESAURITA] {error_msg}{RESET}")
+                            # Signal with a distinct exit code so the bridge can annotate BLOCKED_RETRY correctly
+                            raw_exit_code = 2
+                            log_f.write(f"\n[QUOTA EXHAUSTED] {error_msg}\n")
+                        elif status == "ERROR" and error_msg:
+                            print(f"\n{BOLD}{RED}[ERROR] {error_msg}{RESET}")
+                        else:
+                            print(f"\n{BOLD}{CYAN}[RESULT] Stato finale: {status} ({dur:.1f}s){RESET}")
 
                 except json.JSONDecodeError:
                     # Non-JSON output line, print directly
