@@ -222,19 +222,21 @@ def test_posas_rebuild_has_no_local_dependency(tmp_path, monkeypatch):
 
 
 def test_sfr_rebuild_uses_both_official_datasets(tmp_path, monkeypatch):
+    # Match Socrata resource API field naming: lower-case/underscore identifiers.
+    # Historical 2015-2023 is documented by Regione Lombardia as weekday-mean only,
+    # so the rebuild must not require a day-type column for that source.
     hist = pd.DataFrame({
-        "Campagna": [f"C_nov {year}" for year in range(2015, 2024)],
-        "Stazione": ["OLGIATE-CALCO-BRIVIO"] * 9,
-        "Saliti24H": [1000 + 50 * (year - 2015) for year in range(2015, 2024)],
-        "Anno": list(range(2015, 2024)),
-        "tipo_giorno": ["Feriale"] * 9,
+        "campagna": [f"C_nov {year}" for year in range(2015, 2024)],
+        "stazione": ["OLGIATE-CALCO-BRIVIO"] * 9,
+        "saliti24h": [1000 + 50 * (year - 2015) for year in range(2015, 2024)],
+        "anno": list(range(2015, 2024)),
     })
     recent = pd.DataFrame({
-        "Campagna": ["c2024Novembre", "c2025Novembre"],
-        "Stazione": ["OLGIATE-CALCO-BRIVIO"] * 2,
-        "Saliti24H": [1800, 2000],
-        "Anno": [2024, 2025],
-        "Tipo giorno": ["Feriale", "Feriale"],
+        "campagna": ["c2024Novembre", "c2025Novembre", "c2025Novembre"],
+        "stazione": ["OLGIATE-CALCO-BRIVIO"] * 3,
+        "saliti24h": [1800, 2000, 9999],
+        "anno": [2024, 2025, 2025],
+        "tipo_giorno": ["Feriale", "Feriale", "Sabato"],
     })
     calls = []
 
@@ -255,6 +257,7 @@ def test_sfr_rebuild_uses_both_official_datasets(tmp_path, monkeypatch):
     olg = df[df["Stazione_std"] == "OLGIATE-CALCO-BRIVIO"]
     assert set(olg["Anno"].astype(int)) == set(range(2015, 2026))
     assert olg.loc[olg["Anno"] == 2019, "Indice_2019_100"].iloc[0] == pytest.approx(100.0)
+    assert olg.loc[olg["Anno"] == 2025, "Saliti24H"].iloc[0] == pytest.approx(2000.0)
 
 
 def test_programma_di_bacino():

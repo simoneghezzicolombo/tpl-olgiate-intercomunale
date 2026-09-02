@@ -98,10 +98,12 @@ PDB_MERATESE_URL = (
     "Rev7.2/Allegato3.4_PdB_SchedaAmbito_Meratese.pdf"
 )
 
-OVERPASS_URL = "https://overpass.kumi.systems/api/interpreter"
+# Public global Overpass instances currently listed by the OpenStreetMap Wiki.
+# private.coffee is the successor of the former kumi.systems instance.
+OVERPASS_URL = "https://overpass.private.coffee/api/interpreter"
 OVERPASS_FALLBACKS = [
     "https://overpass-api.de/api/interpreter",
-    "https://lz4.overpass-api.de/api/interpreter",
+    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
 ]
 
 CORE_CODES = {"097010", "097012", "097058", "097074", "097092"}
@@ -473,7 +475,8 @@ def fetch_osm_xml(
                 endpoint,
                 data={"data": query},
                 headers=HEADERS_HTTP,
-                timeout=timeout + 30,
+                # Fail over quickly when a public mirror blocks cloud ranges.
+                timeout=(10, min(timeout, 45)),
             )
             if r.status_code in (406, 429, 503, 504):
                 last_exc = requests.HTTPError(
@@ -506,7 +509,7 @@ def _fetch_overpass_json(query: str, out_path: Path, timeout: int = 60) -> None:
                 endpoint,
                 data={"data": query},
                 headers=HEADERS_HTTP,
-                timeout=timeout,
+                timeout=(10, min(timeout, 45)),
             )
             r.raise_for_status()
             out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -739,44 +742,73 @@ def fetch_sfr_from_socrata(
     print(f"[SFR] recent 2024-2025: {recent_url}")
     recent = _read_sfr_csv(recent_url)
 
+    def canonicalize_columns(df: pd.DataFrame) -> pd.DataFrame:
+        """Map Socrata API field names and display labels to one stable schema."""
+        aliases = {
+            "campagna": "Campagna",
+            "stazione": "Stazione",
+            "saliti24h": "Saliti24H",
+            "anno": "Anno",
+            "tipogiorno": "TipoGiorno",
+        }
+        rename = {}
+        for col in df.columns:
+            key = re.sub(r"[^a-z0-9]", "", str(col).lower())
+            if key in aliases:
+                rename[col] = aliases[key]
+        return df.rename(columns=rename)
+
     def prepare(
         df: pd.DataFrame,
-        day_col: str,
         source_label: str,
         min_year: int,
         max_year: int,
+        *,
+        filter_weekday: bool,
     ) -> pd.DataFrame:
-        required = {"Campagna", "Stazione", "Saliti24H", "Anno", day_col}
-        missing = required - set(df.columns)
+        d = canonicalize_columns(df.copy())
+        required = {"Campagna", "Stazione", "Saliti24H", "Anno"}
+        if filter_weekday:
+            required.add("TipoGiorno")
+        missing = required - set(d.columns)
         if missing:
-            raise ValueError(f"SFR schema changed; missing {sorted(missing)}")
-        d = df.copy()
+            raise ValueError(
+                f"SFR schema changed; missing {sorted(missing)}; "
+                f"available={list(d.columns)}"
+            )
+
         d["Anno"] = pd.to_numeric(d["Anno"], errors="coerce")
         d["Saliti24H"] = pd.to_numeric(d["Saliti24H"], errors="coerce")
         d["_station_key"] = d["Stazione"].map(_norm_station)
         d["Stazione_std"] = d["_station_key"].map(S8_DISPLAY)
-        d = d[
+
+        mask = (
             d["Stazione_std"].notna()
             & d["Anno"].between(min_year, max_year)
             & d["Campagna"].map(_month_is_november)
-            & d[day_col].map(_day_is_weekday)
-        ].copy()
+        )
+        # Regione Lombardia documents 2015-2023 as weekday-mean only.
+        # From 2024 onward the dataset distinguishes weekday/Saturday/holiday.
+        if filter_weekday:
+            mask &= d["TipoGiorno"].map(_day_is_weekday)
+
+        d = d[mask].copy()
         d["Fonte_periodo"] = source_label
         return d[["Anno", "Stazione_std", "Saliti24H", "Fonte_periodo"]]
 
     hist_s8 = prepare(
         hist,
-        "tipo_giorno",
         "Flussi Stazioni Ferroviarie (2015-2023; m2u2-frtq)",
         2015,
         2023,
+        filter_weekday=False,
     )
     recent_s8 = prepare(
         recent,
-        "Tipo giorno",
         "Frequentazione stazioni SFR (2024-2025; ut63-s688)",
         2024,
         2025,
+        filter_weekday=True,
     )
     combined = pd.concat([hist_s8, recent_s8], ignore_index=True)
     combined = (
@@ -841,8 +873,10 @@ def step_9_sfr_station_series() -> None:
         trasformazioni=(
             f"DERIVED from two official Socrata datasets: {SFR_HIST_UID} "
             f"(2015-2023, {SFR_HIST_CSV}) and {SFR_RECENT_UID} "
-            f"(2024-2025, {SFR_RECENT_CSV}). Filter November weekday records, "
-            "harmonize station names and Saliti24H, then compute Indice_2019_100. "
+            f"(2024-2025, {SFR_RECENT_CSV}). Filter November campaigns; "
+            "2015-2023 is already weekday-mean in the official source, while from "
+            "2024 TipoGiorno is filtered to weekday. Harmonize station names and "
+            "Saliti24H, then compute Indice_2019_100. "
             "Rebuild function: fetch_sfr_from_socrata()."
         ),
         stato_epistemico="DERIVED",
