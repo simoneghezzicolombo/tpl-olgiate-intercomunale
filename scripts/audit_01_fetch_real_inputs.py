@@ -705,7 +705,7 @@ def step_8_istat_posas() -> None:
         trasformazioni=(
             "Deterministic province-097 extraction from ISTAT official "
             "POSAS_2025_it_Comuni.zip; fetch_posas_lecco() recreates the file "
-            "without local/manual dependencies"
+            "without pre-existing local files or interactive acquisition"
         ),
         stato_epistemico="DERIVED",
         note=f"Official download page: {POSAS_PAGE}; five core municipality codes: {sorted(CORE_CODES)}.",
