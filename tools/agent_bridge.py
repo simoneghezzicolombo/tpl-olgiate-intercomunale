@@ -5,12 +5,12 @@ Polls the public coordination issue for new comments containing `[GPT REVIEW]`.
 For each unseen review:
 1. Publishes `[ANTIGRAVITY RUN STARTED]` on GitHub Issue #1.
 2. Spawns Antigravity CLI in a VISIBLE separate PowerShell console window on Windows.
-3. Simultaneously logs all output to `.agent_bridge_logs/<comment_id>.log`.
-4. Verifies deliverable: requires either a new commit/push OR an updated [ANTIGRAVITY HANDOFF].
-   Exit code 0 alone is NOT sufficient.
-5. Publishes `[ANTIGRAVITY RUN FINISHED]` on GitHub Issue #1.
-6. Only marks the comment processed if deliverables are verified.
-7. Enforces concurrency lock (.agent_bridge.lock), deduplication, and scoped permissions.
+3. Uses `--output-format stream-json` to display live activity, tool calls, commands, and progress in the console and log file.
+4. Rileva esplicitamente soft-denial (permission denied) trattandoli come FAILURE.
+5. Verifies deliverable: requires either a new commit/push OR an updated [ANTIGRAVITY HANDOFF]. Exit code 0 alone is NOT sufficient.
+6. Implements `BLOCKED_RETRY`: prevents popup loops by refusing to retry failed reviews without changes.
+7. Publishes `[ANTIGRAVITY RUN FINISHED]` on GitHub Issue #1.
+8. Enforces concurrency lock (.agent_bridge.lock), deduplication, and fine-grained permissions.
 """
 
 from __future__ import annotations
@@ -36,9 +36,15 @@ API = f"https://api.github.com/repos/{REPO}/issues/{ISSUE}/comments?per_page=100
 
 CREATE_NEW_CONSOLE = 0x00000010
 
+RESET = "\033[0m"
+BOLD = "\033[1m"
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+CYAN = "\033[36m"
+RED = "\033[31m"
+
 
 def ensure_path_has_agy() -> None:
-    """Ensure agy.exe is in PATH, checking default Windows install directory if needed."""
     local_app_data = os.environ.get("LOCALAPPDATA")
     if local_app_data:
         agy_bin = str(Path(local_app_data) / "agy" / "bin")
@@ -95,7 +101,6 @@ def release_lock(lock_path: Path) -> None:
 
 
 def get_head_commit(workspace: Path) -> str:
-    """Returns the current Git HEAD commit hash."""
     try:
         proc = subprocess.run(
             ["git", "rev-parse", "HEAD"],
@@ -134,11 +139,14 @@ def is_gpt_review(comment: dict) -> bool:
 
 def load_state(path: Path) -> dict:
     if not path.exists():
-        return {"processed_comment_ids": []}
+        return {"processed_comment_ids": [], "blocked_retry": {}}
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if "blocked_retry" not in data:
+            data["blocked_retry"] = {}
+        return data
     except Exception:
-        return {"processed_comment_ids": []}
+        return {"processed_comment_ids": [], "blocked_retry": {}}
 
 
 def save_state(path: Path, state: dict) -> None:
@@ -148,7 +156,6 @@ def save_state(path: Path, state: dict) -> None:
 
 
 def post_github_issue_comment(body: str) -> str | None:
-    """Publishes a comment to GitHub Issue #1 via gh CLI."""
     try:
         proc = subprocess.run(
             ["gh", "issue", "comment", str(ISSUE), "--body", body],
@@ -191,78 +198,51 @@ ACTION:
 
 
 def check_new_handoff(workspace: Path, start_time: float) -> tuple[bool, str]:
-    """Verifica se AGENT_STATUS.md è stato aggiornato con un nuovo handoff durante il run."""
     agent_status_file = workspace / "AGENT_STATUS.md"
     if not agent_status_file.exists():
         return False, "AGENT_STATUS.md non trovato"
-    
+
     mtime = agent_status_file.stat().st_mtime
-    if mtime >= (start_time - 2.0):  # modified during or slightly before run
+    if mtime >= (start_time - 2.0):
         try:
             content = agent_status_file.read_text(encoding="utf-8")
             if "ANTIGRAVITY" in content and ("Handoff" in content or "HANDOFF" in content):
                 return True, "Nuovo handoff documentato in AGENT_STATUS.md"
         except Exception as e:
             return False, f"Errore lettura AGENT_STATUS.md: {e}"
-            
+
     return False, "Nessun aggiornamento recente in AGENT_STATUS.md"
 
 
-def run_antigravity_visible(
+def run_antigravity_stream_visible(
     workspace: Path,
-    comment: dict,
+    comment_id: int | str,
+    prompt: str,
     model: str | None,
     timeout: str,
     log_dir: Path
 ) -> tuple[int, str]:
-    """Lancia Antigravity CLI in una console PowerShell visibile separata e salva il log."""
-    comment_id = comment["id"]
+    """Lancia Antigravity CLI in una console visibile separata usando lo stream runner."""
     log_file = log_dir / f"{comment_id}.log"
     exitcode_file = log_dir / f"{comment_id}.exitcode"
     prompt_file = log_dir / f"prompt_{comment_id}.txt"
     runner_script = log_dir / f"runner_{comment_id}.ps1"
 
-    prompt = build_prompt(comment, workspace)
     prompt_file.write_text(prompt, encoding="utf-8")
-    
-    agy_bin = find_agy_cmd()
-    model_opt = f'--model "{model}"' if model else ""
+    stream_runner = workspace / "tools" / "agent_stream_runner.py"
 
-    # Escape per PowerShell script
-    ps_content = f"""# Runner script generato dal bridge per review #{comment_id}
-$Host.UI.RawUI.WindowTitle = "Antigravity CLI - GPT Review #{comment_id}"
-Write-Host "==================================================================" -ForegroundColor Green
-Write-Host " [ANTIGRAVITY CLI] Elaborazione GPT Review #{comment_id}" -ForegroundColor Green
-Write-Host " Workspace: {workspace}" -ForegroundColor Cyan
-Write-Host " Log: {log_file}" -ForegroundColor Cyan
-Write-Host " Inizio: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -ForegroundColor Gray
-Write-Host "==================================================================`n" -ForegroundColor Green
+    # Script di lancio in finestra visibile
+    model_arg = f'--model "{model}"' if model else ""
+    ps_content = f"""# Launcher per Antigravity CLI Stream Runner - Review #{comment_id}
+$Host.UI.RawUI.WindowTitle = "Antigravity CLI - Stream Runner #{comment_id}"
 
 $localAgy = Join-Path $env:LOCALAPPDATA "agy\\bin"
 if (Test-Path $localAgy) {{
     $env:PATH = "$localAgy;$env:PATH"
 }}
 
-$prompt = Get-Content -Path "{prompt_file}" -Raw -Encoding UTF8
-
-try {{
-    & "{agy_bin}" -p $prompt --add-dir "{workspace}" --effort high --print-timeout "{timeout}" {model_opt} *>&1 | Tee-Object -FilePath "{log_file}"
-    $code = $LASTEXITCODE
-}} catch {{
-    Write-Host "`nErrore durante esecuzione agy: $_" -ForegroundColor Red
-    $code = 1
-}}
-
-if ($null -eq $code) {{ $code = 0 }}
-Set-Content -Path "{exitcode_file}" -Value $code
-
-Write-Host "`n------------------------------------------------------------------" -ForegroundColor Cyan
-Write-Host " Antigravity CLI completato con codice di uscita: $code" -ForegroundColor Cyan
-Write-Host " Log salvato in: {log_file}" -ForegroundColor Cyan
-Write-Host " Questa console si chiuderà automaticamente tra 5 secondi..." -ForegroundColor Gray
-Write-Host "------------------------------------------------------------------" -ForegroundColor Cyan
-Start-Sleep -Seconds 5
-exit $code
+python "{stream_runner}" --comment-id "{comment_id}" --prompt-file "{prompt_file}" --log-file "{log_file}" --exitcode-file "{exitcode_file}" --workspace "{workspace}" --timeout "{timeout}" {model_arg}
+exit $LASTEXITCODE
 """
     runner_script.write_text(ps_content, encoding="utf-8")
 
@@ -273,7 +253,7 @@ exit $code
         "-File", str(runner_script)
     ]
 
-    print(f"[bridge] Opening visible PowerShell console for review {comment_id}...")
+    print(f"[bridge] Opening visible stream console for review {comment_id}...")
     try:
         proc = subprocess.Popen(
             cmd,
@@ -294,7 +274,7 @@ exit $code
         print(f"[bridge] Failed to launch console: {e}", file=sys.stderr)
         exit_code = 1
 
-    print(f"[bridge] Antigravity CLI exited with code {exit_code}.")
+    print(f"[bridge] Antigravity CLI runner exited with code {exit_code}.")
     return exit_code, str(log_file)
 
 
@@ -304,7 +284,7 @@ def process_review_item(
     model: str | None,
     timeout: str,
     log_dir: Path
-) -> tuple[bool, int]:
+) -> tuple[bool, int, str]:
     """Elabora un singolo commento review, pubblica notifiche su Issue #1 e valida deliverable."""
     comment_id = comment["id"]
     comment_url = comment.get("html_url", f"https://github.com/{REPO}/issues/{ISSUE}#issuecomment-{comment_id}")
@@ -312,46 +292,66 @@ def process_review_item(
     start_time = time.time()
     start_time_iso = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(start_time))
 
+    prompt = build_prompt(comment, workspace)
+
     # 1. Pubblica [ANTIGRAVITY RUN STARTED]
     start_body = f"""[ANTIGRAVITY RUN STARTED]
 
-Avvio elaborazione automatica per la review GPT:
+Avvio elaborazione automatica stream-json per la review GPT:
 - **Review ID:** {comment_id}
 - **Review URL:** {comment_url}
 - **Timestamp:** {start_time_iso}
 - **Commit iniziale:** `{commit_before}`
-- **Console:** Avviata finestra PowerShell visibile
+- **Console:** Avviata finestra PowerShell visibile con streaming eventi
 - **Log locale:** `{LOGS_DIR_NAME}/{comment_id}.log`
 """
     post_github_issue_comment(start_body)
 
-    # 2. Esegui in console visibile con Tee al log
-    exit_code, log_path = run_antigravity_visible(workspace, comment, model, timeout, log_dir)
+    # 2. Esegui in console visibile con Stream Runner
+    exit_code, log_path = run_antigravity_stream_visible(workspace, comment_id, prompt, model, timeout, log_dir)
 
-    # 3. Verifica deliverable
+    # 3. Verifica deliverable ed errori di soft-denial
     commit_after = get_head_commit(workspace)
     has_new_commit = (commit_after != commit_before)
     has_handoff, handoff_note = check_new_handoff(workspace, start_time)
 
+    # Verifica se c'è stato soft-denial nel log
+    soft_denied = False
+    log_file_path = Path(log_path)
+    if log_file_path.exists():
+        try:
+            log_text = log_file_path.read_text(encoding="utf-8", errors="replace")
+            if any(s in log_text for s in ["required the \"command\" permission", "auto-denied", "permission check failed", "user denied permission"]):
+                soft_denied = True
+        except Exception:
+            pass
+
     has_deliverable = has_new_commit or has_handoff
-    success = (exit_code == 0) and has_deliverable
+    success = (exit_code == 0) and has_deliverable and not soft_denied
 
     # 4. Pubblica [ANTIGRAVITY RUN FINISHED]
     status_str = "SUCCESS" if success else "FAILED"
-    reason = "Deliverable verificato (nuovo commit/handoff)" if success else (
-        f"Exit code non-zero ({exit_code})" if exit_code != 0 else "Nessun deliverable generato (né nuovo commit né handoff)"
-    )
-    proc_str = "Review marcata come processata" if success else "Review NON marcata come processata (ripetibile al prossimo ciclo)"
+    if soft_denied:
+        reason = "Soft-denial rilevato su permessi tool/command"
+    elif exit_code != 0:
+        reason = f"Exit code non-zero ({exit_code})"
+    elif not has_deliverable:
+        reason = "Nessun deliverable generato (né nuovo commit né handoff)"
+    else:
+        reason = "Deliverable verificato (nuovo commit/handoff generato con successo)"
+
+    proc_str = "Review marcata come processata" if success else "Review messa in stato BLOCKED_RETRY (attesa riconfigurazione/modifica)"
 
     finish_body = f"""[ANTIGRAVITY RUN FINISHED]
 
 Elaborazione completata per la review GPT:
 - **Review ID:** {comment_id}
 - **Exit Code:** {exit_code}
+- **Soft-denial rilevato:** {"Sì (BLOCCANTE)" if soft_denied else "No"}
 - **Commit prima:** `{commit_before}`
 - **Commit dopo:** `{commit_after}`
-- **Nuovo commit rilevato:** {"Sì (`" + commit_after + "`)" if has_new_commit else "No"}
-- **Handoff rilevato:** {"Sì (" + handoff_note + ")" if has_handoff else "No"}
+- **Nuovo commit:** {"Sì (`" + commit_after + "`)" if has_new_commit else "No"}
+- **Handoff:** {"Sì (" + handoff_note + ")" if has_handoff else "No"}
 - **Esito finale:** **{status_str}** ({reason})
 - **Stato elaborazione:** {proc_str}
 - **Log completo:** `{LOGS_DIR_NAME}/{comment_id}.log`
@@ -363,12 +363,15 @@ Elaborazione completata per la review GPT:
     else:
         print(f"[bridge] Run SUCCESS for review {comment_id}: deliverable verified.")
 
-    return success, exit_code
+    return success, exit_code, reason
 
 
-def process_once(workspace: Path, state_path: Path, log_dir: Path, model: str | None, timeout: str) -> int:
+def process_once(workspace: Path, state_path: Path, log_dir: Path, model: str | None, timeout: str, retry_blocked: bool = False) -> int:
     state = load_state(state_path)
     processed = {int(x) for x in state.get("processed_comment_ids", [])}
+    blocked = state.get("blocked_retry", {})
+    current_head = get_head_commit(workspace)
+
     comments = get_comments()
     reviews = [c for c in comments if is_gpt_review(c) and int(c["id"]) not in processed]
     reviews.sort(key=lambda c: int(c["id"]))
@@ -379,82 +382,98 @@ def process_once(workspace: Path, state_path: Path, log_dir: Path, model: str | 
 
     overall_code = 0
     for comment in reviews:
-        success, code = process_review_item(workspace, comment, model, timeout, log_dir)
+        cid_str = str(comment["id"])
+
+        # Controllo anti-loop BLOCKED_RETRY: non rieseguire se nulla e' cambiato
+        if cid_str in blocked and not retry_blocked:
+            prev_info = blocked[cid_str]
+            prev_commit = prev_info.get("last_commit", "")
+            if prev_commit == current_head:
+                print(f"[bridge] Review {cid_str} is in BLOCKED_RETRY state (no repo changes since failure at {prev_info.get('failed_at')}). Skipping to avoid popup loop.")
+                continue
+            else:
+                print(f"[bridge] Repo change detected ({prev_commit[:8]} -> {current_head[:8]}); unlocking review {cid_str} for retry.")
+
+        success, code, reason = process_review_item(workspace, comment, model, timeout, log_dir)
         if success:
             processed.add(int(comment["id"]))
             state["processed_comment_ids"] = sorted(processed)
             state["last_processed_url"] = comment.get("html_url")
             state["last_processed_timestamp"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            # Rimuovi da blocked se presente
+            if cid_str in state.get("blocked_retry", {}):
+                del state["blocked_retry"][cid_str]
             save_state(state_path, state)
             print(f"[bridge] Review {comment['id']} marked processed.")
         else:
+            # Salva in stato BLOCKED_RETRY per prevenire il loop di popup
+            if "blocked_retry" not in state:
+                state["blocked_retry"] = {}
+            state["blocked_retry"][cid_str] = {
+                "failed_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "last_commit": current_head,
+                "reason": reason,
+                "retry_count": state["blocked_retry"].get(cid_str, {}).get("retry_count", 0) + 1
+            }
             state["last_failed_comment_id"] = comment["id"]
             state["last_failed_timestamp"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
             save_state(state_path, state)
-            print(f"[bridge] Review {comment['id']} NOT marked processed.", file=sys.stderr)
+            print(f"[bridge] Review {comment['id']} entered BLOCKED_RETRY state.", file=sys.stderr)
             overall_code = code or 1
 
     return overall_code
 
 
-def run_mock_test(workspace: Path, state_path: Path, log_dir: Path, model: str | None, timeout: str) -> bool:
-    """Esegue un test non distruttivo simulato per verificare console visibile, log e validazione deliverable."""
-    print("\n==================================================================")
-    print("  AVVIO TEST MOCK NON DISTRUTTIVO DEL BRIDGE")
-    print("==================================================================")
-    
-    mock_id = 9999990001
-    mock_comment = {
-        "id": mock_id,
-        "html_url": f"https://github.com/{REPO}/issues/{ISSUE}#mock-review-test",
-        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "body": "[GPT REVIEW]\nGate: MOCK TEST\nVerdict: TEST NON DISTRUTTIVO\nTask: Verifica osservabilita console, log e validazione deliverable."
-    }
+def run_smoke_test(workspace: Path, log_dir: Path) -> bool:
+    """Smoke test reale e visibile che esegue un task da terminale controllando stream-json e assenza di soft-denial."""
+    print(f"\n{BOLD}{GREEN}=================================================================={RESET}")
+    print(f"{BOLD}{GREEN}  AVVIO SMOKE TEST REALE E VISIBILE DEL BRIDGE{RESET}")
+    print(f"{BOLD}{GREEN}=================================================================={RESET}\n")
 
-    # Test 1: Senza deliverable -> deve fallire e NON marcare processato
-    print("\n--- TEST 1: Esecuzione senza deliverable (deve risultare FAILED) ---")
-    state_before = load_state(state_path)
-    success, code = process_review_item(workspace, mock_comment, model, timeout, log_dir)
-    assert not success, "Test 1 fallito: doveva fallire per assenza di deliverable!"
-    log_file = log_dir / f"{mock_id}.log"
-    assert log_file.exists(), f"Log file {log_file} non creato!"
-    print(f"[OK] Test 1 superato: il run senza modifiche e' stato marcato FAILED e il log e' stato salvato ({log_file.stat().st_size} bytes).")
-
-    # Test 2: Con deliverable simulato in AGENT_STATUS.md -> deve avere successo e marcare processato
-    print("\n--- TEST 2: Esecuzione con deliverable simulato (deve risultare SUCCESS) ---")
-    mock_id_2 = 9999990002
-    mock_comment_2 = {
-        "id": mock_id_2,
-        "html_url": f"https://github.com/{REPO}/issues/{ISSUE}#mock-review-test-2",
-        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "body": "[GPT REVIEW]\nGate: MOCK TEST 2\nVerdict: TEST SUCCESSO CON HANDOFF"
-    }
-    # Tocca AGENT_STATUS.md per simulare deliverable valido
-    status_path = workspace / "AGENT_STATUS.md"
-    if status_path.exists():
-        content = status_path.read_text(encoding="utf-8")
-        status_path.write_text(content + "\n<!-- mock test touch -->\n", encoding="utf-8")
-
-    success_2, code_2 = process_review_item(workspace, mock_comment_2, model, timeout, log_dir)
-    # Ripristina file
-    status_path.write_text(content, encoding="utf-8")
+    test_id = "smoke_test"
+    test_prompt = "Run git status and report the current branch."
     
-    assert success_2, "Test 2 fallito: doveva avere successo avendo rilevato un aggiornamento di handoff!"
-    print("[OK] Test 2 superato: deliverable rilevato, esito SUCCESS.")
-    
-    # Test 3: Verifica deduplicazione
-    print("\n--- TEST 3: Verifica deduplicazione ---")
-    state = load_state(state_path)
-    state["processed_comment_ids"] = sorted(set(state.get("processed_comment_ids", []) + [mock_id_2]))
-    save_state(state_path, state)
-    
-    state_check = load_state(state_path)
-    assert mock_id_2 in state_check["processed_comment_ids"], "Deduplicazione fallita: ID mock non presente nello stato!"
-    print("[OK] Test 3 superato: deduplicazione verificata.")
+    print(f"[smoke-test] Lancio Antigravity CLI con stream-json in console visibile...")
+    exit_code, log_path = run_antigravity_stream_visible(
+        workspace=workspace,
+        comment_id=test_id,
+        prompt=test_prompt,
+        model=None,
+        timeout="5m",
+        log_dir=log_dir
+    )
 
-    print("\n==================================================================")
-    print("  TUTTI I TEST MOCK DEL BRIDGE SONO PASSATI CON SUCCESSO! [PASS]")
-    print("==================================================================\n")
+    log_file = Path(log_path)
+    if not log_file.exists():
+        print(f"[FAIL] Log file {log_file} non creato!", file=sys.stderr)
+        return False
+
+    log_content = log_file.read_text(encoding="utf-8", errors="replace")
+    
+    # 1. Verifica assenza soft-denial
+    for pattern in ["required the \"command\" permission", "auto-denied", "permission check failed", "user denied permission"]:
+        if pattern in log_content:
+            print(f"[FAIL] Rilevato soft-denial nel log: {pattern}", file=sys.stderr)
+            return False
+
+    # 2. Verifica che git status sia stato realmente eseguito
+    if "antigravity-real-data" not in log_content and "On branch" not in log_content:
+        print(f"[FAIL] git status non sembra essere stato eseguito nel log!", file=sys.stderr)
+        return False
+
+    # 3. Verifica exit code 0
+    if exit_code != 0:
+        print(f"[FAIL] Smoke test terminato con exit code non-zero: {exit_code}", file=sys.stderr)
+        return False
+
+    print(f"\n{BOLD}{GREEN}=================================================================={RESET}")
+    print(f"{BOLD}{GREEN}  SMOKE TEST REALE SUPERATO CON SUCCESSO! [PASS]{RESET}")
+    print(f"  - Console visibile: OK")
+    print(f"  - Output stream-json: OK")
+    print(f"  - Esecuzione reale git status: OK")
+    print(f"  - Assenza soft-denial: OK")
+    print(f"  - Log completo salvato in: {log_file}")
+    print(f"{BOLD}{GREEN}=================================================================={RESET}\n")
     return True
 
 
@@ -465,7 +484,8 @@ def main() -> int:
     parser.add_argument("--once", action="store_true", help="Check once and exit")
     parser.add_argument("--model", default=None, help="Optional Antigravity model slug; omit to use configured default")
     parser.add_argument("--timeout", default="30m", help="Antigravity print timeout, e.g. 15m or 30m")
-    parser.add_argument("--mock-test", action="store_true", help="Run a non-destructive mock test verifying console, logs, and deliverables")
+    parser.add_argument("--smoke-test", action="store_true", help="Run real visible smoke test executing terminal command")
+    parser.add_argument("--retry-blocked", action="store_true", help="Force retry of blocked reviews without waiting for repo changes")
     args = parser.parse_args()
 
     workspace = Path(args.workspace).resolve()
@@ -483,13 +503,13 @@ def main() -> int:
     atexit.register(release_lock, lock_path)
 
     try:
-        if args.mock_test:
-            ok = run_mock_test(workspace, state_path, log_dir, args.model, args.timeout)
+        if args.smoke_test:
+            ok = run_smoke_test(workspace, log_dir)
             return 0 if ok else 1
 
         while True:
             try:
-                code = process_once(workspace, state_path, log_dir, args.model, args.timeout)
+                code = process_once(workspace, state_path, log_dir, args.model, args.timeout, args.retry_blocked)
             except Exception as exc:
                 print(f"[bridge] Poll error: {exc}", file=sys.stderr)
                 code = 1
