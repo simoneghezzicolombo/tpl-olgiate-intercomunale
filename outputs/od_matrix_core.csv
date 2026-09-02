@@ -1,0 +1,36 @@
+origine,destinazione,spostamenti_giorno,tipo,quota_pct,mezzo_prevalente
+Olgiate Molgora,Olgiate Molgora (Interno),1280,Interno,31.2,A piedi / Auto
+Olgiate Molgora,Milano (via S8),840,Esterno Ferrovia,20.5,Treno S8
+Olgiate Molgora,Merate,620,Esterno Conurbato,15.1,Auto / Bus
+Olgiate Molgora,Lecco,430,Esterno Ferrovia/Gomma,10.5,Treno S8 / Auto
+Olgiate Molgora,Calco,290,Intercomunale Core,7.1,Auto
+Olgiate Molgora,La Valletta Brianza,210,Intercomunale Core,5.1,Auto
+Olgiate Molgora,Monza / Sesto,190,Esterno Ferrovia,4.6,Treno S8
+Olgiate Molgora,Brivio,140,Intercomunale Core,3.4,Auto
+Olgiate Molgora,Santa Maria Hoè,100,Intercomunale Core,2.4,Auto
+Calco,Calco (Interno),950,Interno,26.8,Auto / A piedi
+Calco,Merate,780,Esterno Conurbato,22.0,Auto / Bus D150
+Calco,Milano (via FS Olgiate/Cernusco),650,Esterno Ferrovia,18.3,Treno S8
+Calco,Olgiate Molgora (FS/Servizi),410,Intercomunale Core,11.6,Auto / Bici
+Calco,Lecco,360,Esterno Ferrovia/Gomma,10.1,Auto / Treno
+Calco,Brivio,220,Intercomunale Core,6.2,Auto
+Calco,La Valletta / S.Maria,180,Intercomunale Core,5.1,Auto
+Brivio,Brivio (Interno),790,Interno,28.2,Auto / A piedi
+Brivio,Olgiate Molgora (FS),520,Intercomunale Core,18.6,Auto
+Brivio,Merate,480,Esterno Conurbato,17.1,Auto
+Brivio,Milano (via FS),410,Esterno Ferrovia,14.6,Auto + S8
+Brivio,Calco,260,Intercomunale Core,9.3,Auto
+Brivio,Lecco,210,Esterno Ferrovia/Gomma,7.5,Auto
+Brivio,Cisano / Bergamasca,130,Esterno Trans-Adda,4.6,Auto
+La Valletta Brianza,La Valletta (Interno),870,Interno,29.0,Auto / A piedi
+La Valletta Brianza,Olgiate Molgora (FS),610,Intercomunale Core,20.3,Auto
+La Valletta Brianza,Merate,490,Esterno Conurbato,16.3,Auto
+La Valletta Brianza,Milano (via FS),480,Esterno Ferrovia,16.0,Auto + S8
+La Valletta Brianza,Lecco,310,Esterno Ferrovia/Gomma,10.3,Auto
+La Valletta Brianza,Santa Maria Hoè,240,Intercomunale Core,8.0,Auto / A piedi
+Santa Maria Hoè,Santa Maria (Interno),340,Interno,25.2,A piedi / Auto
+Santa Maria Hoè,Olgiate Molgora (FS),320,Intercomunale Core,23.7,Auto
+Santa Maria Hoè,La Valletta Brianza,260,Intercomunale Core,19.3,Auto / A piedi
+Santa Maria Hoè,Milano (via FS),230,Esterno Ferrovia,17.0,Auto + S8
+Santa Maria Hoè,Merate,120,Esterno Conurbato,8.9,Auto
+Santa Maria Hoè,Lecco,80,Esterno Ferrovia/Gomma,5.9,Auto

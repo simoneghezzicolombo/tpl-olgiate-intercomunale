@@ -1,0 +1,25 @@
+stop_id,stop_name,comune,zona,pop_esclusiva_5min,pop_esclusiva_8min,pop_esclusiva_10min,pop_esclusiva_12min,celle_attribuite
+S_ROVAGNATE,Rovagnate - Centro / Via Brianza,La Valletta Brianza,Core Ovest,971.0,1749.0,2133.0,2421.9,224
+S_CALCO_NAZ,Calco - Via Nazionale (SP342) / Municipio,Calco,Core Est,975.8,1501.3,1707.2,1810.2,114
+S_OLGIATE_FS,Olgiate Molgora FS (Piazza Stazione),Olgiate Molgora,Hub,829.4,1393.9,1614.2,1758.5,128
+S_OLGIATE_CENTRO,Olgiate Molgora - Municipio / Via Sommi Picenardi,Olgiate Molgora,Centro,797.5,1203.7,1283.3,1354.1,81
+S_SMARIA_CENTRO,Santa Maria Hoè - Piazza Padre Fausto / Centro,Santa Maria Hoè,Core Ovest,695.6,1135.6,1225.6,1252.9,70
+S_ARLATE,Arlate - San Colombano / Via San Gottardo,Calco,Frazione Est,353.1,710.6,952.1,1164.1,401
+S_PEREGO,Perego - Municipio / Via Roma,La Valletta Brianza,Core Ovest,607.7,841.5,934.2,996.5,75
+S_CALCO_CHIESA,Calco - Chiesa Parrocchiale / Via Volta,Calco,Core Est,464.6,747.1,925.6,1065.3,146
+S_BEVERATE,Beverate - Centro / Scuole Elementari,Brivio,Core Est,358.6,726.5,919.9,1109.1,350
+S_BRIVIO_CASTELLO,Brivio - Castello / Piazza Frigerio,Brivio,Core Est,385.0,625.1,749.3,858.5,159
+S_BRIVIO_PORTO,Brivio - Lungo Adda / Alzaia,Brivio,Core Est,333.3,575.2,690.4,815.6,188
+S_SAN_ZENO,San Zeno - Piazza San Zeno,Olgiate Molgora,Frazione Ovest,251.3,507.2,676.5,821.4,402
+S_BRIVIO_PONTE,Brivio - Testata Ponte Adda (SP342),Brivio,Core Est,293.8,521.0,655.7,753.1,195
+S_VALLETTA_SP342,La Valletta - SP342 dir / Bivio S.Anna,La Valletta Brianza,Core Ovest,301.1,517.8,646.4,708.4,127
+S_MONDONICO,Mondonico - Borgo / Villa Maria,Olgiate Molgora,Frazione Ovest,325.7,435.7,485.4,505.4,126
+S_SMARIA_TREB,Santa Maria Hoè - Trebbia,Santa Maria Hoè,Core Ovest,217.5,359.2,441.3,513.1,204
+S_OLGIATE_SCARPONE,Olgiate Molgora - Bivio Scarpone (SP342),Olgiate Molgora,Ovest,132.3,238.8,365.2,488.6,140
+S_MONTICELLO_OLG,Monticello di Olgiate - Via Belvedere,Olgiate Molgora,Frazione Ovest,180.2,288.5,337.0,399.5,179
+S_CALCO_SUP,Calco Superiore - Borgo Alto,Calco,Frazione Est,165.0,272.8,302.2,314.3,77
+S_GIOVENZANA,Colle Brianza - Giovenzana,Colle Brianza,Coda Ovest,0.0,0.0,0.6,6.6,31
+S_RAVELLINO,Ravellino - Capolinea (Colle Brianza),Colle Brianza,Coda Ovest,0.0,0.0,0.0,0.0,0
+S_CISANO_SOSTA,Cisano Bergamasco - Sosta / Piazza De Gasperi,Cisano Bergamasco,Coda Est,0.0,0.0,0.0,0.0,0
+S_CAPRINO_CENTRO,Caprino Bergamasco - Municipio / Via Roma,Caprino Bergamasco,Coda Est,0.0,0.0,0.0,0.0,0
+S_CELANA,Caprino Bergamasco - Collegio Celana,Caprino Bergamasco,Coda Est,0.0,0.0,0.0,0.0,0

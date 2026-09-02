@@ -1,0 +1,40 @@
+nome,comune,frazione,categoria,peso,lat,lon
+Scuola Media Statale E. Ghezzi,Olgiate Molgora,Olgiate Centro,Istruzione,10,45.7335,9.4005
+Scuola Primaria Olgiate Molgora,Olgiate Molgora,Olgiate Centro,Istruzione,8,45.7342,9.4018
+Scuola Primaria di Calco,Calco,Calco Centro,Istruzione,8,45.7258,9.4132
+Scuola Primaria di Beverate,Brivio,Beverate,Istruzione,8,45.7355,9.4252
+Scuola Primaria di Brivio,Brivio,Brivio Centro,Istruzione,8,45.7435,9.443
+Scuola Primaria La Valletta Brianza,La Valletta Brianza,Perego,Istruzione,8,45.7428,9.3638
+Scuola Primaria Santa Maria Hoè,Santa Maria Hoè,Santa Maria Hoè Centro,Istruzione,7,45.746,9.3742
+Asilo Nido e Infanzia Sommi Picenardi,Olgiate Molgora,Olgiate Centro,Istruzione,6,45.7328,9.4022
+RSA Casa Famiglia di Olgiate Molgora,Olgiate Molgora,Olgiate Centro,Sanita_Assistenza,9,45.7312,9.3985
+Poliambulatorio e Medici di Medicina Generale Calco,Calco,Calco Centro,Sanita_Assistenza,8,45.7265,9.412
+Farmacia Comunale Olgiate Molgora (FS),Olgiate Molgora,Olgiate Stazione,Sanita_Assistenza,7,45.7318,9.4028
+Farmacia di Brivio Centro,Brivio,Brivio Centro,Sanita_Assistenza,7,45.7442,9.4445
+Farmacia di Rovagnate,La Valletta Brianza,Rovagnate,Sanita_Assistenza,7,45.7392,9.3688
+Farmacia Santa Maria Hoè,Santa Maria Hoè,Santa Maria Hoè Centro,Sanita_Assistenza,7,45.7452,9.3738
+Centro Prelievi e Assistenza Brivio,Brivio,Brivio Centro,Sanita_Assistenza,8,45.7438,9.4428
+Municipio di Olgiate Molgora,Olgiate Molgora,Olgiate Centro,Istituzioni,8,45.7338,9.4011
+Municipio di Calco,Calco,Calco Centro,Istituzioni,8,45.726,9.4126
+Municipio di Brivio,Brivio,Brivio Centro,Istituzioni,8,45.7445,9.4439
+Municipio di La Valletta Brianza,La Valletta Brianza,Perego,Istituzioni,8,45.743,9.3645
+Municipio di Santa Maria Hoè,Santa Maria Hoè,Santa Maria Hoè Centro,Istituzioni,8,45.7455,9.3735
+Biblioteca Comunale Olgiate Molgora,Olgiate Molgora,Olgiate Centro,Istituzioni,6,45.734,9.4015
+Ufficio Postale Olgiate Molgora,Olgiate Molgora,Olgiate Centro,Istituzioni,7,45.7325,9.402
+Ufficio Postale Brivio,Brivio,Brivio Centro,Istituzioni,7,45.744,9.4435
+Ufficio Postale Rovagnate,La Valletta Brianza,Rovagnate,Istituzioni,7,45.739,9.3692
+Supermercato Conad Olgiate Molgora,Olgiate Molgora,Olgiate Stazione,Commercio,8,45.7305,9.4045
+Supermercato Bennet Calco,Calco,Calco Nazionale,Commercio,9,45.7235,9.4095
+Centro Commerciale / Negozi SP342 Calco,Calco,Calco Nazionale,Commercio,7,45.725,9.411
+Negozi e Botteghe Brivio Lungo Adda,Brivio,Brivio Centro,Commercio,6,45.7432,9.445
+Mercato Settimanale Olgiate Molgora (Martedì),Olgiate Molgora,Olgiate Centro,Commercio,8,45.7332,9.401
+Mercato Settimanale Brivio (Sabato),Brivio,Brivio Porto,Commercio,8,45.7425,9.446
+Area Industriale / Artigianale Calco Sud (SP342),Calco,Calco Sud,Attivita_Produttive,8,45.721,9.408
+Polo Produttivo Beverate - Brivio Est,Brivio,Beverate,Attivita_Produttive,7,45.738,9.432
+Zona Industriale Fornace Rovagnate,La Valletta Brianza,Rovagnate,Attivita_Produttive,7,45.735,9.362
+Polo Artigianale Olgiate Molgora - Pilata,Olgiate Molgora,Pilata,Attivita_Produttive,7,45.728,9.407
+Centro Sportivo Comunale Olgiate Molgora,Olgiate Molgora,Olgiate Centro,Sport_TempoLibero,6,45.7345,9.398
+Impianti Sportivi e Palestra Calco,Calco,Calco Centro,Sport_TempoLibero,6,45.727,9.414
+Centro Sportivo Comunale Brivio,Brivio,Beverate,Sport_TempoLibero,6,45.736,9.428
+Pista Ciclopedonale e Alzaia del Fiume Adda,Brivio,Brivio Porto,Sport_TempoLibero,7,45.742,9.4458
+Oasi WWF di Brivio / Palude dell'Adda,Brivio,Brivio Sud,Sport_TempoLibero,6,45.738,9.448
