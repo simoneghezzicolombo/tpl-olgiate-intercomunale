@@ -1,0 +1,7 @@
+frazione_deviazione,comune,tipo_inserimento,delta_tempo_min,nuovi_residenti_8min,rendimento_residenti_per_minuto,poi_aggiunti,giudizio_trasportistico
+Arlate / San Colombano (in anello),Calco,Ramo di Chiusura Anello Est,1.0,1150,1150.0,2,ECCELLENTE (Sostituisce km a vuoto con nuovo bacino utile)
+Mondonico / Monticello (in anello),Olgiate Molgora,Ramo di Chiusura Anello Ovest,1.5,920,613.3,3,"ECCELLENTE (Rendimento altissimo, chiude l'anello)"
+Calco Superiore,Calco,Deviazione Collinare,4.5,580,128.9,1,MEDIO-BASSO (Rischio elevato di sforare il ciclo di 60')
+San Zeno,Olgiate Molgora,Antenna a Fondo Cieco,7.5,710,94.7,1,INSUFFICIENTE (Fa sforare il ciclo a 62.5 min)
+Caprino Bergamasco / Celana,Caprino Bergamasco,Coda Trans-Adda,20.0,1400,70.0,2,BASSO PER IL CORE (Porta ciclo a 75 min: navetta/scolastico)
+Ravellino (Colle Brianza),Colle Brianza,Coda Rurale Esterna,19.0,520,27.4,1,MOLTO BASSO (Porta ciclo a 74 min: solo corse dedicate)

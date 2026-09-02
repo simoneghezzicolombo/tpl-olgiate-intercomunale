@@ -1,0 +1,6 @@
+punto_critico,comune,lat,lon,problema_rilevato,livello_incertezza,cosa_verificare
+Mondonico - Ingresso Borgo Storico,Olgiate Molgora,45.7385,9.3972,"Carreggiata ristretta (larghezza tra muri ~3.3 - 3.6m), auto in sosta parziale.",MEDIO,"Test di raggio di sterzata con bus 10.5m. Se critico, predisporre fermata all'imbocco via Molgora o uso midibus (8.5m)."
+Arlate - Innesto via San Gottardo / SP72,Calco,45.7164,9.4321,Innesto a T su curva con pendenza 7% e visibilità ridotta da vegetazione.,BASSO-MEDIO,Verificare specchio parabolico e raggio di svolta verso Calco Sud.
+Calco Superiore - Salita via Volta / via Grugana,Calco,45.7289,9.4192,"Tornante stretto con pendenza >12%, incrocio cieco con via don Minzoni.",ALTO,Impraticabile per bus standard 12m. Richiede midibus o esclusione dal percorso di linea.
+San Zeno - Piazza centrale e via San Zeno,Olgiate Molgora,45.7248,9.3821,Fondo cieco: assenza di rotatoria o piazzola di inversione di marcia per autobus.,ALTO (BLOCCANTE),Conferma impossibilità di manovra per mezzi TPL senza retromarcia pericolosa su piazza.
+Ponte di Brivio (SP342 sull'Adda),Brivio / Cisano Bergamasco,45.7462,9.4485,Cantiere e limitazioni di carico post-manutenzione 2026.,TEMPORANEO (2026),Cronoprogramma riapertura al traffico pesante/TPL da parte della Provincia di Lecco.
