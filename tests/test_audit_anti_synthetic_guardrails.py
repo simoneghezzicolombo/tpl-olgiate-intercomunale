@@ -9,7 +9,7 @@ def test_manifest_epistemic_status_integrity():
     assert os.path.exists(manifest_path), "data/manifest.csv deve esistere"
     df = pd.read_csv(manifest_path)
     
-    valid_states = {"FACT", "DERIVED", "ESTIMATE", "ASSUMPTION", "RECONSTRUCTED", "MODEL OUTPUT", "FIELD CHECK", "PLACEHOLDER", "INVALIDATED"}
+    valid_states = {"FACT", "FACT_OSM_OBSERVATION", "DERIVED", "ESTIMATE", "ASSUMPTION", "RECONSTRUCTED", "MODEL OUTPUT", "FIELD CHECK", "PLACEHOLDER", "INVALIDATED"}
     for idx, row in df.iterrows():
         assert row["stato_epistemico"] in valid_states, f"Stato epistemico non valido {row['stato_epistemico']} per {row['dataset_id']}"
         # Se dichiarato FACT, l'ente_fonte e l'URL devono essere validi e non vuoti

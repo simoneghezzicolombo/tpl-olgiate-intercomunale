@@ -1,0 +1,22 @@
+route_id,agency_id,route_short_name,route_long_name,route_type,route_url,route_color,route_text_color
+VCB,A2013327,VCB,Urbano Vercurago - Calolzio - Bisone,3,https://arriva.it,008000,FFFFFF
+D122,A2013327,D122,Urbano Colico,3,https://arriva.it,008000,FFFFFF
+D120,A2013327,D120,Lecco - Mandello - Olcio,3,https://arriva.it,008000,FFFFFF
+D121,A2013327,D121,Bellano - Varenna - Esino Lario,3,https://arriva.it,008000,FFFFFF
+D125,A2013327,D125,Bellano - Tremenico - Avano,3,https://arriva.it,008000,FFFFFF
+D126,A2013327,D126,Bellano - Vendrogno,3,https://arriva.it,008000,FFFFFF
+D127,A2013327,D127,Bellano - Taceno - Premana,3,https://arriva.it,008000,FFFFFF
+D135,A2013327,D135,Lecco - Taceno - Premana,3,https://arriva.it,008000,FFFFFF
+D140,A2013327,D140,Calolzio F.S. - Cisano F.S.,3,https://arriva.it,008000,FFFFFF
+D148,A2013327,D148,Airuno - Besana,3,https://arriva.it,008000,FFFFFF
+D150,A2013327,D150,Lecco - Brivio - Lomagna,3,https://arriva.it,008000,FFFFFF
+D155,A2013327,D155,Lecco - Galbiate - Nava - Annone,3,https://arriva.it,008000,FFFFFF
+D160,A2013327,D160,Lecco - Seregno,3,https://arriva.it,008000,FFFFFF
+D161,A2013327,D161,Costa Masnaga - Villa Raverio,3,https://arriva.it,008000,FFFFFF
+D170,A2013327,D170,Arlate - Vimercate,3,https://arriva.it,008000,FFFFFF
+D180,A2013327,D180,Oggiono - Monza,3,https://arriva.it,008000,FFFFFF
+D182,175711,D182,Missaglia - Vimercate,3,https://arriva.it,008000,FFFFFF
+D181,175711,D181,Monticello - Carnate F.S.,3,https://arriva.it,008000,FFFFFF
+D184,A2013327,D184,Olgiate Molgora F.S. - Ravellino,3,https://arriva.it,008000,FFFFFF
+D185,A2013327,D185,Celana - Olgiate F.S.,3,https://arriva.it,008000,FFFFFF
+D151,A2013327,D151,Urbano Lecco - Garlate - Valgreghentino,3,https://arriva.it,008000,FFFFFF

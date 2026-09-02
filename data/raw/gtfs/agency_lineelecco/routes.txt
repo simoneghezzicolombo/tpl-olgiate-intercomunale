@@ -1,0 +1,20 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,continuous_pickup,continuous_drop_off,route_sort_order
+8,LL,8,Lecco Rancio - Lecco Germanedo Ospedale,Lecco Germanedo Ospedale - Lecco Rancio,3,https://lineelecco.it/trasporto/orari-invernali/,00E0FF,000000,,,8
+5,LL,5,Lecco Funivia - Lecco Capodistria,Lecco Capodistria - Lecco Funivia,3,https://lineelecco.it/trasporto/orari-invernali/,00B900,FFFFFF,,,5
+D110,LL,D110,Lecco - Onno - Limonta - Bellagio,Bellagio - Limonta - Onno - Lecco,3,https://lineelecco.it/trasporto/orari-invernali/,0065A3,FFFFFF,,,12
+7,LL,7,Calolziocorte - Lecco Laorca - Ballabio Resinelli,Ballabio Resinelli - Lecco Laorca - Calolziocorte,3,https://lineelecco.it/trasporto/orari-invernali/,FF6A00,FFFFFF,,,7
+1,LL,1,Vercurago - Lecco Chiuso - Lecco Laorca,Lecco Laorca - Lecco Chiuso - Vercurago,3,https://lineelecco.it/trasporto/orari-invernali/,FF0000,FFFFFF,,,1
+4,LL,4,Malgrate Gaggio - Lecco Cereda,Lecco Cereda - Malgrate Gaggio,3,https://lineelecco.it/trasporto/orari-invernali/,0000FF,FFFFFF,,,4
+2,LL,2,Circolare Destra · Lecco Ospedale,,3,https://lineelecco.it/trasporto/orari-invernali/,FFFF00,000000,,,2
+D163,LL,D163,Triuggio - Casatenovo - Besana Villa Raverio,Casatenovo - Besana Villa Raverio - Triuggio,3,https://lineelecco.it/trasporto/orari-invernali/,0065A3,FFFFFF,,,19
+9B,LL,9B,Lecco - Valmadrera Caserta / Pare' - Lecco,,3,https://lineelecco.it/trasporto/orari-invernali/,FF7FFF,000000,,,10
+D143,LL,D143,Calolziocorte - Monte Marenzo - Torre de Busi,Torre de Busi - Monte Marenzo - Calolziocorte,3,https://lineelecco.it/trasporto/orari-invernali/,0065A3,FFFFFF,,,16
+6,LL,6,Lecco Rivabella - Lecco Tonio da Belledo,Lecco Tonio da Belledo - Lecco Rivabella,3,https://lineelecco.it/trasporto/orari-invernali/,B300B3,FFFFFF,,,6
+D141,LL,D141,Calolziocorte - Erve,Erve - Calolziocorte,3,https://lineelecco.it/trasporto/orari-invernali/,0065A3,FFFFFF,,,14
+11,LL,11,Calolziocorte - Lecco (Scolastica),Lecco - Calolziocorte (Scolastica),3,https://lineelecco.it/trasporto/orari-invernali/,D17F36,FFFFFF,,,11
+9A,LL,9A,Lecco - Valmadrera Pare' / Caserta - Lecco,,3,https://lineelecco.it/trasporto/orari-invernali/,FF7FFF,000000,,,9
+3,LL,3,Circolare Sinistra · Lecco Ospedale,,3,https://lineelecco.it/trasporto/orari-invernali/,FFFF00,000000,,,3
+D162,LL,D162,Nibionno - Besana Villa Raverio - Casatenovo,Casatenovo - Besana Villa Raverio - Nibionno,3,https://lineelecco.it/trasporto/orari-invernali/,0065A3,FFFFFF,,,18
+D142,LL,D142,Calolziocorte - Carenno,Carenno - Calolziocorte,3,https://lineelecco.it/trasporto/orari-invernali/,0065A3,FFFFFF,,,15
+D111,LL,D111,Suello - Civate,Civate - Suello,3,https://lineelecco.it/trasporto/orari-invernali/,0065A3,FFFFFF,,,13
+D144,LL,D144,Calolziocorte - Erve - Carenno - Calolziocorte,,3,https://lineelecco.it/trasporto/orari-invernali/,0065A3,FFFFFF,,,17

@@ -1,0 +1,2 @@
+﻿network_id,network_label,operator_id,operator_label,import_mode
+106,Rete Linee Lecco,106,CSLLCL,F

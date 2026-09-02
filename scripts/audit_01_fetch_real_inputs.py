@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """
 audit_01_fetch_real_inputs.py
-Script di acquisizione, estrazione e verifica delle fonti reali (AUDIT CHECKPOINT 1):
-1. WorldPop GeoTIFF reale (ita_ppp_2020_UNadj.tif) e clip su confini 5 comuni
-2. Copernicus DEM GLO-30 reale (Copernicus_DSM_COG_10_N45_00_E009_00_DEM.tif) e clip
-3. Confini amministrativi ISTAT 2026 ufficiali (Limiti01012026.zip)
-4. Matrice del pendolarismo ISTAT 2011 reale (matrix_pendo2011_10112014.txt)
-5. Trenord GTFS reale da Open Data Regione Lombardia (trenord_gtfs.zip)
-6. OpenStreetMap fermate bus, percorsi e POI reali estratti dal PBF planet locale ed Overpass API
-7. Trasparenza GTFS Agenzia TPL Como-Lecco-Varese (dichiarazione formale indisponibilità open data)
-8. Calcolo checksum SHA256 e generazione data/manifest.csv conforme a COLLABORATION_PROTOCOL.md
+Pipeline completamente riproducibile di acquisizione, estrazione e verifica delle fonti reali:
+1. Confini ISTAT 2026 ufficiali (download automatico da portale ISTAT cartografia 2026)
+2. WorldPop 2020 100m unconstrained (Global_2000_2020, risoluzione 3 arc-sec, clip deterministico)
+3. Copernicus DEM GLO-30 reale (download tile COG 30m N45_00_E009_00 da AWS Open Data ESA e clip)
+4. Matrice pendolarismo ISTAT 2011 (download da portale ISTAT e parsing tracciato fisso tipo S)
+5. GTFS Ferroviario Trenord (download da dati.lombardia.it dataset 3z4k-mxz9)
+6. GTFS Automobilistico Agenzia TPL Como-Lecco-Varese inv. 2025-2026 (Arriva Italia e Linee Lecco)
+7. OpenStreetMap rete stradale/pedonale (4.477 segmenti) e fermate con provenance esplicita
+8. Frequentazione stazioni SFR Trenord 2015-2025 (Regione Lombardia D.G. Trasporti)
+9. Generazione manifest conforme a COLLABORATION_PROTOCOL.md e risoluzione Blocker/Warning Gate A
 """
 
 import os
@@ -33,6 +34,7 @@ BBOX_CORE = {
 }
 
 MANIFEST_ROWS = []
+HEADERS_HTTP = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AntigravityTPLResearch/1.0"}
 
 def compute_sha256(filepath: str) -> str:
     h = hashlib.sha256()
@@ -40,6 +42,29 @@ def compute_sha256(filepath: str) -> str:
         while chunk := f.read(65536):
             h.update(chunk)
     return h.hexdigest()
+
+def download_file_if_missing(url: str, target_path: str, expected_size: int = None, fallback_local: str = None) -> str:
+    """Scarica un file se non presente localmente, con controllo su cache locale e fallback."""
+    if os.path.exists(target_path) and os.path.getsize(target_path) > 0:
+        return target_path
+    
+    # Se presente in fallback_local (es. directory download preesistente), copia o usa
+    if fallback_local and os.path.exists(fallback_local) and os.path.getsize(fallback_local) > 0:
+        print(f"Utilizzo file preesistente da {fallback_local} -> {target_path}")
+        os.makedirs(os.path.dirname(target_path), exist_ok=True)
+        import shutil
+        shutil.copy2(fallback_local, target_path)
+        return target_path
+
+    print(f"Download da {url} verso {target_path}...")
+    os.makedirs(os.path.dirname(target_path), exist_ok=True)
+    r = requests.get(url, headers=HEADERS_HTTP, stream=True, timeout=60)
+    r.raise_for_status()
+    with open(target_path, "wb") as f:
+        for chunk in r.iter_content(chunk_size=65536):
+            f.write(chunk)
+    print(f"Download completato: {target_path} ({os.path.getsize(target_path):,} bytes)")
+    return target_path
 
 def record_manifest(dataset_id, ente, url, anno, licenza, filepath, trasformazioni="Nessuna (fonte primaria grezza)", stato_epistemico="FACT", note=""):
     sha = compute_sha256(filepath) if os.path.exists(filepath) else "FILE_NOT_FOUND"
@@ -64,7 +89,10 @@ def step_1_istat_boundaries():
     print("\n--- STEP 1: CONFINI AMMINISTRATIVI ISTAT 2026 UFFICIALI ---")
     out_dir = "data/raw/boundaries"
     os.makedirs(out_dir, exist_ok=True)
-    zip_path = r"D:\Utente\Downloads\Limiti01012026.zip"
+    
+    url = "https://www.istat.it/storage/cartografia/confini_amministrativi/non_generalizzati/2026/Limiti01012026.zip"
+    zip_path = os.path.join(out_dir, "Limiti01012026.zip")
+    download_file_if_missing(url, zip_path, fallback_local=r"D:\Utente\Downloads\Limiti01012026.zip")
     
     # Estrai shapefile comuni
     with zipfile.ZipFile(zip_path) as z:
@@ -92,7 +120,7 @@ def step_1_istat_boundaries():
     record_manifest(
         "istat_limiti_comunali_2026",
         "ISTAT",
-        "https://www.istat.it/storage/cartografia/confini_amministrativi/non_generalizzati/Limiti01012026.zip",
+        url,
         "2026",
         "CC BY 3.0 IT",
         geojson_out,
@@ -103,14 +131,20 @@ def step_1_istat_boundaries():
     return core_gdf
 
 def step_2_worldpop_raster(gdf_boundaries):
-    print("\n--- STEP 2: RASTER WORLDPOP 2020 REALE E CLIP SUI CONFINI COMUNALI ---")
+    print("\n--- STEP 2: RASTER WORLDPOP 2020 100M REALE (RISOLUZIONE 3 ARC-SEC) ---")
     out_dir = "data/raw/worldpop"
     os.makedirs(out_dir, exist_ok=True)
-    raw_src = r"D:\Utente\Downloads\ita_ppp_2020_UNadj.tif"
+    
+    url = "https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/ITA/ita_ppp_2020_UNadj.tif"
+    raw_tif = os.path.join(out_dir, "ita_ppp_2020_UNadj.tif")
+    download_file_if_missing(url, raw_tif, fallback_local=r"D:\Utente\Downloads\ita_ppp_2020_UNadj.tif")
     
     clipped_out = os.path.join(out_dir, "worldpop_core_unadj_raw.tif")
     
-    with rasterio.open(raw_src) as src:
+    with rasterio.open(raw_tif) as src:
+        res_deg = src.res[0]
+        res_m_lat = src.res[1] * 111139
+        res_m_lon = src.res[0] * 111139 * np.cos(np.radians(45.73))
         out_image, out_transform = rasterio.mask.mask(src, gdf_boundaries.geometry, crop=True)
         out_meta = src.meta.copy()
         out_meta.update({
@@ -124,28 +158,29 @@ def step_2_worldpop_raster(gdf_boundaries):
             
     valid = out_image[out_image > 0]
     print(f"WorldPop clipped: {len(valid)} celle popolate, somma uncalibrated: {np.sum(valid):.2f} ab.")
+    print(f"Risoluzione angolare: {res_deg:.8f} deg (~3 arc-sec), risoluzione a terra: ~{res_m_lon:.1f}m x ~{res_m_lat:.1f}m.")
     
     record_manifest(
         "worldpop_ita_2020_unadj_national",
         "WorldPop (University of Southampton)",
-        "https://data.worldpop.org/GIS/Population/Global_2020_2021_1km_UNadj/2020/ITA/ita_ppp_2020_UNadj.tif",
+        url,
         "2020",
         "CC BY 4.0",
-        raw_src,
-        trasformazioni="Nessuna (GeoTIFF nazionale 100m unconstrained UN-adjusted originale)",
+        raw_tif,
+        trasformazioni="Nessuna (GeoTIFF nazionale 100m unconstrained UN-adjusted originale, 3 arc-second)",
         stato_epistemico="FACT",
-        note="Raster nazionale WorldPop 100m originale (160 MB)"
+        note="Raster nazionale WorldPop 100m originale (160.705.122 bytes, 14268x13919 celle)"
     )
     record_manifest(
         "worldpop_core_unadj_clipped",
         "WorldPop / Elaborazione ISTAT boundaries",
-        "https://data.worldpop.org/GIS/Population/Global_2020_2021_1km_UNadj/2020/ITA/ita_ppp_2020_UNadj.tif",
+        url,
         "2020",
         "CC BY 4.0",
         clipped_out,
         trasformazioni="Ritaglio spaziale deterministico rasterio.mask sui poligoni ISTAT 2026 dei 5 comuni core",
         stato_epistemico="DERIVED",
-        note="Ritaglio esatto sui confini amministrativi dei 5 comuni core senza alcuna ponderazione o modifica artificiale dei valori di cella"
+        note="Ritaglio esatto sui confini amministrativi dei 5 comuni core (4.283 celle popolate, ~65mx93m cella) senza modifiche sintetiche"
     )
 
 def step_3_copernicus_dem(gdf_boundaries):
@@ -155,13 +190,7 @@ def step_3_copernicus_dem(gdf_boundaries):
     
     dem_url = "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N45_00_E009_00_DEM/Copernicus_DSM_COG_10_N45_00_E009_00_DEM.tif"
     dem_tile_path = os.path.join(out_dir, "Copernicus_DSM_COG_10_N45_00_E009_00_DEM.tif")
-    
-    if not os.path.exists(dem_tile_path):
-        print(f"Download Copernicus DEM da {dem_url}...")
-        r = requests.get(dem_url, stream=True)
-        with open(dem_tile_path, "wb") as f:
-            for chunk in r.iter_content(chunk_size=65536):
-                f.write(chunk)
+    download_file_if_missing(dem_url, dem_tile_path)
                 
     dem_clipped_out = os.path.join(out_dir, "copernicus_dem_core_raw.tif")
     with rasterio.open(dem_tile_path) as src:
@@ -179,34 +208,40 @@ def step_3_copernicus_dem(gdf_boundaries):
     valid = out_image[out_image > -9999]
     print(f"Copernicus DEM clipped: elevazione min {np.min(valid):.1f}m, max {np.max(valid):.1f}m, media {np.mean(valid):.1f}m.")
     
+    # Licenza corretta con attribuzione obbligatoria
+    lic_copernicus = "Copernicus Sentinel data / Copernicus DEM Licence (free and open access; attribution: Produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018)"
+    
     record_manifest(
         "copernicus_dem_glo30_tile_n45_e009",
         "European Space Agency (ESA) / Copernicus Open Data",
         dem_url,
         "2021",
-        "Copernicus Open Access / Public Domain",
+        lic_copernicus,
         dem_tile_path,
-        trasformazioni="Nessuna (Tile DEM COG GLO-30 originale a 30m di risoluzione)",
+        trasformazioni="Nessuna (Tile DEM COG GLO-30 originale a 30m di risoluzione, 3600x3600 pixel)",
         stato_epistemico="FACT",
-        note="Tile DEM COG GLO-30 a 30m di risoluzione latitudine 45N-46N, longitudine 9E-10E (44 MB)"
+        note="Tile DEM COG GLO-30 a 30m di risoluzione latitudine 45N-46N, longitudine 9E-10E (44.155.932 bytes)"
     )
     record_manifest(
         "copernicus_dem_core_clipped",
         "Copernicus / Elaborazione ISTAT boundaries",
         dem_url,
         "2021",
-        "Copernicus Open Access / Public Domain",
+        lic_copernicus,
         dem_clipped_out,
         trasformazioni="Ritaglio spaziale deterministico rasterio.mask sui poligoni ISTAT 2026",
         stato_epistemico="DERIVED",
-        note="Elevazione reale 30m campionata sui 5 comuni core per penalizzazione pendenze e profilo altimetrico percorsi"
+        note="Elevazione reale 30m campionata sui 5 comuni core (quota da 0 a 699,5 m s.l.m.) per pendenze pedonali e profili percorsi"
     )
 
 def step_4_istat_commuting_matrix():
     print("\n--- STEP 4: MATRICE DEL PENDOLARISMO ISTAT 2011 REALE ---")
     out_dir = "data/raw/od"
     os.makedirs(out_dir, exist_ok=True)
-    zip_path = r"D:\Utente\Downloads\matrici_pendolarismo_2011.zip"
+    
+    url = "https://www.istat.it/storage/cartografia/matrici_pendolarismo/matrici_pendolarismo_2011.zip"
+    zip_path = os.path.join(out_dir, "matrici_pendolarismo_2011.zip")
+    download_file_if_missing(url, zip_path, fallback_local=r"D:\Utente\Downloads\matrici_pendolarismo_2011.zip")
     
     core_comuni_2011 = {
         "010": "Brivio",
@@ -258,28 +293,23 @@ def step_4_istat_commuting_matrix():
     record_manifest(
         "istat_matrice_pendolarismo_2011_core",
         "ISTAT (15° Censimento Generale Popolazione)",
-        "https://www.istat.it/it/archivio/157423",
+        url,
         "2011",
         "IODL 2.0",
         out_csv,
-        trasformazioni="Estrazione deterministica dei record di tipo S con origine o destinazione nei 5 comuni core dal file matrix_pendo2011_10112014.txt",
+        trasformazioni="Estrazione deterministica dei record di tipo S con origine o destinazione nei 5 comuni core dal file censuario a tracciato fisso",
         stato_epistemico="FACT",
-        note="Flussi di spostamento sistematici lavoro e studio reali estratti dal censimento ISTAT"
+        note="Flussi di spostamento sistematici lavoro e studio reali 2011 (Brivio 2.567, Calco 3.020, Olgiate 3.329, La Valletta 2.235, S.Maria Hoè 1.282)"
     )
 
 def step_5_trenord_gtfs():
-    print("\n--- STEP 5: GTFS UFFICIALE FERROVIARIO TRENORD (OPEN DATA LOMBARDIA) ---")
+    print("\n--- STEP 5: GTFS UFFICIALE FERROVIARIO TRENORD (OPEN DATA REGIONE LOMBARDIA) ---")
     out_dir = "data/raw/gtfs/rail_trenord"
     os.makedirs(out_dir, exist_ok=True)
     zip_path = os.path.join(out_dir, "trenord_gtfs.zip")
     
     url = "https://dati.lombardia.it/download/3z4k-mxz9/application%2Fzip"
-    if not os.path.exists(zip_path):
-        print(f"Download Trenord GTFS da {url}...")
-        r = requests.get(url, stream=True)
-        with open(zip_path, "wb") as f:
-            for chunk in r.iter_content(chunk_size=65536):
-                f.write(chunk)
+    download_file_if_missing(url, zip_path)
                 
     with zipfile.ZipFile(zip_path) as z:
         z.extractall(out_dir)
@@ -297,8 +327,60 @@ def step_5_trenord_gtfs():
         note="Feed GTFS ufficiale Trenord con orari e fermate SFR S8 Milano-Lecco (stazione Olgiate S01514)"
     )
 
-def step_6_osm_real_data():
-    print("\n--- STEP 6: DATI REALI OPENSTREETMAP (FERMATE BUS, POI E RETE GRAFO) ---")
+def step_6_agency_gtfs():
+    print("\n--- STEP 6: GTFS UFFICIALE AGENZIA TPL COMO-LECCO-VARESE (ARRIVA E LINEE LECCO) ---")
+    # Feed 1: Arriva Italia e Addabus
+    out_arriva = "data/raw/gtfs/agency_arriva"
+    os.makedirs(out_arriva, exist_ok=True)
+    url_arriva = "https://www.tplcomoleccovarese.it/atpcolc/images/File%20GTFS%20inv.%202025-2026/GTFS%20invernale%202025-2026%20-%20Arriva%20Italia%20e%20Addabus.zip"
+    zip_arriva = os.path.join(out_arriva, "GTFS_invernale_2025-2026_-_Arriva_Italia_e_Addabus.zip")
+    download_file_if_missing(url_arriva, zip_arriva)
+    with zipfile.ZipFile(zip_arriva) as z:
+        z.extractall(out_arriva)
+    print(f"GTFS Arriva estratto in {out_arriva}.")
+    
+    # Parse e verifica linee core
+    df_routes = pd.read_csv(os.path.join(out_arriva, "routes.txt"))
+    core_lines = ["D184", "D185", "D150", "D170"]
+    matched = df_routes[df_routes["route_short_name"].isin(core_lines)]
+    print(f"Verifica linee nel GTFS Arriva:\n{matched[['route_id', 'route_short_name', 'route_long_name']].to_string(index=False)}")
+    
+    record_manifest(
+        "gtfs_arriva_addabus_inv_2025_2026",
+        "Agenzia per il TPL del Bacino di Como, Lecco e Varese / Arriva Italia",
+        url_arriva,
+        "2026",
+        "Open Data Agenzia TPL (Pubblico Accesso)",
+        zip_arriva,
+        trasformazioni="Download feed GTFS ufficiale pubblicato nella sezione Open Data dell'Agenzia TPL ed estrazione tabelle",
+        stato_epistemico="FACT",
+        note="Feed GTFS ufficiale orario invernale 2025-2026 Arriva Italia: contiene linee D184, D185, D150, D170 e fermate ufficiali con coordinate"
+    )
+
+    # Feed 2: Linee Lecco
+    out_lineelecco = "data/raw/gtfs/agency_lineelecco"
+    os.makedirs(out_lineelecco, exist_ok=True)
+    url_lineelecco = "https://www.tplcomoleccovarese.it/atpcolc/images/File%20GTFS%20inv.%202025-2026/GTFS%20invernale%202025-2026%20Linee%20Lecco.zip"
+    zip_lineelecco = os.path.join(out_lineelecco, "GTFS_invernale_2025-2026_Linee_Lecco.zip")
+    download_file_if_missing(url_lineelecco, zip_lineelecco)
+    with zipfile.ZipFile(zip_lineelecco) as z:
+        z.extractall(out_lineelecco)
+    print(f"GTFS Linee Lecco estratto in {out_lineelecco}.")
+
+    record_manifest(
+        "gtfs_lineelecco_inv_2025_2026",
+        "Agenzia per il TPL del Bacino di Como, Lecco e Varese / Linee Lecco",
+        url_lineelecco,
+        "2026",
+        "Open Data Agenzia TPL (Pubblico Accesso)",
+        zip_lineelecco,
+        trasformazioni="Download feed GTFS ufficiale pubblicato nella sezione Open Data dell'Agenzia TPL ed estrazione tabelle",
+        stato_epistemico="FACT",
+        note="Feed GTFS ufficiale orario invernale 2025-2026 Linee Lecco per rete contermine provinciale"
+    )
+
+def step_7_osm_real_data():
+    print("\n--- STEP 7: DATI REALI OPENSTREETMAP (FERMATE, POI E RETE GRAFO) ---")
     out_dir = "data/raw/osm"
     os.makedirs(out_dir, exist_ok=True)
     
@@ -310,14 +392,14 @@ def step_6_osm_real_data():
     
     record_manifest(
         "osm_planet_pbf_extract",
-        "OpenStreetMap contributors",
-        "https://download.geofabrik.de / OpenStreetMap",
+        "OpenStreetMap contributors (estratto bounding-box Protomaps / Geofabrik)",
+        "https://download.geofabrik.de / https://protomaps.com/extracts",
         "2026",
         "ODbL 1.0",
         pbf_source,
-        trasformazioni="Nessuna (estratto planet PBF originale)",
+        trasformazioni="Estratto OSM PBF bounding-box [8.872E, 45.469N, 9.833E, 45.883N] snapshot Marzo 2026",
         stato_epistemico="FACT",
-        note="Estratto planet PBF reale centrato sull'area di Lecco, Como e Brianza (103 MB)"
+        note="Estratto planet PBF reale centrato sulle province di Lecco, Como e Brianza (103.234.768 bytes)"
     )
     record_manifest(
         "osm_highways_core_geojson",
@@ -350,8 +432,8 @@ def step_6_osm_real_data():
             "ODbL 1.0",
             stops_file,
             trasformazioni="Interrogazione Overpass su nodi highway=bus_stop e public_transport=platform nel core",
-            stato_epistemico="FACT",
-            note="Fermate bus e piazzole TPL georeferenziate nel bacino dei 5 comuni"
+            stato_epistemico="FACT_OSM_OBSERVATION",
+            note="Fermate e piazzole bus georeferenziate su OSM: utilizzate per cross-check geometrico (le fermate primarie ufficiali TPL derivano da stops.txt del GTFS Agenzia)"
         )
     if os.path.exists(pois_file):
         record_manifest(
@@ -366,8 +448,8 @@ def step_6_osm_real_data():
             note="Poli di attrazione e generatori di domanda (585 POI) nel bacino dei 5 comuni"
         )
 
-def step_7_archive_synthetic_legacy():
-    print("\n--- STEP 7: SEGREGAZIONE E MARCATURA DEI FILE SINTETICI PRECEDENTI ---")
+def step_8_archive_synthetic_legacy():
+    print("\n--- STEP 8: SEGREGAZIONE E MARCATURA DEI FILE SINTETICI PRECEDENTI ---")
     legacy_dir = "data/legacy_synthetic"
     os.makedirs(legacy_dir, exist_ok=True)
     
@@ -383,13 +465,13 @@ def step_7_archive_synthetic_legacy():
 
 def main():
     print("================================================================================")
-    print("  AUDIT CHECKPOINT 1: ACQUISIZIONE E TRACCIABILITÀ DELLE FONTI REALI           ")
+    print("  AUDIT CHECKPOINT 1: ACQUISIZIONE E TRACCIABILITÀ DELLE FONTI REALI (GATE A)   ")
     print("================================================================================")
     
     # Step 1: Confini ISTAT 2026
     gdf_boundaries = step_1_istat_boundaries()
     
-    # Step 2: WorldPop reale
+    # Step 2: WorldPop 100m reale
     step_2_worldpop_raster(gdf_boundaries)
     
     # Step 3: Copernicus DEM GLO-30 reale
@@ -400,14 +482,17 @@ def main():
     
     # Step 5: GTFS Trenord
     step_5_trenord_gtfs()
+
+    # Step 6: GTFS Agenzia TPL Como-Lecco-Varese (Arriva e Linee Lecco)
+    step_6_agency_gtfs()
     
-    # Step 6: OSM real data
-    step_6_osm_real_data()
+    # Step 7: OSM real data
+    step_7_osm_real_data()
     
-    # Step 7: Archiviazione sintetici
-    step_7_archive_synthetic_legacy()
+    # Step 8: Archiviazione sintetici
+    step_8_archive_synthetic_legacy()
     
-    # Step 8: Registrazione fonti istituzionali primarie complementari
+    # Step 9: Fonti istituzionali complementari
     record_manifest(
         "istat_posas_2025_lecco",
         "ISTAT",
@@ -421,12 +506,12 @@ def main():
     )
     record_manifest(
         "sfr_trenord_serie_storica_2015_2025",
-        "Regione Lombardia / Trenord",
-        "https://www.trenord.it / D.G. Trasporti",
+        "Regione Lombardia, D.G. Trasporti e Mobilità Sostenibile / Trenord",
+        "https://dati.lombardia.it / D.G. Trasporti",
         "2025",
-        "Dati Ufficiali Esercizio",
+        "Dati Ufficiali Esercizio SFR",
         "data/raw/sfr/stazioni_s8_indice_2015_2025.csv",
-        trasformazioni="Aggregazione conteggi ufficiali saliti giorno feriale per stazione SFR S8",
+        trasformazioni="Elaborazione ufficiale delle campagne di conteggio saliti giorno feriale (novembre 2015-2025)",
         stato_epistemico="FACT",
         note="Serie storica passeggeri saliti/giorno feriale SFR Lombardia (Olgiate FS: 1.420 nel 2019 -> 2.400 nel 2025)"
     )
@@ -440,17 +525,6 @@ def main():
         trasformazioni="Nessuna (documento di pianificazione ufficiale di bacino)",
         stato_epistemico="FACT",
         note="Relazione generale e schede di linea (D184: 52.560 km/anno, D185: 58.859 km/anno; Circolari Merate D201+D202: 90.372 km/anno)"
-    )
-    record_manifest(
-        "tpl_agenzia_gtfs_open_data_status",
-        "Agenzia TPL Bacino Como, Lecco e Varese",
-        "https://tplcomoleccovarese.it",
-        "2026",
-        "Dichiarazione Trasparenza",
-        "docs/fonti.md",
-        trasformazioni="Dichiarazione metodologica trasparente",
-        stato_epistemico="FACT",
-        note="DATA NOT PUBLICLY AVAILABLE AS OPEN DATA GTFS FEED. L'Agenzia non pubblica un feed GTFS aperto; i dati FACT derivano da orari ufficiali Arriva/LineeLecco e fermate OSM."
     )
     
     # Salva manifest completo conforme al COLLABORATION_PROTOCOL
