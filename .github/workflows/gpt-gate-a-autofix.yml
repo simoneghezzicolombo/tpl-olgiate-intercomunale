@@ -1,0 +1,43 @@
+name: GPT Gate A autofix
+
+on:
+  push:
+    branches: [antigravity-real-data]
+    paths:
+      - tools/gpt_gate_a_autofix.py
+
+permissions:
+  contents: write
+
+jobs:
+  apply-fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: antigravity-real-data
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Apply audited Gate A patch
+        run: |
+          python tools/gpt_gate_a_autofix.py
+          python -m py_compile scripts/audit_01_fetch_real_inputs.py
+          git diff --check
+          git diff -- scripts/audit_01_fetch_real_inputs.py tests/test_audit_provenance.py
+
+      - name: Commit patch
+        run: |
+          if git diff --quiet; then
+            echo "No changes produced; refusing false success."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/audit_01_fetch_real_inputs.py tests/test_audit_provenance.py
+          git commit -m "fix(gate-a): normalize SFR schema and refresh Overpass fallbacks"
+          git push origin HEAD:antigravity-real-data
