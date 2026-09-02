@@ -4,7 +4,7 @@ on:
   push:
     branches: [antigravity-real-data]
     paths:
-      - tools/gpt_gate_a_finalize.py
+      - tools/gpt_gate_a_finalize_retry.flag
 
 permissions:
   contents: write
@@ -34,6 +34,8 @@ jobs:
       - name: Finalize documentation and clean temporary tooling
         run: |
           python tools/gpt_gate_a_finalize.py
+          sed -i 's/[[:space:]]*$//' AGENT_STATUS.md docs/GATE_A_PASS.md docs/fonti.md
+          rm -f tools/gpt_gate_a_finalize_retry.flag
           git diff --check
 
       - name: Commit authoritative Gate A snapshot
