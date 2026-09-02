@@ -15,6 +15,10 @@ data/raw/gtfs/rail_trenord/calendar_dates.txt
 data/raw/gtfs/rail_trenord/trenord_gtfs.zip
 cache/
 
+# Local multi-agent bridge state
+.agent_bridge_state.json
+.agent_bridge_state.json.tmp
+
 # Environments
 .env
 .venv
