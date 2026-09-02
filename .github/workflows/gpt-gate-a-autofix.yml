@@ -1,18 +1,18 @@
-name: GPT Gate A autofix
+name: GPT Gate A finalize
 
 on:
   push:
     branches: [antigravity-real-data]
     paths:
-      - tools/gpt_gate_a_autofix_2.py
+      - tools/gpt_gate_a_finalize.py
 
 permissions:
   contents: write
 
 jobs:
-  apply-fix:
+  finalize-gate-a:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,21 +23,27 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Apply audited Gate A patch
+      - name: Install provenance dependencies
         run: |
-          python tools/gpt_gate_a_autofix_2.py
-          python -m py_compile scripts/audit_01_fetch_real_inputs.py
-          git diff --check
-          git diff -- scripts/audit_01_fetch_real_inputs.py
+          python -m pip install --upgrade pip
+          python -m pip install pandas geopandas rasterio pyogrio requests pytest
 
-      - name: Commit patch
+      - name: Regenerate authoritative Gate A manifest
+        run: python scripts/audit_01_fetch_real_inputs.py
+
+      - name: Finalize documentation and clean temporary tooling
         run: |
-          if git diff --quiet; then
-            echo "No changes produced; refusing false success."
-            exit 1
-          fi
+          python tools/gpt_gate_a_finalize.py
+          git diff --check
+
+      - name: Commit authoritative Gate A snapshot
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/audit_01_fetch_real_inputs.py
-          git commit -m "fix(gate-a): clarify automated POSAS provenance"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No finalization changes produced; refusing false success."
+            exit 1
+          fi
+          git commit -m "audit(gate-a): record authoritative PASS snapshot"
           git push origin HEAD:antigravity-real-data
