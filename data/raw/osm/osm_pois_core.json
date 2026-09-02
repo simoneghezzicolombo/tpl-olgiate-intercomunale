@@ -1,0 +1,10261 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-09-02T21:11:36Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 227677410,
+  "lat": 45.7190350,
+  "lon": 9.4093390,
+  "tags": {
+    "addr:city": "Calco",
+    "addr:housenumber": "5",
+    "addr:postcode": "23885",
+    "addr:street": "Via Nazionale",
+    "amenity": "fuel",
+    "brand": "Eni",
+    "brand:wikidata": "Q565594",
+    "brand:wikipedia": "en:Eni",
+    "name": "Eni",
+    "operator": "G.S.S. di Fabio Valsecchi & C. S.A.S.",
+    "ref:mise": "23547",
+    "source:date": "2018-04-16"
+  }
+},
+{
+  "type": "node",
+  "id": 227820556,
+  "lat": 45.7404390,
+  "lon": 9.4516860,
+  "tags": {
+    "addr:city": "Cisano Bergamasco",
+    "addr:housenumber": "32",
+    "addr:postcode": "24034",
+    "addr:street": "Via Milano",
+    "amenity": "fuel",
+    "brand": "Tamoil",
+    "brand:wikidata": "Q706793",
+    "brand:wikipedia": "en:Tamoil",
+    "name": "Tamoil",
+    "operator": "Dam S.N.C. di Caccia Daniele & C.",
+    "ref:mise": "7740"
+  }
+},
+{
+  "type": "node",
+  "id": 228158099,
+  "lat": 45.7286770,
+  "lon": 9.4007940,
+  "tags": {
+    "addr:city": "Olgiate Molgora",
+    "addr:postcode": "23887",
+    "addr:street": "Via Como",
+    "amenity": "fuel",
+    "brand": "Q8",
+    "name": "Q8",
+    "operator": "Q8"
+  }
+},
+{
+  "type": "node",
+  "id": 228161132,
+  "lat": 45.7383280,
+  "lon": 9.3631161,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "IP",
+    "operator": "Panzeri Renato & C. S.N.C.",
+    "ref:mise": "8391"
+  }
+},
+{
+  "type": "node",
+  "id": 228161352,
+  "lat": 45.7435995,
+  "lon": 9.3767240,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Tamoil",
+    "name": "Tamoil",
+    "operator": "Officina Dei Sapori S.N.C. di Fumagalli Ivan e Radaelli Filippo",
+    "ref:mise": "36136"
+  }
+},
+{
+  "type": "node",
+  "id": 228758466,
+  "lat": 45.7257270,
+  "lon": 9.4154820,
+  "tags": {
+    "addr:city": "Calco",
+    "addr:housenumber": "59",
+    "addr:postcode": "23885",
+    "addr:street": "Via Nazionale",
+    "amenity": "fuel",
+    "brand": "Coil",
+    "name": "Coil",
+    "nobrand": "yes",
+    "operator": "Cristella Petroli s.r.l.",
+    "ref:mise": "9378",
+    "self_service": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 526201954,
+  "lat": 45.7239862,
+  "lon": 9.4109305,
+  "tags": {
+    "amenity": "pharmacy"
+  }
+},
+{
+  "type": "node",
+  "id": 526204028,
+  "lat": 45.7246063,
+  "lon": 9.4155507,
+  "tags": {
+    "addr:city": "Calco",
+    "addr:housenumber": "6",
+    "addr:postcode": "23885",
+    "addr:street": "Largo Pomeo",
+    "amenity": "post_office",
+    "brand": "Poste Italiane",
+    "brand:wikidata": "Q495026",
+    "brand:wikipedia": "en:Poste italiane",
+    "name": "Calco",
+    "opening_hours": "Mo-Fr 08:20-13:35; Sa 08:20-12:35",
+    "operator": "Poste Italiane",
+    "operator:wikidata": "Q495026",
+    "phone": "+39 039 508428",
+    "ref": "20041"
+  }
+},
+{
+  "type": "node",
+  "id": 526204508,
+  "lat": 45.7243277,
+  "lon": 9.4154109,
+  "tags": {
+    "addr:city": "Calco",
+    "addr:housenumber": "4c",
+    "addr:postcode": "23885",
+    "addr:street": "Largo Pomeo",
+    "amenity": "bank",
+    "brand": "Banco BPM",
+    "brand:en": "BPM Bank",
+    "brand:es": "Banco BPM",
+    "brand:wikidata": "Q27331643",
+    "brand:wikipedia": "en:Banco BPM",
+    "drive_through": "no",
+    "name": "Banco BPM",
+    "name:en": "BPM Bank",
+    "name:es": "Banco BPM",
+    "name:it": "Banco BPM"
+  }
+},
+{
+  "type": "node",
+  "id": 526204876,
+  "lat": 45.7246573,
+  "lon": 9.4160718,
+  "tags": {
+    "amenity": "cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 527390165,
+  "lat": 45.7230771,
+  "lon": 9.4159160,
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "node",
+  "id": 527391227,
+  "lat": 45.7226816,
+  "lon": 9.4064832,
+  "tags": {
+    "amenity": "recycling",
+    "recycling_type": "centre"
+  }
+},
+{
+  "type": "node",
+  "id": 679102820,
+  "lat": 45.7416757,
+  "lon": 9.4493900,
+  "tags": {
+    "leisure": "slipway"
+  }
+},
+{
+  "type": "node",
+  "id": 856718199,
+  "lat": 45.7250199,
+  "lon": 9.3608099,
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "gravel"
+  }
+},
+{
+  "type": "node",
+  "id": 856782610,
+  "lat": 45.7259730,
+  "lon": 9.3627993,
+  "tags": {
+    "amenity": "restaurant",
+    "capacity": "40",
+    "cuisine": "regional",
+    "description": "Aperto Gio-Ven-Sab a cena e Dom e festivi a pranzo",
+    "email": "info@amicidellaratta.it",
+    "name": "Agriturismo Amici della Ratta",
+    "opening_hours": "Tu-Sa 20:30+;PH Su 12:30-14:30",
+    "phone": "+39 039 5312150",
+    "website": "www.amicidellaratta.it"
+  }
+},
+{
+  "type": "node",
+  "id": 856782645,
+  "lat": 45.7230487,
+  "lon": 9.3651772,
+  "tags": {
+    "addr:housenumber": "15",
+    "addr:street": "Via Curone",
+    "amenity": "restaurant",
+    "guest_house": "agritourism",
+    "name": "Agriturismo La Costa",
+    "name:fr": "Accès - Hôtel Agriturismo La Costa",
+    "tourism": "guest_house"
+  }
+},
+{
+  "type": "node",
+  "id": 856796195,
+  "lat": 45.7257547,
+  "lon": 9.3630204,
+  "tags": {
+    "access": "private",
+    "amenity": "parking"
+  }
+},
+{
+  "type": "node",
+  "id": 1144810134,
+  "lat": 45.7599964,
+  "lon": 9.3927451,
+  "tags": {
+    "amenity": "hunting_stand",
+    "height": "low"
+  }
+},
+{
+  "type": "node",
+  "id": 1145450322,
+  "lat": 45.7592458,
+  "lon": 9.3939798,
+  "tags": {
+    "amenity": "bench",
+    "backrest": "no",
+    "material": "stone"
+  }
+},
+{
+  "type": "node",
+  "id": 1371635248,
+  "lat": 45.7197087,
+  "lon": 9.4014768,
+  "tags": {
+    "addr:city": "Olgiate Molgora",
+    "addr:country": "IT",
+    "addr:postcode": "23887",
+    "addr:street": "Via Don Luigi Sturzo",
+    "name": "Olgiate Motori",
+    "shop": "car_repair"
+  }
+},
+{
+  "type": "node",
+  "id": 1380841735,
+  "lat": 45.7132941,
+  "lon": 9.3716930,
+  "tags": {
+    "amenity": "drinking_water",
+    "check_date": "2021-08-30"
+  }
+},
+{
+  "type": "node",
+  "id": 1461939148,
+  "lat": 45.7513943,
+  "lon": 9.3882630,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 1568131300,
+  "lat": 45.7118333,
+  "lon": 9.4589521,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:biogas": "yes",
+    "fuel:diesel": "yes",
+    "fuel:octane_95": "yes",
+    "name": "CAR Fuel 037",
+    "nobrand": "yes",
+    "operator": "Bl Car S.A.S. di Carrara Luca & C.",
+    "ref:mise": "15311"
+  }
+},
+{
+  "type": "node",
+  "id": 1576508271,
+  "lat": 45.7108593,
+  "lon": 9.3842840,
+  "tags": {
+    "access": "yes",
+    "amenity": "charging_station",
+    "bicycle": "yes",
+    "fixme": "verificare la posizione",
+    "name": "DINAclub - Stazione di Ricarica e-Bike",
+    "network": "DINAclub",
+    "operator": "Repower",
+    "operator:website": "https://www.repower.com/dina/",
+    "operator:wikidata": "Q674712",
+    "operator:wikipedia": "it:Repower"
+  }
+},
+{
+  "type": "node",
+  "id": 1837069780,
+  "lat": 45.7282300,
+  "lon": 9.4032082,
+  "tags": {
+    "amenity": "townhall"
+  }
+},
+{
+  "type": "node",
+  "id": 1837070077,
+  "lat": 45.7298587,
+  "lon": 9.4000797,
+  "tags": {
+    "addr:postcode": "23887",
+    "addr:street": "Via Sommi Picenardi",
+    "amenity": "school",
+    "name": "Scuola Primaria E. Gola"
+  }
+},
+{
+  "type": "node",
+  "id": 1837075017,
+  "lat": 45.7241181,
+  "lon": 9.4007674,
+  "tags": {
+    "leisure": "sports_centre"
+  }
+},
+{
+  "type": "node",
+  "id": 1837075019,
+  "lat": 45.7241294,
+  "lon": 9.4002578,
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "node",
+  "id": 1837075469,
+  "lat": 45.7282861,
+  "lon": 9.4020441,
+  "tags": {
+    "amenity": "post_office",
+    "name": "Olgiate Molgora",
+    "not:operator:wikidata": "Q495026",
+    "operator": "Poste Italiane",
+    "phone": "+39 039 508385",
+    "ref": "20143"
+  }
+},
+{
+  "type": "node",
+  "id": 1837076072,
+  "lat": 45.7282374,
+  "lon": 9.4017652,
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "brand": "Deutsche Bank",
+    "brand:wikidata": "Q66048",
+    "name": "Deutsche Bank"
+  }
+},
+{
+  "type": "node",
+  "id": 1837076073,
+  "lat": 45.7211247,
+  "lon": 9.4027627,
+  "tags": {
+    "amenity": "recycling",
+    "recycling_type": "centre"
+  }
+},
+{
+  "type": "node",
+  "id": 2046132409,
+  "lat": 45.7592775,
+  "lon": 9.3623269,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "italian",
+    "delivery": "no",
+    "name": "Da Giuseppe",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2267174921,
+  "lat": 45.7418989,
+  "lon": 9.4493786,
+  "tags": {
+    "access": "yes",
+    "amenity": "drinking_water",
+    "fee": "no",
+    "man_made": "water_tap"
+  }
+},
+{
+  "type": "node",
+  "id": 2291321774,
+  "lat": 45.7364589,
+  "lon": 9.3636229,
+  "tags": {
+    "access": "yes",
+    "leisure": "playground"
+  }
+},
+{
+  "type": "node",
+  "id": 2428954854,
+  "lat": 45.7373510,
+  "lon": 9.3745723,
+  "tags": {
+    "shop": "motorcycle"
+  }
+},
+{
+  "type": "node",
+  "id": 2428954870,
+  "lat": 45.7375009,
+  "lon": 9.3739178,
+  "tags": {
+    "amenity": "bar",
+    "name": "Bar Gelateria TAEL",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2428954872,
+  "lat": 45.7393615,
+  "lon": 9.3647712,
+  "tags": {
+    "name": "Riva Magazin",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 2428961615,
+  "lat": 45.7380773,
+  "lon": 9.3697255,
+  "tags": {
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 2428961622,
+  "lat": 45.7379893,
+  "lon": 9.3704524,
+  "tags": {
+    "amenity": "bar"
+  }
+},
+{
+  "type": "node",
+  "id": 2428982854,
+  "lat": 45.7405563,
+  "lon": 9.3622727,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wall_loops",
+    "check_date": "2025-07-30",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2434904329,
+  "lat": 45.7289662,
+  "lon": 9.4008603,
+  "tags": {
+    "amenity": "bank",
+    "name": "Credito Valtellinese"
+  }
+},
+{
+  "type": "node",
+  "id": 2434904330,
+  "lat": 45.7289076,
+  "lon": 9.4003274,
+  "tags": {
+    "name": "Parrucchiere uomo",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 2447334447,
+  "lat": 45.7154793,
+  "lon": 9.4569017,
+  "tags": {
+    "amenity": "bar",
+    "name": "Flash",
+    "wifi": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2447334452,
+  "lat": 45.7178315,
+  "lon": 9.4567300,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "IP",
+    "brand:wikidata": "Q646807",
+    "fuel:biodiesel": "yes",
+    "fuel:diesel": "yes",
+    "fuel:octane_95": "yes",
+    "name": "IP Distribuzione",
+    "operator": "Ip Services S.R.L.",
+    "ref:mise": "31007"
+  }
+},
+{
+  "type": "node",
+  "id": 2447334455,
+  "lat": 45.7153654,
+  "lon": 9.4575078,
+  "tags": {
+    "addr:housename": "LD Market",
+    "addr:postcode": "24030",
+    "name": "LD Market",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2447334458,
+  "lat": 45.7155168,
+  "lon": 9.4571592,
+  "tags": {
+    "name": "Corte Zappello",
+    "shop": "mall"
+  }
+},
+{
+  "type": "node",
+  "id": 2451956744,
+  "lat": 45.7132764,
+  "lon": 9.4595017,
+  "tags": {
+    "addr:housename": "Pianeta Uomo",
+    "addr:housenumber": "1/a",
+    "addr:postcode": "24030",
+    "addr:street": "Via Catello",
+    "name": "Pianeta Uomo",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 2451966974,
+  "lat": 45.7108884,
+  "lon": 9.4595636,
+  "tags": {
+    "amenity": "recycling",
+    "recycling:batteries": "yes",
+    "recycling:books": "yes",
+    "recycling:cartons": "yes",
+    "recycling:clothes": "yes",
+    "recycling:electrical_appliances": "yes",
+    "recycling:glass": "yes",
+    "recycling:glass_bottles": "yes",
+    "recycling:green_waste": "yes",
+    "recycling:magazines": "yes",
+    "recycling:newspaper": "yes",
+    "recycling:paper": "yes",
+    "recycling:paper_packaging": "yes",
+    "recycling:plastic": "yes",
+    "recycling:plastic_bottles": "yes",
+    "recycling:small_appliances": "yes",
+    "recycling:waste": "yes",
+    "recycling:wood": "yes",
+    "recycling_type": "centre"
+  }
+},
+{
+  "type": "node",
+  "id": 2495922681,
+  "lat": 45.7375342,
+  "lon": 9.3703015,
+  "tags": {
+    "amenity": "bar"
+  }
+},
+{
+  "type": "node",
+  "id": 2495922682,
+  "lat": 45.7376099,
+  "lon": 9.3703300,
+  "tags": {
+    "email": "ottica@fotoagostoni.com",
+    "name": "Foto Ottica Agostoni",
+    "opening_hours": "Mo 15:00-19:30; Tu-Sa 09:00-12:30,15:00-19:30",
+    "operator": "Luca Agostoni",
+    "phone": "+39 039 5310112",
+    "shop": "optician",
+    "website": "https://www.otticaagostoni.it/"
+  }
+},
+{
+  "type": "node",
+  "id": 2495922685,
+  "lat": 45.7374563,
+  "lon": 9.3705057,
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "name": "Intesa San Paolo"
+  }
+},
+{
+  "type": "node",
+  "id": 2621230885,
+  "lat": 45.7396398,
+  "lon": 9.3713350,
+  "tags": {
+    "amenity": "parking_entrance"
+  }
+},
+{
+  "type": "node",
+  "id": 2621230886,
+  "lat": 45.7400043,
+  "lon": 9.3716158,
+  "tags": {
+    "amenity": "parking_entrance"
+  }
+},
+{
+  "type": "node",
+  "id": 2638544710,
+  "lat": 45.7148496,
+  "lon": 9.4425199,
+  "tags": {
+    "leisure": "panorama",
+    "tourism": "viewpoint"
+  }
+},
+{
+  "type": "node",
+  "id": 2638544713,
+  "lat": 45.7143508,
+  "lon": 9.4426195,
+  "tags": {
+    "leisure": "panorama",
+    "tourism": "viewpoint"
+  }
+},
+{
+  "type": "node",
+  "id": 2774920952,
+  "lat": 45.7210497,
+  "lon": 9.4124427,
+  "tags": {
+    "addr:city": "Calco",
+    "addr:housenumber": "14",
+    "addr:postcode": "23885",
+    "addr:street": "Via Nazionale",
+    "amenity": "fuel",
+    "brand": "IP",
+    "brand:wikidata": "Q3788748",
+    "name": "IP",
+    "operator": "Khan Car Wash di Shakir Hussain",
+    "ref:mise": "26888",
+    "self_service": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3016606433,
+  "lat": 45.7379799,
+  "lon": 9.3715099,
+  "tags": {
+    "amenity": "post_office",
+    "name": "Rovagnate",
+    "operator": "Poste Italiane",
+    "phone": "+39 039 5310325",
+    "ref": "20169"
+  }
+},
+{
+  "type": "node",
+  "id": 3016619233,
+  "lat": 45.7435223,
+  "lon": 9.3717396,
+  "tags": {
+    "amenity": "post_office"
+  }
+},
+{
+  "type": "node",
+  "id": 3016619333,
+  "lat": 45.7436300,
+  "lon": 9.3717151,
+  "tags": {
+    "amenity": "post_box"
+  }
+},
+{
+  "type": "node",
+  "id": 3016740543,
+  "lat": 45.7555737,
+  "lon": 9.4255778,
+  "tags": {
+    "amenity": "post_office"
+  }
+},
+{
+  "type": "node",
+  "id": 3016753033,
+  "lat": 45.7555896,
+  "lon": 9.4255884,
+  "tags": {
+    "amenity": "post_box"
+  }
+},
+{
+  "type": "node",
+  "id": 3016774434,
+  "lat": 45.7367942,
+  "lon": 9.4283381,
+  "tags": {
+    "amenity": "post_box"
+  }
+},
+{
+  "type": "node",
+  "id": 3016774445,
+  "lat": 45.7425863,
+  "lon": 9.4471676,
+  "tags": {
+    "amenity": "post_office"
+  }
+},
+{
+  "type": "node",
+  "id": 3016774446,
+  "lat": 45.7425929,
+  "lon": 9.4472148,
+  "tags": {
+    "amenity": "post_box"
+  }
+},
+{
+  "type": "node",
+  "id": 3589553032,
+  "lat": 45.7133659,
+  "lon": 9.4180913,
+  "tags": {
+    "shop": "kiosk"
+  }
+},
+{
+  "type": "node",
+  "id": 3589759004,
+  "lat": 45.7153766,
+  "lon": 9.4192763,
+  "tags": {
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 3589775762,
+  "lat": 45.7150588,
+  "lon": 9.4205965,
+  "tags": {
+    "amenity": "post_box"
+  }
+},
+{
+  "type": "node",
+  "id": 4055226949,
+  "lat": 45.7375630,
+  "lon": 9.3736993,
+  "tags": {
+    "name": "Elite",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 4055226950,
+  "lat": 45.7376495,
+  "lon": 9.3731838,
+  "tags": {
+    "amenity": "pharmacy"
+  }
+},
+{
+  "type": "node",
+  "id": 4449777392,
+  "lat": 45.7251138,
+  "lon": 9.3681647,
+  "tags": {
+    "addr:street": "Cipressi Bassi",
+    "amenity": "restaurant",
+    "name": "Cascina Galbusera Nera",
+    "name:en": "Cascina Galbusera Nera",
+    "name:it": "Cascina Galbusera Nera"
+  }
+},
+{
+  "type": "node",
+  "id": 4683871824,
+  "lat": 45.7368532,
+  "lon": 9.4280170,
+  "tags": {
+    "amenity": "bar",
+    "source": "note 890539"
+  }
+},
+{
+  "type": "node",
+  "id": 4869723546,
+  "lat": 45.7432161,
+  "lon": 9.4504853,
+  "tags": {
+    "leisure": "playground"
+  }
+},
+{
+  "type": "node",
+  "id": 4869723547,
+  "lat": 45.7430460,
+  "lon": 9.4503320,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 4869723744,
+  "lat": 45.7435047,
+  "lon": 9.4510040,
+  "tags": {
+    "leisure": "marina",
+    "seamark:harbour:category": "marina",
+    "seamark:type": "harbour"
+  }
+},
+{
+  "type": "node",
+  "id": 4946954571,
+  "lat": 45.7100730,
+  "lon": 9.3949245,
+  "tags": {
+    "amenity": "drinking_water",
+    "wikimedia_commons": "File:Lavoir in Pianezzo (Olgiate Molgora).jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 5057729701,
+  "lat": 45.7421684,
+  "lon": 9.4489798,
+  "tags": {
+    "amenity": "ice_cream"
+  }
+},
+{
+  "type": "node",
+  "id": 5057729704,
+  "lat": 45.7435012,
+  "lon": 9.4506632,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 5265369805,
+  "lat": 45.7141197,
+  "lon": 9.3719776,
+  "tags": {
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 5265369806,
+  "lat": 45.7141000,
+  "lon": 9.3719280,
+  "tags": {
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 5329242223,
+  "lat": 45.7404912,
+  "lon": 9.3611589,
+  "tags": {
+    "amenity": "townhall",
+    "email": "info@unionevalletta.it",
+    "name": "Municipio della Valletta Brianza",
+    "phone": "+39 039 5311174",
+    "website": "https://www.comune.lavallettabrianza.lc.it/"
+  }
+},
+{
+  "type": "node",
+  "id": 5406073921,
+  "lat": 45.7421793,
+  "lon": 9.4064056,
+  "tags": {
+    "amenity": "drinking_water",
+    "source": "mapillary 2019"
+  }
+},
+{
+  "type": "node",
+  "id": 5409570126,
+  "lat": 45.7595268,
+  "lon": 9.3615061,
+  "tags": {
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 5410309689,
+  "lat": 45.7595185,
+  "lon": 9.3615495,
+  "tags": {
+    "amenity": "vending_machine",
+    "vending": "cigarettes"
+  }
+},
+{
+  "type": "node",
+  "id": 5416291523,
+  "lat": 45.7128003,
+  "lon": 9.4185179,
+  "tags": {
+    "amenity": "water_point",
+    "drinking_water": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5569912921,
+  "lat": 45.7421336,
+  "lon": 9.4492878,
+  "tags": {
+    "addr:housenumber": "7",
+    "addr:street": "Piazza Frigerio",
+    "amenity": "restaurant",
+    "cuisine": "italian_pizza",
+    "name": "Carmen"
+  }
+},
+{
+  "type": "node",
+  "id": 5655743203,
+  "lat": 45.7422468,
+  "lon": 9.4470908,
+  "tags": {
+    "addr:city": "Brivio",
+    "addr:housenumber": "25a",
+    "addr:postcode": "23883",
+    "addr:street": "Via Vittorio Emanuele II",
+    "amenity": "library",
+    "internet_access": "yes",
+    "internet_access:fee": "no",
+    "name": "Biblioteca Comunale Pietro Frigerio",
+    "phone": "+39 039 5321377",
+    "start_date": "2006-03-26",
+    "website": "https://www.comune.brivio.lc.it/",
+    "wikidata": "Q112941220"
+  }
+},
+{
+  "type": "node",
+  "id": 5741238435,
+  "lat": 45.7590968,
+  "lon": 9.3602661,
+  "tags": {
+    "name": "Ripamonti Calzature",
+    "shop": "shoes"
+  }
+},
+{
+  "type": "node",
+  "id": 5748667743,
+  "lat": 45.7443666,
+  "lon": 9.4501675,
+  "tags": {
+    "amenity": "vending_machine",
+    "payment:coins": "yes",
+    "vending": "parking_tickets"
+  }
+},
+{
+  "type": "node",
+  "id": 5748770932,
+  "lat": 45.7435121,
+  "lon": 9.4506718,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 5749012315,
+  "lat": 45.7435139,
+  "lon": 9.4485265,
+  "tags": {
+    "amenity": "vending_machine",
+    "name": "Casa dell'acqua",
+    "payment:coins": "yes",
+    "vending": "water"
+  }
+},
+{
+  "type": "node",
+  "id": 5749012316,
+  "lat": 45.7431320,
+  "lon": 9.4487149,
+  "tags": {
+    "amenity": "vending_machine",
+    "name": "Distributore Latte",
+    "payment:coins": "yes",
+    "vending": "milk"
+  }
+},
+{
+  "type": "node",
+  "id": 5749012579,
+  "lat": 45.7438297,
+  "lon": 9.4487438,
+  "tags": {
+    "amenity": "marketplace",
+    "name": "Mercato del Lunedì",
+    "opening_hours": "Mo 07:00-12:30",
+    "operator": "Comune di Brivio",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5749012580,
+  "lat": 45.7439130,
+  "lon": 9.4503866,
+  "tags": {
+    "amenity": "motorcycle_parking",
+    "covered": "no",
+    "fee": "no",
+    "supervised": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "node",
+  "id": 5749368669,
+  "lat": 45.7425880,
+  "lon": 9.4457402,
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "chapel",
+    "denomination": "catholic",
+    "religion": "christian"
+  }
+},
+{
+  "type": "node",
+  "id": 5783696435,
+  "lat": 45.7143857,
+  "lon": 9.4213504,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 5783697258,
+  "lat": 45.7142452,
+  "lon": 9.4423655,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 5851842521,
+  "lat": 45.7386686,
+  "lon": 9.4215175,
+  "tags": {
+    "addr:city": "Olgiate Molgora",
+    "addr:housenumber": "10",
+    "addr:postcode": "23887",
+    "addr:street": "Via Nazionale",
+    "amenity": "fuel",
+    "brand": "Q8",
+    "brand:wikidata": "Q4119207",
+    "name": "Q8",
+    "operator": "Servizi & Gestioni Italia S.R.L.",
+    "ref:mise": "23790",
+    "self_service": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5858705476,
+  "lat": 45.7411725,
+  "lon": 9.4481439,
+  "tags": {
+    "addr:city": "Brivio",
+    "addr:postcode": "23883",
+    "addr:street": "Via Suor Maria Anna Sala",
+    "amenity": "ice_cream",
+    "contact:phone": "+39 039 5320337",
+    "name": "Flor & Fantasy",
+    "ref:vatin": "IT02298520137"
+  }
+},
+{
+  "type": "node",
+  "id": 5913676429,
+  "lat": 45.7185585,
+  "lon": 9.4075094,
+  "tags": {
+    "amenity": "parking_entrance",
+    "covered": "yes",
+    "layer": "-1"
+  }
+},
+{
+  "type": "node",
+  "id": 5913676430,
+  "lat": 45.7180777,
+  "lon": 9.4067658,
+  "tags": {
+    "amenity": "parking_entrance",
+    "covered": "yes",
+    "layer": "-1"
+  }
+},
+{
+  "type": "node",
+  "id": 5915576018,
+  "lat": 45.7363190,
+  "lon": 9.3620569,
+  "tags": {
+    "amenity": "post_box"
+  }
+},
+{
+  "type": "node",
+  "id": 5964730903,
+  "lat": 45.7393510,
+  "lon": 9.3612695,
+  "tags": {
+    "addr:city": "La Valletta Brianza",
+    "addr:housenumber": "2",
+    "addr:postcode": "23888",
+    "addr:street": "Via Dante Alighieri",
+    "clothes": "sports",
+    "name": "Barba sport",
+    "operator": "Intersport",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 5967485385,
+  "lat": 45.7338296,
+  "lon": 9.3568665,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 6127183264,
+  "lat": 45.7353166,
+  "lon": 9.3606862,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 6419604836,
+  "lat": 45.7468910,
+  "lon": 9.4162850,
+  "tags": {
+    "check_date": "2021-07-10",
+    "covered": "no",
+    "leisure": "picnic_table",
+    "mapillary": "307602810990578"
+  }
+},
+{
+  "type": "node",
+  "id": 6419604837,
+  "lat": 45.7469088,
+  "lon": 9.4162689,
+  "tags": {
+    "check_date": "2021-07-10",
+    "covered": "no",
+    "leisure": "picnic_table",
+    "mapillary": "307602810990578"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299290,
+  "lat": 45.7145601,
+  "lon": 9.4435554,
+  "tags": {
+    "amenity": "bench",
+    "material": "stone"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299291,
+  "lat": 45.7145098,
+  "lon": 9.4436092,
+  "tags": {
+    "amenity": "bench",
+    "material": "stone"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299294,
+  "lat": 45.7140597,
+  "lon": 9.4430298,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299295,
+  "lat": 45.7140506,
+  "lon": 9.4430805,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299296,
+  "lat": 45.7140139,
+  "lon": 9.4431209,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299297,
+  "lat": 45.7139649,
+  "lon": 9.4431735,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299298,
+  "lat": 45.7139117,
+  "lon": 9.4432532,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299299,
+  "lat": 45.7138597,
+  "lon": 9.4433321,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299300,
+  "lat": 45.7140341,
+  "lon": 9.4430472,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299301,
+  "lat": 45.7140065,
+  "lon": 9.4430735,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299302,
+  "lat": 45.7139007,
+  "lon": 9.4432260,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299303,
+  "lat": 45.7139680,
+  "lon": 9.4431296,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299304,
+  "lat": 45.7139307,
+  "lon": 9.4431840,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299305,
+  "lat": 45.7138701,
+  "lon": 9.4432725,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299306,
+  "lat": 45.7138364,
+  "lon": 9.4433225,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 6448299310,
+  "lat": 45.7146238,
+  "lon": 9.4443347,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Il Baretto"
+  }
+},
+{
+  "type": "node",
+  "id": 6448340107,
+  "lat": 45.7143749,
+  "lon": 9.4216243,
+  "tags": {
+    "access": "private",
+    "leisure": "slipway"
+  }
+},
+{
+  "type": "node",
+  "id": 6448340340,
+  "lat": 45.7145260,
+  "lon": 9.4223430,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 6448340341,
+  "lat": 45.7145054,
+  "lon": 9.4223830,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 6448340342,
+  "lat": 45.7142195,
+  "lon": 9.4225741,
+  "tags": {
+    "leisure": "picnic_table",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 6448340343,
+  "lat": 45.7142012,
+  "lon": 9.4226174,
+  "tags": {
+    "leisure": "picnic_table",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 6448993329,
+  "lat": 45.7182416,
+  "lon": 9.4077113,
+  "tags": {
+    "amenity": "cafe",
+    "name": "Bar Atlantic"
+  }
+},
+{
+  "type": "node",
+  "id": 6463662710,
+  "lat": 45.7416826,
+  "lon": 9.3952042,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 6463662711,
+  "lat": 45.7416933,
+  "lon": 9.3951978,
+  "tags": {
+    "amenity": "bench"
+  }
+},
+{
+  "type": "node",
+  "id": 6463662712,
+  "lat": 45.7416917,
+  "lon": 9.3951681,
+  "tags": {
+    "amenity": "bench"
+  }
+},
+{
+  "type": "node",
+  "id": 6463662727,
+  "lat": 45.7418483,
+  "lon": 9.3953007,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 6463662729,
+  "lat": 45.7422885,
+  "lon": 9.3967326,
+  "tags": {
+    "amenity": "post_box"
+  }
+},
+{
+  "type": "node",
+  "id": 6464165617,
+  "lat": 45.7220658,
+  "lon": 9.3943539,
+  "tags": {
+    "amenity": "post_box"
+  }
+},
+{
+  "type": "node",
+  "id": 6466726443,
+  "lat": 45.7592161,
+  "lon": 9.3935061,
+  "tags": {
+    "leisure": "picnic_table",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 6466726444,
+  "lat": 45.7592307,
+  "lon": 9.3934868,
+  "tags": {
+    "leisure": "picnic_table",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 6466726445,
+  "lat": 45.7592437,
+  "lon": 9.3934643,
+  "tags": {
+    "leisure": "picnic_table",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 6466726446,
+  "lat": 45.7592593,
+  "lon": 9.3934434,
+  "tags": {
+    "leisure": "picnic_table",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 6466726447,
+  "lat": 45.7592744,
+  "lon": 9.3934249,
+  "tags": {
+    "leisure": "picnic_table",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 6466726448,
+  "lat": 45.7593349,
+  "lon": 9.3935944,
+  "tags": {
+    "leisure": "picnic_table",
+    "material": "concrete"
+  }
+},
+{
+  "type": "node",
+  "id": 6466726449,
+  "lat": 45.7586152,
+  "lon": 9.3931315,
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "unpaved"
+  }
+},
+{
+  "type": "node",
+  "id": 6699382641,
+  "lat": 45.7192483,
+  "lon": 9.4572257,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 6765736763,
+  "lat": 45.7369088,
+  "lon": 9.3739549,
+  "tags": {
+    "amenity": "cafe",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "level": "0",
+    "name": "Polisportiva A.S.R. ASD B'Ars",
+    "outdoor_seating": "yes",
+    "ref:vatin": "IT01337140139",
+    "smoking": "outside",
+    "toilets": "yes",
+    "toilets:access": "customers",
+    "toilets:wheelchair": "designated",
+    "wheelchair": "designated"
+  }
+},
+{
+  "type": "node",
+  "id": 6779222114,
+  "lat": 45.7374856,
+  "lon": 9.3739860,
+  "tags": {
+    "amenity": "ice_cream",
+    "name": "Bar Gelateria Tael",
+    "outdoor_seating": "yes",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7623102199,
+  "lat": 45.7246602,
+  "lon": 9.4163794,
+  "tags": {
+    "addr:city": "Calco",
+    "addr:postcode": "23885",
+    "addr:street": "Via Italia",
+    "amenity": "bank",
+    "brand": "UBI Banca",
+    "brand:wikidata": "Q1476162",
+    "brand:wikipedia": "en:UBI Banca",
+    "name": "UBI Banca"
+  }
+},
+{
+  "type": "node",
+  "id": 7815378851,
+  "lat": 45.7320954,
+  "lon": 9.4199012,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 7985758664,
+  "lat": 45.7102426,
+  "lon": 9.3635433,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 8666951932,
+  "lat": 45.7307703,
+  "lon": 9.4034869,
+  "tags": {
+    "addr:city": "Olgiate Molgora",
+    "addr:housenumber": "21",
+    "addr:postcode": "23844",
+    "addr:street": "Via Fabbricone",
+    "amenity": "pharmacy",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmacia Pallavicini",
+    "opening_hours": "Mo-Fr 08:30-12:30,15:30-19:30; Sa 08:30-12:30",
+    "payment:bancomat": "yes",
+    "payment:cash": "yes",
+    "payment:mastercard": "yes",
+    "payment:visa": "yes",
+    "phone": "+39 039 507489",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8691321572,
+  "lat": 45.7177027,
+  "lon": 9.3739235,
+  "tags": {
+    "addr:city": "La Valletta Brianza",
+    "addr:postcode": "23888",
+    "addr:street": "Via Malnido",
+    "name": "Latte e terra",
+    "shop": "farm"
+  }
+},
+{
+  "type": "node",
+  "id": 8691321582,
+  "lat": 45.7160221,
+  "lon": 9.3802922,
+  "tags": {
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 8846043518,
+  "lat": 45.7100449,
+  "lon": 9.4067618,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Donna Burgherita Merate"
+  }
+},
+{
+  "type": "node",
+  "id": 9051033876,
+  "lat": 45.7261177,
+  "lon": 9.3747007,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 9270194105,
+  "lat": 45.7221949,
+  "lon": 9.3708704,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 9396833511,
+  "lat": 45.7110051,
+  "lon": 9.3838532,
+  "tags": {
+    "addr:city": "Bagaggera",
+    "addr:housenumber": "25",
+    "addr:postcode": "23888",
+    "addr:street": "Via Bagaggera",
+    "contact:facebook": "https://www.facebook.com/bagaggera/",
+    "contact:instagram": "https://www.instagram.com/cascina_bagaggera/",
+    "name": "Cascina Bagaggera",
+    "opening_hours": "Mo off; Tu-Su 09:00-19:00",
+    "operator": "SOCIETA' AGRICOLA BAGAGGERA S.R.L.",
+    "phone": "+393666173311",
+    "ref:vatin": "IT02157140134",
+    "shop": "deli",
+    "website": "https://www.bagaggera.eu/"
+  }
+},
+{
+  "type": "node",
+  "id": 9428418638,
+  "lat": 45.7128517,
+  "lon": 9.4182897,
+  "tags": {
+    "access": "yes",
+    "amenity": "charging_station",
+    "capacity": "2",
+    "operator": "Be Charge"
+  }
+},
+{
+  "type": "node",
+  "id": 9692196564,
+  "lat": 45.7305116,
+  "lon": 9.4184549,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Osteria del Brau"
+  }
+},
+{
+  "type": "node",
+  "id": 9795033363,
+  "lat": 45.7528985,
+  "lon": 9.3756676,
+  "tags": {
+    "addr:city": "Colle Brianza",
+    "addr:housenumber": "11",
+    "addr:street": "Via Alessandro Manzoni",
+    "amenity": "restaurant",
+    "name": "Trattoria Bellavista"
+  }
+},
+{
+  "type": "node",
+  "id": 9795033364,
+  "lat": 45.7540952,
+  "lon": 9.3726704,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 10079364329,
+  "lat": 45.7570869,
+  "lon": 9.4220587,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10106610123,
+  "lat": 45.7385782,
+  "lon": 9.3911013,
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "node",
+  "id": 10106944193,
+  "lat": 45.7417570,
+  "lon": 9.4077140,
+  "tags": {
+    "amenity": "drinking_water",
+    "drinking_water": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10106972098,
+  "lat": 45.7530989,
+  "lon": 9.4061311,
+  "tags": {
+    "amenity": "hunting_stand"
+  }
+},
+{
+  "type": "node",
+  "id": 10537966046,
+  "lat": 45.7445491,
+  "lon": 9.4255060,
+  "tags": {
+    "addr:city": "Brivio",
+    "addr:housenumber": "18",
+    "addr:postcode": "23883",
+    "addr:street": "Via Nazionale",
+    "brand": "Volkswagen veicoli commerciali;Volkswagen;Audi",
+    "email": "vic@autocogliati.it",
+    "name": "Autocogliati",
+    "phone": "+390395320481",
+    "service:vehicle:car_parts": "yes",
+    "service:vehicle:car_repair": "yes",
+    "service:vehicle:repairs": "yes",
+    "service:vehicle:truck_repair": "yes",
+    "shop": "car",
+    "website": "https://www.autocogliati.it/"
+  }
+},
+{
+  "type": "node",
+  "id": 10559204605,
+  "lat": 45.7233885,
+  "lon": 9.4258253,
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "node",
+  "id": 10588809219,
+  "lat": 45.7560638,
+  "lon": 9.4083224,
+  "tags": {
+    "bench": "yes",
+    "covered": "no",
+    "leisure": "picnic_table",
+    "lit": "no",
+    "material": "wood",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 10591362661,
+  "lat": 45.7573810,
+  "lon": 9.4121503,
+  "tags": {
+    "access": "yes",
+    "amenity": "drinking_water",
+    "bottle": "yes",
+    "fee": "no",
+    "man_made": "water_tap"
+  }
+},
+{
+  "type": "node",
+  "id": 10591569868,
+  "lat": 45.7573189,
+  "lon": 9.4120407,
+  "tags": {
+    "amenity": "bench",
+    "backrest": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10652069895,
+  "lat": 45.7552051,
+  "lon": 9.4016485,
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "node",
+  "id": 10678132200,
+  "lat": 45.7552899,
+  "lon": 9.4046544,
+  "tags": {
+    "amenity": "hunting_stand"
+  }
+},
+{
+  "type": "node",
+  "id": 10683532505,
+  "lat": 45.7428947,
+  "lon": 9.3804001,
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846913,
+  "lat": 45.7146754,
+  "lon": 9.4220196,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846914,
+  "lat": 45.7146305,
+  "lon": 9.4219042,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846915,
+  "lat": 45.7147138,
+  "lon": 9.4221208,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846916,
+  "lat": 45.7145790,
+  "lon": 9.4217674,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846917,
+  "lat": 45.7145219,
+  "lon": 9.4216132,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846918,
+  "lat": 45.7144938,
+  "lon": 9.4215495,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846919,
+  "lat": 45.7144863,
+  "lon": 9.4215287,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846920,
+  "lat": 45.7144793,
+  "lon": 9.4215086,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846921,
+  "lat": 45.7178362,
+  "lon": 9.4238435,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846922,
+  "lat": 45.7189092,
+  "lon": 9.4252489,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846923,
+  "lat": 45.7189324,
+  "lon": 9.4280626,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846924,
+  "lat": 45.7174415,
+  "lon": 9.4278514,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846925,
+  "lat": 45.7148857,
+  "lon": 9.4255252,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846926,
+  "lat": 45.7148744,
+  "lon": 9.4254917,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846927,
+  "lat": 45.7146441,
+  "lon": 9.4248359,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846928,
+  "lat": 45.7146207,
+  "lon": 9.4247796,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846929,
+  "lat": 45.7147471,
+  "lon": 9.4251215,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846930,
+  "lat": 45.7142985,
+  "lon": 9.4242056,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846931,
+  "lat": 45.7141412,
+  "lon": 9.4236356,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846932,
+  "lat": 45.7141319,
+  "lon": 9.4235431,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846933,
+  "lat": 45.7141178,
+  "lon": 9.4235980,
+  "tags": {
+    "leisure": "picnic_table",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846934,
+  "lat": 45.7141094,
+  "lon": 9.4235001,
+  "tags": {
+    "leisure": "picnic_table",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846935,
+  "lat": 45.7141047,
+  "lon": 9.4234116,
+  "tags": {
+    "leisure": "picnic_table",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846936,
+  "lat": 45.7143557,
+  "lon": 9.4224293,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846937,
+  "lat": 45.7142110,
+  "lon": 9.4226747,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846938,
+  "lat": 45.7142573,
+  "lon": 9.4225755,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846939,
+  "lat": 45.7144807,
+  "lon": 9.4221497,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846940,
+  "lat": 45.7144966,
+  "lon": 9.4221966,
+  "tags": {
+    "amenity": "bench",
+    "material": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 10712846941,
+  "lat": 45.7143173,
+  "lon": 9.4216669,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 10814609727,
+  "lat": 45.7384397,
+  "lon": 9.3623388,
+  "tags": {
+    "clothes": "suits;women",
+    "kids_area": "no",
+    "level": "0",
+    "name": "Laura",
+    "shop": "clothes",
+    "toilets": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10862580539,
+  "lat": 45.7100618,
+  "lon": 9.3635208,
+  "tags": {
+    "access": "yes",
+    "amenity": "charging_station",
+    "bicycle": "yes",
+    "brand": "Pradella Sistemi srl",
+    "fee": "no",
+    "operator": "Pradella Sistemi srl"
+  }
+},
+{
+  "type": "node",
+  "id": 10967391916,
+  "lat": 45.7586251,
+  "lon": 9.4068804,
+  "tags": {
+    "amenity": "hunting_stand"
+  }
+},
+{
+  "type": "node",
+  "id": 11163223425,
+  "lat": 45.7219666,
+  "lon": 9.3705376,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Galbusera Bianca"
+  }
+},
+{
+  "type": "node",
+  "id": 11163228808,
+  "lat": 45.7108063,
+  "lon": 9.3841830,
+  "tags": {
+    "addr:city": "La Valletta Brianza",
+    "addr:housenumber": "25",
+    "addr:postcode": "23888",
+    "addr:street": "Via Bagaggera",
+    "amenity": "restaurant",
+    "contact:facebook": "https://www.facebook.com/bagaggera/",
+    "contact:instagram": "https://www.instagram.com/cascina_bagaggera/",
+    "email": "Info.bagaggera@gmail.com",
+    "name": "Bagaggera - Agriristoro",
+    "opening_hours": "Mo,Th off; We-Fr 12:00-14:30; Sa-Su 12:00-15:00",
+    "phone": "+390395311471",
+    "website": "https://www.bagaggera.eu/agri-ristoro/",
+    "website:menu": "https://www.leggimenu.it/menu/cascinabagaggera"
+  }
+},
+{
+  "type": "node",
+  "id": 11874224033,
+  "lat": 45.7110660,
+  "lon": 9.3835768,
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "node",
+  "id": 11874235285,
+  "lat": 45.7554163,
+  "lon": 9.4009615,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Stala del re"
+  }
+},
+{
+  "type": "node",
+  "id": 11920211769,
+  "lat": 45.7561976,
+  "lon": 9.3931135,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 12148378196,
+  "lat": 45.7198329,
+  "lon": 9.4419137,
+  "tags": {
+    "addr:housenumber": "30",
+    "addr:street": "Via Fontana",
+    "amenity": "restaurant",
+    "name": "Trattoria Al Bosco",
+    "phone": "+39 099 20134"
+  }
+},
+{
+  "type": "node",
+  "id": 12600740263,
+  "lat": 45.7102608,
+  "lon": 9.3635219,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 12857894068,
+  "lat": 45.7182049,
+  "lon": 9.4076490,
+  "tags": {
+    "addr:city": "Calco",
+    "addr:housenumber": "3",
+    "addr:street": "Via Nazionale",
+    "branch": "CALCO",
+    "brand": "Esselunga",
+    "brand:wikidata": "Q1059636",
+    "name": "Esselunga",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 12864319647,
+  "lat": 45.7221874,
+  "lon": 9.3714565,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 12881364019,
+  "lat": 45.7569510,
+  "lon": 9.4122016,
+  "tags": {
+    "amenity": "waste_basket",
+    "waste": "trash"
+  }
+},
+{
+  "type": "node",
+  "id": 12881364020,
+  "lat": 45.7569609,
+  "lon": 9.4121814,
+  "tags": {
+    "amenity": "bench",
+    "backrest": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13015830646,
+  "lat": 45.7147527,
+  "lon": 9.4440056,
+  "tags": {
+    "amenity": "fountain",
+    "direction": "50"
+  }
+},
+{
+  "type": "node",
+  "id": 13015830661,
+  "lat": 45.7146216,
+  "lon": 9.4425304,
+  "tags": {
+    "access": "yes",
+    "amenity": "toilets",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 13038981957,
+  "lat": 45.7430959,
+  "lon": 9.4506761,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13038981958,
+  "lat": 45.7430857,
+  "lon": 9.4506566,
+  "tags": {
+    "amenity": "waste_basket",
+    "material": "metal",
+    "waste": "trash"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483005,
+  "lat": 45.7430125,
+  "lon": 9.4505659,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483006,
+  "lat": 45.7431871,
+  "lon": 9.4507832,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483007,
+  "lat": 45.7427252,
+  "lon": 9.4502487,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483008,
+  "lat": 45.7427037,
+  "lon": 9.4502280,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483009,
+  "lat": 45.7425857,
+  "lon": 9.4501046,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483010,
+  "lat": 45.7422642,
+  "lon": 9.4497660,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483011,
+  "lat": 45.7421393,
+  "lon": 9.4496406,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483012,
+  "lat": 45.7413639,
+  "lon": 9.4491256,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483013,
+  "lat": 45.7414125,
+  "lon": 9.4491443,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483014,
+  "lat": 45.7414537,
+  "lon": 9.4491611,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483015,
+  "lat": 45.7415029,
+  "lon": 9.4491839,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483016,
+  "lat": 45.7415454,
+  "lon": 9.4492040,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483017,
+  "lat": 45.7415969,
+  "lon": 9.4492255,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483018,
+  "lat": 45.7416437,
+  "lon": 9.4492456,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483019,
+  "lat": 45.7416882,
+  "lon": 9.4492630,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483020,
+  "lat": 45.7417289,
+  "lon": 9.4492825,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "no",
+    "material": "concrete",
+    "seats": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483021,
+  "lat": 45.7418206,
+  "lon": 9.4492805,
+  "tags": {
+    "amenity": "waste_basket",
+    "material": "metal",
+    "waste": "trash"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483022,
+  "lat": 45.7419002,
+  "lon": 9.4493576,
+  "tags": {
+    "amenity": "waste_basket",
+    "material": "metal",
+    "waste": "trash"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483023,
+  "lat": 45.7413526,
+  "lon": 9.4491209,
+  "tags": {
+    "amenity": "waste_basket",
+    "material": "metal",
+    "waste": "trash"
+  }
+},
+{
+  "type": "node",
+  "id": 13090483024,
+  "lat": 45.7415281,
+  "lon": 9.4491933,
+  "tags": {
+    "amenity": "waste_basket",
+    "material": "metal",
+    "waste": "trash"
+  }
+},
+{
+  "type": "node",
+  "id": 13142808631,
+  "lat": 45.7550820,
+  "lon": 9.3913458,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 13142808638,
+  "lat": 45.7547895,
+  "lon": 9.3914293,
+  "tags": {
+    "amenity": "drinking_water"
+  }
+},
+{
+  "type": "node",
+  "id": 13235151977,
+  "lat": 45.7128527,
+  "lon": 9.4184911,
+  "tags": {
+    "amenity": "sanitary_dump_station"
+  }
+},
+{
+  "type": "node",
+  "id": 13389359724,
+  "lat": 45.7157968,
+  "lon": 9.4341069,
+  "tags": {
+    "amenity": "parking_entrance",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 13423599652,
+  "lat": 45.7575696,
+  "lon": 9.4117045,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Ristorante Bar Formenti"
+  }
+},
+{
+  "type": "node",
+  "id": 13516285450,
+  "lat": 45.7144269,
+  "lon": 9.4213354,
+  "tags": {
+    "amenity": "public_bookcase"
+  }
+},
+{
+  "type": "node",
+  "id": 13519338288,
+  "lat": 45.7149831,
+  "lon": 9.4186960,
+  "tags": {
+    "amenity": "cafe",
+    "name": "Bar Sartirana"
+  }
+},
+{
+  "type": "node",
+  "id": 13519364380,
+  "lat": 45.7148725,
+  "lon": 9.4185953,
+  "tags": {
+    "amenity": "fountain",
+    "name": "Fontana"
+  }
+},
+{
+  "type": "node",
+  "id": 13732262117,
+  "lat": 45.7159095,
+  "lon": 9.4485384,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13732262118,
+  "lat": 45.7159171,
+  "lon": 9.4484634,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 13732262119,
+  "lat": 45.7159950,
+  "lon": 9.4484461,
+  "tags": {
+    "covered": "no",
+    "leisure": "picnic_table"
+  }
+},
+{
+  "type": "node",
+  "id": 13732262121,
+  "lat": 45.7160590,
+  "lon": 9.4485259,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13732304153,
+  "lat": 45.7407677,
+  "lon": 9.4486651,
+  "tags": {
+    "amenity": "bench",
+    "backrest": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13732307385,
+  "lat": 45.7379622,
+  "lon": 9.4480645,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13732307399,
+  "lat": 45.7420621,
+  "lon": 9.4495131,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13732308874,
+  "lat": 45.7372593,
+  "lon": 9.4481800,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13732312622,
+  "lat": 45.7406266,
+  "lon": 9.4485628,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13732318879,
+  "lat": 45.7378283,
+  "lon": 9.4481160,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13732319088,
+  "lat": 45.7372815,
+  "lon": 9.4481797,
+  "tags": {
+    "amenity": "vending_machine",
+    "vending": "excrement_bags"
+  }
+},
+{
+  "type": "node",
+  "id": 13732326568,
+  "lat": 45.7396550,
+  "lon": 9.4480172,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13732326905,
+  "lat": 45.7407893,
+  "lon": 9.4486825,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13732327384,
+  "lat": 45.7399602,
+  "lon": 9.4480856,
+  "tags": {
+    "addr:housenumber": "2",
+    "addr:street": "Piazza Carozzi",
+    "name": "Il Vecchio Forno",
+    "opening_hours": "Mo-Sa 07:30-13:00",
+    "phone": "+39",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 13732327611,
+  "lat": 45.7420278,
+  "lon": 9.4494785,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13732334390,
+  "lat": 45.7406440,
+  "lon": 9.4485792,
+  "tags": {
+    "amenity": "bench",
+    "backrest": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13732335203,
+  "lat": 45.7409439,
+  "lon": 9.4487912,
+  "tags": {
+    "addr:housenumber": "9",
+    "addr:street": "Via Leonardo da Vinci",
+    "amenity": "cafe",
+    "name": "Caffè del fiume"
+  }
+},
+{
+  "type": "node",
+  "id": 13734717830,
+  "lat": 45.7318260,
+  "lon": 9.4457036,
+  "tags": {
+    "amenity": "waste_basket"
+  }
+},
+{
+  "type": "node",
+  "id": 13762139214,
+  "lat": 45.7460921,
+  "lon": 9.3824150,
+  "tags": {
+    "amenity": "bench"
+  }
+},
+{
+  "type": "node",
+  "id": 13776064948,
+  "lat": 45.7102281,
+  "lon": 9.3635702,
+  "tags": {
+    "amenity": "drinking_water",
+    "man_made": "water_tap"
+  }
+},
+{
+  "type": "node",
+  "id": 13810963393,
+  "lat": 45.7575937,
+  "lon": 9.3845902,
+  "tags": {
+    "amenity": "hunting_stand"
+  }
+},
+{
+  "type": "node",
+  "id": 13828347171,
+  "lat": 45.7180632,
+  "lon": 9.4565302,
+  "tags": {
+    "amenity": "parcel_locker",
+    "brand": "InPost",
+    "indoor": "no",
+    "name": "InPost",
+    "opening_hours": "24/7",
+    "website": "https://inpost.it/locker-villa-dadda-itvil036116f-viale-delle-industrie/"
+  }
+},
+{
+  "type": "node",
+  "id": 13912770354,
+  "lat": 45.7419883,
+  "lon": 9.3787958,
+  "tags": {
+    "amenity": "vending_machine",
+    "vending": "water"
+  }
+},
+{
+  "type": "node",
+  "id": 13912770355,
+  "lat": 45.7421184,
+  "lon": 9.3786234,
+  "tags": {
+    "amenity": "charging_station",
+    "fee": "yes",
+    "motorcar": "yes",
+    "motorcycle": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14041338104,
+  "lat": 45.7553617,
+  "lon": 9.4222306,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "yes",
+    "material": "metal"
+  }
+},
+{
+  "type": "node",
+  "id": 14041338105,
+  "lat": 45.7554747,
+  "lon": 9.4222511,
+  "tags": {
+    "amenity": "waste_basket",
+    "waste": "cigarettes"
+  }
+},
+{
+  "type": "node",
+  "id": 14041338106,
+  "lat": 45.7554618,
+  "lon": 9.4222494,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "yes",
+    "material": "metal"
+  }
+},
+{
+  "type": "node",
+  "id": 14041338107,
+  "lat": 45.7553395,
+  "lon": 9.4222294,
+  "tags": {
+    "amenity": "waste_basket",
+    "waste": "trash"
+  }
+},
+{
+  "type": "node",
+  "id": 14041338108,
+  "lat": 45.7555227,
+  "lon": 9.4222608,
+  "tags": {
+    "amenity": "bench",
+    "armrest": "no",
+    "backrest": "yes",
+    "material": "metal"
+  }
+},
+{
+  "type": "node",
+  "id": 14041338109,
+  "lat": 45.7555768,
+  "lon": 9.4222623,
+  "tags": {
+    "amenity": "waste_basket",
+    "waste": "trash"
+  }
+},
+{
+  "type": "node",
+  "id": 14041890122,
+  "lat": 45.7555922,
+  "lon": 9.4224774,
+  "tags": {
+    "amenity": "waste_basket",
+    "waste": "trash"
+  }
+},
+{
+  "type": "node",
+  "id": 14072874229,
+  "lat": 45.7419200,
+  "lon": 9.4493529,
+  "tags": {
+    "amenity": "waste_basket",
+    "waste": "dog_excrement"
+  }
+},
+{
+  "type": "node",
+  "id": 14085060250,
+  "lat": 45.7205713,
+  "lon": 9.3824839,
+  "tags": {
+    "access": "yes",
+    "amenity": "drinking_water",
+    "fee": "no",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14134824188,
+  "lat": 45.7474791,
+  "lon": 9.3700559,
+  "tags": {
+    "amenity": "bench"
+  }
+},
+{
+  "type": "node",
+  "id": 14134836662,
+  "lat": 45.7476731,
+  "lon": 9.3699601,
+  "tags": {
+    "amenity": "bench"
+  }
+},
+{
+  "type": "way",
+  "id": 42827096,
+  "center": {
+    "lat": 45.7134472,
+    "lon": 9.3716500
+  },
+  "nodes": [
+    535736343,
+    535736349,
+    535736353,
+    535736360,
+    535736343
+  ],
+  "tags": {
+    "amenity": "public_building",
+    "building": "yes",
+    "description": "Centro Parco, sede del gruppo di Guardie ecologiche volontarie del parco.",
+    "name": "Ca' del Soldato"
+  }
+},
+{
+  "type": "way",
+  "id": 55503466,
+  "center": {
+    "lat": 45.7435576,
+    "lon": 9.4488096
+  },
+  "nodes": [
+    697459862,
+    697459865,
+    697459869,
+    697459873,
+    697459876,
+    697459879,
+    697459880,
+    697459889,
+    697459892,
+    697459897,
+    697459899,
+    697459903,
+    697459862
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 55503467,
+  "center": {
+    "lat": 45.7441068,
+    "lon": 9.4502526
+  },
+  "nodes": [
+    697459911,
+    3560803459,
+    3560803453,
+    3560803457,
+    3560803456,
+    3560803448,
+    3560803446,
+    3560803445,
+    697459912,
+    697459914,
+    697459915,
+    5057729745,
+    697459917,
+    697459918,
+    697459920,
+    697459911
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "yes",
+    "maxheight": "2.20",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 72004740,
+  "center": {
+    "lat": 45.7154269,
+    "lon": 9.3761160
+  },
+  "nodes": [
+    855833369,
+    855833351,
+    855833381,
+    2006485395,
+    2006485378,
+    2006485344,
+    1576687070,
+    2006485259,
+    855833333,
+    855833369
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface",
+    "source": "survey",
+    "surface": "gravel"
+  }
+},
+{
+  "type": "way",
+  "id": 72049411,
+  "center": {
+    "lat": 45.7223636,
+    "lon": 9.3711259
+  },
+  "nodes": [
+    856543143,
+    856543105,
+    856543124,
+    11346831413,
+    856543118,
+    11346831412,
+    856543143
+  ],
+  "tags": {
+    "alt_name": "Chiesa sussidiaria di San Francesco",
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "historic": "church",
+    "name": "Chiesa di San Francesco",
+    "religion": "christian",
+    "wikidata": "Q112673783",
+    "wikimedia_commons": "Category:San Francesco (Galbusera Bianca, La Valletta Brianza)"
+  }
+},
+{
+  "type": "way",
+  "id": 76908794,
+  "center": {
+    "lat": 45.7138600,
+    "lon": 9.4583676
+  },
+  "nodes": [
+    905812657,
+    905812689,
+    905812736,
+    905812719,
+    905812712,
+    905812699,
+    905812657
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 98957152,
+  "center": {
+    "lat": 45.7593270,
+    "lon": 9.3935201
+  },
+  "nodes": [
+    1144810321,
+    1144810059,
+    1144810152,
+    1144810173,
+    1144810092,
+    1144810321
+  ],
+  "tags": {
+    "addr:city": "Colle Brianza",
+    "addr:housenumber": "3",
+    "amenity": "restaurant",
+    "building": "yes",
+    "name": "Ristoro Alpino",
+    "operator": "Associazione Nazionale Alpini \"Gruppo Campanone\"",
+    "source": "PCN Ortofoto a colori 2006, survey"
+  }
+},
+{
+  "type": "way",
+  "id": 98957158,
+  "center": {
+    "lat": 45.7546851,
+    "lon": 9.3914223
+  },
+  "nodes": [
+    1144810322,
+    1144810210,
+    2456277255,
+    1144810168,
+    1144810324,
+    1144810322
+  ],
+  "tags": {
+    "addr:city": "Colle Brianza",
+    "addr:country": "IT",
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "roman_catholic",
+    "ele": "661",
+    "name": "Chiesa della Madonna del Sasso",
+    "religion": "christian",
+    "source": "PCN Ortofoto a colori 2006"
+  }
+},
+{
+  "type": "way",
+  "id": 98957160,
+  "center": {
+    "lat": 45.7587967,
+    "lon": 9.3952476
+  },
+  "nodes": [
+    1144810075,
+    2047856562,
+    1144810287,
+    1145450325,
+    1145450475,
+    2047856564,
+    11360187795,
+    1145450402,
+    1144810036,
+    2047856579,
+    2047856588,
+    2047856589,
+    2047856580,
+    2047856582,
+    1144810075
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "roman_catholic",
+    "name": "Chiesa di San Giuseppe",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 98957164,
+  "center": {
+    "lat": 45.7587910,
+    "lon": 9.3952889
+  },
+  "nodes": [
+    1144810251,
+    12316050646,
+    1145450676,
+    12316050626,
+    1144810222,
+    1144810175,
+    1144810195,
+    1144810329,
+    1144810302,
+    1144810018,
+    1144810319,
+    1144810251
+  ],
+  "tags": {
+    "access": "private",
+    "addr:housenumber": "43",
+    "amenity": "monastery",
+    "denomination": "catholic",
+    "historic": "yes",
+    "name": "Eremo di San Genesio",
+    "place": "isolated_dwelling",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 102453569,
+  "center": {
+    "lat": 45.7556617,
+    "lon": 9.3994807
+  },
+  "nodes": [
+    1183200484,
+    2456277321,
+    1183200534,
+    1183200585,
+    1183200297,
+    2046185969,
+    1183200332,
+    1183200463,
+    1183200484
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "check_date:fee": "2023-02-19",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 110554586,
+  "center": {
+    "lat": 45.7399573,
+    "lon": 9.3708866
+  },
+  "nodes": [
+    1262265092,
+    1262265339,
+    1262264666,
+    1262265222,
+    1262265473,
+    2428935543,
+    1262264954,
+    1262265092
+  ],
+  "tags": {
+    "amenity": "grave_yard",
+    "name": "Cimitero di Rovagnate",
+    "wikidata": "Q88962310"
+  }
+},
+{
+  "type": "way",
+  "id": 110554601,
+  "center": {
+    "lat": 45.7397169,
+    "lon": 9.3714878
+  },
+  "nodes": [
+    1262265322,
+    2621230885,
+    1262265427,
+    1262264856,
+    1262265366,
+    1262265322
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "20",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 110555374,
+  "center": {
+    "lat": 45.7407299,
+    "lon": 9.3617458
+  },
+  "nodes": [
+    1262272323,
+    1262272390,
+    1262272506,
+    1262272335,
+    1262272323
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 142577859,
+  "center": {
+    "lat": 45.7258063,
+    "lon": 9.3747590
+  },
+  "nodes": [
+    1560310939,
+    1560310952,
+    1560310941,
+    11346831418,
+    11346831419,
+    11346831420,
+    11346831421,
+    1560310937,
+    1560310939
+  ],
+  "tags": {
+    "amenity": "restaurant",
+    "building": "yes",
+    "cuisine": "italian",
+    "name": "Osteria al 48",
+    "opening_hours": "We-Su 12:00-14:00,19:00-22:00",
+    "phone": "+39 349 272 9230"
+  }
+},
+{
+  "type": "way",
+  "id": 143996275,
+  "center": {
+    "lat": 45.7365029,
+    "lon": 9.3581706
+  },
+  "nodes": [
+    1575759354,
+    3016198034,
+    3016198235,
+    3016198133,
+    3016198033,
+    1575759342,
+    1575759354
+  ],
+  "tags": {
+    "amenity": "townhall",
+    "building": "public"
+  }
+},
+{
+  "type": "way",
+  "id": 143996295,
+  "center": {
+    "lat": 45.7310052,
+    "lon": 9.3693444
+  },
+  "nodes": [
+    1575758903,
+    1575758928,
+    1575758901,
+    1575758894,
+    1575758903
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa di Maria Vergine e San Rocco",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 143996309,
+  "center": {
+    "lat": 45.7263408,
+    "lon": 9.3755267
+  },
+  "nodes": [
+    1575758413,
+    1575758394,
+    11346831436,
+    1838561539,
+    11346831435,
+    1838561536,
+    11346831430,
+    11346831426,
+    11346831427,
+    11346831428,
+    11346831429,
+    11346831434,
+    11346831431,
+    11346831432,
+    11346831433,
+    3180297981,
+    1575758361,
+    11346831425,
+    3180297976,
+    1838561559,
+    1838561556,
+    1575758413
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "historic": "church",
+    "name": "Chiesa di Sant'Ambrogio",
+    "religion": "christian",
+    "wikidata": "Q112812529",
+    "wikimedia_commons": "Category:Sant'Ambrogio (Monte, La Valletta Brianza)"
+  }
+},
+{
+  "type": "way",
+  "id": 144074511,
+  "center": {
+    "lat": 45.7100904,
+    "lon": 9.3947491
+  },
+  "nodes": [
+    11347451961,
+    11347451962,
+    11347451963,
+    11347451964,
+    11347451966,
+    1576575680,
+    1576575668,
+    12794279958,
+    1576575671,
+    1576575681,
+    11347451965,
+    11347451961
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "historic": "church",
+    "name": "Chiesa di San Michele",
+    "religion": "christian",
+    "wikidata": "Q112673847",
+    "wikimedia_commons": "Category:San Michele (Olgiate Molgora)"
+  }
+},
+{
+  "type": "way",
+  "id": 145642564,
+  "center": {
+    "lat": 45.7390720,
+    "lon": 9.3723631
+  },
+  "nodes": [
+    2043556270,
+    2043556224,
+    2043556211,
+    2043556208,
+    2043556196,
+    2043556190,
+    2043556236,
+    2043556234,
+    2043556264,
+    2043556261,
+    2043556267,
+    1590163817,
+    2043556289,
+    2043556297,
+    2043556307,
+    2043556309,
+    1590163819,
+    2043556337,
+    2043556322,
+    1590163816,
+    1590163818,
+    2043556270
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "check_date": "2025-06-29",
+    "denomination": "catholic",
+    "name": "Chiesa di San Giorgio Martire",
+    "religion": "christian",
+    "wikidata": "Q110914988"
+  }
+},
+{
+  "type": "way",
+  "id": 173639186,
+  "center": {
+    "lat": 45.7294782,
+    "lon": 9.3835018
+  },
+  "nodes": [
+    3180292707,
+    1844119035,
+    1844119014,
+    3180292704,
+    3180292707
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 173720413,
+  "center": {
+    "lat": 45.7261786,
+    "lon": 9.3743931
+  },
+  "nodes": [
+    1844879910,
+    1844879907,
+    1844879905,
+    1844879906,
+    1844879910
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 173737539,
+  "center": {
+    "lat": 45.7312637,
+    "lon": 9.3895907
+  },
+  "nodes": [
+    1845027239,
+    1845027253,
+    1845027251,
+    1845027235,
+    1845027239
+  ],
+  "tags": {
+    "addr:city": "Olgiate Molgora",
+    "addr:housenumber": "37",
+    "addr:postcode": "23887",
+    "addr:street": "Via Como",
+    "amenity": "restaurant",
+    "building": "yes",
+    "cuisine": "italian",
+    "name": "Trattoria Bar Lo Scarpone"
+  }
+},
+{
+  "type": "way",
+  "id": 190241484,
+  "center": {
+    "lat": 45.7254944,
+    "lon": 9.3995109
+  },
+  "nodes": [
+    12809732690,
+    2008280250,
+    2008280243,
+    2008280165,
+    2008280148,
+    2008280173,
+    2008280176,
+    12809732689,
+    12809732688,
+    12809732687,
+    2008280159,
+    2008280217,
+    2008280221,
+    2008280237,
+    12809732686,
+    12809732685,
+    12809732684,
+    12809732690
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa di Maria Madre della Chiesa",
+    "religion": "christian",
+    "wikidata": "Q118745166"
+  }
+},
+{
+  "type": "way",
+  "id": 190241638,
+  "center": {
+    "lat": 45.7184201,
+    "lon": 9.3940779
+  },
+  "nodes": [
+    11347417608,
+    12809763603,
+    11347417609,
+    11347417610,
+    2008279077,
+    2008279076,
+    2008279072,
+    2008279073,
+    12809763604,
+    11347417605,
+    11347417606,
+    11347417607,
+    11347417608
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "historic": "church",
+    "name": "Oratorio dei SS. Pietro e Paolo",
+    "religion": "christian",
+    "wikidata": "Q112322255"
+  }
+},
+{
+  "type": "way",
+  "id": 190241834,
+  "center": {
+    "lat": 45.7271918,
+    "lon": 9.3994914
+  },
+  "nodes": [
+    2008280999,
+    2008280969,
+    2008280760,
+    2008280774,
+    2008280906,
+    2008280920,
+    2008280810,
+    2008280829,
+    2008281001,
+    2008280999
+  ],
+  "tags": {
+    "amenity": "school",
+    "building": "yes",
+    "name": "Scuola media Emilio Gola"
+  }
+},
+{
+  "type": "way",
+  "id": 193736926,
+  "center": {
+    "lat": 45.7405244,
+    "lon": 9.3605794
+  },
+  "nodes": [
+    2042525597,
+    2042525573,
+    2042525551,
+    2042525577,
+    2042525597
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 193847317,
+  "center": {
+    "lat": 45.7388885,
+    "lon": 9.3702344
+  },
+  "nodes": [
+    2043556250,
+    2043556272,
+    2043556248,
+    2043556238,
+    2043556226,
+    2043556259,
+    2043556232,
+    2043556240,
+    2043556200,
+    2043556185,
+    2043556189,
+    2043556175,
+    2043556173,
+    2043556161,
+    2043556217,
+    2043556230,
+    2043556250
+  ],
+  "tags": {
+    "addr:postcode": "23888",
+    "addr:street": "Viale Rimembranze",
+    "amenity": "school",
+    "building": "school",
+    "check_date": "2025-07-27",
+    "isced:level": "2",
+    "name": "Scuola Media Don Piero Pointinger"
+  }
+},
+{
+  "type": "way",
+  "id": 193847339,
+  "center": {
+    "lat": 45.7378226,
+    "lon": 9.3732667
+  },
+  "nodes": [
+    2043555847,
+    2043555882,
+    2043555866,
+    2043555836,
+    2043555847
+  ],
+  "tags": {
+    "amenity": "bank",
+    "building": "yes",
+    "name": "Banca Credem"
+  }
+},
+{
+  "type": "way",
+  "id": 193847356,
+  "center": {
+    "lat": 45.7384684,
+    "lon": 9.3692596
+  },
+  "nodes": [
+    2043556059,
+    2043556106,
+    2043556096,
+    2043556108,
+    2043556100,
+    2043556082,
+    2043556071,
+    2043556028,
+    2043556059
+  ],
+  "tags": {
+    "amenity": "school",
+    "building": "school",
+    "check_date": "2025-07-27",
+    "isced:level": "1",
+    "name": "Scuole elementari"
+  }
+},
+{
+  "type": "way",
+  "id": 193862481,
+  "center": {
+    "lat": 45.7348330,
+    "lon": 9.3900377
+  },
+  "nodes": [
+    2043692348,
+    2043692360,
+    2043692335,
+    2043692328,
+    2043692348
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa dei Santi Rocco e Sebastiano",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 193940125,
+  "center": {
+    "lat": 45.7288063,
+    "lon": 9.4032319
+  },
+  "nodes": [
+    12809741366,
+    12809741359,
+    2044483819,
+    2044483784,
+    12809741365,
+    12809741364,
+    12809741363,
+    12809741362,
+    12809741361,
+    12809741358,
+    2044483760,
+    12809741360,
+    12809741366
+  ],
+  "tags": {
+    "alt_name": "Chiesa di San Miro",
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa dell'Assunta",
+    "religion": "christian",
+    "wikidata": "Q112673540"
+  }
+},
+{
+  "type": "way",
+  "id": 193977000,
+  "center": {
+    "lat": 45.7431604,
+    "lon": 9.3751151
+  },
+  "nodes": [
+    2044849173,
+    2044849159,
+    2044849153,
+    2044849088,
+    2044849091,
+    2044849111,
+    2044849130,
+    2044849173
+  ],
+  "tags": {
+    "amenity": "kindergarten",
+    "building": "yes",
+    "name": "Scuola dell'Infanzia Gorizia"
+  }
+},
+{
+  "type": "way",
+  "id": 194064674,
+  "center": {
+    "lat": 45.7435994,
+    "lon": 9.3715869
+  },
+  "nodes": [
+    2045775806,
+    2045775820,
+    2045775825,
+    2045775839,
+    2045775832,
+    2045775828,
+    2045775831,
+    2045775826,
+    2045775822,
+    2045775815,
+    2045775797,
+    2045775808,
+    2045775794,
+    2045775806
+  ],
+  "tags": {
+    "amenity": "townhall",
+    "building": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 194064853,
+  "center": {
+    "lat": 45.7435289,
+    "lon": 9.3724114
+  },
+  "nodes": [
+    2045775814,
+    2045775772,
+    2045775830,
+    2045775850,
+    2045775816,
+    2045775833,
+    2045775851,
+    2045775814
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 194077233,
+  "center": {
+    "lat": 45.7429622,
+    "lon": 9.3799101
+  },
+  "nodes": [
+    2045883928,
+    2045883938,
+    2045883934,
+    13356060239,
+    13356060238,
+    13356060237,
+    13356060236,
+    13356060232,
+    13356060235,
+    13356060233,
+    13356060234,
+    2045883915,
+    2045883928
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "mapillary": "1505632347771654",
+    "name": "Chiesa di Santa Veronica",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 194080834,
+  "center": {
+    "lat": 45.7464014,
+    "lon": 9.3904366
+  },
+  "nodes": [
+    2045915937,
+    2045915938,
+    2045915933,
+    13839245753,
+    2045915932,
+    13839245754,
+    2045915937
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "historic": "church",
+    "mapillary": "1120136411822645",
+    "name": "Chiesa di San Gaetano",
+    "religion": "christian",
+    "website": "https://www.lombardiabeniculturali.it/architetture/schede/LC120-00486/",
+    "wikidata": "Q112674006"
+  }
+},
+{
+  "type": "way",
+  "id": 194085884,
+  "center": {
+    "lat": 45.7401541,
+    "lon": 9.3998488
+  },
+  "nodes": [
+    2045962631,
+    12809640043,
+    12809640040,
+    12809640041,
+    12809640039,
+    2045962620,
+    2045962619,
+    2045962615,
+    2045962610,
+    2045962616,
+    2045962614,
+    2045962622,
+    12809640044,
+    2045962631
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa di San Biagio",
+    "religion": "christian",
+    "wikidata": "Q112674026"
+  }
+},
+{
+  "type": "way",
+  "id": 194095682,
+  "center": {
+    "lat": 45.7532535,
+    "lon": 9.3757369
+  },
+  "nodes": [
+    2046066306,
+    2046066440,
+    2046066336,
+    2046066250,
+    2046066300,
+    11346406318,
+    2046066211,
+    11346406320,
+    11346406317,
+    2046066306
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "roman_catholic",
+    "historic": "church",
+    "name": "Chiesa di San Donnino",
+    "religion": "christian",
+    "wikidata": "Q118745088"
+  }
+},
+{
+  "type": "way",
+  "id": 194097978,
+  "center": {
+    "lat": 45.7518459,
+    "lon": 9.3866772
+  },
+  "nodes": [
+    2046090213,
+    11360187773,
+    11360187770,
+    11360072267,
+    11360187771,
+    11360187772,
+    11360072268,
+    2046090199,
+    11360072265,
+    11360072266,
+    2046090185,
+    2046090207,
+    2046090213
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "roman_catholic",
+    "name": "Chiesa di San Materno",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 198149309,
+  "center": {
+    "lat": 45.7456245,
+    "lon": 9.3741547
+  },
+  "nodes": [
+    2083250519,
+    2083250515,
+    2083250513,
+    2083250511,
+    2083250509,
+    2083250507,
+    2083250505,
+    2083250504,
+    2083250502,
+    2083250501,
+    2083250499,
+    2083250500,
+    2083250503,
+    2083250506,
+    2083250508,
+    2083250510,
+    2083250512,
+    2083250514,
+    2083250516,
+    2083250517,
+    2083250518,
+    2083250520,
+    2083250521,
+    2083250519
+  ],
+  "tags": {
+    "amenity": "school"
+  }
+},
+{
+  "type": "way",
+  "id": 210454468,
+  "center": {
+    "lat": 45.7205441,
+    "lon": 9.3821873
+  },
+  "nodes": [
+    2205292424,
+    2205292410,
+    2454239328,
+    2454239327,
+    2205292401,
+    2454239326,
+    2454239329,
+    2205292413,
+    2454239333,
+    2454239334,
+    2205292424
+  ],
+  "tags": {
+    "access": "no",
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 213181596,
+  "center": {
+    "lat": 45.7154224,
+    "lon": 9.4435292
+  },
+  "nodes": [
+    2229201639,
+    6448299293,
+    2229201723,
+    2229201697,
+    2229201728,
+    2229201722,
+    2229201639
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 213181602,
+  "center": {
+    "lat": 45.7149252,
+    "lon": 9.4436796
+  },
+  "nodes": [
+    2229201699,
+    2229201669,
+    2229201676,
+    2229201727,
+    2229201725,
+    2229201735,
+    2229201717,
+    2229201699
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 219223677,
+  "center": {
+    "lat": 45.7148454,
+    "lon": 9.4423112
+  },
+  "nodes": [
+    2284151549,
+    2284151552,
+    5140804507,
+    5140804506,
+    2284151545,
+    2284151543,
+    2284151549
+  ],
+  "tags": {
+    "amenity": "cafe",
+    "building": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 219223679,
+  "center": {
+    "lat": 45.7140556,
+    "lon": 9.4426205
+  },
+  "nodes": [
+    2284151531,
+    2284151530,
+    2284151529,
+    2284151532,
+    2284151534,
+    13014955927,
+    2284151536,
+    2284151537,
+    2284151533,
+    11757392625,
+    2284151531
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "basilica": "minor",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Santuario della Madonna del Bosco",
+    "religion": "christian",
+    "website": "https://www.madonnadelbosco.org/",
+    "wikidata": "Q3949695",
+    "wikimedia_commons": "Category:Santuario della Madonna del bosco",
+    "wikipedia": "it:Santuario della Madonna del Bosco (Imbersago)"
+  }
+},
+{
+  "type": "way",
+  "id": 220035459,
+  "center": {
+    "lat": 45.7248730,
+    "lon": 9.4078508
+  },
+  "nodes": [
+    2291566640,
+    2291566645,
+    2291566650,
+    2291566654,
+    2291566648,
+    2291566643,
+    2291566640
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 220041703,
+  "center": {
+    "lat": 45.7248519,
+    "lon": 9.4123122
+  },
+  "nodes": [
+    1262287165,
+    2291616289,
+    2291616316,
+    2291616318,
+    1262287165
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 220041704,
+  "center": {
+    "lat": 45.7245506,
+    "lon": 9.4134303
+  },
+  "nodes": [
+    2291616303,
+    2291616305,
+    1262287166,
+    2291616287,
+    2291616281,
+    2291616280,
+    2291616303
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 223263791,
+  "center": {
+    "lat": 45.7233607,
+    "lon": 9.4408571
+  },
+  "nodes": [
+    2321807488,
+    2321807478,
+    2321807482,
+    2321807492,
+    2321807488
+  ],
+  "tags": {
+    "amenity": "grave_yard",
+    "wikidata": "Q88962334"
+  }
+},
+{
+  "type": "way",
+  "id": 223277011,
+  "center": {
+    "lat": 45.7347619,
+    "lon": 9.4127205
+  },
+  "nodes": [
+    2321918745,
+    2321918747,
+    2321918743,
+    2321918739,
+    2321918740,
+    2321918726,
+    2321918728,
+    2321918732,
+    2321918734,
+    2321918695,
+    2321918694,
+    2321918646,
+    2321918627,
+    2321918383,
+    2321918349,
+    2321918394,
+    2321918372,
+    2321918249,
+    2321918248,
+    2321918250,
+    2321918246,
+    2321918251,
+    2321918252,
+    2321918255,
+    2321918266,
+    2321918276,
+    2321918288,
+    2321918300,
+    2321918338,
+    2321918433,
+    2321918445,
+    2321918478,
+    2321918495,
+    2321918519,
+    2321918531,
+    2321918555,
+    2321918607,
+    2321918566,
+    2321918710,
+    2321918716,
+    2321918719,
+    2321918722,
+    2321918723,
+    2321918727,
+    2321918730,
+    2321918729,
+    2321918741,
+    2321918754,
+    2321918745
+  ],
+  "tags": {
+    "amenity": "grave_yard"
+  }
+},
+{
+  "type": "way",
+  "id": 223381121,
+  "center": {
+    "lat": 45.7117243,
+    "lon": 9.4451053
+  },
+  "nodes": [
+    2322831270,
+    2322831203,
+    2322831150,
+    2322831190,
+    2322831270
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 223381126,
+  "center": {
+    "lat": 45.7114317,
+    "lon": 9.4469270
+  },
+  "nodes": [
+    2322831243,
+    2322831230,
+    5140804519,
+    5140804824,
+    2322831003,
+    2322831016,
+    2322831029,
+    2322831055,
+    2322831067,
+    2322831176,
+    2322831243
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 234752210,
+  "center": {
+    "lat": 45.7389366,
+    "lon": 9.3714053
+  },
+  "nodes": [
+    2428934861,
+    2428934853,
+    2428934868,
+    2428934866,
+    2428934865,
+    2428934855,
+    2428934870,
+    2428934869,
+    2428934854,
+    2428934871,
+    2428934862,
+    2428934858,
+    2428934857,
+    2428934859,
+    2428934856,
+    2428934860,
+    2428934864,
+    2428934863,
+    2428934867,
+    2428934861
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "10",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 234752250,
+  "center": {
+    "lat": 45.7400237,
+    "lon": 9.3715578
+  },
+  "nodes": [
+    2428935542,
+    2428935540,
+    2428935541,
+    2428935543,
+    2428935542
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "4",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 234752612,
+  "center": {
+    "lat": 45.7388407,
+    "lon": 9.3720540
+  },
+  "nodes": [
+    2428938808,
+    2428938814,
+    2428938815,
+    2428930582,
+    2428938809,
+    2428938808
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 234755235,
+  "center": {
+    "lat": 45.7376272,
+    "lon": 9.3705311
+  },
+  "nodes": [
+    2428961608,
+    2428961613,
+    2428961609,
+    2428961606,
+    2428961618,
+    2428961616,
+    2428961623,
+    2428961621,
+    2428961610,
+    2428961608
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "street_side"
+  }
+},
+{
+  "type": "way",
+  "id": 234755236,
+  "center": {
+    "lat": 45.7373712,
+    "lon": 9.3711500
+  },
+  "nodes": [
+    2428961614,
+    2428961624,
+    2428961612,
+    2428961626,
+    2428961607,
+    2428961617,
+    2428961619,
+    2428961614
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 234758129,
+  "center": {
+    "lat": 45.7370646,
+    "lon": 9.3739067
+  },
+  "nodes": [
+    2428982584,
+    2428982585,
+    10879668852,
+    10879668857,
+    10879668855,
+    2428982586,
+    2428982587,
+    2428982584
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "15",
+    "fee": "no",
+    "parking": "surface",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 234862724,
+  "center": {
+    "lat": 45.7376313,
+    "lon": 9.4146755
+  },
+  "nodes": [
+    2429867021,
+    2429867022,
+    2429867023,
+    2429867024,
+    2429867025,
+    2429867026,
+    2429867021
+  ],
+  "tags": {
+    "amenity": "parking",
+    "name": "Parcheggio condominio \"il Gelso\""
+  }
+},
+{
+  "type": "way",
+  "id": 235417838,
+  "center": {
+    "lat": 45.7380094,
+    "lon": 9.4153401
+  },
+  "nodes": [
+    2434813426,
+    2434813427,
+    2434813428,
+    2434813429,
+    2434813426
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 235418043,
+  "center": {
+    "lat": 45.7367036,
+    "lon": 9.4143695
+  },
+  "nodes": [
+    2434814932,
+    2434814933,
+    2434814934,
+    2434814935,
+    2434814936,
+    2434814937,
+    2434814938,
+    2434814939,
+    2434814940,
+    2434814941,
+    2434814942,
+    2434814943,
+    2434814944,
+    2434814945,
+    2434814946,
+    2434814947,
+    2434814932
+  ],
+  "tags": {
+    "addr:city": "Olgiate Molgora",
+    "addr:housenumber": "49/e",
+    "addr:postcode": "23887",
+    "addr:street": "Via Cesare Cantù",
+    "amenity": "kindergarten",
+    "building": "yes",
+    "name": "Punto Gioco"
+  }
+},
+{
+  "type": "way",
+  "id": 235427233,
+  "center": {
+    "lat": 45.7241736,
+    "lon": 9.4024965
+  },
+  "nodes": [
+    2434900165,
+    2434900167,
+    2434900168,
+    2434900169,
+    2434900170,
+    2434900165
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "50",
+    "fee": "no",
+    "parking": "surface",
+    "supervised": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 235428111,
+  "center": {
+    "lat": 45.7370712,
+    "lon": 9.4140490
+  },
+  "nodes": [
+    2434906682,
+    2434906686,
+    2434906688,
+    2434906691,
+    2434906693,
+    2434906682
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 235438867,
+  "center": {
+    "lat": 45.7382331,
+    "lon": 9.4153258
+  },
+  "nodes": [
+    2434977649,
+    2434977650,
+    2434977652,
+    2434977653,
+    2434977649
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 235438868,
+  "center": {
+    "lat": 45.7382399,
+    "lon": 9.4155466
+  },
+  "nodes": [
+    2434977654,
+    2434977655,
+    2434977656,
+    2434977657,
+    2434977658,
+    2434977659,
+    2434977660,
+    2434977661,
+    2434977662,
+    2434977654
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 235442912,
+  "center": {
+    "lat": 45.7347728,
+    "lon": 9.4133041
+  },
+  "nodes": [
+    2435014861,
+    2435014862,
+    2435014863,
+    2435014864,
+    2435014861
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "no",
+    "park_ride": "no",
+    "parking": "surface",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 235442917,
+  "center": {
+    "lat": 45.7290471,
+    "lon": 9.4051876
+  },
+  "nodes": [
+    2435014916,
+    2435014917,
+    2435014918,
+    2435014919,
+    2435014920,
+    2435014921,
+    2435014922,
+    2435014923,
+    2435014924,
+    2435014925,
+    2435014926,
+    2435014927,
+    2435014928,
+    2435014929,
+    2435014930,
+    2435014931,
+    2435014932,
+    2435014933,
+    2435014934,
+    2435014935,
+    2435014936,
+    2435014937,
+    2435014916
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "no",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 235442918,
+  "center": {
+    "lat": 45.7298358,
+    "lon": 9.4036093
+  },
+  "nodes": [
+    2435014938,
+    2435014939,
+    2435014940,
+    2965579804,
+    2435014941,
+    2435014942,
+    2965579805,
+    2965579806,
+    2435014944,
+    2435014945,
+    2435014946,
+    2435014947,
+    2435014948,
+    2965579802,
+    2435014938
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "no",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 235445443,
+  "center": {
+    "lat": 45.7354121,
+    "lon": 9.4073261
+  },
+  "nodes": [
+    2435031354,
+    2435031353,
+    2435031355,
+    2435031352,
+    12809735704,
+    12809735703,
+    12809735702,
+    2435031351,
+    2435031349,
+    12809701196,
+    2435031342,
+    2435031340,
+    12809735701,
+    12809701200,
+    12809701199,
+    12809701198,
+    12809701197,
+    2435031338,
+    2435031368,
+    2435031364,
+    2435031366,
+    2435031362,
+    2435031361,
+    2435031359,
+    2435031357,
+    2435031354
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa di San Zeno",
+    "religion": "christian",
+    "wikidata": "Q112811972",
+    "wikimedia_commons": "File:Chiesa di San Zeno, Olgiate Molgora.JPG"
+  }
+},
+{
+  "type": "way",
+  "id": 235609142,
+  "center": {
+    "lat": 45.7388171,
+    "lon": 9.4128348
+  },
+  "nodes": [
+    2436823605,
+    2436823604,
+    2436823602,
+    12809670339,
+    2436823606,
+    2436823605
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa della Beata Vergine Addolorata",
+    "religion": "christian",
+    "wikidata": "Q112673838"
+  }
+},
+{
+  "type": "way",
+  "id": 237749941,
+  "center": {
+    "lat": 45.7585944,
+    "lon": 9.3931660
+  },
+  "nodes": [
+    2456277337,
+    2456277336,
+    1145450495,
+    2456277338,
+    2456277339,
+    2456277337
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface",
+    "surface": "ground"
+  }
+},
+{
+  "type": "way",
+  "id": 238064381,
+  "center": {
+    "lat": 45.7409529,
+    "lon": 9.4580610
+  },
+  "nodes": [
+    2459286931,
+    4851617848,
+    4851617847,
+    2459286932,
+    2459286933,
+    2459286934,
+    2459286935,
+    2899290450,
+    2899290452,
+    2899290454,
+    2899290455,
+    2459286931
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 238066697,
+  "center": {
+    "lat": 45.7344545,
+    "lon": 9.4597693
+  },
+  "nodes": [
+    2459307778,
+    2459307779,
+    2459307780,
+    2459307781,
+    2459307782,
+    2459307783,
+    2459307784,
+    2459307785,
+    2459307786,
+    2459307787,
+    2459307788,
+    2459307789,
+    2459307778
+  ],
+  "tags": {
+    "amenity": "recycling",
+    "area": "yes",
+    "name": "Piattaforma ecologica",
+    "recycling_type": "centre"
+  }
+},
+{
+  "type": "way",
+  "id": 238694134,
+  "center": {
+    "lat": 45.7108364,
+    "lon": 9.4397687
+  },
+  "nodes": [
+    2464975527,
+    2464975560,
+    2464975581,
+    2464975583,
+    2464975456,
+    2464975479,
+    2464975534,
+    2464975567,
+    2464975527
+  ],
+  "tags": {
+    "addr:housenumber": "21",
+    "addr:postcode": "23898",
+    "addr:street": "Via Brianza",
+    "amenity": "restaurant",
+    "building": "yes",
+    "contact:email": "il.barbagianni@libero.it",
+    "contact:phone": "+39 039 9921410",
+    "cuisine": "italian",
+    "name": "Il Barbagianni",
+    "website": "https://www.ristorantebarbagianni.com/"
+  }
+},
+{
+  "type": "way",
+  "id": 242011526,
+  "center": {
+    "lat": 45.7378361,
+    "lon": 9.3719406
+  },
+  "nodes": [
+    2495918996,
+    2495918997,
+    2495918999,
+    2495919001,
+    2495918996
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "3",
+    "fee": "yes",
+    "parking": "street_side",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 242012014,
+  "center": {
+    "lat": 45.7378057,
+    "lon": 9.3716079
+  },
+  "nodes": [
+    2495920449,
+    2495920450,
+    2495920451,
+    2495920452,
+    2495920449
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "7",
+    "fee": "yes",
+    "parking": "surface",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 242013215,
+  "center": {
+    "lat": 45.7393053,
+    "lon": 9.3725115
+  },
+  "nodes": [
+    2495934052,
+    2495934053,
+    2495934054,
+    2495934055,
+    2495934052
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "20",
+    "fee": "yes",
+    "parking": "street_side",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 245607113,
+  "center": {
+    "lat": 45.7514010,
+    "lon": 9.4261155
+  },
+  "nodes": [
+    2527748168,
+    2527748176,
+    2527748179,
+    2527748182,
+    2527748168
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9",
+    "fee": "yes",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 245607115,
+  "center": {
+    "lat": 45.7510856,
+    "lon": 9.4261921
+  },
+  "nodes": [
+    2527748185,
+    2527748189,
+    2527748192,
+    2527748195,
+    2527748185
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "13",
+    "fee": "yes",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 245607116,
+  "center": {
+    "lat": 45.7513057,
+    "lon": 9.4262802
+  },
+  "nodes": [
+    2527748199,
+    2527748201,
+    2527748203,
+    2527748206,
+    2527748199
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "19",
+    "fee": "yes",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 245607118,
+  "center": {
+    "lat": 45.7515244,
+    "lon": 9.4257848
+  },
+  "nodes": [
+    2527748208,
+    2527748210,
+    2527748212,
+    2527748215,
+    2527748208
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8",
+    "fee": "yes",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 245607154,
+  "center": {
+    "lat": 45.7514183,
+    "lon": 9.4258128
+  },
+  "nodes": [
+    2527749524,
+    2527749525,
+    2527749526,
+    2527749527,
+    2527749524
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "7",
+    "fee": "yes",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 245607812,
+  "center": {
+    "lat": 45.7520706,
+    "lon": 9.4261749
+  },
+  "nodes": [
+    2527754737,
+    2527754738,
+    2527756567,
+    2527754739,
+    2527754740,
+    2527754737
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "yes",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 245612087,
+  "center": {
+    "lat": 45.7347631,
+    "lon": 9.3896061
+  },
+  "nodes": [
+    2527784697,
+    2527784698,
+    2527784699,
+    2527784700,
+    2527784697
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 246632180,
+  "center": {
+    "lat": 45.7420032,
+    "lon": 9.3786145
+  },
+  "nodes": [
+    2536410492,
+    2536410495,
+    2536410497,
+    2536410499,
+    2536410501,
+    2536410504,
+    2536410506,
+    2536410508,
+    2536410492
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "25",
+    "fee": "no",
+    "parking": "surface",
+    "smoothness": "excellent",
+    "supervised": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 250587699,
+  "center": {
+    "lat": 45.7199506,
+    "lon": 9.4243062
+  },
+  "nodes": [
+    2570173560,
+    2570173561,
+    2570173563,
+    2570173565,
+    2570173567,
+    2570173569,
+    2570173560
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 258510730,
+  "center": {
+    "lat": 45.7171844,
+    "lon": 9.4400219
+  },
+  "nodes": [
+    2638544712,
+    2638544702,
+    2638544706,
+    2638544707,
+    2638544712
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 261260020,
+  "center": {
+    "lat": 45.7253724,
+    "lon": 9.4128222
+  },
+  "nodes": [
+    2668950478,
+    2668950479,
+    2668950480,
+    2668950482,
+    2668950478
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "7",
+    "fee": "yes",
+    "parking": "surface",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 261260082,
+  "center": {
+    "lat": 45.7253623,
+    "lon": 9.4126914
+  },
+  "nodes": [
+    2668951742,
+    2668951743,
+    2668951744,
+    2668951745,
+    2668951742
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "6",
+    "fee": "yes",
+    "parking": "surface",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 261260789,
+  "center": {
+    "lat": 45.7257688,
+    "lon": 9.4132313
+  },
+  "nodes": [
+    2668963901,
+    13387410868,
+    2668963902,
+    2668963903,
+    2668963904,
+    13387410847,
+    2668963905,
+    2668963906,
+    2668963907,
+    2668963908,
+    2668963909,
+    13387410856,
+    2668963910,
+    13387410858,
+    2668963911,
+    2668963912,
+    13387410842,
+    13387410867,
+    13387410866,
+    13387410865,
+    13387410864,
+    2668963913,
+    2668963914,
+    2668963915,
+    13387410863,
+    13387410862,
+    13387410861,
+    13387410860,
+    13387410859,
+    2668963901
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "roman_catholic",
+    "name": "Chiesa di San Vigilio",
+    "religion": "christian",
+    "wikidata": "Q105590188",
+    "wikipedia": "it:Chiesa di San Vigilio (Calco)"
+  }
+},
+{
+  "type": "way",
+  "id": 278789848,
+  "center": {
+    "lat": 45.7247708,
+    "lon": 9.4156036
+  },
+  "nodes": [
+    2830986733,
+    2830986734,
+    2830986735,
+    2830986736,
+    2830986733
+  ],
+  "tags": {
+    "amenity": "ice_cream",
+    "building": "yes",
+    "description": "Good Italien icecream",
+    "name": "Lecca Lecca",
+    "opening_hours": "Mo 16:00-00:00; Tu-Sa 14:00-00:00; Su 10:30-00:00"
+  }
+},
+{
+  "type": "way",
+  "id": 278791244,
+  "center": {
+    "lat": 45.7223893,
+    "lon": 9.4124080
+  },
+  "nodes": [
+    2830988654,
+    2830988655,
+    2830988656,
+    2830988657,
+    2830988654
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "10",
+    "fee": "no",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 278792611,
+  "center": {
+    "lat": 45.7245362,
+    "lon": 9.4109538
+  },
+  "nodes": [
+    2830994660,
+    2830994661,
+    2830994662,
+    2830994663,
+    2830994660
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 297320961,
+  "center": {
+    "lat": 45.7256051,
+    "lon": 9.4181961
+  },
+  "nodes": [
+    3011937237,
+    3011956733,
+    3011955135,
+    3011954634,
+    3011937237
+  ],
+  "tags": {
+    "amenity": "townhall",
+    "building": "public",
+    "name": "Municipio di Calco"
+  }
+},
+{
+  "type": "way",
+  "id": 297770234,
+  "center": {
+    "lat": 45.7544049,
+    "lon": 9.4224939
+  },
+  "nodes": [
+    3016701833,
+    3016701734,
+    12880505054,
+    12880505053,
+    12880505052,
+    12880505051,
+    3016698834,
+    3016701733,
+    12880505050,
+    3016701833
+  ],
+  "tags": {
+    "amenity": "townhall",
+    "building": "yes",
+    "wikidata": "Q134625184"
+  }
+},
+{
+  "type": "way",
+  "id": 297778222,
+  "center": {
+    "lat": 45.7422524,
+    "lon": 9.4471870
+  },
+  "nodes": [
+    3016774136,
+    3016773838,
+    3016774444,
+    3016773837,
+    3016774136
+  ],
+  "tags": {
+    "amenity": "townhall",
+    "building": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 297778232,
+  "center": {
+    "lat": 45.7367452,
+    "lon": 9.4283243
+  },
+  "nodes": [
+    3016773836,
+    3016774433,
+    3016774334,
+    3016774335,
+    3016774035,
+    3016774434,
+    3016773836
+  ],
+  "tags": {
+    "amenity": "post_office",
+    "building": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 298335688,
+  "center": {
+    "lat": 45.7469839,
+    "lon": 9.4423605
+  },
+  "nodes": [
+    3022498035,
+    3022513633,
+    3022495939,
+    3022497936,
+    3022496139,
+    3022498035
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "park_ride": "no",
+    "parking": "surface",
+    "supervised": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 302727483,
+  "center": {
+    "lat": 45.7202023,
+    "lon": 9.4428660
+  },
+  "nodes": [
+    3069963332,
+    3069963833,
+    3069963834,
+    3069963835,
+    3069963332
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 302727660,
+  "center": {
+    "lat": 45.7205046,
+    "lon": 9.4438851
+  },
+  "nodes": [
+    3069965654,
+    3069965655,
+    3069965656,
+    3069965657,
+    3069965654
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 302727775,
+  "center": {
+    "lat": 45.7205306,
+    "lon": 9.4444572
+  },
+  "nodes": [
+    3069963000,
+    3777957892,
+    3069963001,
+    3069963002,
+    3069963003,
+    3069947073,
+    3069963000
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "description": "chiesa di arlate stile romanico",
+    "name": "Chiesa dei Santi Gottardo e Colombano",
+    "religion": "christian",
+    "wikidata": "Q112811985",
+    "wikimedia_commons": "File:Calco (LC) - frazione Arlate - chiesa dei Santi Gottardo e Colombano.jpg"
+  }
+},
+{
+  "type": "way",
+  "id": 302734440,
+  "center": {
+    "lat": 45.7226081,
+    "lon": 9.4367655
+  },
+  "nodes": [
+    3070050536,
+    2321807444,
+    3070050537,
+    3070050538,
+    3070050539,
+    3070050540,
+    3070050541,
+    3070050542,
+    3070050543,
+    3070050544,
+    3070050545,
+    3070050546,
+    3070050547,
+    3070050548,
+    3070050549,
+    3070050536
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 302735706,
+  "center": {
+    "lat": 45.7288417,
+    "lon": 9.4006338
+  },
+  "nodes": [
+    3070062806,
+    3070062807,
+    3070062808,
+    3070062809,
+    3070062810,
+    3070062811,
+    3070062806
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "yes",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 302736239,
+  "center": {
+    "lat": 45.7282236,
+    "lon": 9.4015775
+  },
+  "nodes": [
+    3070068733,
+    3070068734,
+    3070068735,
+    3070068736,
+    3070068737,
+    3070068738,
+    3070068733
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 302736241,
+  "center": {
+    "lat": 45.7284719,
+    "lon": 9.4014003
+  },
+  "nodes": [
+    3070068739,
+    3070068740,
+    3070068741,
+    3070068742,
+    3070068739
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 302736242,
+  "center": {
+    "lat": 45.7284154,
+    "lon": 9.4013020
+  },
+  "nodes": [
+    3070068743,
+    3070068744,
+    3070068745,
+    3070068746,
+    3070068747,
+    3070068748,
+    3070068749,
+    3070068750,
+    3070068743
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 302736559,
+  "center": {
+    "lat": 45.7302884,
+    "lon": 9.4008115
+  },
+  "nodes": [
+    3070070867,
+    3070070875,
+    3070070878,
+    3070070868,
+    3070070869,
+    3070070870,
+    3070070871,
+    3070070872,
+    3070070867
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 303462776,
+  "center": {
+    "lat": 45.7115655,
+    "lon": 9.4421468
+  },
+  "nodes": [
+    3078219314,
+    13014936173,
+    13014936176,
+    13014936177,
+    13014936178,
+    13014936179,
+    13014936180,
+    13014936181,
+    13014936182,
+    13014936185,
+    13014936184,
+    13014936183,
+    3078219316,
+    13014936187,
+    5527133190,
+    5527133191,
+    13014936140,
+    3078219315,
+    13014936151,
+    3078219313,
+    4687007618,
+    13014936186,
+    4687004321,
+    13014936190,
+    6877610456,
+    13014936189,
+    13014936188,
+    3078219314
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa dei Santi Marcellino e Pietro",
+    "religion": "christian",
+    "start_date": "1624",
+    "wikidata": "Q3668264",
+    "wikimedia_commons": "Category:Santi Marcellino e Pietro (Imbersago)",
+    "wikipedia": "it:Chiesa dei Santi Marcellino e Pietro (Imbersago)"
+  }
+},
+{
+  "type": "way",
+  "id": 306546704,
+  "center": {
+    "lat": 45.7144214,
+    "lon": 9.4175967
+  },
+  "nodes": [
+    3114959186,
+    3114959187,
+    3114959183,
+    3114959182,
+    3114959186
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "name": "Chiesa di San Pietro Apostolo",
+    "religion": "christian",
+    "wikidata": "Q111340696",
+    "wikimedia_commons": "Category:San Pietro Apostolo (Merate)"
+  }
+},
+{
+  "type": "way",
+  "id": 310919109,
+  "center": {
+    "lat": 45.7390817,
+    "lon": 9.3646889
+  },
+  "nodes": [
+    3164236500,
+    3164236501,
+    3164236502,
+    3164236503,
+    3164236500
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5",
+    "fee": "yes",
+    "parking": "street_side",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 310920356,
+  "center": {
+    "lat": 45.7428858,
+    "lon": 9.3727253
+  },
+  "nodes": [
+    3164248144,
+    3164246222,
+    3164248145,
+    3164248147,
+    3164248144
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 310920469,
+  "center": {
+    "lat": 45.7413403,
+    "lon": 9.3740810
+  },
+  "nodes": [
+    3164248858,
+    3164248859,
+    3164248860,
+    3164249661,
+    3164248858
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "street_side"
+  }
+},
+{
+  "type": "way",
+  "id": 312183669,
+  "center": {
+    "lat": 45.7276803,
+    "lon": 9.3751753
+  },
+  "nodes": [
+    3180294538,
+    3180294539,
+    3180294540,
+    3180294541,
+    3180294542,
+    3180294538
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "7",
+    "fee": "no",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 312183670,
+  "center": {
+    "lat": 45.7277837,
+    "lon": 9.3750511
+  },
+  "nodes": [
+    3180294543,
+    3180294544,
+    3180294545,
+    3180294546,
+    3180294543
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6",
+    "fee": "no",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 312184117,
+  "center": {
+    "lat": 45.7260835,
+    "lon": 9.3758575
+  },
+  "nodes": [
+    3180297984,
+    3180297985,
+    3180297986,
+    3180297987,
+    3180297984
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "7",
+    "fee": "no",
+    "parking": "street_side",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 329283629,
+  "center": {
+    "lat": 45.7571869,
+    "lon": 9.4121162
+  },
+  "nodes": [
+    3361529849,
+    12881364037,
+    3361529847,
+    3361529848,
+    3361529849
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "street_side"
+  }
+},
+{
+  "type": "way",
+  "id": 340266670,
+  "center": {
+    "lat": 45.7261153,
+    "lon": 9.4120898
+  },
+  "nodes": [
+    3474815913,
+    3474815923,
+    3474815917,
+    3474815908,
+    3474815913
+  ],
+  "tags": {
+    "amenity": "school",
+    "building": "school"
+  }
+},
+{
+  "type": "way",
+  "id": 350332824,
+  "center": {
+    "lat": 45.7245329,
+    "lon": 9.4132405
+  },
+  "nodes": [
+    3560785962,
+    3560785960,
+    3560785971,
+    3560785972,
+    3560785962
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "chapel",
+    "denomination": "catholic",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 350332843,
+  "center": {
+    "lat": 45.7474110,
+    "lon": 9.4429700
+  },
+  "nodes": [
+    3560805064,
+    3560805063,
+    3560805066,
+    3560805068,
+    3560805064
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "chapel",
+    "denomination": "catholic",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 350332863,
+  "center": {
+    "lat": 45.7245778,
+    "lon": 9.4132454
+  },
+  "nodes": [
+    3560785973,
+    3560785979,
+    3560785981,
+    3560785975,
+    3560785973
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "chapel",
+    "denomination": "catholic",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 350332873,
+  "center": {
+    "lat": 45.7475664,
+    "lon": 9.4438121
+  },
+  "nodes": [
+    3560805086,
+    3560805107,
+    3560805110,
+    3560805100,
+    3560805099,
+    3560805088,
+    3560805086
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "chapel",
+    "denomination": "catholic",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 350338326,
+  "center": {
+    "lat": 45.7316161,
+    "lon": 9.4167747
+  },
+  "nodes": [
+    3560790393,
+    3560790063,
+    3560790194,
+    3560790255,
+    3560790423,
+    3560790393
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 353189627,
+  "center": {
+    "lat": 45.7129894,
+    "lon": 9.4182065
+  },
+  "nodes": [
+    3560779942,
+    13235151967,
+    3560779670,
+    3561359387,
+    3589553003,
+    3560779942
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 353207075,
+  "center": {
+    "lat": 45.7147406,
+    "lon": 9.4182875
+  },
+  "nodes": [
+    12811620840,
+    3589752168,
+    12811620839,
+    12811620838,
+    12811620837,
+    3589752167,
+    3589752086,
+    3589751989,
+    12811620832,
+    12811620835,
+    12811620831,
+    3589751949,
+    12811620836,
+    3589752149,
+    12811620840
+  ],
+  "tags": {
+    "addr:city": "Merate",
+    "addr:housenumber": "5",
+    "addr:street": "Piazza San Pietro",
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa vecchia di San Pietro Apostolo",
+    "religion": "christian",
+    "wikidata": "Q134352569"
+  }
+},
+{
+  "type": "way",
+  "id": 365647495,
+  "center": {
+    "lat": 45.7402666,
+    "lon": 9.4590717
+  },
+  "nodes": [
+    3696514613,
+    3696514617,
+    3696514618,
+    3696514614,
+    3696514613
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 365647496,
+  "center": {
+    "lat": 45.7402443,
+    "lon": 9.4584942
+  },
+  "nodes": [
+    3696514610,
+    3696514615,
+    3696514616,
+    3696514612,
+    3696514610
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 368741302,
+  "center": {
+    "lat": 45.7502968,
+    "lon": 9.4291732
+  },
+  "nodes": [
+    3725873631,
+    3725873632,
+    3725873626,
+    3725873625,
+    3725873631
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 368741303,
+  "center": {
+    "lat": 45.7532981,
+    "lon": 9.4279116
+  },
+  "nodes": [
+    3725873920,
+    3725873919,
+    3725873876,
+    3725873879,
+    3725873920
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 368741304,
+  "center": {
+    "lat": 45.7507614,
+    "lon": 9.4297321
+  },
+  "nodes": [
+    3725873638,
+    3725873640,
+    3725873644,
+    3725873642,
+    3725873638
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 368741305,
+  "center": {
+    "lat": 45.7532580,
+    "lon": 9.4286546
+  },
+  "nodes": [
+    3725873909,
+    3725873906,
+    3725873878,
+    3725873889,
+    3725873909
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 368741306,
+  "center": {
+    "lat": 45.7534587,
+    "lon": 9.4283545
+  },
+  "nodes": [
+    3725873931,
+    3725873934,
+    3725873917,
+    3725873914,
+    3725873931
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 368741314,
+  "center": {
+    "lat": 45.7577207,
+    "lon": 9.4238962
+  },
+  "nodes": [
+    12880555244,
+    3725874094,
+    3725874099,
+    3725874100,
+    3725874098,
+    3725874097,
+    3725874096,
+    12880555243,
+    3725874090,
+    12921371505,
+    3725874080,
+    12880555238,
+    12880555237,
+    12880555236,
+    3725874082,
+    12880555235,
+    3725874079,
+    3725874081,
+    3725874084,
+    12921371504,
+    3725874092,
+    3725874087,
+    3725874086,
+    3725874088,
+    3725874089,
+    3725874091,
+    3725874093,
+    3725874095,
+    12880555242,
+    12880555239,
+    12880555244
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa dei Santi Cosma e Damiano",
+    "religion": "christian",
+    "wikidata": "Q112812028",
+    "wikimedia_commons": "Category:Santi Cosma e Damiano (Airuno)"
+  }
+},
+{
+  "type": "way",
+  "id": 368760934,
+  "center": {
+    "lat": 45.7548729,
+    "lon": 9.4272232
+  },
+  "nodes": [
+    3726048443,
+    3726048445,
+    3726048465,
+    3726048459,
+    3726048443
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 368760944,
+  "center": {
+    "lat": 45.7549631,
+    "lon": 9.4272927
+  },
+  "nodes": [
+    3726048478,
+    3726048475,
+    3726048462,
+    3726048471,
+    3726048478
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 368928634,
+  "center": {
+    "lat": 45.7156040,
+    "lon": 9.4561342
+  },
+  "nodes": [
+    3727658619,
+    3727658617,
+    3727658620,
+    3727658737,
+    3727658734,
+    3727658735,
+    3727658619
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 369506415,
+  "center": {
+    "lat": 45.7146816,
+    "lon": 9.4599383
+  },
+  "nodes": [
+    3732902763,
+    3732902764,
+    3732902750,
+    3732902749,
+    3732902763
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374090897,
+  "center": {
+    "lat": 45.7181331,
+    "lon": 9.4322749
+  },
+  "nodes": [
+    3774978818,
+    3774978822,
+    3774978823,
+    3774978821,
+    3774978818
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374092167,
+  "center": {
+    "lat": 45.7225355,
+    "lon": 9.4425283
+  },
+  "nodes": [
+    3774979433,
+    3774979434,
+    3774979442,
+    3774979439,
+    3774979433
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374406655,
+  "center": {
+    "lat": 45.7180654,
+    "lon": 9.4575665
+  },
+  "nodes": [
+    3777957638,
+    3777957640,
+    3777957642,
+    3777957639,
+    3777957638
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374406656,
+  "center": {
+    "lat": 45.7177739,
+    "lon": 9.4577734
+  },
+  "nodes": [
+    3777957622,
+    3777957626,
+    3777957627,
+    3777957624,
+    3777957622
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374406657,
+  "center": {
+    "lat": 45.7181653,
+    "lon": 9.4575063
+  },
+  "nodes": [
+    3777957649,
+    3777957646,
+    3777957647,
+    3777957650,
+    3777957649
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374408480,
+  "center": {
+    "lat": 45.7358490,
+    "lon": 9.4166270
+  },
+  "nodes": [
+    3777979477,
+    3777979479,
+    3777979470,
+    3777979468,
+    3777979477
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374408482,
+  "center": {
+    "lat": 45.7357810,
+    "lon": 9.4175444
+  },
+  "nodes": [
+    3777979466,
+    3777979467,
+    3777979474,
+    3777979472,
+    3777979466
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374408484,
+  "center": {
+    "lat": 45.7358684,
+    "lon": 9.4167679
+  },
+  "nodes": [
+    3777979480,
+    3777979481,
+    3777979471,
+    3777979469,
+    3777979480
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374408486,
+  "center": {
+    "lat": 45.7356662,
+    "lon": 9.4176270
+  },
+  "nodes": [
+    3777979465,
+    3777979464,
+    3777979459,
+    3777979460,
+    3777979465
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374408487,
+  "center": {
+    "lat": 45.7355603,
+    "lon": 9.4167474
+  },
+  "nodes": [
+    3777979462,
+    3777979463,
+    3777978952,
+    3777978950,
+    3777979462
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374408489,
+  "center": {
+    "lat": 45.7355412,
+    "lon": 9.4169025
+  },
+  "nodes": [
+    3777978956,
+    3777979457,
+    3777978954,
+    3777978953,
+    3777978956
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374425445,
+  "center": {
+    "lat": 45.7387645,
+    "lon": 9.4231092
+  },
+  "nodes": [
+    3778155600,
+    3778155603,
+    3778155588,
+    3778155586,
+    3778155600
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374425446,
+  "center": {
+    "lat": 45.7363965,
+    "lon": 9.4271797
+  },
+  "nodes": [
+    3778155513,
+    3778155512,
+    3778155504,
+    3778155505,
+    3778155513
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374425447,
+  "center": {
+    "lat": 45.7287034,
+    "lon": 9.4356189
+  },
+  "nodes": [
+    3778155430,
+    3778155432,
+    3778155434,
+    3778155433,
+    3778155430
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374425448,
+  "center": {
+    "lat": 45.7386847,
+    "lon": 9.4229758
+  },
+  "nodes": [
+    3778155587,
+    3778155591,
+    3778155579,
+    3778155577,
+    3778155587
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374425450,
+  "center": {
+    "lat": 45.7362026,
+    "lon": 9.4276329
+  },
+  "nodes": [
+    3778155498,
+    3778155501,
+    3778155499,
+    3778155497,
+    3778155498
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374425451,
+  "center": {
+    "lat": 45.7384772,
+    "lon": 9.4230081
+  },
+  "nodes": [
+    3778155561,
+    3778155566,
+    3778155576,
+    3778155574,
+    3778155561
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374425452,
+  "center": {
+    "lat": 45.7285886,
+    "lon": 9.4356904
+  },
+  "nodes": [
+    3778155428,
+    3778155427,
+    3778155429,
+    3778155431,
+    3778155428
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374426942,
+  "center": {
+    "lat": 45.7284765,
+    "lon": 9.4067388
+  },
+  "nodes": [
+    3778163894,
+    3778163898,
+    3778163896,
+    3778163891,
+    3778163894
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374426943,
+  "center": {
+    "lat": 45.7284427,
+    "lon": 9.4080405
+  },
+  "nodes": [
+    3778163887,
+    3778163893,
+    3778163892,
+    3778163886,
+    3778163887
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374426944,
+  "center": {
+    "lat": 45.7286253,
+    "lon": 9.4080427
+  },
+  "nodes": [
+    3778163906,
+    3778163904,
+    3778163900,
+    3778163902,
+    3778163905,
+    3778163910,
+    3778163906
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374519461,
+  "center": {
+    "lat": 45.7491641,
+    "lon": 9.4381307
+  },
+  "nodes": [
+    3779157844,
+    3779157843,
+    3779157837,
+    3779157838,
+    3779157844
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 374555285,
+  "center": {
+    "lat": 45.7506344,
+    "lon": 9.4294199
+  },
+  "nodes": [
+    3779495763,
+    3779495769,
+    3779495786,
+    3779495782,
+    3779495763
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 440762163,
+  "center": {
+    "lat": 45.7365761,
+    "lon": 9.4198381
+  },
+  "nodes": [
+    4385378213,
+    4385378211,
+    4385378217,
+    4385378218,
+    4385378213
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 440762164,
+  "center": {
+    "lat": 45.7315026,
+    "lon": 9.4039110
+  },
+  "nodes": [
+    4385378134,
+    4385378133,
+    4385378131,
+    4385378132,
+    4385378134
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 440762165,
+  "center": {
+    "lat": 45.7321302,
+    "lon": 9.4040278
+  },
+  "nodes": [
+    4385378140,
+    4385378139,
+    4385378141,
+    4385378142,
+    4385378140
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 440762166,
+  "center": {
+    "lat": 45.7364034,
+    "lon": 9.4201400
+  },
+  "nodes": [
+    4385378209,
+    4385378210,
+    4385378204,
+    4385378203,
+    4385378209
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 440762167,
+  "center": {
+    "lat": 45.7324035,
+    "lon": 9.4040743
+  },
+  "nodes": [
+    4385378144,
+    4385378143,
+    4385378145,
+    4385378146,
+    4385378144
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 440762168,
+  "center": {
+    "lat": 45.7364935,
+    "lon": 9.4202451
+  },
+  "nodes": [
+    4385378214,
+    4385378212,
+    4385378205,
+    4385378208,
+    4385378214
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 440762169,
+  "center": {
+    "lat": 45.7318272,
+    "lon": 9.4039578
+  },
+  "nodes": [
+    4385378136,
+    4385378135,
+    4385378137,
+    4385378138,
+    4385378136
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 440762170,
+  "center": {
+    "lat": 45.7363920,
+    "lon": 9.4209273
+  },
+  "nodes": [
+    4385378199,
+    4385378200,
+    4385378216,
+    4385378215,
+    4385378199
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 440762171,
+  "center": {
+    "lat": 45.7363191,
+    "lon": 9.4207628
+  },
+  "nodes": [
+    4385378207,
+    4385378206,
+    4385378201,
+    4385378202,
+    4385378207
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 440764698,
+  "center": {
+    "lat": 45.7326312,
+    "lon": 9.4041119
+  },
+  "nodes": [
+    4385398465,
+    4385398464,
+    4385398462,
+    4385398463,
+    4385398465
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 444057216,
+  "center": {
+    "lat": 45.7371749,
+    "lon": 9.4578578
+  },
+  "nodes": [
+    4415601909,
+    4415601910,
+    4415601911,
+    4415601912,
+    4415601909
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 444057217,
+  "center": {
+    "lat": 45.7370540,
+    "lon": 9.4579174
+  },
+  "nodes": [
+    4415601913,
+    4415601914,
+    4415601915,
+    4415601916,
+    4415601913
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 444057218,
+  "center": {
+    "lat": 45.7371482,
+    "lon": 9.4586528
+  },
+  "nodes": [
+    4415601917,
+    4415601918,
+    4415601919,
+    4415601920,
+    4415601917
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 444057219,
+  "center": {
+    "lat": 45.7370238,
+    "lon": 9.4588352
+  },
+  "nodes": [
+    4415601921,
+    4415601922,
+    4415601923,
+    4415601924,
+    4415601921
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 445391505,
+  "center": {
+    "lat": 45.7101093,
+    "lon": 9.3637521
+  },
+  "nodes": [
+    4428273659,
+    12600740268,
+    12600740269,
+    12600740271,
+    9921867196,
+    9921867195,
+    7985758667,
+    12600740267,
+    9921867194,
+    9921867193,
+    7985758669,
+    7985758670,
+    4428273657,
+    9921867198,
+    9921867197,
+    12600740264,
+    4428273659
+  ],
+  "tags": {
+    "access": "yes",
+    "addr:city": "Montevecchia",
+    "addr:postcode": "23874",
+    "addr:street": "Via Alta Collina",
+    "amenity": "parking",
+    "fee": "no",
+    "park_ride": "no",
+    "parking": "surface",
+    "supervised": "no",
+    "surface": "paved"
+  }
+},
+{
+  "type": "way",
+  "id": 474427550,
+  "center": {
+    "lat": 45.7368162,
+    "lon": 9.4290519
+  },
+  "nodes": [
+    4683871801,
+    4683871802,
+    4683871803,
+    4683871804,
+    4683871805,
+    13371883917,
+    13371883912,
+    13371883913,
+    13371883914,
+    13371883915,
+    13371883916,
+    4683871806,
+    4683871807,
+    13371883920,
+    13371883919,
+    4683871808,
+    4683871809,
+    4683871810,
+    4683871811,
+    4683871812,
+    13371883918,
+    4683871801
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "catholic",
+    "name": "Chiesa Santi Margherita e Simpliciano",
+    "religion": "christian",
+    "source": "bing"
+  }
+},
+{
+  "type": "way",
+  "id": 503916021,
+  "center": {
+    "lat": 45.7158338,
+    "lon": 9.4573454
+  },
+  "nodes": [
+    4941600538,
+    4941600537,
+    4941600536,
+    4941600535,
+    4941600538
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916022,
+  "center": {
+    "lat": 45.7158122,
+    "lon": 9.4570549
+  },
+  "nodes": [
+    4941600542,
+    4941600540,
+    4941600539,
+    4941600541,
+    4941600542
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916023,
+  "center": {
+    "lat": 45.7159180,
+    "lon": 9.4572155
+  },
+  "nodes": [
+    4941600546,
+    4941600544,
+    4941600543,
+    4941600545,
+    4941600546
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916024,
+  "center": {
+    "lat": 45.7155958,
+    "lon": 9.4567522
+  },
+  "nodes": [
+    4941600550,
+    4941600548,
+    4941600547,
+    4941600549,
+    4941600550
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916028,
+  "center": {
+    "lat": 45.7154269,
+    "lon": 9.4567840
+  },
+  "nodes": [
+    4941600554,
+    4941600552,
+    4941600551,
+    4941600553,
+    4941600554
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916030,
+  "center": {
+    "lat": 45.7150522,
+    "lon": 9.4569506
+  },
+  "nodes": [
+    4941600560,
+    4941600558,
+    4941600557,
+    4941600559,
+    4941600556,
+    4941600555,
+    4941600560
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916033,
+  "center": {
+    "lat": 45.7152703,
+    "lon": 9.4575376
+  },
+  "nodes": [
+    4941600564,
+    4941600563,
+    4941600562,
+    4941600561,
+    4941600564
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916034,
+  "center": {
+    "lat": 45.7152262,
+    "lon": 9.4571201
+  },
+  "nodes": [
+    4941600568,
+    4941600567,
+    4941600566,
+    4941600565,
+    4941600568
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916035,
+  "center": {
+    "lat": 45.7149819,
+    "lon": 9.4574674
+  },
+  "nodes": [
+    4941600572,
+    4941600571,
+    4941600570,
+    4941600569,
+    4941600572
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916036,
+  "center": {
+    "lat": 45.7150888,
+    "lon": 9.4575629
+  },
+  "nodes": [
+    4941600576,
+    4941600575,
+    4941600574,
+    4941600573,
+    4941600576
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916037,
+  "center": {
+    "lat": 45.7151624,
+    "lon": 9.4575357
+  },
+  "nodes": [
+    4941600580,
+    4941600579,
+    4941600578,
+    4941600577,
+    4941600580
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916038,
+  "center": {
+    "lat": 45.7151375,
+    "lon": 9.4572504
+  },
+  "nodes": [
+    4941600584,
+    4941600583,
+    4941600582,
+    4941600581,
+    4941600584
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 503916039,
+  "center": {
+    "lat": 45.7150550,
+    "lon": 9.4572657
+  },
+  "nodes": [
+    4941600588,
+    4941600586,
+    4941600585,
+    4941600587,
+    4941600588
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 523261999,
+  "center": {
+    "lat": 45.7390573,
+    "lon": 9.4115551
+  },
+  "nodes": [
+    5094528091,
+    5094528092,
+    5094528093,
+    5094528094,
+    6856023559,
+    5094528095,
+    6856023562,
+    5094528091
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 529009030,
+  "center": {
+    "lat": 45.7181944,
+    "lon": 9.4331588
+  },
+  "nodes": [
+    12811421723,
+    5139731534,
+    12811421722,
+    12811497651,
+    12811497650,
+    12811497649,
+    12811497648,
+    5139731535,
+    5139731536,
+    12811497645,
+    5139731533,
+    12811497647,
+    12811497646,
+    12811421723
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa di Santa Maria Assunta",
+    "religion": "christian",
+    "wikidata": "Q118745150"
+  }
+},
+{
+  "type": "way",
+  "id": 529009061,
+  "center": {
+    "lat": 45.7184885,
+    "lon": 9.4326706
+  },
+  "nodes": [
+    5139731646,
+    5139731645,
+    5139731644,
+    5139731655,
+    5139731656,
+    5139731657,
+    5139731643,
+    5139731642,
+    5139731637,
+    5139731633,
+    5139731640,
+    5139731641,
+    5139731622,
+    5139731623,
+    5139731624,
+    5139731646
+  ],
+  "tags": {
+    "addr:housenumber": "1",
+    "addr:street": "Piazza Silvio Pellico",
+    "alt_name": "Da Mister",
+    "amenity": "pub",
+    "contact:email": "birreria.cassina@live.de",
+    "contact:phone": "+39 333 524 2113",
+    "name": "Birreria Cassina",
+    "opening_hours": "Mo-Sa 00:00-01:00,17:30-24:00; Su 00:00-01:00,11:00-24:00"
+  }
+},
+{
+  "type": "way",
+  "id": 540734393,
+  "center": {
+    "lat": 45.7364592,
+    "lon": 9.4511874
+  },
+  "nodes": [
+    5230681819,
+    5230681820,
+    5230683321,
+    5655702565,
+    5655702566,
+    5230683322,
+    5230681819
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesetta Morti di San Martino",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 584844632,
+  "center": {
+    "lat": 45.7408074,
+    "lon": 9.4465532
+  },
+  "nodes": [
+    5589824546,
+    13362368288,
+    13362368265,
+    13362368287,
+    5589824547,
+    13362368286,
+    13362368285,
+    5589824548,
+    5589824549,
+    13362368284,
+    13362368281,
+    13362368282,
+    13362368283,
+    5589824550,
+    13362368280,
+    5589824551,
+    5589824552,
+    5589824553,
+    5589824554,
+    5589824555,
+    5589824556,
+    5589824557,
+    13362368279,
+    5589824558,
+    5589824559,
+    5589824560,
+    13362368290,
+    13362368289,
+    5589824546
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa parrocchiale di Brivio",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 592640676,
+  "center": {
+    "lat": 45.7370312,
+    "lon": 9.4279669
+  },
+  "nodes": [
+    5655739669,
+    5655739670,
+    5655739671,
+    5655739672,
+    5655739673,
+    5655739674,
+    5655739669
+  ],
+  "tags": {
+    "amenity": "community_centre",
+    "loc_name": "Oratorio di Beverate",
+    "name": "Oratorio San Giovanni Bosco"
+  }
+},
+{
+  "type": "way",
+  "id": 606275086,
+  "center": {
+    "lat": 45.7431600,
+    "lon": 9.4503231
+  },
+  "nodes": [
+    5748667739,
+    5748667740,
+    5748667741,
+    5748667742,
+    5748667739
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5",
+    "capacity:disabled": "1",
+    "parking:condition:both": "residents @ (Su 08:00-20:00 PH)",
+    "surface": "sett"
+  }
+},
+{
+  "type": "way",
+  "id": 606283354,
+  "center": {
+    "lat": 45.7423079,
+    "lon": 9.4495415
+  },
+  "nodes": [
+    5748718503,
+    5748718504,
+    5748718505,
+    697460177,
+    5748718503
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "street_side"
+  }
+},
+{
+  "type": "way",
+  "id": 606327560,
+  "center": {
+    "lat": 45.7425690,
+    "lon": 9.4460423
+  },
+  "nodes": [
+    5749012472,
+    5749012471,
+    5749012470,
+    5749012469,
+    5749012468,
+    5749012467,
+    5749012472
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa di San Leonardo",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 606327567,
+  "center": {
+    "lat": 45.7418464,
+    "lon": 9.4452971
+  },
+  "nodes": [
+    5749012557,
+    5749012556,
+    5749012555,
+    5749012554,
+    5749012553,
+    5749012552,
+    5749012557
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 606380655,
+  "center": {
+    "lat": 45.7404281,
+    "lon": 9.4463925
+  },
+  "nodes": [
+    5749326604,
+    5749326605,
+    5749326614,
+    5749326615,
+    5749326613,
+    5749326606,
+    5749326607,
+    5749326610,
+    5749326604
+  ],
+  "tags": {
+    "amenity": "parking",
+    "maxstay:conditional": "2 hr @ Su 08:00-20:00",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 606385949,
+  "center": {
+    "lat": 45.7426071,
+    "lon": 9.4446596
+  },
+  "nodes": [
+    5749356972,
+    5749356973,
+    5749356974,
+    5749356975,
+    5749356976,
+    5749356977,
+    5749356978,
+    5749356979,
+    5749356980,
+    5749356981,
+    5749356982,
+    5749356983,
+    5749356984,
+    5749356985,
+    5749356986,
+    5749356987,
+    5749356988,
+    5749356972
+  ],
+  "tags": {
+    "amenity": "social_facility",
+    "name": "Casa di riposo Carlo e Elisa Frigerio",
+    "social_facility": "nursing_home",
+    "social_facility:for": "senior",
+    "wikidata": "Q112139247"
+  }
+},
+{
+  "type": "way",
+  "id": 606386751,
+  "center": {
+    "lat": 45.7404298,
+    "lon": 9.4473264
+  },
+  "nodes": [
+    5749360683,
+    13362368366,
+    5749360684,
+    5749360685,
+    5749360686,
+    5749360687,
+    5749360688,
+    5749360689,
+    5749360690,
+    5749360683
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 626186478,
+  "center": {
+    "lat": 45.7338782,
+    "lon": 9.3569336
+  },
+  "nodes": [
+    5911635571,
+    5911635572,
+    5911635573,
+    5911635574,
+    5911635575,
+    5911635576,
+    5911635577,
+    5911635578,
+    5911635579,
+    5911635580,
+    5911635581,
+    5911635582,
+    5911635583,
+    5911635584,
+    5911642785,
+    5911642786,
+    5911642787,
+    5911642788,
+    5911635571
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity:disabled": "1",
+    "surface": "grass_paver"
+  }
+},
+{
+  "type": "way",
+  "id": 626398004,
+  "center": {
+    "lat": 45.7178830,
+    "lon": 9.4081062
+  },
+  "nodes": [
+    5913663983,
+    5913663982,
+    5913663981,
+    5913663980,
+    5913663979,
+    5913663978,
+    5913663977,
+    5913663976,
+    5913663983
+  ],
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "fee": "no",
+    "lit": "yes",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 626399167,
+  "center": {
+    "lat": 45.7183672,
+    "lon": 9.4072354
+  },
+  "nodes": [
+    5913676435,
+    5913664185,
+    5913664184,
+    5913664183,
+    5913664180,
+    5913664179,
+    5913676438,
+    5913676437,
+    5913676436,
+    5913676435
+  ],
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "layer": "-1",
+    "level": "-1",
+    "lit": "yes",
+    "parking": "underground",
+    "supervised": "no",
+    "surface": "concrete"
+  }
+},
+{
+  "type": "way",
+  "id": 633916383,
+  "center": {
+    "lat": 45.7266926,
+    "lon": 9.4522533
+  },
+  "nodes": [
+    5983334566,
+    5983334567,
+    11187625317,
+    5983334568,
+    5983334569,
+    5983334566
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "ground"
+  }
+},
+{
+  "type": "way",
+  "id": 680130138,
+  "center": {
+    "lat": 45.7574984,
+    "lon": 9.4171472
+  },
+  "nodes": [
+    6368223221,
+    6368223222,
+    6368223223,
+    6368223224,
+    6368223221
+  ],
+  "tags": {
+    "amenity": "restaurant",
+    "building": "detached",
+    "name": "Ristorante Il Gabbiano"
+  }
+},
+{
+  "type": "way",
+  "id": 683646520,
+  "center": {
+    "lat": 45.7320851,
+    "lon": 9.3639746
+  },
+  "nodes": [
+    6403465622,
+    6403465621,
+    6403465620,
+    6403465619,
+    6403465622
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "40",
+    "fee": "no",
+    "maxstay": "unlimited",
+    "name": "Parcheggio Frigola",
+    "source": "GPS"
+  }
+},
+{
+  "type": "way",
+  "id": 687531830,
+  "center": {
+    "lat": 45.7153840,
+    "lon": 9.4327003
+  },
+  "nodes": [
+    6444921232,
+    6444921233,
+    6444921234,
+    6444921235,
+    6444921232
+  ],
+  "tags": {
+    "amenity": "parking",
+    "surface": "paved"
+  }
+},
+{
+  "type": "way",
+  "id": 687829128,
+  "center": {
+    "lat": 45.7174028,
+    "lon": 9.4299788
+  },
+  "nodes": [
+    6448340096,
+    6448340097,
+    6448340098,
+    6448340099,
+    6448340096
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 687829129,
+  "center": {
+    "lat": 45.7180665,
+    "lon": 9.4253464
+  },
+  "nodes": [
+    6448340101,
+    6448340102,
+    6448340103,
+    6448340104,
+    6448340101
+  ],
+  "tags": {
+    "amenity": "shelter",
+    "area": "yes",
+    "shelter_type": "weather_shelter"
+  }
+},
+{
+  "type": "way",
+  "id": 687893185,
+  "center": {
+    "lat": 45.7182183,
+    "lon": 9.4073544
+  },
+  "nodes": [
+    5913664179,
+    5913676438,
+    5913664186,
+    5913664185,
+    5913664184,
+    5913664179
+  ],
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "branch": "CALCO",
+    "brand": "Esselunga",
+    "operator": "Esselunga",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 688194968,
+  "center": {
+    "lat": 45.7545777,
+    "lon": 9.4304462
+  },
+  "nodes": [
+    6452550713,
+    6452550714,
+    6452550715,
+    6452550716,
+    6452550713
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 688194969,
+  "center": {
+    "lat": 45.7545897,
+    "lon": 9.4305831
+  },
+  "nodes": [
+    6452550717,
+    6452550718,
+    6452550719,
+    6452550720,
+    6452550717
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 688194971,
+  "center": {
+    "lat": 45.7546608,
+    "lon": 9.4301556
+  },
+  "nodes": [
+    6452550722,
+    6452550723,
+    6452550724,
+    6452550725,
+    6452550722
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 688624393,
+  "center": {
+    "lat": 45.7267712,
+    "lon": 9.4186872
+  },
+  "nodes": [
+    2312843916,
+    6458086943,
+    6458086944,
+    6458086945,
+    6458086946,
+    6458086947,
+    6458086948,
+    6458185064,
+    6458185065,
+    6458185066,
+    6458185067,
+    6458086949,
+    6458086950,
+    6458086951,
+    6458086952,
+    6458086953,
+    6458086954,
+    6458086955,
+    6458185069,
+    6458185068,
+    6458086956,
+    6458185060,
+    6458185061,
+    6458086957,
+    6458185062,
+    6458185063,
+    2312843916
+  ],
+  "tags": {
+    "addr:city": "Calco",
+    "addr:housenumber": "29",
+    "addr:postcode": "23885",
+    "addr:street": "Via Italia",
+    "amenity": "school",
+    "building": "school",
+    "name": "Scuola primaria \"Bartolomeo Calchi\""
+  }
+},
+{
+  "type": "way",
+  "id": 689063164,
+  "center": {
+    "lat": 45.7418931,
+    "lon": 9.3951594
+  },
+  "nodes": [
+    6463662713,
+    6463662714,
+    6463662726,
+    6463662715,
+    6463662716,
+    6463662717,
+    6463662718,
+    6463662719,
+    6463662720,
+    6463662721,
+    6463662722,
+    6463662723,
+    6463662724,
+    6463662725,
+    6463662713
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface",
+    "surface": "unpaved"
+  }
+},
+{
+  "type": "way",
+  "id": 689065452,
+  "center": {
+    "lat": 45.7354955,
+    "lon": 9.3992895
+  },
+  "nodes": [
+    6463692269,
+    6463692270,
+    6463692271,
+    6463692272,
+    6463692269
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 689065456,
+  "center": {
+    "lat": 45.7411049,
+    "lon": 9.4002659
+  },
+  "nodes": [
+    6463692586,
+    6463692587,
+    6463692588,
+    6463692589,
+    6463692590,
+    6463692591,
+    6463692586
+  ],
+  "tags": {
+    "amenity": "parking",
+    "capacity": "4",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 690916435,
+  "center": {
+    "lat": 45.7577787,
+    "lon": 9.4243456
+  },
+  "nodes": [
+    6482590967,
+    6482590968,
+    6482590969,
+    6482590970,
+    6482590967
+  ],
+  "tags": {
+    "access:note": "Piazzale parrocchiale, riservato ai fedeli negli orari dei riti religiosi",
+    "amenity": "parking",
+    "fee": "no",
+    "surface": "unpaved",
+    "vehicle:conditional": "yes @ (Sa 17:30-19:00; Su 07:30-09:00, 10:30-12:00, 17:30-19:00; PH -1: 17:30-19:00; PH 07:30-09:00, 10:30-12:00)",
+    "wikimedia_commons": "File:Parking on Via San Francesco (Airuno), behind the church.jpg"
+  }
+},
+{
+  "type": "way",
+  "id": 690995942,
+  "center": {
+    "lat": 45.7377912,
+    "lon": 9.3641750
+  },
+  "nodes": [
+    6483433387,
+    6483433388,
+    6483433389,
+    6483433390,
+    6483433387
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 690995944,
+  "center": {
+    "lat": 45.7383356,
+    "lon": 9.3631108
+  },
+  "nodes": [
+    6483433391,
+    6483433392,
+    6483433393,
+    6483433394,
+    6483433391
+  ],
+  "tags": {
+    "amenity": "shelter",
+    "building": "yes",
+    "shelter_type": "lean_to"
+  }
+},
+{
+  "type": "way",
+  "id": 701042641,
+  "center": {
+    "lat": 45.7509965,
+    "lon": 9.4252791
+  },
+  "nodes": [
+    6583691152,
+    6583691151,
+    6583691150,
+    6583691149,
+    6583691148,
+    6583691147,
+    6583691146,
+    6583691145,
+    6583691144,
+    6583691143,
+    6583691142,
+    6583691152
+  ],
+  "tags": {
+    "amenity": "community_centre",
+    "name": "Oratorio di Airuno"
+  }
+},
+{
+  "type": "way",
+  "id": 701042642,
+  "center": {
+    "lat": 45.7513006,
+    "lon": 9.4256445
+  },
+  "nodes": [
+    6583691156,
+    6583691155,
+    13374776778,
+    13374776779,
+    6583691154,
+    13374776780,
+    6583691153,
+    13374776781,
+    13374776782,
+    6583691159,
+    6583691156
+  ],
+  "tags": {
+    "amenity": "cinema",
+    "building": "yes",
+    "name": "Cinema Smeraldo"
+  }
+},
+{
+  "type": "way",
+  "id": 712545571,
+  "center": {
+    "lat": 45.7193004,
+    "lon": 9.4574690
+  },
+  "nodes": [
+    6699382637,
+    6699382638,
+    2327751084,
+    6699382639,
+    6699382640,
+    971108527,
+    6699382637
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 731711864,
+  "center": {
+    "lat": 45.7339463,
+    "lon": 9.4320227
+  },
+  "nodes": [
+    6852093199,
+    6852093200,
+    6852093201,
+    6852093202,
+    6852093199
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 743123610,
+  "center": {
+    "lat": 45.7418753,
+    "lon": 9.4410017
+  },
+  "nodes": [
+    6955937324,
+    6955937325,
+    6955937326,
+    6955937327,
+    6955937324
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 833905178,
+  "center": {
+    "lat": 45.7099909,
+    "lon": 9.4415674
+  },
+  "nodes": [
+    7784559511,
+    7784559512,
+    7784559513,
+    7784559514,
+    7784559515,
+    7784559516,
+    7784559511
+  ],
+  "tags": {
+    "amenity": "community_centre"
+  }
+},
+{
+  "type": "way",
+  "id": 833905179,
+  "center": {
+    "lat": 45.7101579,
+    "lon": 9.4440879
+  },
+  "nodes": [
+    3078219294,
+    3078219293,
+    3078219302,
+    7784559520,
+    3078219294
+  ],
+  "tags": {
+    "amenity": "waste_transfer_station",
+    "fee": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 839611731,
+  "center": {
+    "lat": 45.7414612,
+    "lon": 9.4488856
+  },
+  "nodes": [
+    2267174905,
+    7834678694,
+    7834678693,
+    7834678692,
+    2267174905
+  ],
+  "tags": {
+    "addr:city": "Brivio",
+    "addr:country": "IT",
+    "addr:housenumber": "7",
+    "addr:postcode": "23883",
+    "addr:street": "Piazza Carlo Frigerio",
+    "amenity": "cafe",
+    "contact:email": "tofecafe@gmail.com",
+    "contact:phone": "+39 039 5987536",
+    "name": "Tofe Cafe",
+    "operator": "Tofe Cafe S.a.s.",
+    "outdoor_seating": "yes",
+    "ref:vatin": "IT03071000131",
+    "smoking": "outside"
+  }
+},
+{
+  "type": "way",
+  "id": 845428995,
+  "center": {
+    "lat": 45.7220570,
+    "lon": 9.4129096
+  },
+  "nodes": [
+    7887652253,
+    7887652252,
+    7887652228,
+    7887652227,
+    7887652226,
+    7887652216,
+    7887652236,
+    7887652235,
+    7887652234,
+    7887652233,
+    7887652232,
+    7887652231,
+    7887652230,
+    7887652229,
+    7887652224,
+    7887652253
+  ],
+  "tags": {
+    "addr:housenumber": "25",
+    "addr:postcode": "23885",
+    "addr:street": "Via Nazionale",
+    "amenity": "restaurant",
+    "contact:email": "info@alberso.it",
+    "contact:mobile": "+39 335 8340692",
+    "contact:phone": "+39 039 2189391",
+    "name": "Al Bersò",
+    "operator": "Al Bersò - Panico Srl",
+    "ref:vatin": "IT04081120133",
+    "website": "https://www.alberso.it/"
+  }
+},
+{
+  "type": "way",
+  "id": 845428998,
+  "center": {
+    "lat": 45.7214203,
+    "lon": 9.4129911
+  },
+  "nodes": [
+    7887652244,
+    7887652243,
+    3474814961,
+    7887652242,
+    7887652241,
+    7887652240,
+    7887652239,
+    7887652238,
+    7887652244
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 845428999,
+  "center": {
+    "lat": 45.7218637,
+    "lon": 9.4135652
+  },
+  "nodes": [
+    7887652251,
+    7887652250,
+    7887652249,
+    7887652248,
+    3474814972,
+    7887652247,
+    7887652246,
+    7887652245,
+    7887652251
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 845429000,
+  "center": {
+    "lat": 45.7220289,
+    "lon": 9.4130025
+  },
+  "nodes": [
+    7887652261,
+    7887652219,
+    7887652255,
+    7887652254,
+    2082593142,
+    7887652229,
+    7887652224,
+    7887652253,
+    7887652252,
+    7887652263,
+    7887652262,
+    7887652261
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 885477599,
+  "center": {
+    "lat": 45.7566050,
+    "lon": 9.4225883
+  },
+  "nodes": [
+    8233982560,
+    8233982561,
+    8233982562,
+    8233982563,
+    8233982564,
+    8233982565,
+    8233982566,
+    8233982567,
+    8233982560
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "park_ride": "yes",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 885481392,
+  "center": {
+    "lat": 45.7578427,
+    "lon": 9.4247428
+  },
+  "nodes": [
+    8234021328,
+    8234021327,
+    8234021326,
+    8234021325,
+    8234021324,
+    8234021323,
+    12924784590,
+    8234021331,
+    8234021330,
+    8234021329,
+    8234021328
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa di San Carlo",
+    "operator": "Caritas parrocchiale",
+    "religion": "christian",
+    "social_facility": "outreach",
+    "wikidata": "Q112301057",
+    "wikimedia_commons": "Category:San Carlo (Airuno)"
+  }
+},
+{
+  "type": "way",
+  "id": 906560020,
+  "center": {
+    "lat": 45.7411625,
+    "lon": 9.3836624
+  },
+  "nodes": [
+    8418279905,
+    8418279902,
+    8418279903,
+    13912770352,
+    13912770353,
+    8418279904,
+    13912770348,
+    13912770351,
+    8418279905
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "name": "Santa Petronilla"
+  }
+},
+{
+  "type": "way",
+  "id": 914079880,
+  "center": {
+    "lat": 45.7565986,
+    "lon": 9.4152270
+  },
+  "nodes": [
+    8490996502,
+    8490996503,
+    8490996504,
+    8490996505,
+    8490996502
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 914080882,
+  "center": {
+    "lat": 45.7562011,
+    "lon": 9.4270542
+  },
+  "nodes": [
+    8491019813,
+    8491019814,
+    8491019815,
+    8491019816,
+    8491022717,
+    8491022718,
+    8491019813
+  ],
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 914081632,
+  "center": {
+    "lat": 45.7557114,
+    "lon": 9.4226100
+  },
+  "nodes": [
+    8490992015,
+    8490992016,
+    8491028517,
+    8491028518,
+    8490992015
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "name": "Piazza Oriana Fallaci",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 914360012,
+  "center": {
+    "lat": 45.7558212,
+    "lon": 9.4137406
+  },
+  "nodes": [
+    8493893502,
+    8493893499,
+    8493893500,
+    12880420031,
+    12880420030,
+    12880420029,
+    12880420028,
+    8493893501,
+    8493893502
+  ],
+  "tags": {
+    "amenity": "grave_yard",
+    "name": "Cimitero di Aizurro",
+    "religion": "christian",
+    "wikidata": "Q88961284"
+  }
+},
+{
+  "type": "way",
+  "id": 914360014,
+  "center": {
+    "lat": 45.7557995,
+    "lon": 9.4129217
+  },
+  "nodes": [
+    12880420033,
+    12881364010,
+    12880420043,
+    12880420042,
+    12880420044,
+    12880420040,
+    12880420039,
+    12880420038,
+    12882861862,
+    12880420037,
+    12880420032,
+    12880420036,
+    12880420035,
+    12880420034,
+    8493893512,
+    8493893507,
+    8493893511,
+    8493893510,
+    8493893509,
+    8493893508,
+    12880420041,
+    12880420033
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa di San Macario",
+    "religion": "christian",
+    "wikidata": "Q118745039",
+    "wikimedia_commons": "Category:San Macario (Airuno)"
+  }
+},
+{
+  "type": "way",
+  "id": 916903932,
+  "center": {
+    "lat": 45.7591412,
+    "lon": 9.4202426
+  },
+  "nodes": [
+    8516045146,
+    8516045147,
+    8516045148,
+    8516045149,
+    8516045146
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 916903933,
+  "center": {
+    "lat": 45.7589423,
+    "lon": 9.4204867
+  },
+  "nodes": [
+    8516045150,
+    8516045151,
+    8516045152,
+    8516045153,
+    8516045150
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 925360352,
+  "center": {
+    "lat": 45.7159985,
+    "lon": 9.4338346
+  },
+  "nodes": [
+    8588079660,
+    8588079661,
+    8588079662,
+    8588079663,
+    8588079660
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 925360357,
+  "center": {
+    "lat": 45.7148721,
+    "lon": 9.4374489
+  },
+  "nodes": [
+    8588079680,
+    8588079681,
+    8588079682,
+    8588079683,
+    8588079680
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 927561112,
+  "center": {
+    "lat": 45.7144713,
+    "lon": 9.4584033
+  },
+  "nodes": [
+    8605556197,
+    8605556198,
+    8605556199,
+    8605556200,
+    8605556201,
+    8605556202,
+    8605556197
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 935476343,
+  "center": {
+    "lat": 45.7156008,
+    "lon": 9.4585526
+  },
+  "nodes": [
+    8669095123,
+    8669095124,
+    8669095125,
+    8669095126,
+    8669095127,
+    8669095128,
+    10044546324,
+    8669095129,
+    8669095130,
+    8669095131,
+    8669095123
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesetta di San Martirio",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 938157179,
+  "center": {
+    "lat": 45.7261088,
+    "lon": 9.3749133
+  },
+  "nodes": [
+    8691321566,
+    8691321567,
+    8691321568,
+    8691321569,
+    8691321570,
+    8691321566
+  ],
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 959125852,
+  "center": {
+    "lat": 45.7364089,
+    "lon": 9.4151779
+  },
+  "nodes": [
+    8875064731,
+    8875064730,
+    8875064729,
+    8875064728,
+    8875064727,
+    8875064726,
+    8875064725,
+    8875064724,
+    8875064731
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 959125890,
+  "center": {
+    "lat": 45.7352619,
+    "lon": 9.4067310
+  },
+  "nodes": [
+    8875064884,
+    8875064883,
+    8875064882,
+    8875064881,
+    2435031351,
+    2435031349,
+    2435031346,
+    2435031344,
+    2435031342,
+    2435031340,
+    8875064880,
+    8875064884
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 959125951,
+  "center": {
+    "lat": 45.7351233,
+    "lon": 9.4061555
+  },
+  "nodes": [
+    8875065123,
+    12809674371,
+    12809674370,
+    8875065122,
+    8875065125,
+    12809674369,
+    12809674368,
+    8875065124,
+    12809674367,
+    8875065123
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Oratorio di San Giuseppe",
+    "religion": "christian",
+    "wikidata": "Q112138392"
+  }
+},
+{
+  "type": "way",
+  "id": 959125969,
+  "center": {
+    "lat": 45.7353722,
+    "lon": 9.4110654
+  },
+  "nodes": [
+    8875065227,
+    8875065226,
+    8875065225,
+    8875065224,
+    8875065227
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 959128674,
+  "center": {
+    "lat": 45.7353169,
+    "lon": 9.4168285
+  },
+  "nodes": [
+    8875095455,
+    8875095454,
+    8875095453,
+    8875095452,
+    8875095455
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 959128675,
+  "center": {
+    "lat": 45.7361655,
+    "lon": 9.4166364
+  },
+  "nodes": [
+    8875095459,
+    8875095458,
+    8875095457,
+    8875095456,
+    8875095459
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 959128676,
+  "center": {
+    "lat": 45.7361451,
+    "lon": 9.4165073
+  },
+  "nodes": [
+    8875095463,
+    8875095462,
+    8875095461,
+    8875095460,
+    8875095463
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1054727553,
+  "center": {
+    "lat": 45.7306602,
+    "lon": 9.4185551
+  },
+  "nodes": [
+    9692216099,
+    9692216102,
+    9692216100,
+    9692216101,
+    9692216099
+  ],
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "fee": "no",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 1066711041,
+  "center": {
+    "lat": 45.7539831,
+    "lon": 9.3726247
+  },
+  "nodes": [
+    9795033331,
+    9795033332,
+    9795033333,
+    9795033334,
+    9795033335,
+    9795033331
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1066711042,
+  "center": {
+    "lat": 45.7542257,
+    "lon": 9.3777599
+  },
+  "nodes": [
+    9795033336,
+    9795033337,
+    9795033338,
+    9795033339,
+    9795033336
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1066711045,
+  "center": {
+    "lat": 45.7528480,
+    "lon": 9.3762218
+  },
+  "nodes": [
+    9795033350,
+    9795033351,
+    9795033352,
+    9795033353,
+    9795033354,
+    9795033355,
+    9795033350
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1081561041,
+  "center": {
+    "lat": 45.7539977,
+    "lon": 9.4250353
+  },
+  "nodes": [
+    9912929813,
+    3560808930,
+    9912929814,
+    9912929815,
+    9912929816,
+    3560808540,
+    9912934517,
+    9912929813
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1081561045,
+  "center": {
+    "lat": 45.7540800,
+    "lon": 9.4254304
+  },
+  "nodes": [
+    9912934535,
+    9912934536,
+    9912934537,
+    13376554235,
+    13376554234,
+    13376554233,
+    13376554236,
+    13376554232,
+    9912934538,
+    9912934539,
+    9912934540,
+    9912934541,
+    9912934542,
+    9912934543,
+    9912934535
+  ],
+  "tags": {
+    "amenity": "school",
+    "building": "school",
+    "name": "Scuola dell'Infanzia"
+  }
+},
+{
+  "type": "way",
+  "id": 1112682561,
+  "center": {
+    "lat": 45.7473452,
+    "lon": 9.3703378
+  },
+  "nodes": [
+    10180477021,
+    10180477022,
+    10180477023,
+    10180477024,
+    10180477025,
+    10180477026,
+    10180477027,
+    10180477028,
+    10180477021
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1115827603,
+  "center": {
+    "lat": 45.7176481,
+    "lon": 9.4076801
+  },
+  "nodes": [
+    10205213546,
+    10205213547,
+    10205213548,
+    10205213549,
+    10205213546
+  ],
+  "tags": {
+    "amenity": "parcel_locker",
+    "name": "Locker di Calco",
+    "operator": "Esselunga",
+    "parcel_pickup": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1153846663,
+  "center": {
+    "lat": 45.7106510,
+    "lon": 9.3656806
+  },
+  "nodes": [
+    10730979938,
+    10730979935,
+    10730979936,
+    1492801647,
+    10730979938
+  ],
+  "tags": {
+    "amenity": "lavoir",
+    "name": "Lavatoio San Bernardo",
+    "shelter": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 1162813333,
+  "center": {
+    "lat": 45.7385346,
+    "lon": 9.3623436
+  },
+  "nodes": [
+    10814609731,
+    10814609725,
+    10814609730,
+    10814609729,
+    10814609732,
+    10814609731
+  ],
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "capacity:disabled": "no",
+    "capacity:parent": "no",
+    "capacity:women": "no",
+    "fee": "no",
+    "lit": "yes",
+    "maxstay": "unlimited",
+    "operator": "Negozio Laura",
+    "parking": "surface",
+    "smoothness": "bad",
+    "supervised": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1207231120,
+  "center": {
+    "lat": 45.7118228,
+    "lon": 9.4543811
+  },
+  "nodes": [
+    508345598,
+    3133589174,
+    3133589173,
+    3133589175,
+    3133589176,
+    3133589177,
+    11186228120,
+    11186228121,
+    11186228122,
+    11186228123,
+    11186228124,
+    508345598
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1238836080,
+  "center": {
+    "lat": 45.7382244,
+    "lon": 9.3720618
+  },
+  "nodes": [
+    11508449047,
+    11508449048,
+    11508449049,
+    11508449050,
+    11508449047
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "street_side"
+  }
+},
+{
+  "type": "way",
+  "id": 1265741622,
+  "center": {
+    "lat": 45.7147218,
+    "lon": 9.4420342
+  },
+  "nodes": [
+    11757392606,
+    11757392605,
+    11757392604,
+    11757392603,
+    11757392606
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1265741623,
+  "center": {
+    "lat": 45.7147668,
+    "lon": 9.4421529
+  },
+  "nodes": [
+    11757392610,
+    11757392609,
+    11757392608,
+    11757392607,
+    11757392610
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1293277818,
+  "center": {
+    "lat": 45.7399938,
+    "lon": 9.4217885
+  },
+  "nodes": [
+    11988885617,
+    11988885618,
+    11988885619,
+    11988885620,
+    11988885621,
+    11988885622,
+    11988885617
+  ],
+  "tags": {
+    "addr:city": "Brivio",
+    "addr:housenumber": "1",
+    "addr:postcode": "23883",
+    "addr:street": "Via Bicocca",
+    "amenity": "pub",
+    "building": "industrial",
+    "microbrewery": "yes",
+    "name": "Fabbrica in Pedavena Brivio"
+  }
+},
+{
+  "type": "way",
+  "id": 1293277819,
+  "center": {
+    "lat": 45.7397567,
+    "lon": 9.4219471
+  },
+  "nodes": [
+    11988885623,
+    11988885624,
+    11988885625,
+    11988885626,
+    11988885627,
+    11988885628,
+    11988885623
+  ],
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1293277820,
+  "center": {
+    "lat": 45.7401713,
+    "lon": 9.4215453
+  },
+  "nodes": [
+    11988885629,
+    11988885630,
+    11988885631,
+    11988885632,
+    11988885629
+  ],
+  "tags": {
+    "access": "unknown",
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1331107981,
+  "center": {
+    "lat": 45.7538471,
+    "lon": 9.3910257
+  },
+  "nodes": [
+    12315925918,
+    12315925919,
+    12315925920,
+    12315925921,
+    12315925918
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1354966879,
+  "center": {
+    "lat": 45.7122103,
+    "lon": 9.3612937
+  },
+  "nodes": [
+    12539488578,
+    12539488577,
+    12539488576,
+    12539488575,
+    12539488578
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1361156288,
+  "center": {
+    "lat": 45.7100141,
+    "lon": 9.3637650
+  },
+  "nodes": [
+    7985758667,
+    12600740265,
+    12600740266,
+    12600740267,
+    7985758667
+  ],
+  "tags": {
+    "amenity": "parking_space",
+    "parking_space": "disabled"
+  }
+},
+{
+  "type": "way",
+  "id": 1381934083,
+  "center": {
+    "lat": 45.7100878,
+    "lon": 9.3949531
+  },
+  "nodes": [
+    12794279957,
+    12794279956,
+    12794279955,
+    12794279954,
+    12794279957
+  ],
+  "tags": {
+    "amenity": "lavoir",
+    "building": "roof",
+    "wikimedia_commons": "File:Lavoir in Pianezzo (Olgiate Molgora).jpg"
+  }
+},
+{
+  "type": "way",
+  "id": 1383763298,
+  "center": {
+    "lat": 45.7109257,
+    "lon": 9.4067442
+  },
+  "nodes": [
+    12811636131,
+    12811636130,
+    12811636129,
+    12811636128,
+    12811636123,
+    12811636127,
+    12811636126,
+    12811636125,
+    12811636124,
+    12811636131
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa di San Giuseppe",
+    "religion": "christian",
+    "wikidata": "Q112674176"
+  }
+},
+{
+  "type": "way",
+  "id": 1391534168,
+  "center": {
+    "lat": 45.7547907,
+    "lon": 9.4230174
+  },
+  "nodes": [
+    12880527906,
+    12880527905,
+    12880523798,
+    12880527904,
+    12880527903,
+    12880527902,
+    12880527901,
+    12880523789,
+    12880523783,
+    12880523784,
+    12880523785,
+    12880527906
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "Chiesa di San Giovanni Battista",
+    "religion": "christian",
+    "wikidata": "Q112301014"
+  }
+},
+{
+  "type": "way",
+  "id": 1391640066,
+  "center": {
+    "lat": 45.7570122,
+    "lon": 9.4121184
+  },
+  "nodes": [
+    12881364033,
+    12881364032,
+    12881364031,
+    12881364030,
+    12881364033
+  ],
+  "tags": {
+    "amenity": "lavoir",
+    "building": "roof",
+    "drinking_water": "no",
+    "water": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1396452444,
+  "center": {
+    "lat": 45.7574679,
+    "lon": 9.4238722
+  },
+  "nodes": [
+    12924781316,
+    12924781315,
+    12924781314,
+    3725874072,
+    12924781316
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "denomination": "catholic",
+    "place_of_worship": "lourdes_grotto",
+    "religion": "christian",
+    "wikimedia_commons": "File:Via San Francesco (Airuno) - Lourdes grotto.jpg"
+  }
+},
+{
+  "type": "way",
+  "id": 1396846572,
+  "center": {
+    "lat": 45.7105914,
+    "lon": 9.3846386
+  },
+  "nodes": [
+    12928071762,
+    12928071761,
+    12928071760,
+    12928071759,
+    12928071758,
+    12928071757,
+    12928071756,
+    12928071762
+  ],
+  "tags": {
+    "amenity": "parking",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1416246714,
+  "center": {
+    "lat": 45.7114054,
+    "lon": 9.4458825
+  },
+  "nodes": [
+    13014955933,
+    13014955932,
+    13014955955,
+    13014955931,
+    13014955930,
+    13014955929,
+    13014955954,
+    13014955928,
+    13014955933
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "chapel",
+    "denomination": "catholic",
+    "name": "Cappella Famiglia Falcò",
+    "religion": "christian",
+    "wikidata": "Q112137384"
+  }
+},
+{
+  "type": "way",
+  "id": 1416246715,
+  "center": {
+    "lat": 45.7104132,
+    "lon": 9.4475608
+  },
+  "nodes": [
+    13014955945,
+    13014955944,
+    13014955943,
+    13014955942,
+    13014955941,
+    13014955940,
+    13014955939,
+    13014955938,
+    13014955945
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 1424217431,
+  "center": {
+    "lat": 45.7416510,
+    "lon": 9.4491919
+  },
+  "nodes": [
+    13090483039,
+    13090483041,
+    13090483042,
+    13090483040,
+    13090483039
+  ],
+  "tags": {
+    "amenity": "parking",
+    "parking": "street_side"
+  }
+},
+{
+  "type": "way",
+  "id": 1456316607,
+  "center": {
+    "lat": 45.7415816,
+    "lon": 9.3801746
+  },
+  "nodes": [
+    13356070967,
+    13356070951,
+    13356070960,
+    13356070959,
+    13356070966,
+    13356070967
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1456666604,
+  "center": {
+    "lat": 45.7480018,
+    "lon": 9.3692678
+  },
+  "nodes": [
+    13359288202,
+    13359288199,
+    13359288200,
+    13359288201,
+    13359288202
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1456666605,
+  "center": {
+    "lat": 45.7415458,
+    "lon": 9.3744097
+  },
+  "nodes": [
+    13359288206,
+    13359288205,
+    13359288204,
+    13359288203,
+    13359288206
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1456667258,
+  "center": {
+    "lat": 45.7553189,
+    "lon": 9.4018913
+  },
+  "nodes": [
+    13359288887,
+    13359288884,
+    13359288885,
+    13359288886,
+    13359288887
+  ],
+  "tags": {
+    "amenity": "lavoir",
+    "building": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1458067672,
+  "center": {
+    "lat": 45.7480816,
+    "lon": 9.3654441
+  },
+  "nodes": [
+    13371888880,
+    13371888883,
+    13371888884,
+    13371888881,
+    13371888880
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Chiesa di Santa Veronica (Hoè Superiore)",
+    "religion": "christian",
+    "wikidata": "Q118745185"
+  }
+},
+{
+  "type": "way",
+  "id": 1460724521,
+  "center": {
+    "lat": 45.7470796,
+    "lon": 9.4263007
+  },
+  "nodes": [
+    13397426714,
+    13397426713,
+    13397426712,
+    13397426711,
+    13397426710,
+    13397426714
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1466236046,
+  "center": {
+    "lat": 45.7362834,
+    "lon": 9.3586919
+  },
+  "nodes": [
+    13448239637,
+    13448239636,
+    13448239635,
+    13448239634,
+    13448239633,
+    13448239632,
+    13448239637
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1466236060,
+  "center": {
+    "lat": 45.7277163,
+    "lon": 9.4070633
+  },
+  "nodes": [
+    13448239731,
+    13448239728,
+    13448239729,
+    13448239730,
+    13448239731
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1466236079,
+  "center": {
+    "lat": 45.7358311,
+    "lon": 9.4062177
+  },
+  "nodes": [
+    13448239812,
+    13448239811,
+    13448239810,
+    13448239809,
+    13448239808,
+    13448239807,
+    13448239812
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1498447380,
+  "center": {
+    "lat": 45.7466208,
+    "lon": 9.3904720
+  },
+  "nodes": [
+    13723099837,
+    13723099834,
+    13723099835,
+    13723099836,
+    13723099837
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1498448684,
+  "center": {
+    "lat": 45.7403125,
+    "lon": 9.3878280
+  },
+  "nodes": [
+    13723068795,
+    13723068793,
+    13723068792,
+    13723068794,
+    13723068795
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1498515912,
+  "center": {
+    "lat": 45.7348224,
+    "lon": 9.3787928
+  },
+  "nodes": [
+    13723126784,
+    13723126783,
+    13723126781,
+    13723126782,
+    13723126784
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1498552229,
+  "center": {
+    "lat": 45.7546267,
+    "lon": 9.3762897
+  },
+  "nodes": [
+    13723562416,
+    13723562413,
+    13723562414,
+    13723562417,
+    13723562415,
+    13723562416
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1498552302,
+  "center": {
+    "lat": 45.7544856,
+    "lon": 9.3762783
+  },
+  "nodes": [
+    13723568636,
+    13723568634,
+    13723568635,
+    13723568632,
+    13723568633,
+    13723568636
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1498552373,
+  "center": {
+    "lat": 45.7541487,
+    "lon": 9.3757287
+  },
+  "nodes": [
+    13723567993,
+    13723567992,
+    13723567991,
+    13723567994,
+    13723567993
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1498552485,
+  "center": {
+    "lat": 45.7543335,
+    "lon": 9.3755651
+  },
+  "nodes": [
+    13723542900,
+    13723542899,
+    13723573301,
+    13723573302,
+    13723542900
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1498553293,
+  "center": {
+    "lat": 45.7538605,
+    "lon": 9.3764483
+  },
+  "nodes": [
+    13723540738,
+    13723540734,
+    13723540737,
+    13723540740,
+    13723540739,
+    13723540733,
+    13723540732,
+    13723540735,
+    13723540736,
+    13723540738
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1498554045,
+  "center": {
+    "lat": 45.7535720,
+    "lon": 9.3690402
+  },
+  "nodes": [
+    13723566997,
+    13723566999,
+    13723584602,
+    13723567000,
+    13723584601,
+    13723584603,
+    13723566998,
+    13723566997
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+},
+{
+  "type": "way",
+  "id": 1526472666,
+  "center": {
+    "lat": 45.7417994,
+    "lon": 9.3829716
+  },
+  "nodes": [
+    13912638150,
+    2045883429,
+    13912638149,
+    13912638151,
+    13912638150
+  ],
+  "tags": {
+    "amenity": "lavoir",
+    "shelter": "yes",
+    "water": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1553623347,
+  "center": {
+    "lat": 45.7479401,
+    "lon": 9.3699802
+  },
+  "nodes": [
+    14134941867,
+    14134941869,
+    14134941868,
+    14134941866,
+    14134941867
+  ],
+  "tags": {
+    "amenity": "parking"
+  }
+}
+
+  ]
+}

@@ -10,7 +10,10 @@ htmlcov/
 # Large binary external data (documented in data/manifest.csv with SHA256 and URL)
 data/external/*.pdf
 data/external/*.zip
-data/raw/dem/*.tif
+data/raw/dem/Copernicus_DSM_COG_10_N45_00_E009_00_DEM.tif
+data/raw/gtfs/rail_trenord/calendar_dates.txt
+data/raw/gtfs/rail_trenord/trenord_gtfs.zip
+cache/
 
 # Environments
 .env
