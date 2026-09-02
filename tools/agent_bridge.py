@@ -6,16 +6,19 @@ For each unseen review, launches Antigravity CLI headlessly in the repository wo
 
 The bridge is intentionally one-way and conservative:
 - GitHub comments are read-only via the public REST API.
-- Only comments containing the exact marker `[GPT REVIEW]` trigger Antigravity.
-- Processed comment IDs are stored locally and never committed.
+- Only comments containing the exact marker `[GPT REVIEW]` as a header/tag trigger Antigravity.
+- Processed comment IDs are stored locally in `.agent_bridge_state.json` and never committed.
 - No `--dangerously-skip-permissions` flag is used.
+- Concurrency lock (.agent_bridge.lock) prevents two bridge instances running on the same worktree.
 """
 
 from __future__ import annotations
 
 import argparse
+import atexit
 import json
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -26,7 +29,66 @@ REPO = "simoneghezzicolombo/tpl-olgiate-intercomunale"
 ISSUE = 1
 MARKER = "[GPT REVIEW]"
 STATE_FILENAME = ".agent_bridge_state.json"
+LOCK_FILENAME = ".agent_bridge.lock"
 API = f"https://api.github.com/repos/{REPO}/issues/{ISSUE}/comments?per_page=100"
+
+
+def ensure_path_has_agy() -> None:
+    """Ensure agy.exe is in PATH, checking default Windows install directory if needed."""
+    local_app_data = os.environ.get("LOCALAPPDATA")
+    if local_app_data:
+        agy_bin = str(Path(local_app_data) / "agy" / "bin")
+        if agy_bin not in os.environ.get("PATH", ""):
+            os.environ["PATH"] = f"{agy_bin};{os.environ.get('PATH', '')}"
+
+
+def find_agy_cmd() -> str:
+    ensure_path_has_agy()
+    cmd = shutil.which("agy")
+    if cmd:
+        return cmd
+    local_app_data = os.environ.get("LOCALAPPDATA")
+    if local_app_data:
+        fallback = Path(local_app_data) / "agy" / "bin" / "agy.exe"
+        if fallback.exists():
+            return str(fallback)
+    return "agy"
+
+
+def acquire_lock(lock_path: Path) -> bool:
+    """Ensure no other bridge instance runs on this workspace."""
+    if lock_path.exists():
+        try:
+            pid = int(lock_path.read_text(encoding="utf-8").strip())
+            # Check if PID is still running
+            import ctypes
+            kernel32 = ctypes.windll.kernel32
+            STILL_ACTIVE = 259
+            PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
+            h_proc = kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
+            if h_proc:
+                exit_code = ctypes.c_ulong()
+                kernel32.GetExitCodeProcess(h_proc, ctypes.byref(exit_code))
+                kernel32.CloseHandle(h_proc)
+                if exit_code.value == STILL_ACTIVE:
+                    print(f"[bridge] ERROR: Another bridge process (PID {pid}) is already running on this workspace.", file=sys.stderr)
+                    return False
+        except Exception:
+            pass  # Stale lock file
+    try:
+        lock_path.write_text(str(os.getpid()), encoding="utf-8")
+        return True
+    except Exception as e:
+        print(f"[bridge] Failed to write lock file: {e}", file=sys.stderr)
+        return False
+
+
+def release_lock(lock_path: Path) -> None:
+    try:
+        if lock_path.exists():
+            lock_path.unlink()
+    except Exception:
+        pass
 
 
 def get_comments() -> list[dict]:
@@ -39,6 +101,18 @@ def get_comments() -> list[dict]:
     )
     with urllib.request.urlopen(req, timeout=30) as response:
         return json.load(response)
+
+
+def is_gpt_review(comment: dict) -> bool:
+    body = comment.get("body") or ""
+    if MARKER not in body:
+        return False
+    # Ensure it's a real review comment and not a coordination announcement that merely mentions the string
+    for line in body.splitlines():
+        cleaned = line.strip()
+        if cleaned.startswith(MARKER) or cleaned == MARKER:
+            return True
+    return False
 
 
 def load_state(path: Path) -> dict:
@@ -87,12 +161,14 @@ Do not use synthetic placeholders as factual inputs. Do not modify numbers merel
 
 def run_antigravity(workspace: Path, comment: dict, model: str | None, timeout: str) -> int:
     prompt = build_prompt(comment)
-    cmd = ["agy", "-p", prompt, "--effort", "high", "--print-timeout", timeout]
+    agy_bin = find_agy_cmd()
+    cmd = [agy_bin, "-p", prompt, "--effort", "high", "--print-timeout", timeout]
     if model:
         cmd.extend(["--model", model])
 
-    print(f"[bridge] Launching Antigravity for GPT review comment {comment['id']}...")
+    print(f"[bridge] Launching Antigravity CLI for GPT review comment {comment['id']}...")
     try:
+        ensure_path_has_agy()
         proc = subprocess.run(cmd, cwd=str(workspace), check=False)
     except FileNotFoundError:
         print("[bridge] ERROR: `agy` not found in PATH. Install/authenticate Antigravity CLI first.", file=sys.stderr)
@@ -105,7 +181,7 @@ def process_once(workspace: Path, state_path: Path, model: str | None, timeout: 
     state = load_state(state_path)
     processed = {int(x) for x in state.get("processed_comment_ids", [])}
     comments = get_comments()
-    reviews = [c for c in comments if MARKER in (c.get("body") or "") and int(c["id"]) not in processed]
+    reviews = [c for c in comments if is_gpt_review(c) and int(c["id"]) not in processed]
     reviews.sort(key=lambda c: int(c["id"]))
 
     if not reviews:
@@ -120,6 +196,7 @@ def process_once(workspace: Path, state_path: Path, model: str | None, timeout: 
         processed.add(int(comment["id"]))
         state["processed_comment_ids"] = sorted(processed)
         state["last_processed_url"] = comment.get("html_url")
+        state["last_processed_timestamp"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         save_state(state_path, state)
         print(f"[bridge] Review {comment['id']} marked processed.")
     return 0
@@ -139,16 +216,24 @@ def main() -> int:
         print(f"[bridge] ERROR: {workspace} is not a Git repository workspace.", file=sys.stderr)
         return 2
     state_path = workspace / STATE_FILENAME
+    lock_path = workspace / LOCK_FILENAME
 
-    while True:
-        try:
-            code = process_once(workspace, state_path, args.model, args.timeout)
-        except Exception as exc:
-            print(f"[bridge] Poll error: {exc}", file=sys.stderr)
-            code = 1
-        if args.once:
-            return code
-        time.sleep(max(15, args.poll_seconds))
+    if not acquire_lock(lock_path):
+        return 3
+    atexit.register(release_lock, lock_path)
+
+    try:
+        while True:
+            try:
+                code = process_once(workspace, state_path, args.model, args.timeout)
+            except Exception as exc:
+                print(f"[bridge] Poll error: {exc}", file=sys.stderr)
+                code = 1
+            if args.once:
+                return code
+            time.sleep(max(15, args.poll_seconds))
+    finally:
+        release_lock(lock_path)
 
 
 if __name__ == "__main__":

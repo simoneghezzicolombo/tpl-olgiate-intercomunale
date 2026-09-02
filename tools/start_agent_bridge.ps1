@@ -11,6 +11,11 @@ Write-Host "Workspace: $Workspace"
 Write-Host "Issue: simoneghezzicolombo/tpl-olgiate-intercomunale#1"
 Write-Host "Poll: ${PollSeconds}s"
 
+$localAgy = Join-Path $env:LOCALAPPDATA "agy\bin"
+if (Test-Path (Join-Path $localAgy "agy.exe")) {
+    $env:PATH = "$localAgy;$env:PATH"
+}
+
 if (-not (Get-Command agy -ErrorAction SilentlyContinue)) {
     Write-Host "Antigravity CLI (agy) non trovato." -ForegroundColor Yellow
     Write-Host "Installazione ufficiale Windows:"
@@ -19,10 +24,9 @@ if (-not (Get-Command agy -ErrorAction SilentlyContinue)) {
 }
 
 Write-Host "agy trovato: $((Get-Command agy).Source)" -ForegroundColor Green
-Write-Host "Verifica autenticazione/modelli con: agy models"
 Write-Host ""
 Write-Host "Il bridge NON usa --dangerously-skip-permissions."
-Write-Host "Per headless affidabile configura permessi scoped in ~/.gemini/antigravity-cli/settings.json, ad esempio git/python/pytest." -ForegroundColor Cyan
+Write-Host "Concorrenza protetta da lockfile locale (.agent_bridge.lock)." -ForegroundColor Cyan
 Write-Host ""
 
 $Bridge = Join-Path $Workspace "tools\agent_bridge.py"

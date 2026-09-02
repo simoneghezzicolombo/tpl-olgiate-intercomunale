@@ -21,6 +21,7 @@ cache/
 # Local multi-agent bridge state
 .agent_bridge_state.json
 .agent_bridge_state.json.tmp
+.agent_bridge.lock
 
 # Environments
 .env
