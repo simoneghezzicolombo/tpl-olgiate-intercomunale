@@ -1,0 +1,19 @@
+id_domanda,codice_variabile,tipo_dato,valori_ammessi,obbligatoria,variabile_modello_aggiornata
+1,comune_residenza,string,"Olgiate Molgora|Calco|Brivio|La Valletta Brianza|Santa Maria Hoè|Altro",TRUE,matrice_od_origine
+2,frazione_residenza,string,"Mondonico|San Zeno|Monticello|Perego|Rovagnate|Beverate|Arlate|Calco Centro|Calco Sup|Brivio Centro|Altro",TRUE,cella_popolazione_snap
+3,fascia_eta,string,"<14|14-19|20-29|30-49|50-64|>=65",TRUE,coefficiente_velocita_pedonale
+4,condizione_professionale,string,"Studente|Dipendente|Autonomo|Pensionato|Altro",TRUE,domanda_sistematica_punta
+5,comune_destinazione,string,"Interno|Core|Merate|Lecco|Milano|Monza|Vimercate|Altro",TRUE,matrice_od_destinazione
+6,motivo_spostamento,string,"Lavoro|Studio|Sanita|Spesa_Commissioni|TempoLibero",TRUE,generatore_domanda_poi
+7,giorni_spostamento,string,"Lun-Ven|Ibrido|Sabato|Domenica",TRUE,fattore_espansione_giornaliero
+8,fascia_oraria_andata,string,"<07:00|07:00-07:30|07:30-08:00|08:00-08:30|08:30-09:30|09:30-12:30|>12:30",TRUE,profilo_carico_orario_andata
+9,fascia_oraria_ritorno,string,"12:30-14:30|16:30-17:30|17:30-18:30|18:30-19:30|>19:30",TRUE,profilo_carico_orario_ritorno
+10,mezzo_attuale,string,"Auto_Guida|Auto_Passeggero|Treno_Auto|Treno_Piedi|Bus|Bici_Monopattino|Piedi",TRUE,modal_split_baseline
+11,frequenza_treno,string,"Quotidiana|Settimanale|Occasionale|Mai",TRUE,propensione_interscambio_ferro
+12,stazione_usata,string,"Olgiate_FS|Cernusco_FS|Airuno_FS|Osnago_FS|Nessuna",TRUE,attrazione_nodo_ferroviario
+13,motivo_non_uso_olgiate_fs,string,"Parcheggio_Saturo|Mancanza_Bus|Strada_Pericolosa|Piu_Vicina_Altra|Nessuna_Necessita",FALSE,barriera_accesso_nodo
+14,destinazione_ferrovia,string,"Milano|Monza_Sesto|Lecco_Nord|Altra",FALSE,coincidenza_direzione_s8
+15,minuti_piedi_accettabili,integer,"5|8|10|12|15",TRUE,soglia_isocrona_servita
+16,frequenza_minima_utile,integer,"15|30|60|120|Mai",TRUE,elasticita_domanda_headway
+17,destinazioni_desiderate_locali,string,"multi-select max 3",TRUE,attrattivita_linee_core
+18,problemi_accessibilita,string,"Mancanza_Marciapiede|Pendenza_Forte|Fermata_Inadeguata|Barriere_Mezzo|Nessuno",FALSE,ponderazione_slope_network
