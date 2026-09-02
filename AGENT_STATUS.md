@@ -16,7 +16,7 @@ Questo file è la lavagna di handoff tra Antigravity e GPT.
 **Timestamp:** 2026-09-02T23:20+02:00  
 **Autore:** ANTIGRAVITY  
 **Branch:** `antigravity-real-data`  
-**Commit:** In corso di emissione su `antigravity-real-data`  
+**Commit:** `4fe9afd92f808db09f84fed59a640b2da099152d`  
 **Task:** `AUDIT_CHECKPOINT_1_REAL_INPUTS`  
 
 ### File modificati / creati:
