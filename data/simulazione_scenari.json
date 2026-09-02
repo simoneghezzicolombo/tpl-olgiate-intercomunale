@@ -1,0 +1,50 @@
+{
+  "scenario_0_baseline": {
+    "km_ciclo": 22.4,
+    "cicli_giorno": 13,
+    "cicli_anno": 3939,
+    "km_anno": 88233.6,
+    "budget_pdb_totale": 111419.0,
+    "budget_pdb_morbida": 77010.0,
+    "delta_km_vs_pdb": -23185.4,
+    "delta_pct_vs_pdb": -20.81,
+    "stato_semaforo": "GIALLO",
+    "giudizio": "Coperto dal budget complessivo D184+D185 a saldo zero o con risparmio."
+  },
+  "scenario_1_anello_ottimizzato_1bus": {
+    "km_ciclo": 19.8,
+    "cicli_giorno": 13,
+    "cicli_anno": 3939,
+    "km_anno": 77992.2,
+    "budget_pdb_totale": 111419.0,
+    "budget_pdb_morbida": 77010.0,
+    "delta_km_vs_pdb": -33426.8,
+    "delta_pct_vs_pdb": -30.0,
+    "stato_semaforo": "GIALLO",
+    "giudizio": "Coperto dal budget complessivo D184+D185 a saldo zero o con risparmio."
+  },
+  "scenario_2_full_merate_2bus": {
+    "km_ciclo": 19.8,
+    "cicli_giorno": 26,
+    "cicli_anno": 7878,
+    "km_anno": 155984.4,
+    "budget_pdb_totale": 111419.0,
+    "budget_pdb_morbida": 77010.0,
+    "delta_km_vs_pdb": 44565.4,
+    "delta_pct_vs_pdb": 40.0,
+    "stato_semaforo": "ROSSO",
+    "giudizio": "Richiede risorse integrative (+44,565.4 km/anno, +40.0%)."
+  },
+  "scenario_3_ibrido_punta_morbida": {
+    "km_ciclo": 19.5,
+    "cicli_giorno": 19,
+    "cicli_anno": 5757,
+    "km_anno": 112261.5,
+    "budget_pdb_totale": 111419.0,
+    "budget_pdb_morbida": 77010.0,
+    "delta_km_vs_pdb": 842.5,
+    "delta_pct_vs_pdb": 0.76,
+    "stato_semaforo": "ROSSO",
+    "giudizio": "Richiede risorse integrative (+842.5 km/anno, +0.8%)."
+  }
+}

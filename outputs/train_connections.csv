@@ -1,0 +1,6 @@
+scenario,descrizione_transiti_fs,minuti_arrivo_bus_fs,minuti_partenza_bus_fs,tempo_medio_interscambio_min,mediana_interscambio_min,p90_interscambio_min,coincidenze_utili_ora,coincidenze_utili_giorno,pct_treni_s8_alimentati,pct_bus_con_coincidenza_milano,pct_bus_con_coincidenza_lecco,rail_connection_score
+SCENARIO_0 (Attuale),Transiti irregolari con buchi fino a 7 ore,"[24, 45]","[35, 37]",12.8,14.0,15.4,4,24,50.0,50.0,50.0,43.0
+SCENARIO_1 (1 Bus Anello Integrato),1 bus continuo: transito a FS ogni 30 min alternando Ovest ed Est,"[26, 56]","[0, 30]",10.5,10.5,12.0,4,52,50.0,100.0,0.0,48.8
+SCENARIO_2 (2 Bus Full Merate CW+CCW),2 bus continui nei due versi: transiti a FS ogni 15 minuti,"[12, 26, 42, 56]","[0, 15, 30, 45]",9.8,9.5,12.0,8,104,100.0,50.0,50.0,80.5
+SCENARIO_3 (Core 60' + Code 120'),Transiti core a :26/:56 più partenze code a :00,"[26, 55]","[0, 30]",10.8,10.5,12.7,4,64,50.0,100.0,0.0,48.0
+SCENARIO_4 (Ibrido di Punta CW+CCW Raccomandato),"Transiti a :12, :26, :42, :56 in punta; :26 e :56 in morbida","[12, 26, 42, 56]","[0, 15, 30, 45]",9.8,9.5,12.0,8,88,100.0,50.0,50.0,80.5
