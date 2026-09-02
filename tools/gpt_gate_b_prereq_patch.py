@@ -42,3 +42,5 @@ if insert not in ts:
 t.write_text(ts, encoding='utf-8')
 
 print('Patched Gate A OSM extent to full official five-municipality geometry.')
+
+# trigger after workflow installation
