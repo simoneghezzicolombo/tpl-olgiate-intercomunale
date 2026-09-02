@@ -49,4 +49,4 @@ jobs:
             tests/test_audit_provenance.py::test_sfr_clean_network_fetch \
             tests/test_audit_provenance.py::test_osm_clean_network_fetch
 
-# Gate A validation revision 4: exact finalized branch snapshot revalidation.
+# Gate A validation revision 5: revalidate full-municipality OSM extent prerequisite for Gate B.
