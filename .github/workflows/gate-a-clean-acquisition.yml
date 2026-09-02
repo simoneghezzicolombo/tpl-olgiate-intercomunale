@@ -1,0 +1,44 @@
+name: Gate A clean acquisition
+
+on:
+  push:
+    branches: [antigravity-real-data]
+    paths:
+      - scripts/audit_01_fetch_real_inputs.py
+      - tests/test_audit_provenance.py
+      - pytest.ini
+      - .github/workflows/gate-a-clean-acquisition.yml
+  workflow_dispatch:
+
+jobs:
+  provenance-clean-acquisition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install Gate A test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pandas geopandas rasterio pyogrio requests pytest
+
+      - name: Compile provenance pipeline
+        run: python -m py_compile scripts/audit_01_fetch_real_inputs.py
+
+      - name: Run deterministic rebuild unit tests
+        run: |
+          python -m pytest -v \
+            tests/test_audit_provenance.py::test_posas_rebuild_has_no_local_dependency \
+            tests/test_audit_provenance.py::test_sfr_rebuild_uses_both_official_datasets
+
+      - name: Run real clean-acquisition tests
+        run: |
+          python -m pytest -v -m network \
+            tests/test_audit_provenance.py::test_posas_clean_network_fetch \
+            tests/test_audit_provenance.py::test_sfr_clean_network_fetch \
+            tests/test_audit_provenance.py::test_osm_clean_network_fetch
