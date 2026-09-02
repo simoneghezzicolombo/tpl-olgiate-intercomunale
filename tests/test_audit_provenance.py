@@ -151,6 +151,18 @@ def test_agency_bus_gtfs():
     assert len(stop_times[stop_times["trip_id"].isin(core_trips["trip_id"])]) > 1000
 
 
+def test_osm_acquisition_extent_covers_core_boundaries():
+    meta = Path("data/raw/osm/osm_core_bbox.meta.json")
+    assert meta.exists(), "OSM bbox metadata missing"
+    import json
+    payload = json.loads(meta.read_text(encoding="utf-8"))
+    south, west, north, east = payload["bbox_south_west_north_east"]
+    bounds = gpd.read_file("data/raw/boundaries/comuni_core_istat_2026.geojson").to_crs(4326)
+    minx, miny, maxx, maxy = bounds.total_bounds
+    assert west <= minx and south <= miny
+    assert east >= maxx and north >= maxy
+
+
 def test_osm_repo_snapshot_and_layers():
     raw = Path("data/raw/osm/osm_core_bbox.osm")
     lines = Path("data/raw/osm/osm_highways_core.geojson")

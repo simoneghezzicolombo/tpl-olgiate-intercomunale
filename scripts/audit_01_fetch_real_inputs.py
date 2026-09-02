@@ -520,7 +520,7 @@ def _fetch_overpass_json(query: str, out_path: Path, timeout: int = 60) -> None:
     raise last_exc or RuntimeError("Overpass JSON acquisition failed")
 
 
-def step_7_osm_real_data() -> None:
+def step_7_osm_real_data(boundaries: gpd.GeoDataFrame) -> None:
     print("\n--- STEP 7: OpenStreetMap / Overpass ---")
     out_dir = Path("data/raw/osm")
     raw = out_dir / "osm_core_bbox.osm"
@@ -528,22 +528,50 @@ def step_7_osm_real_data() -> None:
     points_file = out_dir / "osm_points_core.geojson"
     stops_file = out_dir / "osm_bus_stops_core.json"
     pois_file = out_dir / "osm_pois_core.json"
+    bbox_meta_file = out_dir / "osm_core_bbox.meta.json"
+
+    # Gate B spatial-integrity prerequisite: derive the acquisition extent from the
+    # full official municipal geometry rather than from a hand-written bbox. A
+    # small buffer preserves road-network continuity just outside administrative
+    # borders. This matters especially for northern Brivio, which extended beyond
+    # the earlier 45.760 N cutoff.
+    minx, miny, maxx, maxy = boundaries.to_crs(4326).total_bounds
+    bbox_pad_deg = 0.002
     bbox = (
-        BBOX_CORE["south"],
-        BBOX_CORE["west"],
-        BBOX_CORE["north"],
-        BBOX_CORE["east"],
+        float(miny - bbox_pad_deg),
+        float(minx - bbox_pad_deg),
+        float(maxy + bbox_pad_deg),
+        float(maxx + bbox_pad_deg),
     )
+    bbox_meta = {
+        "bbox_south_west_north_east": [round(x, 8) for x in bbox],
+        "derived_from": "ISTAT 2026 five-core-municipality total_bounds + 0.002 degree buffer",
+    }
 
-    if not raw.exists() or raw.stat().st_size == 0:
+    cached_bbox_matches = False
+    if bbox_meta_file.exists():
+        try:
+            cached_bbox_matches = json.loads(
+                bbox_meta_file.read_text(encoding="utf-8")
+            ) == bbox_meta
+        except (json.JSONDecodeError, OSError):
+            cached_bbox_matches = False
+
+    if (
+        not raw.exists()
+        or raw.stat().st_size == 0
+        or not cached_bbox_matches
+    ):
+        # Invalidate derivatives tied to the former/manual extent before fetching.
+        for stale in (raw, lines_file, points_file, stops_file, pois_file):
+            stale.unlink(missing_ok=True)
         fetch_osm_xml(bbox, str(raw))
+        bbox_meta_file.write_text(
+            json.dumps(bbox_meta, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
 
-    ogr_bbox = (
-        BBOX_CORE["west"],
-        BBOX_CORE["south"],
-        BBOX_CORE["east"],
-        BBOX_CORE["north"],
-    )
+    ogr_bbox = (bbox[1], bbox[0], bbox[3], bbox[2])
     lines = pyogrio.read_dataframe(raw, layer="lines", bbox=ogr_bbox)
     points = pyogrio.read_dataframe(raw, layer="points", bbox=ogr_bbox)
     pyogrio.write_dataframe(lines, lines_file, driver="GeoJSON")
@@ -579,7 +607,11 @@ out center;"""
             "public_transport, amenity, shop and leisure selectors for the core bbox"
         ),
         stato_epistemico="FACT",
-        note=f"Access date 2026-09-03; bbox={bbox}; raw snapshot checksum recorded here.",
+        note=(
+            f"Access date 2026-09-03; bbox={bbox}; extent derived from the full "
+            "ISTAT core-municipality geometry with 0.002 degree buffer; raw snapshot "
+            "checksum recorded here."
+        ),
     )
     record_manifest(
         "osm_highways_core_geojson",
@@ -939,7 +971,7 @@ def main() -> None:
     step_4_istat_commuting_matrix()
     step_5_trenord_gtfs()
     step_6_agency_gtfs()
-    step_7_osm_real_data()
+    step_7_osm_real_data(boundaries)
     step_8_istat_posas()
     step_9_sfr_station_series()
     step_10_programma_di_bacino()
