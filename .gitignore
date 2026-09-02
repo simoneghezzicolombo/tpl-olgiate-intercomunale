@@ -15,7 +15,6 @@ data/raw/od/*.zip
 data/raw/worldpop/ita_ppp_2020_UNadj.tif
 data/raw/dem/Copernicus_DSM_COG_10_N45_00_E009_00_DEM.tif
 data/raw/gtfs/rail_trenord/calendar_dates.txt
-data/raw/gtfs/rail_trenord/trenord_gtfs.zip
 cache/
 
 # Local multi-agent bridge state

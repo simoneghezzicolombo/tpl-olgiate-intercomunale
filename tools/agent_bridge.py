@@ -26,6 +26,12 @@ import time
 import urllib.request
 from pathlib import Path
 
+# Assicura flushing immediato dei print per logging e demoni
+if sys.stdout and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(line_buffering=True)
+if sys.stderr and hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(line_buffering=True)
+
 REPO = "simoneghezzicolombo/tpl-olgiate-intercomunale"
 ISSUE = 1
 MARKER = "[GPT REVIEW]"

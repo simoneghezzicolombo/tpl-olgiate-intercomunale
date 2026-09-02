@@ -27,7 +27,7 @@ Tutte le fonti, i checksum SHA256 e le trasformazioni sono formalmente registrat
 ## 2. Popolazione Territoriale Raster (WorldPop 2020 Reale 100m)
 - **Ente**: WorldPop (School of Geography and Environmental Science, University of Southampton)
 - **Dataset**: *Italy 100m Population Count (unconstrained, UN-adjusted, 2020)*
-- **Serie Ufficiale**: `Global_2000_2020`
+- **Serie Ufficiale**: `Global_2000_2020` (dataset nominale 100m)
 - **URL Ufficiale**: `https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/ITA/ita_ppp_2020_UNadj.tif`
 - **File Nazionale Originale**: `data/raw/worldpop/ita_ppp_2020_UNadj.tif` (160.705.122 bytes)
   - **SHA256 Nazionale**: `a9f9743a08f73e714722ecd54db5e9bb4968bec4a9f88d8f1782c6f7ba1dcea8`
@@ -86,7 +86,7 @@ Tutte le fonti, i checksum SHA256 e le trasformazioni sono formalmente registrat
 ## 6. GTFS Ufficiale Agenzia TPL Como-Lecco-Varese (Orario Invernale 2025-2026)
 - **Ente**: Agenzia per il Trasporto Pubblico Locale del Bacino di Como, Lecco e Varese
 - **Pagina Ufficiale Open Data**: [File GTFS - orario invernale ed estivo 2025-2026](https://www.tplcomoleccovarese.it/atpcolc/zf/index.php/servizi-aggiuntivi/index/index/idtesto/172)
-- **Licenza**: Accesso Pubblico Open Data Agenzia TPL.
+- **Licenza**: `licenza non specificata / accesso pubblico` (download pubblico diretto sul portale istituzionale dell'Agenzia TPL).
 
 ### Feed 1: Arriva Italia S.r.l. e Addabus (Bacino Lecchese / Meratese)
 - **URL Ufficiale**: `https://www.tplcomoleccovarese.it/atpcolc/images/File%20GTFS%20inv.%202025-2026/GTFS%20invernale%202025-2026%20-%20Arriva%20Italia%20e%20Addabus.zip`
@@ -97,7 +97,11 @@ Tutte le fonti, i checksum SHA256 e le trasformazioni sono formalmente registrat
   - `D185`: *Celana - Olgiate F.S.*
   - `D150`: *Lecco - Brivio - Lomagna*
   - `D170`: *Arlate - Vimercate*
-- **Fermate Ufficiali**: `stops.txt` contiene 56 fermate ufficiali nel perimetro dei 5 comuni core con coordinate GPS precise e codici palina istituzionali.
+- **Articolazione Dati Core**:
+  - 201 corse (`trips.txt`) per le linee core
+  - 2.392 passaggi orari (`stop_times.txt`)
+  - 59.021 punti di tracciato vettoriale (`shapes.txt`)
+  - 56 fermate ufficiali (`stops.txt`) con coordinate GPS nel perimetro dei 5 comuni core
 - **Stato Epistemico**: `FACT`.
 
 ### Feed 2: Linee Lecco (Rete Urbana e Contermine)
@@ -110,32 +114,68 @@ Tutte le fonti, i checksum SHA256 e le trasformazioni sono formalmente registrat
 
 ## 7. Rete Stradale, Pedonale e Punti OpenStreetMap (OSM)
 - **Ente**: OpenStreetMap contributors
-- **Dataset PBF Originale**: Estratto bounding-box `[8.872°E, 45.469°N, 9.833°E, 45.883°N]` centrato su Lecco, Como e Brianza nord (snapshot Marzo 2026, 103.234.768 bytes, SHA256: `8c9e469581ef5df195b376eaf86236d7ba816f3c8ab09b3e00d3e06f7266ad83`).
-- **Layer Estratti con pyogrio (Bbox Core 45.71-45.76 N, 9.355-9.460 E)**:
-  1. `data/raw/osm/osm_highways_core.geojson`: 4.477 segmenti stradali e pedonali reali con geometrie WGS84 e attributi (SHA256: `e45b893bedd1c2e9606352b2406614c6aebbaea2bc528b29764df844084ffc23`). Stato: `DERIVED`.
-  2. `data/raw/osm/osm_points_core.geojson`: 1.762 punti reali (fermate bus, scuole, farmacie, servizi) (SHA256: `1ca6fd819ce781b0992dccc89b79ad67e98c31c8edc9d6aacb9dd0c949e11fb5`). Stato: `DERIVED`.
-- **Layer Overpass API**:
-  - `data/raw/osm/osm_bus_stops_core.json`: 37 fermate e piazzole bus georeferenziate su OSM (SHA256: `464c818c08e73ea06607afc696a34bb940dc6f25010165c6ccfa6ab215bb4748`). Stato: `FACT_OSM_OBSERVATION`.
-    - *Nota di gerarchia*: La fonte primaria istituzionale per le fermate TPL è il file `stops.txt` del GTFS ufficiale Arriva; le fermate OSM sono utilizzate esclusivamente per cross-check geometrico e verifica accessibilità pedonale su banchina.
-  - `data/raw/osm/osm_pois_core.json`: 585 generatori di domanda georeferenziati (scuole, municipi, sanità, sport, commercio) (SHA256: `df5369b5f96d1c245b07db921d2cd364fa8489292dfe8dc217d92d323efd2696`). Stato: `FACT`.
-- **Licenza**: Open Database License 1.0 (ODbL).
+- **Provider & Endpoint Ufficiale**: `https://overpass-api.de/api/interpreter` (FOSSGIS e.V. / OpenStreetMap Foundation)
+- **Estrazione Primaria Raw XML**: Query Overpass per bounding box core `[45.710°N, 9.355°E, 45.760°N, 9.460°E]`
+  - **File Raw XML**: `data/raw/osm/osm_core_bbox.osm` (24.347.485 bytes)
+  - **SHA256**: `cff22a10740b049cd847095748706024821ff47579d6788af54c592f4fbe8582`
+  - **Stato Epistemico**: `FACT`.
+- **Layer Estratti Deterministici con pyogrio (Bbox Core 45.71-45.76 N, 9.355-9.460 E)**:
+  1. `data/raw/osm/osm_highways_core.geojson`: 4.506 segmenti stradali e pedonali reali con geometrie WGS84 e attributi (2.752.693 bytes, SHA256: `2a1082b10f5a6560bdf69e8dc344541d3a892f751054316ea582fef32fe6b4c4`). Stato: `DERIVED`.
+  2. `data/raw/osm/osm_points_core.geojson`: 1.875 punti reali (fermate bus, scuole, farmacie, servizi) (697.238 bytes, SHA256: `897b8351af5fcf9b7fab9187b43adbe9bc043a635a035e9aa54c4a59ff1fb004`). Stato: `DERIVED`.
+- **Layer Overpass API Complementari**:
+  - `data/raw/osm/osm_bus_stops_core.json`: 37 fermate e piazzole bus georeferenziate su OSM (10.079 bytes, SHA256: `464c818c08e73ea06607afc696a34bb940dc6f25010165c6ccfa6ab215bb4748`). Stato: `FACT_OSM_OBSERVATION`.
+    - *Nota di gerarchia*: La fonte primaria istituzionale per le fermate TPL è il file `stops.txt` del GTFS ufficiale Arriva; le fermate OSM sono osservazioni reali utilizzate per cross-check geometrico e verifica accessibilità pedonale su banchina.
+  - `data/raw/osm/osm_pois_core.json`: 585 generatori di domanda georeferenziati (scuole, municipi, sanità, sport, commercio) (175.482 bytes, SHA256: `df5369b5f96d1c245b07db921d2cd364fa8489292dfe8dc217d92d323efd2696`). Stato: `FACT`.
+- **Licenza**: Open Database License 1.0 (ODbL 1.0).
 
 ---
 
-## 8. Statistiche Demografiche e Programmazione TPL di Bacino
-- **ISTAT POSAS 2025**:
-  - URL: `https://www.istat.it/it/archivio/295287`
-  - File: `data/raw/istat/POSAS_2025_it_097_Lecco.csv` (SHA256: `3756f20b9b1b9633ee0fc68f1c7a42d9c2d436e181141236675f24de94074132`).
-  - Licenza: IODL 2.0. Popolazione legale al 01/01/2025: Olgiate Molgora 6.332, Calco 5.460, Brivio 4.357, La Valletta Brianza 4.656, Santa Maria Hoè 2.109 (Totale Core: 22.914 residenti).
-  - Stato: `FACT`.
-- **Serie Storica Frequentazioni Stazioni SFR 2015-2025**:
-  - Ente: Regione Lombardia, D.G. Trasporti e Mobilità Sostenibile / Trenord S.r.l.
-  - File: `data/raw/sfr/stazioni_s8_indice_2015_2025.csv` (SHA256: `0f66710b0d1b3cc0928e57dfc945df17e84f39a39bc2a461f09dc404bf8e452c`).
-  - Rilevazioni ufficiali di saliti giorno feriale (campagne novembre).
-  - Stato: `FACT`.
-- **Programma di Bacino 2025 (PdB)**:
-  - Ente: Agenzia TPL Bacino Como, Lecco e Varese.
-  - URL: `https://tplcomoleccovarese.it/programma-di-bacino/`
-  - File: `data/external/PdB_Aggiornamento_2025_Relazione_generale.pdf` (SHA256: `e31b992d7bc6fa5978b8ab4e890c56bc68e02c26e91fc2426ce36b552b1eff18`).
-  - Dati di contratto: D184 (52.560 bus-km/anno), D185 (58.859 bus-km/anno).
-  - Stato: `FACT`.
+## 8. Statistiche Demografiche ISTAT (POSAS 2025)
+- **Ente**: ISTAT (Istituto Nazionale di Statistica)
+- **Dataset**: *Popolazione residente per età, sesso e stato civile al 1° gennaio 2025 (Provincia di Lecco - 097)*
+- **URL Ufficiale**: `https://demo.istat.it/app/?l=it&a=2025&i=POS` (e `https://www.istat.it/it/archivio/295287`)
+- **File Locale**: `data/raw/istat/POSAS_2025_it_097_Lecco.csv` (479.315 bytes)
+- **SHA256**: `3756f20b9b1b9633ee0fc68f1c7a42d9c2d436e181141236675f24de94074132`
+- **Licenza**: Italian Open Data License 2.0 (IODL 2.0)
+- **Popolazione Legale al 01/01/2025 nei 5 Comuni Core**:
+  - Olgiate Molgora: 6.332 ab.
+  - Calco: 5.460 ab.
+  - Brivio: 4.357 ab.
+  - La Valletta Brianza: 4.656 ab.
+  - Santa Maria Hoè: 2.109 ab.
+  - **Totale Core**: 22.914 residenti legali
+- **Stato Epistemico**: `FACT`.
+
+---
+
+## 9. Frequentazione Ferroviaria SFR (Serie Storica 2015-2025)
+- **Ente Fonte Primaria**: Regione Lombardia (Direzione Generale Trasporti e Mobilità Sostenibile) / Trenord S.r.l.
+- **Dataset Istituzionale**: Rilevazioni ufficiali di frequentazione stazioni SFR, campagne di monitoraggio contrattuale novembre feriale 2015-2025 (portale Open Data Regione Lombardia: `https://dati.lombardia.it/Mobilit-e-trasporti/Frequentazione-stazioni-SFR/`)
+- **Origine ed Elaborazione Upstream**: Serie storica passeggeri saliti/giorno feriale elaborata e documentata nel repository correlato `s8-analisi`, acquisita in questo studio per l'analisi di interscambio con la linea ferroviaria S8.
+- **File Locale**: `data/raw/sfr/stazioni_s8_indice_2015_2025.csv` (11.877 bytes)
+- **SHA256**: `0f66710b0d1b3cc0928e57dfc945df17e84f39a39bc2a461f09dc404bf8e452c`
+- **Licenza**: Italian Open Data License 2.0 (IODL 2.0)
+- **Dato Stazione Hub (Olgiate-Calco-Brivio FS)**:
+  - Saliti feriale 2019: 1.420 saliti/giorno
+  - Saliti feriale 2025: 2.400 saliti/giorno (+69% rispetto al 2019)
+- **Stato Epistemico**: `DERIVED`.
+
+---
+
+## 10. Programma di Bacino Ufficiale (PdB Agenzia TPL Como-Lecco-Varese - Rev. 7.2)
+- **Ente**: Agenzia per il Trasporto Pubblico Locale del Bacino di Como, Lecco e Varese
+- **Dataset**: *Programma di Bacino del Trasporto Pubblico Locale - Revisione 7.2* (approvato con Delibera dell'Assemblea di Bacino)
+- **Licenza**: Atto Pubblico di Pianificazione Territoriale e Trasportistica
+
+### Documento 1: Relazione Generale di Progetto (Rev. 7.2)
+- **URL Ufficiale**: `https://www.tplcomoleccovarese.it/atpcolc/images/Programma%20di%20Bacino/Rev7.2/programma%20di%20bacino%20del%20trasporto%20pubblico%20locale%20-%20v7.2_def.pdf`
+- **File Locale**: `data/raw/pdb/PdB_Como_Lecco_Varese_Relazione_v7.2.pdf` (6.128.753 bytes)
+- **SHA256**: `aedff739f2e55defac8c4db16aef42ebecedd331817316de03a337123fbd2e48`
+- **Stato Epistemico**: `FACT`.
+
+### Documento 2: Scheda d'Ambito 3.4 Meratese (Rev. 7.2)
+- **URL Ufficiale**: `https://www.tplcomoleccovarese.it/atpcolc/images/Programma%20di%20Bacino/Rev7.2/Allegato3.4_PdB_SchedaAmbito_Meratese.pdf`
+- **File Locale**: `data/raw/pdb/PdB_Allegato3.4_Meratese.pdf` (10.583.241 bytes)
+- **SHA256**: `e0657cb4e8a078ddf99f28e1ebbde4a67ee36bb9b7a92fcd488e2539a948079a`
+- **Contenuto**: Scheda di dettaglio per l'ambito del Meratese con standard di servizio, fabbisogni e specifiche delle linee contermini D184 (52.560 km/anno) e D185 (58.859 km/anno).
+- **Stato Epistemico**: `FACT`.
