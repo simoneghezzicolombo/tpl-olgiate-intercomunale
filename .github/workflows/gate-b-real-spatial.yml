@@ -1,0 +1,60 @@
+name: Gate B real spatial integrity
+
+on:
+  push:
+    branches: [antigravity-real-data]
+    paths:
+      - scripts/audit_02_real_spatial.py
+      - tests/test_gate_b_spatial.py
+      - scripts/audit_01_fetch_real_inputs.py
+      - tests/test_audit_provenance.py
+      - .github/workflows/gate-b-real-spatial.yml
+  workflow_dispatch:
+
+jobs:
+  real-spatial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install spatial dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pandas geopandas rasterio pyogrio requests pytest networkx scipy
+
+      - name: Compile Gate B pipeline and tests
+        run: |
+          python -m py_compile scripts/audit_02_real_spatial.py
+          python -m py_compile tests/test_gate_b_spatial.py
+
+      - name: Rebuild Gate A inputs from clean checkout
+        run: python scripts/audit_01_fetch_real_inputs.py
+
+      - name: Run Gate B real spatial pipeline
+        run: python scripts/audit_02_real_spatial.py
+
+      - name: Run Gate B tests
+        run: python -m pytest -v tests/test_gate_b_spatial.py
+
+      - name: Print Gate B summary
+        if: always()
+        run: |
+          if [ -f data/audit_gate_b/gate_b_summary.json ]; then
+            cat data/audit_gate_b/gate_b_summary.json
+          fi
+          if [ -f data/audit_gate_b/coverage_summary.csv ]; then
+            echo '--- coverage_summary.csv ---'
+            cat data/audit_gate_b/coverage_summary.csv
+          fi
+          if [ -f data/audit_gate_b/spot_checks.csv ]; then
+            echo '--- spot_checks.csv ---'
+            cat data/audit_gate_b/spot_checks.csv
+          fi
+
+# Gate B starts from a fresh Gate A acquisition and never reads legacy synthetic outputs.
