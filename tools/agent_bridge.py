@@ -9,8 +9,16 @@ For each unseen review:
 4. Rileva esplicitamente soft-denial (permission denied) trattandoli come FAILURE.
 5. Verifies deliverable: requires either a new commit/push OR an updated [ANTIGRAVITY HANDOFF]. Exit code 0 alone is NOT sufficient.
 6. Implements `BLOCKED_RETRY`: prevents popup loops by refusing to retry failed reviews without changes.
-7. Publishes `[ANTIGRAVITY RUN FINISHED]` on GitHub Issue #1.
-8. Enforces concurrency lock (.agent_bridge.lock), deduplication, and fine-grained permissions.
+7. SUPERSEDED: For reviews of the same Gate/checkpoint, only the most recent is processed;
+   older ones are permanently marked SUPERSEDED without triggering Antigravity runs.
+   A review may also declare `Supersedes: <id1>, <id2>` to explicitly mark those IDs as SUPERSEDED.
+8. Publishes `[ANTIGRAVITY RUN FINISHED]` on GitHub Issue #1.
+9. Enforces concurrency lock (.agent_bridge.lock), deduplication, and fine-grained permissions.
+
+State file (.agent_bridge_state.json):
+- Read with UTF-8-sig (BOM-safe). JSON parse failures are logged as explicit errors; the bridge
+  refuses to process reviews until the state file is manually fixed or removed.
+- Written in plain UTF-8 without BOM.
 """
 
 from __future__ import annotations
@@ -143,19 +151,36 @@ def is_gpt_review(comment: dict) -> bool:
     return False
 
 
-def load_state(path: Path) -> dict:
+def load_state(path: Path) -> dict | None:
+    """Load the bridge state file.
+
+    Returns None if the file exists but cannot be parsed as JSON (explicit parse failure).
+    This forces the caller to abort review processing rather than silently resetting state.
+    Reads with UTF-8-sig to safely handle files saved with a BOM.
+    """
     if not path.exists():
-        return {"processed_comment_ids": [], "blocked_retry": {}}
+        return {"processed_comment_ids": [], "blocked_retry": {}, "superseded_comment_ids": []}
+    raw = path.read_bytes()
+    # Strip UTF-8 BOM if present (utf-8-sig codec behaviour)
+    text = raw.decode("utf-8-sig")
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-        if "blocked_retry" not in data:
-            data["blocked_retry"] = {}
-        return data
-    except Exception:
-        return {"processed_comment_ids": [], "blocked_retry": {}}
+        data = json.loads(text)
+    except json.JSONDecodeError as exc:
+        print(
+            f"[bridge] FATAL: {path} is not valid JSON ({exc}). "
+            "Fix or remove the file before restarting the bridge.",
+            file=sys.stderr,
+        )
+        return None  # Caller must abort
+    if "blocked_retry" not in data:
+        data["blocked_retry"] = {}
+    if "superseded_comment_ids" not in data:
+        data["superseded_comment_ids"] = []
+    return data
 
 
 def save_state(path: Path, state: dict) -> None:
+    """Write state file as plain UTF-8 without BOM."""
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(json.dumps(state, indent=2), encoding="utf-8")
     tmp.replace(path)
@@ -372,18 +397,108 @@ Elaborazione completata per la review GPT:
     return success, exit_code, reason
 
 
+def parse_review_metadata(body: str) -> dict:
+    """Extract structured metadata from a [GPT REVIEW] comment body.
+
+    Parses header fields like:
+      Gate: GATE A - Provenance
+      Supersedes: 5516612555, 5516728746
+
+    Returns a dict with keys: 'gate' (str or None), 'supersedes' (list[int]).
+    """
+    gate = None
+    supersedes: list[int] = []
+    for line in body.splitlines():
+        stripped = line.strip()
+        if stripped.lower().startswith("gate:"):
+            gate = stripped[5:].strip()
+        elif stripped.lower().startswith("supersedes:"):
+            raw_ids = stripped[11:].strip()
+            for part in raw_ids.replace(",", " ").split():
+                try:
+                    supersedes.append(int(part))
+                except ValueError:
+                    pass
+    return {"gate": gate, "supersedes": supersedes}
+
+
+def apply_superseded_logic(
+    reviews: list[dict],
+    state: dict,
+) -> tuple[list[dict], set[int]]:
+    """Determine which reviews are SUPERSEDED and should not be run.
+
+    Rules:
+    1. Explicit: if a review has `Supersedes: <id1>, <id2>`, those IDs are immediately SUPERSEDED.
+    2. Implicit: for reviews sharing the same Gate label, only the newest (highest ID) is kept;
+       older ones are SUPERSEDED.
+
+    Returns:
+        - filtered list of reviews to actually process (not superseded)
+        - set of comment IDs newly determined to be SUPERSEDED
+    """
+    existing_superseded = {int(x) for x in state.get("superseded_comment_ids", [])}
+    newly_superseded: set[int] = set()
+
+    # Step 1: collect explicit Supersedes declarations
+    for comment in reviews:
+        meta = parse_review_metadata(comment.get("body", ""))
+        for sid in meta["supersedes"]:
+            newly_superseded.add(sid)
+
+    # Step 2: group by Gate label; keep only newest per gate
+    gate_groups: dict[str, list[dict]] = {}
+    no_gate: list[dict] = []
+    for comment in reviews:
+        meta = parse_review_metadata(comment.get("body", ""))
+        gate = meta["gate"]
+        if gate:
+            gate_groups.setdefault(gate, []).append(comment)
+        else:
+            no_gate.append(comment)
+
+    for gate, group in gate_groups.items():
+        group.sort(key=lambda c: int(c["id"]))
+        # Supersede all except the most recent
+        for old_comment in group[:-1]:
+            newly_superseded.add(int(old_comment["id"]))
+
+    all_superseded = existing_superseded | newly_superseded
+    # Filter out superseded from the to-process list
+    to_process = [c for c in reviews if int(c["id"]) not in all_superseded]
+    return to_process, newly_superseded
+
+
 def process_once(workspace: Path, state_path: Path, log_dir: Path, model: str | None, timeout: str, retry_blocked: bool = False) -> int:
     state = load_state(state_path)
+    if state is None:
+        # State file exists but is unparseable JSON - refuse to process.
+        print("[bridge] Aborting: cannot read state file. Fix it manually.", file=sys.stderr)
+        return 4
+
     processed = {int(x) for x in state.get("processed_comment_ids", [])}
     blocked = state.get("blocked_retry", {})
     current_head = get_head_commit(workspace)
 
     comments = get_comments()
-    reviews = [c for c in comments if is_gpt_review(c) and int(c["id"]) not in processed]
-    reviews.sort(key=lambda c: int(c["id"]))
+    all_reviews = [c for c in comments if is_gpt_review(c) and int(c["id"]) not in processed]
+    all_reviews.sort(key=lambda c: int(c["id"]))
+
+    if not all_reviews:
+        print("[bridge] No unseen GPT reviews.")
+        return 0
+
+    # Apply SUPERSEDED logic
+    reviews, newly_superseded = apply_superseded_logic(all_reviews, state)
+    if newly_superseded:
+        existing_sup = {int(x) for x in state.get("superseded_comment_ids", [])}
+        state["superseded_comment_ids"] = sorted(existing_sup | newly_superseded)
+        save_state(state_path, state)
+        for sid in sorted(newly_superseded):
+            print(f"[bridge] Review {sid} marked SUPERSEDED (newer review for same Gate exists or explicit Supersedes declared).")
 
     if not reviews:
-        print("[bridge] No unseen GPT reviews.")
+        print("[bridge] All pending GPT reviews are SUPERSEDED. Nothing to process.")
         return 0
 
     overall_code = 0
