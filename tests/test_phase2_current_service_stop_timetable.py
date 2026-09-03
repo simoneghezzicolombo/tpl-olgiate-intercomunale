@@ -1,9 +1,12 @@
 from datetime import date
 from pathlib import Path
+import sys
 
 import pytest
 
-from src.phase2_current_service_stop_timetable import (
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from src.phase2_current_service_stop_timetable import (  # noqa: E402
     TimetableAmbiguity,
     _header_columns,
     _parse_clock,
