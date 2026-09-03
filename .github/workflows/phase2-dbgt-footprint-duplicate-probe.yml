@@ -1,5 +1,6 @@
 name: Phase 2 DBGT footprint duplicate probe
 
+# Exhaustive diagnostic workflow. No sampling.
 on:
   push:
     branches: [phase2-building-population]
