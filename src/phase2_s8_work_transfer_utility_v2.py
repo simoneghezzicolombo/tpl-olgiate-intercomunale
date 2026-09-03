@@ -4,6 +4,10 @@ This is deliberately narrower than Passenger GJT. It weights the four hub
 connection cells by empirical ISTAT 2021 work-destination counts that are
 addressable by direct S8 service. It does not infer worker origins, modal share,
 walking time, full journey time or a final topology ranking.
+
+A round-trip score is only valid when both BUS_TO_RAIL and RAIL_TO_BUS hub
+events are supported by the public-service geometry. Vehicle-only return
+closures must never be supplied as passenger BUS_TO_RAIL service.
 """
 from __future__ import annotations
 
@@ -15,6 +19,7 @@ from typing import Mapping
 
 CONNECTION_TYPES = ("BUS_TO_RAIL", "RAIL_TO_BUS")
 DIRECTIONS = ("LECCO", "MILANO")
+FORBIDDEN_SUPPORT_EVIDENCE = {"", "ASSUMED", "INFERRED_FROM_VEHICLE_CLOSURE", "PLACEHOLDER", "INVALIDATED"}
 
 
 @dataclass(frozen=True)
@@ -45,13 +50,40 @@ class WorkDirectionWeights:
 
 
 @dataclass(frozen=True)
+class PassengerConnectionSupport:
+    """Route/service evidence needed before a round-trip transfer score exists."""
+
+    route_id: str
+    bus_to_rail_supported: bool
+    rail_to_bus_supported: bool
+    evidence_status: str = "DERIVED_FROM_PUBLIC_SERVICE_GEOMETRY"
+
+    def validate_roundtrip(self) -> None:
+        if not self.route_id:
+            raise ValueError("Passenger connection support requires route_id")
+        status = self.evidence_status.strip().upper()
+        if status in FORBIDDEN_SUPPORT_EVIDENCE:
+            raise ValueError("Passenger connection support has forbidden evidence status")
+        if not self.rail_to_bus_supported:
+            raise ValueError("RAIL_TO_BUS passenger service is not supported for this route")
+        if not self.bus_to_rail_supported:
+            raise ValueError(
+                "Round-trip transfer utility requires passenger-supported BUS_TO_RAIL service; "
+                "a vehicle-only return closure is not sufficient"
+            )
+
+
+@dataclass(frozen=True)
 class WeightedTransferUtility:
+    route_id: str
     profile_quality: Mapping[str, float]
     worst_profile_quality: float
     mean_profile_quality: float
     best_profile_quality: float
     worker_count: float
     weighted_connection_count: float
+    roundtrip_passenger_supported: bool
+    support_evidence_status: str
 
 
 def _parse_profile_cells(profile_cell_quality: Mapping[str, float]) -> dict[str, dict[tuple[str, str], float]]:
@@ -85,14 +117,17 @@ def _parse_profile_cells(profile_cell_quality: Mapping[str, float]) -> dict[str,
 def weight_transfer_quality(
     profile_cell_quality: Mapping[str, float],
     weights: WorkDirectionWeights,
+    support: PassengerConnectionSupport,
 ) -> WeightedTransferUtility:
-    """Weight each transfer profile by observed addressable work destinations.
+    """Weight a fully passenger-supported round-trip hub transfer opportunity.
 
     Every worker contributes one outbound BUS_TO_RAIL direction and one return
     RAIL_TO_BUS direction. This is a round-trip directional weighting only; it
-    makes no claim about daily rail use frequency or modal share.
+    makes no claim about daily rail use frequency or modal share. The function
+    fails closed when either passenger connection direction is unsupported.
     """
     weights.validate()
+    support.validate_roundtrip()
     profiles = _parse_profile_cells(profile_cell_quality)
     worker_count = weights.worker_count
     denominator = 2.0 * worker_count
@@ -111,10 +146,13 @@ def weight_transfer_quality(
         profile_quality[profile_id] = numerator / denominator
     values = tuple(profile_quality.values())
     return WeightedTransferUtility(
+        route_id=support.route_id,
         profile_quality=dict(sorted(profile_quality.items())),
         worst_profile_quality=min(values),
         mean_profile_quality=mean(values),
         best_profile_quality=max(values),
         worker_count=worker_count,
         weighted_connection_count=denominator,
+        roundtrip_passenger_supported=True,
+        support_evidence_status=support.evidence_status,
     )

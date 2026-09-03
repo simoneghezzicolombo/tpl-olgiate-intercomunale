@@ -8,11 +8,13 @@ on:
       - 'config/phase2_passenger_gjt_sensitivity_v2.json'
       - 'src/phase2_passenger_gjt_v2.py'
       - 'src/phase2_s8_destination_direction_v2.py'
+      - 'src/phase2_s8_work_transfer_utility_v2.py'
       - 'scripts/phase2_build_passenger_journey_universe_v2.py'
       - 'scripts/phase2_build_s8_work_direction_weights_v2.py'
       - 'tests/test_phase2_passenger_gjt_v2.py'
       - 'tests/test_phase2_passenger_journey_universe_v2.py'
       - 'tests/test_phase2_s8_destination_direction_v2.py'
+      - 'tests/test_phase2_s8_work_transfer_utility_v2.py'
       - 'docs/PHASE2_PASSENGER_GJT_V2.md'
       - '.github/workflows/phase2-passenger-gjt-v2.yml'
   workflow_dispatch:
@@ -46,6 +48,7 @@ jobs:
         run: |
           python -m py_compile src/phase2_passenger_gjt_v2.py
           python -m py_compile src/phase2_s8_destination_direction_v2.py
+          python -m py_compile src/phase2_s8_work_transfer_utility_v2.py
           python -m py_compile scripts/phase2_build_passenger_journey_universe_v2.py
           python -m py_compile scripts/phase2_build_s8_work_direction_weights_v2.py
 
@@ -55,6 +58,7 @@ jobs:
           tests/test_phase2_passenger_gjt_v2.py
           tests/test_phase2_passenger_journey_universe_v2.py
           tests/test_phase2_s8_destination_direction_v2.py
+          tests/test_phase2_s8_work_transfer_utility_v2.py
 
       - name: Materialise empirical journey universe and sensitivity grid
         run: >-
@@ -178,7 +182,7 @@ jobs:
 
       - name: Guard Passenger GJT epistemic separation
         run: |
-          FILES="config/phase2_passenger_gjt_sensitivity_v2.json src/phase2_passenger_gjt_v2.py src/phase2_s8_destination_direction_v2.py scripts/phase2_build_passenger_journey_universe_v2.py scripts/phase2_build_s8_work_direction_weights_v2.py"
+          FILES="config/phase2_passenger_gjt_sensitivity_v2.json src/phase2_passenger_gjt_v2.py src/phase2_s8_destination_direction_v2.py src/phase2_s8_work_transfer_utility_v2.py scripts/phase2_build_passenger_journey_universe_v2.py scripts/phase2_build_s8_work_direction_weights_v2.py"
           ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
           ! grep -n -E 'S8_DIRECT_is_modal_share[^f]*true|population_proportional_worker_allocation_performed[^f]*true|nearest_stop_imputation_performed[^f]*true|full_gjt_ready[^f]*true' $FILES
           git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-access-equity-v2...HEAD
