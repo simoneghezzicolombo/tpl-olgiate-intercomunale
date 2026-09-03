@@ -7,6 +7,7 @@ from __future__ import annotations
 from src.phase2_current_service_stop_identity import (
     GtfsStop,
     PageRow,
+    exact_physical_equivalence,
     labels_compatible,
     normalize_stop_label,
     resolve_page,
@@ -37,6 +38,37 @@ def test_unique_route_name_candidate_resolves_without_forcing_sequence():
     result = resolve_page(rows, route_patterns=[("A", "B")], stops=stops)
     assert result[0].status == "RESOLVED_ROUTE_NAME_UNIQUE"
     assert result[0].stop_id == "A"
+
+
+def test_exact_same_name_and_coordinate_gtfs_records_are_one_physical_equivalence():
+    stops = {
+        "300001": GtfsStop("300001", "Town - centro", "45.700000", "9.400000"),
+        "L00001": GtfsStop("L00001", "Town - centro", "45.700000", "9.400000"),
+    }
+    equivalence = exact_physical_equivalence(stops)
+    assert equivalence["300001"] == ("300001", "L00001")
+    result = resolve_page(
+        [PageRow("R", 1, 1, "TOWN CENTRO")],
+        route_patterns=[("300001",), ("L00001",)],
+        stops=stops,
+    )
+    assert result[0].status == "RESOLVED_EQUIVALENT_GTFS_RECORDS_SAME_NAME_COORDINATE"
+    assert result[0].stop_id == "300001"
+    assert result[0].equivalent_stop_ids == ("300001", "L00001")
+
+
+def test_same_name_but_different_coordinates_is_not_collapsed():
+    stops = {
+        "A": GtfsStop("A", "Town - centro", "45.700000", "9.400000"),
+        "B": GtfsStop("B", "Town - centro", "45.700100", "9.400000"),
+    }
+    result = resolve_page(
+        [PageRow("R", 1, 1, "TOWN CENTRO")],
+        route_patterns=[("A",), ("B",)],
+        stops=stops,
+    )
+    assert result[0].status == "AMBIGUOUS_HISTORICAL_GTFS"
+    assert result[0].stop_id is None
 
 
 def test_sequence_disambiguates_repeated_name_candidate_when_best_pattern_is_unique():
