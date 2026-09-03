@@ -128,7 +128,7 @@ jobs:
           for file in /tmp/current_service/*; do
             cp "$file" "outputs/phase2/$(basename "$file")"
           done
-          if git diff --quiet -- outputs/phase2/current_service_*2026-09-03*; then
+          if [ -z "$(git status --porcelain -- outputs/phase2/current_service_*2026-09-03*)" ]; then
             echo "Committed outputs already match regenerated evidence."
             exit 0
           fi
