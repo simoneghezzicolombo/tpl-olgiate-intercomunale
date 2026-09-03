@@ -1,0 +1,152 @@
+name: Phase 2 Operational Screening V2
+
+on:
+  push:
+    branches:
+      - phase2-operational-screening-v2
+    paths:
+      - 'src/phase2_operational_screening.py'
+      - 'scripts/phase2_run_operational_screening_v2.py'
+      - 'tests/test_phase2_operational_screening.py'
+      - '.github/workflows/phase2-operational-screening-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-operational-screening-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile operational lower-bound engine
+        run: |
+          python -m py_compile src/phase2_operational_screening.py
+          python -m py_compile scripts/phase2_run_operational_screening_v2.py
+
+      - name: Run operational lower-bound tests
+        run: python -m pytest -q tests/test_phase2_operational_screening.py
+
+      - name: Materialise Operational Screening V2 for all 100k scenarios
+        run: >-
+          python scripts/phase2_run_operational_screening_v2.py
+          --catalog outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv
+          --catalog-validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json
+          --structural-screening outputs/phase2/structural_screening_v2/structural_screening_v2.csv
+          --structural-screening-validation outputs/phase2/structural_screening_v2/structural_screening_v2_validation.json
+          --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv
+          --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json
+          --anchor-universe outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv
+          --budget-envelopes outputs/phase2/budget_envelopes.csv
+          --budget-validation outputs/phase2/budget_envelopes_validation.json
+          --output outputs/phase2/operational_screening_v2/operational_screening_v2.csv
+          --validation outputs/phase2/operational_screening_v2/operational_screening_v2_validation.json
+
+      - name: Validate Operational Screening V2 contract
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          root = Path('outputs/phase2/operational_screening_v2')
+          val = json.loads((root/'operational_screening_v2_validation.json').read_text(encoding='utf-8'))
+          assert val['status'] == 'PASS_OPERATIONAL_SCREENING_V2_BUILD'
+          assert val['contract'] == 'PHASE2_OPERATIONAL_LOWER_BOUND_SCREENING_V2'
+          assert val['evidence_label'] == 'V2_OPERATIONAL_LOWER_BOUNDS_NOT_SERVICE_POLICY'
+          assert val['scenario_count'] == 100000
+          assert val['operational_pass_count'] == 100000
+          assert val['operational_fail_count'] == 0
+          assert val['return_closure_added_scenario_count'] > 0
+          assert val['unique_public_directed_legs_rechecked'] > 0
+          assert val['budget_envelope_count'] == 6
+          assert val['headway_assumed'] is False
+          assert val['calendar_assumed'] is False
+          assert val['service_days_assumed'] is False
+          assert val['recovery_assumed'] is False
+          assert val['fleet_assumed'] is False
+          assert val['extension_share_assumed'] is False
+          assert val['service_policy_selected'] is False
+          assert val['topology_ranked'] is False
+          assert val['stop_set_selected'] is False
+          assert val['annual_service_plan_produced'] is False
+          assert val['computes_budget_capacity_upper_bounds'] is True
+          assert val['budget_capacity_is_service_plan'] is False
+          with (root/'operational_screening_v2.csv').open(encoding='utf-8', newline='') as handle:
+              rows = list(csv.DictReader(handle))
+          assert len(rows) == 100000
+          assert len({row['scenario_id'] for row in rows}) == 100000
+          assert all(row['operational_screen_status'] == 'PASS_TO_SERVICE_POLICY_SEARCH' for row in rows)
+          assert all(row['all_public_routes_return_closable'] == 'true' for row in rows)
+          forbidden = {'rank', 'score', 'winner', 'recommended', 'primary_recommendation', 'selected_headway', 'service_days'}
+          assert not (forbidden & set(rows[0]))
+          print(json.dumps(val, indent=2))
+          PY
+
+      - name: Deterministic byte-for-byte operational rebuild
+        run: |
+          rm -rf /tmp/phase2-operational-screening-v2
+          mkdir -p /tmp/phase2-operational-screening-v2
+          python scripts/phase2_run_operational_screening_v2.py \
+            --catalog outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv \
+            --catalog-validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json \
+            --structural-screening outputs/phase2/structural_screening_v2/structural_screening_v2.csv \
+            --structural-screening-validation outputs/phase2/structural_screening_v2/structural_screening_v2_validation.json \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --anchor-universe outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --budget-envelopes outputs/phase2/budget_envelopes.csv \
+            --budget-validation outputs/phase2/budget_envelopes_validation.json \
+            --output /tmp/phase2-operational-screening-v2/operational.csv \
+            --validation /tmp/phase2-operational-screening-v2/validation.json
+          cmp outputs/phase2/operational_screening_v2/operational_screening_v2.csv /tmp/phase2-operational-screening-v2/operational.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a = json.loads(Path('outputs/phase2/operational_screening_v2/operational_screening_v2_validation.json').read_text())
+          b = json.loads(Path('/tmp/phase2-operational-screening-v2/validation.json').read_text())
+          for payload in (a, b):
+              payload['lineage'].pop('operational_screening')
+              payload['lineage'].pop('operational_screening_sha256')
+          assert a == b
+          PY
+
+      - name: Guard assumption-free operational semantics
+        run: |
+          FILES="src/phase2_operational_screening.py scripts/phase2_run_operational_screening_v2.py"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de|08_candidate_routes|route_variants\.csv' $FILES
+          ! grep -n -E 'primary recommendation|runner-up|recommended topology|selected_headway|303 service days' $FILES
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-structural-screening-v2...HEAD
+
+      - name: Persist validated Operational Screening V2
+        run: |
+          git config user.name "phase2-operational-screening-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/operational_screening_v2
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist audited Operational Screening V2 [skip ci]"
+            git push origin HEAD:phase2-operational-screening-v2
+          fi
+
+      - name: Upload Operational Screening V2 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-operational-screening-v2-${{ github.sha }}
+          retention-days: 90
+          path: outputs/phase2/operational_screening_v2
