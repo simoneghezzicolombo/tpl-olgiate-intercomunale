@@ -12,10 +12,12 @@ on:
       - scripts/gate_d_structural_candidates_v2.py
       - scripts/gate_d_structural_candidates_v3.py
       - scripts/gate_d_slope_audit.py
+      - scripts/gate_d_baseline_calibration.py
       - tests/test_gate_d_route_integrity.py
       - tests/test_gate_d_structural_candidates.py
       - tests/test_gate_d_anchor_and_slope.py
       - tests/test_gate_d_dependency_closed.py
+      - tests/test_gate_d_baseline_calibration.py
       - data/gate_d_structural_road_constraints.csv
       - .github/workflows/gate-d-road-route-integrity.yml
   workflow_dispatch:
@@ -46,12 +48,14 @@ jobs:
           python -m py_compile scripts/gate_d_structural_candidates_v2.py
           python -m py_compile scripts/gate_d_structural_candidates_v3.py
           python -m py_compile scripts/gate_d_slope_audit.py
+          python -m py_compile scripts/gate_d_baseline_calibration.py
           python -m py_compile tests/test_gate_d_route_integrity.py
           python -m py_compile tests/test_gate_d_structural_candidates.py
           python -m py_compile tests/test_gate_d_anchor_and_slope.py
           python -m py_compile tests/test_gate_d_dependency_closed.py
+          python -m py_compile tests/test_gate_d_baseline_calibration.py
       - name: Run Gate D adversarial tests
-        run: python -m pytest -v tests/test_gate_d_route_integrity.py tests/test_gate_d_structural_candidates.py tests/test_gate_d_anchor_and_slope.py tests/test_gate_d_dependency_closed.py
+        run: python -m pytest -v tests/test_gate_d_route_integrity.py tests/test_gate_d_structural_candidates.py tests/test_gate_d_anchor_and_slope.py tests/test_gate_d_dependency_closed.py tests/test_gate_d_baseline_calibration.py
       - name: Check patch whitespace
         run: git diff --check 549198743e7265b333da565ce6990f9241cfd1fd..HEAD
       - name: Fail if legacy hardcoded route outputs are regenerated
@@ -104,6 +108,8 @@ jobs:
           python -m pip install pandas geopandas shapely networkx pyogrio requests rasterio scipy
       - name: Acquire tiled OSM and run dependency-closed structural candidate audit
         run: python scripts/gate_d_structural_candidates_v3.py
+      - name: Route D184/D185 baseline and diagnose runtime model bias
+        run: python scripts/gate_d_baseline_calibration.py
       - name: Derive Copernicus DSM grade diagnostics
         run: python scripts/gate_d_slope_audit.py
       - name: Print structural numerical evidence
@@ -111,6 +117,8 @@ jobs:
         run: |
           if [ -f data/audit_gate_d/structural_candidate_summary.json ]; then cat data/audit_gate_d/structural_candidate_summary.json; fi
           if [ -f data/audit_gate_d/structural_candidate_metrics.csv ]; then echo '--- STRUCTURAL CANDIDATES ---'; cat data/audit_gate_d/structural_candidate_metrics.csv; fi
+          if [ -f data/audit_gate_d/structural_baseline_calibration_summary.json ]; then echo '--- BASELINE CALIBRATION SUMMARY ---'; cat data/audit_gate_d/structural_baseline_calibration_summary.json; fi
+          if [ -f data/audit_gate_d/structural_baseline_calibration.csv ]; then echo '--- BASELINE CALIBRATION ---'; cat data/audit_gate_d/structural_baseline_calibration.csv; fi
           if [ -f data/audit_gate_d/structural_candidate_slope_audit.csv ]; then echo '--- DSM GRADE DIAGNOSTICS ---'; cat data/audit_gate_d/structural_candidate_slope_audit.csv; fi
           if [ -f data/audit_gate_d/structural_anchor_evidence.csv ]; then echo '--- ANCHOR EVIDENCE ---'; cat data/audit_gate_d/structural_anchor_evidence.csv; fi
           if [ -f data/audit_gate_d/station_anchor_diagnostic.csv ]; then echo '--- STATION ANCHOR DIAGNOSTIC ---'; cat data/audit_gate_d/station_anchor_diagnostic.csv; fi
