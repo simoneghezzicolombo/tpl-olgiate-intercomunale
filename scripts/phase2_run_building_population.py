@@ -102,7 +102,7 @@ def _population_candidates(columns) -> list:
     return out
 
 
-def _discover_table(raw: bytes) -> tuple[pd.DataFrame, str, int, object, object | None, object]:
+def _discover_table(raw: bytes) -> tuple[pd.DataFrame, str, int, object, object, object]:
     workbook = load_workbook(io.BytesIO(raw), read_only=True, data_only=True)
     matches = []
     observations = []
@@ -128,15 +128,15 @@ def _discover_table(raw: bytes) -> tuple[pd.DataFrame, str, int, object, object 
                         "municipality": [str(v) for v in muni],
                         "population": [str(v) for v in pop],
                     })
-                if len(sec) == 1 and len(pop) == 1 and len(muni) <= 1:
-                    matches.append((sheet, header, sec[0], muni[0] if muni else None, pop[0]))
+                if len(sec) == 1 and len(pop) == 1 and len(muni) == 1:
+                    matches.append((sheet, header, sec[0], muni[0], pop[0]))
                     break
     finally:
         workbook.close()
 
     if len(matches) != 1:
         raise RuntimeError(
-            "ISTAT 2023 workbook schema is not uniquely identifiable; "
+            "ISTAT 2023 workbook schema is not uniquely identifiable with an explicit municipal key; "
             f"matches={[(m[0], m[1], str(m[2]), str(m[3]), str(m[4])) for m in matches]}; "
             f"candidate_observations={observations[:30]}"
         )
@@ -161,19 +161,9 @@ def load_istat_2023_sections(source_dir: Path, selected_codes: set[str]):
     out = pd.DataFrame({
         "section_id_raw": section_raw,
         "section_id": df[section_col].map(impl.normalise_section),
+        "municipality_code": df[muni_col].map(impl.normalise_municipality),
         "population_2023_fact": pd.to_numeric(df[pop_col], errors="coerce"),
     })
-    if muni_col is not None:
-        out["municipality_code"] = df[muni_col].map(impl.normalise_municipality)
-        municipality_method = f"FACT_FIELD:{muni_col}"
-    else:
-        raw_digits = section_raw.str.replace(r"\.0$", "", regex=True).str.replace(r"\D", "", regex=True)
-        usable = raw_digits.str.len() >= 6
-        out["municipality_code"] = raw_digits.where(usable, "").str[:6]
-        municipality_method = "DERIVED_FROM_OFFICIAL_SECTION_ID_FIRST_6_DIGITS"
-
-    # Footer/note rows are irrelevant unless they can resolve to a selected official
-    # municipality. Filtering by selected municipality happens before numeric checks.
     out = out.loc[out["municipality_code"].isin(selected_codes)].copy()
     if out.empty:
         raise RuntimeError("no selected municipalities found in ISTAT 2023 section table")
@@ -204,7 +194,7 @@ def load_istat_2023_sections(source_dir: Path, selected_codes: set[str]):
         "regional_xlsx_sha256": hashlib.sha256(raw).hexdigest(),
         "regional_xlsx_bytes": len(raw),
         "section_id_field": str(section_col),
-        "municipality_field_or_method": municipality_method,
+        "municipality_field_or_method": f"FACT_FIELD:{muni_col}",
         "population_field": str(pop_col),
         "selected_rows": len(out),
         "selected_fictitious_rows": int(out["is_fictitious_section"].sum()),
