@@ -2,15 +2,13 @@
 """Gate D structural candidate audit, dependency-closed version.
 
 Gate B and Gate C are formally PASS. This wrapper extends the v2 structural
-routing audit with an explicitly ASSUMPTION-labelled Calco Superiore sensitivity
-and removes obsolete Gate C provisional labels from generated Gate D evidence.
+routing audit with an explicitly ASSUMPTION-labelled Calco Superiore sensitivity,
+non-loop alternatives anchored entirely to validated GTFS stops, and removes
+obsolete Gate C provisional labels from generated Gate D evidence.
 
-The Calco Superiore design anchor is resolved from the real OSM named road
-``Via Calco Superiore``. No coordinate, distance, runtime or recommendation is
-hard-coded. Official Comune di Calco evidence is retained as corroboration that
-Calco Superiore is a public-road locality and that shuttle/navetta access to the
-upper hamlets has existed, but that evidence does not prove suitability for every
-full-size bus class.
+No coordinate, distance, runtime or recommendation is hard-coded. The figure-8
+remains a hypothesis: existing-corridor out-and-back alternatives are evaluated in
+the same road graph so downstream Pareto analysis is not forced to choose a loop.
 """
 from __future__ import annotations
 
@@ -57,6 +55,21 @@ _EXTRA_CANDIDATES = [
         "anchors": [
             "FS", "ARLATE", "BRIVIO", "BEVERATE", "CALCO_SUPERIORE", "CALCO", "FS"
         ],
+    },
+    {
+        "candidate_id": "WEST_D184_CORRIDOR_OUT_AND_BACK",
+        "family": "NON_LOOP_EXISTING_CORRIDOR",
+        "direction": "OUT_AND_BACK",
+        "anchors": [
+            "FS", "SCARPONE", "ROVAGNATE", "PEREGO", "SMARIA", "RAVELLINO",
+            "SMARIA", "PEREGO", "ROVAGNATE", "SCARPONE", "FS"
+        ],
+    },
+    {
+        "candidate_id": "EAST_D185_CORRIDOR_OUT_AND_BACK",
+        "family": "NON_LOOP_EXISTING_CORRIDOR",
+        "direction": "OUT_AND_BACK",
+        "anchors": ["FS", "CALCO", "BEVERATE", "BRIVIO", "BEVERATE", "CALCO", "FS"],
     },
 ]
 _existing_ids = {candidate["candidate_id"] for candidate in base.CANDIDATES}
@@ -115,6 +128,8 @@ def build_summary(metrics, bridge_detail, turn_summary, acquisition) -> dict:
     lookup = metrics.set_index("candidate_id")
     cw = lookup.loc["EAST_CALCO_SUPERIORE_SENSITIVITY_CW"]
     ccw = lookup.loc["EAST_CALCO_SUPERIORE_SENSITIVITY_CCW"]
+    west_non_loop = lookup.loc["WEST_D184_CORRIDOR_OUT_AND_BACK"]
+    east_non_loop = lookup.loc["EAST_D185_CORRIDOR_OUT_AND_BACK"]
     summary.update(
         {
             "verdict": "READY_FOR_GATE_D_REVIEW",
@@ -132,6 +147,9 @@ def build_summary(metrics, bridge_detail, turn_summary, acquisition) -> dict:
             "calco_superiore_ccw_pure_running_minutes_model": float(
                 ccw["pure_running_minutes"]
             ),
+            "non_loop_alternatives_status": "TESTED_SAME_GRAPH_NOT_FIGURE8",
+            "west_d184_out_and_back_km": float(west_non_loop["route_km"]),
+            "east_d185_out_and_back_km": float(east_non_loop["route_km"]),
         }
     )
     remaining = [
