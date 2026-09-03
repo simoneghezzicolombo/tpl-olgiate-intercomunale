@@ -25,6 +25,7 @@ on:
       - tests/test_gate_d_baseline_calibration_v4.py
       - tests/test_gate_d_access_precedence.py
       - data/gate_d_structural_road_constraints.csv
+      - data/manifest.csv
       - .github/workflows/gate-d-road-route-integrity.yml
   workflow_dispatch:
 
@@ -113,11 +114,44 @@ jobs:
               assert hashlib.sha256(target.read_bytes()).hexdigest() == digest
               print(f'{dataset_id}: verified {digest} -> {target}')
           PY
-      - name: Verify official S8 station source and Gate B DEM
+      - name: Verify official S8 source and stage full Copernicus GLO-30 tile
         run: |
           test -s data/raw/gtfs/rail_trenord/stops.txt
           grep '^S01514,Olgiate-Calco-Brivio,' data/raw/gtfs/rail_trenord/stops.txt
           test -s data/raw/dem/copernicus_dem_core_raw.tif
+          python - <<'PY'
+          import csv
+          import hashlib
+          import pathlib
+          import urllib.request
+
+          dataset_id = 'copernicus_dem_glo30_tile_n45_e009'
+          with open('data/manifest.csv', encoding='utf-8', newline='') as handle:
+              rows = {row['dataset_id']: row for row in csv.DictReader(handle)}
+          row = rows[dataset_id]
+          target = pathlib.Path(row['filepath_locale'])
+          target.parent.mkdir(parents=True, exist_ok=True)
+
+          if not target.exists() or target.stat().st_size == 0:
+              request = urllib.request.Request(
+                  row['url_ufficiale'],
+                  headers={'User-Agent': 'tpl-olgiate-gate-d-audit/1.0'},
+              )
+              temporary = target.with_suffix(target.suffix + '.part')
+              with urllib.request.urlopen(request, timeout=180) as response, temporary.open('wb') as output:
+                  while True:
+                      chunk = response.read(1024 * 1024)
+                      if not chunk:
+                          break
+                      output.write(chunk)
+              temporary.replace(target)
+
+          digest = hashlib.sha256(target.read_bytes()).hexdigest()
+          assert digest == row['sha256_hash'], (
+              f'checksum mismatch for {dataset_id}: {digest} != {row["sha256_hash"]}'
+          )
+          print(f'{dataset_id}: verified {digest} -> {target} ({target.stat().st_size} bytes)')
+          PY
       - name: Install spatial and network dependencies
         run: |
           python -m pip install --upgrade pip
