@@ -42,6 +42,55 @@ jobs:
       - name: Run Gate B tests
         run: python -m pytest -v tests/test_gate_b_spatial.py
 
+      - name: Gate B red-team diagnostics
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          import numpy as np
+
+          pop = pd.read_csv('data/audit_gate_b/population_cells_real.csv', dtype={'PRO_COM_T': str})
+          acc = pd.read_csv('data/audit_gate_b/population_accessibility.csv', dtype={'PRO_COM_T': str})
+          stops = pd.read_csv('data/audit_gate_b/gtfs_core_stops.csv', dtype={'stop_id': str})
+          edges = pd.read_csv('data/audit_gate_b/walk_graph_edges.csv')
+
+          print('--- calibration by municipality ---')
+          diag = pop.groupby(['PRO_COM_T', 'COMUNE']).agg(
+              worldpop_2020_sum=('worldpop_2020_raw', 'sum'),
+              calibrated_2025=('pop_calibrated_2025', 'sum'),
+              calibration_factor=('calibration_factor_2025', 'first'),
+              populated_cells=('cell_id', 'count'),
+          ).reset_index()
+          print(diag.to_string(index=False))
+          print('core calibrated total:', float(pop['pop_calibrated_2025'].sum()))
+
+          print('\n--- GTFS stop snap failures / largest snaps ---')
+          print(stops.sort_values('snap_distance_m', ascending=False)[
+              ['stop_id','stop_name','COMUNE','snap_distance_m','snap_ok']
+          ].head(12).to_string(index=False))
+
+          print('\n--- cell connector distance quantiles (m) ---')
+          print(acc['connector_distance_m'].quantile([0, .5, .9, .95, .99, 1]).to_string())
+
+          total = float(acc['pop_calibrated_2025'].sum())
+          print('\n--- coverage sensitivity to cell connector cap ---')
+          for cap in (100, 200, 300):
+              vals = []
+              for threshold in (5, 8, 10, 12):
+                  mask = (
+                      (acc['connector_distance_m'] <= cap)
+                      & acc['walk_min_to_nearest_gtfs_stop'].notna()
+                      & (acc['walk_min_to_nearest_gtfs_stop'] <= threshold)
+                  )
+                  pct = 100.0 * float(acc.loc[mask, 'pop_calibrated_2025'].sum()) / total
+                  vals.append(f'{threshold}m={pct:.2f}%')
+              print(f'cap {cap} m: ' + ', '.join(vals))
+
+          print('\n--- DSM-derived edge slope diagnostics ---')
+          abs_slope = edges.loc[edges['in_giant_component'], 'slope_uv'].abs().replace([np.inf, -np.inf], np.nan).dropna()
+          print(abs_slope.quantile([.5, .9, .95, .99, .999, 1]).to_string())
+          print('edges |slope| > 0.30:', int((abs_slope > .30).sum()), 'of', len(abs_slope))
+          PY
+
       - name: Print Gate B summary
         if: always()
         run: |
@@ -58,4 +107,4 @@ jobs:
           fi
 
 # Gate B starts from a fresh Gate A acquisition and never reads legacy synthetic outputs.
-# Trigger revision 3: metric 500 m OSM acquisition buffer.
+# Trigger revision 4: POSAS Età=999 aggregate fix plus sensitivity diagnostics.
