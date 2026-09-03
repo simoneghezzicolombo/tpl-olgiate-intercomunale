@@ -7,7 +7,7 @@ on:
       - 'src/phase2_s8_interchange.py'
       - 'scripts/phase2_build_s8_interchange.py'
       - 'tests/test_phase2_s8_interchange.py'
-      - 'docs/PHASE2_S8_INTERCHANGE_MODEL.md'
+      - 'docs/PHASE2_S8_INTERCHANGE_*.md'
       - '.github/workflows/phase2-s8-interchange.yml'
       - 'outputs/phase2/s8_*'
   pull_request:
@@ -15,7 +15,7 @@ on:
       - 'src/phase2_s8_interchange.py'
       - 'scripts/phase2_build_s8_interchange.py'
       - 'tests/test_phase2_s8_interchange.py'
-      - 'docs/PHASE2_S8_INTERCHANGE_MODEL.md'
+      - 'docs/PHASE2_S8_INTERCHANGE_*.md'
       - '.github/workflows/phase2-s8-interchange.yml'
       - 'outputs/phase2/s8_*'
 
@@ -94,12 +94,29 @@ jobs:
           assert all(r['origin_stop_id'] and r['terminal_stop_id'] for r in events)
           summary=list(csv.DictReader((root/'s8_direction_summary.csv').open(encoding='utf-8')))
           assert len(summary)==2
-          assert sum(int(r['event_count']) for r in summary)==74
-          assert all(float(r['headway_median_min'])>0 for r in summary)
+          by={r['direction']: r for r in summary}
+          assert int(by['MILANO']['event_count'])==37
+          assert int(by['LECCO']['event_count'])==37
+          assert by['MILANO']['first_departure']=='05:26:00'
+          assert by['MILANO']['last_departure']=='23:26:00'
+          assert by['LECCO']['first_departure']=='06:03:00'
+          assert by['LECCO']['last_departure']=='24:03:00'
+          assert by['MILANO']['departure_minute_offsets']=='26|56'
+          assert by['LECCO']['departure_minute_offsets']=='3|33'
+          for row in summary:
+              assert float(row['headway_mean_min'])==30.0
+              assert float(row['headway_median_min'])==30.0
+              assert float(row['headway_min_min'])==30.0
+              assert float(row['headway_p10_min'])==30.0
+              assert float(row['headway_p90_min'])==30.0
+              assert float(row['headway_max_min'])==30.0
+              assert float(row['service_span_min'])==1080.0
           contract=json.load((root/'s8_interchange_contract.json').open(encoding='utf-8'))
           work=contract['work_demand']
+          assert work['work_rows_workers_total']==8754
           assert work['direct_s8_workers']==1882
           assert work['verified_transfer_workers']==0
+          assert work['not_rail_assigned_workers']==6872
           assert work['S8_DIRECT_is_modal_share'] is False
           assert contract['topology_dependency']=='NONE'
           assert contract['transfer_quality']['type']=='CONTINUOUS'
