@@ -60,8 +60,23 @@ CORE_2011_TO_2021 = {
 # destinations are retained under their 2011 codes and explicitly flagged;
 # they are never silently reassigned.
 ADMIN_MAP = {
-    "097066": "097092",
-    "097073": "097092",
+    # Core merger
+    "097066": "097092",  # Perego -> La Valletta Brianza
+    "097073": "097092",  # Rovagnate -> La Valletta Brianza
+    # Other 2011 destinations actually observed from the five core origins.
+    # Map both predecessors of each merger when applicable, even when one has
+    # zero observed core flow, so the crosswalk itself is complete.
+    "097087": "097091",  # Verderio Inferiore -> Verderio
+    "097088": "097091",  # Verderio Superiore -> Verderio
+    "097080": "016215",  # Torre de' Busi: Lecco -> Bergamo province recode (2018)
+    "012028": "012143",  # Cadrezzate -> Cadrezzate con Osmate
+    "012111": "012143",  # Osmate -> Cadrezzate con Osmate
+    "013019": "013250",  # Bellagio (old) -> Bellagio (post-fusion)
+    "013068": "013250",  # Civenna -> Bellagio
+    "015235": "015251",  # Vermezzo -> Vermezzo con Zelo
+    "015246": "015251",  # Zelo Surrigone -> Vermezzo con Zelo
+    "016039": "016253",  # Brembilla -> Val Brembilla
+    "016112": "016253",  # Gerosa -> Val Brembilla
 }
 S8_CODES_2021 = {
     "097002",  # Airuno
@@ -222,8 +237,7 @@ def parse_2011(zip_bytes: bytes) -> tuple[list[tuple[str, str, int]], dict]:
         "reason_filter": "2 = work",
         "location_filter": "1/2 = domestic, excludes 3 = abroad",
         "administrative_harmonisation": {
-            "097066": "097092 Perego -> La Valletta Brianza",
-            "097073": "097092 Rovagnate -> La Valletta Brianza",
+            k: v for k, v in ADMIN_MAP.items()
         },
     }
     return rows, meta
