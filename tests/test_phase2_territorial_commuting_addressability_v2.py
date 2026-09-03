@@ -6,8 +6,10 @@ import json
 import pytest
 
 from scripts.phase2_build_territorial_commuting_addressability_v2 import (
+    load_anchors,
     load_routes,
     parse_json_list,
+    repair_reversible_mojibake,
 )
 from src.phase2_territorial_commuting_addressability_v2 import (
     RouteGeometry,
@@ -155,3 +157,39 @@ def test_route_loader_preserves_legitimate_repeated_anchor(tmp_path) -> None:
 
     routes = load_routes(path, ANCHORS)
     assert routes["LOOP"].anchors == ("H", "B", "H")
+
+
+def test_reversible_mojibake_repair_is_narrow() -> None:
+    repaired, changed = repair_reversible_mojibake("Santa Maria HoÃ¨")
+    assert changed is True
+    assert repaired == "Santa Maria Hoè"
+
+    untouched, changed = repair_reversible_mojibake("Olgiate Molgora")
+    assert changed is False
+    assert untouched == "Olgiate Molgora"
+
+
+def test_anchor_loader_repairs_municipality_display_label(tmp_path) -> None:
+    path = tmp_path / "anchors.csv"
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=["anchor_id", "enabled", "municipalities"],
+        )
+        writer.writeheader()
+        writer.writerow(
+            {
+                "anchor_id": "S",
+                "enabled": "true",
+                "municipalities": "Santa Maria HoÃ¨",
+            }
+        )
+
+    anchors, repairs = load_anchors(path)
+    assert anchors["S"] == frozenset({"Santa Maria Hoè"})
+    assert repairs == [
+        {
+            "source_label": "Santa Maria HoÃ¨",
+            "repaired_label": "Santa Maria Hoè",
+        }
+    ]
