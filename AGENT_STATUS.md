@@ -4,8 +4,8 @@ Questo file è la lavagna corrente di handoff tra agenti. Gli handoff storici de
 
 ## Stato corrente
 
-**Data:** 2026-09-03  
-**Autore:** GPT external reviewer / co-developer  
+**Data:** 2026-09-03
+**Autore:** GPT external reviewer / co-developer
 **Branch:** `gate-e-workstream`
 
 - **Gate A — provenance:** **PASS**. Commit validato `019a12806af09d744f6f22032d980441ae60dc06`.
@@ -14,7 +14,7 @@ Questo file è la lavagna corrente di handoff tra agenti. Gli handoff storici de
 - **Gate D — route integrity:** **PASS**. Commit computazionale validato `7c220f7586d0f6e5cccd14a2d518be52eb1c4a55`; CI run `33746091690`; artifact `9891607118`.
 - **Gate E — service math:** **PASS**. Commit computazionale validato `e2d096ca929c92da0d8a4abdacde827445e208bd`; CI run `33755350763`; job `100648344246`; **130/130 test PASS**.
 
-**Verdetto Gate E autorevole:** `docs/GATE_E_PASS.md`.  
+**Verdetto Gate E autorevole:** `docs/GATE_E_PASS.md`.
 **Prossimo checkpoint:** **GATE F — recommendation UNLOCKED**.
 
 ## Gate E handoff
