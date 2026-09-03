@@ -1,0 +1,27 @@
+{
+  "status": "PASS_PASSENGER_JOURNEY_UNIVERSE_V2_BUILD",
+  "contract": "PHASE2_PASSENGER_JOURNEY_UNIVERSE_V2",
+  "source_scope": "ISTAT_2021_WORK_COMMUTING_ONLY",
+  "source_resolution": "MUNICIPAL_OD",
+  "journey_count": 50,
+  "origin_municipality_count": 5,
+  "destination_municipality_count": 10,
+  "demand_weight_sum": 1882.0,
+  "expected_demand_weight_sum": 1882.0,
+  "sensitivity_case_count": 81,
+  "full_gjt_ready": false,
+  "spatial_allocation_performed": false,
+  "population_proportional_worker_allocation_performed": false,
+  "nearest_stop_imputation_performed": false,
+  "S8_DIRECT_is_modal_share": false,
+  "fine_walking_access_combined_with_empirical_OD": false,
+  "downstream_requirement": "EXPLICIT_SPATIAL_ALLOCATION_LINEAGE_BEFORE_FULL_PASSENGER_GJT",
+  "lineage": {
+    "addressability_sha256": "50d4e146a6ac3957b9ee8b8f71bb1592a06b09a8dc05cdf475186bc910864693",
+    "od_validation_sha256": "60c899529e006f9447dd0b285d0bbb0c75d928c34c9dfc7366e2de98a071fa89",
+    "sensitivity_config_sha256": "fabc1cc8c8d8300592dd657869fcf021521dea0b398388dd4697e458bdf4c7c2",
+    "journey_output_sha256": "ade46c847032c4d5da86a61a3e8b413269320fe4aba1a96121dc12e052de4840",
+    "sensitivity_output_sha256": "6ad8b1e8d92d4812c979ddfbab8673e372d63f16412c3bdde3330e422c3525ee"
+  },
+  "sensitivity_contract": "PHASE2_PASSENGER_GJT_SENSITIVITY_V2"
+}
