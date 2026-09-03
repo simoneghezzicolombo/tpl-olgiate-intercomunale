@@ -84,6 +84,7 @@ jobs:
           assert validation['matching_contract']['edit_distance_fuzzy_matching_used'] is False
           assert validation['matching_contract']['forced_nearest_coordinate_matching_used'] is False
           assert validation['matching_contract']['manual_stop_alias_whitelist_used'] is False
+          assert validation['matching_contract']['coordinate_distance_tolerance_for_equivalence_used'] is False
           assert validation['historical_gtfs_semantics']['used_to_assert_current_service_activation'] is False
           assert validation['historical_gtfs_semantics']['used_to_fill_current_unpublished_times'] is False
           assert validation['v1_cluster_semantics']['external_or_not_in_v1_stops_are_not_force_joined'] is True
@@ -106,13 +107,24 @@ jobs:
       - name: Static anti-shortcut guard
         shell: bash
         run: |
-          ! grep -R "np.random\|numpy.random\|import random\|from random" \
-            src/phase2_current_service_stop_identity.py scripts/phase2_build_current_service_stop_identity.py
-          ! grep -R "fuzzywuzzy\|rapidfuzz\|SequenceMatcher\|get_close_matches" \
-            src/phase2_current_service_stop_identity.py scripts/phase2_build_current_service_stop_identity.py
-          ! grep -R "current_service_baseline.csv\|scripts/05_current_service.py" \
-            src/phase2_current_service_stop_identity.py scripts/phase2_build_current_service_stop_identity.py
-          git diff --check
+          python - <<'PY'
+          from pathlib import Path
+          paths = [
+              Path('src/phase2_current_service_stop_identity.py'),
+              Path('scripts/phase2_build_current_service_stop_identity.py'),
+          ]
+          text='\n'.join(path.read_text(encoding='utf-8') for path in paths)
+          forbidden = [
+              'np.random', 'numpy.random', 'import random', 'from random',
+              'fuzzywuzzy', 'rapidfuzz', 'SequenceMatcher', 'get_close_matches',
+              'current_service_baseline.csv', 'scripts/05_current_service.py',
+          ]
+          found=[token for token in forbidden if token in text]
+          assert not found, f'Forbidden shortcut tokens: {found}'
+          PY
+          # Check committed workstream changes only. Production evidence is intentionally
+          # dirty at this point and is persisted in the following step.
+          git diff --check dbda7ee2a6f2c3b5f6bfc7d4c6e0e936b2e26189...HEAD
 
       - name: Persist audited generated evidence
         if: github.event_name == 'push' && github.ref == 'refs/heads/phase2-current-service-stop-identity'
