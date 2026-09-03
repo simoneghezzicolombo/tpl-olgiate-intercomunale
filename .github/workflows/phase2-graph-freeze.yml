@@ -69,9 +69,11 @@ jobs:
             echo 'PHASE2_GRAPH_BOOTSTRAP_USED=false' >> "$GITHUB_ENV"
           fi
 
-      - name: Require source-closed rebuild after bootstrap epoch is committed
+      - name: Require source-closed clean-checkout state
         run: |
           test "${PHASE2_GRAPH_BOOTSTRAP_USED}" = "false"
+          test ! -e tools/phase2_graph_bootstrap
+          test ! -e .github/workflows/phase2-graph-bootstrap.yml
 
       - name: Strong frozen-graph tests
         run: python -m pytest -q tests/test_phase2_frozen_graph.py
