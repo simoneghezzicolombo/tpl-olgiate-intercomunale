@@ -5,13 +5,13 @@ on:
     branches: [phase2-building-population]
     paths:
       - src/phase2_building_population.py
-      - src/phase2_dbgt_footprints.py
+      - src/phase2_dbgt_composite.py
       - scripts/phase2_build_building_population.py
       - scripts/phase2_run_building_population.py
       - scripts/phase2_run_building_population_v2.py
-      - scripts/phase2_run_building_population_v3.py
+      - scripts/phase2_run_building_population_v5.py
       - tests/test_phase2_building_population.py
-      - tests/test_phase2_dbgt_footprints.py
+      - tests/test_phase2_dbgt_composite.py
       - .github/workflows/phase2-building-population.yml
   workflow_dispatch:
 
@@ -38,37 +38,37 @@ jobs:
           python -m pip install --upgrade
           pandas pytest requests geopandas pyogrio shapely pyproj openpyxl
           networkx scipy
-      - name: Compile production and allocation core
+      - name: Compile authoritative production and allocation core
         run: |
           python -m py_compile src/phase2_building_population.py
-          python -m py_compile src/phase2_dbgt_footprints.py
+          python -m py_compile src/phase2_dbgt_composite.py
           python -m py_compile scripts/phase2_build_building_population.py
           python -m py_compile scripts/phase2_run_building_population.py
           python -m py_compile scripts/phase2_run_building_population_v2.py
-          python -m py_compile scripts/phase2_run_building_population_v3.py
+          python -m py_compile scripts/phase2_run_building_population_v5.py
       - name: Building-population focused tests
         run: >-
           PYTHONPATH=. pytest -q
           tests/test_phase2_building_population.py
-          tests/test_phase2_dbgt_footprints.py
+          tests/test_phase2_dbgt_composite.py
       - name: Reject synthetic and random active implementation
         run: |
           ! grep -R --line-number -E 'np\.random|random\.' \
             src/phase2_building_population.py \
-            src/phase2_dbgt_footprints.py \
+            src/phase2_dbgt_composite.py \
             scripts/phase2_build_building_population.py \
             scripts/phase2_run_building_population.py \
             scripts/phase2_run_building_population_v2.py \
-            scripts/phase2_run_building_population_v3.py \
+            scripts/phase2_run_building_population_v5.py \
             tests/test_phase2_building_population.py \
-            tests/test_phase2_dbgt_footprints.py
+            tests/test_phase2_dbgt_composite.py
           ! grep -R --line-number -E 'PLACEHOLDER|synthetic population|hardcoded population' \
             src/phase2_building_population.py \
-            src/phase2_dbgt_footprints.py \
+            src/phase2_dbgt_composite.py \
             scripts/phase2_build_building_population.py \
             scripts/phase2_run_building_population.py \
             scripts/phase2_run_building_population_v2.py \
-            scripts/phase2_run_building_population_v3.py
+            scripts/phase2_run_building_population_v5.py
       - name: Fetch checksum-validated Gate B evidence artifact
         env:
           GH_TOKEN: ${{ github.token }}
@@ -93,7 +93,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          PYTHONPATH=. python scripts/phase2_run_building_population_v3.py \
+          PYTHONPATH=. python scripts/phase2_run_building_population_v5.py \
             --gate-b-dir /tmp/gate_b \
             --core-boundaries data/raw/boundaries/comuni_core_istat_2026.geojson \
             --output-dir outputs/phase2 \
@@ -112,6 +112,7 @@ jobs:
           m = json.loads(Path('outputs/phase2/building_population_source_manifest.json').read_text())
           s23 = m['sources']['istat_2023_sections']
           fp = m['sources']['lombardia_dbgt_footprints']
+          dbgt = m['sources']['lombardia_dbgt_attributes']
           assert v['status'] == 'PASS_BUILDING_POPULATION_BUILD'
           assert v['core_posas_2025_total'] == 22914.0
           assert v['all_selected_municipalities_reconcile_exactly'] is True
@@ -121,14 +122,23 @@ jobs:
           assert v['legacy_synthetic_population_used'] is False
           assert v['building_resident_estimates_observed'] is False
           assert v['building_resident_estimate_status'] == 'MODEL_OUTPUT_DASYMETRIC_BUILDING_POPULATION'
-          assert v['dbgt_building_geometry_status'] == 'DERIVED_UNION_OF_ACTIVE_DBGT_FOOTPRINT_PARTS_BY_CLASSREF'
+          assert v['dbgt_relational_identity_status'] == 'DERIVED_COMPOSITE_DBGT_KEY_COD_CONS_PLUS_LOCAL_ID'
+          assert v['dbgt_cross_delivery_local_id_join_allowed'] is False
+          assert v['dbgt_building_geometry_status'] == 'DERIVED_UNION_OF_ACTIVE_DBGT_FOOTPRINT_PARTS_BY_DELIVERY_AND_CLASSREF'
           assert v['dbgt_raw_footprint_source_status'] == 'FACT_DBGT_ACTIVE_FOOTPRINT_SOURCE_PART'
-          assert v['dbgt_footprint_random_used'] is False
-          assert v['dbgt_footprint_sampling_used'] is False
+          assert v['dbgt_composite_edifc_semantic_conflicts'] == 0
+          assert v['dbgt_composite_volume_numeric_conflicts'] == 0
+          assert v['dbgt_buildings_missing_delivery_scoped_edifc'] == 0
+          assert v['dbgt_composite_random_used'] is False
+          assert v['dbgt_composite_sampling_used'] is False
           assert fp['random_used'] is False and fp['sampling_used'] is False
-          assert fp['raw_linked_active_footprint_rows'] - fp['extra_active_footprint_rows_collapsed_by_union'] == fp['normalized_building_classref_count']
+          assert fp['raw_selected_active_footprint_rows'] - fp['extra_active_footprint_rows_collapsed_by_composite_union'] == fp['normalized_composite_building_count']
+          assert dbgt['normalized_composite_edifc_records'] == fp['normalized_composite_building_count']
+          assert dbgt['composite_edifc_semantic_conflicts'] == 0
+          assert dbgt['composite_volume_numeric_conflicts'] == 0
           assert s23['municipality_field_or_method'].startswith('FACT_FIELD:PROCOM')
           assert s23['municipality_section_id_consistency'] == 'PASS'
+          assert m['dbgt_relational_identity']['cross_delivery_local_id_join_allowed'] is False
           assert v['final_stop_ranking_produced'] is False
           assert v['final_network_selected'] is False
           assert v['headway_modified'] is False
@@ -137,6 +147,8 @@ jobs:
           for threshold in ('5', '8', '10', '12'):
               assert threshold in v['core_v2_coverage_pct_total_posas']
               assert threshold in v['core_v1_coverage_pct_worldpop_posas']
+              assert 0 <= v['core_v2_coverage_pct_total_posas'][threshold] <= 100
+              assert 0 <= v['core_v1_coverage_pct_worldpop_posas'][threshold] <= 100
           print(json.dumps(v, indent=2))
           PY
           (cd outputs/phase2 && sha256sum -c building_population_checksums.sha256)
