@@ -7,11 +7,14 @@ on:
       - 'src/service_math.py'
       - 'src/headway_audit.py'
       - 'src/fleet_audit.py'
+      - 'src/operating_envelope.py'
       - 'scripts/10_service_simulation.py'
       - 'scripts/gate_e_sensitivity.py'
       - 'scripts/gate_e_build_input.py'
       - 'scripts/gate_e_headway_audit.py'
       - 'scripts/gate_e_fleet_audit.py'
+      - 'scripts/gate_e_gate_c_baseline.py'
+      - 'scripts/gate_e_operating_envelope.py'
       - 'tests/test_gate_e_*.py'
       - 'tests/test_cycle_times.py'
       - 'schemas/gate_e_*.csv'
@@ -25,11 +28,14 @@ on:
       - 'src/service_math.py'
       - 'src/headway_audit.py'
       - 'src/fleet_audit.py'
+      - 'src/operating_envelope.py'
       - 'scripts/10_service_simulation.py'
       - 'scripts/gate_e_sensitivity.py'
       - 'scripts/gate_e_build_input.py'
       - 'scripts/gate_e_headway_audit.py'
       - 'scripts/gate_e_fleet_audit.py'
+      - 'scripts/gate_e_gate_c_baseline.py'
+      - 'scripts/gate_e_operating_envelope.py'
       - 'tests/test_gate_e_*.py'
       - 'tests/test_cycle_times.py'
       - 'schemas/gate_e_*.csv'
@@ -62,15 +68,35 @@ jobs:
       - name: Compile
         run: >-
           python -m py_compile
-          src/service_math.py src/headway_audit.py src/fleet_audit.py
+          src/service_math.py src/headway_audit.py src/fleet_audit.py src/operating_envelope.py
           scripts/10_service_simulation.py scripts/gate_e_sensitivity.py
           scripts/gate_e_build_input.py scripts/gate_e_headway_audit.py
-          scripts/gate_e_fleet_audit.py
+          scripts/gate_e_fleet_audit.py scripts/gate_e_gate_c_baseline.py
+          scripts/gate_e_operating_envelope.py
       - name: Gate E tests
         run: pytest -q tests/test_gate_e_*.py tests/test_cycle_times.py
+      - name: Gate C PASS pinned integration
+        shell: bash
+        run: |
+          GATE_C_PASS=dcc3e75ae3b4f4ea5170f48e85345b83620c5536
+          git cat-file -e "$GATE_C_PASS^{commit}"
+          git show "$GATE_C_PASS:outputs/gate_c/live_bus_timetables_2026-09-03.json" > /tmp/gate_c_bus.json
+          git show "$GATE_C_PASS:outputs/gate_c/live_trenord_2026-09-03.json" > /tmp/gate_c_rail.json
+          python scripts/gate_e_gate_c_baseline.py \
+            --bus-json /tmp/gate_c_bus.json \
+            --rail-json /tmp/gate_c_rail.json \
+            --gate-c-commit "$GATE_C_PASS" \
+            --output /tmp/gate_e_gate_c_baseline.csv
+          python - <<'PY'
+          import csv
+          rows = list(csv.DictReader(open('/tmp/gate_e_gate_c_baseline.csv', encoding='utf-8')))
+          assert {r['service_id'] for r in rows} == {'D184', 'D185', 'D184+D185', 'S8@S01514'}
+          assert all(r['annualization_status'] == 'FORBIDDEN_FROM_SINGLE_DATE_BASELINE' for r in rows)
+          assert all(r['gate_c_commit'] == 'dcc3e75ae3b4f4ea5170f48e85345b83620c5536' for r in rows)
+          PY
       - name: Benchmark audit
         run: python scripts/10_service_simulation.py --benchmark-only --budget-output /tmp/gate_e_budget.csv
-      - name: Missing upstream input must block
+      - name: Missing integrated input must block
         shell: bash
         run: |
           set +e
