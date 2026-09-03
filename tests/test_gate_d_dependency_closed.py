@@ -56,12 +56,8 @@ def test_non_loop_existing_corridor_alternatives_are_present():
 def test_feed_without_target_routes_returns_schema_correct_empty_geodataframe():
     feed = {
         "feed_label": "OTHER_OPERATOR",
-        "routes": pd.DataFrame(
-            {"route_id": ["R1"], "route_short_name": ["UNRELATED"]}
-        ),
-        "trips": pd.DataFrame(
-            {"route_id": ["R1"], "trip_id": ["T1"], "shape_id": ["S1"]}
-        ),
+        "routes": pd.DataFrame({"route_id": ["R1"], "route_short_name": ["UNRELATED"]}),
+        "trips": pd.DataFrame({"route_id": ["R1"], "trip_id": ["T1"], "shape_id": ["S1"]}),
         "shapes": pd.DataFrame(
             {
                 "shape_id": ["S1", "S1"],
@@ -75,6 +71,64 @@ def test_feed_without_target_routes_returns_schema_correct_empty_geodataframe():
     assert result.empty
     assert result.crs.to_epsg() == 4326
     assert "geometry" in result.columns
+
+
+def test_motor_vehicle_no_is_excluded_unless_bus_override_exists():
+    denied = pd.Series({
+        "highway": "residential",
+        "other_tags": '"motor_vehicle"=>"no"',
+    })
+    eligible, reasons = module.bus_eligibility(denied)
+    assert not eligible
+    assert reasons == ["explicit_motor_vehicle_restriction"]
+
+    bus_allowed = pd.Series({
+        "highway": "residential",
+        "other_tags": '"motor_vehicle"=>"no","bus"=>"yes"',
+    })
+    eligible, _ = module.bus_eligibility(bus_allowed)
+    assert eligible
+
+
+def test_vehicle_no_is_excluded_unless_psv_override_exists():
+    denied = pd.Series({
+        "highway": "residential",
+        "other_tags": '"vehicle"=>"no"',
+    })
+    eligible, reasons = module.bus_eligibility(denied)
+    assert not eligible
+    assert reasons == ["explicit_vehicle_restriction"]
+
+    psv_allowed = pd.Series({
+        "highway": "residential",
+        "other_tags": '"vehicle"=>"no","psv"=>"designated"',
+    })
+    eligible, _ = module.bus_eligibility(psv_allowed)
+    assert eligible
+
+
+def test_bus_oneway_override_takes_precedence_over_general_oneway():
+    direction, warning = module.bus_oneway_direction(
+        {"oneway": "yes", "oneway:bus": "no"}
+    )
+    assert direction == 0
+    assert warning is None
+
+    direction, warning = module.bus_oneway_direction(
+        {"oneway": "no", "oneway:psv": "-1"}
+    )
+    assert direction == -1
+    assert warning is None
+
+
+def test_destination_access_is_not_silently_treated_as_unrestricted():
+    row = pd.Series({
+        "highway": "residential",
+        "other_tags": '"access"=>"destination"',
+    })
+    eligible, uncertainty = module.bus_eligibility(row)
+    assert eligible
+    assert "conditional_access=destination" in uncertainty
 
 
 def test_dependency_closed_summary_does_not_claim_a_route_recommendation():
@@ -98,6 +152,7 @@ def test_dependency_closed_summary_does_not_claim_a_route_recommendation():
     assert summary["gate_c_status"] == "PASS"
     assert summary["gate_c_dependency"] == "RESOLVED"
     assert summary["non_loop_alternatives_status"] == "TESTED_SAME_GRAPH_NOT_FIGURE8"
+    assert summary["bus_access_policy"].startswith("ACCESS_BUS_PSV")
     assert summary["verdict"] == "READY_FOR_GATE_D_REVIEW"
     assert "recommend" not in summary["verdict"].lower()
 
