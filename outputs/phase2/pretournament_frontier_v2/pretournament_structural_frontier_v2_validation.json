@@ -1,0 +1,57 @@
+{
+  "contract": "PHASE2_PRETOURNAMENT_STRUCTURAL_FRONTIER_V2",
+  "decision_budget_selected": false,
+  "epistemic_note": "Pareto membership is a topology-level structural classification, not a ranking. It uses only certified 10-minute resident access, worst-municipality access and municipal work-OD structural addressability among scenarios with at least one service policy feasible under the validated 111,419 bus-km/year reference envelope. The reference envelope is a screening reference, not a declared final decision budget. Non-frontier scenarios remain eligible for later plan-level evaluation because service frequency, runtime, joint timetable/S8 phase and robustness can change the final result.",
+  "extension_frontier_semantics": "UPPER_BOUND_ALL_OPTIONAL_EXTENSION_ANCHORS_PRESENT_NOT_EXTENSION_SHARE_OR_TIMETABLE_SELECTION",
+  "full_passenger_gjt_calculated": false,
+  "lineage": {
+    "access_sha256": "4cb53431c40a19b39c0357f5358400a7fadc6364c53f7545787d852bb87e8eca",
+    "access_validation_sha256": "b9e1f26506bda9ad2976b0bb4925388117ef69f9ec3dc22b4a4a70f12a53d00a",
+    "extension_frontier_output_sha256": "72a52c4eab19c23ecba3427bdf9b8624815dea0646a25efda78a7051f5b1f29b",
+    "joined_output_sha256": "d9b90d4f847843e8c2ee04e08d2bd4f9d9c92f3b218b5619a0dc81e2bf7d398d",
+    "public_frontier_output_sha256": "72a52c4eab19c23ecba3427bdf9b8624815dea0646a25efda78a7051f5b1f29b",
+    "service_feasibility_sha256": "ee15939cefd4ec2a67381bf3aeb7dc7936d74041bf0cab33998dd1bf2296c8e6",
+    "service_validation_sha256": "134a71198053369ff53c669d609f49b07eb1f580a3c3b328f50989bb64a990ed",
+    "territorial_sha256": "08f318b8f37421460ce3939814146e007366f3959429cddfc3f9b1cf4528f1d5",
+    "territorial_validation_sha256": "d56fc349ff62b81dc6d4026e9d15fd5c76a62181da17637e5cecc89def9d5361",
+    "union_output_sha256": "72a52c4eab19c23ecba3427bdf9b8624815dea0646a25efda78a7051f5b1f29b"
+  },
+  "nonfrontier_pruning_authorized": false,
+  "nonfrontier_scenarios_discarded_from_final_tournament": false,
+  "pareto_objectives": [
+    "MAX_PUBLIC_10MIN_LOCATED_POPULATION_COVERAGE_SHARE",
+    "MAX_PUBLIC_10MIN_WORST_MUNICIPALITY_COVERAGE_SHARE",
+    "MAX_TERRITORIAL_STRUCTURALLY_ADDRESSABLE_WORKER_OD_MASS_UPPER_BOUND"
+  ],
+  "primary_selected": false,
+  "public_frontier_family_counts": {
+    "interlined_figure8": 7,
+    "two_independent_loops": 7
+  },
+  "public_frontier_scenario_count": 14,
+  "public_frontier_unique_metric_point_count": 7,
+  "public_plus_extensions_upper_bound_frontier_family_counts": {
+    "interlined_figure8": 7,
+    "two_independent_loops": 7
+  },
+  "public_plus_extensions_upper_bound_frontier_scenario_count": 14,
+  "public_plus_extensions_upper_bound_frontier_unique_metric_point_count": 7,
+  "reference_budget_feasible_scenario_count": 69186,
+  "reference_budget_screening_cap_annual_bus_km": 111419.0,
+  "reference_budget_screening_only": true,
+  "runner_up_selected": false,
+  "s8_feeder_metric_used_in_pareto": false,
+  "s8_phase_selected": false,
+  "scenario_count": 100000,
+  "service_extrema_semantics": "DESCRIPTIVE_INDEPENDENT_EXTREMA_ACROSS_REFERENCE_FEASIBLE_POLICIES_NOT_ONE_JOINT_PLAN",
+  "service_policy_selected": false,
+  "status": "PASS_PRETOURNAMENT_STRUCTURAL_FRONTIER_V2_BUILD",
+  "structural_frontier_union_family_counts": {
+    "interlined_figure8": 7,
+    "two_independent_loops": 7
+  },
+  "structural_frontier_union_scenario_count": 14,
+  "topology_ranked": false,
+  "topology_selected": false,
+  "weighted_composite_score_used": false
+}
