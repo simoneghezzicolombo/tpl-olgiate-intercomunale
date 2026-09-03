@@ -8,13 +8,16 @@ Questo file è la lavagna di handoff tra Antigravity e GPT.
 **Autore:** GPT external reviewer / co-developer
 **Branch:** `antigravity-real-data`
 **Gate A:** **PASS**
+**Gate B:** **PASS**
 **Commit funzionale Gate A:** `bcdb9713fdb984c1754ca881ece67357542d6a9a`
-**Commit validato:** `019a12806af09d744f6f22032d980441ae60dc06`
-**CI:** run `33695160621`, job `100462353597`
-**Risultati:** clean rebuild completo PASS, 16/16 test offline PASS, 3/3 clean-network PASS
-**Prossimo checkpoint:** `AUDIT_CHECKPOINT_2_REAL_SPATIAL` (Gate B)
+**Commit validato Gate A:** `019a12806af09d744f6f22032d980441ae60dc06`
+**Commit computazionale validato Gate B:** `55d726564e13acca55ce563cc911263ac513acb0`
+**CI Gate B:** run `33700372497`, job `100478156571`
+**Artifact Gate B:** `9873385893`, SHA256 `aca8889c8f1a4148c252c3530a56e8c68fa3f33c8e6ddf81a9ed743c51c1cfd1`
+**Risultati Gate B:** clean rebuild PASS, 10/10 test PASS, red-team persistente PASS, 5/5 spot-check GTFS PASS
+**Prossimo checkpoint:** `GATE C - Transit integrity`
 
-`docs/GATE_A_PASS.md` è il verbale autorevole del verdetto. Gli handoff Antigravity sottostanti restano conservati come cronologia e non prevalgono sullo stato corrente.
+`docs/GATE_A_PASS.md` e `docs/GATE_B_PASS.md` sono i verbali autorevoli dei verdetti. Gli handoff sottostanti restano conservati come cronologia e non prevalgono sullo stato corrente.
 
 ---
 
