@@ -9,8 +9,12 @@ on:
       - scripts/gate_d_real_road_audit.py
       - scripts/gate_d_turn_restrictions.py
       - scripts/gate_d_structural_candidates.py
+      - scripts/gate_d_structural_candidates_v2.py
+      - scripts/gate_d_slope_audit.py
       - tests/test_gate_d_route_integrity.py
       - tests/test_gate_d_structural_candidates.py
+      - tests/test_gate_d_anchor_and_slope.py
+      - data/gate_d_structural_road_constraints.csv
       - .github/workflows/gate-d-road-route-integrity.yml
   workflow_dispatch:
 
@@ -29,7 +33,7 @@ jobs:
       - name: Install Gate D dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pandas geopandas shapely networkx pyogrio pytest requests
+          python -m pip install pandas geopandas shapely networkx pyogrio pytest requests rasterio scipy
       - name: Compile Gate D pipeline
         run: |
           python -m py_compile scripts/08_candidate_routes.py
@@ -37,10 +41,13 @@ jobs:
           python -m py_compile scripts/gate_d_real_road_audit.py
           python -m py_compile scripts/gate_d_turn_restrictions.py
           python -m py_compile scripts/gate_d_structural_candidates.py
+          python -m py_compile scripts/gate_d_structural_candidates_v2.py
+          python -m py_compile scripts/gate_d_slope_audit.py
           python -m py_compile tests/test_gate_d_route_integrity.py
           python -m py_compile tests/test_gate_d_structural_candidates.py
+          python -m py_compile tests/test_gate_d_anchor_and_slope.py
       - name: Run Gate D adversarial tests
-        run: python -m pytest -v tests/test_gate_d_route_integrity.py tests/test_gate_d_structural_candidates.py
+        run: python -m pytest -v tests/test_gate_d_route_integrity.py tests/test_gate_d_structural_candidates.py tests/test_gate_d_anchor_and_slope.py
       - name: Check patch whitespace
         run: git diff --check 549198743e7265b333da565ce6990f9241cfd1fd..HEAD
       - name: Fail if legacy hardcoded route outputs are regenerated
@@ -82,18 +89,27 @@ jobs:
               assert hashlib.sha256(target.read_bytes()).hexdigest() == digest
               print(f'{dataset_id}: verified {digest} -> {target}')
           PY
+      - name: Verify official S8 station source and Gate B DEM
+        run: |
+          test -s data/raw/gtfs/rail_trenord/stops.txt
+          grep '^S01514,Olgiate-Calco-Brivio,' data/raw/gtfs/rail_trenord/stops.txt
+          test -s data/raw/dem/copernicus_dem_core_raw.tif
       - name: Install spatial and network dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pandas geopandas shapely networkx pyogrio requests
+          python -m pip install pandas geopandas shapely networkx pyogrio requests rasterio scipy
       - name: Acquire tiled OSM and run structural candidate audit
-        run: python scripts/gate_d_structural_candidates.py
+        run: python scripts/gate_d_structural_candidates_v2.py
+      - name: Derive Copernicus DSM grade diagnostics
+        run: python scripts/gate_d_slope_audit.py
       - name: Print structural numerical evidence
         if: always()
         run: |
           if [ -f data/audit_gate_d/structural_candidate_summary.json ]; then cat data/audit_gate_d/structural_candidate_summary.json; fi
           if [ -f data/audit_gate_d/structural_candidate_metrics.csv ]; then echo '--- STRUCTURAL CANDIDATES ---'; cat data/audit_gate_d/structural_candidate_metrics.csv; fi
+          if [ -f data/audit_gate_d/structural_candidate_slope_audit.csv ]; then echo '--- DSM GRADE DIAGNOSTICS ---'; cat data/audit_gate_d/structural_candidate_slope_audit.csv; fi
           if [ -f data/audit_gate_d/structural_anchor_evidence.csv ]; then echo '--- ANCHOR EVIDENCE ---'; cat data/audit_gate_d/structural_anchor_evidence.csv; fi
+          if [ -f data/audit_gate_d/station_anchor_diagnostic.csv ]; then echo '--- STATION ANCHOR DIAGNOSTIC ---'; cat data/audit_gate_d/station_anchor_diagnostic.csv; fi
           if [ -f data/audit_gate_d/structural_gtfs_baseline_patterns.csv ]; then echo '--- GTFS BASELINES ---'; cat data/audit_gate_d/structural_gtfs_baseline_patterns.csv; fi
           if [ -f data/audit_gate_d/osm_turn_restrictions_summary.json ]; then echo '--- TURN RESTRICTIONS ---'; cat data/audit_gate_d/osm_turn_restrictions_summary.json; fi
       - uses: actions/upload-artifact@v4
