@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Final audited runner for the Phase-2 candidate-stop universe.
 
-It preserves the existing materialisation pipeline but fixes two audit findings:
+It preserves the existing materialisation pipeline but fixes audit findings:
 1. catchment-Jaccard pruning keeps cellsets aligned after deterministic coordinate sort;
 2. each physical existing-stop cluster uses all snapped official GTFS records as
-   walking-network sources, rather than one representative record.
+   walking-network sources, rather than one representative record;
+3. known UTF-8-as-Latin-1 mojibake is removed from generated text labels only.
 """
 from __future__ import annotations
 
@@ -22,6 +23,13 @@ sys.path.insert(0, str(ROOT))
 from src.phase2_stop_cluster import walk_distances_to_stop_records  # noqa: E402
 from src.phase2_stop_core import THRESHOLDS, cell_membership, load_walk_graph, sha256  # noqa: E402
 from src.phase2_stop_metrics_v2 import geometric_overlap_prune  # noqa: E402
+
+TEXT_REPLACEMENTS = {
+    "Ã€": "À", "Ãˆ": "È", "Ã‰": "É", "ÃŒ": "Ì", "Ã’": "Ò", "Ã™": "Ù",
+    "Ã ": "à", "Ã¨": "è", "Ã©": "é", "Ã¬": "ì", "Ã²": "ò", "Ã¹": "ù",
+    "Ã§": "ç", "Ãª": "ê", "Ã´": "ô", "Â°": "°", "Âª": "ª",
+}
+SUSPICIOUS_TEXT_MARKERS = ("Ã", "Â")
 
 
 def _load_base_runner():
@@ -77,6 +85,24 @@ def _rebuild_existing_cluster_catchments(gate_b_dir: Path, output_dir: Path) -> 
     pd.DataFrame(cell_rows).to_csv(output_dir / "existing_stop_catchment_cells_12min.csv", index=False)
 
 
+def _normalize_generated_text_labels(output_dir: Path) -> None:
+    """Normalize labels only; fail if suspicious mojibake remains in text outputs."""
+    for path in sorted(output_dir.iterdir()):
+        if path.suffix.lower() not in {".csv", ".geojson", ".json"}:
+            continue
+        if not path.name.startswith(
+            ("existing_", "accessibility_", "settlement_", "proposed_", "interchange_", "candidate_", "stop_universe_")
+        ):
+            continue
+        text = path.read_text(encoding="utf-8")
+        for broken, fixed in TEXT_REPLACEMENTS.items():
+            text = text.replace(broken, fixed)
+        if any(marker in text for marker in SUSPICIOUS_TEXT_MARKERS):
+            sample = next(line for line in text.splitlines() if any(marker in line for marker in SUSPICIOUS_TEXT_MARKERS))
+            raise RuntimeError(f"Unresolved generated-text mojibake in {path}: {sample[:240]}")
+        path.write_text(text, encoding="utf-8", newline="")
+
+
 def _rewrite_validation_and_checksums(output_dir: Path) -> None:
     validation_path = output_dir / "stop_universe_validation.json"
     validation = json.loads(validation_path.read_text(encoding="utf-8"))
@@ -84,6 +110,7 @@ def _rewrite_validation_and_checksums(output_dir: Path) -> None:
         "MULTI_SOURCE_ALL_SNAPPED_GTFS_RECORDS_PER_40M_CLUSTER"
     )
     validation["pruning_cellset_alignment"] = "STABLE_PRE_SORT_KEYS"
+    validation["text_label_normalization"] = "KNOWN_UTF8_AS_LATIN1_MOJIBAKE_ONLY"
     validation["final_network_selected"] = False
     validation["headway_modified"] = False
     validation["timetable_modified"] = False
@@ -122,6 +149,7 @@ def main() -> int:
     result = base.main()
     output_dir = Path(known.output_dir)
     _rebuild_existing_cluster_catchments(Path(known.gate_b_dir), output_dir)
+    _normalize_generated_text_labels(output_dir)
     _rewrite_validation_and_checksums(output_dir)
     return int(result or 0)
 
