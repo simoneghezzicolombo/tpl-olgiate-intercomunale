@@ -1,6 +1,10 @@
+from pathlib import Path
+import sys
+
 import pandas as pd
 import pytest
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.gate_f_pareto import Objective, blocker_labels, decision_summary, identify_pareto_frontier, leave_one_objective_out_robustness
 
 
