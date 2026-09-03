@@ -34,7 +34,6 @@ def main() -> int:
     p.add_argument("--manifest-output", type=Path, default=Path("outputs/gate_f_v2/assembly_manifest.json"))
     args = p.parse_args()
     try:
-        paths = {key: _inside_repo(getattr(args, key.replace("gate_", "gate_"))) for key in []}
         catalog = _inside_repo(args.catalog)
         gate_b = _inside_repo(args.gate_b)
         gate_c = _inside_repo(args.gate_c)
