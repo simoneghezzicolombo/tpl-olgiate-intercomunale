@@ -97,11 +97,15 @@ def test_hub_filter_excludes_one_way_or_disconnected_anchors() -> None:
     matrix = ReducedPathMatrix([
         PathLeg("H", "A", 1.0, 2.0),
         PathLeg("A", "H", 1.1, 2.2),
+        PathLeg("H", "E", 1.2, 2.1),
+        PathLeg("E", "H", 1.3, 2.3),
+        PathLeg("H", "F", 1.4, 2.4),
+        PathLeg("F", "H", 1.5, 2.5),
         PathLeg("H", "B", 1.0, 2.0),
         PathLeg("C", "H", 1.0, 2.0),
     ])
     kept, excluded = hub_bidirectional_anchor_filter(
-        hub="H", anchors=["H", "A", "B", "C", "D"], matrix=matrix
+        hub="H", anchors=["H", "A", "B", "C", "D", "E", "F"], matrix=matrix
     )
-    assert kept == ["H", "A"]
+    assert kept == ["H", "A", "E", "F"]
     assert excluded == ["B", "C", "D"]
