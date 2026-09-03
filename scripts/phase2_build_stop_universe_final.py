@@ -84,6 +84,11 @@ def _rewrite_validation_and_checksums(output_dir: Path) -> None:
         "MULTI_SOURCE_ALL_SNAPPED_GTFS_RECORDS_PER_40M_CLUSTER"
     )
     validation["pruning_cellset_alignment"] = "STABLE_PRE_SORT_KEYS"
+    validation["final_network_selected"] = False
+    validation["headway_modified"] = False
+    validation["timetable_modified"] = False
+    validation["budget_modified"] = False
+    validation["ranking_produced"] = False
     validation_path.write_text(json.dumps(validation, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     targets = sorted(
