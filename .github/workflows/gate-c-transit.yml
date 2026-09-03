@@ -21,7 +21,7 @@ jobs:
       - name: Install Gate C test dependencies
         run: python -m pip install pytest pandas pypdf
       - name: Gate C targeted tests
-        run: python -m pytest tests/test_gate_c_transit.py -q
+        run: python -m pytest tests/test_gate_c_transit.py tests/test_gate_c_quarantine.py -q
       - name: Audit covered bus date
         run: python scripts/gate_c_transit_audit.py --service-date 2026-05-06 --output outputs/gate_c/transit_integrity_2026-05-06.json
       - name: Audit current project date against frozen snapshots
