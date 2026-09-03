@@ -62,7 +62,7 @@ jobs:
         shell: bash
         run: |
           echo "0d2c187b888ce711da04fb96a8ff8f6e638f67980099e9d9e67a073b9b6cc2a1  data/processed/gate_d_pass/structural_candidate_metrics.csv" | sha256sum -c -
-          echo "50d177dbd575b7e14c77e8e59f99770ac0017913a266e96680d7fa8405bda5b3  data/processed/gate_d_pass/candidate_loop_evidence.csv" | sha256sum -c -
+          echo "b12a047efc70f8cf816cd905a9a6de56ebfee200b1815295f42f75d2b9fbbf4e  data/processed/gate_d_pass/candidate_loop_evidence.csv" | sha256sum -c -
       - name: Gate C PASS pinned integration
         shell: bash
         run: |
@@ -140,7 +140,7 @@ jobs:
                   'source_waypoints_sha256': source_sha, 'epistemic_status': 'DERIVED',
               })
           with open('/tmp/candidate_loop_evidence.csv', 'w', newline='', encoding='utf-8') as f:
-              writer = csv.DictWriter(f, fieldnames=list(output[0].keys()))
+              writer = csv.DictWriter(f, fieldnames=list(output[0].keys()), lineterminator='\n')
               writer.writeheader(); writer.writerows(output)
           PY
           cmp /tmp/candidate_loop_evidence.csv data/processed/gate_d_pass/candidate_loop_evidence.csv
