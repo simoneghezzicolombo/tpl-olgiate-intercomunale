@@ -19,41 +19,7 @@ jobs:
           fetch-depth: 0
       - name: Append protocol handoff and self-remove
         run: |
-          cat >> AGENT_STATUS.md <<'EOF'
-
----
-
-## Handoff GPT — Phase 2 frozen Gate D graph
-
-**Timestamp:** 2026-09-03  
-**Autore:** GPT reviewer/co-developer  
-**Branch:** `phase2-graph-freeze`  
-**Commit computazionale validato:** `6f239484fdcdc04a98eb3777d2cd0bb5228f0dd3`  
-**CI source-closed:** run `33770304214`, job `100694808106` — SUCCESS  
-**Task:** materializzazione persistente e deterministica del grafo bus-eligible Gate D e primo reduced transfer graph.
-
-### Risultati principali
-
-- Gate D epoch canonico: `7c220f7586d0f6e5cccd14a2d518be52eb1c4a55`.
-- Raw OSM Gate D canonico SHA256: `834d5caa0bfd6e9f4a1400ef5d2f5083ed0da60ba51c0331f59fcbcb5d4b097c`.
-- Frozen directed bus graph: 104.071 nodi e 199.217 archi.
-- Turn restrictions: 564 regole serializzate, 551 chiavi, 535 chiavi presenti nel grafo.
-- Reduced transfer layer: 597 anchor rows, 480 nodi stradali unici, 476 nella componente principale e 4 in componenti minori preservate.
-- Seed shortest-path cache: 240 percorsi ordinati, 118 coppie con asimmetria direzionale.
-- Source closure: `SOURCE_CLOSED`; build policy `FORBID_LIVE_OSM_AND_OVERPASS`.
-
-### Stato epistemico e limiti
-
-- Il grafo è `DERIVED` dal frozen snapshot Gate D PASS, non da OSM live.
-- Le fermate GTFS restano evidenza ufficiale; gli anchor progettuali Gate D mantengono il proprio stato `ASSUMPTION` e non vengono promossi a FACT.
-- Nessuna proposed stop è stata generata e nessuna topologia è stata selezionata.
-- Restano ereditate le limitazioni Gate D sulle 8 restriction `via-way` non approssimate; future topologie che le attraversano richiederanno supporto completo.
-- I 4 reduced nodes fuori dalla componente principale sono conservati e devono essere gestiti esplicitamente dai workstream downstream, non eliminati silenziosamente.
-
-### Contratto per il workstream successivo
-
-Usare `data/phase2/frozen_gate_d/source/` e `outputs/phase2/frozen_gate_d/` come input canonici. Non sostituire il frozen graph con acquisizioni live Overpass. Proposed stops possono essere aggiunte soltanto come nuove entità tracciate e con stato `PROPOSED_STOP/FIELD_CHECK_PENDING`.
-EOF
+          printf '%s' 'LS0tCgojIyBIYW5kb2ZmIEdQVCDigJQgUGhhc2UgMiBmcm96ZW4gR2F0ZSBEIGdyYXBoCgoqKlRpbWVzdGFtcDoqKiAyMDI2LTA5LTAzICAKKipBdXRvcmU6KiogR1BUIHJldmlld2VyL2NvLWRldmVsb3BlciAgCioqQnJhbmNoOioqIGBwaGFzZTItZ3JhcGgtZnJlZXplYCAgCioqQ29tbWl0IGNvbXB1dGF6aW9uYWxlIHZhbGlkYXRvOioqIGA2ZjIzOTQ4NGZkY2RjMDRhOThlYjM3NzdkMmNkMGJiNTIyOGYwZGQzYCAgCioqQ0kgc291cmNlLWNsb3NlZDoqKiBydW4gYDMzNzcwMzA0MjE0YCwgam9iIGAxMDA2OTQ4MDgxMDZgIOKAlCBTVUNDRVNTICAKKipUYXNrOioqIG1hdGVyaWFsaXp6YXppb25lIHBlcnNpc3RlbnRlIGUgZGV0ZXJtaW5pc3RpY2EgZGVsIGdyYWZvIGJ1cy1lbGlnaWJsZSBHYXRlIEQgZSBwcmltbyByZWR1Y2VkIHRyYW5zZmVyIGdyYXBoLgoKIyMjIFJpc3VsdGF0aSBwcmluY2lwYWxpCgotIEdhdGUgRCBlcG9jaCBjYW5vbmljbzogYDdjMjIwZjc1ODZkMGY2ZTVjY2NkMTRhMmQ1MThiZTUyZWIxYzRhNTVgLgotIFJhdyBPU00gR2F0ZSBEIGNhbm9uaWNvIFNIQTI1NjogYDgzNGQ1Y2FhMGJmZDZlOWY0YTE0MDBlZjVkMmY1MDgzZWQwZGE2MGJhNTFjMDMzMWY1OWZjYmNiNWQ0YjA5N2NgLgotIEZyb3plbiBkaXJlY3RlZCBidXMgZ3JhcGg6IDEwNC4wNzEgbm9kaSBlIDE5OS4yMTcgYXJjaGkuCi0gVHVybiByZXN0cmljdGlvbnM6IDU2NCByZWdvbGUgc2VyaWFsaXp6YXRlLCA1NTEgY2hpYXZpLCA1MzUgY2hpYXZpIHByZXNlbnRpIG5lbCBncmFmby4KLSBSZWR1Y2VkIHRyYW5zZmVyIGxheWVyOiA1OTcgYW5jaG9yIHJvd3MsIDQ4MCBub2RpIHN0cmFkYWxpIHVuaWNpLCA0NzYgbmVsbGEgY29tcG9uZW50ZSBwcmluY2lwYWxlIGUgNCBpbiBjb21wb25lbnRpIG1pbm9yaSBwcmVzZXJ2YXRlLgotIFNlZWQgc2hvcnRlc3QtcGF0aCBjYWNoZTogMjQwIHBlcmNvcnNpIG9yZGluYXRpLCAxMTggY29wcGllIGNvbiBhc2ltbWV0cmlhIGRpcmV6aW9uYWxlLgotIFNvdXJjZSBjbG9zdXJlOiBgU09VUkNFX0NMT1NFRGA7IGJ1aWxkIHBvbGljeSBgRk9SQklEX0xJVkVfT1NNX0FORF9PVkVSUEFTU2AuCgojIyMgU3RhdG8gZXBpc3RlbWljbyBlIGxpbWl0aQoKLSBJbCBncmFmbyDDqCBgREVSSVZFRGAgZGFsIGZyb3plbiBzbmFwc2hvdCBHYXRlIEQgUEFTUywgbm9uIGRhIE9TTSBsaXZlLgotIExlIGZlcm1hdGUgR1RGUyByZXN0YW5vIGV2aWRlbnphIHVmZmljaWFsZTsgZ2xpIGFuY2hvciBwcm9nZXR0dWFsaSBHYXRlIEQgbWFudGVuZ29ubyBpbCBwcm9wcmlvIHN0YXRvIGBBU1NVTVBUSU9OYCBlIG5vbiB2ZW5nb25vIHByb21vc3NpIGEgRkFDVC4KLSBOZXNzdW5hIHByb3Bvc2VkIHN0b3Agw6ggc3RhdGEgZ2VuZXJhdGEgZSBuZXNzdW5hIHRvcG9sb2dpYSDDqCBzdGF0YSBzZWxlemlvbmF0YS4KLSBSZXN0YW5vIGVyZWRpdGF0ZSBsZSBsaW1pdGF6aW9uaSBHYXRlIEQgc3VsbGUgOCByZXN0cmljdGlvbiBgdmlhLXdheWAgbm9uIGFwcHJvc3NpbWF0ZTsgZnV0dXJlIHRvcG9sb2dpZSBjaGUgbGUgYXR0cmF2ZXJzYW5vIHJpY2hpZWRlcmFubm8gc3VwcG9ydG8gY29tcGxldG8uCi0gSSA0IHJlZHVjZWQgbm9kZXMgZnVvcmkgZGFsbGEgY29tcG9uZW50ZSBwcmluY2lwYWxlIHNvbm8gY29uc2VydmF0aSBlIGRldm9ubyBlc3NlcmUgZ2VzdGl0aSBlc3BsaWNpdGFtZW50ZSBkYWkgd29ya3N0cmVhbSBkb3duc3RyZWFtLCBub24gZWxpbWluYXRpIHNpbGVuemlvc2FtZW50ZS4KCiMjIyBDb250cmF0dG8gcGVyIGlsIHdvcmtzdHJlYW0gc3VjY2Vzc2l2bwoKVXNhcmUgYGRhdGEvcGhhc2UyL2Zyb3plbl9nYXRlX2Qvc291cmNlL2AgZSBgb3V0cHV0cy9waGFzZTIvZnJvemVuX2dhdGVfZC9gIGNvbWUgaW5wdXQgY2Fub25pY2kuIE5vbiBzb3N0aXR1aXJlIGlsIGZyb3plbiBncmFwaCBjb24gYWNxdWlzaXppb25pIGxpdmUgT3ZlcnBhc3MuIFByb3Bvc2VkIHN0b3BzIHBvc3Nvbm8gZXNzZXJlIGFnZ2l1bnRlIHNvbHRhbnRvIGNvbWUgbnVvdmUgZW50aXTDoCB0cmFjY2lhdGUgZSBjb24gc3RhdG8gYFBST1BPU0VEX1NUT1AvRklFTERfQ0hFQ0tfUEVORElOR2AuCg==' | base64 --decode >> AGENT_STATUS.md
           git rm .github/workflows/phase2-graph-handoff.yml
           git config user.name "phase2-graph-ci"
           git config user.email "actions@users.noreply.github.com"
