@@ -2,8 +2,9 @@
 """Authoritative building-population runner with composite DBGT identity and piece points.
 
 V5 fixes Regione Lombardia DBGT relational identity by scoping local ids to
-COD_CONS.  V6 additionally keeps the building-section intersection as the
-spatial unit for walking catchments and boundary-sensitive diagnostics.
+COD_CONS. V6 additionally keeps the building-section intersection as the
+spatial unit for walking catchments and boundary-sensitive diagnostics and
+retains unlinked active footprint rows as provenance-only evidence.
 """
 from __future__ import annotations
 
@@ -13,8 +14,16 @@ import sys
 
 import phase2_run_building_population_v5 as v5
 from src import phase2_building_piece_access as piece
+from src.phase2_dbgt_unlinked_footprints import (
+    UNLINKED_STATUS,
+    normalize_footprints as normalize_footprints_allow_unlinked,
+)
 
 impl = v5.impl
+
+# v5.fetch_dbgt_footprints resolves this global at call time.  Replace only the
+# normalization stage: source acquisition and raw snapshot remain unchanged.
+v5.normalize_footprints = normalize_footprints_allow_unlinked
 
 
 def build_section_pieces(buildings, section_geometry):
@@ -60,6 +69,8 @@ def _postprocess_piece_outputs(output_dir: Path) -> None:
     if not validation_path.is_file() or not manifest_path.is_file():
         raise RuntimeError("building-population validation/manifest missing before piece-point postprocess")
 
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    fp = manifest["sources"]["lombardia_dbgt_footprints"]
     validation = json.loads(validation_path.read_text(encoding="utf-8"))
     validation.update({
         "building_section_piece_point_status": piece.PIECE_POINT_STATUS,
@@ -67,19 +78,33 @@ def _postprocess_piece_outputs(output_dir: Path) -> None:
         "accessibility_point_status": piece.PIECE_POINT_STATUS,
         "boundary_comparison_spatial_unit": "BUILDING_SECTION_INTERSECTION",
         "spatial_distribution_v2_spatial_unit": "BUILDING_SECTION_INTERSECTION",
+        "dbgt_unlinked_active_footprints_excluded": int(fp["raw_active_footprints_without_classref_excluded"]),
+        "dbgt_unlinked_active_footprint_area_m2_excluded": float(fp["raw_active_footprints_without_classref_excluded_area_m2"]),
+        "dbgt_unlinked_footprint_status": UNLINKED_STATUS,
+        "dbgt_unlinked_footprints_population_assigned": False,
     })
     validation["limitations"].append(
         "Walking accessibility and boundary-sensitive V2 diagnostics use a DERIVED representative point of each DBGT-building × ISTAT-section intersection, not one whole-building point; whole-building representative points remain only for building-level diagnostic exports such as WorldPop-cell heterogeneity."
     )
+    validation["limitations"].append(
+        "Active DBGT footprint source rows with official COD_CONS but blank CLASSREF are preserved in raw provenance and excluded from building allocation because no auditable EDIFC/use/volume relation can be established; no synthetic identifier or proximity join is used."
+    )
     validation_path.write_text(json.dumps(validation, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     manifest["building_section_piece_spatial_semantics"] = {
         "allocation_unit": "DBGT_BUILDING_X_ISTAT_SECTION_INTERSECTION",
         "piece_point_status": piece.PIECE_POINT_STATUS,
         "walking_accessibility_uses_piece_point": True,
         "boundary_diagnostics_use_piece_point": True,
         "whole_building_point_used_for_worldpop_cell_diagnostic_only": True,
+    }
+    manifest["dbgt_unlinked_footprint_semantics"] = {
+        "status": UNLINKED_STATUS,
+        "population_assigned": False,
+        "synthetic_id_created": False,
+        "proximity_join_used": False,
+        "count": int(fp["raw_active_footprints_without_classref_excluded"]),
+        "area_m2": float(fp["raw_active_footprints_without_classref_excluded_area_m2"]),
     }
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     impl.write_checksums(output_dir)
