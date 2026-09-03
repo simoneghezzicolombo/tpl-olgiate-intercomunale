@@ -15,19 +15,22 @@ def test_materialise_universe_keeps_only_certified_s8_direct_rows(tmp_path):
             handle,
             fieldnames=[
                 "procom_res", "origin_name", "procom_lav", "destination_name",
-                "workers", "rail_addressability", "feeder_objective_eligible", "rail_semantics",
+                "workers", "category", "rail_addressability",
+                "feeder_objective_eligible", "rail_semantics",
             ],
         )
         writer.writeheader()
         writer.writerow({
             "procom_res": "1", "origin_name": "A", "procom_lav": "9", "destination_name": "X",
-            "workers": "8", "rail_addressability": "S8_DIRECT", "feeder_objective_eligible": "True",
+            "workers": "8", "category": "S8_DIRECT", "rail_addressability": "DIRECT_S8_GTFS_VERIFIED",
+            "feeder_objective_eligible": "True",
             "rail_semantics": "INFRASTRUCTURE_ADDRESSABILITY_NOT_MODAL_SHARE",
         })
         writer.writerow({
             "procom_res": "1", "origin_name": "A", "procom_lav": "8", "destination_name": "Y",
-            "workers": "2", "rail_addressability": "OTHER_EXTERNAL", "feeder_objective_eligible": "False",
-            "rail_semantics": "NO_VERIFIED_RAIL_ASSIGNMENT",
+            "workers": "2", "category": "OTHER_EXTERNAL", "rail_addressability": "NOT_RAIL_ASSIGNED",
+            "feeder_objective_eligible": "False",
+            "rail_semantics": "INFRASTRUCTURE_ADDRESSABILITY_NOT_MODAL_SHARE",
         })
     validation.write_text(json.dumps({
         "source_scope": "ISTAT_2021_WORK_COMMUTING_ONLY",
@@ -37,6 +40,8 @@ def test_materialise_universe_keeps_only_certified_s8_direct_rows(tmp_path):
     rows, _ = materialise_universe(addressability, validation)
     assert len(rows) == 1
     assert rows[0]["demand_weight"] == "8.000000000"
+    assert rows[0]["category"] == "S8_DIRECT"
+    assert rows[0]["rail_addressability"] == "DIRECT_S8_GTFS_VERIFIED"
     assert rows[0]["spatial_allocation_status"] == "MUNICIPAL_OD_ONLY_NO_SPATIAL_ALLOCATION"
     assert rows[0]["full_gjt_ready"] == "false"
 
