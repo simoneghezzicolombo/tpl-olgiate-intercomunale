@@ -1,0 +1,34 @@
+{
+  "scope_note": "Context only. These outputs are not merged into the audited 2011-2021 OD series unless the underlying universe is demonstrated compatible.",
+  "public_workbook_target_match_count": 0,
+  "municipal_2019_sdmx": "IDENTIFIED_AND_VALIDATED",
+  "recent_population_employment": {
+    "occupied_total_identified": false,
+    "available_age_codes_for_occupied": [
+      "Y15-24",
+      "Y25-49",
+      "Y50-64",
+      "Y_GE15",
+      "Y_GE65"
+    ]
+  },
+  "student_recent_municipal_series": "NOT_IDENTIFIED_IN_PUBLIC_EQUIVALENT_SERIES",
+  "sources": {
+    "workbooks": {
+      "2019": "https://www.istat.it/wp-content/uploads/2022/09/Allegato-statistico-2019_22_07_2022-new.xlsx",
+      "2020": "https://www.istat.it/wp-content/uploads/2024/11/Allegato-statistico-2020_23_07_2024.xlsx",
+      "2021": "https://www.istat.it/wp-content/uploads/2026/06/Allegato-statistico-2021_20_03_2026.xlsx",
+      "2022": "https://www.istat.it/wp-content/uploads/2026/06/Allegato-statistico-2022_20_03_2026.xlsx",
+      "2023": "https://www.istat.it/wp-content/uploads/2026/06/Allegato-statistico-2023_20_03_2026.xlsx"
+    },
+    "municipal_2019": "https://esploradati.istat.it/SDMXWS/rest/data/IT1,DF_DCSS_ISTR_LAV_PEN_2_TV_5,1.0/A.097002+097010+097012+097020+097039+097092+097044+097048+097053+097058+097061+097062+097071+097074+097091.RP_COM_DAY.T.TOTAL.TOTAL.ALL.99..?startPeriod=2019&endPeriod=2019",
+    "population": "https://esploradati.istat.it/SDMXWS/rest/data/IT1,DF_DCSS_FAM_POP_TV_1,1.0/A.097002+097010+097012+097020+097039+097092+097044+097048+097053+097058+097061+097062+097071+097074+097091.RESPOP_AV?startPeriod=2019&endPeriod=2024",
+    "labour": "https://esploradati.istat.it/SDMXWS/rest/data/IT1,DF_DCSS_ISTR_LAV_PEN_2_TV_3,1.0/A.097002+097010+097012+097020+097039+097092+097044+097048+097053+097058+097061+097062+097071+097074+097091........?startPeriod=2019&endPeriod=2024"
+  },
+  "outputs": [
+    "outputs/phase2/mobility_context_workbook_scan.json",
+    "outputs/phase2/mobility_context_national_2019_2023.csv",
+    "outputs/phase2/mobility_context_meratese_2019.csv",
+    "outputs/phase2/mobility_context_population_employment_2019_2024.csv"
+  ]
+}

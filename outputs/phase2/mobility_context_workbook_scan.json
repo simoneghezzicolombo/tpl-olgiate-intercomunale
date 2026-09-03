@@ -1,0 +1,260 @@
+{
+  "inventory": {
+    "2019": {
+      "url": "https://www.istat.it/wp-content/uploads/2022/09/Allegato-statistico-2019_22_07_2022-new.xlsx",
+      "sha256": "402fa189eae16788e8349d9a4c912b375f736f09d49ced07561fd25386d1073b",
+      "sheets": [
+        {
+          "title": "Indice delle tavole",
+          "rows": 9,
+          "columns": 3
+        },
+        {
+          "title": "Tav. 1 - Italia",
+          "rows": 30,
+          "columns": 8
+        },
+        {
+          "title": "Tav. 2 - Grandi Comuni",
+          "rows": 53,
+          "columns": 22
+        },
+        {
+          "title": "Tav. 3 - Città metropolitane",
+          "rows": 23,
+          "columns": 23
+        },
+        {
+          "title": "Tav. 4 - SLL",
+          "rows": 30,
+          "columns": 22
+        },
+        {
+          "title": "Tav. 5 - FUA",
+          "rows": 1927,
+          "columns": 23
+        },
+        {
+          "title": "Tav. 6 - Citta universitarie",
+          "rows": 67,
+          "columns": 12
+        },
+        {
+          "title": "Tav. 7 - Regioni",
+          "rows": 25,
+          "columns": 22
+        },
+        {
+          "title": "Legenda indicatori",
+          "rows": 1,
+          "columns": 1
+        }
+      ]
+    },
+    "2020": {
+      "url": "https://www.istat.it/wp-content/uploads/2024/11/Allegato-statistico-2020_23_07_2024.xlsx",
+      "sha256": "a609cbdcc35b350def3e14dfdaee205f71dc44d716a4130e91afbef3ad0b88a5",
+      "sheets": [
+        {
+          "title": "Indice delle tavole",
+          "rows": 9,
+          "columns": 3
+        },
+        {
+          "title": "Tav. 1 - Italia",
+          "rows": 30,
+          "columns": 10
+        },
+        {
+          "title": "Tav. 2 - Grandi Comuni",
+          "rows": 52,
+          "columns": 22
+        },
+        {
+          "title": "Tav. 3 - Città metropolitane",
+          "rows": 25,
+          "columns": 24
+        },
+        {
+          "title": "Tav. 4 - SLL",
+          "rows": 30,
+          "columns": 22
+        },
+        {
+          "title": "Tav. 5 - FUA",
+          "rows": 1927,
+          "columns": 23
+        },
+        {
+          "title": "Tav. 6 - Citta universitarie",
+          "rows": 70,
+          "columns": 12
+        },
+        {
+          "title": "Tav. 7 - Regioni",
+          "rows": 25,
+          "columns": 22
+        },
+        {
+          "title": "Legenda indicatori",
+          "rows": 1,
+          "columns": 1
+        }
+      ]
+    },
+    "2021": {
+      "url": "https://www.istat.it/wp-content/uploads/2026/06/Allegato-statistico-2021_20_03_2026.xlsx",
+      "sha256": "abdacfc929c95deafe6de1dd761ba69cd3d9983630d1e5b782921adbf980475b",
+      "sheets": [
+        {
+          "title": "Indice delle tavole",
+          "rows": 9,
+          "columns": 3
+        },
+        {
+          "title": "Tav. 1 - Italia",
+          "rows": 30,
+          "columns": 8
+        },
+        {
+          "title": "Tav. 2 - Grandi Comuni",
+          "rows": 52,
+          "columns": 22
+        },
+        {
+          "title": "Tav. 3 - Città metropolitane",
+          "rows": 24,
+          "columns": 24
+        },
+        {
+          "title": "Tav. 4 - SLL",
+          "rows": 30,
+          "columns": 22
+        },
+        {
+          "title": "Tav. 5 - FUA",
+          "rows": 1926,
+          "columns": 25
+        },
+        {
+          "title": "Tav. 6 - Città universitarie",
+          "rows": 71,
+          "columns": 13
+        },
+        {
+          "title": "Tav. 7 - Regioni",
+          "rows": 25,
+          "columns": 22
+        },
+        {
+          "title": "Legenda indicatori",
+          "rows": 1,
+          "columns": 1
+        }
+      ]
+    },
+    "2022": {
+      "url": "https://www.istat.it/wp-content/uploads/2026/06/Allegato-statistico-2022_20_03_2026.xlsx",
+      "sha256": "3f8f6b03c562540bc11f64e2aa77206161463159d5a63b5a9a9af2e2d5967359",
+      "sheets": [
+        {
+          "title": "Indice delle tavole",
+          "rows": 9,
+          "columns": 3
+        },
+        {
+          "title": "Tav. 1 - Italia",
+          "rows": 32,
+          "columns": 10
+        },
+        {
+          "title": "Tav. 2 - Grandi Comuni",
+          "rows": 52,
+          "columns": 22
+        },
+        {
+          "title": "Tav. 3 - Città metropolitane",
+          "rows": 25,
+          "columns": 24
+        },
+        {
+          "title": "Tav. 4 - SLL",
+          "rows": 30,
+          "columns": 22
+        },
+        {
+          "title": "Tav. 5 - FUA",
+          "rows": 1927,
+          "columns": 23
+        },
+        {
+          "title": "Tav. 6 - Citta universitarie",
+          "rows": 71,
+          "columns": 13
+        },
+        {
+          "title": "Tav. 7 - Regioni",
+          "rows": 26,
+          "columns": 23
+        },
+        {
+          "title": "Legenda indicatori",
+          "rows": 1,
+          "columns": 1
+        }
+      ]
+    },
+    "2023": {
+      "url": "https://www.istat.it/wp-content/uploads/2026/06/Allegato-statistico-2023_20_03_2026.xlsx",
+      "sha256": "971deb1da0ba4d1cf6464a104dbaedb2f2ce82356266fdacd6cfeac8e5874ab6",
+      "sheets": [
+        {
+          "title": "Indice delle tavole",
+          "rows": 9,
+          "columns": 3
+        },
+        {
+          "title": "Tav. 1 - Italia",
+          "rows": 34,
+          "columns": 10
+        },
+        {
+          "title": "Tav. 2 - Grandi Comuni",
+          "rows": 52,
+          "columns": 22
+        },
+        {
+          "title": "Tav. 3 - Città metropolitane",
+          "rows": 24,
+          "columns": 24
+        },
+        {
+          "title": "Tav. 4 - SLL",
+          "rows": 30,
+          "columns": 22
+        },
+        {
+          "title": "Tav. 5 - FUA",
+          "rows": 1926,
+          "columns": 23
+        },
+        {
+          "title": "Tav. 6 - Città universitarie",
+          "rows": 71,
+          "columns": 13
+        },
+        {
+          "title": "Tav. 7 - Regioni",
+          "rows": 27,
+          "columns": 22
+        },
+        {
+          "title": "Legenda indicatori",
+          "rows": 1,
+          "columns": 1
+        }
+      ]
+    }
+  },
+  "matches": []
+}
