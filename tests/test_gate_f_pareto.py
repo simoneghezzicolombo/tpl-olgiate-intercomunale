@@ -76,6 +76,19 @@ def test_leave_one_out_robustness_is_bounded_and_weight_free():
     assert not any(col.startswith("score_") for col in out.columns)
 
 
+def test_string_false_is_not_treated_as_true_baseline():
+    df, objectives = _fixture([("BASE", 1, 5, True), ("ALT", 2, 4, False)])
+    df["is_baseline"] = ["true", "false"]
+    out = identify_pareto_frontier(df, objectives)
+    assert len(out) == 2
+
+
+def test_single_scenario_is_rejected_as_non_comparison():
+    df, objectives = _fixture([("BASE", 1, 5, True)])
+    with pytest.raises(ValueError, match="at least two scenarios"):
+        identify_pareto_frontier(df, objectives)
+
+
 def test_blocker_labels_require_all_upstream_gates():
     assert blocker_labels({"A": "PASS", "B": "PASS", "C": "PASS", "D": "PASS", "E": "PASS"}) == []
     assert blocker_labels({"A": "PASS"}) == ["BLOCKED_BY_GATE_B", "BLOCKED_BY_GATE_C", "BLOCKED_BY_GATE_D", "BLOCKED_BY_GATE_E"]
