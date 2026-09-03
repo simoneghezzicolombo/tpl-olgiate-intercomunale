@@ -141,6 +141,18 @@ def test_walk_graph_is_real_connected_and_slope_aware():
     assert (edges['walk_min_vu'] > 0).all()
     assert ((edges['walk_min_uv'] - edges['walk_min_vu']).abs() > 1e-5).sum() > 100
 
+    # Regression guard against the former nearest-pixel DSM artifact. These are
+    # distribution-level sanity limits, not claims that every walkable path must
+    # be below a given natural grade. They deliberately allow a steep tail for
+    # paths/steps while rejecting a network where raster cell boundaries create
+    # implausible grades across a large share of ordinary segments.
+    assert 'bilinear interpolation' in summary['graph']['dem_sampling']
+    assert summary['graph']['edge_abs_slope_p95'] < 0.30
+    assert summary['graph']['edge_abs_slope_p99'] < 0.50
+    giant_edge_count = int(edges['in_giant_component'].sum())
+    steep_share = summary['graph']['edges_abs_slope_gt_030'] / giant_edge_count
+    assert steep_share < 0.05
+
 
 def test_gtfs_is_primary_stop_source_and_spot_checks_pass():
     stops = pd.read_csv(CORE_STOPS, dtype={'stop_id': str})
