@@ -1,0 +1,71 @@
+name: Phase 2 ISTAT OD 2021 acquisition
+
+on:
+  push:
+    branches: [phase2-service-design]
+    paths:
+      - scripts/phase2_fetch_istat_od_2021.py
+      - .github/workflows/phase2-istat-od-2021.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  acquire-istat-2021-od:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile acquisition script
+        run: python -m py_compile scripts/phase2_fetch_istat_od_2021.py
+
+      - name: Download and extract official ISTAT 2021 work commuting matrix
+        run: python scripts/phase2_fetch_istat_od_2021.py
+
+      - name: Validate deterministic outputs
+        run: |
+          test -s data/raw/od/matrice_pendolarismo_istat_2021_core.csv
+          test -s outputs/phase2/od_2021_core_summary.csv
+          test -s outputs/phase2/od_2021_validation.json
+          grep '^istat_matrice_pendolarismo_lavoro_2021_core,' data/manifest.csv
+          grep '^istat_matrice_pendolarismo_2011_core,' data/manifest.csv
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          core = {'097010','097012','097058','097074','097092'}
+          rows = list(csv.DictReader(Path('data/raw/od/matrice_pendolarismo_istat_2021_core.csv').open(encoding='utf-8')))
+          assert rows
+          assert all(r['procom_res'] in core or r['procom_lav'] in core for r in rows)
+          assert all(int(r['pendolari']) > 0 for r in rows)
+          assert len({(r['procom_res'], r['procom_lav']) for r in rows}) == len(rows)
+          meta = json.loads(Path('outputs/phase2/od_2021_validation.json').read_text(encoding='utf-8'))
+          assert meta['scope'] == 'WORK_COMMUTING_ONLY'
+          assert 450000 <= meta['national_positive_od_rows'] <= 600000
+          assert 18000000 <= meta['national_commuters_sum'] <= 21000000
+          print(f"validated {len(rows)} core-connected OD pairs")
+          PY
+          git diff --check
+
+      - name: Commit canonical Phase 2 OD evidence
+        run: |
+          git add \
+            data/raw/od/matrice_pendolarismo_istat_2021_core.csv \
+            data/manifest.csv \
+            outputs/phase2/od_2021_core_summary.csv \
+            outputs/phase2/od_2021_validation.json
+          if git diff --cached --quiet; then
+            echo 'No OD data changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'data(phase2): materialise official ISTAT 2021 commuting OD [skip ci]'
+          git push origin HEAD:phase2-service-design
