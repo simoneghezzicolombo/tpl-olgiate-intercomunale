@@ -1,0 +1,14 @@
+{
+  "source": "ISTAT 15th Population Census 2011, mirrored by ixmaps/gjrichter",
+  "urls": {
+    "summary": "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ISTAT/pendolari_2011_in_out_self.csv",
+    "od": "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ISTAT/pendo2011_S_aggregato.csv.gz"
+  },
+  "summary_columns": [
+    "procom;out;in;self"
+  ],
+  "od_columns": [
+    "procom_residenza;procom_lavoro;Numero_di_individui"
+  ],
+  "note": "Study+work combined. For merged current municipalities, resident_commuters_total=out+self is merger-invariant; out/self separately are predecessor-geography sums."
+}
