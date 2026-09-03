@@ -1,0 +1,36 @@
+name: Gate F Pareto workstream
+
+on:
+  push:
+    branches:
+      - gate-f-workstream
+  pull_request:
+    paths:
+      - 'src/gate_f_pareto.py'
+      - 'scripts/13_gate_f_pareto.py'
+      - 'tests/test_gate_f_pareto.py'
+
+jobs:
+  gate-f-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install focused dependencies
+        run: python -m pip install --upgrade pip pandas numpy pytest
+      - name: Gate F unit tests
+        run: pytest -q tests/test_gate_f_pareto.py
+      - name: Compile Gate F code
+        run: python -m py_compile src/gate_f_pareto.py scripts/13_gate_f_pareto.py
+      - name: Legacy output refusal smoke test
+        shell: bash
+        run: |
+          set +e
+          python scripts/13_gate_f_pareto.py --input outputs/route_variants.csv > /tmp/gate_f_refusal.log 2>&1
+          code=$?
+          set -e
+          cat /tmp/gate_f_refusal.log
+          test "$code" -ne 0
+          grep -q 'INVALIDATED legacy/hardcoded output' /tmp/gate_f_refusal.log
