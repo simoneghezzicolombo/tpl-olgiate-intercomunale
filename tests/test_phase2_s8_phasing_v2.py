@@ -1,4 +1,5 @@
 from decimal import Decimal
+import csv
 
 import pytest
 
@@ -6,6 +7,7 @@ from scripts.phase2_build_s8_phasing_v2 import HUB_ANCHOR, route_runtime_compone
 from scripts.phase2_build_s8_phasing_v2_cached import (
     _require_integer_minute_rail_events,
     _translated_phase_metrics,
+    build_phase_envelope_cached,
     representative_runtime_for_complete_phase_range,
 )
 from src.phase2_s8_phasing_v2 import RailEvent, Span, clockface_times, phase_raw_gap_metrics, steady_state_arrival_times
@@ -110,6 +112,29 @@ def test_positive_fraction_translation_matches_direct_phase_metrics_at_persisted
     transformed = _translated_phase_metrics(base_rows, actual_fraction=actual % D("1"))
     direct = _phase_rows(actual, headway, span)
     assert _range_signature(transformed) == _range_signature(direct)
+
+
+def test_compact_kernel_is_lossless_two_class_representation(tmp_path):
+    output = tmp_path / "kernel.csv"
+    info = build_phase_envelope_cached(
+        runtime_archetypes={
+            "integer": D("40"),
+            "positive_a": D("137.25"),
+            "positive_b": D("52.75"),
+        },
+        rail_events=_rail(),
+        timing_archetypes=[(20, Span("test", 360, 450))],
+        output_path=output,
+    )
+    with output.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    assert {row["runtime_class"] for row in rows} == {"INTEGER", "POSITIVE_FRACTION"}
+    assert len(rows) == 2
+    assert info["phase_envelope_rows"] == 2
+    assert info["phase_envelope_representation"] == "LOSSLESS_PARAMETRIC_RUNTIME_CLASS_KERNEL"
+    assert info["logical_runtime_timing_archetype_rows"] == 3
+    assert info["integer_phase_evaluations"] == 60
+    assert info["unique_metric_phase_evaluations"] == 40
 
 
 def test_fraction_compression_fails_closed_for_subminute_rail_event():
