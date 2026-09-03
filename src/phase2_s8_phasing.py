@@ -12,7 +12,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
-from statistics import mean
 from typing import Mapping, Sequence
 
 from src.phase2_s8_interchange import TransferQualityProfile, transfer_quality_from_slack
@@ -68,12 +67,7 @@ def route_cycle_runtime(
 def rail_clockface_offsets(
     rail_events: Sequence[Mapping[str, object]],
 ) -> dict[tuple[str, str], tuple[float, float]]:
-    """Extract the certified half-hourly S8 minute offsets.
-
-    Phase Search V2 intentionally fails closed if the factual reference day is
-    not a strict two-pulse-per-hour clockface. A future non-clockface S8 day
-    requires exact event scoring rather than silently using this shortcut.
-    """
+    """Extract the certified half-hourly S8 minute offsets."""
     result: dict[tuple[str, str], tuple[float, float]] = {}
     for connection_type in CONNECTION_TYPES:
         field = "departure_min" if connection_type == "BUS_TO_RAIL" else "arrival_min"
@@ -162,6 +156,62 @@ def _rotation_values(extension_share: float) -> range:
     return range(1)
 
 
+def _exact_float_mean(values: Sequence[float]) -> float:
+    """Return exactly the same float mean as statistics.mean, faster for floats."""
+    if not values:
+        raise ValueError("Cannot average zero values")
+    parts: list[tuple[int, int]] = []
+    max_shift = -1
+    for raw in values:
+        value = float(raw)
+        if not math.isfinite(value):
+            raise ValueError("Phase quality mean requires finite values")
+        numerator, denominator = value.as_integer_ratio()
+        shift = denominator.bit_length() - 1
+        if denominator != 1 << shift:
+            raise AssertionError("Finite float denominator is not a power of two")
+        parts.append((numerator, shift))
+        max_shift = max(max_shift, shift)
+    total = sum(numerator << (max_shift - shift) for numerator, shift in parts)
+    return total / ((1 << max_shift) * len(parts))
+
+
+_QUALITY_CACHE: dict[
+    tuple[object, ...],
+    tuple[
+        dict[tuple[str, str, int], float],
+        dict[tuple[str, str, float, int], float],
+    ],
+] = {}
+_CANDIDATE_CACHE: dict[
+    tuple[int, int, float],
+    tuple[
+        tuple[int, int, int, tuple[bool, ...], tuple[int, ...], tuple[float, ...]],
+        ...,
+    ],
+] = {}
+
+
+def _quality_cache_key(
+    rail_events: Sequence[Mapping[str, object]],
+    profiles: Sequence[PhasingProfile],
+) -> tuple[object, ...]:
+    offsets = rail_clockface_offsets(rail_events)
+    return (
+        tuple((key, value) for key, value in sorted(offsets.items())),
+        tuple(
+            (
+                p.profile_id,
+                float(p.transfer_walk_min),
+                float(p.preferred_wait_min),
+                float(p.miss_transition_scale_min),
+                float(p.wait_decay_min),
+            )
+            for p in profiles
+        ),
+    )
+
+
 def _quality_tables(
     *,
     public_route_runtimes_min: Sequence[float],
@@ -172,27 +222,40 @@ def _quality_tables(
     dict[tuple[str, str, int], float],
     dict[tuple[str, str, float, int], float],
 ]:
+    cache_key = _quality_cache_key(rail_events, profiles)
+    cached = _QUALITY_CACHE.get(cache_key)
     offsets = rail_clockface_offsets(rail_events)
+    if cached is None:
+        departure_q: dict[tuple[str, str, int], float] = {}
+        arrival_q: dict[tuple[str, str, float, int], float] = {}
+        for raw_profile in profiles:
+            profile = raw_profile.as_transfer_profile()
+            pid = raw_profile.profile_id
+            for direction in RAIL_DIRECTIONS:
+                r2b_base = offsets[("RAIL_TO_BUS", direction)][0]
+                for minute in range(30):
+                    departure_q[(pid, direction, minute)] = clockface_transfer_quality(
+                        minute,
+                        first_rail_offset_min=r2b_base,
+                        connection_type="RAIL_TO_BUS",
+                        profile=profile,
+                    )
+        cached = (departure_q, arrival_q)
+        _QUALITY_CACHE[cache_key] = cached
+    departure_q, arrival_q = cached
+
     runtimes = {float(value) for value in public_route_runtimes_min}
     if extension_runtime_min is not None:
         runtimes.add(float(extension_runtime_min))
-
-    departure_q: dict[tuple[str, str, int], float] = {}
-    arrival_q: dict[tuple[str, str, float, int], float] = {}
     for raw_profile in profiles:
         profile = raw_profile.as_transfer_profile()
         pid = raw_profile.profile_id
         for direction in RAIL_DIRECTIONS:
-            r2b_base = offsets[("RAIL_TO_BUS", direction)][0]
             b2r_base = offsets[("BUS_TO_RAIL", direction)][0]
-            for minute in range(30):
-                departure_q[(pid, direction, minute)] = clockface_transfer_quality(
-                    minute,
-                    first_rail_offset_min=r2b_base,
-                    connection_type="RAIL_TO_BUS",
-                    profile=profile,
-                )
             for runtime in runtimes:
+                first_key = (pid, direction, runtime, 0)
+                if first_key in arrival_q:
+                    continue
                 for minute in range(30):
                     arrival_q[(pid, direction, runtime, minute)] = clockface_transfer_quality(
                         minute + runtime,
@@ -201,6 +264,53 @@ def _quality_tables(
                         profile=profile,
                     )
     return departure_q, arrival_q
+
+
+def _candidate_rows(
+    *,
+    headway_min: int,
+    extension_share: float,
+    profiles: Sequence[PhasingProfile],
+    departure_q: Mapping[tuple[str, str, int], float],
+) -> tuple[
+    tuple[int, int, int, tuple[bool, ...], tuple[int, ...], tuple[float, ...]],
+    ...,
+]:
+    key = (id(departure_q), headway_min, extension_share)
+    cached = _CANDIDATE_CACHE.get(key)
+    if cached is not None:
+        return cached
+    rows = []
+    for phase in range(min(headway_min, 30)):
+        for rotation in _rotation_values(extension_share):
+            flags, period_departures = extension_pattern(
+                headway_min=headway_min,
+                extension_share=extension_share,
+                rotation=rotation,
+            )
+            pulse_minutes = tuple(
+                int((phase + ordinal * headway_min) % 30)
+                for ordinal in range(period_departures)
+            )
+            r2b_values = tuple(
+                _exact_float_mean(tuple(
+                    departure_q[(raw_profile.profile_id, direction, minute)]
+                    for minute in pulse_minutes
+                ))
+                for raw_profile in profiles
+                for direction in RAIL_DIRECTIONS
+            )
+            rows.append((
+                phase,
+                rotation,
+                period_departures,
+                flags,
+                pulse_minutes,
+                r2b_values,
+            ))
+    result = tuple(rows)
+    _CANDIDATE_CACHE[key] = result
+    return result
 
 
 def _choose_with_tables(
@@ -213,82 +323,85 @@ def _choose_with_tables(
     departure_q: Mapping[tuple[str, str, int], float],
     arrival_q: Mapping[tuple[str, str, float, int], float],
 ) -> dict[str, object]:
+    cells = tuple(
+        (raw_profile.profile_id, direction)
+        for raw_profile in profiles
+        for direction in RAIL_DIRECTIONS
+    )
     best_key: tuple[float, float, int, int] | None = None
-    best_payload: dict[str, object] | None = None
+    best_payload: tuple[object, ...] | None = None
 
-    for phase in range(headway_min):
-        for rotation in _rotation_values(extension_share):
-            flags, period_departures = extension_pattern(
-                headway_min=headway_min,
-                extension_share=extension_share,
-                rotation=rotation,
-            )
-            pulse_minutes = tuple(
-                int((phase + ordinal * headway_min) % 30)
-                for ordinal in range(period_departures)
-            )
-            cell_values: dict[str, float] = {}
-            all_values: list[float] = []
-            for raw_profile in profiles:
-                pid = raw_profile.profile_id
-                for direction in RAIL_DIRECTIONS:
-                    r2b = mean(
-                        departure_q[(pid, direction, minute)]
-                        for minute in pulse_minutes
+    for phase, rotation, period_departures, flags, pulse_minutes, r2b_values in _candidate_rows(
+        headway_min=headway_min,
+        extension_share=extension_share,
+        profiles=profiles,
+        departure_q=departure_q,
+    ):
+        b2r_values: list[float] = []
+        for pid, direction in cells:
+            if extension_share > 0:
+                if len(runtimes) != 1 or extension_runtime_min is None:
+                    raise ValueError(
+                        "Positive scheduled-extension share requires one public base route "
+                        "and one explicit extension runtime"
                     )
-                    r2b_key = f"{pid}|RAIL_TO_BUS|{direction}"
-                    cell_values[r2b_key] = r2b
-                    all_values.append(r2b)
+                base_runtime = runtimes[0]
+                ext_runtime = float(extension_runtime_min)
+                values = tuple(
+                    arrival_q[
+                        (pid, direction, ext_runtime if flags[ordinal] else base_runtime, minute)
+                    ]
+                    for ordinal, minute in enumerate(pulse_minutes)
+                )
+            else:
+                values = tuple(
+                    arrival_q[(pid, direction, runtime, minute)]
+                    for minute in pulse_minutes
+                    for runtime in runtimes
+                )
+            b2r_values.append(_exact_float_mean(values))
 
-                    arrivals: list[float] = []
-                    if extension_share > 0:
-                        if len(runtimes) != 1 or extension_runtime_min is None:
-                            raise ValueError(
-                                "Positive scheduled-extension share requires one public base route "
-                                "and one explicit extension runtime"
-                            )
-                        base_runtime = runtimes[0]
-                        ext_runtime = float(extension_runtime_min)
-                        for ordinal, minute in enumerate(pulse_minutes):
-                            runtime = ext_runtime if flags[ordinal] else base_runtime
-                            arrivals.append(arrival_q[(pid, direction, runtime, minute)])
-                    else:
-                        for minute in pulse_minutes:
-                            for runtime in runtimes:
-                                arrivals.append(arrival_q[(pid, direction, runtime, minute)])
-                    b2r = mean(arrivals)
-                    b2r_key = f"{pid}|BUS_TO_RAIL|{direction}"
-                    cell_values[b2r_key] = b2r
-                    all_values.append(b2r)
+        all_values: list[float] = []
+        for r2b, b2r in zip(r2b_values, b2r_values):
+            all_values.extend((r2b, b2r))
+        robust_min = min(all_values)
+        robust_mean = _exact_float_mean(tuple(all_values))
+        candidate_key = (robust_min, robust_mean, -phase, -rotation)
+        if best_key is None or candidate_key > best_key:
+            best_key = candidate_key
+            best_payload = (
+                phase,
+                rotation,
+                period_departures,
+                robust_min,
+                robust_mean,
+                r2b_values,
+                tuple(b2r_values),
+            )
 
-            robust_min = min(all_values)
-            robust_mean = mean(all_values)
-            candidate_key = (robust_min, robust_mean, -phase, -rotation)
-            if best_key is None or candidate_key > best_key:
-                worst_cells: dict[str, float] = {}
-                for connection_type in CONNECTION_TYPES:
-                    for direction in RAIL_DIRECTIONS:
-                        suffix = f"|{connection_type}|{direction}"
-                        values = [
-                            value for key, value in cell_values.items()
-                            if key.endswith(suffix)
-                        ]
-                        worst_cells[
-                            f"worst_profile_{connection_type.lower()}_{direction.lower()}"
-                        ] = min(values)
-                best_key = candidate_key
-                best_payload = {
-                    "phase_offset_min": phase,
-                    "extension_rotation_index": rotation,
-                    "extension_pattern_period_departures": period_departures,
-                    "robust_min_transfer_quality": robust_min,
-                    "robust_unweighted_mean_transfer_quality": robust_mean,
-                    **worst_cells,
-                    "profile_cell_quality": dict(sorted(cell_values.items())),
-                }
     if best_payload is None:
         raise AssertionError("Phase search generated no candidate")
-    return best_payload
+    phase, rotation, period_departures, robust_min, robust_mean, r2b_values, b2r_values = best_payload
+    cell_values: dict[str, float] = {}
+    for index, (pid, direction) in enumerate(cells):
+        cell_values[f"{pid}|RAIL_TO_BUS|{direction}"] = r2b_values[index]
+        cell_values[f"{pid}|BUS_TO_RAIL|{direction}"] = b2r_values[index]
+    worst_cells: dict[str, float] = {}
+    for connection_type in CONNECTION_TYPES:
+        for direction in RAIL_DIRECTIONS:
+            suffix = f"|{connection_type}|{direction}"
+            worst_cells[f"worst_profile_{connection_type.lower()}_{direction.lower()}"] = min(
+                value for key, value in cell_values.items() if key.endswith(suffix)
+            )
+    return {
+        "phase_offset_min": phase,
+        "extension_rotation_index": rotation,
+        "extension_pattern_period_departures": period_departures,
+        "robust_min_transfer_quality": robust_min,
+        "robust_unweighted_mean_transfer_quality": robust_mean,
+        **worst_cells,
+        "profile_cell_quality": dict(sorted(cell_values.items())),
+    }
 
 
 def choose_robust_phase_grid(
@@ -300,7 +413,7 @@ def choose_robust_phase_grid(
     rail_events: Sequence[Mapping[str, object]],
     profiles: Sequence[PhasingProfile],
 ) -> dict[tuple[int, float], dict[str, object]]:
-    """Evaluate multiple headways/shares while computing transfer curves once."""
+    """Evaluate multiple headways/shares with exact reusable transfer curves."""
     runtimes = tuple(float(value) for value in public_route_runtimes_min)
     if not runtimes or any((not math.isfinite(v) or v <= 0) for v in runtimes):
         raise ValueError("At least one positive finite public route runtime is required")
