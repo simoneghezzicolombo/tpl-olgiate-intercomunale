@@ -58,3 +58,10 @@ def test_slope_audit_never_converts_dsm_estimate_into_feasibility_rule():
 def test_slope_profile_spacing_is_explicit_and_positive():
     assert slope.SAMPLE_SPACING_M == 60.0
     assert slope.SAMPLE_SPACING_M > 0
+
+
+def test_extended_candidate_slope_audit_uses_full_copernicus_source_tile():
+    assert slope.DEFAULT_DEM == Path(
+        "data/raw/dem/Copernicus_DSM_COG_10_N45_00_E009_00_DEM.tif"
+    )
+    assert "copernicus_dem_core_raw.tif" not in SLOPE_PATH.read_text(encoding="utf-8")
