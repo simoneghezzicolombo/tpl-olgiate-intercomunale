@@ -1,0 +1,4 @@
+rule,area_km2,municipalities_intersected,census_sections_intersected,buildings_intersected,official_gtfs_bus_stops_intersected,contains_core_v1_guard,contains_full_first_order_shell_with_guard,within_frozen_graph_bbox_plus_probe,selected
+METRIC_GUARD_ONLY,79.04058556356755,25,621,12359,174,True,False,True,True
+ADJACENCY_1_PLUS_V1_WALK_GUARD,219.28836154900583,53,1516,37685,502,True,True,False,False
+ADJACENCY_2_PLUS_V1_WALK_GUARD_SENSITIVITY,386.66854503160977,77,2846,65481,566,True,True,False,False
