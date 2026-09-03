@@ -21,9 +21,10 @@ on:
       - 'tests/test_phase2_current_service_matrix.py'
       - 'docs/PHASE2_CURRENT_SERVICE_STOP_TIMETABLE.md'
       - '.github/workflows/phase2-current-service-stop-timetable.yml'
+      - 'outputs/phase2/current_service_*2026-09-03*'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   current-service-stop-timetable:
@@ -109,6 +110,17 @@ jobs:
           assert validation['operator_trip_ids_available_for_current_pdf_columns'] is False
           PY
 
+      - name: Compare regenerated evidence to committed baseline
+        shell: bash
+        run: |
+          cmp /tmp/current_service/current_service_sources_2026-09-03.csv outputs/phase2/current_service_sources_2026-09-03.csv
+          cmp /tmp/current_service/current_service_trips_2026-09-03.csv outputs/phase2/current_service_trips_2026-09-03.csv
+          cmp /tmp/current_service/current_service_stop_times_2026-09-03.csv outputs/phase2/current_service_stop_times_2026-09-03.csv
+          cmp /tmp/current_service/current_service_stop_trip_matrix_2026-09-03.csv outputs/phase2/current_service_stop_trip_matrix_2026-09-03.csv
+          cmp /tmp/current_service/current_service_pdf_stop_rows_2026-09-03.csv outputs/phase2/current_service_pdf_stop_rows_2026-09-03.csv
+          cmp /tmp/current_service/current_service_temporary_conditions_2026-09-03.csv outputs/phase2/current_service_temporary_conditions_2026-09-03.csv
+          cmp /tmp/current_service/current_service_stop_timetable_validation.json outputs/phase2/current_service_stop_timetable_validation_2026-09-03.json
+
       - name: Static anti-shortcut guard
         shell: bash
         run: |
@@ -119,24 +131,6 @@ jobs:
           ! grep -E "outputs/current_service_baseline.csv|scripts/05_current_service.py" \
             src/phase2_current_service_stop_timetable.py \
             src/phase2_current_service_matrix.py
-
-      - name: Persist validated outputs on branch
-        if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
-        shell: bash
-        run: |
-          mkdir -p outputs/phase2
-          for file in /tmp/current_service/*; do
-            cp "$file" "outputs/phase2/$(basename "$file")"
-          done
-          if [ -z "$(git status --porcelain -- outputs/phase2/current_service_*2026-09-03*)" ]; then
-            echo "Committed outputs already match regenerated evidence."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add outputs/phase2/current_service_*2026-09-03*
-          git commit -m "data(phase2-current): materialise audited stop timetable [skip ci]"
-          git push origin HEAD:phase2-current-service-stop-timetable
 
       - name: Upload reproducible current-service evidence
         uses: actions/upload-artifact@v4
