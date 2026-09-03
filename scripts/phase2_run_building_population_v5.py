@@ -377,7 +377,15 @@ def _postprocess_outputs(output_dir: Path) -> None:
     )
     validation_path.write_text(json.dumps(validation, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    buildings = pd.read_csv(building_csv)
+    buildings = pd.read_csv(
+        building_csv,
+        dtype={
+            "building_id": "string",
+            "dbgt_status_fact": "string",
+            "dbgt_type_fact": "string",
+            "dbgt_use_codes_fact": "string",
+        },
+    )
     parsed = buildings["building_id"].map(split_composite_id)
     buildings.insert(1, "dbgt_cod_cons_fact", parsed.map(lambda x: x[0]))
     buildings.insert(2, "dbgt_local_classref_fact", parsed.map(lambda x: x[1]))
