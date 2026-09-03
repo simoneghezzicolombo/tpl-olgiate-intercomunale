@@ -1,63 +1,37 @@
 name: Gate E service math
 
+permissions:
+  contents: read
+  actions: read
+
 on:
   push:
     branches: [gate-e-workstream, antigravity-real-data]
     paths:
-      - 'src/service_math.py'
-      - 'src/headway_audit.py'
-      - 'src/fleet_audit.py'
-      - 'src/operating_envelope.py'
-      - 'src/gate_d_screen.py'
-      - 'src/service_contract_integrity.py'
+      - 'src/**'
+      - 'scripts/gate_e_*.py'
       - 'scripts/10_service_simulation.py'
-      - 'scripts/gate_e_sensitivity.py'
-      - 'scripts/gate_e_build_input.py'
-      - 'scripts/gate_e_headway_audit.py'
-      - 'scripts/gate_e_fleet_audit.py'
-      - 'scripts/gate_e_gate_c_baseline.py'
-      - 'scripts/gate_e_operating_envelope.py'
-      - 'scripts/gate_e_normalize_gate_d.py'
-      - 'scripts/gate_e_screen_gate_d.py'
-      - 'scripts/gate_e_gtfs_runtime_benchmark.py'
-      - 'scripts/gate_e_service_calendar.py'
       - 'tests/test_gate_e_*.py'
       - 'tests/test_cycle_times.py'
-      - 'schemas/gate_e_*.csv'
-      - 'schemas/gate_c_to_e_v1.csv'
-      - 'schemas/gate_c_departures_to_e_v1.csv'
-      - 'schemas/gate_d_to_e_v1.csv'
-      - 'schemas/gate_d_to_e_v2.csv'
+      - 'schemas/gate_*.csv'
       - 'data/risorse_tpl_pdb.csv'
+      - 'data/processed/gate_d_pass/**'
+      - 'outputs/gate_e/**'
       - 'docs/GATE_E_*.md'
+      - '.github/workflows/gate-e-service-math.yml'
   pull_request:
     paths:
-      - 'src/service_math.py'
-      - 'src/headway_audit.py'
-      - 'src/fleet_audit.py'
-      - 'src/operating_envelope.py'
-      - 'src/gate_d_screen.py'
-      - 'src/service_contract_integrity.py'
+      - 'src/**'
+      - 'scripts/gate_e_*.py'
       - 'scripts/10_service_simulation.py'
-      - 'scripts/gate_e_sensitivity.py'
-      - 'scripts/gate_e_build_input.py'
-      - 'scripts/gate_e_headway_audit.py'
-      - 'scripts/gate_e_fleet_audit.py'
-      - 'scripts/gate_e_gate_c_baseline.py'
-      - 'scripts/gate_e_operating_envelope.py'
-      - 'scripts/gate_e_normalize_gate_d.py'
-      - 'scripts/gate_e_screen_gate_d.py'
-      - 'scripts/gate_e_gtfs_runtime_benchmark.py'
-      - 'scripts/gate_e_service_calendar.py'
       - 'tests/test_gate_e_*.py'
       - 'tests/test_cycle_times.py'
-      - 'schemas/gate_e_*.csv'
-      - 'schemas/gate_c_to_e_v1.csv'
-      - 'schemas/gate_c_departures_to_e_v1.csv'
-      - 'schemas/gate_d_to_e_v1.csv'
-      - 'schemas/gate_d_to_e_v2.csv'
+      - 'schemas/gate_*.csv'
       - 'data/risorse_tpl_pdb.csv'
+      - 'data/processed/gate_d_pass/**'
+      - 'outputs/gate_e/**'
       - 'docs/GATE_E_*.md'
+      - '.github/workflows/gate-e-service-math.yml'
 
 jobs:
   service-math:
@@ -80,18 +54,15 @@ jobs:
             git diff --check HEAD^ HEAD
           fi
       - name: Compile
-        run: >-
-          python -m py_compile
-          src/service_math.py src/headway_audit.py src/fleet_audit.py src/operating_envelope.py
-          src/gate_d_screen.py src/service_contract_integrity.py
-          scripts/10_service_simulation.py scripts/gate_e_sensitivity.py
-          scripts/gate_e_build_input.py scripts/gate_e_headway_audit.py
-          scripts/gate_e_fleet_audit.py scripts/gate_e_gate_c_baseline.py
-          scripts/gate_e_operating_envelope.py scripts/gate_e_normalize_gate_d.py
-          scripts/gate_e_screen_gate_d.py scripts/gate_e_gtfs_runtime_benchmark.py
-          scripts/gate_e_service_calendar.py
+        shell: bash
+        run: python -m py_compile src/*.py scripts/gate_e_*.py scripts/10_service_simulation.py
       - name: Gate E tests
         run: pytest -q tests/test_gate_e_*.py tests/test_cycle_times.py
+      - name: Verify committed Gate D PASS snapshot hashes
+        shell: bash
+        run: |
+          echo "0d2c187b888ce711da04fb96a8ff8f6e638f67980099e9d9e67a073b9b6cc2a1  data/processed/gate_d_pass/structural_candidate_metrics.csv" | sha256sum -c -
+          echo "50d177dbd575b7e14c77e8e59f99770ac0017913a266e96680d7fa8405bda5b3  data/processed/gate_d_pass/candidate_loop_evidence.csv" | sha256sum -c -
       - name: Gate C PASS pinned integration
         shell: bash
         run: |
@@ -130,6 +101,81 @@ jobs:
           assert {'D184', 'D185'} <= {r['route_id'] for r in rows}
           assert all(r['epistemic_status'] == 'DERIVED' for r in rows)
           assert all('NOT_OBSERVED' in r['runtime_semantics'] for r in rows)
+          PY
+      - name: Gate D PASS exact artifact integration
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ARTIFACT_ID=9891607118
+          ARTIFACT_SHA=6fbc06d74d5ba970bc980e4cde6234245e0753c22386f703ea313c6a4de9206a
+          GATE_D_PASS=7c220f7586d0f6e5cccd14a2d518be52eb1c4a55
+          curl --fail --location --retry 3 \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+            -o /tmp/gate-d-pass.zip
+          echo "$ARTIFACT_SHA  /tmp/gate-d-pass.zip" | sha256sum -c -
+          rm -rf /tmp/gate-d-pass && mkdir -p /tmp/gate-d-pass
+          unzip -q /tmp/gate-d-pass.zip -d /tmp/gate-d-pass
+          cmp /tmp/gate-d-pass/structural_candidate_metrics.csv data/processed/gate_d_pass/structural_candidate_metrics.csv
+          python - <<'PY'
+          import csv
+          from collections import defaultdict
+          source = '/tmp/gate-d-pass/structural_candidate_waypoints.csv'
+          rows = list(csv.DictReader(open(source, encoding='utf-8-sig')))
+          groups = defaultdict(list)
+          for row in rows:
+              groups[row['candidate_id']].append(row)
+          output = []
+          source_sha = 'a8bf8fe133590230b4cd063b58c3332d27243c11b501c160979a2e1a94de054b'
+          for candidate_id, group in sorted(groups.items()):
+              group.sort(key=lambda r: int(r['sequence']))
+              output.append({
+                  'candidate_id': candidate_id, 'family': group[0]['family'], 'direction': group[0]['direction'],
+                  'first_anchor': group[0]['anchor_id'], 'last_anchor': group[-1]['anchor_id'],
+                  'waypoint_count': len(group),
+                  'assumption_waypoint_count': sum(r['epistemic_status'] == 'ASSUMPTION' for r in group),
+                  'source_waypoints_sha256': source_sha, 'epistemic_status': 'DERIVED',
+              })
+          with open('/tmp/candidate_loop_evidence.csv', 'w', newline='', encoding='utf-8') as f:
+              writer = csv.DictWriter(f, fieldnames=list(output[0].keys()))
+              writer.writeheader(); writer.writerows(output)
+          PY
+          cmp /tmp/candidate_loop_evidence.csv data/processed/gate_d_pass/candidate_loop_evidence.csv
+          python scripts/gate_e_gate_d_pass_analysis.py \
+            --artifact-zip /tmp/gate-d-pass.zip \
+            --artifact-sha256 "$ARTIFACT_SHA" \
+            --artifact-id "$ARTIFACT_ID" \
+            --gate-d-commit "$GATE_D_PASS" \
+            --composite-id FIG8_COMPACT \
+            --composite-families WEST_COMPACT_MONDONICO,EAST_COMPACT_ARLATE \
+            --headways 30,45,60,90 \
+            --vehicles-each-direction 1,2,3 \
+            --budget-output /tmp/gate_e_budget_envelope.csv \
+            --fleet-output /tmp/gate_e_fleet_envelope.csv \
+            --unpaired-output /tmp/gate_e_unpaired.csv
+          python - <<'PY'
+          import csv, math
+          budget = list(csv.DictReader(open('/tmp/gate_e_budget_envelope.csv', encoding='utf-8')))
+          fig8 = next(r for r in budget if r['route_id'] == 'FIG8_COMPACT')
+          assert fig8['route_definition_status'] == 'ASSUMPTION'
+          assert int(fig8['max_equal_CW_CCW_cycles_year_under_budget']) == 2383
+          assert float(fig8['budget_margin_km_at_max_equal_pairs']) > 0
+          assert float(fig8['next_equal_pair_delta_km_vs_budget']) > 0
+          assert math.isclose(
+              float(fig8['annual_bus_km_at_max_equal_pairs']) + float(fig8['budget_margin_km_at_max_equal_pairs']),
+              float(fig8['budget_bus_km_year']), abs_tol=1e-8
+          )
+          fleet = list(csv.DictReader(open('/tmp/gate_e_fleet_envelope.csv', encoding='utf-8')))
+          cw60 = next(r for r in fleet if r['route_id']=='FIG8_COMPACT' and r['direction']=='CW' and r['target_headway_min']=='60.0' and r['in_service_vehicles_direction']=='1')
+          assert 14 < float(cw60['maximum_dwell_plus_recovery_min_compatible']) < 15
+          cw45 = next(r for r in fleet if r['route_id']=='FIG8_COMPACT' and r['direction']=='CW' and r['target_headway_min']=='45.0' and r['in_service_vehicles_direction']=='1')
+          assert cw45['headway_possible_with_zero_nonrunning'] == 'False'
+          unpaired = list(csv.DictReader(open('/tmp/gate_e_unpaired.csv', encoding='utf-8')))
+          assert {'WEST_RAVELLINO_EXTENSION','EAST_CAPRINO_CELANA_EXTENSION','WEST_SAN_ZENO_SENSITIVITY'} <= {r['candidate_id'] for r in unpaired}
+          assert all(r['gate_e_pairing_status'].startswith('UNPAIRED') for r in unpaired)
           PY
       - name: Benchmark audit
         run: python scripts/10_service_simulation.py --benchmark-only --budget-output /tmp/gate_e_budget.csv

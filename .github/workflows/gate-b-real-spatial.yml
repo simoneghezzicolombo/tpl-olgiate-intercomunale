@@ -5,6 +5,7 @@ on:
     branches: [antigravity-real-data]
     paths:
       - scripts/audit_02_real_spatial.py
+      - scripts/audit_02_redteam.py
       - tests/test_gate_b_spatial.py
       - scripts/audit_01_fetch_real_inputs.py
       - tests/test_audit_provenance.py
@@ -28,9 +29,10 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pandas geopandas rasterio pyogrio requests pytest networkx scipy
 
-      - name: Compile Gate B pipeline and tests
+      - name: Compile Gate B pipeline, red-team and tests
         run: |
           python -m py_compile scripts/audit_02_real_spatial.py
+          python -m py_compile scripts/audit_02_redteam.py
           python -m py_compile tests/test_gate_b_spatial.py
 
       - name: Rebuild Gate A inputs from clean checkout
@@ -42,60 +44,19 @@ jobs:
       - name: Run Gate B tests
         run: python -m pytest -v tests/test_gate_b_spatial.py
 
-      - name: Gate B red-team diagnostics
-        run: |
-          python - <<'PY'
-          import pandas as pd
-          import numpy as np
+      - name: Run persistent Gate B red-team
+        run: python scripts/audit_02_redteam.py
 
-          pop = pd.read_csv('data/audit_gate_b/population_cells_real.csv', dtype={'PRO_COM_T': str})
-          acc = pd.read_csv('data/audit_gate_b/population_accessibility.csv', dtype={'PRO_COM_T': str})
-          stops = pd.read_csv('data/audit_gate_b/gtfs_core_stops.csv', dtype={'stop_id': str})
-          edges = pd.read_csv('data/audit_gate_b/walk_graph_edges.csv')
-
-          print('--- calibration by municipality ---')
-          diag = pop.groupby(['PRO_COM_T', 'COMUNE']).agg(
-              worldpop_2020_sum=('worldpop_2020_raw', 'sum'),
-              calibrated_2025=('pop_calibrated_2025', 'sum'),
-              calibration_factor=('calibration_factor_2025', 'first'),
-              populated_cells=('cell_id', 'count'),
-          ).reset_index()
-          print(diag.to_string(index=False))
-          print('core calibrated total:', float(pop['pop_calibrated_2025'].sum()))
-
-          print('\n--- GTFS stop snap failures / largest snaps ---')
-          print(stops.sort_values('snap_distance_m', ascending=False)[
-              ['stop_id','stop_name','COMUNE','snap_distance_m','snap_ok']
-          ].head(12).to_string(index=False))
-
-          print('\n--- cell connector distance quantiles (m) ---')
-          print(acc['connector_distance_m'].quantile([0, .5, .9, .95, .99, 1]).to_string())
-
-          total = float(acc['pop_calibrated_2025'].sum())
-          print('\n--- coverage sensitivity to cell connector cap ---')
-          for cap in (100, 200, 300):
-              vals = []
-              for threshold in (5, 8, 10, 12):
-                  mask = (
-                      (acc['connector_distance_m'] <= cap)
-                      & acc['walk_min_to_nearest_gtfs_stop'].notna()
-                      & (acc['walk_min_to_nearest_gtfs_stop'] <= threshold)
-                  )
-                  pct = 100.0 * float(acc.loc[mask, 'pop_calibrated_2025'].sum()) / total
-                  vals.append(f'{threshold}m={pct:.2f}%')
-              print(f'cap {cap} m: ' + ', '.join(vals))
-
-          print('\n--- DSM-derived edge slope diagnostics ---')
-          abs_slope = edges.loc[edges['in_giant_component'], 'slope_uv'].abs().replace([np.inf, -np.inf], np.nan).dropna()
-          print(abs_slope.quantile([.5, .9, .95, .99, .999, 1]).to_string())
-          print('edges |slope| > 0.30:', int((abs_slope > .30).sum()), 'of', len(abs_slope))
-          PY
-
-      - name: Print Gate B summary
+      - name: Print Gate B audit outputs
         if: always()
         run: |
           if [ -f data/audit_gate_b/gate_b_summary.json ]; then
+            echo '--- gate_b_summary.json ---'
             cat data/audit_gate_b/gate_b_summary.json
+          fi
+          if [ -f data/audit_gate_b/redteam_summary.json ]; then
+            echo '--- redteam_summary.json ---'
+            cat data/audit_gate_b/redteam_summary.json
           fi
           if [ -f data/audit_gate_b/coverage_summary.csv ]; then
             echo '--- coverage_summary.csv ---'
@@ -106,5 +67,14 @@ jobs:
             cat data/audit_gate_b/spot_checks.csv
           fi
 
+      - name: Upload Gate B audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-b-spatial-audit-${{ github.sha }}
+          path: data/audit_gate_b/
+          if-no-files-found: error
+          retention-days: 30
+
 # Gate B starts from a fresh Gate A acquisition and never reads legacy synthetic outputs.
-# Trigger revision 5: continuous filtered DSM sampling and slope red-team.
+# Candidate PASS run revision 6: DSM guardrails, persistent red-team and archived outputs.

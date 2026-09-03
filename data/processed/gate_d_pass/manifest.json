@@ -1,0 +1,18 @@
+{
+  "gate": "D",
+  "gate_status": "PASS",
+  "computational_commit": "7c220f7586d0f6e5cccd14a2d518be52eb1c4a55",
+  "closure_branch_head": "7826b53bc4ac72cfbe93ebc7dd3ef0efe7898e1e",
+  "workflow_run_id": 33746091690,
+  "artifact_id": 9891607118,
+  "artifact_name": "gate-d-structural-evidence",
+  "artifact_zip_sha256": "6fbc06d74d5ba970bc980e4cde6234245e0753c22386f703ea313c6a4de9206a",
+  "source_waypoints_sha256": "a8bf8fe133590230b4cd063b58c3332d27243c11b501c160979a2e1a94de054b",
+  "snapshot_files": {
+    "structural_candidate_metrics.csv": "0d2c187b888ce711da04fb96a8ff8f6e638f67980099e9d9e67a073b9b6cc2a1",
+    "candidate_loop_evidence.csv": "50d177dbd575b7e14c77e8e59f99770ac0017913a266e96680d7fa8405bda5b3"
+  },
+  "epistemic_status": "RECONSTRUCTED",
+  "snapshot_semantics": "METRICS_BYTE_IDENTICAL_TO_PASS_ARTIFACT_PLUS_DERIVED_LOOP_CLOSURE_EVIDENCE",
+  "note": "The complete waypoint file is identified by SHA256 but not duplicated in Gate E. candidate_loop_evidence.csv is deterministically derived from it and preserves only loop closure, hub, count and assumption-presence information required by Gate E. Closure CI verifies it against artifact 9891607118."
+}

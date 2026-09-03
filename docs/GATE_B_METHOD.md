@@ -1,7 +1,8 @@
 # Gate B — Real spatial integrity
 
-**Stato:** IN VALIDAZIONE  
-**Checkpoint:** `AUDIT_CHECKPOINT_2_REAL_SPATIAL`
+**Stato:** **PASS**  
+**Checkpoint:** `AUDIT_CHECKPOINT_2_REAL_SPATIAL`  
+**Verbale:** `docs/GATE_B_PASS.md`
 
 Gate B sostituisce integralmente la precedente modellazione spaziale sintetica. Gli output legacy basati su nuclei insediativi manuali, `np.random`, quote inserite a mano, fermate hard-coded o distanze euclidee non sono ammessi come evidenza.
 
@@ -22,9 +23,11 @@ Ogni cella popolata del raster WorldPop conserva `worldpop_2020_raw`. La variabi
 
 Il grafo deriva dalle geometrie stradali OSM reali. Sono esclusi motorway, trunk, construction, proposed, raceway e gli archi con accesso pedonale esplicitamente vietato. Le coordinate sono proiettate in UTM 32N per le distanze metriche.
 
-Le quote dei nodi sono campionate dal Copernicus DSM mediante mediana locale 3×3. Questa procedura riduce l'influenza puntuale di edifici e vegetazione, ma non trasforma il DSM in un DTM bare-earth. La distinzione resta esplicita.
+Le quote dei nodi derivano dal Copernicus DSM GLO-30. Il metodo approvato applica un filtro mediano locale 3×3 e successiva interpolazione bilineare continua. Questo riduce l'influenza puntuale di edifici e vegetazione ed evita i falsi gradini altimetrici prodotti dal precedente nearest-pixel sampling sui segmenti OSM corti. Il DSM non viene comunque trattato come DTM bare-earth.
 
 I tempi di cammino sono direzionali e usano la funzione di Tobler sulla pendenza del singolo arco. Per il collegamento cella→grafo è ammesso un connettore massimo di 300 m a 4,8 km/h; la quota di popolazione che richiede connettori maggiori viene esclusa e riportata come controllo di qualità.
+
+La suite impone inoltre guardrail contro il ritorno dell'artefatto DSM: p95 della pendenza assoluta <30%, p99 <50% e meno del 5% degli archi con |slope| >30%.
 
 ## Fermate
 
@@ -46,15 +49,17 @@ Gate B misura quindi l'accessibilità spaziale all'infrastruttura di fermata uff
 
 ## Condizioni minime per PASS
 
-Gate B non può essere dichiarato PASS finché non sono contemporaneamente verificati:
+Gate B è PASS perché sono state verificate contemporaneamente:
 
 1. acquisizione OSM che copre l'intera geometria dei cinque comuni;
 2. separazione raw WorldPop 2020 / calibrazione 2025;
 3. quadratura esatta con POSAS per tutti i comuni senza doppio conteggio della riga aggregata;
-4. grafo OSM sufficientemente connesso e con pendenze reali dal DSM;
-5. fermate provenienti dal GTFS ufficiale e spot-check superati;
-6. almeno l'85% della popolazione calibrata collegabile al grafo entro il limite di 300 m;
+4. grafo OSM sufficientemente connesso e pendenze DSM sottoposte a red-team e guardrail;
+5. fermate provenienti dal GTFS ufficiale e 5/5 spot-check superati;
+6. almeno l'85% della popolazione calibrata collegabile al grafo entro il limite di 300 m, osservato 100%;
 7. coperture 5/8/10/12 minuti monotone e comprese tra 0 e 100%;
-8. suite CI completa su clone pulito.
+8. suite CI completa su clone pulito;
+9. red-team persistente con sensitivity analysis su connettori, pendenza e controfattuale flat;
+10. artifact di audit prodotto dal run validato.
 
-Il PASS finale viene assegnato solo dopo revisione dei risultati numerici e dei failure reali della CI.
+Il verdetto autorevole, i numeri validati e i limiti epistemici sono registrati in `docs/GATE_B_PASS.md`.
