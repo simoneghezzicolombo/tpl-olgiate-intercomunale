@@ -20,6 +20,7 @@ on:
       - 'scripts/gate_e_normalize_gate_d.py'
       - 'scripts/gate_e_screen_gate_d.py'
       - 'scripts/gate_e_gtfs_runtime_benchmark.py'
+      - 'scripts/gate_e_service_calendar.py'
       - 'tests/test_gate_e_*.py'
       - 'tests/test_cycle_times.py'
       - 'schemas/gate_e_*.csv'
@@ -47,6 +48,7 @@ on:
       - 'scripts/gate_e_normalize_gate_d.py'
       - 'scripts/gate_e_screen_gate_d.py'
       - 'scripts/gate_e_gtfs_runtime_benchmark.py'
+      - 'scripts/gate_e_service_calendar.py'
       - 'tests/test_gate_e_*.py'
       - 'tests/test_cycle_times.py'
       - 'schemas/gate_e_*.csv'
@@ -87,6 +89,7 @@ jobs:
           scripts/gate_e_fleet_audit.py scripts/gate_e_gate_c_baseline.py
           scripts/gate_e_operating_envelope.py scripts/gate_e_normalize_gate_d.py
           scripts/gate_e_screen_gate_d.py scripts/gate_e_gtfs_runtime_benchmark.py
+          scripts/gate_e_service_calendar.py
       - name: Gate E tests
         run: pytest -q tests/test_gate_e_*.py tests/test_cycle_times.py
       - name: Gate C PASS pinned integration
