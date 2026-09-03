@@ -8,6 +8,7 @@ on:
       - 'src/headway_audit.py'
       - 'src/fleet_audit.py'
       - 'src/operating_envelope.py'
+      - 'src/gate_d_screen.py'
       - 'scripts/10_service_simulation.py'
       - 'scripts/gate_e_sensitivity.py'
       - 'scripts/gate_e_build_input.py'
@@ -16,6 +17,7 @@ on:
       - 'scripts/gate_e_gate_c_baseline.py'
       - 'scripts/gate_e_operating_envelope.py'
       - 'scripts/gate_e_normalize_gate_d.py'
+      - 'scripts/gate_e_screen_gate_d.py'
       - 'tests/test_gate_e_*.py'
       - 'tests/test_cycle_times.py'
       - 'schemas/gate_e_*.csv'
@@ -31,6 +33,7 @@ on:
       - 'src/headway_audit.py'
       - 'src/fleet_audit.py'
       - 'src/operating_envelope.py'
+      - 'src/gate_d_screen.py'
       - 'scripts/10_service_simulation.py'
       - 'scripts/gate_e_sensitivity.py'
       - 'scripts/gate_e_build_input.py'
@@ -39,6 +42,7 @@ on:
       - 'scripts/gate_e_gate_c_baseline.py'
       - 'scripts/gate_e_operating_envelope.py'
       - 'scripts/gate_e_normalize_gate_d.py'
+      - 'scripts/gate_e_screen_gate_d.py'
       - 'tests/test_gate_e_*.py'
       - 'tests/test_cycle_times.py'
       - 'schemas/gate_e_*.csv'
@@ -72,11 +76,12 @@ jobs:
       - name: Compile
         run: >-
           python -m py_compile
-          src/service_math.py src/headway_audit.py src/fleet_audit.py src/operating_envelope.py
+          src/service_math.py src/headway_audit.py src/fleet_audit.py src/operating_envelope.py src/gate_d_screen.py
           scripts/10_service_simulation.py scripts/gate_e_sensitivity.py
           scripts/gate_e_build_input.py scripts/gate_e_headway_audit.py
           scripts/gate_e_fleet_audit.py scripts/gate_e_gate_c_baseline.py
           scripts/gate_e_operating_envelope.py scripts/gate_e_normalize_gate_d.py
+          scripts/gate_e_screen_gate_d.py
       - name: Gate E tests
         run: pytest -q tests/test_gate_e_*.py tests/test_cycle_times.py
       - name: Gate C PASS pinned integration
@@ -97,6 +102,7 @@ jobs:
           assert {r['service_id'] for r in rows} == {'D184', 'D185', 'D184+D185', 'S8@S01514'}
           assert all(r['annualization_status'] == 'FORBIDDEN_FROM_SINGLE_DATE_BASELINE' for r in rows)
           assert all(r['gate_c_commit'] == 'dcc3e75ae3b4f4ea5170f48e85345b83620c5536' for r in rows)
+          assert {r['epistemic_status'] for r in rows} <= {'RECONSTRUCTED', 'DERIVED'}
           PY
       - name: Benchmark audit
         run: python scripts/10_service_simulation.py --benchmark-only --budget-output /tmp/gate_e_budget.csv
