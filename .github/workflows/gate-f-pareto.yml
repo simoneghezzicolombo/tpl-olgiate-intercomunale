@@ -6,21 +6,11 @@ on:
       - gate-f-workstream
   pull_request:
     paths:
-      - 'src/gate_f_pareto.py'
-      - 'src/gate_f_inputs.py'
-      - 'src/gate_f_status.py'
-      - 'src/gate_f_assembly.py'
-      - 'src/gate_f_contract.py'
-      - 'scripts/13_gate_f_pareto.py'
-      - 'scripts/gate_f_build_inputs.py'
-      - 'tests/test_gate_f_pareto.py'
-      - 'tests/test_gate_f_inputs.py'
-      - 'tests/test_gate_f_status.py'
-      - 'tests/test_gate_f_status_git_objects.py'
-      - 'tests/test_gate_f_assembly.py'
-      - 'tests/test_gate_f_contract.py'
-      - 'tests/test_gate_f_end_to_end.py'
-      - 'schemas/gate_f_status_bundle.schema.json'
+      - 'src/gate_f_*.py'
+      - 'scripts/13_gate_f_*.py'
+      - 'scripts/gate_f_*.py'
+      - 'tests/test_gate_f_*.py'
+      - 'schemas/gate_f_*.json'
       - 'docs/GATE_F_*.md'
 
 jobs:
@@ -38,7 +28,7 @@ jobs:
       - name: Diff check against workstream baseline
         run: git diff --check 549198743e7265b333da565ce6990f9241cfd1fd...HEAD
       - name: Install focused dependencies
-        run: python -m pip install --upgrade pip pandas numpy pytest
+        run: python -m pip install --upgrade pip pandas numpy pytest networkx scipy pyproj
       - name: Gate F unit and integration tests
         run: >-
           pytest -q
@@ -49,11 +39,21 @@ jobs:
           tests/test_gate_f_assembly.py
           tests/test_gate_f_contract.py
           tests/test_gate_f_end_to_end.py
+          tests/test_gate_f_v2.py
+          tests/test_gate_f_inputs_v2.py
+          tests/test_gate_f_gate_d_adapter.py
+          tests/test_gate_f_gate_b_bridge.py
+          tests/test_gate_f_s8_bridge.py
       - name: Compile Gate F code
         run: >-
           python -m py_compile
           src/gate_f_pareto.py src/gate_f_inputs.py src/gate_f_status.py src/gate_f_assembly.py src/gate_f_contract.py
+          src/gate_f_contract_v2.py src/gate_f_v2.py src/gate_f_inputs_v2.py
+          src/gate_f_gate_b_bridge.py src/gate_f_gate_d_adapter.py src/gate_f_gate_e_adapter.py src/gate_f_s8_bridge.py
           scripts/13_gate_f_pareto.py scripts/gate_f_build_inputs.py
+          scripts/13_gate_f_pareto_v2.py scripts/gate_f_build_inputs_v2.py scripts/gate_f_build_status_bundle.py
+          scripts/gate_f_build_population_coverage.py scripts/gate_f_adapt_gate_d.py scripts/gate_f_adapt_gate_e.py
+          scripts/gate_f_build_s8_connections.py
       - name: Legacy output refusal smoke test
         shell: bash
         run: |
