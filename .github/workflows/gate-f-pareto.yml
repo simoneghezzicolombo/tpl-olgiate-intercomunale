@@ -9,15 +9,25 @@ on:
       - 'src/gate_f_pareto.py'
       - 'scripts/13_gate_f_pareto.py'
       - 'tests/test_gate_f_pareto.py'
+      - 'docs/GATE_F_WORKSTREAM.md'
+      - '.github/workflows/gate-f-pareto.yml'
 
 jobs:
   gate-f-unit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Diff check against workstream baseline
+        shell: bash
+        run: |
+          git fetch origin antigravity-real-data
+          base=$(git merge-base HEAD origin/antigravity-real-data)
+          git diff --check "$base"..HEAD
       - name: Install focused dependencies
         run: python -m pip install --upgrade pip pandas numpy pytest
       - name: Gate F unit tests
