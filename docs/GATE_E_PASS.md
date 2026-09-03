@@ -1,10 +1,10 @@
 # Gate E — Service math: PASS
 
-**Verdetto:** PASS  
-**Data:** 2026-09-03  
-**Branch:** `gate-e-workstream`  
-**Commit computazionale validato:** `e2d096ca929c92da0d8a4abdacde827445e208bd`  
-**CI validato:** run `33755350763`, job `100648344246`  
+**Verdetto:** PASS
+**Data:** 2026-09-03
+**Branch:** `gate-e-workstream`
+**Commit computazionale validato:** `e2d096ca929c92da0d8a4abdacde827445e208bd`
+**CI validato:** run `33755350763`, job `100648344246`
 **Test Gate E:** 130/130 PASS
 
 ## 1. Portata del PASS
