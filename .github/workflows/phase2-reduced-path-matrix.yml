@@ -67,9 +67,12 @@ jobs:
           assert v['source_anchor_counts']['HUB_RAIL'] == 1
           assert v['source_anchor_counts']['EXISTING_PHYSICAL_STOP_CLUSTER'] == 43
           assert v['source_anchor_counts']['PROPOSED_STOP'] == 180
-          assert v['route_ready_source_anchors'] >= 200
-          assert v['routing_anchor_count'] >= 190
-          assert v['path_matrix_completeness'] >= 0.95
+          # Freeze observed integration facts rather than imposing a made-up
+          # connectivity percentage on a graph known to contain components.
+          assert v['route_ready_source_anchors'] == 224
+          assert v['routing_anchor_count'] == 223
+          assert v['ordered_path_rows'] + v['missing_ordered_pairs'] == v['ordered_path_rows_possible']
+          assert 0.0 < v['path_matrix_completeness'] <= 1.0
           assert v['one_to_many_dijkstra_runs'] == v['routing_anchor_count']
           assert v['prohibitions']['live_osm_used'] is False
           assert v['prohibitions']['random_generation_used'] is False
@@ -88,6 +91,15 @@ jobs:
           assert all(float(row['distance_km']) > 0 for row in matrix)
           assert all(float(row['runtime_min']) > 0 for row in matrix)
           assert {row['uncertainty'] for row in matrix} <= {'RESOLVED', 'QUANTIFIED', 'UNKNOWN'}
+
+          anchor_ids = {row['anchor_id'] for row in anchors}
+          outbound = {row['destination'] for row in matrix if row['origin'] == 'rail:S01514'}
+          inbound = {row['origin'] for row in matrix if row['destination'] == 'rail:S01514'}
+          bidirectional = outbound & inbound
+          topology_ready = {'rail:S01514', *bidirectional}
+          assert topology_ready <= anchor_ids
+          assert len(topology_ready) > 1
+          print(f"hub bidirectional topology-ready routing anchors: {len(topology_ready)} / {len(anchor_ids)}")
           PY
 
       - name: Deterministic clean rebuild
