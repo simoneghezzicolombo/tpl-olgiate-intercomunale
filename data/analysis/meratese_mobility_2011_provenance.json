@@ -10,5 +10,7 @@
   "od_columns": [
     "procom_residenza;procom_lavoro;Numero_di_individui"
   ],
-  "note": "Study+work combined. For merged current municipalities, resident_commuters_total=out+self is merger-invariant; out/self separately are predecessor-geography sums."
+  "note": "Study+work combined. For merged current municipalities, resident_commuters_total=out+self is merger-invariant; out/self separately are predecessor-geography sums.",
+  "summary_delimiter": ";",
+  "parsing_fix": "2026-09-03: corrected semicolon delimiter; previous zero-valued comparison invalidated."
 }
