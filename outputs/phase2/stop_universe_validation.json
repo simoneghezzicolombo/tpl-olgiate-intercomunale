@@ -1,0 +1,56 @@
+{
+  "status": "PASS_STOP_UNIVERSE_BUILD",
+  "scope": "CANDIDATE_STOP_UNIVERSE_NOT_FINAL_NETWORK",
+  "gate_b_commit": "55d726564e13acca55ce563cc911263ac513acb0",
+  "gate_d_computational_commit": "7c220f7586d0f6e5cccd14a2d518be52eb1c4a55",
+  "gate_b_population_denominator_2025": 22914.0,
+  "existing_official_stop_records": 66,
+  "existing_physical_stop_clusters": 43,
+  "existing_snapped_stop_records": 62,
+  "baseline_coverage_pct": {
+    "5": 48.68678082149822,
+    "8": 72.12290602562771,
+    "10": 80.00327161825983,
+    "12": 85.90396587714696
+  },
+  "osm_settlement_anchors": 57,
+  "osm_destination_anchors": 30,
+  "bus_eligible_discovery_samples_with_gate_b_walk_access": 2559,
+  "raw_seeded_candidates_before_geometry_thin": 1296,
+  "raw_seeded_candidates": 381,
+  "pre_geometric_pruning_candidates": 347,
+  "final_proposed_candidates": 180,
+  "new_stop_epistemic_status": "PROPOSED_STOP/FIELD_CHECK_PENDING",
+  "legacy_processed_population_used": false,
+  "legacy_hardcoded_poi_dataset_used": false,
+  "live_overpass_used": false,
+  "principal_optimizer_catchment_threshold_min": 10,
+  "thresholds_reported_min": [
+    5,
+    8,
+    10,
+    12
+  ],
+  "assumptions": {
+    "discovery_sample_m": 150.0,
+    "seed_radius_m": 800.0,
+    "near_existing_prune_m": 150.0,
+    "candidate_prune_radius_m": 220.0,
+    "catchment_jaccard_prune": 0.9
+  },
+  "limitations": [
+    "Gate B walking/population evidence is limited to the five core municipalities; proposed-stop generation is therefore limited to that audited spatial universe plus the Gate-B boundary buffer.",
+    "Official bus GTFS route assignments describe the validated 2025-2026 reference period, not exact current post-2026-06-08 stop service.",
+    "OSM settlement/destination anchors are observations, not an exhaustive registry.",
+    "No proposed stop is certified physically constructible; every proposal requires field verification.",
+    "ISTAT 2021 work OD is municipal context only and is not downscaled to stops."
+  ],
+  "existing_physical_cluster_catchment_method": "MULTI_SOURCE_ALL_SNAPPED_GTFS_RECORDS_PER_40M_CLUSTER",
+  "pruning_cellset_alignment": "STABLE_PRE_SORT_KEYS",
+  "text_label_normalization": "KNOWN_UTF8_AS_LATIN1_MOJIBAKE_ONLY",
+  "final_network_selected": false,
+  "headway_modified": false,
+  "timetable_modified": false,
+  "budget_modified": false,
+  "ranking_produced": false
+}
