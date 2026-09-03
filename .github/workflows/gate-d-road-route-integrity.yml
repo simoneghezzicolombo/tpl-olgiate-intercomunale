@@ -54,6 +54,28 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
+      - name: Verify and stage Gate A official GTFS snapshots
+        run: |
+          python - <<'PY'
+          import csv, hashlib, pathlib, shutil
+
+          wanted = {
+              'gtfs_arriva_addabus_inv_2025_2026': pathlib.Path('data/audit_gate_d/raw/arriva_addabus_2025_2026.zip'),
+              'gtfs_lineelecco_inv_2025_2026': pathlib.Path('data/audit_gate_d/raw/lineelecco_2025_2026.zip'),
+          }
+          with open('data/manifest.csv', encoding='utf-8', newline='') as handle:
+              rows = {row['dataset_id']: row for row in csv.DictReader(handle)}
+          for dataset_id, target in wanted.items():
+              row = rows[dataset_id]
+              source = pathlib.Path(row['filepath_locale'])
+              assert source.exists() and source.stat().st_size > 0, f'missing Gate A input: {source}'
+              digest = hashlib.sha256(source.read_bytes()).hexdigest()
+              assert digest == row['sha256_hash'], f'checksum mismatch for {dataset_id}'
+              target.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(source, target)
+              assert hashlib.sha256(target.read_bytes()).hexdigest() == digest
+              print(f'{dataset_id}: verified {digest} -> {target}')
+          PY
       - name: Install spatial and network dependencies
         run: |
           python -m pip install --upgrade pip
