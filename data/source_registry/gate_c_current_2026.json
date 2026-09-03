@@ -1,0 +1,61 @@
+{
+  "gate": "C",
+  "acquired_on": "2026-09-03",
+  "sources": [
+    {
+      "id": "bus_D184_summer_2026",
+      "mode": "bus",
+      "route_id": "D184",
+      "publisher": "Lecco Trasporti / Arriva Italia",
+      "url": "https://www.leccotrasporti.it/percorsi/estivo/linea-d184.pdf",
+      "valid_from": "2026-06-09",
+      "valid_to": "2026-09-13",
+      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE"
+    },
+    {
+      "id": "bus_D185_summer_2026",
+      "mode": "bus",
+      "route_id": "D185",
+      "publisher": "Lecco Trasporti / Arriva Italia",
+      "url": "https://www.leccotrasporti.it/percorsi/estivo/linea-d185.pdf",
+      "valid_from": "2026-06-09",
+      "valid_to": "2026-09-13",
+      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE"
+    },
+    {
+      "id": "bus_D150_summer_2026",
+      "mode": "bus",
+      "route_id": "D150",
+      "publisher": "Lecco Trasporti / Arriva Italia",
+      "url": "https://www.leccotrasporti.it/percorsi/estivo/linea-d150.pdf",
+      "valid_from": "2026-06-09",
+      "valid_to": "2026-09-13",
+      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE"
+    },
+    {
+      "id": "bus_D170_summer_2026",
+      "mode": "bus",
+      "route_id": "D170",
+      "publisher": "Lecco Trasporti / Arriva Italia",
+      "url": "https://www.leccotrasporti.it/percorsi/estivo/linea-d170.pdf",
+      "valid_from": "2026-06-09",
+      "valid_to": "2026-09-13",
+      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE"
+    },
+    {
+      "id": "rail_trenord_regione_lombardia_gtfs_current",
+      "mode": "rail",
+      "route_id": "S8",
+      "publisher": "Regione Lombardia / Trenord",
+      "dataset_url": "https://www.dati.lombardia.it/Mobilit-e-trasporti/Orario-Ferroviario-Regionale-Gtfs/3z4k-mxz9",
+      "download_url": "https://www.dati.lombardia.it/download/3z4k-mxz9/application/zip",
+      "verified_active_service_from": "2026-07-26",
+      "verified_active_service_to": "2026-12-12",
+      "verification_aids": [
+        "https://www.transit.land/feeds/f-u0n-trenord",
+        "https://mobilitydatabase.org/feeds/gtfs/mdb-855"
+      ],
+      "epistemic_status": "FACT_OFFICIAL_SOURCE_IDENTIFIED_INGEST_PENDING"
+    }
+  ]
+}
