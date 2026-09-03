@@ -9,6 +9,7 @@ on:
       - 'src/fleet_audit.py'
       - 'src/operating_envelope.py'
       - 'src/gate_d_screen.py'
+      - 'src/service_contract_integrity.py'
       - 'scripts/10_service_simulation.py'
       - 'scripts/gate_e_sensitivity.py'
       - 'scripts/gate_e_build_input.py'
@@ -35,6 +36,7 @@ on:
       - 'src/fleet_audit.py'
       - 'src/operating_envelope.py'
       - 'src/gate_d_screen.py'
+      - 'src/service_contract_integrity.py'
       - 'scripts/10_service_simulation.py'
       - 'scripts/gate_e_sensitivity.py'
       - 'scripts/gate_e_build_input.py'
@@ -78,7 +80,8 @@ jobs:
       - name: Compile
         run: >-
           python -m py_compile
-          src/service_math.py src/headway_audit.py src/fleet_audit.py src/operating_envelope.py src/gate_d_screen.py
+          src/service_math.py src/headway_audit.py src/fleet_audit.py src/operating_envelope.py
+          src/gate_d_screen.py src/service_contract_integrity.py
           scripts/10_service_simulation.py scripts/gate_e_sensitivity.py
           scripts/gate_e_build_input.py scripts/gate_e_headway_audit.py
           scripts/gate_e_fleet_audit.py scripts/gate_e_gate_c_baseline.py
