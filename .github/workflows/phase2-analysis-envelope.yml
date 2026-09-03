@@ -32,7 +32,6 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-
           script = Path('scripts/phase2_analysis_envelope.py')
           text = script.read_text(encoding='utf-8')
           old = '''    m["procom"]=m.procom.map(norm); core,first,second,cu,fu,su=rings(m); cs=candidates(cu,fu,su); selected_name="ADJACENCY_1_PLUS_V1_WALK_GUARD"; selected=cs[selected_name]; acquisition=selected.buffer(EDGE_GUARD_M)
@@ -56,7 +55,6 @@ jobs:
           newp='"selection_principle":"Largest nested topology-neutral rule among the tested candidates that contains the inherited V1 core walk+snap guard and remains fully supported by the frozen Gate D source with a 250 m probe. Wider unsupported rules remain explicit sensitivity results rather than being forced into the primary envelope."'
           text=text.replace(oldp,newp)
           script.write_text(text,encoding='utf-8')
-
           test = Path('tests/test_phase2_analysis_envelope.py')
           t=test.read_text(encoding='utf-8')
           t=t.replace('    assert val["selected_rule"] == "ADJACENCY_1_PLUS_V1_WALK_GUARD"\n','''    comp=pd.read_csv(OUT / "envelope_rule_comparison.csv")
@@ -67,12 +65,11 @@ jobs:
           '''.replace('              ','    '))
           t=t.replace('    assert val["edge_effect_audit"]["first_order_shell_guard_contained"] is True\n','    assert isinstance(val["edge_effect_audit"]["first_order_shell_guard_contained"], bool)\n')
           test.write_text(t,encoding='utf-8')
-
           doc=Path('docs/PHASE2_ANALYSIS_ENVELOPE.md')
           d=doc.read_text(encoding='utf-8')
-          d=d.replace('The selected analysis rule is `ADJACENCY_1_PLUS_V1_WALK_GUARD`. Its epistemic state is `ASSUMPTION_RULE_EXPLICIT_AND_TOPOLOGY_NEUTRAL`, not FACT. It is chosen as the smallest tested rule that preserves a complete first-order supramunicipal context shell while remaining inside the frozen Gate D source epoch.','''The primary rule is selected mechanically after comparison: choose the **largest nested tested rule** that (a) fully contains the inherited V1 core walk+snap guard and (b) remains fully supported by the frozen Gate D source bbox with the 250 m graph probe. Its epistemic state is `ASSUMPTION_RULE_EXPLICIT_AND_TOPOLOGY_NEUTRAL`, not FACT. Wider rules that fail source support remain published sensitivity geometries instead of being clipped or silently accepted.
-
-The first CI red-team was useful: the full first-order municipal shell plus guard exceeded the frozen Gate D source bbox and was therefore rejected. This is an edge-effect finding, not a reason to expand or shrink the frozen road epoch silently.''')
+          old_doc='The selected analysis rule is `ADJACENCY_1_PLUS_V1_WALK_GUARD`. Its epistemic state is `ASSUMPTION_RULE_EXPLICIT_AND_TOPOLOGY_NEUTRAL`, not FACT. It is chosen as the smallest tested rule that preserves a complete first-order supramunicipal context shell while remaining inside the frozen Gate D source epoch.'
+          new_doc='The primary rule is selected mechanically after comparison: choose the **largest nested tested rule** that (a) fully contains the inherited V1 core walk+snap guard and (b) remains fully supported by the frozen Gate D source bbox with the 250 m graph probe. Its epistemic state is `ASSUMPTION_RULE_EXPLICIT_AND_TOPOLOGY_NEUTRAL`, not FACT. Wider rules that fail source support remain published sensitivity geometries instead of being clipped or silently accepted.\n\nThe first CI red-team was useful: the full first-order municipal shell plus guard exceeded the frozen Gate D source bbox and was therefore rejected. This is an edge-effect finding, not a reason to expand or shrink the frozen road epoch silently.'
+          d=d.replace(old_doc,new_doc)
           d=d.replace('- the full first-order municipal shell plus the same guard is contained;','- the selected rule contains the inherited V1 core guard; the full first-order shell is separately reported as a sensitivity and may legitimately be unsupported by the frozen road epoch;')
           doc.write_text(d,encoding='utf-8')
           PY
