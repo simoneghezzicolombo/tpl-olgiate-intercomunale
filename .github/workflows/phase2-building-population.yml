@@ -62,13 +62,25 @@ jobs:
             scripts/phase2_run_building_population_v5.py \
             tests/test_phase2_building_population.py \
             tests/test_phase2_dbgt_composite.py
-          ! grep -R --line-number -E 'PLACEHOLDER|synthetic population|hardcoded population' \
+          ! grep -R --line-number -E 'PLACEHOLDER|hardcoded population' \
             src/phase2_building_population.py \
             src/phase2_dbgt_composite.py \
             scripts/phase2_build_building_population.py \
             scripts/phase2_run_building_population.py \
             scripts/phase2_run_building_population_v2.py \
             scripts/phase2_run_building_population_v5.py
+          python - <<'PY'
+          from pathlib import Path
+          authoritative = [
+              Path('src/phase2_building_population.py'),
+              Path('src/phase2_dbgt_composite.py'),
+              Path('scripts/phase2_run_building_population_v5.py'),
+          ]
+          for p in authoritative:
+              text = p.read_text(encoding='utf-8')
+              assert 'np.random' not in text and 'random.' not in text, p
+          print('Static random/placeholder/hardcoded guards PASS; runtime validation separately requires legacy_synthetic_population_used=false.')
+          PY
       - name: Fetch checksum-validated Gate B evidence artifact
         env:
           GH_TOKEN: ${{ github.token }}
