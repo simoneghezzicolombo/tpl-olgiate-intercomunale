@@ -16,6 +16,8 @@ on:
 jobs:
   build-and-audit:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
     permissions:
       contents: read
       actions: read
