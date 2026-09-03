@@ -18,6 +18,7 @@ from scripts.audit_02_real_spatial import (
     SPOT_CHECKS,
     SUMMARY,
     THRESHOLDS_MIN,
+    load_posas_totals,
     tobler_walk_minutes,
 )
 
@@ -34,8 +35,29 @@ def _posas_totals():
     df['Codice comune'] = (
         df['Codice comune'].astype(str).str.replace(r'\.0$', '', regex=True).str.zfill(6)
     )
+    df['Età_num'] = pd.to_numeric(df['Età'], errors='coerce')
     df['Totale'] = pd.to_numeric(df['Totale'], errors='coerce')
-    return df[df['Codice comune'].isin(CORE_CODES)].groupby('Codice comune')['Totale'].sum()
+    agg = df[df['Codice comune'].isin(CORE_CODES) & (df['Età_num'] == 999)].copy()
+    return agg.set_index('Codice comune')['Totale']
+
+
+def test_posas_aggregate_row_is_not_double_counted():
+    parsed = load_posas_totals().set_index('Codice comune')['istat_2025'].sort_index()
+    official = _posas_totals().sort_index()
+    assert np.allclose(parsed.to_numpy(), official.to_numpy(), atol=1e-6)
+
+    raw = pd.read_csv(
+        POSAS, sep=';', skiprows=1, dtype={'Codice comune': str},
+        encoding='utf-8-sig', low_memory=False,
+    )
+    raw['Codice comune'] = raw['Codice comune'].astype(str).str.replace(r'\.0$', '', regex=True).str.zfill(6)
+    raw['Età_num'] = pd.to_numeric(raw['Età'], errors='coerce')
+    raw['Totale'] = pd.to_numeric(raw['Totale'], errors='coerce')
+    core = raw[raw['Codice comune'].isin(CORE_CODES)]
+    naive = core.groupby('Codice comune')['Totale'].sum().sort_index()
+    # The old bug summed detailed ages plus the already-aggregated 999 row.
+    assert np.allclose(naive.to_numpy(), 2.0 * official.to_numpy(), atol=1e-6)
+    assert float(parsed.sum()) == 22914.0
 
 
 def test_gate_b_source_contains_no_legacy_random_or_manual_nuclei():

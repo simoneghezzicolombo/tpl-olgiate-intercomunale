@@ -123,22 +123,47 @@ def load_posas_totals() -> pd.DataFrame:
         encoding="utf-8-sig",
         low_memory=False,
     )
-    required = {"Codice comune", "Comune", "Totale"}
+    required = {"Codice comune", "Comune", "Età", "Totale"}
     if not required.issubset(df.columns):
         raise ValueError(f"POSAS schema changed; missing={required - set(df.columns)}")
     df["Codice comune"] = (
         df["Codice comune"].astype(str).str.replace(r"\.0$", "", regex=True).str.zfill(6)
     )
+    df["Età_num"] = pd.to_numeric(df["Età"], errors="coerce")
     df["Totale"] = pd.to_numeric(df["Totale"], errors="coerce")
     core = df[df["Codice comune"].isin(CORE_CODES)].copy()
-    totals = (
-        core.groupby(["Codice comune", "Comune"], as_index=False)["Totale"]
+
+    # ISTAT POSAS publishes one municipality aggregate row with Età=999.
+    # Ages 0..100 sum to that row; adding the 999 row to the age rows would
+    # double-count the population exactly. Use the official aggregate and
+    # independently verify it against the detailed age rows.
+    aggregate = core[core["Età_num"] == 999].copy()
+    if len(aggregate) != 5 or set(aggregate["Codice comune"]) != CORE_CODES:
+        raise ValueError(
+            "POSAS must contain exactly one Età=999 aggregate row for each core municipality"
+        )
+    if aggregate["Totale"].isna().any():
+        raise ValueError("POSAS Età=999 aggregate contains missing population totals")
+
+    detail = (
+        core[core["Età_num"].between(0, 100, inclusive="both")]
+        .groupby("Codice comune", as_index=False)["Totale"]
         .sum()
-        .rename(columns={"Totale": "istat_2025"})
+        .rename(columns={"Totale": "detail_sum"})
     )
-    if len(totals) != 5 or totals["istat_2025"].isna().any():
-        raise ValueError(f"Could not derive all five POSAS totals: {totals}")
-    return totals
+    check = aggregate[["Codice comune", "Totale"]].merge(detail, on="Codice comune", how="left")
+    if check["detail_sum"].isna().any() or not np.allclose(
+        check["Totale"].to_numpy(dtype=float),
+        check["detail_sum"].to_numpy(dtype=float),
+        atol=1e-6,
+    ):
+        raise ValueError(f"POSAS age detail does not reconcile with Età=999 totals: {check}")
+
+    return (
+        aggregate[["Codice comune", "Comune", "Totale"]]
+        .rename(columns={"Totale": "istat_2025"})
+        .reset_index(drop=True)
+    )
 
 
 def extract_worldpop_cells(
@@ -648,7 +673,7 @@ def write_outputs(
         "access": access_info,
         "method_notes": [
             "WorldPop 2020 values are preserved separately from the municipality-calibrated 2025 derivative.",
-            "Population calibration is multiplicative within each official municipality and exactly quadrates to POSAS 2025 totals.",
+            "Population calibration is multiplicative within each official municipality and exactly quadrates to the POSAS 2025 Età=999 official aggregate row; age-detail rows are independently reconciled to prevent double counting.",
             "OSM walk edges exclude motorway/trunk/construction/proposed/raceway and explicit no-foot/private access unless foot access overrides it.",
             "Copernicus GLO-30 is a DSM; node elevations use a 3x3 median to reduce local building/tree artifacts but are not treated as bare-earth truth.",
             "Walking times use directional Tobler slope adjustment on the OSM graph. Cell-to-network connectors are limited to 300 m and use 4.8 km/h.",
