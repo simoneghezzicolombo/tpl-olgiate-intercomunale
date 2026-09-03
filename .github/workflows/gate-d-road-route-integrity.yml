@@ -1,0 +1,39 @@
+name: Gate D road and route integrity
+
+on:
+  push:
+    branches: [gate-d-workstream]
+    paths:
+      - scripts/08_candidate_routes.py
+      - scripts/gate_d_route_integrity.py
+      - tests/test_gate_d_route_integrity.py
+      - .github/workflows/gate-d-road-route-integrity.yml
+  workflow_dispatch:
+
+jobs:
+  gate-d-unit-and-static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install Gate D dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pandas geopandas shapely networkx pyogrio pytest
+      - name: Compile Gate D pipeline
+        run: |
+          python -m py_compile scripts/08_candidate_routes.py
+          python -m py_compile scripts/gate_d_route_integrity.py
+          python -m py_compile tests/test_gate_d_route_integrity.py
+      - name: Run Gate D adversarial tests
+        run: python -m pytest -v tests/test_gate_d_route_integrity.py
+      - name: Fail if legacy hardcoded route outputs are regenerated
+        run: |
+          if grep -R -n -E 'PARETO-OTTIMALE|\(Raccomandata\)|pop_servita_5min|od_flusso_intercettato|runtime_ovest_min|km_ovest' scripts/08_candidate_routes.py; then
+            echo 'Legacy hard-coded route metrics detected'
+            exit 1
+          fi
