@@ -1,0 +1,100 @@
+name: Phase 2 materialise S8 evidence
+
+on:
+  push:
+    branches: [phase2-optimizer-core]
+    paths:
+      - src/phase2_s8_interchange.py
+      - scripts/phase2_build_s8_interchange.py
+      - .github/workflows/phase2-s8-materialise.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialise-s8:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Extract pinned authoritative Gate C S8 service-day evidence
+        shell: bash
+        run: |
+          GATE_C_PASS=dcc3e75ae3b4f4ea5170f48e85345b83620c5536
+          git cat-file -e "$GATE_C_PASS^{commit}"
+          git show "$GATE_C_PASS:outputs/gate_c/live_trenord_2026-09-03.json" > /tmp/gate_c_live_s8.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/gate_c_live_s8.json', encoding='utf-8'))
+          assert p['gate']=='C'
+          assert p['source_type']=='LIVE_OFFICIAL_GTFS'
+          assert p['service_date']=='2026-09-03'
+          assert p['station']['stop_id']=='S01514'
+          assert p['active_s8_station_events_count']==74
+          assert p['download_sha256']=='b4296f145b42ccb35c26085470ff4b3fd5dffe533251c0aab312312a73820ad6'
+          PY
+
+      - name: Build central S8 evidence bundle
+        run: >-
+          python scripts/phase2_build_s8_interchange.py
+          --gate-c-live-json /tmp/gate_c_live_s8.json
+          --gtfs-zip data/raw/gtfs/rail_trenord/trenord_gtfs.zip
+          --gate-c-commit dcc3e75ae3b4f4ea5170f48e85345b83620c5536
+          --demand outputs/phase2/od_2021_destinations_by_origin.csv
+          --s8-municipalities outputs/phase2/s8_station_municipalities.csv
+          --sfr data/raw/sfr/stazioni_s8_indice_2015_2025.csv
+          --output-dir outputs/phase2
+
+      - name: Validate materialised S8 contract
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root=Path('outputs/phase2')
+          events=list(csv.DictReader((root/'s8_events.csv').open(encoding='utf-8')))
+          assert len(events)==74
+          assert sum(r['direction']=='MILANO' for r in events)==37
+          assert sum(r['direction']=='LECCO' for r in events)==37
+          assert all(r['epistemic_status']=='DERIVED_FROM_LIVE_OFFICIAL_GTFS' for r in events)
+          summary={r['direction']:r for r in csv.DictReader((root/'s8_direction_summary.csv').open(encoding='utf-8'))}
+          assert summary['MILANO']['first_departure']=='05:26:00'
+          assert summary['MILANO']['last_departure']=='23:26:00'
+          assert summary['LECCO']['first_departure']=='06:03:00'
+          assert summary['LECCO']['last_departure']=='24:03:00'
+          assert float(summary['MILANO']['headway_median_min'])==30.0
+          assert float(summary['LECCO']['headway_median_min'])==30.0
+          contract=json.load((root/'s8_interchange_contract.json').open(encoding='utf-8'))
+          assert contract['topology_dependency']=='NONE'
+          assert contract['active_s8_events']==74
+          assert contract['official_gtfs_sha256']=='b4296f145b42ccb35c26085470ff4b3fd5dffe533251c0aab312312a73820ad6'
+          assert contract['work_demand']['direct_s8_workers']==1882
+          assert contract['work_demand']['S8_DIRECT_is_modal_share'] is False
+          assert contract['delay_robustness']['random_sampling'] is False
+          PY
+          git diff --check
+
+      - name: Commit central S8 evidence
+        shell: bash
+        run: |
+          FILES="outputs/phase2/s8_events.csv outputs/phase2/s8_direction_summary.csv outputs/phase2/s8_work_demand_addressability.csv outputs/phase2/s8_timetable_characterization.json outputs/phase2/s8_station_context.json outputs/phase2/s8_interchange_contract.json"
+          if git diff --quiet -- $FILES && \
+             git ls-files --error-unmatch outputs/phase2/s8_events.csv >/dev/null 2>&1; then
+            echo "S8 evidence already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add $FILES
+          git commit -m "data(phase2): materialise validated S8 evidence [skip ci]"
+          git push
