@@ -1,0 +1,76 @@
+name: Phase 2 budget envelopes
+
+on:
+  push:
+    branches: [phase2-optimizer-core]
+    paths:
+      - scripts/phase2_build_budget_envelopes.py
+      - tests/test_phase2_budget_envelopes.py
+      - .github/workflows/phase2-budget-envelopes.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialise-budget-envelopes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install pytest
+
+      - name: Compile budget bridge
+        run: python -m py_compile scripts/phase2_build_budget_envelopes.py
+
+      - name: Run budget-envelope contract tests
+        run: pytest -q tests/test_phase2_budget_envelopes.py
+
+      - name: Materialise declared Phase 2 budget search space
+        run: >-
+          python scripts/phase2_build_budget_envelopes.py
+          --changes=-0.2,-0.1,0,0.1,0.2,0.3
+
+      - name: Validate materialised envelopes
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root=Path('outputs/phase2')
+          rows=list(csv.DictReader((root/'budget_envelopes.csv').open(encoding='utf-8')))
+          validation=json.load((root/'budget_envelopes_validation.json').open(encoding='utf-8'))
+          assert len(rows)==6
+          assert validation['status']=='PASS'
+          assert validation['gate_e_commit']=='e2d096ca929c92da0d8a4abdacde827445e208bd'
+          assert validation['budget_status']=='DERIVED_FROM_PDB_RECONSTRUCTED_LINE_TOTALS'
+          assert validation['pairable_route_count']==4
+          assert validation['reference_annual_bus_km']==111419.0
+          assert validation['declared_changes_fraction']==[-0.2,-0.1,0.0,0.1,0.2,0.3]
+          assert [float(r['annual_bus_km_cap']) for r in rows]==[89135.2,100277.1,111419.0,122560.90000000001,133702.8,144844.7]
+          assert all(r['envelope_status']=='PHASE2_DECLARED_DESIGN_SEARCH_ENVELOPE' for r in rows)
+          PY
+          git diff --check
+
+      - name: Commit materialised budget envelopes
+        shell: bash
+        run: |
+          FILES="outputs/phase2/budget_envelopes.csv outputs/phase2/budget_envelopes_validation.json"
+          if git diff --quiet -- $FILES && \
+             git ls-files --error-unmatch outputs/phase2/budget_envelopes.csv >/dev/null 2>&1; then
+            echo "Budget envelopes already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add $FILES
+          git commit -m "data(phase2): materialise validated budget envelopes [skip ci]"
+          git push
