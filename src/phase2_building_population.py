@@ -284,14 +284,23 @@ def reconcile_municipal_population(
     if building_allocations.empty:
         alloc = pd.DataFrame(columns=[municipality_col, "building_population_model"])
     else:
-        alloc = building_allocations.merge(section_to_muni, on=section_col, how="left", validate="many_to_one")
+        # Production building-section pieces already carry municipality_code. Drop it
+        # before the authoritative section->municipality join so pandas cannot create
+        # municipality_code_x/municipality_code_y and silently break accounting.
+        alloc_input = building_allocations.drop(columns=[municipality_col], errors="ignore")
+        alloc = alloc_input.merge(section_to_muni, on=section_col, how="left", validate="many_to_one")
+        if alloc[municipality_col].isna().any():
+            raise ValueError("building allocation section lacks municipality mapping")
         alloc = (
             alloc.groupby(municipality_col, as_index=False)["building_piece_population_model"]
             .sum()
             .rename(columns={"building_piece_population_model": "building_population_model"})
         )
 
-    res = section_residuals.merge(section_to_muni, on=section_col, how="left", validate="one_to_one")
+    residual_input = section_residuals.drop(columns=[municipality_col], errors="ignore")
+    res = residual_input.merge(section_to_muni, on=section_col, how="left", validate="one_to_one")
+    if res[municipality_col].isna().any():
+        raise ValueError("section residual lacks municipality mapping")
     res = (
         res.groupby(municipality_col, as_index=False)["unallocated_population"]
         .sum()
