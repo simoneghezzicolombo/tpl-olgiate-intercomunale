@@ -8,7 +8,9 @@ on:
       - scripts/gate_d_route_integrity.py
       - scripts/gate_d_real_road_audit.py
       - scripts/gate_d_turn_restrictions.py
+      - scripts/gate_d_structural_candidates.py
       - tests/test_gate_d_route_integrity.py
+      - tests/test_gate_d_structural_candidates.py
       - .github/workflows/gate-d-road-route-integrity.yml
   workflow_dispatch:
 
@@ -34,9 +36,11 @@ jobs:
           python -m py_compile scripts/gate_d_route_integrity.py
           python -m py_compile scripts/gate_d_real_road_audit.py
           python -m py_compile scripts/gate_d_turn_restrictions.py
+          python -m py_compile scripts/gate_d_structural_candidates.py
           python -m py_compile tests/test_gate_d_route_integrity.py
+          python -m py_compile tests/test_gate_d_structural_candidates.py
       - name: Run Gate D adversarial tests
-        run: python -m pytest -v tests/test_gate_d_route_integrity.py
+        run: python -m pytest -v tests/test_gate_d_route_integrity.py tests/test_gate_d_structural_candidates.py
       - name: Check patch whitespace
         run: git diff --check 549198743e7265b333da565ce6990f9241cfd1fd..HEAD
       - name: Fail if legacy hardcoded route outputs are regenerated
@@ -82,20 +86,19 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install pandas geopandas shapely networkx pyogrio requests
-      - name: Acquire extended OSM and audit official GTFS geometry
-        run: python scripts/gate_d_real_road_audit.py
-      - name: Resolve bus-applicable OSM turn restrictions
-        run: python scripts/gate_d_turn_restrictions.py
-      - name: Print numerical evidence
+      - name: Acquire tiled OSM and run structural candidate audit
+        run: python scripts/gate_d_structural_candidates.py
+      - name: Print structural numerical evidence
         if: always()
         run: |
-          if [ -f data/audit_gate_d/gate_d_real_audit_summary.json ]; then cat data/audit_gate_d/gate_d_real_audit_summary.json; fi
+          if [ -f data/audit_gate_d/structural_candidate_summary.json ]; then cat data/audit_gate_d/structural_candidate_summary.json; fi
+          if [ -f data/audit_gate_d/structural_candidate_metrics.csv ]; then echo '--- STRUCTURAL CANDIDATES ---'; cat data/audit_gate_d/structural_candidate_metrics.csv; fi
+          if [ -f data/audit_gate_d/structural_anchor_evidence.csv ]; then echo '--- ANCHOR EVIDENCE ---'; cat data/audit_gate_d/structural_anchor_evidence.csv; fi
+          if [ -f data/audit_gate_d/structural_gtfs_baseline_patterns.csv ]; then echo '--- GTFS BASELINES ---'; cat data/audit_gate_d/structural_gtfs_baseline_patterns.csv; fi
           if [ -f data/audit_gate_d/osm_turn_restrictions_summary.json ]; then echo '--- TURN RESTRICTIONS ---'; cat data/audit_gate_d/osm_turn_restrictions_summary.json; fi
-          if [ -f data/audit_gate_d/gtfs_osm_shape_audit.csv ]; then echo '--- GTFS/OSM SHAPE AUDIT ---'; cat data/audit_gate_d/gtfs_osm_shape_audit.csv; fi
-          if [ -f data/audit_gate_d/public_road_constraints.csv ]; then echo '--- PUBLIC ROAD CONSTRAINTS ---'; cat data/audit_gate_d/public_road_constraints.csv; fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: gate-d-live-evidence
+          name: gate-d-structural-evidence
           path: data/audit_gate_d/
           if-no-files-found: warn
