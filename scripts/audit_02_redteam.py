@@ -92,13 +92,24 @@ def stop_snap_diagnostics(stops: pd.DataFrame) -> dict:
 
 
 def slope_diagnostics(edges: pd.DataFrame) -> dict:
-    values = (
-        edges.loc[edges["in_giant_component"], "slope_uv"]
-        .abs()
-        .replace([np.inf, -np.inf], np.nan)
-        .dropna()
+    giant = edges.loc[edges["in_giant_component"]].copy()
+    giant["abs_slope"] = (
+        giant["slope_uv"].abs().replace([np.inf, -np.inf], np.nan)
     )
+    values = giant["abs_slope"].dropna()
     q = values.quantile([0.5, 0.9, 0.95, 0.99, 0.999, 1.0])
+    steep = giant.loc[giant["abs_slope"] > 0.30].copy()
+    steep_by_highway = (
+        steep.groupby("highway").size().sort_values(ascending=False).astype(int).to_dict()
+        if len(steep)
+        else {}
+    )
+    very_steep = giant.loc[giant["abs_slope"] > 0.50].copy()
+    very_steep_by_highway = (
+        very_steep.groupby("highway").size().sort_values(ascending=False).astype(int).to_dict()
+        if len(very_steep)
+        else {}
+    )
     return {
         "n_edges": int(len(values)),
         "abs_slope_quantiles": {
@@ -111,8 +122,10 @@ def slope_diagnostics(edges: pd.DataFrame) -> dict:
         },
         "edges_abs_slope_gt_030": int((values > 0.30).sum()),
         "share_abs_slope_gt_030": float((values > 0.30).mean()),
+        "steep_gt_030_by_highway": steep_by_highway,
         "edges_abs_slope_gt_050": int((values > 0.50).sum()),
         "share_abs_slope_gt_050": float((values > 0.50).mean()),
+        "steep_gt_050_by_highway": very_steep_by_highway,
     }
 
 
