@@ -1,0 +1,118 @@
+{
+  "status": "PASS",
+  "reference_date": "2026-09-03",
+  "scope": "STOP_LEVEL_AND_TRIP_LEVEL_CURRENT_SERVICE_REFERENCE",
+  "gate_c_commit": "dcc3e75ae3b4f4ea5170f48e85345b83620c5536",
+  "gate_c_report_sha256": "6b896754be5ceb989b0700f33fc5366f0c8d87a5e3e84c938f71a073281a8af3",
+  "source_class": "OFFICIAL_OPERATOR_PRIMARY_TIMETABLE_PDFS",
+  "epistemic_status": "RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE",
+  "route_ids": [
+    "D184",
+    "D185",
+    "D150",
+    "D170"
+  ],
+  "scheduled_timetable_columns_total": 119,
+  "active_timetable_columns_on_reference_date": 104,
+  "operator_trip_ids_available_for_current_pdf_columns": false,
+  "trip_identity_semantics": "STABLE_RECONSTRUCTED_TIMETABLE_COLUMN_ID_NOT_OPERATOR_TRIP_ID",
+  "stop_time_rows_total": 1145,
+  "active_stop_time_rows_on_reference_date": 990,
+  "pdf_stop_rows_total": 209,
+  "complete_stop_trip_cells_total": 3089,
+  "complete_stop_trip_cell_state_counts": {
+    "OUTSIDE_PUBLISHED_TIMED_SPAN": 1477,
+    "PUBLISHED_TIME": 1145,
+    "NO_PUBLISHED_TIME_WITHIN_COLUMN_SPAN": 454,
+    "EXPLICITLY_SUSPENDED_STOP": 13
+  },
+  "unpublished_time_interpolation_used": false,
+  "temporary_conditions_count": 1,
+  "historical_gtfs_crosscheck_date": "2026-05-06",
+  "historical_gtfs_crosscheck": {
+    "D184": {
+      "snapshot_trips": 15,
+      "active_trips_on_2026_05_06": 15,
+      "snapshot_stop_patterns": 8,
+      "active_stop_patterns_on_2026_05_06": 8
+    },
+    "D185": {
+      "snapshot_trips": 27,
+      "active_trips_on_2026_05_06": 19,
+      "snapshot_stop_patterns": 10,
+      "active_stop_patterns_on_2026_05_06": 9
+    },
+    "D150": {
+      "snapshot_trips": 41,
+      "active_trips_on_2026_05_06": 33,
+      "snapshot_stop_patterns": 33,
+      "active_stop_patterns_on_2026_05_06": 28
+    },
+    "D170": {
+      "snapshot_trips": 118,
+      "active_trips_on_2026_05_06": 96,
+      "snapshot_stop_patterns": 57,
+      "active_stop_patterns_on_2026_05_06": 49
+    }
+  },
+  "calendar_semantics": {
+    "validity": "FROM_OFFICIAL_TIMETABLE_PDF",
+    "day_codes": "FROM_COLUMN_HEADER_COORDINATES",
+    "note_codes": "FROM_COLUMN_NOTE_COORDINATES",
+    "reference_date_activation": "DERIVED_FROM_PUBLISHED_DAY_AND_NOTE_RULES",
+    "annual_service_days": "NOT_INFERRED"
+  },
+  "runtime_semantics": {
+    "published_stop_times": "OFFICIAL_SCHEDULED_TIMES",
+    "scheduled_runtime": "DERIVED_DIFFERENCE_OF_PUBLISHED_STOP_TIMES",
+    "unpublished_stop_time_interpolation": "FORBIDDEN_NOT_USED",
+    "observed_runtime": "NOT_AVAILABLE_FROM_THIS_SOURCE",
+    "observed_runtime_substitution": false
+  },
+  "temporary_service_semantics": {
+    "D185_reference_date_context": "TEMPORARY_DEVIATION_CURRENT",
+    "ordinary_network_baseline_overwritten": false,
+    "brivio_condition": {
+      "condition_id": "D185_BRIVIO_BRIDGE_PONTE_CANTU_2026",
+      "route_id": "D185",
+      "condition_type": "TEMPORARY_DEVIATION_AND_STOP_SUSPENSION",
+      "valid_from": "2026-05-04",
+      "valid_to": "UNKNOWN_FROM_TIMETABLE_SOURCE",
+      "reference_date_active": true,
+      "routing_effect": "SERVICES_USE_PONTE_CANTU",
+      "stop_effect": "CISANO_SOSTA_SUSPENDED",
+      "ordinary_network_baseline_replaced": false,
+      "source_url": "https://www.leccotrasporti.it/percorsi/estivo/linea-d185.pdf",
+      "source_pdf_sha256": "31f2da4a8f6539bbb08da8b7ec08b8d4a475f38482f880d3d1206ef9fbd90c66",
+      "epistemic_status": "FACT_TEMPORARY_SERVICE_CONDITION_FROM_PRIMARY_TIMETABLE"
+    }
+  },
+  "forbidden_inputs": [
+    "outputs/current_service_baseline.csv",
+    "scripts/05_current_service.py",
+    "data/raw/gtfs/network_structural/",
+    "data/raw/gtfs/network_2026_emergency/"
+  ],
+  "not_identified_by_this_workstream": [
+    "annual_bus_km",
+    "passenger_demand",
+    "observed_runtime",
+    "unpublished_frequency",
+    "unpublished_headway",
+    "operator_trip_id_for_pdf_columns",
+    "exact_call_semantics_for_cells_without_published_time_unless_source_note_explicit"
+  ],
+  "gjt_readiness": {
+    "scheduled_in_vehicle_time_between_published_timed_stops": true,
+    "scheduled_wait_from_explicit_active_timetable_columns": true,
+    "complete_pdf_stop_by_column_cell_matrix": true,
+    "published_stop_sequence": true,
+    "route_identity": true,
+    "reconstructed_column_identity": true,
+    "operator_trip_identity": false,
+    "untimed_cell_use_for_gjt": "FORBIDDEN_UNTIL_CALL_AND_TIME_EVIDENCE_EXISTS",
+    "walking_access_join": "REQUIRES_SEPARATE_STOP_IDENTITY_OR_SPATIAL_JOIN_WHERE_PDF_LABEL_IS_NOT_UNIQUE",
+    "reliability_observed_runtime": "NOT_AVAILABLE"
+  },
+  "legacy_current_service_files_used": false
+}
