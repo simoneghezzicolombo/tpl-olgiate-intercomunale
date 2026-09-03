@@ -57,6 +57,49 @@ class GtfsStop:
     stop_lon: str = ""
 
 
+def exact_physical_equivalence(stops: Mapping[str, GtfsStop]) -> dict[str, tuple[str, ...]]:
+    """Group only records with the same normalized official name and exact coordinates.
+
+    The Arriva aggregate feed contains parallel namespace records for some physical
+    stops. Equal official name + equal numeric coordinates is treated as duplicate
+    record evidence, not as a nearest-stop assumption. Missing coordinates never
+    create an equivalence class with another ID.
+    """
+    groups: dict[tuple[object, ...], list[str]] = {}
+    for stop_id, stop in stops.items():
+        tokens = normalize_stop_label(stop.stop_name)
+        try:
+            lat = float(stop.stop_lat)
+            lon = float(stop.stop_lon)
+        except (TypeError, ValueError):
+            groups[("UNMERGEABLE", stop_id)].append(stop_id)
+            continue
+        if not tokens:
+            groups[("UNMERGEABLE", stop_id)].append(stop_id)
+            continue
+        key = (tokens, lat, lon)
+        groups.setdefault(key, []).append(stop_id)
+    output: dict[str, tuple[str, ...]] = {}
+    for ids in groups.values():
+        members = tuple(sorted(ids))
+        for stop_id in members:
+            output[stop_id] = members
+    return output
+
+
+def _single_equivalence_class(
+    stop_ids: Iterable[str],
+    equivalence: Mapping[str, tuple[str, ...]],
+) -> tuple[str, ...] | None:
+    ids = tuple(sorted(set(stop_ids)))
+    if not ids:
+        return None
+    classes = {equivalence.get(stop_id, (stop_id,)) for stop_id in ids}
+    if len(classes) != 1:
+        return None
+    return next(iter(classes))
+
+
 @dataclass(frozen=True)
 class PageRow:
     route_id: str
@@ -70,6 +113,7 @@ class IdentityResolution:
     row: PageRow
     status: str
     stop_id: str | None
+    equivalent_stop_ids: tuple[str, ...]
     name_candidate_ids: tuple[str, ...]
     best_pattern_match_rows: int
     tied_best_pattern_count: int
@@ -145,13 +189,7 @@ def resolve_page(
     route_patterns: Sequence[Sequence[str]],
     stops: Mapping[str, GtfsStop],
 ) -> list[IdentityResolution]:
-    """Resolve one ordered PDF page without forcing ambiguous identities.
-
-    A stop name unique within the historical route stop universe is accepted from
-    name evidence alone. Ambiguous names are resolved only when the maximum-agreement
-    ordered historical pattern(s) leave one stop ID. Ties across best patterns remain
-    ambiguous unless they imply the same stop ID.
-    """
+    """Resolve one ordered PDF page without forcing ambiguous physical identities."""
     if not rows:
         return []
     if len({row.route_id for row in rows}) != 1 or len({row.source_page for row in rows}) != 1:
@@ -159,6 +197,7 @@ def resolve_page(
     if [row.stop_sequence_on_page for row in rows] != sorted(row.stop_sequence_on_page for row in rows):
         raise ValueError("PDF page rows must be ordered by stop_sequence_on_page")
 
+    equivalence = exact_physical_equivalence(stops)
     route_stop_ids = sorted({stop_id for pattern in route_patterns for stop_id in pattern if stop_id in stops})
     name_candidates: list[tuple[str, ...]] = []
     for row in rows:
@@ -181,14 +220,22 @@ def resolve_page(
     for index, row in enumerate(rows):
         candidate_ids = name_candidates[index]
         if not candidate_ids:
-            results.append(IdentityResolution(row, "NO_HISTORICAL_GTFS_NAME_MATCH", None, (), best_score, len(best)))
+            results.append(IdentityResolution(row, "NO_HISTORICAL_GTFS_NAME_MATCH", None, (), (), best_score, len(best)))
             continue
-        if len(candidate_ids) == 1:
+
+        name_equivalence = _single_equivalence_class(candidate_ids, equivalence)
+        if name_equivalence is not None:
+            status = (
+                "RESOLVED_ROUTE_NAME_UNIQUE"
+                if len(candidate_ids) == 1
+                else "RESOLVED_EQUIVALENT_GTFS_RECORDS_SAME_NAME_COORDINATE"
+            )
             results.append(
                 IdentityResolution(
                     row,
-                    "RESOLVED_ROUTE_NAME_UNIQUE",
-                    candidate_ids[0],
+                    status,
+                    name_equivalence[0],
+                    name_equivalence,
                     candidate_ids,
                     best_score,
                     len(best),
@@ -202,12 +249,19 @@ def resolve_page(
                 for position in alignment.feasible_by_row[index]:
                     sequence_ids.add(alignment.pattern[position])
         sequence_ids &= set(candidate_ids)
-        if len(sequence_ids) == 1:
+        sequence_equivalence = _single_equivalence_class(sequence_ids, equivalence)
+        if sequence_equivalence is not None:
+            status = (
+                "RESOLVED_BEST_SEQUENCE_UNIQUE"
+                if len(sequence_ids) == 1
+                else "RESOLVED_BEST_SEQUENCE_PHYSICAL_EQUIVALENCE"
+            )
             results.append(
                 IdentityResolution(
                     row,
-                    "RESOLVED_BEST_SEQUENCE_UNIQUE",
-                    next(iter(sequence_ids)),
+                    status,
+                    sequence_equivalence[0],
+                    sequence_equivalence,
                     candidate_ids,
                     best_score,
                     len(best),
@@ -219,6 +273,7 @@ def resolve_page(
                     row,
                     "AMBIGUOUS_HISTORICAL_GTFS",
                     None,
+                    (),
                     candidate_ids,
                     best_score,
                     len(best),
