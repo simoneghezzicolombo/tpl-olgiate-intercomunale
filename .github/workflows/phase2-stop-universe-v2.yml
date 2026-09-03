@@ -104,12 +104,28 @@ jobs:
           test -s /tmp/building/building_population_municipal_reconciliation.csv
           test -s /tmp/building/building_population_validation.json
 
-      - name: Stage official municipality context geometry
+      - name: Stage official municipality geometry and context-only GTFS centroids
         shell: bash
         run: |
           set -euo pipefail
           gzip -dc data/phase2/analysis_envelope/source/municipalities_context.geojson.gz > /tmp/municipalities_context.geojson
           test -s /tmp/municipalities_context.geojson
+          python - <<'PY'
+          import pandas as pd
+          source = pd.read_csv('outputs/phase2/analysis_envelope/stops_and_anchors_intersected.csv', dtype=str)
+          context = source[
+              source['anchor_class'].eq('GATE_D_VALIDATED_ANCHOR')
+              & source['source_detail'].eq('OFFICIAL_GTFS_STOP_CLUSTER_CENTROID')
+              & source['analysis_role'].eq('CONTEXT')
+          ].copy()
+          if context.empty:
+              raise SystemExit('No context-only official GTFS cluster centroids found in analysis envelope')
+          if not context['equity_scope'].eq('CONTEXT_ONLY').all():
+              raise SystemExit('Context GTFS centroids unexpectedly enter decision-core equity scope')
+          context.to_csv('/tmp/context_gtfs_anchors.csv', index=False)
+          print(f'context-only official GTFS cluster centroids: {len(context)}')
+          PY
+          test -s /tmp/context_gtfs_anchors.csv
 
       - name: Build Stop Universe V2
         run: >-
@@ -119,7 +135,7 @@ jobs:
           --building-dir /tmp/building
           --analysis-envelope outputs/phase2/analysis_envelope/analysis_envelope.geojson
           --municipalities-context /tmp/municipalities_context.geojson
-          --context-stops-anchors outputs/phase2/analysis_envelope/stops_and_anchors_intersected.csv
+          --context-stops-anchors /tmp/context_gtfs_anchors.csv
           --osm-pois data/raw/osm/osm_pois_core.json
           --osm-points data/raw/osm/osm_points_core.geojson
           --od-summary outputs/phase2/od_2021_core_summary.csv
@@ -173,6 +189,9 @@ jobs:
               'GATE_B_CORE_GTFS_RECORD',
               'ANALYSIS_ENVELOPE_GATE_D_GTFS_CLUSTER_CENTROID',
           }).all()
+          context = existing[existing['source_scope'].eq('ANALYSIS_ENVELOPE_GATE_D_GTFS_CLUSTER_CENTROID')]
+          assert not context.empty
+          assert ~context['PRO_COM_T'].astype(str).str.zfill(6).isin({'097010','097012','097058','097074','097092'}).any()
           for value in validation['baseline_coverage_pct_total_posas'].values():
               assert 0 <= float(value) <= 100
           PY
