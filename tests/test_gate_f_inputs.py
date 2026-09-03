@@ -30,8 +30,8 @@ def _write_fragments(tmp_path, *, infeasible_alt=False, omit_ineligible_metrics=
         },
     ])
     d = pd.DataFrame([
-        {"scenario_id": "BASE", "road_feasible": "True", "road_feasible__status": "DERIVED", "road_feasible__source": "TEST_D"},
-        {"scenario_id": "ALT", "road_feasible": "False" if infeasible_alt else "True", "road_feasible__status": "DERIVED", "road_feasible__source": "TEST_D"},
+        {"scenario_id": "BASE", "road_feasible": "True", "road_feasible__status": "DERIVED", "road_feasible__source": "TEST_D", "road_feasible__unit": "boolean", "road_feasible__semantics": "HARD_ELIGIBILITY_CONSTRAINT"},
+        {"scenario_id": "ALT", "road_feasible": "False" if infeasible_alt else "True", "road_feasible__status": "DERIVED", "road_feasible__source": "TEST_D", "road_feasible__unit": "boolean", "road_feasible__semantics": "HARD_ELIGIBILITY_CONSTRAINT"},
     ])
     ids = ["BASE"] if infeasible_alt and omit_ineligible_metrics else ["BASE", "ALT"]
     b = pd.DataFrame([
@@ -40,9 +40,13 @@ def _write_fragments(tmp_path, *, infeasible_alt=False, omit_ineligible_metrics=
             "population_covered_pct": 50 + idx,
             "population_covered_pct__status": "MODEL OUTPUT",
             "population_covered_pct__source": "TEST_B",
+            "population_covered_pct__unit": "%",
+            "population_covered_pct__semantics": "PERCENT_OF_DEFINED_POPULATION_DENOMINATOR",
             "territories_served_count": 2 + idx,
             "territories_served_count__status": "DERIVED",
             "territories_served_count__source": "TEST_B",
+            "territories_served_count__unit": "count",
+            "territories_served_count__semantics": "COUNT_OF_DEFINED_TERRITORIAL_UNITS",
         }
         for idx, sid in enumerate(ids)
     ])
@@ -52,6 +56,8 @@ def _write_fragments(tmp_path, *, infeasible_alt=False, omit_ineligible_metrics=
             "s8_useful_connection_pct": 60 + idx,
             "s8_useful_connection_pct__status": "MODEL OUTPUT",
             "s8_useful_connection_pct__source": "TEST_C",
+            "s8_useful_connection_pct__unit": "%",
+            "s8_useful_connection_pct__semantics": "PERCENT_OF_DEFINED_S8_CONNECTION_DENOMINATOR",
         }
         for idx, sid in enumerate(ids)
     ])
@@ -61,12 +67,18 @@ def _write_fragments(tmp_path, *, infeasible_alt=False, omit_ineligible_metrics=
             "headway_combined_min": 60 - idx * 10,
             "headway_combined_min__status": "MODEL OUTPUT",
             "headway_combined_min__source": "TEST_E",
+            "headway_combined_min__unit": "min",
+            "headway_combined_min__semantics": "RATE_EQUIVALENT_NOT_MAX_GAP",
             "annual_bus_km": 100000 + idx * 1000,
             "annual_bus_km__status": "MODEL OUTPUT",
             "annual_bus_km__source": "TEST_E",
+            "annual_bus_km__unit": "bus-km/year",
+            "annual_bus_km__semantics": "ANNUAL_SCHEDULED_BUS_DISTANCE",
             "peak_buses_required": 2 + idx,
             "peak_buses_required__status": "MODEL OUTPUT",
             "peak_buses_required__source": "TEST_E",
+            "peak_buses_required__unit": "vehicles",
+            "peak_buses_required__semantics": "SIMULTANEOUS_PEAK_VEHICLES",
         }
         for idx, sid in enumerate(ids)
     ])
@@ -144,4 +156,22 @@ def test_road_feasibility_requires_traceable_source(tmp_path):
     d.loc[d["scenario_id"] == "ALT", "road_feasible__source"] = ""
     d.to_csv(paths["d"], index=False)
     with pytest.raises(ValueError, match="must be traceable"):
+        _assemble(paths)
+
+
+def test_wrong_bus_km_unit_is_rejected(tmp_path):
+    paths = _write_fragments(tmp_path)
+    e = pd.read_csv(paths["e"])
+    e["annual_bus_km__unit"] = "km/day"
+    e.to_csv(paths["e"], index=False)
+    with pytest.raises(ValueError, match="canonical unit"):
+        _assemble(paths)
+
+
+def test_rate_equivalent_cannot_be_mislabeled_as_max_gap(tmp_path):
+    paths = _write_fragments(tmp_path)
+    e = pd.read_csv(paths["e"])
+    e["headway_combined_min__semantics"] = "GUARANTEED_MAX_GAP"
+    e.to_csv(paths["e"], index=False)
+    with pytest.raises(ValueError, match="RATE_EQUIVALENT_NOT_MAX_GAP"):
         _assemble(paths)

@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.gate_f_assembly import enforce_verified_assembly_evidence, verify_assembly_manifest  # noqa: E402
+from src.gate_f_contract import metric_contract_manifest, validate_gate_f_metric_contract  # noqa: E402
 from src.gate_f_pareto import (  # noqa: E402
     DEFAULT_OBJECTIVES,
     build_epistemic_audit,
@@ -93,6 +94,7 @@ def main() -> int:
         status_bundle = None
 
     df = pd.read_csv(resolved_input)
+    validate_gate_f_metric_contract(df)
     pareto = leave_one_objective_out_robustness(df, DEFAULT_OBJECTIVES)
     tradeoffs = build_tradeoffs(pareto, DEFAULT_OBJECTIVES)
     summary = decision_summary(pareto, gate_status, DEFAULT_OBJECTIVES)
@@ -132,6 +134,10 @@ def main() -> int:
     epistemic.to_csv(output_dir / "epistemic_audit.csv", index=False)
     (output_dir / "objectives.json").write_text(
         json.dumps(objective_manifest(DEFAULT_OBJECTIVES), indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    (output_dir / "metric_contract.json").write_text(
+        json.dumps(metric_contract_manifest(), indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
     if assembly_manifest is not None:

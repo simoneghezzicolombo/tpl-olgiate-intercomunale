@@ -1,9 +1,9 @@
 """Assemble provenance-complete Gate F scenario metrics from upstream gate fragments.
 
 The assembler contains no project scenario values. It enforces a lossless scenario
-catalog, Gate D road eligibility, exact provenance fields and one-to-one joins.
-Ineligible scenarios may be absent from B/C/E metric fragments, but every eligible
-scenario must be present and no unknown scenario may appear.
+catalog, Gate D road eligibility, exact provenance fields, units/semantics and
+one-to-one joins. Ineligible scenarios may be absent from B/C/E metric fragments,
+but every eligible scenario must be present and no unknown scenario may appear.
 """
 from __future__ import annotations
 
@@ -12,6 +12,8 @@ from pathlib import Path
 from typing import Mapping
 
 import pandas as pd
+
+from src.gate_f_contract import validate_gate_f_metric_contract
 
 
 ALLOWED_STATUSES = {"FACT", "DERIVED", "ESTIMATE", "RECONSTRUCTED", "MODEL OUTPUT", "FIELD CHECK"}
@@ -41,9 +43,13 @@ GATE_B_SPEC = FragmentSpec(
         "population_covered_pct",
         "population_covered_pct__status",
         "population_covered_pct__source",
+        "population_covered_pct__unit",
+        "population_covered_pct__semantics",
         "territories_served_count",
         "territories_served_count__status",
         "territories_served_count__source",
+        "territories_served_count__unit",
+        "territories_served_count__semantics",
     ),
 )
 GATE_C_SPEC = FragmentSpec(
@@ -53,6 +59,8 @@ GATE_C_SPEC = FragmentSpec(
         "s8_useful_connection_pct",
         "s8_useful_connection_pct__status",
         "s8_useful_connection_pct__source",
+        "s8_useful_connection_pct__unit",
+        "s8_useful_connection_pct__semantics",
     ),
 )
 GATE_D_SPEC = FragmentSpec(
@@ -62,6 +70,8 @@ GATE_D_SPEC = FragmentSpec(
         "road_feasible",
         "road_feasible__status",
         "road_feasible__source",
+        "road_feasible__unit",
+        "road_feasible__semantics",
     ),
 )
 GATE_E_SPEC = FragmentSpec(
@@ -71,12 +81,18 @@ GATE_E_SPEC = FragmentSpec(
         "headway_combined_min",
         "headway_combined_min__status",
         "headway_combined_min__source",
+        "headway_combined_min__unit",
+        "headway_combined_min__semantics",
         "annual_bus_km",
         "annual_bus_km__status",
         "annual_bus_km__source",
+        "annual_bus_km__unit",
+        "annual_bus_km__semantics",
         "peak_buses_required",
         "peak_buses_required__status",
         "peak_buses_required__source",
+        "peak_buses_required__unit",
+        "peak_buses_required__semantics",
     ),
 )
 
@@ -209,13 +225,24 @@ def assemble_gate_f_inputs(
     if result.isna().any().any():
         null_columns = sorted(result.columns[result.isna().any()].tolist())
         raise ValueError(f"assembled Gate F input contains nulls: {null_columns}")
+    validate_gate_f_metric_contract(result)
 
-    exclusions = catalog.loc[~catalog["scenario_id"].astype(str).isin(eligible_ids), [
-        "scenario_id", "scenario_name", "topology_family", "is_baseline", "scenario_epistemic_status", "scenario_source"
-    ]].copy()
+    exclusions = catalog.loc[
+        ~catalog["scenario_id"].astype(str).isin(eligible_ids),
+        ["scenario_id", "scenario_name", "topology_family", "is_baseline", "scenario_epistemic_status", "scenario_source"],
+    ].copy()
     if not exclusions.empty:
         exclusions = exclusions.merge(
-            gate_d[["scenario_id", "road_feasible", "road_feasible__status", "road_feasible__source"]],
+            gate_d[
+                [
+                    "scenario_id",
+                    "road_feasible",
+                    "road_feasible__status",
+                    "road_feasible__source",
+                    "road_feasible__unit",
+                    "road_feasible__semantics",
+                ]
+            ],
             on="scenario_id",
             how="left",
             validate="one_to_one",
