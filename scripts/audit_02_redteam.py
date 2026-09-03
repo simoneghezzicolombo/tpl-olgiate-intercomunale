@@ -9,11 +9,16 @@ for audit history.
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 import networkx as nx
 import numpy as np
 import pandas as pd
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from scripts.audit_02_real_spatial import (
     ACCESS_CELLS,
@@ -27,6 +32,12 @@ from scripts.audit_02_real_spatial import (
 )
 
 OUT = OUT_DIR / "redteam_summary.json"
+
+
+def _bool_series(series: pd.Series) -> pd.Series:
+    if pd.api.types.is_bool_dtype(series):
+        return series.astype(bool)
+    return series.astype(str).str.strip().str.lower().eq("true")
 
 
 def _coverage_from_mask(acc: pd.DataFrame, mask: pd.Series) -> float:
@@ -75,6 +86,8 @@ def connector_sensitivity(acc: pd.DataFrame) -> dict:
 
 
 def stop_snap_diagnostics(stops: pd.DataFrame) -> dict:
+    stops = stops.copy()
+    stops["snap_ok"] = _bool_series(stops["snap_ok"])
     ordered = stops.sort_values("snap_distance_m", ascending=False)
     failures = ordered.loc[~ordered["snap_ok"], [
         "stop_id", "stop_name", "COMUNE", "snap_distance_m"
@@ -92,6 +105,8 @@ def stop_snap_diagnostics(stops: pd.DataFrame) -> dict:
 
 
 def slope_diagnostics(edges: pd.DataFrame) -> dict:
+    edges = edges.copy()
+    edges["in_giant_component"] = _bool_series(edges["in_giant_component"])
     giant = edges.loc[edges["in_giant_component"]].copy()
     giant["abs_slope"] = (
         giant["slope_uv"].abs().replace([np.inf, -np.inf], np.nan)
@@ -138,6 +153,13 @@ def flat_walk_sensitivity(
     only edge walking time is recomputed with zero grade. This is a sensitivity
     diagnostic, not an alternative factual result.
     """
+    stops = stops.copy()
+    edges = edges.copy()
+    acc = acc.copy()
+    stops["snap_ok"] = _bool_series(stops["snap_ok"])
+    edges["in_giant_component"] = _bool_series(edges["in_giant_component"])
+    acc["connector_within_limit"] = _bool_series(acc["connector_within_limit"])
+
     usable = stops[stops["snap_ok"]].copy()
     giant_edges = edges[edges["in_giant_component"]].copy()
     G = nx.Graph()
@@ -169,7 +191,7 @@ def flat_walk_sensitivity(
         [dist.get(int(node), np.nan) for node in acc["nearest_graph_node_id"]],
         dtype=float,
     ) + acc["connector_walk_min"].to_numpy(dtype=float)
-    flat_total[~acc["connector_within_limit"].astype(bool).to_numpy()] = np.nan
+    flat_total[~acc["connector_within_limit"].to_numpy(dtype=bool)] = np.nan
 
     result = {"coverage_pct": {}, "slope_minus_flat_percentage_points": {}}
     total_pop = float(acc["pop_calibrated_2025"].sum())
