@@ -1,9 +1,12 @@
 """Gate F status-evidence validation.
 
 A definitive Gate F PASS cannot be unlocked by manually typing A=PASS...E=PASS.
-It requires a machine-readable bundle that points to hashed evidence files for
-all upstream gates. This validates evidence integrity, not the substantive truth
-of an upstream audit, which remains the responsibility of each gate review.
+It requires a machine-readable bundle that points to hashed evidence for all
+upstream gates. Evidence may live in the current worktree or at an exact Git
+commit on another workstream branch.
+
+This validates evidence integrity and lineage, not the substantive truth of an
+upstream audit, which remains the responsibility of each gate review.
 """
 from __future__ import annotations
 
@@ -11,13 +14,19 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import subprocess
 from typing import Mapping
 
 
 REQUIRED_GATES = ("A", "B", "C", "D", "E")
 ALLOWED_VERDICTS = {"PASS", "PROVISIONAL", "FAIL", "IN_PROGRESS"}
+EVIDENCE_MODES = {"WORKTREE", "GIT_OBJECT"}
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 HASH_RE = re.compile(r"^[0-9a-f]{64}$")
+
+
+def sha256_bytes(payload: bytes) -> str:
+    return hashlib.sha256(payload).hexdigest()
 
 
 def sha256_file(path: Path) -> str:
@@ -40,6 +49,46 @@ def _safe_repo_path(repo_root: Path, raw_path: str) -> Path:
     return resolved
 
 
+def _safe_git_path(raw_path: str) -> str:
+    path = str(raw_path).strip().replace("\\", "/")
+    if not path or path.startswith("/") or "\x00" in path:
+        raise ValueError(f"Git evidence path must be repository-relative: {raw_path!r}")
+    parts = path.split("/")
+    if any(part in {"", ".", ".."} for part in parts):
+        raise ValueError(f"Git evidence path contains unsafe component: {raw_path!r}")
+    return path
+
+
+def _git(repo_root: Path, *args: str) -> subprocess.CompletedProcess[bytes]:
+    try:
+        return subprocess.run(
+            ["git", *args],
+            cwd=repo_root,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+    except OSError as exc:
+        raise ValueError(f"Cannot execute git for Gate F evidence verification: {exc}") from exc
+
+
+def _verify_git_commit(repo_root: Path, commit_sha: str) -> None:
+    result = _git(repo_root, "cat-file", "-e", f"{commit_sha}^{{commit}}")
+    if result.returncode != 0:
+        detail = result.stderr.decode("utf-8", errors="replace").strip()
+        raise ValueError(f"Gate evidence commit is not available as a Git object: {commit_sha}: {detail}")
+
+
+def _git_object_bytes(repo_root: Path, commit_sha: str, raw_path: str) -> bytes:
+    path = _safe_git_path(raw_path)
+    _verify_git_commit(repo_root, commit_sha)
+    result = _git(repo_root, "show", f"{commit_sha}:{path}")
+    if result.returncode != 0:
+        detail = result.stderr.decode("utf-8", errors="replace").strip()
+        raise ValueError(f"Git evidence file is missing at {commit_sha}:{path}: {detail}")
+    return result.stdout
+
+
 def load_gate_status_bundle(path: str | Path, repo_root: str | Path) -> tuple[dict[str, str], dict]:
     bundle_path = Path(path)
     root = Path(repo_root)
@@ -48,8 +97,9 @@ def load_gate_status_bundle(path: str | Path, repo_root: str | Path) -> tuple[di
     except (OSError, json.JSONDecodeError) as exc:
         raise ValueError(f"Cannot read Gate F status bundle: {exc}") from exc
 
-    if bundle.get("schema_version") != 1:
-        raise ValueError("Gate F status bundle schema_version must equal 1")
+    schema_version = bundle.get("schema_version")
+    if schema_version not in {1, 2}:
+        raise ValueError("Gate F status bundle schema_version must equal 1 or 2")
     integration_id = str(bundle.get("integration_id", "")).strip()
     if not integration_id:
         raise ValueError("Gate F status bundle requires a non-empty integration_id")
@@ -79,6 +129,7 @@ def load_gate_status_bundle(path: str | Path, repo_root: str | Path) -> tuple[di
         evidence_files = entry.get("evidence_files")
         if not isinstance(evidence_files, list) or not evidence_files:
             raise ValueError(f"Gate {gate} requires at least one evidence file")
+
         for evidence in evidence_files:
             if not isinstance(evidence, dict):
                 raise ValueError(f"Gate {gate} evidence entries must be objects")
@@ -86,13 +137,24 @@ def load_gate_status_bundle(path: str | Path, repo_root: str | Path) -> tuple[di
             expected_hash = str(evidence.get("sha256", "")).strip().lower()
             if not HASH_RE.fullmatch(expected_hash):
                 raise ValueError(f"Gate {gate} evidence {raw_path!r} requires a 64-hex sha256")
-            evidence_path = _safe_repo_path(root, raw_path)
-            if not evidence_path.is_file():
-                raise ValueError(f"Gate {gate} evidence file is missing: {raw_path}")
-            actual_hash = sha256_file(evidence_path)
+            mode = str(evidence.get("mode", "WORKTREE")).strip().upper()
+            if mode not in EVIDENCE_MODES:
+                raise ValueError(f"Gate {gate} evidence {raw_path!r} has unsupported mode {mode!r}")
+            if schema_version == 1 and mode != "WORKTREE":
+                raise ValueError("Gate F status bundle schema v1 supports WORKTREE evidence only")
+
+            if mode == "WORKTREE":
+                evidence_path = _safe_repo_path(root, raw_path)
+                if not evidence_path.is_file():
+                    raise ValueError(f"Gate {gate} evidence file is missing: {raw_path}")
+                actual_hash = sha256_file(evidence_path)
+            else:
+                actual_hash = sha256_bytes(_git_object_bytes(root, commit_sha, raw_path))
+
             if actual_hash != expected_hash:
+                location = raw_path if mode == "WORKTREE" else f"{commit_sha}:{raw_path}"
                 raise ValueError(
-                    f"Gate {gate} evidence hash mismatch for {raw_path}: expected {expected_hash}, got {actual_hash}"
+                    f"Gate {gate} evidence hash mismatch for {location}: expected {expected_hash}, got {actual_hash}"
                 )
         statuses[gate] = verdict
     return statuses, bundle
