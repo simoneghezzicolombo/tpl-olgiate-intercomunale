@@ -35,3 +35,5 @@ ds = ds.replace(old_doc, new_doc, 1)
 d.write_text(ds, encoding='utf-8')
 
 print('Replaced angular OSM padding with audited 500 m UTM buffer.')
+
+# trigger after workflow installation
