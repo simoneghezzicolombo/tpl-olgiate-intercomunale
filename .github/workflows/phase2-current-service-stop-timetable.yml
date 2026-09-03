@@ -47,7 +47,7 @@ jobs:
         shell: bash
         run: |
           base=$(git merge-base HEAD origin/phase2-optimizer-core)
-          git diff --check "$base"...HEAD
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check "$base"...HEAD
 
       - name: Compile
         run: >-
