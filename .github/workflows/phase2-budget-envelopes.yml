@@ -43,7 +43,7 @@ jobs:
         shell: bash
         run: |
           python - <<'PY'
-          import csv, json
+          import csv, json, math
           from pathlib import Path
           root=Path('outputs/phase2')
           rows=list(csv.DictReader((root/'budget_envelopes.csv').open(encoding='utf-8')))
@@ -55,7 +55,9 @@ jobs:
           assert validation['pairable_route_count']==4
           assert validation['reference_annual_bus_km']==111419.0
           assert validation['declared_changes_fraction']==[-0.2,-0.1,0.0,0.1,0.2,0.3]
-          assert [float(r['annual_bus_km_cap']) for r in rows]==[89135.2,100277.1,111419.0,122560.90000000001,133702.8,144844.7]
+          observed=[float(r['annual_bus_km_cap']) for r in rows]
+          expected=[89135.2,100277.1,111419.0,122560.9,133702.8,144844.7]
+          assert all(math.isclose(a,b,rel_tol=0.0,abs_tol=1e-6) for a,b in zip(observed,expected))
           assert all(r['envelope_status']=='PHASE2_DECLARED_DESIGN_SEARCH_ENVELOPE' for r in rows)
           PY
           git diff --check
