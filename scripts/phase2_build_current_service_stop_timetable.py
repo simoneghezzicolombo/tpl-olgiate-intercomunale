@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 from datetime import date
 from pathlib import Path
 import json
@@ -24,6 +25,48 @@ from src.phase2_current_service_stop_timetable import (  # noqa: E402
     validate_against_gate_c,
     write_csv,
 )
+
+
+def _read_csv(path: Path) -> list[dict[str, str]]:
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def _active_pattern_counts(gtfs_dir: Path, audit_date: date) -> dict[str, int]:
+    """Reproduce Gate C's active-stop-pattern denominator, not all snapshot trips."""
+    trips = _read_csv(gtfs_dir / "trips.txt")
+    stop_times = _read_csv(gtfs_dir / "stop_times.txt")
+    calendar_dates = _read_csv(gtfs_dir / "calendar_dates.txt")
+    date_key = audit_date.strftime("%Y%m%d")
+    active_service_ids = {
+        row["service_id"]
+        for row in calendar_dates
+        if row.get("date") == date_key and row.get("exception_type") == "1"
+    }
+    active_service_ids -= {
+        row["service_id"]
+        for row in calendar_dates
+        if row.get("date") == date_key and row.get("exception_type") == "2"
+    }
+    active_trip_route = {
+        row["trip_id"]: row["route_id"]
+        for row in trips
+        if row.get("route_id") in REQUIRED_ROUTES and row.get("service_id") in active_service_ids
+    }
+    sequences: dict[str, list[tuple[int, str]]] = {trip_id: [] for trip_id in active_trip_route}
+    for row in stop_times:
+        trip_id = row.get("trip_id", "")
+        if trip_id in sequences:
+            sequences[trip_id].append((int(row["stop_sequence"]), row["stop_id"]))
+    output: dict[str, int] = {}
+    for route_id in REQUIRED_ROUTES:
+        patterns = {
+            tuple(stop_id for _, stop_id in sorted(sequences[trip_id]))
+            for trip_id, observed_route in active_trip_route.items()
+            if observed_route == route_id
+        }
+        output[route_id] = len(patterns)
+    return output
 
 
 def main() -> None:
@@ -65,20 +108,29 @@ def main() -> None:
         })
 
     validate_against_gate_c(route_reports, all_trips)
-    gtfs_audit = audit_historical_gtfs(gtfs_dir, audit_date=date(2026, 5, 6))
+    gtfs_audit_date = date(2026, 5, 6)
+    gtfs_audit = audit_historical_gtfs(gtfs_dir, audit_date=gtfs_audit_date)
+    active_patterns = _active_pattern_counts(gtfs_dir, gtfs_audit_date)
+    historical_crosscheck: dict[str, dict[str, int]] = {}
     for route_id, expected in EXPECTED_GATE_C.items():
         observed = gtfs_audit[route_id]
         expected_tuple = (expected["gtfs_trips"], expected["gtfs_active"], expected["patterns"])
         observed_tuple = (
             observed["snapshot_trips"],
             observed["active_trips_on_2026_05_06"],
-            observed["stop_patterns"],
+            active_patterns[route_id],
         )
         if observed_tuple != expected_tuple:
             raise TimetableAmbiguity(
                 f"{route_id}: historical official GTFS cross-check differs from Gate C: "
                 f"{observed_tuple} != {expected_tuple}"
             )
+        historical_crosscheck[route_id] = {
+            "snapshot_trips": observed["snapshot_trips"],
+            "active_trips_on_2026_05_06": observed["active_trips_on_2026_05_06"],
+            "snapshot_stop_patterns": observed["stop_patterns"],
+            "active_stop_patterns_on_2026_05_06": active_patterns[route_id],
+        }
 
     conditions = build_conditions(route_reports)
     all_trips.sort(key=lambda r: (r["route_id"], int(r["source_page"]), int(r["source_column"])))
@@ -109,7 +161,7 @@ def main() -> None:
         "pdf_stop_rows_total": len(all_stops),
         "temporary_conditions_count": len(conditions),
         "historical_gtfs_crosscheck_date": "2026-05-06",
-        "historical_gtfs_crosscheck": gtfs_audit,
+        "historical_gtfs_crosscheck": historical_crosscheck,
         "calendar_semantics": {
             "validity": "FROM_OFFICIAL_TIMETABLE_PDF",
             "day_codes": "FROM_COLUMN_HEADER_COORDINATES",
