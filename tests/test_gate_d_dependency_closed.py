@@ -35,6 +35,24 @@ def test_calco_superiore_is_bidirectionally_tested_as_sensitivity():
     assert all("CALCO_SUPERIORE" in candidate["anchors"] for candidate in selected)
 
 
+def test_non_loop_existing_corridor_alternatives_are_present():
+    selected = {
+        candidate["candidate_id"]: candidate
+        for candidate in module.base.CANDIDATES
+        if candidate["family"] == "NON_LOOP_EXISTING_CORRIDOR"
+    }
+    assert set(selected) == {
+        "WEST_D184_CORRIDOR_OUT_AND_BACK",
+        "EAST_D185_CORRIDOR_OUT_AND_BACK",
+    }
+    assert all(candidate["direction"] == "OUT_AND_BACK" for candidate in selected.values())
+    assert all(
+        module.base.ANCHOR_SPECS[anchor]["type"] in {"gtfs_stop", "rail_gtfs_stop"}
+        for candidate in selected.values()
+        for anchor in set(candidate["anchors"])
+    )
+
+
 def test_dependency_closed_summary_does_not_claim_a_route_recommendation():
     metrics = pd.DataFrame(
         [
@@ -47,12 +65,15 @@ def test_dependency_closed_summary_does_not_claim_a_route_recommendation():
             {"candidate_id": "WEST_SAN_ZENO_SENSITIVITY", "route_km": 11.0, "pure_running_minutes": 22.0},
             {"candidate_id": "EAST_CALCO_SUPERIORE_SENSITIVITY_CW", "route_km": 16.0, "pure_running_minutes": 30.0},
             {"candidate_id": "EAST_CALCO_SUPERIORE_SENSITIVITY_CCW", "route_km": 15.7, "pure_running_minutes": 29.5},
+            {"candidate_id": "WEST_D184_CORRIDOR_OUT_AND_BACK", "route_km": 18.0, "pure_running_minutes": 36.0},
+            {"candidate_id": "EAST_D185_CORRIDOR_OUT_AND_BACK", "route_km": 17.0, "pure_running_minutes": 34.0},
         ]
     )
     summary = module.build_summary(metrics, {}, {}, {})
     assert summary["gate_b_status"] == "PASS"
     assert summary["gate_c_status"] == "PASS"
     assert summary["gate_c_dependency"] == "RESOLVED"
+    assert summary["non_loop_alternatives_status"] == "TESTED_SAME_GRAPH_NOT_FIGURE8"
     assert summary["verdict"] == "READY_FOR_GATE_D_REVIEW"
     assert "recommend" not in summary["verdict"].lower()
 
