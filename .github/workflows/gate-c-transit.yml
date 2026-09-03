@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -27,7 +29,7 @@ jobs:
       - name: Anti-synthetic guardrails
         run: python -m pytest tests/test_audit_anti_synthetic_guardrails.py -q
       - name: Diff whitespace check
-        run: git diff --check HEAD^
+        run: git diff --check 549198743e7265b333da565ce6990f9241cfd1fd...HEAD
       - name: Persist deterministic Gate C reports
         run: |
           git config user.name "gate-c-ci"
