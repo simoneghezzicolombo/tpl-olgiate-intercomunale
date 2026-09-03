@@ -58,4 +58,4 @@ jobs:
           fi
 
 # Gate B starts from a fresh Gate A acquisition and never reads legacy synthetic outputs.
-# Trigger revision 2: corrected Overpass geometry and paid stop-snap connectors.
+# Trigger revision 3: metric 500 m OSM acquisition buffer.
