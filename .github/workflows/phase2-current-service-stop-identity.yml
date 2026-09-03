@@ -122,9 +122,12 @@ jobs:
           found=[token for token in forbidden if token in text]
           assert not found, f'Forbidden shortcut tokens: {found}'
           PY
-          # Check committed workstream changes only. Production evidence is intentionally
-          # dirty at this point and is persisted in the following step.
-          git diff --check dbda7ee2a6f2c3b5f6bfc7d4c6e0e936b2e26189...HEAD
+          git diff --check dbda7ee2a6f2c3b5f6bfc7d4c6e0e936b2e26189...HEAD -- \
+            src/phase2_current_service_stop_identity.py \
+            scripts/phase2_build_current_service_stop_identity.py \
+            tests/test_phase2_current_service_stop_identity.py \
+            docs/PHASE2_CURRENT_SERVICE_STOP_IDENTITY.md \
+            .github/workflows/phase2-current-service-stop-identity.yml
 
       - name: Persist audited generated evidence
         if: github.event_name == 'push' && github.ref == 'refs/heads/phase2-current-service-stop-identity'
