@@ -75,7 +75,7 @@ jobs:
               assert names["097090"] == "Viganò"
           '''.replace('              ','    ')
           if 'test_municipality_labels_are_clean_utf8_text' not in t:
-              t=t.rstrip()+block+'\n'
+              t=t.rstrip()+block.rstrip()+'\n'
           test.write_text(t,encoding='utf-8')
 
           doc=Path('docs/PHASE2_ANALYSIS_ENVELOPE.md')
