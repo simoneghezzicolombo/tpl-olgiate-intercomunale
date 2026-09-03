@@ -2,9 +2,12 @@
 """Gate D candidate grade diagnostics using the Gate B Copernicus DSM.
 
 This is a terrain diagnostic, not an engineering road-grade survey. The validated
-Gate B Copernicus GLO-30 DSM is median-filtered and bilinearly sampled along routed
-candidate geometries. Results are labelled ESTIMATE_FROM_COPERNICUS_DSM and no
-bus-feasibility threshold is imposed.
+Gate B Copernicus GLO-30 source tile is median-filtered and bilinearly sampled along
+routed candidate geometries. The full source tile is used rather than the five-core-
+municipality clipped raster, because Gate D candidates extend to Ravellino and
+Caprino/Celana and the clipped raster's outside-mask fill values are not terrain.
+Results are labelled ESTIMATE_FROM_COPERNICUS_DSM and no bus-feasibility threshold
+is imposed.
 """
 from __future__ import annotations
 
@@ -20,7 +23,7 @@ from pyproj import Transformer
 from scipy.ndimage import median_filter
 
 DEFAULT_ROUTES = Path("data/audit_gate_d/structural_candidate_geometry.geojson")
-DEFAULT_DEM = Path("data/raw/dem/copernicus_dem_core_raw.tif")
+DEFAULT_DEM = Path("data/raw/dem/Copernicus_DSM_COG_10_N45_00_E009_00_DEM.tif")
 DEFAULT_OUT = Path("data/audit_gate_d/structural_candidate_slope_audit.csv")
 UTM_EPSG = 32632
 SAMPLE_SPACING_M = 60.0
@@ -96,7 +99,7 @@ def sample_route_grade(geometry, src, arr: np.ndarray, valid: np.ndarray, spacin
         "p95_abs_grade_pct_60m": float(np.percentile(finite_grades, 95)) if len(finite_grades) else np.nan,
         "max_abs_grade_pct_60m": float(np.max(finite_grades)) if len(finite_grades) else np.nan,
         "epistemic_status": "ESTIMATE_FROM_COPERNICUS_DSM",
-        "method_status": "MEDIAN3X3_BILINEAR_60M_PROFILE",
+        "method_status": "MEDIAN3X3_BILINEAR_60M_PROFILE_FULL_GLO30_TILE",
         "feasibility_threshold_applied": False,
     }
 
