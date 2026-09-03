@@ -4,6 +4,9 @@ from pathlib import Path
 import geopandas as gpd
 import numpy as np
 import pandas as pd
+import rasterio
+from rasterio.io import MemoryFile
+from rasterio.transform import from_origin
 
 from scripts.audit_02_real_spatial import (
     ACCESS_CELLS,
@@ -18,6 +21,7 @@ from scripts.audit_02_real_spatial import (
     SPOT_CHECKS,
     SUMMARY,
     THRESHOLDS_MIN,
+    _dem_bilinear,
     load_posas_totals,
     tobler_walk_minutes,
 )
@@ -67,6 +71,23 @@ def test_gate_b_source_contains_no_legacy_random_or_manual_nuclei():
     assert 'STOPS_DATABASE' not in text
     assert 'STOP_ELEVATIONS' not in text
     assert 'Euclidean*' not in text
+
+
+def test_dem_bilinear_sampler_is_continuous_on_planar_surface():
+    # 4x4 raster whose centre values lie on z = 10*col + 5*row.
+    arr = np.fromfunction(lambda r, c: 10.0 * c + 5.0 * r, (4, 4), dtype=float).astype('float32')
+    profile = {
+        'driver': 'GTiff', 'height': 4, 'width': 4, 'count': 1,
+        'dtype': 'float32', 'crs': 'EPSG:4326',
+        'transform': from_origin(0.0, 4.0, 1.0, 1.0),
+    }
+    with MemoryFile() as mem:
+        with mem.open(**profile) as ds:
+            ds.write(arr, 1)
+            # Pixel centres (1.5, 2.5) and (2.5, 2.5) have z=15 and z=25.
+            # Midway between them must interpolate to 20, not jump to either cell.
+            z = _dem_bilinear(ds, arr, 2.0, 2.5)
+            assert abs(z - 20.0) < 1e-6
 
 
 def test_directional_tobler_behaviour():

@@ -29,6 +29,7 @@ import numpy as np
 import pandas as pd
 import rasterio
 from pyproj import Transformer
+from scipy.ndimage import median_filter
 from scipy.spatial import cKDTree
 from shapely.geometry import LineString, MultiLineString
 
@@ -279,23 +280,59 @@ def _node_key(lon: float, lat: float) -> tuple[float, float]:
 
 def _load_dem_array():
     src = rasterio.open(DEM_RAW)
-    arr = src.read(1, masked=True)
-    return src, arr
+    masked = src.read(1, masked=True)
+    data = np.asarray(masked.filled(np.nan), dtype=float)
+    finite = np.isfinite(data)
+    if finite.mean() < 0.95:
+        src.close()
+        raise ValueError(f"Copernicus DSM contains too many missing cells: {finite.mean():.3f} finite")
+    # Median-filter the DSM before interpolation. The source is a 30 m DSM, not
+    # bare-earth DTM; the local robust filter suppresses isolated building/tree
+    # returns. Missing values, if any, are neutral-filled before the filter and
+    # are still guarded by the node-level finite-coverage test downstream.
+    fill = float(np.nanmedian(data))
+    prepared = np.where(finite, data, fill)
+    prepared = median_filter(prepared, size=3, mode="nearest")
+    return src, prepared
 
 
-def _dem_median(src, arr, lon: float, lat: float) -> float:
+def _dem_bilinear(src, arr: np.ndarray, lon: float, lat: float) -> float:
+    """Sample the prepared DSM continuously at lon/lat using bilinear interpolation.
+
+    Nearest-pixel sampling creates artificial elevation steps at 30 m raster cell
+    boundaries. Those steps become impossible grades on short OSM segments.
+    Bilinear interpolation turns the filtered raster into a continuous local
+    surface while preserving the underlying DEM scale.
+    """
     try:
-        row, col = src.index(lon, lat)
+        col_corner, row_corner = (~src.transform) * (lon, lat)
     except Exception:
         return float("nan")
-    r0, r1 = max(0, row - 1), min(arr.shape[0], row + 2)
-    c0, c1 = max(0, col - 1), min(arr.shape[1], col + 2)
-    window = arr[r0:r1, c0:c1]
-    values = np.asarray(window.compressed(), dtype=float)
-    values = values[np.isfinite(values)]
-    if len(values) == 0:
+
+    # Raster values represent pixel centres at integer corner coordinate + 0.5.
+    x = float(col_corner) - 0.5
+    y = float(row_corner) - 0.5
+    c0 = math.floor(x)
+    r0 = math.floor(y)
+    dx = x - c0
+    dy = y - r0
+    c1 = c0 + 1
+    r1 = r0 + 1
+    if r0 < 0 or c0 < 0 or r1 >= arr.shape[0] or c1 >= arr.shape[1]:
         return float("nan")
-    return float(np.median(values))
+
+    z00 = float(arr[r0, c0])
+    z10 = float(arr[r0, c1])
+    z01 = float(arr[r1, c0])
+    z11 = float(arr[r1, c1])
+    if not np.isfinite([z00, z10, z01, z11]).all():
+        return float("nan")
+    return float(
+        z00 * (1.0 - dx) * (1.0 - dy)
+        + z10 * dx * (1.0 - dy)
+        + z01 * (1.0 - dx) * dy
+        + z11 * dx * dy
+    )
 
 
 def tobler_walk_minutes(length_m: float, dz_m: float) -> float:
@@ -356,7 +393,7 @@ def build_walk_graph(boundaries: gpd.GeoDataFrame):
         )
 
     dem_src, dem_arr = _load_dem_array()
-    elevations = {node: _dem_median(dem_src, dem_arr, node[0], node[1]) for node in node_xy}
+    elevations = {node: _dem_bilinear(dem_src, dem_arr, node[0], node[1]) for node in node_xy}
     dem_src.close()
     finite = np.array([v for v in elevations.values() if np.isfinite(v)], dtype=float)
     if len(finite) / len(elevations) < 0.95:
@@ -423,6 +460,8 @@ def build_walk_graph(boundaries: gpd.GeoDataFrame):
     edge_df = pd.DataFrame(edge_rows)
     edge_df["in_giant_component"] = edge_df["u"].isin(giant) & edge_df["v"].isin(giant)
 
+    giant_edges = edge_df[edge_df["in_giant_component"]].copy()
+    abs_slope = giant_edges["slope_uv"].abs().replace([np.inf, -np.inf], np.nan).dropna()
     info = {
         "walkable_source_features": int(len(lines)),
         "graph_nodes_all": int(len(node_rows)),
@@ -431,6 +470,10 @@ def build_walk_graph(boundaries: gpd.GeoDataFrame):
         "giant_component_directed_edges": int(G.number_of_edges()),
         "giant_component_ratio": float(giant_ratio),
         "dem_missing_nodes_filled": int(len(elevations) - len(finite)),
+        "dem_sampling": "3x3 median-filtered Copernicus DSM + bilinear interpolation",
+        "edge_abs_slope_p95": float(abs_slope.quantile(0.95)),
+        "edge_abs_slope_p99": float(abs_slope.quantile(0.99)),
+        "edges_abs_slope_gt_030": int((abs_slope > 0.30).sum()),
     }
     return G, node_df, edge_df, info
 
@@ -675,7 +718,7 @@ def write_outputs(
             "WorldPop 2020 values are preserved separately from the municipality-calibrated 2025 derivative.",
             "Population calibration is multiplicative within each official municipality and exactly quadrates to the POSAS 2025 Età=999 official aggregate row; age-detail rows are independently reconciled to prevent double counting.",
             "OSM walk edges exclude motorway/trunk/construction/proposed/raceway and explicit no-foot/private access unless foot access overrides it.",
-            "Copernicus GLO-30 is a DSM; node elevations use a 3x3 median to reduce local building/tree artifacts but are not treated as bare-earth truth.",
+            "Copernicus GLO-30 is a DSM; a 3x3 median-filtered surface with bilinear interpolation reduces local building/tree artifacts and avoids nearest-pixel elevation steps on short OSM segments, but is not treated as bare-earth truth.",
             "Walking times use directional Tobler slope adjustment on the OSM graph. Cell-to-network connectors are limited to 300 m and use 4.8 km/h.",
             "GTFS stops.txt is the institutional primary stop source. OSM stop tags are not used to define stops.",
             "Raster-cell population coverage uses each cell centre as the representative routing point; the original 2020 raster value remains attached to that cell.",
