@@ -50,15 +50,26 @@ def _required_columns(objectives: Sequence[Objective]) -> set[str]:
     return cols
 
 
+def _baseline_mask(series: pd.Series) -> pd.Series:
+    if pd.api.types.is_bool_dtype(series):
+        return series.fillna(False)
+    normalized = series.astype(str).str.strip().str.lower()
+    invalid = ~normalized.isin({"true", "false", "1", "0"})
+    if invalid.any():
+        bad = sorted(set(series.loc[invalid].astype(str)))
+        raise ValueError(f"is_baseline must be boolean-like, found: {bad}")
+    return normalized.isin({"true", "1"})
+
+
 def validate_scenarios(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAULT_OBJECTIVES) -> None:
     missing = sorted(_required_columns(objectives) - set(df.columns))
     if missing:
         raise ValueError(f"Missing Gate F input columns: {', '.join(missing)}")
-    if df.empty:
-        raise ValueError("Gate F scenario table is empty")
+    if len(df) < 2:
+        raise ValueError("Gate F requires at least two scenarios for comparison")
     if df["scenario_id"].isna().any() or df["scenario_id"].duplicated().any():
         raise ValueError("scenario_id must be non-null and unique")
-    baseline_count = int(df["is_baseline"].astype(bool).sum())
+    baseline_count = int(_baseline_mask(df["is_baseline"]).sum())
     if baseline_count != 1:
         raise ValueError(f"Exactly one baseline scenario is required, found {baseline_count}")
     if (~df["scenario_epistemic_status"].isin(ALLOWED_INPUT_STATUSES)).any():
@@ -73,6 +84,8 @@ def validate_scenarios(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAU
             raise ValueError(f"Objective {obj.column} must contain only finite numeric values")
         if obj.column == "headway_combined_min" and (values <= 0).any():
             raise ValueError("headway_combined_min must be > 0")
+        if obj.column in {"population_covered_pct", "s8_useful_connection_pct"} and (~values.between(0, 100)).any():
+            raise ValueError(f"{obj.column} must be between 0 and 100")
         if obj.column in {"annual_bus_km", "peak_buses_required", "territories_served_count"} and (values < 0).any():
             raise ValueError(f"{obj.column} must be >= 0")
         status_col = f"{obj.column}__status"
@@ -129,7 +142,7 @@ def leave_one_objective_out_robustness(
 def build_tradeoffs(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAULT_OBJECTIVES) -> pd.DataFrame:
     """Add deltas versus the input baseline; no baseline value is hardcoded here."""
     validate_scenarios(df, objectives)
-    baseline = df.loc[df["is_baseline"].astype(bool)].iloc[0]
+    baseline = df.loc[_baseline_mask(df["is_baseline"])].iloc[0]
     out = df.copy()
     for obj in objectives:
         out[f"delta_vs_baseline__{obj.column}"] = out[obj.column].astype(float) - float(baseline[obj.column])
