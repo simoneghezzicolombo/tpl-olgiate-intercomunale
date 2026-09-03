@@ -91,9 +91,10 @@ jobs:
         run: |
           git config user.name "phase2-graph-ci"
           git config user.email "actions@users.noreply.github.com"
-          git add .github/workflows/phase2-graph-freeze.yml docs/PHASE2_FROZEN_GATE_D_GRAPH.md \
+          # The Actions token intentionally does not create/update workflow files.
+          # The final source-closed workflow is installed separately via the GitHub connector.
+          git add docs/PHASE2_FROZEN_GATE_D_GRAPH.md \
             scripts/phase2_materialize_frozen_gate_d_graph.py src/phase2_frozen_graph.py \
             tests/test_phase2_frozen_graph.py data/phase2/frozen_gate_d/source outputs/phase2/frozen_gate_d
-          git rm -r tools/phase2_graph_bootstrap .github/workflows/phase2-graph-bootstrap.yml
           git commit -m "feat(phase2-graph): freeze validated Gate D graph and transfer layer"
           git push
