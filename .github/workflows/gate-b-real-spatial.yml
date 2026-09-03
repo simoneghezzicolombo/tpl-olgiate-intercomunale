@@ -107,4 +107,4 @@ jobs:
           fi
 
 # Gate B starts from a fresh Gate A acquisition and never reads legacy synthetic outputs.
-# Trigger revision 4: POSAS Età=999 aggregate fix plus sensitivity diagnostics.
+# Trigger revision 5: continuous filtered DSM sampling and slope red-team.
