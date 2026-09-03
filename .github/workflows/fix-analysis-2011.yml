@@ -1,0 +1,77 @@
+name: Fix 2011 Meratese parsing
+
+on:
+  push:
+    branches: [analysis-meratese-mobility]
+    paths:
+      - .github/workflows/fix-analysis-2011.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: analysis-meratese-mobility
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reparse semicolon-delimited 2011 data and rebuild comparison
+        run: |
+          python - <<'PY'
+          import csv, json, pathlib
+          p=pathlib.Path('data/analysis')
+          rows=list(csv.DictReader(open(p/'istat_2011_in_out_self_raw.csv',encoding='utf-8-sig'),delimiter=';'))
+          print('columns',list(rows[0])); print('first',rows[:3])
+          areas={
+            '097002':('Airuno',['97002']), '097010':('Brivio',['97010']), '097012':('Calco',['97012']),
+            '097020':('Cernusco Lombardone',['97020']), '097039':('Imbersago',['97039']),
+            '097092':('La Valletta Brianza',['97066','97073']), '097044':('Lomagna',['97044']),
+            '097048':('Merate',['97048']), '097053':('Montevecchia',['97053']), '097058':('Olgiate Molgora',['97058']),
+            '097061':('Osnago',['97061']), '097062':("Paderno d'Adda",['97062']), '097071':('Robbiate',['97071']),
+            '097074':('Santa Maria Hoe',['97074']), '097091':('Verderio',['97087','97088'])}
+          def norm(x):
+              s=str(x).strip().replace('.0','')
+              return str(int(s)) if s and s.replace('.','',1).isdigit() else s
+          idx={norm(r['procom']):r for r in rows}
+          out=[]
+          for current,(name,oldcodes) in areas.items():
+              selected=[idx[norm(c)] for c in oldcodes if norm(c) in idx]
+              if len(selected)!=len(oldcodes): print('WARNING',name,oldcodes,[r['procom'] for r in selected])
+              def s(col): return sum(float(r[col]) for r in selected)
+              oo,ii,ss=s('out'),s('in'),s('self')
+              out.append({'istat':current,'comune':name,'out_predecessor_sum':oo,'in_predecessor_sum':ii,
+                          'self_predecessor_sum':ss,'resident_commuters_total':oo+ss,
+                          'workplace_people_total':ii+ss,'saldo':ii-oo,'n_2011_units':len(selected)})
+          with open(p/'meratese_mobility_2011.csv','w',newline='',encoding='utf-8') as f:
+              w=csv.DictWriter(f,fieldnames=list(out[0]));w.writeheader();w.writerows(out)
+          b={r['istat']:r for r in csv.DictReader(open(p/'meratese_mobility_2019.csv',encoding='utf-8'))}
+          a={r['istat']:r for r in csv.DictReader(open(p/'meratese_mobility_2011.csv',encoding='utf-8'))}
+          comp=[]
+          for code,r19 in b.items():
+              r11=a[code]; c11=float(r11['resident_commuters_total']); c19=float(r19['commuters_total'])
+              pop19=float(r19['population_2019']); outside19=float(r19['commuters_outside'])
+              comp.append({'istat':code,'comune':r19['comune'],'commuters_2011':c11,'commuters_2019':c19,
+                 'commuters_change_abs':c19-c11,'commuters_change_pct':(c19/c11-1)*100,
+                 'population_2019':pop19,'commuters_share_pop_2019_pct':c19/pop19*100,
+                 'outside_2019':outside19,'inside_2019':float(r19['commuters_inside']),
+                 'outside_share_2019_pct':outside19/c19*100,'work_2019':float(r19['work_total']),
+                 'study_2019':float(r19['study_total']),'work_share_2019_pct':float(r19['work_total'])/c19*100})
+          with open(p/'meratese_mobility_2011_2019_comparison.csv','w',newline='',encoding='utf-8') as f:
+              w=csv.DictWriter(f,fieldnames=list(comp[0]));w.writeheader();w.writerows(comp)
+          meta=json.load(open(p/'meratese_mobility_2011_provenance.json',encoding='utf-8'))
+          meta['summary_delimiter']=';'; meta['parsing_fix']='2026-09-03: corrected semicolon delimiter; previous zero-valued comparison invalidated.'
+          open(p/'meratese_mobility_2011_provenance.json','w',encoding='utf-8').write(json.dumps(meta,ensure_ascii=False,indent=2))
+          PY
+          cat data/analysis/meratese_mobility_2011_2019_comparison.csv
+      - name: Commit corrected results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/analysis/meratese_mobility_2011.csv data/analysis/meratese_mobility_2011_2019_comparison.csv data/analysis/meratese_mobility_2011_provenance.json
+          git commit -m "fix: parse 2011 commuting data with semicolon delimiter"
+          git push origin HEAD:analysis-meratese-mobility
