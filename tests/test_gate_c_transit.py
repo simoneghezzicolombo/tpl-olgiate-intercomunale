@@ -36,16 +36,27 @@ def test_arriva_feed_dates_are_explicit_and_stale_for_current_project_date():
 
 
 def test_calendar_dates_drive_arriva_service_not_empty_calendar_file():
-    calendar_rows = (OFFICIAL_ARRIVA / "calendar.txt").read_text(encoding="utf-8-sig").strip().splitlines()
-    assert len(calendar_rows) == 1, "Official Arriva calendar.txt is expected to contain only its header"
+    calendar_rows = (
+        (OFFICIAL_ARRIVA / "calendar.txt")
+        .read_text(encoding="utf-8-sig")
+        .strip()
+        .splitlines()
+    )
+    assert len(calendar_rows) == 1, (
+        "Official Arriva calendar.txt is expected to contain only its header"
+    )
     assert (OFFICIAL_ARRIVA / "calendar_dates.txt").stat().st_size > 1000
-    assert active_service_ids(OFFICIAL_ARRIVA, date(2026, 5, 6)), "calendar_dates must yield active services"
+    assert active_service_ids(OFFICIAL_ARRIVA, date(2026, 5, 6)), (
+        "calendar_dates must yield active services"
+    )
 
 
 def test_official_route_patterns_have_real_active_trips_and_stops():
     stop_ids = {
         line.split(",", 1)[0].strip('"')
-        for line in (OFFICIAL_ARRIVA / "stops.txt").read_text(encoding="utf-8-sig").splitlines()[1:]
+        for line in (OFFICIAL_ARRIVA / "stops.txt")
+        .read_text(encoding="utf-8-sig")
+        .splitlines()[1:]
         if line.strip()
     }
     audit = bus_route_audit(OFFICIAL_ARRIVA, date(2026, 5, 6))
@@ -57,11 +68,14 @@ def test_official_route_patterns_have_real_active_trips_and_stops():
 def test_trenord_s8_events_come_from_gtfs_and_service_date_is_not_fabricated():
     rail = s8_station_events(OFFICIAL_TRENORD)
     assert rail["events_count"] > 0
-    assert "OLGIATE" in rail["stop_name"].upper()
-    assert "MOLGORA" in rail["stop_name"].upper()
+    assert rail["stop_name"] == "Olgiate-Calco-Brivio"
+    assert rail["stop_id"] == "S01514"
     assert not rail_has_standard_service_calendar(OFFICIAL_TRENORD)
     assert rail["service_date_status"] == "PROVISIONAL_SERVICE_DATE_UNRESOLVED"
-    assert all(event["arrival_time"] and event["departure_time"] for event in rail["events"])
+    assert all(
+        event["arrival_time"] and event["departure_time"]
+        for event in rail["events"]
+    )
 
 
 def test_gate_c_module_does_not_consume_reconstructed_gtfs():
