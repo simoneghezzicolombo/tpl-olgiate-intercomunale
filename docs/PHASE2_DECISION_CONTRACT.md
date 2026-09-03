@@ -31,6 +31,10 @@ The final order remains:
 
 The stable candidate ID is the final deterministic tie-break only after substantive tie-break dimensions are exhausted. No weighted composite score, hidden imputation, random ordering or first-row-wins rule is introduced.
 
+## Validation contract
+
+The dedicated workflow compiles the tournament and finalizer, runs both targeted test suites and statically rejects reintroduction of the former implicit `max(budgets)` fallback, random generation and legacy hard-coded evidence paths. The workstream materialises no recommendation data.
+
 ## Scope
 
 This contract changes no route, stop, timetable, headway, fleet assumption, demand metric or recommendation. It only ensures that later V2 evidence cannot be converted into a primary/runner-up recommendation through an undeclared budget or non-finite numeric shortcut.
