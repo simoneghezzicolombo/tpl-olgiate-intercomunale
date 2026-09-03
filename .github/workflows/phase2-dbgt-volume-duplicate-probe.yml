@@ -1,0 +1,57 @@
+name: Phase 2 DBGT volume duplicate probe
+
+on:
+  push:
+    branches: [phase2-building-population]
+    paths:
+      - scripts/phase2_probe_dbgt_volume_duplicates.py
+      - .github/workflows/phase2-dbgt-volume-duplicate-probe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  volume-duplicate-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install focused geospatial dependencies
+        run: >-
+          python -m pip install --upgrade
+          pandas requests geopandas pyogrio shapely pyproj openpyxl networkx scipy
+      - name: Compile probe
+        run: python -m py_compile scripts/phase2_probe_dbgt_volume_duplicates.py
+      - name: Exhaustively inspect active volume-unit multiplicity
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=. python scripts/phase2_probe_dbgt_volume_duplicates.py \
+            | tee /tmp/dbgt-volume-duplicate-probe.log
+      - name: Reject random or sampled audit and validate completeness
+        run: |
+          ! grep -R --line-number -E 'np\.random|random\.' scripts/phase2_probe_dbgt_volume_duplicates.py
+          python - <<'PY'
+          import json
+          p = json.load(open('/tmp/dbgt-volume-duplicate-probe.json'))
+          assert p['random_used'] is False
+          assert p['sampling_used'] is False
+          assert p['layer3_candidate_object_ids'] == p['layer3_attribute_rows']
+          assert p['unique_nonblank_classref'] > 0
+          assert p['active_volume_rows'] > 0
+          print(json.dumps({k:v for k,v in p.items() if k != 'details'}, indent=2))
+          PY
+      - name: Upload volume duplicate evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-dbgt-volume-duplicate-probe-${{ github.sha }}
+          path: |
+            /tmp/dbgt-volume-duplicate-probe.json
+            /tmp/dbgt-volume-duplicate-rows.csv
+            /tmp/dbgt-volume-duplicate-probe.log
+          if-no-files-found: error
+          retention-days: 30
