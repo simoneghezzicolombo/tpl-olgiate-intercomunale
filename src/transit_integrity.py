@@ -1,6 +1,6 @@
 """Gate C transit-integrity primitives.
 
-Only official GTFS snapshots are admissible inputs here.  The historical
+Only official GTFS snapshots are admissible inputs here. The historical
 ``network_structural`` and ``network_2026_emergency`` folders are deliberately
 not referenced because they are project reconstructions, not source evidence.
 """
@@ -11,7 +11,6 @@ import hashlib
 import json
 import re
 from collections import Counter, defaultdict
-from dataclasses import dataclass
 from datetime import date, datetime
 from pathlib import Path
 from typing import Iterable
@@ -40,14 +39,16 @@ def feed_declared_range(feed_dir: Path) -> tuple[date | None, date | None]:
         return None, None
     row = rows[0]
     start, end = row.get("feed_start_date", ""), row.get("feed_end_date", "")
-    return (_parse_yyyymmdd(start) if start else None,
-            _parse_yyyymmdd(end) if end else None)
+    return (
+        _parse_yyyymmdd(start) if start else None,
+        _parse_yyyymmdd(end) if end else None,
+    )
 
 
 def active_service_ids(feed_dir: Path, service_date: date) -> set[str]:
     """Resolve active services using the GTFS calendar + calendar_dates rules.
 
-    This intentionally does not infer dates from service_id strings.  A feed
+    This intentionally does not infer dates from service_id strings. A feed
     with no calendar information therefore returns an empty set rather than a
     fabricated schedule.
     """
@@ -98,7 +99,10 @@ def _trip_stop_sequences(feed_dir: Path, trip_ids: set[str]) -> dict[str, tuple[
         except ValueError:
             seq = 0
         grouped[tid].append((seq, row.get("stop_id", "")))
-    return {tid: tuple(stop for _, stop in sorted(vals)) for tid, vals in grouped.items()}
+    return {
+        tid: tuple(stop for _, stop in sorted(vals))
+        for tid, vals in grouped.items()
+    }
 
 
 def bus_route_audit(feed_dir: Path, service_date: date) -> list[dict[str, object]]:
@@ -133,13 +137,20 @@ def _normalise(text: str) -> str:
 
 
 def find_olgiate_rail_stop(feed_dir: Path) -> dict[str, str]:
+    """Resolve the official Trenord stop named Olgiate-Calco-Brivio.
+
+    The railway station's official GTFS name omits ``Molgora``. Requiring that
+    municipality name would incorrectly reject the actual source record.
+    """
     candidates = []
     for row in _rows(feed_dir / "stops.txt"):
-        name = _normalise(row.get("stop_name", ""))
-        if "OLGIATE" in name and "MOLGORA" in name:
+        tokens = set(_normalise(row.get("stop_name", "")).split())
+        if {"OLGIATE", "CALCO", "BRIVIO"}.issubset(tokens):
             candidates.append(row)
     if len(candidates) != 1:
-        raise ValueError(f"Expected exactly one Olgiate-Molgora rail stop, found {len(candidates)}")
+        raise ValueError(
+            f"Expected exactly one Olgiate-Calco-Brivio rail stop, found {len(candidates)}"
+        )
     return candidates[0]
 
 
@@ -155,7 +166,11 @@ def s8_station_events(feed_dir: Path) -> dict[str, object]:
     active on any requested civil date.
     """
     stop = find_olgiate_rail_stop(feed_dir)
-    s8_trips = {r["trip_id"]: r for r in _rows(feed_dir / "trips.txt") if r.get("route_id") == "S8"}
+    s8_trips = {
+        r["trip_id"]: r
+        for r in _rows(feed_dir / "trips.txt")
+        if r.get("route_id") == "S8"
+    }
     events = []
     for row in _rows(feed_dir / "stop_times.txt"):
         tid = row.get("trip_id", "")
@@ -171,15 +186,17 @@ def s8_station_events(feed_dir: Path) -> dict[str, object]:
                 "stop_name": stop.get("stop_name", ""),
             })
     events.sort(key=lambda r: (r["departure_time"], r["trip_id"]))
+    has_calendar = rail_has_standard_service_calendar(feed_dir)
     return {
         "route_id": "S8",
         "stop_id": stop.get("stop_id", ""),
         "stop_name": stop.get("stop_name", ""),
         "events": events,
         "events_count": len(events),
-        "standard_service_calendar_present": rail_has_standard_service_calendar(feed_dir),
+        "standard_service_calendar_present": has_calendar,
         "service_date_status": (
-            "RESOLVABLE_FROM_GTFS_CALENDAR" if rail_has_standard_service_calendar(feed_dir)
+            "RESOLVABLE_FROM_GTFS_CALENDAR"
+            if has_calendar
             else "PROVISIONAL_SERVICE_DATE_UNRESOLVED"
         ),
         "epistemic_status": "DERIVED_FROM_OFFICIAL_GTFS",
@@ -206,7 +223,9 @@ def build_gate_c_report(service_date: date) -> dict[str, object]:
             "source": str(OFFICIAL_ARRIVA),
             "declared_start": bus_start.isoformat() if bus_start else None,
             "declared_end": bus_end.isoformat() if bus_end else None,
-            "date_within_declared_feed_range": bool(bus_start and bus_end and bus_start <= service_date <= bus_end),
+            "date_within_declared_feed_range": bool(
+                bus_start and bus_end and bus_start <= service_date <= bus_end
+            ),
             "routes": bus,
             "epistemic_status": "FACT_SNAPSHOT_AND_DERIVED_METRICS",
         },
