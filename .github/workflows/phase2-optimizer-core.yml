@@ -5,10 +5,13 @@ on:
     branches: [phase2-optimizer-core]
     paths:
       - src/phase2_optimizer_core.py
+      - src/phase2_service_engine.py
       - scripts/phase2_run_structural_search.py
       - tests/test_phase2_optimizer_core.py
       - tests/test_phase2_structural_runner.py
+      - tests/test_phase2_service_engine.py
       - docs/PHASE2_OPTIMIZER_CORE.md
+      - docs/PHASE2_SERVICE_EVALUATION_ENGINE.md
       - .github/workflows/phase2-optimizer-core.yml
   workflow_dispatch:
 
@@ -34,18 +37,19 @@ jobs:
       - name: Compile Phase 2 search modules
         run: |
           python -m py_compile src/phase2_optimizer_core.py
+          python -m py_compile src/phase2_service_engine.py
           python -m py_compile scripts/phase2_run_structural_search.py
 
       - name: Run optimizer-core tests
-        run: pytest -q tests/test_phase2_optimizer_core.py tests/test_phase2_structural_runner.py
+        run: pytest -q tests/test_phase2_optimizer_core.py tests/test_phase2_structural_runner.py tests/test_phase2_service_engine.py
 
       - name: Guard deterministic implementation
         run: |
-          if grep -R "np.random\|numpy.random\|import random\|from random" src/phase2_optimizer_core.py scripts/phase2_run_structural_search.py; then
+          if grep -R "np.random\|numpy.random\|import random\|from random" src/phase2_optimizer_core.py src/phase2_service_engine.py scripts/phase2_run_structural_search.py; then
             echo "Random generation is forbidden in the Phase 2 optimizer core."
             exit 1
           fi
-          if grep -R "08_candidate_routes\|route_variants.csv" src/phase2_optimizer_core.py scripts/phase2_run_structural_search.py; then
+          if grep -R "08_candidate_routes\|route_variants.csv" src/phase2_optimizer_core.py src/phase2_service_engine.py scripts/phase2_run_structural_search.py; then
             echo "Legacy hardcoded candidate-route evidence must not enter the Phase 2 optimizer."
             exit 1
           fi
