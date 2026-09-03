@@ -31,10 +31,7 @@ EXCEPTION_FROM = date(2026, 7, 27)
 EXCEPTION_TO = date(2026, 8, 30)
 DAY_CODES = {"123456", "12345", "6"}
 NOTE_CODES = {"A", "B", "D", "V"}
-VALIDITY_RE = re.compile(
-    r"ORARIO\s+IN\s+VIGORE\s+dal\s+9\s+Giugno\s+al\s+13\s+Settembre\s+2026",
-    re.IGNORECASE,
-)
+VALIDITY_PHRASE = "ORARIO IN VIGORE DAL 9 GIUGNO AL 13 SETTEMBRE 2026"
 DIRECTIONS = {
     "D184": (("OLGIATE", "RAVELLINO"), ("RAVELLINO", "OLGIATE")),
     "D185": (("CELANA", "BRIVIO", "OLGIATE"), ("OLGIATE", "BRIVIO", "CELANA")),
@@ -169,7 +166,7 @@ def audit_route(route_id: str, service_date: date) -> dict[str, object]:
 
     full_text = "\n".join(text_parts)
     normalised = _normalise(full_text)
-    if route_id not in normalised or not VALIDITY_RE.search(full_text):
+    if route_id not in normalised or VALIDITY_PHRASE not in normalised:
         raise RuntimeError(f"{route_id}: source identity/validity statement not verified")
 
     return {
