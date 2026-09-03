@@ -1,0 +1,30 @@
+{
+  "status": "PASS_S8_WORK_DIRECTION_WEIGHTS_V2_BUILD",
+  "contract": "PHASE2_S8_WORK_DIRECTION_WEIGHTS_V2",
+  "journey_count": 50,
+  "destination_municipality_count": 10,
+  "demand_weight_sum": 1882.0,
+  "expected_demand_weight_sum": 1882.0,
+  "official_gtfs_sha256": "b4296f145b42ccb35c26085470ff4b3fd5dffe533251c0aab312312a73820ad6",
+  "direction_method": "ACTIVE_S8_GTFS_STOP_SEQUENCE_DOWNSTREAM_OF_OLGIATE_CALCO_BRIVIO",
+  "outbound_direction_demand": {
+    "LECCO": 697.0,
+    "MILANO": 1185.0
+  },
+  "return_direction_demand": {
+    "LECCO": 1185.0,
+    "MILANO": 697.0
+  },
+  "S8_DIRECT_is_modal_share": false,
+  "full_gjt_ready": false,
+  "spatial_allocation_performed": false,
+  "lineage": {
+    "journeys_sha256": "ade46c847032c4d5da86a61a3e8b413269320fe4aba1a96121dc12e052de4840",
+    "s8_events_sha256": "00b9994c1331ab5caa09a6092815bc5554f07baddbde8a651857a470d0fdb71b",
+    "station_municipalities_sha256": "8c256464f7266b532781231acee7bb6d8da84eccf5ce3639da8375d489d26d1c",
+    "s8_contract_sha256": "4b2c3f2a9d05fb1fc42b3b1c1a8d9fbc153c36267721b332dbb2a643df613d72",
+    "gtfs_sha256": "b4296f145b42ccb35c26085470ff4b3fd5dffe533251c0aab312312a73820ad6",
+    "output_sha256": "0697625203b6a51bcab5e4bd6061c92e42202f7313e95f8c527ace8fda7e9658",
+    "summary_sha256": "ba6115ddeed3021d3ecc732be000c15d8df7fa365e3e70b4cdfce25e50d44a81"
+  }
+}
