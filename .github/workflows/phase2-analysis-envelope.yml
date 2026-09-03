@@ -1,0 +1,106 @@
+name: Phase 2 analysis envelope
+
+on:
+  push:
+    branches: [phase2-analysis-envelope]
+    paths:
+      - 'scripts/phase2_analysis_envelope.py'
+      - 'tests/test_phase2_analysis_envelope.py'
+      - 'docs/PHASE2_ANALYSIS_ENVELOPE.md'
+      - '.github/workflows/phase2-analysis-envelope.yml'
+      - 'data/phase2/analysis_envelope/**'
+      - 'outputs/phase2/analysis_envelope/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      BASELINE: 147ad941579eb7ef17a5a54c19a5f820e5a226d4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Compile analysis-envelope builder
+        run: python -m py_compile scripts/phase2_analysis_envelope.py tests/test_phase2_analysis_envelope.py
+      - name: Acquire primary sources only when snapshot is absent
+        run: |
+          if [ ! -f data/phase2/analysis_envelope/source/source_manifest.json ]; then
+            python scripts/phase2_analysis_envelope.py
+          fi
+      - name: Source-closed materialisation
+        run: python scripts/phase2_analysis_envelope.py --forbid-live
+      - name: Record source-closed output hashes
+        run: |
+          find outputs/phase2/analysis_envelope -type f -print0 | sort -z | xargs -0 sha256sum > /tmp/envelope_hashes_1.txt
+      - name: Deterministic second source-closed rebuild
+        run: |
+          python scripts/phase2_analysis_envelope.py --forbid-live
+          find outputs/phase2/analysis_envelope -type f -print0 | sort -z | xargs -0 sha256sum > /tmp/envelope_hashes_2.txt
+          diff -u /tmp/envelope_hashes_1.txt /tmp/envelope_hashes_2.txt
+      - name: Analysis-envelope tests
+        run: python -m pytest -q tests/test_phase2_analysis_envelope.py
+      - name: Preserve all V1 Phase 2 outputs
+        run: |
+          git diff --exit-code "$BASELINE" -- outputs/phase2 ':(exclude)outputs/phase2/analysis_envelope/**'
+      - name: Anti-synthetic and anti-manual-whitelist guards
+        run: |
+          ! grep -R -n -E 'np\.random|random\.' scripts/phase2_analysis_envelope.py
+          ! grep -n -E 'Merate|Imbersago|Airuno' scripts/phase2_analysis_envelope.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('outputs/phase2/analysis_envelope/analysis_envelope_validation.json').read_text())
+          assert v['acquisition_used_this_run'] is False
+          assert v['prohibitions']['synthetic_data_used'] is False
+          assert v['prohibitions']['manual_external_municipality_whitelist_used'] is False
+          assert v['prohibitions']['topology_selected'] is False
+          assert v['prohibitions']['final_stop_selected'] is False
+          print(json.dumps({'status':v['status'],'rule':v['selected_rule'],'counts':v['counts']},indent=2))
+          PY
+      - name: Whitespace and provenance checks
+        run: |
+          git add -N data/phase2/analysis_envelope outputs/phase2/analysis_envelope || true
+          git diff --check "$BASELINE"
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('data/phase2/analysis_envelope/source/source_manifest.json')
+          m=json.loads(p.read_text())
+          for f,h in m['frozen_source_files_sha256'].items():
+              q=p.parent/f
+              assert hashlib.sha256(q.read_bytes()).hexdigest()==h, f
+          print('source checksums PASS')
+          PY
+      - name: Commit frozen source and validated outputs
+        id: commit
+        run: |
+          git add data/phase2/analysis_envelope outputs/phase2/analysis_envelope
+          if git diff --cached --quiet; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+          else
+            git config user.name 'phase2-analysis-envelope-ci'
+            git config user.email 'actions@users.noreply.github.com'
+            git commit -m 'data(phase2): freeze analysis envelope sources and outputs [skip ci]'
+            git push
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Upload audit bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-analysis-envelope-audit
+          path: |
+            outputs/phase2/analysis_envelope
+            data/phase2/analysis_envelope/source/source_manifest.json
+          if-no-files-found: error
