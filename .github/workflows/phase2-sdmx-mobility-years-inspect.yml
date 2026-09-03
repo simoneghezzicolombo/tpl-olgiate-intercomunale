@@ -1,0 +1,45 @@
+name: Phase 2 inspect SDMX mobility year coverage
+
+on:
+  push:
+    branches: [phase2-od-2011-audit]
+    paths:
+      - .github/workflows/phase2-sdmx-mobility-years-inspect.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Query official SDMX mobility flow across years
+        run: |
+          python - <<'PY'
+          import urllib.request,csv,io,collections
+          codes='097010+097012+097058+097074+097092'
+          keys={
+            'commuting_total':f'A.{codes}.RP_COM_DAY.T.TOTAL.TOTAL.ALL.99..',
+            'all_indicators':f'A.{codes}.........',
+          }
+          base='https://esploradati.istat.it/SDMXWS/rest/data/IT1,DF_DCSS_ISTR_LAV_PEN_2_TV_5,1.0/'
+          for label,key in keys.items():
+            u=base+key+'?startPeriod=2018&endPeriod=2024'
+            req=urllib.request.Request(u,headers={'User-Agent':'tpl-olgiate-phase2-sdmx-audit/1.0','Accept':'application/vnd.sdmx.data+csv;version=1.0.0'})
+            with urllib.request.urlopen(req,timeout=180) as r: txt=r.read().decode('utf-8-sig')
+            rows=list(csv.DictReader(io.StringIO(txt)))
+            print('\n',label,'rows',len(rows),'fields',list(rows[0]) if rows else None)
+            print('years',sorted({r.get('TIME_PERIOD') for r in rows}))
+            print('indicators',sorted({r.get('INDICATOR') for r in rows})[:100])
+            print('loc_dest',sorted({r.get('LOC_DEST') for r in rows}))
+            print('reasons',sorted({r.get('REAS_COMMUTING') for r in rows}))
+            byyear=collections.Counter(r.get('TIME_PERIOD') for r in rows)
+            print('rows/year',byyear)
+            for r in rows[:12]: print(r)
+          PY
