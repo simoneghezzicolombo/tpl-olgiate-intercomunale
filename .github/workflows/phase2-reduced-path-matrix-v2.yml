@@ -94,7 +94,12 @@ jobs:
           assert v['source_anchor_counts']['EXISTING_PHYSICAL_STOP_CLUSTER'] == 43
           assert v['source_anchor_counts']['PROPOSED_STOP'] == 155
           assert v['source_scope_counts']['STOP_UNIVERSE_V2_PROPOSED'] == 155
-          assert v['source_scope_counts']['ANALYSIS_ENVELOPE_GATE_D_GTFS_CLUSTER_CENTROID'] == 1
+          context_scope_count = sum(
+              count
+              for scope, count in v['source_scope_counts'].items()
+              if 'ANALYSIS_ENVELOPE_GATE_D_GTFS_CLUSTER_CENTROID' in scope.split('|')
+          )
+          assert context_scope_count == 1
           assert v['source_evidence_status_counts']['DERIVED_OFFICIAL_GTFS_REFERENCE_PERIOD_CLUSTER_CENTROID'] == 1
           assert 'FACT' not in v['source_evidence_status_counts']
           assert v['ordered_path_rows'] + v['missing_ordered_pairs'] == v['ordered_path_rows_possible']
@@ -119,9 +124,13 @@ jobs:
           with (root/'routing_anchor_membership.csv').open(encoding='utf-8', newline='') as f:
               membership = list(csv.DictReader(f))
           assert len(membership) == 199
-          context = [row for row in membership if row['source_scope'] == 'ANALYSIS_ENVELOPE_GATE_D_GTFS_CLUSTER_CENTROID']
+          context = [
+              row for row in membership
+              if 'ANALYSIS_ENVELOPE_GATE_D_GTFS_CLUSTER_CENTROID' in row['source_scope'].split('|')
+          ]
           assert len(context) == 1
           assert context[0]['evidence_status'] == 'DERIVED_OFFICIAL_GTFS_REFERENCE_PERIOD_CLUSTER_CENTROID'
+          assert 'GATE_B_CORE_GTFS_RECORD' in context[0]['source_scope'].split('|')
           proposed = [row for row in membership if row['source_kind'] == 'PROPOSED_STOP']
           assert len(proposed) == 155
           assert all(row['evidence_status'] == 'PROPOSED_STOP/FIELD_CHECK_PENDING' for row in proposed)
