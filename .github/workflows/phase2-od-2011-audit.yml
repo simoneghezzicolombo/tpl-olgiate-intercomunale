@@ -1,0 +1,79 @@
+name: Phase 2 OD 2011 audit
+
+on:
+  push:
+    branches: [phase2-od-2011-audit]
+    paths:
+      - scripts/phase2_audit_istat_od_2011.py
+      - .github/workflows/phase2-od-2011-audit.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-od-2011-audit
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile audit parser
+        run: python -m py_compile scripts/phase2_audit_istat_od_2011.py
+
+      - name: Rebuild canonical 2011 work OD and 2011-2021 trend
+        run: python scripts/phase2_audit_istat_od_2011.py
+
+      - name: Adversarial validation
+        run: |
+          python - <<'PY'
+          import csv, json, pathlib
+          p=pathlib.Path('outputs/phase2')
+          audit=json.loads((p/'od_2011_audit.json').read_text(encoding='utf-8'))
+          assert audit['verdict']=='VALIDATED_WITH_SERIES_BREAK'
+          assert audit['2011']['duplicate_exact_S_strata']==0
+          assert audit['2011']['record_type']=='S only'
+          assert audit['2011']['reason_filter']=='2 = work'
+          assert audit['2011']['counter_field'].startswith('Numero di individui')
+          canon=list(csv.DictReader(open('data/raw/od/matrice_pendolarismo_istat_2011_work_core_canonical.csv',encoding='utf-8')))
+          pairs=[(r['procom_res'],r['procom_lav']) for r in canon]
+          assert len(pairs)==len(set(pairs)), 'duplicate canonical OD pairs'
+          assert not any('097066' in x or '097073' in x for pair in pairs for x in pair), 'predecessor code leaked after harmonisation'
+          origins={r['procom_res'] for r in canon}
+          assert origins=={'097010','097012','097058','097074','097092'}, origins
+          trend=list(csv.DictReader(open(p/'od_trend_2011_2021.csv',encoding='utf-8')))
+          assert len(trend)==6 and trend[-1]['procom']=='TOTAL5'
+          # Reconcile 2021 totals against the already-audited Phase 2 profile.
+          expected={'097010':1662,'097012':2173,'097058':2287,'097074':836,'097092':1796}
+          got={r['procom']:int(r['resident_work_2021']) for r in trend if r['procom']!='TOTAL5'}
+          assert got==expected,(got,expected)
+          assert sum(got.values())==8754
+          print('VALIDATION PASS')
+          print('2011 totals',audit['resident_work_commuters_2011'])
+          print('2021 totals',audit['resident_work_commuters_2021'])
+          PY
+
+      - name: Show trend outputs
+        run: |
+          cat outputs/phase2/od_trend_2011_2021.csv
+          echo '--- internal core ---'
+          cat outputs/phase2/od_trend_internal_core_2011_2021.csv
+          echo '--- key/S8 destinations ---'
+          head -100 outputs/phase2/od_trend_destinations_2011_2021.csv
+          echo '--- unmapped historic destination codes ---'
+          cat outputs/phase2/od_2011_destination_codes_not_in_2021.csv
+
+      - name: Commit audited outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/raw/od/matrice_pendolarismo_istat_2011_work_core_canonical.csv outputs/phase2/od_2011_audit.json outputs/phase2/od_2011_core_summary.csv outputs/phase2/od_trend_2011_2021.csv outputs/phase2/od_trend_destinations_2011_2021.csv outputs/phase2/od_trend_internal_core_2011_2021.csv outputs/phase2/od_2011_destination_codes_not_in_2021.csv
+          git diff --cached --quiet && exit 0
+          git commit -m "data(phase2): materialise audited 2011-2021 OD trend [skip ci]"
+          git push origin HEAD:phase2-od-2011-audit
