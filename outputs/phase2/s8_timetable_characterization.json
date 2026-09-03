@@ -1,0 +1,48 @@
+{
+  "directions": {
+    "LECCO": {
+      "event_count": 37,
+      "first_arrival": "06:02:00",
+      "first_departure": "06:03:00",
+      "last_arrival": "24:02:00",
+      "last_departure": "24:03:00",
+      "service_span_min": 1080.0,
+      "headway_count": 36,
+      "headway_mean_min": 30.0,
+      "headway_median_min": 30.0,
+      "headway_min_min": 30.0,
+      "headway_p10_min": 30.0,
+      "headway_p90_min": 30.0,
+      "headway_max_min": 30.0,
+      "departure_minute_offsets": [
+        3,
+        33
+      ]
+    },
+    "MILANO": {
+      "event_count": 37,
+      "first_arrival": "05:25:00",
+      "first_departure": "05:26:00",
+      "last_arrival": "23:25:00",
+      "last_departure": "23:26:00",
+      "service_span_min": 1080.0,
+      "headway_count": 36,
+      "headway_mean_min": 30.0,
+      "headway_median_min": 30.0,
+      "headway_min_min": 30.0,
+      "headway_p10_min": 30.0,
+      "headway_p90_min": 30.0,
+      "headway_max_min": 30.0,
+      "departure_minute_offsets": [
+        26,
+        56
+      ]
+    }
+  },
+  "asymmetry": {
+    "event_count_difference_milano_minus_lecco": 0,
+    "median_headway_difference_min": 0.0,
+    "service_span_difference_min": 0.0,
+    "semantics": "DESCRIPTIVE_TIMETABLE_ASYMMETRY_NOT_PASSENGER_DEMAND"
+  }
+}
