@@ -11,6 +11,10 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from src.phase2_current_service_matrix import (  # noqa: E402
+    build_complete_cell_matrix,
+    enrich_trip_identity,
+)
 from src.phase2_current_service_stop_timetable import (  # noqa: E402
     EXPECTED_GATE_C,
     GATE_C_COMMIT,
@@ -133,18 +137,33 @@ def main() -> None:
         }
 
     conditions = build_conditions(route_reports)
+    all_trips = enrich_trip_identity(all_trips, all_stop_times)
     all_trips.sort(key=lambda r: (r["route_id"], int(r["source_page"]), int(r["source_column"])))
     all_stop_times.sort(key=lambda r: (r["route_id"], r["trip_id"], int(r["trip_stop_sequence"])))
     all_stops.sort(key=lambda r: (r["route_id"], int(r["source_page"]), int(r["stop_sequence_on_page"])))
+    complete_matrix = build_complete_cell_matrix(all_trips, all_stop_times, all_stops, conditions)
+    complete_matrix.sort(
+        key=lambda r: (
+            r["route_id"],
+            int(r["source_page"]),
+            int(r["source_column"]),
+            int(r["stop_sequence_on_page"]),
+        )
+    )
 
     write_csv(out / "current_service_sources_2026-09-03.csv", source_rows)
     write_csv(out / "current_service_trips_2026-09-03.csv", all_trips)
     write_csv(out / "current_service_stop_times_2026-09-03.csv", all_stop_times)
+    write_csv(out / "current_service_stop_trip_matrix_2026-09-03.csv", complete_matrix)
     write_csv(out / "current_service_pdf_stop_rows_2026-09-03.csv", all_stops)
     write_csv(out / "current_service_temporary_conditions_2026-09-03.csv", conditions)
 
     active_trips = [r for r in all_trips if bool(r["active_on_reference_date"])]
     active_stop_times = [r for r in all_stop_times if bool(r["active_on_reference_date"])]
+    matrix_state_counts: dict[str, int] = {}
+    for row in complete_matrix:
+        state = str(row["cell_state"])
+        matrix_state_counts[state] = matrix_state_counts.get(state, 0) + 1
     validation = {
         "status": "PASS",
         "reference_date": REFERENCE_DATE.isoformat(),
@@ -154,11 +173,16 @@ def main() -> None:
         "source_class": "OFFICIAL_OPERATOR_PRIMARY_TIMETABLE_PDFS",
         "epistemic_status": "RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE",
         "route_ids": list(REQUIRED_ROUTES),
-        "scheduled_trip_columns_total": len(all_trips),
-        "active_trip_columns_on_reference_date": len(active_trips),
+        "scheduled_timetable_columns_total": len(all_trips),
+        "active_timetable_columns_on_reference_date": len(active_trips),
+        "operator_trip_ids_available_for_current_pdf_columns": False,
+        "trip_identity_semantics": "STABLE_RECONSTRUCTED_TIMETABLE_COLUMN_ID_NOT_OPERATOR_TRIP_ID",
         "stop_time_rows_total": len(all_stop_times),
         "active_stop_time_rows_on_reference_date": len(active_stop_times),
         "pdf_stop_rows_total": len(all_stops),
+        "complete_stop_trip_cells_total": len(complete_matrix),
+        "complete_stop_trip_cell_state_counts": matrix_state_counts,
+        "unpublished_time_interpolation_used": False,
         "temporary_conditions_count": len(conditions),
         "historical_gtfs_crosscheck_date": "2026-05-06",
         "historical_gtfs_crosscheck": historical_crosscheck,
@@ -172,6 +196,7 @@ def main() -> None:
         "runtime_semantics": {
             "published_stop_times": "OFFICIAL_SCHEDULED_TIMES",
             "scheduled_runtime": "DERIVED_DIFFERENCE_OF_PUBLISHED_STOP_TIMES",
+            "unpublished_stop_time_interpolation": "FORBIDDEN_NOT_USED",
             "observed_runtime": "NOT_AVAILABLE_FROM_THIS_SOURCE",
             "observed_runtime_substitution": False,
         },
@@ -192,12 +217,18 @@ def main() -> None:
             "observed_runtime",
             "unpublished_frequency",
             "unpublished_headway",
+            "operator_trip_id_for_pdf_columns",
+            "exact_call_semantics_for_cells_without_published_time_unless_source_note_explicit",
         ],
         "gjt_readiness": {
             "scheduled_in_vehicle_time_between_published_timed_stops": True,
-            "scheduled_wait_from_explicit_active_trip_departures": True,
-            "stop_sequence": True,
-            "route_and_trip_identity": True,
+            "scheduled_wait_from_explicit_active_timetable_columns": True,
+            "complete_pdf_stop_by_column_cell_matrix": True,
+            "published_stop_sequence": True,
+            "route_identity": True,
+            "reconstructed_column_identity": True,
+            "operator_trip_identity": False,
+            "untimed_cell_use_for_gjt": "FORBIDDEN_UNTIL_CALL_AND_TIME_EVIDENCE_EXISTS",
             "walking_access_join": "REQUIRES_SEPARATE_STOP_IDENTITY_OR_SPATIAL_JOIN_WHERE_PDF_LABEL_IS_NOT_UNIQUE",
             "reliability_observed_runtime": "NOT_AVAILABLE",
         },
@@ -209,8 +240,9 @@ def main() -> None:
     )
 
     print("Current-service stop timetable reconstructed from official primary PDFs")
-    print("scheduled columns:", len(all_trips), "active:", len(active_trips))
+    print("scheduled timetable columns:", len(all_trips), "active:", len(active_trips))
     print("stop-time rows:", len(all_stop_times), "active:", len(active_stop_times))
+    print("complete stop x timetable-column cells:", len(complete_matrix), matrix_state_counts)
     for route_id in REQUIRED_ROUTES:
         rows = [r for r in all_trips if r["route_id"] == route_id]
         print(route_id, "scheduled=", len(rows), "active=", sum(bool(r["active_on_reference_date"]) for r in rows))
