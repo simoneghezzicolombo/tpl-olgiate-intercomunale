@@ -9,11 +9,13 @@ on:
       - 'src/gate_f_pareto.py'
       - 'src/gate_f_inputs.py'
       - 'src/gate_f_status.py'
+      - 'src/gate_f_assembly.py'
       - 'scripts/13_gate_f_pareto.py'
       - 'scripts/gate_f_build_inputs.py'
       - 'tests/test_gate_f_pareto.py'
       - 'tests/test_gate_f_inputs.py'
       - 'tests/test_gate_f_status.py'
+      - 'tests/test_gate_f_assembly.py'
       - 'schemas/gate_f_status_bundle.schema.json'
       - 'docs/GATE_F_*.md'
 
@@ -35,10 +37,11 @@ jobs:
           tests/test_gate_f_pareto.py
           tests/test_gate_f_inputs.py
           tests/test_gate_f_status.py
+          tests/test_gate_f_assembly.py
       - name: Compile Gate F code
         run: >-
           python -m py_compile
-          src/gate_f_pareto.py src/gate_f_inputs.py src/gate_f_status.py
+          src/gate_f_pareto.py src/gate_f_inputs.py src/gate_f_status.py src/gate_f_assembly.py
           scripts/13_gate_f_pareto.py scripts/gate_f_build_inputs.py
       - name: Legacy output refusal smoke test
         shell: bash

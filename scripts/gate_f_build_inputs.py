@@ -6,8 +6,10 @@ import argparse
 from pathlib import Path
 import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
+from src.gate_f_assembly import build_assembly_manifest, write_assembly_manifest  # noqa: E402
 from src.gate_f_inputs import assemble_gate_f_inputs  # noqa: E402
 
 
@@ -20,25 +22,49 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--gate-e", required=True, type=Path)
     parser.add_argument("--output", type=Path, default=Path("outputs/gate_f_scenario_metrics.csv"))
     parser.add_argument("--exclusions-output", type=Path, default=Path("outputs/gate_f/excluded_scenarios.csv"))
+    parser.add_argument("--manifest-output", type=Path, default=Path("outputs/gate_f/assembly_manifest.json"))
     return parser.parse_args()
+
+
+def _rooted(path: Path) -> Path:
+    return path if path.is_absolute() else ROOT / path
 
 
 def main() -> int:
     args = parse_args()
+    catalog = _rooted(args.catalog)
+    gate_b = _rooted(args.gate_b)
+    gate_c = _rooted(args.gate_c)
+    gate_d = _rooted(args.gate_d)
+    gate_e = _rooted(args.gate_e)
+    output = _rooted(args.output)
+    exclusions_output = _rooted(args.exclusions_output)
+    manifest_output = _rooted(args.manifest_output)
     try:
-        eligible, excluded = assemble_gate_f_inputs(
-            args.catalog, args.gate_b, args.gate_c, args.gate_d, args.gate_e
+        eligible, excluded = assemble_gate_f_inputs(catalog, gate_b, gate_c, gate_d, gate_e)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        eligible.to_csv(output, index=False)
+        exclusions_output.parent.mkdir(parents=True, exist_ok=True)
+        excluded.to_csv(exclusions_output, index=False)
+        manifest = build_assembly_manifest(
+            repo_root=ROOT,
+            inputs={"catalog": catalog, "gate_b": gate_b, "gate_c": gate_c, "gate_d": gate_d, "gate_e": gate_e},
+            metrics_output=output,
+            exclusions_output=exclusions_output,
+            eligible=eligible,
+            excluded=excluded,
         )
+        write_assembly_manifest(manifest_output, manifest)
     except (OSError, ValueError) as exc:
         print(f"GATE_F_INPUT_FAIL: {exc}", file=sys.stderr)
         return 1
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    eligible.to_csv(args.output, index=False)
-    args.exclusions_output.parent.mkdir(parents=True, exist_ok=True)
-    excluded.to_csv(args.exclusions_output, index=False)
-    print(f"Gate F canonical scenario table written: {args.output} ({len(eligible)} eligible)")
-    print(f"Gate F exclusions written: {args.exclusions_output} ({len(excluded)} excluded)")
+    print(f"Gate F canonical scenario table written: {output} ({len(eligible)} eligible)")
+    print(f"Gate F exclusions written: {exclusions_output} ({len(excluded)} excluded)")
+    print(f"Gate F deterministic assembly manifest written: {manifest_output}")
+    warning = manifest["comparison_scope"]["candidate_diversity_warning"]
+    if warning:
+        print(f"GATE_F_SCOPE_WARNING: {warning}")
     return 0
 
 

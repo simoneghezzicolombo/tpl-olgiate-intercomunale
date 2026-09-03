@@ -12,6 +12,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from src.gate_f_assembly import enforce_verified_assembly_evidence, verify_assembly_manifest  # noqa: E402
 from src.gate_f_pareto import (  # noqa: E402
     DEFAULT_OBJECTIVES,
     build_epistemic_audit,
@@ -49,6 +50,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default="outputs/gate_f_scenario_metrics.csv")
     parser.add_argument("--output-dir", default="outputs/gate_f")
+    parser.add_argument("--assembly-manifest", type=Path, default=Path("outputs/gate_f/assembly_manifest.json"))
     parser.add_argument("--gate-status", action="append", default=[])
     parser.add_argument("--gate-status-file", type=Path)
     args = parser.parse_args()
@@ -63,6 +65,18 @@ def main() -> int:
         raise SystemExit(f"REFUSED: {display} is an INVALIDATED legacy/hardcoded output and cannot feed Gate F")
     if not resolved_input.exists():
         raise SystemExit(f"BLOCKED: upstream scenario table not found: {resolved_input}")
+
+    assembly_path = args.assembly_manifest
+    if not assembly_path.is_absolute():
+        assembly_path = ROOT / assembly_path
+    verified_assembly = False
+    assembly_manifest = None
+    if assembly_path.exists():
+        try:
+            assembly_manifest = verify_assembly_manifest(assembly_path, ROOT, resolved_input)
+        except ValueError as exc:
+            raise SystemExit(f"REFUSED_ASSEMBLY_MANIFEST: {exc}") from exc
+        verified_assembly = True
 
     verified_status_evidence = False
     if args.gate_status_file:
@@ -83,6 +97,7 @@ def main() -> int:
     tradeoffs = build_tradeoffs(pareto, DEFAULT_OBJECTIVES)
     summary = decision_summary(pareto, gate_status, DEFAULT_OBJECTIVES)
     summary = enforce_verified_status_evidence(summary, verified_status_evidence)
+    summary = enforce_verified_assembly_evidence(summary, verified_assembly)
     pairs = dominance_pairs(df, DEFAULT_OBJECTIVES)
     epistemic = build_epistemic_audit(df, DEFAULT_OBJECTIVES)
 
@@ -119,6 +134,11 @@ def main() -> int:
         json.dumps(objective_manifest(DEFAULT_OBJECTIVES), indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
+    if assembly_manifest is not None:
+        (output_dir / "verified_assembly_manifest.json").write_text(
+            json.dumps(assembly_manifest, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
     if status_bundle is not None:
         (output_dir / "verified_gate_status_bundle.json").write_text(
             json.dumps(status_bundle, indent=2, ensure_ascii=False) + "\n",
