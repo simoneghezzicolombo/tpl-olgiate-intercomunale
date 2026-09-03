@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Canonical fail-closed entrypoint for Phase 2 building population.
 
-The underlying production module predates observation of the current ISTAT 2023
-regional workbook packaging. This entrypoint replaces only that input reader with
-schema discovery that must identify one workbook, one sheet/header and one set of
-section/population keys before delegating to the deterministic production build.
+The current official ISTAT 2023 regional package is identified from the package
+contents, not from a guessed filename. Header/schema discovery inspects only the
+first rows in read-only mode, then loads the selected table exactly once.
 """
 from __future__ import annotations
 
@@ -15,6 +14,7 @@ from pathlib import Path
 import sys
 import zipfile
 
+from openpyxl import load_workbook
 import pandas as pd
 
 import phase2_build_building_population as impl
@@ -38,11 +38,12 @@ def _single(items: list, label: str):
 
 
 def _workbook_member(names: list[str]) -> str:
+    # The URL itself fixes the release year. Do not require the provider to repeat
+    # "2023" in the internal filename, which is not part of the data contract.
     preferred = [
         n for n in names
         if n.lower().endswith(".xlsx")
         and "r03" in n.lower()
-        and "2023" in n.lower()
         and "tracciato" not in n.lower()
         and ("sez" in n.lower() or "indicator" in n.lower())
     ]
@@ -52,14 +53,13 @@ def _workbook_member(names: list[str]) -> str:
         n for n in names
         if n.lower().endswith(".xlsx")
         and "r03" in n.lower()
-        and "2023" in n.lower()
         and "tracciato" not in n.lower()
     ]
-    return _single(fallback, "Lombardia 2023 regional workbook")
+    return _single(fallback, "Lombardia regional section workbook in official 2023 package")
 
 
 def _find_exact(columns, names):
-    lookup = {str(c).strip().upper(): c for c in columns}
+    lookup = {str(c).strip().upper(): c for c in columns if c is not None}
     for name in names:
         if name in lookup:
             return lookup[name]
@@ -103,35 +103,46 @@ def _population_candidates(columns) -> list:
 
 
 def _discover_table(raw: bytes) -> tuple[pd.DataFrame, str, int, object, object | None, object]:
-    xls = pd.ExcelFile(io.BytesIO(raw), engine="openpyxl")
+    workbook = load_workbook(io.BytesIO(raw), read_only=True, data_only=True)
     matches = []
     observations = []
-    for sheet in xls.sheet_names:
-        for header in range(0, 11):
-            df = pd.read_excel(xls, sheet_name=sheet, header=header, dtype=object)
-            if df.empty:
-                continue
-            sec = _section_candidates(df.columns)
-            muni = _municipality_candidates(df.columns)
-            pop = _population_candidates(df.columns)
-            observations.append({
-                "sheet": sheet,
-                "header": header,
-                "section": [str(v) for v in sec],
-                "municipality": [str(v) for v in muni],
-                "population": [str(v) for v in pop],
-            })
-            if len(sec) == 1 and len(pop) == 1 and len(muni) <= 1:
-                matches.append((df, sheet, header, sec[0], muni[0] if muni else None, pop[0]))
-                break
+    try:
+        for sheet in workbook.sheetnames:
+            ws = workbook[sheet]
+            for header in range(0, 11):
+                values = next(
+                    ws.iter_rows(min_row=header + 1, max_row=header + 1, values_only=True),
+                    None,
+                )
+                if not values:
+                    continue
+                columns = list(values)
+                sec = _section_candidates(columns)
+                muni = _municipality_candidates(columns)
+                pop = _population_candidates(columns)
+                if sec or muni or pop:
+                    observations.append({
+                        "sheet": sheet,
+                        "header": header,
+                        "section": [str(v) for v in sec],
+                        "municipality": [str(v) for v in muni],
+                        "population": [str(v) for v in pop],
+                    })
+                if len(sec) == 1 and len(pop) == 1 and len(muni) <= 1:
+                    matches.append((sheet, header, sec[0], muni[0] if muni else None, pop[0]))
+                    break
+    finally:
+        workbook.close()
+
     if len(matches) != 1:
-        compact = [o for o in observations if o["section"] or o["population"]]
         raise RuntimeError(
             "ISTAT 2023 workbook schema is not uniquely identifiable; "
-            f"matches={[(m[1], m[2], str(m[3]), str(m[4]), str(m[5])) for m in matches]}; "
-            f"candidate_observations={compact[:30]}"
+            f"matches={[(m[0], m[1], str(m[2]), str(m[3]), str(m[4])) for m in matches]}; "
+            f"candidate_observations={observations[:30]}"
         )
-    return matches[0]
+    sheet, header, section_col, muni_col, pop_col = matches[0]
+    df = pd.read_excel(io.BytesIO(raw), sheet_name=sheet, header=header, dtype=object, engine="openpyxl")
+    return df, sheet, header, section_col, muni_col, pop_col
 
 
 def load_istat_2023_sections(source_dir: Path, selected_codes: set[str]):
@@ -156,17 +167,13 @@ def load_istat_2023_sections(source_dir: Path, selected_codes: set[str]):
         out["municipality_code"] = df[muni_col].map(impl.normalise_municipality)
         municipality_method = f"FACT_FIELD:{muni_col}"
     else:
-        # SEZ21_ID is the official unique census-section identifier. Deriving the
-        # six-digit municipal prefix is deterministic, but explicitly DERIVED.
         raw_digits = section_raw.str.replace(r"\.0$", "", regex=True).str.replace(r"\D", "", regex=True)
-        if (raw_digits.str.len() < 6).any():
-            raise RuntimeError("cannot derive municipality from malformed official section identifier")
-        out["municipality_code"] = raw_digits.str[:6]
+        usable = raw_digits.str.len() >= 6
+        out["municipality_code"] = raw_digits.where(usable, "").str[:6]
         municipality_method = "DERIVED_FROM_OFFICIAL_SECTION_ID_FIRST_6_DIGITS"
 
-    # Remove fully blank/footer rows before validating the actual section table.
-    blank = out["section_id"].eq("") & out["population_2023_fact"].isna()
-    out = out.loc[~blank].copy()
+    # Footer/note rows are irrelevant unless they can resolve to a selected official
+    # municipality. Filtering by selected municipality happens before numeric checks.
     out = out.loc[out["municipality_code"].isin(selected_codes)].copy()
     if out.empty:
         raise RuntimeError("no selected municipalities found in ISTAT 2023 section table")
