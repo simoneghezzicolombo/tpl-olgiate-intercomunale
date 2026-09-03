@@ -1,0 +1,128 @@
+name: Phase 2 Frequency Capability Frontiers V2
+
+on:
+  push:
+    branches:
+      - phase2-passenger-gjt-v2
+    paths:
+      - 'src/phase2_service_plan_tournament_v2.py'
+      - 'scripts/phase2_build_frequency_capability_frontiers_v2.py'
+      - 'tests/test_phase2_service_plan_tournament_v2.py'
+      - 'docs/PHASE2_DECISION_CONTRACT_V2.md'
+      - '.github/workflows/phase2-frequency-capability-frontiers-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-frequency-capability-frontiers-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/frequency_frontiers_v2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile tournament engine
+        run: |
+          python -m py_compile src/phase2_service_plan_tournament_v2.py
+          python -m py_compile scripts/phase2_build_frequency_capability_frontiers_v2.py
+
+      - name: Run tournament core tests
+        run: python -m pytest -q tests/test_phase2_service_plan_tournament_v2.py
+
+      - name: Materialise frequency-capability frontiers
+        run: >-
+          python scripts/phase2_build_frequency_capability_frontiers_v2.py
+          --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz
+          --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+          --territorial outputs/phase2/territorial_demand_v2/scenario_territorial_commuting_addressability_v2.csv.gz
+          --territorial-validation outputs/phase2/territorial_demand_v2/territorial_commuting_addressability_v2_validation.json
+          --service-feasibility outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz
+          --service-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json
+          --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv
+          --frontier-output $OUTDIR/frequency_capability_structural_frontiers_v2.csv
+          --validation $OUTDIR/frequency_capability_frontiers_v2_validation.json
+
+      - name: Validate semantics
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root = Path('outputs/phase2/frequency_frontiers_v2')
+          v = json.loads((root/'frequency_capability_frontiers_v2_validation.json').read_text())
+          assert v['status'] == 'PASS_FREQUENCY_CAPABILITY_FRONTIERS_V2_BUILD'
+          assert v['contract'] == 'PHASE2_FREQUENCY_CAPABILITY_FRONTIERS_V2'
+          assert v['scenario_count'] == 100000
+          assert v['reference_budget_bus_km_year'] == 111419.0
+          assert v['headway_thresholds_min'] == [15,20,30,60]
+          for key in ('weighted_composite_score_used','service_policy_selected','topology_selected','s8_feeder_metric_used','s8_phase_selected','full_passenger_gjt_calculated'):
+              assert v[key] is False, key
+          counts = v['eligible_scenario_counts']
+          for budget in ('m20pct','m10pct','reference','p10pct','p20pct','p30pct'):
+              assert counts[f'{budget}__h15'] <= counts[f'{budget}__h20'] <= counts[f'{budget}__h30'] <= counts[f'{budget}__h60']
+          for h in (15,20,30,60):
+              assert counts[f'm20pct__h{h}'] <= counts[f'm10pct__h{h}'] <= counts[f'reference__h{h}'] <= counts[f'p10pct__h{h}'] <= counts[f'p20pct__h{h}'] <= counts[f'p30pct__h{h}']
+          with (root/'frequency_capability_structural_frontiers_v2.csv').open(encoding='utf-8', newline='') as f:
+              rows=list(csv.DictReader(f))
+          assert rows
+          assert all(r['frequency_capability_frontier']=='true' for r in rows)
+          assert all(r['service_policy_selected']=='false' and r['topology_selected']=='false' and r['s8_phase_selected']=='false' for r in rows)
+          print(json.dumps({'reference_counts': {k:v for k,v in counts.items() if k.startswith('reference__')}, 'reference_families': v['reference_family_counts']}, indent=2))
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/frequency-frontiers-v2
+          mkdir -p /tmp/frequency-frontiers-v2
+          python scripts/phase2_build_frequency_capability_frontiers_v2.py \
+            --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz \
+            --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json \
+            --territorial outputs/phase2/territorial_demand_v2/scenario_territorial_commuting_addressability_v2.csv.gz \
+            --territorial-validation outputs/phase2/territorial_demand_v2/territorial_commuting_addressability_v2_validation.json \
+            --service-feasibility outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz \
+            --service-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json \
+            --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv \
+            --frontier-output /tmp/frequency-frontiers-v2/frontier.csv \
+            --validation /tmp/frequency-frontiers-v2/validation.json >/dev/null
+          cmp $OUTDIR/frequency_capability_structural_frontiers_v2.csv /tmp/frequency-frontiers-v2/frontier.csv
+          cmp $OUTDIR/frequency_capability_frontiers_v2_validation.json /tmp/frequency-frontiers-v2/validation.json
+
+      - name: Guard semantics
+        run: |
+          FILES="src/phase2_service_plan_tournament_v2.py scripts/phase2_build_frequency_capability_frontiers_v2.py docs/PHASE2_DECISION_CONTRACT_V2.md"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -n -E 'weighted_score|primary_selected.: true|runner_up_selected.: true|service_policy_selected.: true|topology_selected.: true' $FILES
+          git diff --check
+
+      - name: Persist validated frequency frontiers V2
+        run: |
+          git config user.name "phase2-frequency-frontiers-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add $OUTDIR
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist frequency capability frontiers V2 [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-frequency-capability-frontiers-v2-${{ github.sha }}
+          retention-days: 90
+          path: ${{ env.OUTDIR }}
