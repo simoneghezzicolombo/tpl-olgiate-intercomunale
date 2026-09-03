@@ -1,0 +1,177 @@
+name: Phase 2 Pre-Tournament Structural Frontier V2
+
+on:
+  push:
+    branches:
+      - phase2-passenger-gjt-v2
+    paths:
+      - 'src/phase2_pretournament_structural_frontier_v2.py'
+      - 'scripts/phase2_build_pretournament_structural_frontier_v2.py'
+      - 'tests/test_phase2_pretournament_structural_frontier_v2.py'
+      - 'docs/PHASE2_PRETOURNAMENT_STRUCTURAL_FRONTIER_V2.md'
+      - '.github/workflows/phase2-pretournament-structural-frontier-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-pretournament-structural-frontier-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/pretournament_frontier_v2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile frontier engine
+        run: |
+          python -m py_compile src/phase2_pretournament_structural_frontier_v2.py
+          python -m py_compile scripts/phase2_build_pretournament_structural_frontier_v2.py
+
+      - name: Run frontier tests
+        run: python -m pytest -q tests/test_phase2_pretournament_structural_frontier_v2.py
+
+      - name: Materialise pre-tournament structural frontier
+        run: >-
+          python scripts/phase2_build_pretournament_structural_frontier_v2.py
+          --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz
+          --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+          --territorial outputs/phase2/territorial_demand_v2/scenario_territorial_commuting_addressability_v2.csv.gz
+          --territorial-validation outputs/phase2/territorial_demand_v2/territorial_commuting_addressability_v2_validation.json
+          --service-feasibility outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz
+          --service-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json
+          --joined-output $OUTDIR/scenario_structural_evidence_joined_v2.csv.gz
+          --public-frontier-output $OUTDIR/public_structural_pareto_frontier_v2.csv
+          --extension-frontier-output $OUTDIR/public_plus_extensions_upper_bound_pareto_frontier_v2.csv
+          --union-output $OUTDIR/structural_frontier_union_v2.csv
+          --validation $OUTDIR/pretournament_structural_frontier_v2_validation.json
+
+      - name: Validate frontier semantics
+        run: |
+          python - <<'PY'
+          import csv, gzip, json
+          from pathlib import Path
+
+          root = Path('outputs/phase2/pretournament_frontier_v2')
+          v = json.loads((root/'pretournament_structural_frontier_v2_validation.json').read_text(encoding='utf-8'))
+          assert v['status'] == 'PASS_PRETOURNAMENT_STRUCTURAL_FRONTIER_V2_BUILD'
+          assert v['contract'] == 'PHASE2_PRETOURNAMENT_STRUCTURAL_FRONTIER_V2'
+          assert v['scenario_count'] == 100000
+          assert v['reference_budget_screening_only'] is True
+          assert v['reference_budget_screening_cap_annual_bus_km'] == 111419.0
+          assert v['reference_budget_feasible_scenario_count'] == 69186
+          assert 0 < v['public_frontier_scenario_count'] <= 69186
+          assert 0 < v['public_plus_extensions_upper_bound_frontier_scenario_count'] <= 69186
+          assert v['structural_frontier_union_scenario_count'] >= max(
+              v['public_frontier_scenario_count'],
+              v['public_plus_extensions_upper_bound_frontier_scenario_count'],
+          )
+          assert v['structural_frontier_union_scenario_count'] <= 69186
+          for key in (
+              'nonfrontier_scenarios_discarded_from_final_tournament',
+              'nonfrontier_pruning_authorized',
+              'decision_budget_selected',
+              'weighted_composite_score_used',
+              'topology_ranked', 'topology_selected', 'service_policy_selected',
+              'full_passenger_gjt_calculated', 's8_feeder_metric_used_in_pareto',
+              's8_phase_selected', 'primary_selected', 'runner_up_selected',
+          ):
+              assert v[key] is False, key
+
+          joined_count = feasible_count = public_count = extension_count = union_count = 0
+          with gzip.open(root/'scenario_structural_evidence_joined_v2.csv.gz', 'rt', encoding='utf-8', newline='') as h:
+              reader = csv.DictReader(h)
+              for row in reader:
+                  joined_count += 1
+                  feasible_count += row['reference_budget_screening_feasible'] == 'true'
+                  public_count += row['public_structural_pareto_frontier'] == 'true'
+                  extension_count += row['public_plus_extensions_upper_bound_pareto_frontier'] == 'true'
+                  union_count += row['structural_frontier_union'] == 'true'
+                  assert row['topology_ranked'] == 'false'
+                  assert row['service_policy_selected'] == 'false'
+                  assert row['nonfrontier_pruning_authorized'] == 'false'
+                  if row['structural_frontier_union'] == 'true':
+                      assert row['reference_budget_screening_feasible'] == 'true'
+          assert joined_count == 100000
+          assert feasible_count == 69186
+          assert public_count == v['public_frontier_scenario_count']
+          assert extension_count == v['public_plus_extensions_upper_bound_frontier_scenario_count']
+          assert union_count == v['structural_frontier_union_scenario_count']
+
+          for filename, expected in (
+              ('public_structural_pareto_frontier_v2.csv', public_count),
+              ('public_plus_extensions_upper_bound_pareto_frontier_v2.csv', extension_count),
+              ('structural_frontier_union_v2.csv', union_count),
+          ):
+              with (root/filename).open(encoding='utf-8', newline='') as h:
+                  assert sum(1 for _ in csv.DictReader(h)) == expected
+          print(json.dumps({
+              'reference_feasible': feasible_count,
+              'public_frontier': public_count,
+              'extension_upper_bound_frontier': extension_count,
+              'frontier_union': union_count,
+              'public_families': v['public_frontier_family_counts'],
+              'union_families': v['structural_frontier_union_family_counts'],
+          }, indent=2))
+          PY
+
+      - name: Deterministic byte-for-byte rebuild
+        run: |
+          rm -rf /tmp/pretournament-frontier-v2
+          mkdir -p /tmp/pretournament-frontier-v2
+          python scripts/phase2_build_pretournament_structural_frontier_v2.py \
+            --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz \
+            --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json \
+            --territorial outputs/phase2/territorial_demand_v2/scenario_territorial_commuting_addressability_v2.csv.gz \
+            --territorial-validation outputs/phase2/territorial_demand_v2/territorial_commuting_addressability_v2_validation.json \
+            --service-feasibility outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz \
+            --service-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json \
+            --joined-output /tmp/pretournament-frontier-v2/joined.csv.gz \
+            --public-frontier-output /tmp/pretournament-frontier-v2/public.csv \
+            --extension-frontier-output /tmp/pretournament-frontier-v2/extension.csv \
+            --union-output /tmp/pretournament-frontier-v2/union.csv \
+            --validation /tmp/pretournament-frontier-v2/validation.json >/dev/null
+          cmp $OUTDIR/scenario_structural_evidence_joined_v2.csv.gz /tmp/pretournament-frontier-v2/joined.csv.gz
+          cmp $OUTDIR/public_structural_pareto_frontier_v2.csv /tmp/pretournament-frontier-v2/public.csv
+          cmp $OUTDIR/public_plus_extensions_upper_bound_pareto_frontier_v2.csv /tmp/pretournament-frontier-v2/extension.csv
+          cmp $OUTDIR/structural_frontier_union_v2.csv /tmp/pretournament-frontier-v2/union.csv
+          cmp $OUTDIR/pretournament_structural_frontier_v2_validation.json /tmp/pretournament-frontier-v2/validation.json
+
+      - name: Guard against hidden scoring or selection
+        run: |
+          FILES="src/phase2_pretournament_structural_frontier_v2.py scripts/phase2_build_pretournament_structural_frontier_v2.py docs/PHASE2_PRETOURNAMENT_STRUCTURAL_FRONTIER_V2.md"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -n -E 'weighted_score|composite_score|primary_selected.: true|runner_up_selected.: true|service_policy_selected.: true' $FILES
+          git diff --check
+
+      - name: Persist validated pre-tournament frontier V2
+        run: |
+          git config user.name "phase2-pretournament-frontier-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add $OUTDIR
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist pre-tournament structural frontier V2 [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+
+      - name: Upload frontier evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-pretournament-structural-frontier-v2-${{ github.sha }}
+          retention-days: 90
+          path: ${{ env.OUTDIR }}
