@@ -16,6 +16,7 @@ on:
       - 'tests/test_gate_f_pareto.py'
       - 'tests/test_gate_f_inputs.py'
       - 'tests/test_gate_f_status.py'
+      - 'tests/test_gate_f_status_git_objects.py'
       - 'tests/test_gate_f_assembly.py'
       - 'tests/test_gate_f_contract.py'
       - 'tests/test_gate_f_end_to_end.py'
@@ -29,6 +30,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Fetch upstream workstream evidence refs
+        run: git fetch --no-tags origin antigravity-real-data gate-c-workstream gate-d-workstream gate-e-workstream
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -42,6 +45,7 @@ jobs:
           tests/test_gate_f_pareto.py
           tests/test_gate_f_inputs.py
           tests/test_gate_f_status.py
+          tests/test_gate_f_status_git_objects.py
           tests/test_gate_f_assembly.py
           tests/test_gate_f_contract.py
           tests/test_gate_f_end_to_end.py
