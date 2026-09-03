@@ -1,7 +1,7 @@
 # Gate C audit findings
 
-**Workstream:** `gate-c-workstream`  
-**Baseline:** `549198743e7265b333da565ce6990f9241cfd1fd`  
+**Workstream:** `gate-c-workstream`
+**Baseline:** `549198743e7265b333da565ce6990f9241cfd1fd`
 **Verdict corrente:** `PROVISIONAL`
 
 ## Stato upstream verificato
@@ -14,7 +14,7 @@ Gate C non assume output spaziali di Gate B. Qualsiasi successivo conteggio basa
 
 ## Finding C-01 — pseudo-GTFS ricostruito usato come se fosse sorgente
 
-**Severità:** critica  
+**Severità:** critica
 **Stato:** corretto nel workstream / legacy invalidato
 
 `scripts/02_parse_gtfs.py` non effettua il parsing del feed istituzionale. Costruisce manualmente D184/D185, assegna sequenze fermata e orari hard-coded e genera anche una variante `network_2026_emergency` con tempi artificialmente dilatati. I test legacy `tests/test_gtfs_integrity.py` verificano soltanto la coerenza interna di questi file ricostruiti, perciò possono risultare verdi senza dimostrare la veridicità del dato transit.
@@ -23,7 +23,7 @@ Gate C non assume output spaziali di Gate B. Qualsiasi successivo conteggio basa
 
 ## Finding C-02 — service dates autobus lette dal file sbagliato
 
-**Severità:** alta  
+**Severità:** alta
 **Stato:** corretto
 
 Nel feed Arriva ufficiale `calendar.txt` contiene solo l'intestazione. L'effettiva attivazione dei `service_id` è espressa da `calendar_dates.txt`. Un parser che guarda soltanto `calendar.txt` conclude erroneamente che non esiste alcun servizio.
@@ -32,7 +32,7 @@ Nel feed Arriva ufficiale `calendar.txt` contiene solo l'intestazione. L'effetti
 
 ## Finding C-03 — snapshot autobus non valido per settembre 2026
 
-**Severità:** alta  
+**Severità:** alta
 **Stato:** blocker temporale
 
 Il `feed_info.txt` Arriva nel repository dichiara validità `2026-01-01` → `2026-06-08`, versione `20251217`. La pagina Open Data dell'Agenzia TPL Como-Lecco-Varese consultata il 3 settembre 2026 continua a presentare come dataset GTFS pubblicato l'"orario invernale ed estivo 2025-2026" e non espone nella stessa sezione un GTFS 2026-2027.
@@ -43,7 +43,7 @@ Fonte primaria: `https://www.tplcomoleccovarese.it/atpcolc/zf/index.php/servizi-
 
 ## Finding C-04 — deviazione D185 reale diversa dalla ricostruzione legacy
 
-**Severità:** critica  
+**Severità:** critica
 **Stato:** fonte primaria trovata; ricostruzione legacy invalidata
 
 Fonti ufficiali Agenzia TPL, Provincia di Lecco, Arriva Italia e Lecco Trasporti attestano che dal 4 maggio 2026 la chiusura del Ponte di Brivio modifica la D185 con deviazione via Olginate / Ponte Cesare Cantù / Calolziocorte-Bisone. L'Agenzia e la Provincia indicano un allungamento di circa 12 km e un incremento stimato dei tempi di percorrenza di 30-40 minuti.
@@ -61,14 +61,14 @@ La precedente ricostruzione del progetto usa invece una dilatazione temporale ma
 
 ## Finding C-05 — stazione S8 cercata con denominazione non ufficiale
 
-**Severità:** media  
+**Severità:** media
 **Stato:** corretto e coperto da regressione
 
 Nel GTFS Trenord la stazione è `Olgiate-Calco-Brivio`, `stop_id = S01514`. Una prima implementazione Gate C cercava erroneamente anche il token `Molgora`, producendo zero match. La CI ha intercettato il bug. Il resolver ora usa i token ufficiali `Olgiate`, `Calco`, `Brivio` e il test fissa nome e stop ID di fonte.
 
 ## Finding C-06 — GTFS Trenord snapshot senza calendario standard
 
-**Severità:** alta  
+**Severità:** alta
 **Stato:** blocker di service-date, non di estrazione timetable
 
 Nel folder `data/raw/gtfs/rail_trenord` sono presenti `routes.txt`, `trips.txt`, `stop_times.txt`, `stops.txt` e `feed_info.txt`, ma non `calendar.txt` né `calendar_dates.txt`.
@@ -77,7 +77,7 @@ La S8 e gli eventi alla stazione possono quindi essere estratti dalle tabelle GT
 
 ## Finding C-07 — timetable S8 hard-coded nel motore legacy
 
-**Severità:** alta  
+**Severità:** alta
 **Stato:** invalidato come evidenza
 
 `src/timetable_engine.py` contiene `TRENI_S8_VIGENTI` con minuti dell'ora hard-coded. `scripts/11_train_coordination.py` contiene ulteriori minuti e conteggi di coincidenze inseriti manualmente. Entrambi sono incompatibili con Gate C come fonte di verità.
