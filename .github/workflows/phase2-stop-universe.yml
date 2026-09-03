@@ -1,0 +1,156 @@
+name: Phase 2 candidate-stop universe
+
+on:
+  push:
+    branches:
+      - phase2-stop-universe
+    paths:
+      - 'src/phase2_stop_*.py'
+      - 'scripts/phase2_build_stop_universe*.py'
+      - 'tests/test_phase2_stop_universe*.py'
+      - 'docs/PHASE2_STOP_UNIVERSE.md'
+      - '.github/workflows/phase2-stop-universe.yml'
+      - 'AGENT_STATUS.md'
+  workflow_dispatch:
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install focused dependencies
+        run: >-
+          python -m pip install --upgrade pip
+          pandas numpy geopandas networkx scipy pyproj shapely pytest requests
+
+      - name: Verify and stage frozen Gate B and Gate D PASS artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/gate_b /tmp/gate_d
+          python - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          import requests
+
+          repo = 'simoneghezzicolombo/tpl-olgiate-intercomunale'
+          token = os.environ['GH_TOKEN']
+          artifacts = [
+              (9873385893, 'aca8889c8f1a4148c252c3530a56e8c68fa3f33c8e6ddf81a9ed743c51c1cfd1', Path('/tmp/gate_b.zip')),
+              (9891607118, '6fbc06d74d5ba970bc980e4cde6234245e0753c22386f703ea313c6a4de9206a', Path('/tmp/gate_d.zip')),
+          ]
+          headers = {
+              'Authorization': f'Bearer {token}',
+              'Accept': 'application/vnd.github+json',
+              'X-GitHub-Api-Version': '2022-11-28',
+          }
+          for artifact_id, expected, destination in artifacts:
+              url = f'https://api.github.com/repos/{repo}/actions/artifacts/{artifact_id}/zip'
+              response = requests.get(url, headers=headers, timeout=180, allow_redirects=True)
+              response.raise_for_status()
+              destination.write_bytes(response.content)
+              actual = hashlib.sha256(response.content).hexdigest()
+              if actual != expected:
+                  raise SystemExit(f'artifact {artifact_id} sha mismatch: {actual} != {expected}')
+              print(f'artifact {artifact_id}: {len(response.content)} bytes sha256={actual}')
+          PY
+          unzip -q /tmp/gate_b.zip -d /tmp/gate_b
+          unzip -q /tmp/gate_d.zip -d /tmp/gate_d
+          test -s /tmp/gate_b/population_accessibility.csv
+          test -s /tmp/gate_b/walk_graph_edges.csv
+          test -s /tmp/gate_d/osm_gate_d_structural.geojson
+          test -s /tmp/gate_d/raw/arriva_addabus_2025_2026.zip
+
+      - name: Materialise candidate-stop universe
+        run: >-
+          python scripts/phase2_build_stop_universe_final.py
+          --gate-b-dir /tmp/gate_b
+          --gate-d-dir /tmp/gate_d
+          --boundaries data/raw/boundaries/comuni_core_istat_2026.geojson
+          --osm-pois data/raw/osm/osm_pois_core.json
+          --osm-points data/raw/osm/osm_points_core.geojson
+          --od-summary outputs/phase2/od_2021_core_summary.csv
+          --output-dir outputs/phase2
+
+      - name: Stop-universe focused tests
+        run: >-
+          pytest -q
+          tests/test_phase2_stop_universe.py
+          tests/test_phase2_stop_universe_algorithms.py
+
+      - name: Anti-synthetic guardrails
+        run: pytest -q tests/test_audit_anti_synthetic_guardrails.py
+
+      - name: Compile active Phase 2 stop-universe code
+        run: >-
+          python -m py_compile
+          src/phase2_stop_core.py
+          src/phase2_stop_sources.py
+          src/phase2_stop_metrics.py
+          src/phase2_stop_metrics_v2.py
+          src/phase2_stop_cluster.py
+          scripts/phase2_build_stop_universe.py
+          scripts/phase2_build_stop_universe_final.py
+
+      - name: Contract assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import pandas as pd
+          from pathlib import Path
+          out = Path('outputs/phase2')
+          validation = json.loads((out/'stop_universe_validation.json').read_text(encoding='utf-8'))
+          candidates = pd.read_csv(out/'proposed_stop_candidates.csv')
+          catchments = pd.read_csv(out/'existing_stop_catchment_summary.csv')
+          assert validation['existing_physical_cluster_catchment_method'] == 'MULTI_SOURCE_ALL_SNAPPED_GTFS_RECORDS_PER_40M_CLUSTER'
+          assert validation['pruning_cellset_alignment'] == 'STABLE_PRE_SORT_KEYS'
+          assert validation['final_network_selected'] is False
+          assert validation['headway_modified'] is False
+          assert validation['timetable_modified'] is False
+          assert validation['budget_modified'] is False
+          assert validation['ranking_produced'] is False
+          assert candidates['epistemic_status'].eq('PROPOSED_STOP/FIELD_CHECK_PENDING').all()
+          assert candidates['physical_status'].eq('FIELD_CHECK_PENDING').all()
+          assert catchments['epistemic_status'].eq('MODEL_OUTPUT_GATE_B_WALK_GRAPH_MULTI_SOURCE_PHYSICAL_CLUSTER').all()
+          assert catchments['gtfs_records_used_as_sources'].ge(1).all()
+          PY
+
+      - name: Diff and whitespace check
+        run: git diff --check 1b9b3d359be48bf58e592e0698702f58e7559e19...HEAD
+
+      - name: Upload stop-universe evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-stop-universe-${{ github.sha }}
+          retention-days: 90
+          path: |
+            outputs/phase2/existing_official_stops.csv
+            outputs/phase2/existing_official_stops.geojson
+            outputs/phase2/existing_stop_catchment_summary.csv
+            outputs/phase2/existing_stop_catchment_cells_12min.csv
+            outputs/phase2/accessibility_gap_cells.csv
+            outputs/phase2/accessibility_gap_cells.geojson
+            outputs/phase2/settlement_destination_anchors.csv
+            outputs/phase2/settlement_destination_anchors.geojson
+            outputs/phase2/proposed_stop_candidates.csv
+            outputs/phase2/proposed_stop_candidates.geojson
+            outputs/phase2/proposed_stop_candidate_catchment_cells_10min.csv
+            outputs/phase2/interchange_opportunities.csv
+            outputs/phase2/candidate_pruning_audit.csv
+            outputs/phase2/stop_universe_validation.json
+            outputs/phase2/stop_universe_checksums.sha256
