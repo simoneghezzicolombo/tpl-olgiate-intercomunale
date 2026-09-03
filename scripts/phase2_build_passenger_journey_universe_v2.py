@@ -81,8 +81,12 @@ def materialise_universe(addressability_path: Path, od_validation_path: Path) ->
         for source in csv.DictReader(handle):
             if not truthy(source.get("feeder_objective_eligible")):
                 continue
-            if str(source.get("rail_addressability", "")).strip() != "S8_DIRECT":
-                raise ValueError("Feeder-eligible row is not S8_DIRECT")
+            category = str(source.get("category", "")).strip()
+            rail_addressability = str(source.get("rail_addressability", "")).strip()
+            if category != "S8_DIRECT":
+                raise ValueError("Feeder-eligible row is not categorised S8_DIRECT")
+            if rail_addressability != "DIRECT_S8_GTFS_VERIFIED":
+                raise ValueError("Feeder-eligible row lacks verified direct S8 addressability")
             semantics = str(source.get("rail_semantics", "")).strip()
             if semantics != "INFRASTRUCTURE_ADDRESSABILITY_NOT_MODAL_SHARE":
                 raise ValueError("Unexpected S8_DIRECT rail semantics")
@@ -109,7 +113,8 @@ def materialise_universe(addressability_path: Path, od_validation_path: Path) ->
                 "demand_weight": f"{weight:.9f}",
                 "layer": "ISTAT_2021_WORK_S8_DIRECT",
                 "source_resolution": "MUNICIPAL_OD",
-                "rail_addressability": "S8_DIRECT",
+                "category": category,
+                "rail_addressability": rail_addressability,
                 "rail_semantics": semantics,
                 "spatial_allocation_status": "MUNICIPAL_OD_ONLY_NO_SPATIAL_ALLOCATION",
                 "full_gjt_ready": "false",
