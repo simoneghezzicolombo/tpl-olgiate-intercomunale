@@ -75,6 +75,10 @@ def test_v2_conditional_road_uncertainty_blocks_definitive_winner():
 
 def test_v2_rejects_noninteger_minimum_scheduled_fleet():
     frame = _v2_frame()
+    # Pandas 3 refuses lossy float assignment into an int64 column before our
+    # validator can see it. Cast deliberately so the invalid value reaches the
+    # Gate F validation layer being tested.
+    frame["minimum_scheduled_vehicles"] = frame["minimum_scheduled_vehicles"].astype(float)
     frame.loc[frame["scenario_id"] == "ALT", "minimum_scheduled_vehicles"] = 1.5
     with pytest.raises(ValueError, match="integer"):
         point_frontier_v2(frame)
