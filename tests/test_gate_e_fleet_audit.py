@@ -45,14 +45,28 @@ def test_actual_30min_each_direction_with_60min_cycle_needs_four_even_if_interli
     assert result["minimum_scheduled_vehicles_hub_interlining_allowed"] == 4
 
 
-def test_asymmetric_cycle_intervals_can_create_interlining_saving():
+def test_non_overlapping_directional_cycles_can_create_interlining_saving():
+    # One vehicle can alternate CW and CCW because every next departure is at
+    # or after the previous 50-minute cycle returns to the hub. Each direction
+    # considered in isolation still needs one vehicle, so direction-locking
+    # would require two.
+    result = scheduled_fleet_from_directional_cycles(
+        ["06:00:00", "07:40:00"], 50,
+        ["06:50:00", "08:30:00"], 50,
+    )
+    assert result["minimum_scheduled_vehicles_direction_locked_total"] == 2
+    assert result["minimum_scheduled_vehicles_hub_interlining_allowed"] == 1
+    assert result["potential_interlining_saving_vs_direction_locked"] == 1
+
+
+def test_overlapping_cross_direction_cycles_do_not_claim_false_interlining_saving():
     result = scheduled_fleet_from_directional_cycles(
         ["06:00:00", "07:00:00"], 50,
         ["06:50:00", "07:50:00"], 50,
     )
     assert result["minimum_scheduled_vehicles_direction_locked_total"] == 2
-    assert result["minimum_scheduled_vehicles_hub_interlining_allowed"] == 1
-    assert result["potential_interlining_saving_vs_direction_locked"] == 1
+    assert result["minimum_scheduled_vehicles_hub_interlining_allowed"] == 2
+    assert result["potential_interlining_saving_vs_direction_locked"] == 0
 
 
 def write_gate_e(path, cycles=3):
