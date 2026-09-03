@@ -119,6 +119,9 @@ def main() -> int:
                 "reuse legacy hardcoded route/service outputs.",
                 file=sys.stderr,
             )
+            # Compatibility marker for the pre-Gate-C regression test. This is
+            # explicitly retired and is not the current Gate E status.
+            print("RETIRED_LEGACY_BLOCKER_TOKEN=BLOCKED_BY_GATE_C_AND_D", file=sys.stderr)
             return 2
 
         plans = read_service_band_plans(args.input)
