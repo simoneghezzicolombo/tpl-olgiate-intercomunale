@@ -22,7 +22,8 @@ def test_normalization_handles_punctuation_and_common_transit_abbreviations():
 def test_label_matching_is_conservative_containment_not_edit_distance():
     assert labels_compatible("OLGIATE (Via Nazionale)", "Olgiate Molgora - via nazionale")
     assert labels_compatible("CALOLZIO F.S.", "Calolziocorte - stazione f.s.")
-    assert not labels_compatible("CALCO", "Brivio - Calco road") is False or True
+    assert labels_compatible("CALCO", "Calco - via statale")
+    assert not labels_compatible("CALCO", "Brivio - centro")
     # A genuine typo is not repaired by edit distance.
     assert not labels_compatible("IMBERSAGO", "Imbersogo - centro")
 
