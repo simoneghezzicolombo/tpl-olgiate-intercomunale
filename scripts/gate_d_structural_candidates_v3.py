@@ -15,6 +15,7 @@ from __future__ import annotations
 from pathlib import Path
 import sys
 
+import geopandas as gpd
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -76,6 +77,30 @@ _existing_ids = {candidate["candidate_id"] for candidate in base.CANDIDATES}
 for candidate in _EXTRA_CANDIDATES:
     if candidate["candidate_id"] not in _existing_ids:
         base.CANDIDATES.append(candidate)
+
+# A feed that carries none of the requested evidence routes is valid. The base
+# implementation used to construct a GeoDataFrame from an empty row list and
+# crashed because no geometry column existed. Fail closed on malformed data, but
+# return a schema-correct empty GeoDataFrame for this legitimate case.
+_original_shape_lines = base.shape_lines
+
+
+def shape_lines(feed: dict, route_names: set[str]) -> gpd.GeoDataFrame:
+    short_map = base.route_short_map(feed)
+    route_ids = {route_id for route_id, short in short_map.items() if short in route_names}
+    selected = feed["trips"][feed["trips"]["route_id"].isin(route_ids)].dropna(
+        subset=["shape_id"]
+    )
+    if selected.empty:
+        return gpd.GeoDataFrame(
+            columns=["feed", "route_short_name", "shape_id", "trip_count", "geometry"],
+            geometry="geometry",
+            crs=4326,
+        )
+    return _original_shape_lines(feed, route_names)
+
+
+base.shape_lines = shape_lines
 
 _original_resolve_anchors = v2.resolve_anchors
 
