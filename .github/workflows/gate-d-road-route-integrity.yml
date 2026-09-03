@@ -16,11 +16,13 @@ on:
       - scripts/gate_d_baseline_calibration.py
       - scripts/gate_d_baseline_calibration_v2.py
       - scripts/gate_d_baseline_calibration_v3.py
+      - scripts/gate_d_baseline_calibration_v4.py
       - tests/test_gate_d_route_integrity.py
       - tests/test_gate_d_structural_candidates.py
       - tests/test_gate_d_anchor_and_slope.py
       - tests/test_gate_d_dependency_closed.py
       - tests/test_gate_d_baseline_calibration.py
+      - tests/test_gate_d_baseline_calibration_v4.py
       - tests/test_gate_d_access_precedence.py
       - data/gate_d_structural_road_constraints.csv
       - .github/workflows/gate-d-road-route-integrity.yml
@@ -60,14 +62,16 @@ jobs:
           python -m py_compile scripts/gate_d_baseline_calibration.py
           python -m py_compile scripts/gate_d_baseline_calibration_v2.py
           python -m py_compile scripts/gate_d_baseline_calibration_v3.py
+          python -m py_compile scripts/gate_d_baseline_calibration_v4.py
           python -m py_compile tests/test_gate_d_route_integrity.py
           python -m py_compile tests/test_gate_d_structural_candidates.py
           python -m py_compile tests/test_gate_d_anchor_and_slope.py
           python -m py_compile tests/test_gate_d_dependency_closed.py
           python -m py_compile tests/test_gate_d_baseline_calibration.py
+          python -m py_compile tests/test_gate_d_baseline_calibration_v4.py
           python -m py_compile tests/test_gate_d_access_precedence.py
       - name: Run Gate D adversarial tests
-        run: python -m pytest -v tests/test_gate_d_route_integrity.py tests/test_gate_d_structural_candidates.py tests/test_gate_d_anchor_and_slope.py tests/test_gate_d_dependency_closed.py tests/test_gate_d_baseline_calibration.py tests/test_gate_d_access_precedence.py
+        run: python -m pytest -v tests/test_gate_d_route_integrity.py tests/test_gate_d_structural_candidates.py tests/test_gate_d_anchor_and_slope.py tests/test_gate_d_dependency_closed.py tests/test_gate_d_baseline_calibration.py tests/test_gate_d_baseline_calibration_v4.py tests/test_gate_d_access_precedence.py
       - name: Check patch whitespace
         run: git diff --check 549198743e7265b333da565ce6990f9241cfd1fd..HEAD
       - name: Fail if legacy hardcoded route outputs are regenerated
@@ -120,8 +124,8 @@ jobs:
           python -m pip install pandas geopandas shapely networkx pyogrio requests rasterio scipy
       - name: Acquire tiled OSM and run dependency-closed structural candidate audit
         run: python scripts/gate_d_structural_candidates_v4.py
-      - name: Route D184/D185 baseline and diagnose runtime model bias
-        run: python scripts/gate_d_baseline_calibration_v3.py
+      - name: Route D184/D185 dominant official baseline patterns and diagnose runtime model bias
+        run: python scripts/gate_d_baseline_calibration_v4.py
       - name: Derive Copernicus DSM grade diagnostics
         run: python scripts/gate_d_slope_audit.py
       - name: Print structural numerical evidence
