@@ -462,8 +462,8 @@ def fetch_osm_xml(
         f'  node["amenity"]({south},{west},{north},{east});\n'
         f'  node["shop"]({south},{west},{north},{east});\n'
         f'  node["leisure"]({south},{west},{north},{east});\n'
-        "  >;\n"
         ");\n"
+        "(._;>;);\n"
         "out meta;"
     )
     endpoints = [overpass_url] + [x for x in OVERPASS_FALLBACKS if x != overpass_url]

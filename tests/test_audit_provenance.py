@@ -299,6 +299,9 @@ def test_osm_clean_network_fetch(tmp_path):
     fetch_osm_xml((45.726, 9.388, 45.731, 9.396), str(out), timeout=60)
     assert out.exists() and out.stat().st_size > 500
     assert b"<osm" in out.read_bytes()[:1024]
+    parsed_lines = pyogrio.read_dataframe(out, layer="lines")
+    assert len(parsed_lines) > 5, "Overpass response contains no usable highway geometry"
+    assert parsed_lines["highway"].notna().sum() > 5
 
 
 @pytest.mark.network

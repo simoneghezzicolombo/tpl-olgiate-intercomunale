@@ -476,9 +476,24 @@ def calculate_accessibility(
     if len(source_nodes) < 5:
         raise ValueError(f"Too few GTFS stops snapped to walk graph: {len(source_nodes)}")
 
-    network_to_stop = nx.multi_source_dijkstra_path_length(
-        G.reverse(copy=False), source_nodes, weight="walk_min"
+    # Stop snapping is not free: use a synthetic super-source on the reversed
+    # graph and connect each official GTFS stop node with its metric snap time.
+    reversed_graph = G.reverse(copy=True)
+    super_source = 0
+    while super_source in reversed_graph:
+        super_source -= 1
+    reversed_graph.add_node(super_source)
+    stop_connector_min = {}
+    for _, stop in usable_stops.iterrows():
+        node = int(stop["graph_node_id"])
+        connector = float(stop["snap_distance_m"]) / (WALK_CONNECTOR_KMH * 1000.0 / 60.0)
+        stop_connector_min[node] = min(stop_connector_min.get(node, float("inf")), connector)
+    for node, connector in stop_connector_min.items():
+        reversed_graph.add_edge(super_source, node, walk_min=connector)
+    distances = nx.single_source_dijkstra_path_length(
+        reversed_graph, super_source, weight="walk_min"
     )
+    network_to_stop = {node: dist for node, dist in distances.items() if node != super_source}
 
     ids, _, tree = _graph_kdtree(G)
     cmetric = cells.to_crs(UTM_EPSG)
@@ -614,9 +629,9 @@ def write_outputs(
         "status": "PENDING_EXTERNAL_REVIEW",
         "epistemic_status": {
             "worldpop_2020_raw": "FACT",
-            "population_calibrated_2025": "DERIVED",
+            "population_calibrated_2025": "ESTIMATE",
             "osm_walk_graph": "DERIVED",
-            "dem_node_elevation": "DERIVED_FROM_DSM",
+            "dem_node_elevation": "DERIVED",
             "gtfs_stop_coordinates": "FACT",
             "accessibility": "MODEL_OUTPUT",
         },

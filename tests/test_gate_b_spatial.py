@@ -144,7 +144,7 @@ def test_gate_b_summary_keeps_epistemic_statuses_separate():
     summary = json.loads(SUMMARY.read_text(encoding='utf-8'))
     status = summary['epistemic_status']
     assert status['worldpop_2020_raw'] == 'FACT'
-    assert status['population_calibrated_2025'] == 'DERIVED'
+    assert status['population_calibrated_2025'] == 'ESTIMATE'
     assert status['gtfs_stop_coordinates'] == 'FACT'
     assert status['accessibility'] == 'MODEL_OUTPUT'
     assert summary['status'] == 'PENDING_EXTERNAL_REVIEW'
