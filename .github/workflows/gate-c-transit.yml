@@ -26,9 +26,6 @@ jobs:
         run: python scripts/gate_c_transit_audit.py --service-date 2026-09-03 --output outputs/gate_c/transit_integrity_2026-09-03.json
       - name: Anti-synthetic guardrails
         run: python -m pytest tests/test_audit_anti_synthetic_guardrails.py -q
-      - name: Full repository suite (diagnostic)
-        continue-on-error: true
-        run: python -m pytest -q
       - name: Diff whitespace check
         run: git diff --check HEAD^
       - name: Persist deterministic Gate C reports
