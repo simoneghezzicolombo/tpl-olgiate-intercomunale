@@ -111,7 +111,7 @@ I cinque comuni generano **8.754** pendolari residenti per lavoro. Di questi **1
 | 6 | Milano | 28 | 3.3% | S8_DIRECT |
 | 7 | Calco | 21 | 2.5% | OTHER_CORE |
 | 8 | Barzago | 20 | 2.4% | OTHER_EXTERNAL |
-| 9 | BarzanÃ² | 20 | 2.4% | OTHER_EXTERNAL |
+| 9 | Barzanò | 20 | 2.4% | OTHER_EXTERNAL |
 | 10 | Cernusco Lombardone | 17 | 2.0% | S8_DIRECT |
 | 11 | Missaglia | 13 | 1.6% | OTHER_EXTERNAL |
 | 12 | Sirtori | 13 | 1.6% | OTHER_EXTERNAL |
