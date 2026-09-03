@@ -3,7 +3,7 @@
   "public_workbook_target_match_count": 0,
   "municipal_2019_sdmx": "IDENTIFIED_AND_VALIDATED",
   "recent_population_employment": {
-    "occupied_total_identified": false,
+    "occupied_total_identified": true,
     "available_age_codes_for_occupied": [
       "Y15-24",
       "Y25-49",

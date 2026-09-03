@@ -136,6 +136,19 @@ def scan_workbooks() -> dict:
                         })
         wb.close()
 
+    # Tavola 1 repeats the labels for counts, subgroups and percentages.
+    # Retain exactly one national count row per year/signal: the candidate with
+    # the largest inside+outside population, which is the total-population row.
+    best = {}
+    for row in national:
+        total = row.get("inside_plus_outside")
+        if total is None:
+            continue
+        key = (row["year"], row["signal"])
+        if key not in best or total > best[key]["inside_plus_outside"]:
+            best[key] = row
+    national = [best[k] for k in sorted(best)]
+
     (OUT / "mobility_context_workbook_scan.json").write_text(
         json.dumps({"inventory": inventory, "matches": matches}, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
