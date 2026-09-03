@@ -51,6 +51,18 @@ def parse_json_list(value: str, field: str, *, unique: bool = True) -> list[str]
     return parsed
 
 
+def repair_reversible_mojibake(value: str) -> tuple[str, bool]:
+    """Repair only UTF-8 bytes that were reversibly decoded as Latin-1."""
+    stripped = value.strip()
+    if not any(marker in stripped for marker in ("Ã", "Â", "â")):
+        return stripped, False
+    try:
+        repaired = stripped.encode("latin-1").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return stripped, False
+    return repaired, repaired != stripped
+
+
 def gz_writer(path: Path):
     path.parent.mkdir(parents=True, exist_ok=True)
     raw = path.open("wb")
@@ -65,8 +77,9 @@ def gz_writer(path: Path):
     return raw, text
 
 
-def load_anchors(path: Path) -> dict[str, frozenset[str]]:
+def load_anchors(path: Path) -> tuple[dict[str, frozenset[str]], list[dict[str, str]]]:
     anchors: dict[str, frozenset[str]] = {}
+    repaired_labels: set[tuple[str, str]] = set()
     with path.open(encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         required = {"anchor_id", "enabled", "municipalities"}
@@ -76,19 +89,31 @@ def load_anchors(path: Path) -> dict[str, frozenset[str]]:
             if row["enabled"].strip().lower() != "true":
                 continue
             anchor_id = row["anchor_id"].strip()
-            municipalities = frozenset(
-                value.strip()
-                for value in row["municipalities"].split("|")
-                if value.strip()
-            )
+            municipality_names: set[str] = set()
+            for raw_name in row["municipalities"].split("|"):
+                if not raw_name.strip():
+                    continue
+                name, repaired = repair_reversible_mojibake(raw_name)
+                if repaired:
+                    repaired_labels.add((raw_name.strip(), name))
+                municipality_names.add(name)
+            municipalities = frozenset(municipality_names)
             if not anchor_id or not municipalities:
                 raise ValueError(
                     f"Enabled anchor lacks municipality lineage: {anchor_id}"
                 )
+            if any(marker in name for name in municipalities for marker in ("Ã", "Â")):
+                raise ValueError(
+                    f"Unrepaired municipality mojibake in anchor {anchor_id}: {municipalities}"
+                )
             if anchor_id in anchors:
                 raise ValueError(f"Duplicate anchor {anchor_id}")
             anchors[anchor_id] = municipalities
-    return anchors
+    repairs = [
+        {"source_label": source, "repaired_label": repaired}
+        for source, repaired in sorted(repaired_labels)
+    ]
+    return anchors, repairs
 
 
 def load_routes(
@@ -336,7 +361,7 @@ def main() -> int:
     ):
         raise ValueError("Route/scenario lineage mismatch")
 
-    anchors = load_anchors(args.anchors)
+    anchors, repaired_anchor_labels = load_anchors(args.anchors)
     footprint = {
         municipality
         for municipalities in anchors.values()
@@ -485,6 +510,7 @@ def main() -> int:
         "source_resolution": "MUNICIPAL_OD",
         "scenario_count": scenario_count,
         **meta,
+        "anchor_municipality_label_repairs": repaired_anchor_labels,
         "scoped_worker_semantics": (
             "STRUCTURALLY_ADDRESSABLE_MUNICIPAL_OD_MASS_UPPER_BOUND_NOT_SERVED_PASSENGERS"
         ),
@@ -524,7 +550,9 @@ def main() -> int:
             "path exists between at least one anchor in each municipality. This does "
             "not establish that the worker lives or works within walking distance of "
             "those anchors, uses bus, or has a feasible timetable. SELF OD is retained "
-            "in the inventory but excluded from structural scoring."
+            "in the inventory but excluded from structural scoring. Reversible display-label "
+            "mojibake in frozen anchor municipality names is repaired without altering "
+            "anchor IDs, graph nodes, geometries or source bytes."
         ),
     }
     args.validation.parent.mkdir(parents=True, exist_ok=True)
