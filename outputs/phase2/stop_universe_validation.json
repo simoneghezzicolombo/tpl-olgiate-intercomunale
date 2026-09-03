@@ -47,6 +47,7 @@
   ],
   "existing_physical_cluster_catchment_method": "MULTI_SOURCE_ALL_SNAPPED_GTFS_RECORDS_PER_40M_CLUSTER",
   "pruning_cellset_alignment": "STABLE_PRE_SORT_KEYS",
+  "text_label_normalization": "KNOWN_UTF8_AS_LATIN1_MOJIBAKE_ONLY",
   "final_network_selected": false,
   "headway_modified": false,
   "timetable_modified": false,
