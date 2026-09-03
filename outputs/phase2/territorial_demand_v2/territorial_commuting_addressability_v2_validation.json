@@ -8,8 +8,8 @@
   "resident_worker_od_mass": 8754.0,
   "self_worker_od_mass": 1315.0,
   "intermunicipal_worker_od_mass": 7439.0,
-  "footprint_intermunicipal_od_relation_count": 41,
-  "footprint_intermunicipal_worker_od_mass": 1775.0,
+  "footprint_intermunicipal_od_relation_count": 45,
+  "footprint_intermunicipal_worker_od_mass": 1917.0,
   "footprint_destination_municipalities": [
     "Airuno",
     "Brivio",
@@ -19,7 +19,8 @@
     "La Valletta Brianza",
     "Merate",
     "Montevecchia",
-    "Olgiate Molgora"
+    "Olgiate Molgora",
+    "Santa Maria Hoè"
   ],
   "structural_footprint_municipalities": [
     "Airuno",
@@ -31,13 +32,19 @@
     "Merate",
     "Montevecchia",
     "Olgiate Molgora",
-    "Santa Maria HoÃ¨"
+    "Santa Maria Hoè"
+  ],
+  "anchor_municipality_label_repairs": [
+    {
+      "source_label": "Santa Maria HoÃ¨",
+      "repaired_label": "Santa Maria Hoè"
+    }
   ],
   "scoped_worker_semantics": "STRUCTURALLY_ADDRESSABLE_MUNICIPAL_OD_MASS_UPPER_BOUND_NOT_SERVED_PASSENGERS",
   "self_od_structural_scoring": "EXCLUDED_UNRESOLVED_AT_MUNICIPAL_OD_RESOLUTION",
-  "scenarios_where_optional_extensions_increase_addressable_worker_mass": 5513,
-  "max_public_structurally_addressable_worker_od_mass_upper_bound": 1445.0,
-  "max_public_plus_extensions_structurally_addressable_worker_od_mass_upper_bound": 1445.0,
+  "scenarios_where_optional_extensions_increase_addressable_worker_mass": 6286,
+  "max_public_structurally_addressable_worker_od_mass_upper_bound": 1818.0,
+  "max_public_plus_extensions_structurally_addressable_worker_od_mass_upper_bound": 1818.0,
   "worker_assignment_to_routes": false,
   "modal_share_inferred": false,
   "submunicipal_worker_allocation": false,
@@ -56,8 +63,8 @@
     "routes_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
     "s8_validation_sha256": "b79e4dcbe1978e04c76ac7324c8c2e982185291529a8dc0c2b4a6a835360e490",
     "scenario_mapping_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
-    "od_universe_output_sha256": "0436840d1fafe90274ce19f113a9c413a0971366d690293242dc6815929f45b0",
-    "scenario_output_sha256": "d6fd43659c713942491da629092c045c24786d1a68a075c46309b301a73a21b5"
+    "od_universe_output_sha256": "5afdbbefccb0c6d9e37640b0b3f87967e56cb8a39ae2091d226acef110d8861f",
+    "scenario_output_sha256": "08f318b8f37421460ce3939814146e007366f3959429cddfc3f9b1cf4528f1d5"
   },
-  "epistemic_note": "Worker weights remain municipal workplace-commuting OD weights. Scenario values are upper-bound structural addressability masses: a municipality-level OD is counted only when a directed passenger-service path exists between at least one anchor in each municipality. This does not establish that the worker lives or works within walking distance of those anchors, uses bus, or has a feasible timetable. SELF OD is retained in the inventory but excluded from structural scoring."
+  "epistemic_note": "Worker weights remain municipal workplace-commuting OD weights. Scenario values are upper-bound structural addressability masses: a municipality-level OD is counted only when a directed passenger-service path exists between at least one anchor in each municipality. This does not establish that the worker lives or works within walking distance of those anchors, uses bus, or has a feasible timetable. SELF OD is retained in the inventory but excluded from structural scoring. Reversible display-label mojibake in frozen anchor municipality names is repaired without altering anchor IDs, graph nodes, geometries or source bytes."
 }
