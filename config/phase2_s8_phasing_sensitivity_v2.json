@@ -1,0 +1,56 @@
+{
+  "contract": "PHASE2_S8_PHASING_SENSITIVITY_V2",
+  "status": "ASSUMPTION_SENSITIVITY_NOT_EMPIRICAL_INTERVAL",
+  "service_date": "2026-09-03",
+  "reference_day_clockface_required": true,
+  "phase_objective": {
+    "primary": "MAXIMISE_MINIMUM_MEAN_TRANSFER_QUALITY_ACROSS_ALL_PROFILES_CONNECTION_TYPES_AND_RAIL_DIRECTIONS",
+    "secondary": "MAXIMISE_UNWEIGHTED_MEAN_TRANSFER_QUALITY_ACROSS_ALL_PROFILES_CONNECTION_TYPES_AND_RAIL_DIRECTIONS",
+    "deterministic_tie_break": "LOWEST_PHASE_OFFSET_THEN_LOWEST_EXTENSION_ROTATION",
+    "passenger_weighting": false,
+    "topology_weighting": false,
+    "note": "This is a robust interchange-opportunity phase search, not a passenger-utility score or final timetable choice."
+  },
+  "shared_clockface_phase": {
+    "status": "ASSUMPTION_DESIGN_SPACE",
+    "rule": "ALL_PUBLIC_ROUTES_IN_A_SCENARIO_SHARE_ONE_HUB_DEPARTURE_PHASE_WITHIN_THE_DECLARED_UNIFORM_HEADWAY",
+    "note": "Exact route-specific offsets may be reconsidered for finalists during explicit timetable/block construction."
+  },
+  "scheduled_extensions": {
+    "status": "ASSUMPTION_DESIGN_SPACE",
+    "pattern": "EVENLY_SPACED_REPEATING_EXTENSION_TRIPS",
+    "shares": [0.0, 0.25, 0.5, 1.0],
+    "rotation_search": true,
+    "note": "0.25 means one extension in each four-trip repeating pattern; 0.5 one in two; 1.0 every trip. Rotation is searched rather than fixed."
+  },
+  "transfer_profiles": [
+    {
+      "profile_id": "LOW_TRANSFER_FRICTION",
+      "transfer_walk_min": 1.5,
+      "preferred_wait_min": 3.0,
+      "miss_transition_scale_min": 1.0,
+      "wait_decay_min": 8.0,
+      "status": "ASSUMPTION_SENSITIVITY_NOT_EMPIRICAL_INTERVAL"
+    },
+    {
+      "profile_id": "MID_TRANSFER_FRICTION",
+      "transfer_walk_min": 2.0,
+      "preferred_wait_min": 4.0,
+      "miss_transition_scale_min": 1.5,
+      "wait_decay_min": 12.0,
+      "status": "ASSUMPTION_SENSITIVITY_NOT_EMPIRICAL_INTERVAL"
+    },
+    {
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "transfer_walk_min": 3.0,
+      "preferred_wait_min": 5.0,
+      "miss_transition_scale_min": 2.0,
+      "wait_decay_min": 15.0,
+      "status": "ASSUMPTION_SENSITIVITY_NOT_EMPIRICAL_INTERVAL"
+    }
+  ],
+  "delay_robustness_in_this_stage": false,
+  "delay_robustness_deferred_to": "PASSENGER_GJT_AND_ROBUSTNESS_TOURNAMENT",
+  "exact_timetable_constructed": false,
+  "passenger_utility_calculated": false
+}

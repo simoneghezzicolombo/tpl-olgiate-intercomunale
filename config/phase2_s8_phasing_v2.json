@@ -1,0 +1,28 @@
+{
+  "contract": "PHASE2_S8_PHASE_OPPORTUNITY_SURFACE_V2",
+  "status": "ASSUMPTION_PHASE_GRID_NOT_TIMETABLE_SELECTION",
+  "phase_resolution_min": 1,
+  "phase_resolution_status": "ASSUMPTION_TIMETABLE_MINUTE_RESOLUTION",
+  "phase_domain": "INTEGER_MINUTE_OFFSETS_0_TO_HEADWAY_MINUS_1",
+  "span_semantics": "START_INCLUSIVE_END_EXCLUSIVE_STEADY_STATE_HUB_EVENTS",
+  "span_semantics_status": "ASSUMPTION_DESIGN_SEMANTICS",
+  "bus_departure_events": "CLOCKFACE_PUBLIC_SERVICE_DEPARTURES_FROM_HUB_WITHIN_DECLARED_SPAN",
+  "vehicle_cycle_return_events": "STEADY_STATE_VEHICLE_RETURNS_TO_HUB_WITHIN_DECLARED_SPAN_USING_EXACT_V2_CLOSED_CYCLE_RUNTIME",
+  "rail_events": "FROZEN_S8_EVENTS_2026_09_03",
+  "raw_gap_semantics": {
+    "VEHICLE_CYCLE_TO_RAIL": "MINUTES_FROM_VEHICLE_CYCLE_RETURN_TO_NEXT_S8_DEPARTURE_IN_DIRECTION_BEFORE_TRANSFER_WALK; PASSENGER BUS_TO_RAIL ONLY WHEN THE PUBLIC ROUTE ITSELF RETURNS TO THE HUB",
+    "RAIL_TO_BUS": "MINUTES_FROM_S8_ARRIVAL_TO_NEXT PUBLIC BUS DEPARTURE FROM THE HUB BEFORE TRANSFER_WALK"
+  },
+  "passenger_event_rules": {
+    "RAIL_TO_BUS": "SUPPORTED_ONLY_WHEN_PUBLIC_SERVICE_STARTS_AT_HUB",
+    "BUS_TO_RAIL": "SUPPORTED_ONLY_WHEN_PUBLIC_SERVICE_RETURNS_TO_HUB; VEHICLE_ONLY_RETURN_CLOSURES_ARE_NOT_PASSENGER_EVENTS"
+  },
+  "transfer_walk_applied": false,
+  "preferred_wait_utility_applied": false,
+  "delay_cases_applied": false,
+  "passenger_demand_weights_applied": false,
+  "phase_selected": false,
+  "topology_ranked": false,
+  "service_policy_selected": false,
+  "note": "This gate materialises the complete minute-resolution clock-phase opportunity surface needed by later GJT and robustness analysis. It keeps vehicle-cycle return geometry separate from passenger-service return semantics and intentionally does not choose a phase."
+}
