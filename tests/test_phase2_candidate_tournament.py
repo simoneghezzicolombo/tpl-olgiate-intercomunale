@@ -77,6 +77,25 @@ def test_duplicate_sensitivity_id_for_same_candidate_fails_closed():
         )
 
 
+def test_non_finite_sensitivity_metrics_fail_closed():
+    key = CandidateKey("S", "P")
+    with pytest.raises(ValueError, match="must be finite"):
+        CandidateSensitivityResult(key, "A", float("nan"), 0.0, 0.1)
+    with pytest.raises(ValueError, match="must be finite"):
+        CandidateSensitivityResult(key, "A", 1.0, float("inf"), 0.1)
+    with pytest.raises(ValueError, match="must be finite"):
+        CandidateSensitivityResult(key, "A", 1.0, 0.0, float("nan"))
+
+
+def test_non_finite_candidate_metrics_fail_closed():
+    with pytest.raises(ValueError, match="must be finite"):
+        _eval("S", "P", float("nan"), 1.0, 0.1, 90_000)
+    with pytest.raises(ValueError, match="must be finite"):
+        _eval("S", "P", 2.0, float("inf"), 0.1, 90_000)
+    with pytest.raises(ValueError, match="must be finite"):
+        _eval("S", "P", 2.0, 1.0, 0.1, float("inf"))
+
+
 def test_selection_can_choose_between_two_plans_on_same_topology():
     fast = _eval("LOOP", "FAST", 6.0, 3.0, 0.08, 110_000, complexity=2)
     slow = _eval("LOOP", "SLOW", 5.9, 3.5, 0.02, 90_000, complexity=2)
@@ -86,6 +105,12 @@ def test_selection_can_choose_between_two_plans_on_same_topology():
     assert selection.primary.key == CandidateKey("LOOP", "SLOW")
     assert selection.runner_up is not None
     assert selection.runner_up.key == CandidateKey("LOOP", "FAST")
+
+
+def test_uncertainty_band_must_be_finite():
+    valid = _eval("S", "P", 2.0, 1.0, 0.1, 90_000)
+    with pytest.raises(ValueError, match="must be finite"):
+        select_candidates([valid], uncertainty_band_min=float("nan"))
 
 
 def test_ineligible_plan_on_good_topology_cannot_win():
@@ -103,6 +128,12 @@ def test_candidate_frontier_preserves_real_service_tradeoffs():
     assert {row.key.plan_id for row in frontier} == {"HIGH_FREQ", "LOW_FREQ"}
 
 
+def test_frontier_tolerance_must_be_finite():
+    valid = _eval("S", "P", 2.0, 1.0, 0.1, 90_000)
+    with pytest.raises(ValueError, match="must be finite"):
+        candidate_frontier([valid], tolerance=float("nan"))
+
+
 def test_budget_frontier_reports_plan_identity_not_only_topology():
     low = _eval("S", "LOW", 2.0, 1.0, 0.1, 80_000)
     mid = _eval("S", "MID", 4.0, 2.0, 0.1, 100_000)
@@ -111,3 +142,11 @@ def test_budget_frontier_reports_plan_identity_not_only_topology():
     assert [row["plan_id"] for row in rows] == ["LOW", "MID", "HIGH"]
     assert rows[1]["scenario_id"] == "S"
     assert rows[1]["candidate_id"] == mid.candidate_id
+
+
+def test_budget_frontier_does_not_silently_drop_invalid_envelopes():
+    valid = _eval("S", "P", 2.0, 1.0, 0.1, 90_000)
+    with pytest.raises(ValueError):
+        candidate_budget_frontier([valid], [90_000, float("nan")])
+    with pytest.raises(ValueError, match="positive"):
+        candidate_budget_frontier([valid], [90_000, -1])

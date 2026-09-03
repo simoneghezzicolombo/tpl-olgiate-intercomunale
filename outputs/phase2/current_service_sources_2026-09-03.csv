@@ -1,0 +1,5 @@
+route_id,publisher,source_url,source_pdf_sha256,valid_from,valid_to,reference_date,scheduled_columns,active_columns,epistemic_status
+D184,Lecco Trasporti / Arriva Italia,https://www.leccotrasporti.it/percorsi/estivo/linea-d184.pdf,6d5246976d369a283ee5ec3f6a49481755cfce851dd81839ccca4588205dd6ea,2026-06-09,2026-09-13,2026-09-03,12,12,FACT_PRIMARY_SOURCE_WITH_RECONSTRUCTED_STOP_TIMETABLE
+D185,Lecco Trasporti / Arriva Italia,https://www.leccotrasporti.it/percorsi/estivo/linea-d185.pdf,31f2da4a8f6539bbb08da8b7ec08b8d4a475f38482f880d3d1206ef9fbd90c66,2026-06-09,2026-09-13,2026-09-03,13,13,FACT_PRIMARY_SOURCE_WITH_RECONSTRUCTED_STOP_TIMETABLE
+D150,Lecco Trasporti / Arriva Italia,https://www.leccotrasporti.it/percorsi/estivo/linea-d150.pdf,ee2707bdb4a2174008b6819e04b2f2a564e4bef5c2d6f8830e6dc9589f47349b,2026-06-09,2026-09-13,2026-09-03,39,30,FACT_PRIMARY_SOURCE_WITH_RECONSTRUCTED_STOP_TIMETABLE
+D170,Lecco Trasporti / Arriva Italia,https://www.leccotrasporti.it/percorsi/estivo/linea-d170.pdf,87ab0fe1f2c68a38f8e54fd911f0ef38c9b29a22b3d875e34e4209a1a922f63b,2026-06-09,2026-09-13,2026-09-03,55,49,FACT_PRIMARY_SOURCE_WITH_RECONSTRUCTED_STOP_TIMETABLE
