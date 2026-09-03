@@ -3,7 +3,7 @@
 
 Gate B and Gate C are formally PASS. This wrapper extends the v2 structural
 routing audit with an explicitly ASSUMPTION-labelled Calco Superiore sensitivity
-and removes the obsolete Gate C provisional status from the generated summary.
+and removes obsolete Gate C provisional labels from generated Gate D evidence.
 
 The Calco Superiore design anchor is resolved from the real OSM named road
 ``Via Calco Superiore``. No coordinate, distance, runtime or recommendation is
@@ -82,6 +82,31 @@ def resolve_anchors(feeds: list[dict], roads) -> pd.DataFrame:
 
 
 base.resolve_anchors = resolve_anchors
+
+_original_route_one_candidate = base.route_one_candidate
+
+
+def route_one_candidate(*args, **kwargs):
+    row, geometry = _original_route_one_candidate(*args, **kwargs)
+    row = dict(row)
+    row["epistemic_status"] = "DERIVED_OSM_WITH_VALIDATED_GTFS_ANCHORS"
+    return row, geometry
+
+
+base.route_one_candidate = route_one_candidate
+
+_original_representative_patterns = base.representative_gtfs_patterns
+
+
+def representative_gtfs_patterns(feed: dict, route_name: str) -> list[dict]:
+    rows = _original_representative_patterns(feed, route_name)
+    for row in rows:
+        row["epistemic_status"] = "FACT_GTFS_GATE_C_VALIDATED"
+    return rows
+
+
+base.representative_gtfs_patterns = representative_gtfs_patterns
+
 _original_build_summary = base.build_summary
 
 
