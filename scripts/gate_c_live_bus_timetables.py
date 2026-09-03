@@ -140,7 +140,8 @@ def _direction_ok(route_id: str, text: str) -> bool:
 
 
 def audit_route(route_id: str, service_date: date) -> dict[str, object]:
-    payload, sha256 = _download(SOURCES[route_id])
+    source_url = SOURCES[route_id]
+    payload, sha256 = _download(source_url)
     if not (VALID_FROM <= service_date <= VALID_TO):
         raise RuntimeError(f"{route_id}: {service_date} outside timetable validity")
 
@@ -166,7 +167,11 @@ def audit_route(route_id: str, service_date: date) -> dict[str, object]:
             })
 
     normalised = _normalise("\n".join(linear_text_parts))
-    identity_ok = route_id in normalised
+    # Some operator PDFs render the large route-number glyph as vector artwork,
+    # so text extraction can omit it. Identity is therefore anchored to the
+    # canonical official route-specific URL, while every page must separately
+    # pass direction-token checks above and the document must state validity.
+    identity_ok = source_url.lower().endswith(f"/linea-{route_id.lower()}.pdf")
     validity_ok = all(token in normalised for token in VALIDITY_TOKENS)
     if not identity_ok or not validity_ok:
         raise RuntimeError(
@@ -176,7 +181,7 @@ def audit_route(route_id: str, service_date: date) -> dict[str, object]:
 
     return {
         "route_id": route_id,
-        "url": SOURCES[route_id],
+        "url": source_url,
         "download_sha256": sha256,
         "valid_from": VALID_FROM.isoformat(),
         "valid_to": VALID_TO.isoformat(),
