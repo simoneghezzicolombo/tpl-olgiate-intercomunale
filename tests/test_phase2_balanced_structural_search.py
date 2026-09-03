@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from scripts.phase2_run_balanced_structural_search import hub_bidirectional_anchor_filter
 from src.phase2_balanced_structural_search import (
     FAMILIES,
     allocate_family_targets,
@@ -90,3 +91,17 @@ def test_search_uses_no_topology_preference_score() -> None:
     )
     assert result.allocation_rule == "EQUAL_FAMILY_AFTER_FINITE_SINGLE_RADIAL_CAPACITY"
     assert sum(result.family_targets.values()) == 330
+
+
+def test_hub_filter_excludes_one_way_or_disconnected_anchors() -> None:
+    matrix = ReducedPathMatrix([
+        PathLeg("H", "A", 1.0, 2.0),
+        PathLeg("A", "H", 1.1, 2.2),
+        PathLeg("H", "B", 1.0, 2.0),
+        PathLeg("C", "H", 1.0, 2.0),
+    ])
+    kept, excluded = hub_bidirectional_anchor_filter(
+        hub="H", anchors=["H", "A", "B", "C", "D"], matrix=matrix
+    )
+    assert kept == ["H", "A"]
+    assert excluded == ["B", "C", "D"]
