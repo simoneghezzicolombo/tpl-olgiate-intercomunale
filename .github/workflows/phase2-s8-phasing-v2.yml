@@ -5,10 +5,10 @@ on:
     branches:
       - phase2-s8-phasing-v2
     paths:
-      - 'config/phase2_s8_phasing_sensitivity_v2.json'
-      - 'src/phase2_s8_phasing.py'
-      - 'scripts/phase2_run_s8_phasing_v2.py'
-      - 'tests/test_phase2_s8_phasing.py'
+      - 'config/phase2_s8_phasing_v2.json'
+      - 'src/phase2_s8_phasing_v2.py'
+      - 'scripts/phase2_build_s8_phasing_v2.py'
+      - 'tests/test_phase2_s8_phasing_v2.py'
       - '.github/workflows/phase2-s8-phasing-v2.yml'
   workflow_dispatch:
 
@@ -37,120 +37,137 @@ jobs:
       - name: Install test dependency
         run: python -m pip install --disable-pip-version-check pytest==9.0.2
 
-      - name: Compile S8 phasing engine
+      - name: Compile S8 phase-opportunity engine
         run: |
-          python -m py_compile src/phase2_s8_phasing.py
-          python -m py_compile scripts/phase2_run_s8_phasing_v2.py
+          python -m py_compile src/phase2_s8_phasing_v2.py
+          python -m py_compile scripts/phase2_build_s8_phasing_v2.py
 
-      - name: Run S8 phasing tests
-        run: python -m pytest -q tests/test_phase2_s8_phasing.py tests/test_phase2_s8_interchange.py
+      - name: Run S8 phase-opportunity tests
+        run: python -m pytest -q tests/test_phase2_s8_phasing_v2.py tests/test_phase2_s8_interchange.py
 
-      - name: Materialise robust clockface S8 phases
-        run: >-
-          python scripts/phase2_run_s8_phasing_v2.py
-          --catalog outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv
-          --catalog-validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json
-          --matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv
-          --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json
-          --service-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json
-          --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv
-          --policy-feasibility outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz
-          --s8-events outputs/phase2/s8_events.csv
-          --s8-contract outputs/phase2/s8_interchange_contract.json
-          --s8-characterization outputs/phase2/s8_timetable_characterization.json
-          --sensitivity config/phase2_s8_phasing_sensitivity_v2.json
-          --phase-output outputs/phase2/s8_phasing_v2/s8_clockface_phase_v2.csv.gz
-          --policy-map-output outputs/phase2/s8_phasing_v2/service_policy_phase_map_v2.csv
-          --validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json
+      - name: Materialise complete S8 phase opportunity surface
+        run: |
+          rm -rf outputs/phase2/s8_phasing_v2
+          mkdir -p outputs/phase2/s8_phasing_v2
+          python scripts/phase2_build_s8_phasing_v2.py \
+            --catalog outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv \
+            --catalog-validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv \
+            --policy-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json \
+            --s8-events outputs/phase2/s8_events.csv \
+            --s8-contract outputs/phase2/s8_interchange_contract.json \
+            --phasing-config config/phase2_s8_phasing_v2.json \
+            --route-universe-output outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --scenario-route-mapping-output outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --phase-envelope-output outputs/phase2/s8_phasing_v2/s8_phase_opportunity_envelope_v2.csv \
+            --validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json
 
       - name: Validate S8 Phasing V2 contract
         run: |
           python - <<'PY'
-          import csv, gzip, json
+          import csv, json
           from pathlib import Path
           root=Path('outputs/phase2/s8_phasing_v2')
           val=json.loads((root/'s8_phasing_v2_validation.json').read_text(encoding='utf-8'))
-          assert val['status']=='PASS_S8_PHASING_V2_BUILD'
-          assert val['contract']=='PHASE2_S8_CLOCKFACE_PHASE_SEARCH_V2'
+          assert val['status']=='PASS_S8_PHASE_OPPORTUNITY_V2_BUILD'
+          assert val['contract']=='PHASE2_S8_PHASE_OPPORTUNITY_SURFACE_V2'
           assert val['scenario_count']==100000
-          assert val['phase_result_rows']==519772
-          assert val['policy_map_rows']==288
-          assert val['headways_min']==[15,20,30,60]
-          assert val['scheduled_extension_shares']==[0.0,0.25,0.5,1.0]
-          assert val['transfer_profile_count']==3
-          assert val['clockface_period_min']==30
-          assert val['clockface_period_is_factually_supported_on_reference_day'] is True
-          assert val['first_last_trip_boundary_quality_evaluated'] is False
-          assert val['delay_robustness_evaluated'] is False
-          assert val['passenger_weighted'] is False
+          assert val['s8_event_count']==74
+          assert val['s8_direction_counts']=={'MILANO':37,'LECCO':37}
+          assert val['phase_resolution_min']==1
+          assert val['all_integer_phases_evaluated'] is True
+          assert val['all_phases_retained_downstream'] is True
+          assert val['phase_selected'] is False
+          assert val['phase_pruned'] is False
+          assert val['passenger_demand_weights_applied'] is False
           assert val['passenger_utility_calculated'] is False
           assert val['topology_ranked'] is False
           assert val['service_policy_selected'] is False
-          assert val['stop_set_selected'] is False
-          assert val['exact_timetable_constructed'] is False
-          rows=0
-          with gzip.open(root/'s8_clockface_phase_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+          assert val['vehicle_cycle_return_is_passenger_event_for_open_routes'] is False
+          assert val['passenger_bus_to_rail_event_requires_public_return_to_hub'] is True
+          assert val['vehicle_closure_route_count'] > 0
+          assert val['public_service_return_hub_route_count'] > 0
+          assert val['rail_to_bus_passenger_supported_route_count']==val['unique_route_count']
+          assert val['bus_to_rail_passenger_supported_route_count']==val['public_service_return_hub_route_count']
+
+          with (root/'unique_route_cycles_v2.csv').open(encoding='utf-8',newline='') as f:
+              routes=list(csv.DictReader(f))
+          assert len(routes)==val['unique_route_count']
+          open_routes=0
+          closed_routes=0
+          for row in routes:
+              assert row['public_service_starts_at_hub']=='true'
+              assert row['rail_to_bus_passenger_event_supported']=='true'
+              if row['public_service_returns_to_hub']=='true':
+                  closed_routes += 1
+                  assert row['vehicle_closure_added']=='false'
+                  assert row['bus_to_rail_passenger_event_supported']=='true'
+              else:
+                  open_routes += 1
+                  assert row['vehicle_closure_added']=='true'
+                  assert row['bus_to_rail_passenger_event_supported']=='false'
+          assert open_routes==val['vehicle_closure_route_count']
+          assert closed_routes==val['public_service_return_hub_route_count']
+
+          with (root/'s8_phase_opportunity_envelope_v2.csv').open(encoding='utf-8',newline='') as f:
               reader=csv.DictReader(f)
-              for row in reader:
-                  rows+=1
-                  h=int(row['uniform_headway_min'])
-                  phase=int(row['phase_offset_min'])
-                  assert 0 <= phase < h
-                  assert 0.0 <= float(row['robust_min_transfer_quality']) <= 1.0
-                  assert row['passenger_weighted']=='false'
-                  assert row['exact_timetable_constructed']=='false'
-          assert rows==519772
-          with (root/'service_policy_phase_map_v2.csv').open(encoding='utf-8',newline='') as f:
-              policies=list(csv.DictReader(f))
-          assert len(policies)==288
-          assert all(row['policy_selected']=='false' for row in policies)
-          print(json.dumps({k:val[k] for k in ('phase_result_rows','unique_runtime_signature_count','policy_map_rows')}, indent=2))
+              fields=reader.fieldnames or []
+              assert any(name.startswith('vehicle_cycle_to_rail_') for name in fields)
+              assert not any(name.startswith('bus_to_rail_') for name in fields)
+              rows=list(reader)
+          assert len(rows)==val['phase_envelope_rows']
+          assert rows and all(row['all_phases_retained_downstream']=='true' for row in rows)
+          assert all(int(row['evaluated_phase_count'])==int(row['uniform_headway_min']) for row in rows)
+          assert val['integer_phase_evaluations'] > val['phase_envelope_rows']
+          print(json.dumps({k:val[k] for k in ('unique_route_count','vehicle_closure_route_count','public_service_return_hub_route_count','phase_envelope_rows','integer_phase_evaluations')}, indent=2))
           PY
 
       - name: Deterministic byte-for-byte S8 phasing rebuild
         run: |
           rm -rf /tmp/phase2-s8-phasing-v2
           mkdir -p /tmp/phase2-s8-phasing-v2
-          python scripts/phase2_run_s8_phasing_v2.py \
+          python scripts/phase2_build_s8_phasing_v2.py \
             --catalog outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv \
             --catalog-validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json \
-            --matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
             --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
-            --service-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json \
             --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv \
-            --policy-feasibility outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz \
+            --policy-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json \
             --s8-events outputs/phase2/s8_events.csv \
             --s8-contract outputs/phase2/s8_interchange_contract.json \
-            --s8-characterization outputs/phase2/s8_timetable_characterization.json \
-            --sensitivity config/phase2_s8_phasing_sensitivity_v2.json \
-            --phase-output /tmp/phase2-s8-phasing-v2/phases.csv.gz \
-            --policy-map-output /tmp/phase2-s8-phasing-v2/policy-map.csv \
+            --phasing-config config/phase2_s8_phasing_v2.json \
+            --route-universe-output /tmp/phase2-s8-phasing-v2/routes.csv \
+            --scenario-route-mapping-output /tmp/phase2-s8-phasing-v2/scenario-routes.csv.gz \
+            --phase-envelope-output /tmp/phase2-s8-phasing-v2/envelope.csv \
             --validation /tmp/phase2-s8-phasing-v2/validation.json
-          cmp outputs/phase2/s8_phasing_v2/s8_clockface_phase_v2.csv.gz /tmp/phase2-s8-phasing-v2/phases.csv.gz
-          cmp outputs/phase2/s8_phasing_v2/service_policy_phase_map_v2.csv /tmp/phase2-s8-phasing-v2/policy-map.csv
+          cmp outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv /tmp/phase2-s8-phasing-v2/routes.csv
+          cmp outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz /tmp/phase2-s8-phasing-v2/scenario-routes.csv.gz
+          cmp outputs/phase2/s8_phasing_v2/s8_phase_opportunity_envelope_v2.csv /tmp/phase2-s8-phasing-v2/envelope.csv
           python - <<'PY'
           import json
           from pathlib import Path
           a=json.loads(Path('outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json').read_text())
           b=json.loads(Path('/tmp/phase2-s8-phasing-v2/validation.json').read_text())
           for p in (a,b):
-              p['lineage'].pop('phase_output')
-              p['lineage'].pop('policy_map_output')
+              for key in ('route_universe','scenario_route_mapping','phase_envelope'):
+                  p['lineage'].pop(key)
           assert a==b
           PY
 
       - name: Guard S8 epistemic separation
         run: |
-          FILES="config/phase2_s8_phasing_sensitivity_v2.json src/phase2_s8_phasing.py scripts/phase2_run_s8_phasing_v2.py"
+          FILES="config/phase2_s8_phasing_v2.json src/phase2_s8_phasing_v2.py scripts/phase2_build_s8_phasing_v2.py tests/test_phase2_s8_phasing_v2.py"
           ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
-          ! grep -n -E 'passenger_weight *= *true|recommended topology|primary recommendation|winner|modal share *=' $FILES
+          ! grep -n -E 'recommended topology|primary recommendation|modal share *=' $FILES
           git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-service-policy-search-v2...HEAD
 
       - name: Persist validated S8 Phasing V2
         run: |
           git config user.name "phase2-s8-phasing-v2-ci"
           git config user.email "actions@users.noreply.github.com"
-          git add outputs/phase2/s8_phasing_v2
+          git add -A outputs/phase2/s8_phasing_v2
           if ! git diff --cached --quiet; then
             git commit -m "data(phase2): persist audited S8 Phasing V2 [skip ci]"
             git push origin HEAD:phase2-s8-phasing-v2

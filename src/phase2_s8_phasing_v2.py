@@ -1,8 +1,11 @@
 """Raw S8 clock-phase opportunity helpers for Phase 2 V2.
 
 No transfer-walk assumption, waiting utility, delay case, passenger weight or
-phase selection is applied. The module only derives timing geometry between a
-uniform-clockface bus route at the hub and the frozen S8 event set.
+phase selection is applied. Hub departures are public-service events. Hub
+returns generated from a closed vehicle-cycle runtime are operational events,
+not automatically passenger-service arrivals: downstream code must use the
+route-level support flags materialised by the V2 builder before interpreting a
+vehicle return as BUS_TO_RAIL passenger service.
 """
 from __future__ import annotations
 
@@ -61,7 +64,7 @@ def runtime_archetype_id(cycle_runtime_min: Decimal) -> str:
 
 
 def clockface_times(*, phase_min: int, headway_min: int, span: Span) -> tuple[Decimal, ...]:
-    """Integer-minute clockface events inside [start,end)."""
+    """Integer-minute clockface public departures inside [start,end)."""
     span.validate()
     if headway_min <= 0 or 60 % headway_min != 0:
         raise ValueError("headway must be a positive divisor of 60")
@@ -79,7 +82,7 @@ def steady_state_arrival_times(
     cycle_runtime_min: Decimal,
     span: Span,
 ) -> tuple[Decimal, ...]:
-    """Hub-return events in [start,end) for a steady-state clockface cycle."""
+    """Vehicle-cycle hub-return events in [start,end), not passenger assertions."""
     span.validate()
     if cycle_runtime_min <= 0:
         raise ValueError("cycle runtime must be positive")
@@ -160,10 +163,11 @@ def phase_raw_gap_metrics(
     span: Span,
     phase_min: int,
 ) -> dict[str, object]:
+    """Return raw operational gaps without asserting passenger return service."""
     for event in rail_events:
         event.validate()
     departures = clockface_times(phase_min=phase_min, headway_min=headway_min, span=span)
-    arrivals = steady_state_arrival_times(
+    vehicle_returns = steady_state_arrival_times(
         phase_min=phase_min,
         headway_min=headway_min,
         cycle_runtime_min=cycle_runtime_min,
@@ -172,7 +176,7 @@ def phase_raw_gap_metrics(
     out: dict[str, object] = {
         "phase_min": phase_min,
         "bus_departure_count": len(departures),
-        "bus_arrival_count": len(arrivals),
+        "vehicle_cycle_return_count": len(vehicle_returns),
     }
     for direction in ("MILANO", "LECCO"):
         direction_events = [e for e in rail_events if e.direction == direction]
@@ -184,9 +188,9 @@ def phase_raw_gap_metrics(
                 if D(span.start_min) <= e.arrival_min < D(span.end_min)
             )
         )
-        b2r = summarize_gaps(gap_distribution_to_next(arrivals, rail_departures))
-        r2b = summarize_gaps(gap_distribution_to_next(rail_arrivals_in_span, departures))
-        for prefix, metrics in (("bus_to_rail", b2r), ("rail_to_bus", r2b)):
+        cycle_to_rail = summarize_gaps(gap_distribution_to_next(vehicle_returns, rail_departures))
+        rail_to_bus = summarize_gaps(gap_distribution_to_next(rail_arrivals_in_span, departures))
+        for prefix, metrics in (("vehicle_cycle_to_rail", cycle_to_rail), ("rail_to_bus", rail_to_bus)):
             for key, value in metrics.items():
                 out[f"{prefix}_{direction.lower()}_{key}"] = value
     return out

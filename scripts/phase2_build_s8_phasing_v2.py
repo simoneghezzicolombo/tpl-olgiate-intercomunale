@@ -2,10 +2,10 @@
 """Materialise the Phase 2 V2 S8 clock-phase opportunity envelope.
 
 Every integer-minute phase in each declared headway/span timing archetype is
-EVALUATED, but none is selected or discarded. Output is compact: it stores the
-range of raw pre-walk timing gaps across the full phase domain and keeps route
-and scenario mappings so downstream GJT can deterministically reconstruct and
-score every phase using explicit passenger/transfer assumptions.
+evaluated, but none is selected or discarded. Vehicle-cycle hub returns are
+kept distinct from passenger-service returns: an operational closure added to
+an open public route can support fleet feasibility but is never silently
+relabelled as a BUS_TO_RAIL passenger event.
 """
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ import argparse
 import csv
 from decimal import Decimal
 import gzip
-from hashlib import sha256
 import io
 import json
 from pathlib import Path
@@ -33,6 +32,7 @@ from src.phase2_s8_phasing_v2 import (
 
 
 D = Decimal
+HUB_ANCHOR = "rail:S01514"
 
 
 def load_json(path: Path) -> dict:
@@ -67,21 +67,28 @@ def load_matrix_runtime(path: Path) -> dict[tuple[str, str], Decimal]:
     return result
 
 
-def closed_cycle_runtime(anchors: tuple[str, ...], runtime: dict[tuple[str, str], Decimal]) -> Decimal:
-    total = D("0")
+def route_runtime_components(
+    anchors: tuple[str, ...], runtime: dict[tuple[str, str], Decimal]
+) -> tuple[Decimal, Decimal, bool]:
+    """Return public runtime, closed vehicle-cycle runtime and closure flag."""
+    if len(anchors) < 2:
+        raise ValueError("Route requires at least two anchors")
+    public_total = D("0")
     for a, b in zip(anchors[:-1], anchors[1:]):
         try:
-            total += runtime[(a, b)]
+            public_total += runtime[(a, b)]
         except KeyError as exc:
             raise ValueError(f"Route references missing matrix leg {a}->{b}") from exc
-    if anchors[0] != anchors[-1]:
+    closure_added = anchors[0] != anchors[-1]
+    cycle_total = public_total
+    if closure_added:
         try:
-            total += runtime[(anchors[-1], anchors[0])]
+            cycle_total += runtime[(anchors[-1], anchors[0])]
         except KeyError as exc:
-            raise ValueError(f"Open route lacks certified return closure {anchors[-1]}->{anchors[0]}") from exc
-    if total <= 0:
-        raise ValueError("Closed route runtime must be positive")
-    return total
+            raise ValueError(f"Open route lacks certified vehicle return closure {anchors[-1]}->{anchors[0]}") from exc
+    if public_total <= 0 or cycle_total <= 0:
+        raise ValueError("Route runtimes must be positive")
+    return public_total, cycle_total, closure_added
 
 
 def load_rail_events(path: Path) -> list[RailEvent]:
@@ -151,6 +158,9 @@ def validate_upstream(
         "passenger_demand_weights_applied", "phase_selected", "topology_ranked", "service_policy_selected",
     )):
         raise ValueError("S8 phasing config contains a forbidden downstream assumption/selection")
+    rules = config.get("passenger_event_rules", {})
+    if "VEHICLE_ONLY_RETURN_CLOSURES_ARE_NOT_PASSENGER_EVENTS" not in str(rules.get("BUS_TO_RAIL", "")):
+        raise ValueError("S8 phasing config does not protect vehicle-only closure semantics")
     return catalog, matrix, policy, s8
 
 
@@ -200,21 +210,27 @@ def extract_routes_and_mapping(
                 for role, patterns in (("PUBLIC", public), ("EXTENSION", extensions)):
                     for pattern in patterns:
                         anchors = tuple(pattern)
+                        if anchors[0] != HUB_ANCHOR:
+                            raise ValueError(f"Phase 2 route does not start at certified hub {HUB_ANCHOR}: {anchors}")
                         route_id = stable_route_id(anchors)
-                        cycle_runtime = closed_cycle_runtime(anchors, runtime_lookup)
+                        public_runtime, cycle_runtime, closure_added = route_runtime_components(anchors, runtime_lookup)
                         existing = routes.get(route_id)
                         if existing is not None and existing["anchors"] != anchors:
                             raise AssertionError("Route ID collision")
                         if existing is None:
                             routes[route_id] = {
                                 "anchors": anchors,
+                                "public_runtime": public_runtime,
                                 "cycle_runtime": cycle_runtime,
+                                "closure_added": closure_added,
                                 "roles": {role},
                                 "occurrence_count": 1,
                             }
                         else:
-                            if existing["cycle_runtime"] != cycle_runtime:
+                            if existing["public_runtime"] != public_runtime or existing["cycle_runtime"] != cycle_runtime:
                                 raise AssertionError("Same route ID received conflicting runtime")
+                            if existing["closure_added"] != closure_added:
+                                raise AssertionError("Same route ID received conflicting closure semantics")
                             existing["roles"].add(role)
                             existing["occurrence_count"] += 1
                         role_ids[role].append(route_id)
@@ -233,10 +249,17 @@ def extract_routes_and_mapping(
 
     route_output.parent.mkdir(parents=True, exist_ok=True)
     runtime_ids: dict[str, Decimal] = {}
+    closure_count = 0
+    public_return_count = 0
     with route_output.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=["route_id", "runtime_archetype_id", "cycle_runtime_min", "roles", "occurrence_count", "anchors_json"],
+            fieldnames=[
+                "route_id", "runtime_archetype_id", "public_runtime_min", "cycle_runtime_min", "roles",
+                "occurrence_count", "public_service_starts_at_hub", "public_service_returns_to_hub",
+                "vehicle_closure_added", "rail_to_bus_passenger_event_supported",
+                "bus_to_rail_passenger_event_supported", "anchors_json",
+            ],
             lineterminator="\n",
         )
         writer.writeheader()
@@ -246,18 +269,39 @@ def extract_routes_and_mapping(
             if runtime_id in runtime_ids and runtime_ids[runtime_id] != entry["cycle_runtime"]:
                 raise AssertionError("Runtime archetype ID collision")
             runtime_ids[runtime_id] = entry["cycle_runtime"]
+            returns_to_hub = entry["anchors"][-1] == HUB_ANCHOR
+            closure_added = bool(entry["closure_added"])
+            if closure_added == returns_to_hub:
+                raise AssertionError("Vehicle closure flag conflicts with public route geometry")
+            if closure_added:
+                closure_count += 1
+            else:
+                public_return_count += 1
             writer.writerow({
                 "route_id": route_id,
                 "runtime_archetype_id": runtime_id,
+                "public_runtime_min": format(entry["public_runtime"], "f"),
                 "cycle_runtime_min": format(entry["cycle_runtime"], "f"),
                 "roles": "|".join(sorted(entry["roles"])),
                 "occurrence_count": entry["occurrence_count"],
+                "public_service_starts_at_hub": "true",
+                "public_service_returns_to_hub": "true" if returns_to_hub else "false",
+                "vehicle_closure_added": "true" if closure_added else "false",
+                "rail_to_bus_passenger_event_supported": "true",
+                "bus_to_rail_passenger_event_supported": "true" if returns_to_hub else "false",
                 "anchors_json": json.dumps(list(entry["anchors"]), ensure_ascii=False, separators=(",", ":")),
             })
+    if closure_count <= 0 or public_return_count <= 0:
+        raise ValueError("Expected both open public routes with vehicle closure and explicit hub-returning public routes")
     return {
         "scenario_count": scenario_count,
         "unique_route_count": len(routes),
         "unique_runtime_archetype_count": len(runtime_ids),
+        "public_service_start_hub_route_count": len(routes),
+        "public_service_return_hub_route_count": public_return_count,
+        "vehicle_closure_route_count": closure_count,
+        "rail_to_bus_passenger_supported_route_count": len(routes),
+        "bus_to_rail_passenger_supported_route_count": public_return_count,
         "runtime_archetypes": runtime_ids,
     }
 
@@ -282,7 +326,7 @@ def build_phase_envelope(
             "runtime_archetype_id", "cycle_runtime_min", "uniform_headway_min", "span_id", "span_start_min", "span_end_min",
             "evaluated_phase_count", "phase_domain", "all_phases_retained_downstream",
         ]
-        for connection in ("bus_to_rail", "rail_to_bus"):
+        for connection in ("vehicle_cycle_to_rail", "rail_to_bus"):
             for direction in ("milano", "lecco"):
                 for metric in ("mean_gap_min", "median_gap_min", "p90_gap_min"):
                     fields.extend([f"{connection}_{direction}_{metric}_min_across_phases", f"{connection}_{direction}_{metric}_max_across_phases"])
@@ -313,7 +357,7 @@ def build_phase_envelope(
                     "phase_domain": f"0..{headway-1}",
                     "all_phases_retained_downstream": "true",
                 }
-                for connection in ("bus_to_rail", "rail_to_bus"):
+                for connection in ("vehicle_cycle_to_rail", "rail_to_bus"):
                     for direction in ("milano", "lecco"):
                         prefix = f"{connection}_{direction}"
                         for metric in ("mean_gap_min", "median_gap_min", "p90_gap_min"):
@@ -375,8 +419,9 @@ def main() -> int:
     )
     rail_events = load_rail_events(args.s8_events)
     timing_archetypes = load_timing_archetypes(args.policy_grid)
+    runtime_archetypes = route_info.pop("runtime_archetypes")
     surface_info = build_phase_envelope(
-        runtime_archetypes=route_info.pop("runtime_archetypes"),
+        runtime_archetypes=runtime_archetypes,
         rail_events=rail_events,
         timing_archetypes=timing_archetypes,
         output_path=args.phase_envelope_output,
@@ -395,8 +440,11 @@ def main() -> int:
         },
         "phase_resolution_min": 1,
         "all_integer_phases_evaluated": True,
+        "all_phases_retained_downstream": True,
         "phase_selected": False,
         "phase_pruned": False,
+        "vehicle_cycle_return_is_passenger_event_for_open_routes": False,
+        "passenger_bus_to_rail_event_requires_public_return_to_hub": True,
         "transfer_walk_applied": False,
         "preferred_wait_utility_applied": False,
         "delay_cases_applied": False,
@@ -426,8 +474,9 @@ def main() -> int:
         },
         "epistemic_note": (
             "This gate derives raw clock-phase timing geometry only. Every integer-minute phase in the declared "
-            "headway domain is evaluated and remains reconstructible downstream. No transfer-walk time, preferred-wait "
-            "utility, delay weighting, passenger demand weighting or phase winner is introduced before GJT/robustness."
+            "headway domain remains reconstructible downstream. RAIL_TO_BUS departures are public-service events because "
+            "the structural routes start at the hub. A closed vehicle-cycle return is a BUS_TO_RAIL passenger event only "
+            "when the public route itself explicitly returns to the hub; vehicle-only closures remain operational evidence."
         ),
     }
     args.validation.parent.mkdir(parents=True, exist_ok=True)
