@@ -150,7 +150,7 @@
     {
       "adjacency_order_from_core": 2,
       "analysis_role": "CONTEXT",
-      "municipality_name": "BarzanÃ²",
+      "municipality_name": "Barzanò",
       "procom": "097006"
     },
     {
@@ -174,7 +174,7 @@
     {
       "adjacency_order_from_core": 2,
       "analysis_role": "CONTEXT",
-      "municipality_name": "ViganÃ²",
+      "municipality_name": "Viganò",
       "procom": "097090"
     },
     {
@@ -204,7 +204,7 @@
     {
       "adjacency_order_from_core": 0,
       "analysis_role": "CORE",
-      "municipality_name": "Santa Maria HoÃ¨",
+      "municipality_name": "Santa Maria Hoè",
       "procom": "097074"
     }
   ],

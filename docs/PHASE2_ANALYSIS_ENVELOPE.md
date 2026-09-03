@@ -55,6 +55,8 @@ Roads are not refreshed from live OSM. The workstream consumes the already froze
 
 The first acquisition writes deterministic compressed source snapshots under `data/phase2/analysis_envelope/source/`, with upstream ZIP/query provenance and SHA256 checksums. Subsequent CI builds are source-closed and must reproduce from those committed snapshots.
 
+Municipality identity is keyed by the official six-digit ISTAT code. A small number of names in the frozen shapefile-derived snapshot expose reversible UTF-8-as-Latin-1 mojibake. The builder repairs only those reversible display labels during materialisation; codes, geometries, source bytes and source checksums are unchanged. Tests explicitly reject mojibake in the published municipality inventory.
+
 ## Entity inventory
 
 The selected envelope materialises separate inventories for:

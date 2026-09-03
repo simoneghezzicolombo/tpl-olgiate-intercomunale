@@ -42,6 +42,16 @@ def norm(v):
     s=str(v).strip().removesuffix(".0") if v is not None else ""
     d="".join(c for c in s if c.isdigit())
     return d.zfill(6) if d else ""
+def repair_utf8_mojibake(v):
+    """Repair only reversible UTF-8-as-Latin-1 display-label corruption."""
+    text=str(v).strip()
+    if not any(marker in text for marker in ("Ã", "Â", "â", "ð")):
+        return text
+    try:
+        repaired=text.encode("latin-1").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return text
+    return repaired
 def gz_write(path,payload):
     path=Path(path); path.parent.mkdir(parents=True,exist_ok=True)
     with path.open("wb") as raw:
@@ -79,7 +89,7 @@ def prep_mun(raw):
     if raw.crs is None: raise RuntimeError("municipalities CRS missing")
     c=col(raw,["PRO_COM_T","PRO_COM"]); n=col(raw,["COMUNE"])
     if not c or not n: raise RuntimeError(f"municipality schema {list(raw.columns)}")
-    x=raw[[c,n,"geometry"]].copy(); x["procom"]=x[c].map(norm); x["municipality_name"]=x[n].astype(str).str.strip()
+    x=raw[[c,n,"geometry"]].copy(); x["procom"]=x[c].map(norm); x["municipality_name"]=x[n].astype(str).map(repair_utf8_mojibake)
     return x[["procom","municipality_name","geometry"]].drop_duplicates("procom").to_crs(UTM)
 def prep_sec(raw):
     if raw.crs is None: raise RuntimeError("sections CRS missing")
@@ -150,7 +160,7 @@ def build(src,out,gdir,gmanifest,forbid_live):
     if not (src/"source_manifest.json").exists():
         if forbid_live: raise RuntimeError("source-closed build requested but source snapshot missing")
         acquire(src,gm); acquired=True
-    sm=verify_src(src); m=load_gz(src/"municipalities_context.geojson.gz"); secall=load_gz(src/"census_sections_context.geojson.gz"); bldall=load_gz(src/"dbgt_buildings_context.geojson.gz")
+    sm=verify_src(src); m=load_gz(src/"municipalities_context.geojson.gz"); secall=load_gz(src/"census_sections_context.geojson.gz"); bldall=load_gz(src/"dbgt_buildings_context.geojson.gz"); m["municipality_name"]=m["municipality_name"].map(repair_utf8_mojibake)
     m["procom"]=m.procom.map(norm); core,first,second,cu,fu,su=rings(m); cs=candidates(cu,fu,su)
     s,w,n,e=map(float,gm["bbox_south_west_north_east"]); gb=gpd.GeoSeries([box(w,s,e,n)],crs=4326).to_crs(UTM).iloc[0]
     support={name:bool(gb.covers(g.buffer(MAX_SNAP_M)) and g.covers(cu.buffer(EDGE_GUARD_M-1e-6))) for name,g in cs.items()}

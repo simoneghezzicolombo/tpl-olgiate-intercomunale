@@ -98,3 +98,13 @@ def test_no_example_external_whitelist_or_randomness_in_production_code():
     assert "random." not in code
     for forbidden in ["Merate", "Imbersago", "Airuno"]:
         assert forbidden not in code
+
+def test_municipality_labels_are_clean_utf8_text():
+    inv = pd.read_csv(OUT / "municipalities_intersected.csv", dtype={"procom": str})
+    joined = "|".join(inv["municipality_name"].astype(str))
+    for marker in ("Ã", "Â", "�"):
+        assert marker not in joined
+    names = inv.assign(procom=inv.procom.str.zfill(6)).set_index("procom")["municipality_name"]
+    assert names["097074"] == "Santa Maria Hoè"
+    assert names["097006"] == "Barzanò"
+    assert names["097090"] == "Viganò"
