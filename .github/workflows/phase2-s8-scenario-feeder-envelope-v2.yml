@@ -1,0 +1,128 @@
+name: Phase 2 S8 Scenario Feeder Envelope V2
+
+on:
+  push:
+    branches:
+      - phase2-passenger-gjt-v2
+    paths:
+      - 'src/phase2_s8_scenario_feeder_envelope_v2.py'
+      - 'scripts/phase2_build_s8_scenario_feeder_envelope_v2.py'
+      - 'tests/test_phase2_s8_scenario_feeder_envelope_v2.py'
+      - 'docs/PHASE2_S8_SCENARIO_FEEDER_ENVELOPE_V2.md'
+      - '.github/workflows/phase2-s8-scenario-feeder-envelope-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-s8-scenario-feeder-envelope-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile scenario feeder envelope
+        run: |
+          python -m py_compile src/phase2_s8_scenario_feeder_envelope_v2.py
+          python -m py_compile scripts/phase2_build_s8_scenario_feeder_envelope_v2.py
+
+      - name: Run scenario feeder envelope tests
+        run: python -m pytest -q tests/test_phase2_s8_scenario_feeder_envelope_v2.py
+
+      - name: Materialise scenario feeder envelope
+        run: >-
+          python scripts/phase2_build_s8_scenario_feeder_envelope_v2.py
+          --transfer-gap outputs/phase2/passenger_gjt_v2/s8_transfer_gap_envelope_v2.csv.gz
+          --transfer-gap-validation outputs/phase2/passenger_gjt_v2/s8_transfer_gap_envelope_v2_validation.json
+          --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz
+          --scenario-support outputs/phase2/passenger_gjt_v2/s8_scenario_passenger_support_v2.csv.gz
+          --support-validation outputs/phase2/passenger_gjt_v2/s8_passenger_support_mask_v2_validation.json
+          --output outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2.csv.gz
+          --validation outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2_validation.json
+
+      - name: Validate epistemic contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2_validation.json')
+          v=json.loads(p.read_text(encoding='utf-8'))
+          assert v['status']=='PASS_S8_SCENARIO_FEEDER_ENVELOPE_V2_BUILD'
+          assert v['contract']=='PHASE2_S8_SCENARIO_FEEDER_ENVELOPE_V2'
+          assert v['scenario_count']==100000
+          assert v['timing_archetype_count']==8
+          assert v['scenario_timing_row_count']==800000
+          assert v['worker_direction_weight_reference']==1882.0
+          assert v['worker_reference_assigned_to_routes'] is False
+          assert v['demand_weight_semantics']=='DIRECTION_WEIGHT_ONLY_NOT_ROUTE_DEMAND_NOT_MODAL_SHARE'
+          assert v['route_weighting_applied'] is False
+          assert v['route_mean_or_composite_score_calculated'] is False
+          assert v['cross_route_phase_selected'] is False
+          assert v['joint_vehicle_block_timetable_feasibility_evaluated'] is False
+          assert v['all_integer_route_phases_retained_upstream'] is True
+          assert v['passenger_utility_calculated'] is False
+          assert v['full_gjt_calculated'] is False
+          assert v['topology_ranked'] is False
+          assert v['service_policy_selected'] is False
+          assert v['fine_walking_access_combined_with_empirical_OD'] is False
+          assert v['metric_semantics']=='ROUTE_UNWEIGHTED_COUNTS_SHARES_AND_EXTREMA_SPLIT_BY_PASSENGER_SUPPORT_CLASS'
+          print(json.dumps({k:v[k] for k in (
+              'scenario_count','timing_archetype_count','scenario_timing_row_count',
+              'rows_with_all_public_routes_having_some_complete_match_phase',
+              'rows_with_any_public_route_having_some_complete_match_phase',
+              'rows_with_public_roundtrip_routes','rows_with_public_rail_to_bus_only_routes')}, indent=2))
+          PY
+
+      - name: Deterministic byte-for-byte rebuild
+        run: |
+          rm -rf /tmp/phase2-s8-scenario-feeder-envelope-v2
+          mkdir -p /tmp/phase2-s8-scenario-feeder-envelope-v2
+          python scripts/phase2_build_s8_scenario_feeder_envelope_v2.py \
+            --transfer-gap outputs/phase2/passenger_gjt_v2/s8_transfer_gap_envelope_v2.csv.gz \
+            --transfer-gap-validation outputs/phase2/passenger_gjt_v2/s8_transfer_gap_envelope_v2_validation.json \
+            --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --scenario-support outputs/phase2/passenger_gjt_v2/s8_scenario_passenger_support_v2.csv.gz \
+            --support-validation outputs/phase2/passenger_gjt_v2/s8_passenger_support_mask_v2_validation.json \
+            --output /tmp/phase2-s8-scenario-feeder-envelope-v2/envelope.csv.gz \
+            --validation /tmp/phase2-s8-scenario-feeder-envelope-v2/validation.json
+          cmp outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2.csv.gz /tmp/phase2-s8-scenario-feeder-envelope-v2/envelope.csv.gz
+
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-s8-scenario-feeder-envelope-v2
+          path: |
+            outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2.csv.gz
+            outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2_validation.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Persist certified outputs
+        if: github.event_name == 'push'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2.csv.gz \
+                  outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2_validation.json
+          if git diff --cached --quiet; then
+            echo 'Certified scenario feeder outputs already match repository state.'
+          else
+            git commit -m 'persist certified S8 scenario feeder envelope V2'
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
