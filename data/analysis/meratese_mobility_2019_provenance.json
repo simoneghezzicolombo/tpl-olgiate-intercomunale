@@ -1,0 +1,106 @@
+{
+  "source": "ISTAT EsploraDati SDMX REST API",
+  "year": 2019,
+  "mobility_flow": "DF_DCSS_ISTR_LAV_PEN_2_TV_5",
+  "population_flow": "DF_DCSS_FAM_POP_TV_1",
+  "mobility_key": "A.097002+097010+097012+097020+097039+097092+097044+097048+097053+097058+097061+097062+097071+097074+097091.RP_COM_DAY.T.TOTAL.TOTAL.ALL.99..",
+  "population_key": "A.097002+097010+097012+097020+097039+097092+097044+097048+097053+097058+097061+097062+097071+097074+097091.RESPOP_AV",
+  "definitions": {
+    "OMPUR": "fuori comune",
+    "SMPUR": "stesso comune",
+    "WK": "lavoro",
+    "STD": "studio"
+  },
+  "diagnostics": [
+    {
+      "istat": "097002",
+      "comune": "Airuno",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097010",
+      "comune": "Brivio",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097012",
+      "comune": "Calco",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097020",
+      "comune": "Cernusco Lombardone",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097039",
+      "comune": "Imbersago",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097092",
+      "comune": "La Valletta Brianza",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097044",
+      "comune": "Lomagna",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097048",
+      "comune": "Merate",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097053",
+      "comune": "Montevecchia",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097058",
+      "comune": "Olgiate Molgora",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097061",
+      "comune": "Osnago",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097062",
+      "comune": "Paderno d'Adda",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097071",
+      "comune": "Robbiate",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097074",
+      "comune": "Santa Maria Hoe",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    },
+    {
+      "istat": "097091",
+      "comune": "Verderio",
+      "outside_plus_inside_minus_total": 0.0,
+      "work_plus_study_minus_total": 0.0
+    }
+  ]
+}
