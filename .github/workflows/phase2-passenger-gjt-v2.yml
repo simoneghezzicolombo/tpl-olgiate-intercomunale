@@ -9,12 +9,15 @@ on:
       - 'src/phase2_passenger_gjt_v2.py'
       - 'src/phase2_s8_destination_direction_v2.py'
       - 'src/phase2_s8_work_transfer_utility_v2.py'
+      - 'src/phase2_s8_passenger_support_mask_v2.py'
       - 'scripts/phase2_build_passenger_journey_universe_v2.py'
       - 'scripts/phase2_build_s8_work_direction_weights_v2.py'
+      - 'scripts/phase2_build_s8_passenger_support_mask_v2.py'
       - 'tests/test_phase2_passenger_gjt_v2.py'
       - 'tests/test_phase2_passenger_journey_universe_v2.py'
       - 'tests/test_phase2_s8_destination_direction_v2.py'
       - 'tests/test_phase2_s8_work_transfer_utility_v2.py'
+      - 'tests/test_phase2_s8_passenger_support_mask_v2.py'
       - 'docs/PHASE2_PASSENGER_GJT_V2.md'
       - '.github/workflows/phase2-passenger-gjt-v2.yml'
   workflow_dispatch:
@@ -49,8 +52,10 @@ jobs:
           python -m py_compile src/phase2_passenger_gjt_v2.py
           python -m py_compile src/phase2_s8_destination_direction_v2.py
           python -m py_compile src/phase2_s8_work_transfer_utility_v2.py
+          python -m py_compile src/phase2_s8_passenger_support_mask_v2.py
           python -m py_compile scripts/phase2_build_passenger_journey_universe_v2.py
           python -m py_compile scripts/phase2_build_s8_work_direction_weights_v2.py
+          python -m py_compile scripts/phase2_build_s8_passenger_support_mask_v2.py
 
       - name: Run Passenger GJT V2 tests
         run: >-
@@ -59,6 +64,7 @@ jobs:
           tests/test_phase2_passenger_journey_universe_v2.py
           tests/test_phase2_s8_destination_direction_v2.py
           tests/test_phase2_s8_work_transfer_utility_v2.py
+          tests/test_phase2_s8_passenger_support_mask_v2.py
 
       - name: Materialise empirical journey universe and sensitivity grid
         run: >-
@@ -82,10 +88,20 @@ jobs:
           --summary outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv
           --validation outputs/phase2/passenger_gjt_v2/s8_work_direction_weights_v2_validation.json
 
+      - name: Materialise audited S8 passenger support mask
+        run: >-
+          python scripts/phase2_build_s8_passenger_support_mask_v2.py
+          --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json
+          --routes outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv
+          --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz
+          --route-output outputs/phase2/passenger_gjt_v2/s8_route_passenger_support_v2.csv
+          --scenario-output outputs/phase2/passenger_gjt_v2/s8_scenario_passenger_support_v2.csv.gz
+          --validation outputs/phase2/passenger_gjt_v2/s8_passenger_support_mask_v2_validation.json
+
       - name: Validate Passenger GJT V2 contracts
         run: |
           python - <<'PY'
-          import csv, json
+          import csv, gzip, json
           from pathlib import Path
           root=Path('outputs/phase2/passenger_gjt_v2')
           val=json.loads((root/'passenger_journey_universe_v2_validation.json').read_text(encoding='utf-8'))
@@ -135,11 +151,43 @@ jobs:
           assert all(r['outbound_bus_to_rail_direction'] in {'LECCO','MILANO'} for r in directions)
           assert all(r['return_rail_to_bus_direction'] in {'LECCO','MILANO'} for r in directions)
           assert all(r['full_gjt_ready']=='false' for r in directions)
+
+          s=json.loads((root/'s8_passenger_support_mask_v2_validation.json').read_text(encoding='utf-8'))
+          assert s['status']=='PASS_S8_PASSENGER_SUPPORT_MASK_V2_BUILD'
+          assert s['contract']=='PHASE2_S8_PASSENGER_SUPPORT_MASK_V2'
+          assert s['route_count']==50115
+          assert s['roundtrip_passenger_supported_route_count']==35119
+          assert s['rail_to_bus_only_route_count']==14996
+          assert s['scenario_count']==100000
+          assert s['passenger_demand_assigned_to_routes'] is False
+          assert s['passenger_utility_calculated'] is False
+          assert s['full_gjt_calculated'] is False
+          assert s['topology_ranked'] is False
+          assert s['service_policy_selected'] is False
+          assert s['source_resolution_for_empirical_work_demand']=='MUNICIPAL_OD'
+          assert s['s8_addressability_is_modal_share'] is False
+          with (root/'s8_route_passenger_support_v2.csv').open(encoding='utf-8',newline='') as f:
+              support_rows=list(csv.DictReader(f))
+          assert len(support_rows)==50115
+          assert sum(r['roundtrip_passenger_supported']=='true' for r in support_rows)==35119
+          assert sum(r['passenger_support_class']=='RAIL_TO_BUS_ONLY_PUBLIC_ROUTE_OPEN_AWAY_FROM_HUB' for r in support_rows)==14996
+          assert all(r['passenger_demand_assigned_to_route']=='false' for r in support_rows)
+          with gzip.open(root/'s8_scenario_passenger_support_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              scenario_rows=list(csv.DictReader(f))
+          assert len(scenario_rows)==100000
+          assert all(r['passenger_demand_assigned_to_routes']=='false' for r in scenario_rows)
+          assert all(r['scenario_passenger_utility_calculated']=='false' for r in scenario_rows)
+          assert all(r['topology_ranked']=='false' for r in scenario_rows)
+
           print(json.dumps({
               'journey_count': val['journey_count'],
               'demand_weight_sum': val['demand_weight_sum'],
               'sensitivity_case_count': val['sensitivity_case_count'],
               'outbound_direction_demand': d['outbound_direction_demand'],
+              'route_support_count': s['route_count'],
+              'roundtrip_route_count': s['roundtrip_passenger_supported_route_count'],
+              'directional_only_route_count': s['rail_to_bus_only_route_count'],
+              'scenario_support_count': s['scenario_count'],
           }, indent=2))
           PY
 
@@ -163,11 +211,20 @@ jobs:
             --output /tmp/phase2-passenger-gjt-v2/directions.csv \
             --summary /tmp/phase2-passenger-gjt-v2/direction-summary.csv \
             --validation /tmp/phase2-passenger-gjt-v2/direction-validation.json
+          python scripts/phase2_build_s8_passenger_support_mask_v2.py \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --routes outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --route-output /tmp/phase2-passenger-gjt-v2/route-support.csv \
+            --scenario-output /tmp/phase2-passenger-gjt-v2/scenario-support.csv.gz \
+            --validation /tmp/phase2-passenger-gjt-v2/support-validation.json
           cmp outputs/phase2/passenger_gjt_v2/empirical_journey_universe_v2.csv /tmp/phase2-passenger-gjt-v2/journey.csv
           cmp outputs/phase2/passenger_gjt_v2/behavioural_sensitivity_grid_v2.csv /tmp/phase2-passenger-gjt-v2/sensitivity.csv
           cmp outputs/phase2/passenger_gjt_v2/passenger_journey_universe_v2_validation.json /tmp/phase2-passenger-gjt-v2/validation.json
           cmp outputs/phase2/passenger_gjt_v2/s8_work_direction_weights_v2.csv /tmp/phase2-passenger-gjt-v2/directions.csv
           cmp outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv /tmp/phase2-passenger-gjt-v2/direction-summary.csv
+          cmp outputs/phase2/passenger_gjt_v2/s8_route_passenger_support_v2.csv /tmp/phase2-passenger-gjt-v2/route-support.csv
+          cmp outputs/phase2/passenger_gjt_v2/s8_scenario_passenger_support_v2.csv.gz /tmp/phase2-passenger-gjt-v2/scenario-support.csv.gz
           python - <<'PY'
           import json
           from pathlib import Path
@@ -178,13 +235,20 @@ jobs:
               p['lineage'].pop('output_sha256')
               p['lineage'].pop('summary_sha256')
           assert a==b
+          a=json.loads(Path('outputs/phase2/passenger_gjt_v2/s8_passenger_support_mask_v2_validation.json').read_text())
+          b=json.loads(Path('/tmp/phase2-passenger-gjt-v2/support-validation.json').read_text())
+          for p in (a,b):
+              p['lineage']['route_support_output']=None
+              p['lineage']['scenario_support_output']=None
+          assert a==b
           PY
 
       - name: Guard Passenger GJT epistemic separation
         run: |
-          FILES="config/phase2_passenger_gjt_sensitivity_v2.json src/phase2_passenger_gjt_v2.py src/phase2_s8_destination_direction_v2.py src/phase2_s8_work_transfer_utility_v2.py scripts/phase2_build_passenger_journey_universe_v2.py scripts/phase2_build_s8_work_direction_weights_v2.py"
+          FILES="config/phase2_passenger_gjt_sensitivity_v2.json src/phase2_passenger_gjt_v2.py src/phase2_s8_destination_direction_v2.py src/phase2_s8_work_transfer_utility_v2.py src/phase2_s8_passenger_support_mask_v2.py scripts/phase2_build_passenger_journey_universe_v2.py scripts/phase2_build_s8_work_direction_weights_v2.py scripts/phase2_build_s8_passenger_support_mask_v2.py"
           ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
           ! grep -n -E 'S8_DIRECT_is_modal_share[^f]*true|population_proportional_worker_allocation_performed[^f]*true|nearest_stop_imputation_performed[^f]*true|full_gjt_ready[^f]*true' $FILES
+          ! grep -n -E 'passenger_demand_assigned_to_routes[^f]*true|passenger_demand_assigned_to_route[^f]*true|topology_ranked[^f]*true|service_policy_selected[^f]*true' $FILES
           git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-access-equity-v2...HEAD
 
       - name: Persist validated Passenger GJT V2 universe
