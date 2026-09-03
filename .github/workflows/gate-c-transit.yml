@@ -5,6 +5,9 @@ on:
     branches: [gate-c-workstream]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   gate-c:
     runs-on: ubuntu-latest
@@ -13,8 +16,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install test dependency
-        run: python -m pip install pytest
+      - name: Install project dependencies
+        run: python -m pip install -r requirements.txt
       - name: Gate C targeted tests
         run: python -m pytest tests/test_gate_c_transit.py -q
       - name: Audit covered bus date
@@ -23,5 +26,17 @@ jobs:
         run: python scripts/gate_c_transit_audit.py --service-date 2026-09-03 --output outputs/gate_c/transit_integrity_2026-09-03.json
       - name: Anti-synthetic guardrails
         run: python -m pytest tests/test_audit_anti_synthetic_guardrails.py -q
+      - name: Full repository suite (diagnostic)
+        continue-on-error: true
+        run: python -m pytest -q
       - name: Diff whitespace check
         run: git diff --check HEAD^
+      - name: Persist deterministic Gate C reports
+        run: |
+          git config user.name "gate-c-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/gate_c/transit_integrity_2026-05-06.json outputs/gate_c/transit_integrity_2026-09-03.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(gate-c): record deterministic transit audit outputs [skip ci]"
+            git push
+          fi
