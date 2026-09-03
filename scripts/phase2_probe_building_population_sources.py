@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only schema probe for Phase 2 building-population official sources.
-
-The probe verifies current official ISTAT census-section and Regione Lombardia
-DBGT Edificato schemas on a clean runner. It produces no modelling output.
-"""
+"""Read-only fail-closed schema probe for official building-population sources."""
 from __future__ import annotations
 
 import io
@@ -12,6 +8,7 @@ import zipfile
 from pathlib import Path
 
 import geopandas as gpd
+from openpyxl import load_workbook
 import pandas as pd
 import requests
 
@@ -27,39 +24,47 @@ HEADERS = {
 }
 
 
-def get(url: str, *, params: dict | None = None, timeout: int = 180) -> requests.Response:
+def get(url: str, *, params: dict | None = None, timeout: int = 240) -> requests.Response:
     r = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
     r.raise_for_status()
     return r
 
 
 def _normalise_code(series: pd.Series, width: int = 6) -> pd.Series:
-    return (
-        series.astype(str)
-        .str.replace(r"\.0$", "", regex=True)
-        .str.strip()
-        .str.zfill(width)
-    )
+    return series.astype(str).str.replace(r"\.0$", "", regex=True).str.strip().str.zfill(width)
 
 
-def _select_lombardia_2023_workbook(names: list[str]) -> str:
-    candidates = []
-    for name in names:
-        low = name.lower()
-        if not low.endswith(".xlsx"):
-            continue
-        if "r03" not in low or "2023" not in low:
-            continue
-        if "tracciato" in low:
-            continue
-        if "sez" in low or "indicator" in low:
-            candidates.append(name)
+def _select_lombardia_workbook(names: list[str]) -> str:
+    # Release year is established by the official package URL. Internal filenames
+    # need not repeat it.
+    candidates = [
+        n for n in names
+        if n.lower().endswith(".xlsx")
+        and "r03" in n.lower()
+        and "tracciato" not in n.lower()
+        and ("sez" in n.lower() or "indicator" in n.lower())
+    ]
     if len(candidates) != 1:
         raise RuntimeError(
-            "Could not identify exactly one Lombardia 2023 section workbook; "
+            "Could not identify exactly one Lombardia section workbook in official 2023 package; "
             f"candidates={candidates}; xlsx={[n for n in names if n.lower().endswith('.xlsx')]}"
         )
     return candidates[0]
+
+
+def _candidate_fields(columns: list[object]) -> dict:
+    names = [str(c).strip() for c in columns if c is not None]
+    sections = [c for c in names if "sez" in c.lower()]
+    municipalities = [
+        c for c in names
+        if "pro_com" in c.lower() or ("cod" in c.lower() and "com" in c.lower())
+    ]
+    population = [
+        c for c in names
+        if c.upper() in {"P1", "POP", "POP2023", "POP23", "POP_TOT", "POPOLAZIONE"}
+        or ("popol" in c.lower() and "resident" in c.lower())
+    ]
+    return {"section": sections, "municipality": municipalities, "population": population}
 
 
 def inspect_istat() -> dict:
@@ -75,7 +80,6 @@ def inspect_istat() -> dict:
     out["geometry_columns"] = list(gdf.columns)
     out["geometry_crs"] = str(gdf.crs)
     out["geometry_rows"] = int(len(gdf))
-
     code_col = next((c for c in ("PRO_COM_T", "PRO_COM") if c in gdf.columns), None)
     if code_col is None:
         raise RuntimeError(f"ISTAT geometry lacks municipal code: {list(gdf.columns)}")
@@ -89,66 +93,39 @@ def inspect_istat() -> dict:
     with zipfile.ZipFile(io.BytesIO(data)) as z:
         names = z.namelist()
         out["data_2023_members"] = names
-        member = _select_lombardia_2023_workbook(names)
-        out["data_2023_selected_member"] = member
+        member = _select_lombardia_workbook(names)
         raw = z.read(member)
-    xls = pd.ExcelFile(io.BytesIO(raw), engine="openpyxl")
-    out["data_2023_sheets"] = xls.sheet_names
+    out["data_2023_selected_member"] = member
 
-    sheet_summaries = []
-    chosen_df = None
-    chosen_sheet = None
-    for sheet in xls.sheet_names:
-        df = pd.read_excel(xls, sheet_name=sheet, dtype=object)
-        columns = [str(c) for c in df.columns]
-        summary = {"sheet": sheet, "rows": int(len(df)), "columns": columns}
-        sheet_summaries.append(summary)
-        low_cols = {str(c).lower() for c in df.columns}
-        if chosen_df is None and any("sez" in c for c in low_cols):
-            chosen_df = df
-            chosen_sheet = sheet
-    out["data_2023_sheet_summaries"] = sheet_summaries
-    if chosen_df is None:
-        raise RuntimeError("No sheet with a section-like field found in Lombardia 2023 workbook")
-    df = chosen_df
-    out["data_2023_selected_sheet"] = chosen_sheet
-    out["data_2023_columns"] = [str(c) for c in df.columns]
-    out["data_2023_rows"] = int(len(df))
-    out["data_2023_head"] = df.head(5).fillna("").astype(str).to_dict("records")
-
-    section_candidates = [c for c in df.columns if "sez" in str(c).lower()]
-    municipality_candidates = [
-        c for c in df.columns
-        if any(k in str(c).lower() for k in ("pro_com", "comune", "cod_com", "com_"))
-    ]
-    population_candidates = [
-        c for c in df.columns
-        if str(c).upper() in {"P1", "POP", "POP2023", "POP23", "POP_TOT"}
-        or "popol" in str(c).lower()
-    ]
-    out["section_key_candidates"] = [str(c) for c in section_candidates]
-    out["municipality_key_candidates"] = [str(c) for c in municipality_candidates]
-    out["population_field_candidates"] = [str(c) for c in population_candidates]
-
-    candidate_stats = {}
-    for c in population_candidates:
-        num = pd.to_numeric(df[c], errors="coerce")
-        candidate_stats[str(c)] = {
-            "numeric_non_null": int(num.notna().sum()),
-            "numeric_sum": float(num.fillna(0).sum()),
-        }
-    out["population_candidate_stats"] = candidate_stats
-
-    fake_stats = {}
-    for c in section_candidates:
-        s = df[c].astype(str).str.replace(r"\.0$", "", regex=True).str.strip()
-        fake = s.str.contains(r"(?:888888|999999)\d?$", regex=True, na=False)
-        fake_stats[str(c)] = {
-            "unique": int(s.nunique(dropna=True)),
-            "fake_rows": int(fake.sum()),
-            "sample": s.head(10).tolist(),
-        }
-    out["section_candidate_stats"] = fake_stats
+    wb = load_workbook(io.BytesIO(raw), read_only=True, data_only=True)
+    observations = []
+    selected = []
+    try:
+        out["data_2023_sheets"] = wb.sheetnames
+        for sheet in wb.sheetnames:
+            ws = wb[sheet]
+            for header in range(0, 11):
+                row = next(ws.iter_rows(min_row=header + 1, max_row=header + 1, values_only=True), None)
+                if not row:
+                    continue
+                cand = _candidate_fields(list(row))
+                if any(cand.values()):
+                    obs = {"sheet": sheet, "header": header, **cand}
+                    observations.append(obs)
+                    if len(cand["section"]) >= 1 and len(cand["population"]) >= 1:
+                        selected.append(obs)
+                        break
+    finally:
+        wb.close()
+    if len(selected) != 1:
+        raise RuntimeError(f"ISTAT 2023 table header not uniquely identified: {selected}")
+    choice = selected[0]
+    out["data_2023_selected_sheet"] = choice["sheet"]
+    out["data_2023_header_row_zero_based"] = choice["header"]
+    out["section_key_candidates"] = choice["section"]
+    out["municipality_key_candidates"] = choice["municipality"]
+    out["population_field_candidates"] = choice["population"]
+    out["header_candidate_observations"] = observations
     return out
 
 
@@ -174,20 +151,18 @@ def inspect_dbgt(core_bbox: list[float]) -> dict:
 
     minx, miny, maxx, maxy = core_bbox
     envelope = f"{minx-5000},{miny-5000},{maxx+5000},{maxy+5000}"
-    id_payload = arc_query(3, {
+    ids = arc_query(3, {
         "where": "1=1",
         "geometry": envelope,
         "geometryType": "esriGeometryEnvelope",
         "inSR": "7791",
         "spatialRel": "esriSpatialRelIntersects",
         "returnIdsOnly": "true",
-    })
-    object_ids = id_payload.get("objectIds") or []
-    out["footprint_layer3_ids_5km_envelope"] = len(object_ids)
-    sample_ids = object_ids[:20]
+    }).get("objectIds") or []
+    out["footprint_layer3_ids_5km_envelope"] = len(ids)
+    sample_ids = ids[:20]
     if not sample_ids:
         return out
-
     sample = arc_query(3, {
         "objectIds": ",".join(map(str, sample_ids)),
         "outFields": "OBJECTID,CLASSREF,COD_CONS,DATA_FIN",
@@ -199,24 +174,18 @@ def inspect_dbgt(core_bbox: list[float]) -> dict:
     if not refs:
         return out
     safe = ",".join("'" + r.replace("'", "''") + "'" for r in refs)
-
-    buildings = arc_query(22, {
-        "where": f"CLASSID IN ({safe})",
-        "outFields": "*",
-        "returnGeometry": "false",
-    })
-    uses = arc_query(24, {
-        "where": f"CLASSREF IN ({safe})",
-        "outFields": "*",
-        "returnGeometry": "false",
-    })
+    for layer, key, label in ((22, "CLASSID", "building_table_sample"), (24, "CLASSREF", "use_table_sample")):
+        payload = arc_query(layer, {
+            "where": f"{key} IN ({safe})",
+            "outFields": "*",
+            "returnGeometry": "false",
+        })
+        out[label] = [f["attributes"] for f in payload.get("features", [])]
     volumes = arc_query(0, {
         "where": f"CEDIUV IN ({safe})",
         "outFields": "CLASSID,CEDIUV,UN_VOL_AV,UN_VOL_EX,UN_VOL_QE,Shape_Area,DATA_FIN",
         "returnGeometry": "false",
     })
-    out["building_table_sample"] = [f["attributes"] for f in buildings.get("features", [])]
-    out["use_table_sample"] = [f["attributes"] for f in uses.get("features", [])]
     out["volume_unit_sample"] = [f["attributes"] for f in volumes.get("features", [])]
     return out
 
@@ -225,7 +194,7 @@ def main() -> None:
     istat = inspect_istat()
     bbox = istat.get("core_bbox_epsg7791")
     if not bbox:
-        raise SystemExit("Could not derive core bbox from official ISTAT 2021 geometry")
+        raise SystemExit("Could not derive core bbox from official ISTAT geometry")
     dbgt = inspect_dbgt(bbox)
     print(json.dumps({"istat": istat, "dbgt": dbgt}, ensure_ascii=False, indent=2, default=str))
 
