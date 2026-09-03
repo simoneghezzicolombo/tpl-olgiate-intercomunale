@@ -1,0 +1,165 @@
+name: Analysis Meratese 2011 mobility
+
+on:
+  push:
+    branches: [analysis-meratese-mobility]
+    paths:
+      - .github/workflows/analysis-meratese-2011.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-2011:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: analysis-meratese-mobility
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fetch and harmonize ISTAT 2011 study/work commuting aggregate
+        run: |
+          python - <<'PY'
+          import csv, gzip, io, json, pathlib, urllib.request
+
+          OUT=pathlib.Path('data/analysis'); OUT.mkdir(parents=True,exist_ok=True)
+          urls={
+            'summary':'https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ISTAT/pendolari_2011_in_out_self.csv',
+            'od':'https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ISTAT/pendo2011_S_aggregato.csv.gz',
+          }
+          def get(url):
+              req=urllib.request.Request(url,headers={'User-Agent':'tpl-olgiate-intercomunale/analysis'})
+              with urllib.request.urlopen(req,timeout=300) as r:
+                  b=r.read(); print(url,r.status,len(b),r.headers.get('Content-Type')); return b
+
+          summary_b=get(urls['summary'])
+          od_b=get(urls['od'])
+          (OUT/'istat_2011_in_out_self_raw.csv').write_bytes(summary_b)
+          (OUT/'istat_2011_od_aggregated_raw.csv.gz').write_bytes(od_b)
+
+          summary_text=summary_b.decode('utf-8-sig')
+          rows=list(csv.DictReader(io.StringIO(summary_text)))
+          print('summary columns',list(rows[0]) if rows else [])
+          print('summary first',rows[:3])
+
+          od_text=gzip.decompress(od_b).decode('utf-8-sig')
+          od_reader=csv.DictReader(io.StringIO(od_text))
+          print('od columns',od_reader.fieldnames)
+          first=[]
+          for i,r in enumerate(od_reader):
+              first.append(r)
+              if i>=2: break
+          print('od first',first)
+
+          # 2011 municipality codes, harmonized to 2021 municipal geography.
+          areas={
+            '097002':('Airuno',['97002','097002']),
+            '097010':('Brivio',['97010','097010']),
+            '097012':('Calco',['97012','097012']),
+            '097020':('Cernusco Lombardone',['97020','097020']),
+            '097039':('Imbersago',['97039','097039']),
+            '097092':('La Valletta Brianza',['97066','97073','097066','097073']),
+            '097044':('Lomagna',['97044','097044']),
+            '097048':('Merate',['97048','097048']),
+            '097053':('Montevecchia',['97053','097053']),
+            '097058':('Olgiate Molgora',['97058','097058']),
+            '097061':('Osnago',['97061','097061']),
+            '097062':("Paderno d'Adda",['97062','097062']),
+            '097071':('Robbiate',['97071','097071']),
+            '097074':('Santa Maria Hoe',['97074','097074']),
+            '097091':('Verderio',['97087','97088','097087','097088']),
+          }
+          # Identify code column robustly.
+          names=list(rows[0]) if rows else []
+          codecol=next((c for c in names if c.lower() in ('procom','pro_com','codice','comune')), names[0] if names else None)
+          def norm(x):
+              s=str(x).strip().replace('.0','')
+              if s.isdigit(): s=s.zfill(5) if len(s)<=5 else s.zfill(6)
+              return s
+          idx={}
+          for r in rows:
+              idx[norm(r[codecol])]=r
+
+          out=[]
+          for current,(name,oldcodes) in areas.items():
+              selected=[]
+              for oc in oldcodes:
+                  n=norm(oc)
+                  if n in idx and idx[n] not in selected: selected.append(idx[n])
+              if not selected:
+                  print('WARNING no rows',current,name,oldcodes)
+              def sumcol(col):
+                  s=0.0
+                  for r in selected:
+                      try:s+=float(r.get(col,0) or 0)
+                      except:pass
+                  return s
+              # For merged municipalities, predecessor-predecessor flows are counted as out/in
+              # in the old municipal summary. Therefore out+self is robust for resident commuters,
+              # while out and self separately are not directly harmonized. We report total resident
+              # commuters as sum(out+self) and retain raw predecessor sums for transparency.
+              out_sum=sumcol('out'); in_sum=sumcol('in'); self_sum=sumcol('self')
+              out.append({
+                'istat':current,'comune':name,
+                'out_predecessor_sum':out_sum,
+                'in_predecessor_sum':in_sum,
+                'self_predecessor_sum':self_sum,
+                'resident_commuters_total':out_sum+self_sum,
+                'workplace_people_total':in_sum+self_sum,
+                'saldo':in_sum-out_sum,
+                'n_2011_units':len(selected),
+              })
+          op=OUT/'meratese_mobility_2011.csv'
+          with op.open('w',newline='',encoding='utf-8') as f:
+              w=csv.DictWriter(f,fieldnames=list(out[0]));w.writeheader();w.writerows(out)
+          meta={'source':'ISTAT 15th Population Census 2011, mirrored by ixmaps/gjrichter','urls':urls,'summary_columns':names,'od_columns':od_reader.fieldnames,'note':'Study+work combined. For merged current municipalities, resident_commuters_total=out+self is merger-invariant; out/self separately are predecessor-geography sums.'}
+          (OUT/'meratese_mobility_2011_provenance.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2),encoding='utf-8')
+          PY
+
+      - name: Build 2011-2019 comparison
+        run: |
+          python - <<'PY'
+          import csv, pathlib
+          p=pathlib.Path('data/analysis')
+          def read(path):
+              return {r['istat']:r for r in csv.DictReader(open(path,encoding='utf-8'))}
+          a=read(p/'meratese_mobility_2011.csv'); b=read(p/'meratese_mobility_2019.csv')
+          rows=[]
+          for code,r19 in b.items():
+              r11=a[code]
+              c11=float(r11['resident_commuters_total']); c19=float(r19['commuters_total'])
+              outside19=float(r19['commuters_outside']); inside19=float(r19['commuters_inside'])
+              pop19=float(r19['population_2019'])
+              rows.append({
+                'istat':code,'comune':r19['comune'],
+                'commuters_2011':c11,'commuters_2019':c19,
+                'commuters_change_abs':c19-c11,
+                'commuters_change_pct':(c19/c11-1)*100 if c11 else '',
+                'population_2019':pop19,
+                'commuters_share_pop_2019_pct':c19/pop19*100 if pop19 else '',
+                'outside_2019':outside19,'inside_2019':inside19,
+                'outside_share_2019_pct':outside19/c19*100 if c19 else '',
+                'work_2019':float(r19['work_total']),
+                'study_2019':float(r19['study_total']),
+                'work_share_2019_pct':float(r19['work_total'])/c19*100 if c19 else '',
+              })
+          with open(p/'meratese_mobility_2011_2019_comparison.csv','w',newline='',encoding='utf-8') as f:
+              w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
+          PY
+          cat data/analysis/meratese_mobility_2011.csv
+          cat data/analysis/meratese_mobility_2011_2019_comparison.csv
+
+      - name: Commit analysis
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/analysis/istat_2011_in_out_self_raw.csv data/analysis/istat_2011_od_aggregated_raw.csv.gz data/analysis/meratese_mobility_2011.csv data/analysis/meratese_mobility_2011_provenance.json data/analysis/meratese_mobility_2011_2019_comparison.csv
+          git diff --cached --quiet && exit 0
+          git commit -m "analysis: compare Meratese mobility 2011 and 2019"
+          git push origin HEAD:analysis-meratese-mobility
