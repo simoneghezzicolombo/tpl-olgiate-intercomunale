@@ -48,9 +48,12 @@ jobs:
           ! grep -R --line-number -E 'np\.random|random\.' \
             src/phase2_building_population.py \
             scripts/phase2_build_building_population.py \
+            scripts/phase2_run_building_population.py \
             tests/test_phase2_building_population.py
           ! grep -R --line-number -E 'PLACEHOLDER|synthetic population|hardcoded population' \
-            src/phase2_building_population.py scripts/phase2_build_building_population.py
+            src/phase2_building_population.py \
+            scripts/phase2_build_building_population.py \
+            scripts/phase2_run_building_population.py
       - name: Fetch checksum-validated Gate B evidence artifact
         env:
           GH_TOKEN: ${{ github.token }}
@@ -79,7 +82,7 @@ jobs:
           if test -f scripts/phase2_run_building_population.py; then
             ENTRY=scripts/phase2_run_building_population.py
           fi
-          python "$ENTRY" \
+          PYTHONPATH=. python "$ENTRY" \
             --gate-b-dir /tmp/gate_b \
             --core-boundaries data/raw/boundaries/comuni_core_istat_2026.geojson \
             --output-dir outputs/phase2 \
