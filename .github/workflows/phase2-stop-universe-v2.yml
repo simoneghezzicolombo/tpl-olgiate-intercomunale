@@ -209,7 +209,7 @@ jobs:
           fi
 
       - name: Whitespace check
-        run: git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check phase2-optimizer-core...HEAD
+        run: git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-optimizer-core...HEAD
 
       - name: Persist audited V2 optimizer-facing outputs
         shell: bash
