@@ -24,8 +24,15 @@ jobs:
         run: python -m pytest tests/test_gate_c_transit.py -q
       - name: Audit covered bus date
         run: python scripts/gate_c_transit_audit.py --service-date 2026-05-06 --output outputs/gate_c/transit_integrity_2026-05-06.json
-      - name: Audit current project date
+      - name: Audit current project date against frozen snapshots
         run: python scripts/gate_c_transit_audit.py --service-date 2026-09-03 --output outputs/gate_c/transit_integrity_2026-09-03.json
+      - name: Audit current official Trenord GTFS live
+        run: python scripts/gate_c_live_trenord.py --service-date 2026-09-03 --output outputs/gate_c/live_trenord_2026-09-03.json
+      - name: Upload live Trenord audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-c-live-trenord-2026-09-03
+          path: outputs/gate_c/live_trenord_2026-09-03.json
       - name: Anti-synthetic guardrails
         run: python -m pytest tests/test_audit_anti_synthetic_guardrails.py -q
       - name: Diff whitespace check
