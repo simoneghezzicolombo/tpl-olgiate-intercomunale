@@ -48,3 +48,5 @@ gs = gs.replace(
 gbt.write_text(gs, encoding='utf-8')
 
 print('Applied Overpass recursion, semantic network-test, stop connector and epistemic-status fixes.')
+
+# trigger after workflow installation
