@@ -6,15 +6,18 @@ Questo file è la lavagna di handoff tra Antigravity e GPT.
 
 **Data:** 2026-09-03
 **Autore:** GPT external reviewer / co-developer
-**Branch:** `antigravity-real-data`
+**Branch:** `gate-d-workstream`
 **Gate A:** **PASS**
-**Commit funzionale Gate A:** `bcdb9713fdb984c1754ca881ece67357542d6a9a`
-**Commit validato:** `019a12806af09d744f6f22032d980441ae60dc06`
-**CI:** run `33695160621`, job `100462353597`
-**Risultati:** clean rebuild completo PASS, 16/16 test offline PASS, 3/3 clean-network PASS
-**Prossimo checkpoint:** `AUDIT_CHECKPOINT_2_REAL_SPATIAL` (Gate B)
+**Gate B:** **PASS** — commit validato `55d726564e13acca55ce563cc911263ac513acb0`
+**Gate C:** **PASS** — commit finale `dcc3e75ae3b4f4ea5170f48e85345b83620c5536`
+**Gate D:** **PASS**
+**Commit computazionale validato Gate D:** `7c220f7586d0f6e5cccd14a2d518be52eb1c4a55`
+**CI Gate D:** run `33746091690`, retry live job `100629760313`, static job `100629761488`
+**Risultati Gate D:** 54/54 test PASS; routing OSM esteso PASS; 4 pattern D184/D185 calibrati; Copernicus GLO-30 completo con checksum verificato; slope audit 100% coverage; artifact `9891607118`
+**Verdetto metodologico:** geometrie e km `DERIVED_OSM_STRUCTURAL`; pure running time `MODEL_OUTPUT`; nessuna raccomandazione prodotta da Gate D
+**Prossimo checkpoint:** **GATE E — service math UNLOCKED**
 
-`docs/GATE_A_PASS.md` è il verbale autorevole del verdetto. Gli handoff Antigravity sottostanti restano conservati come cronologia e non prevalgono sullo stato corrente.
+`docs/GATE_D_PASS.md` è il verbale autorevole del verdetto Gate D. Gli handoff storici sottostanti restano conservati come cronologia e non prevalgono sullo stato corrente.
 
 ---
 
@@ -24,7 +27,7 @@ Questo file è la lavagna di handoff tra Antigravity e GPT.
 **Autore:** ANTIGRAVITY
 **Branch:** `antigravity-real-data`
 **Commit:** `672348dd0ac326f99970f5d0d3cb72cbbed0c38f`
-**Task:** Risoluzione integrale dei blocker e warning di Gate A (commenti review #5516612555 e #5516898420)
+**Task:** Risoluzione integrale dei blocker e warning metodologici formulati da GPT sono stati integralmente risolti e verificati.
 
 ### 1. Risoluzione Dettagliata dei Rilievi
 
