@@ -44,12 +44,16 @@ jobs:
         run: python -m pytest tests/test_audit_anti_synthetic_guardrails.py -q
       - name: Diff whitespace check
         run: git diff --check 549198743e7265b333da565ce6990f9241cfd1fd...HEAD
-      - name: Persist deterministic Gate C reports
+      - name: Persist Gate C audit reports
         run: |
           git config user.name "gate-c-ci"
           git config user.email "actions@users.noreply.github.com"
-          git add outputs/gate_c/transit_integrity_2026-05-06.json outputs/gate_c/transit_integrity_2026-09-03.json
+          git add \
+            outputs/gate_c/transit_integrity_2026-05-06.json \
+            outputs/gate_c/transit_integrity_2026-09-03.json \
+            outputs/gate_c/live_bus_timetables_2026-09-03.json \
+            outputs/gate_c/live_trenord_2026-09-03.json
           if ! git diff --cached --quiet; then
-            git commit -m "data(gate-c): record deterministic transit audit outputs [skip ci]"
+            git commit -m "data(gate-c): record source-grounded transit audit outputs [skip ci]"
             git push
           fi
