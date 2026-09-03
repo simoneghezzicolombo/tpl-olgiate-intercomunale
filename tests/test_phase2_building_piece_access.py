@@ -5,6 +5,7 @@ from shapely.geometry import box
 
 from src.phase2_building_piece_access import (
     PIECE_POINT_STATUS,
+    _stop_seed_walk_minutes,
     build_section_pieces,
 )
 
@@ -69,3 +70,19 @@ def test_noneligible_building_produces_no_piece():
     buildings["eligible_fallback"] = False
     pieces = build_section_pieces(buildings, _sections())
     assert pieces.empty
+
+
+def test_duplicate_stop_snap_same_node_uses_minimum_independent_of_row_order():
+    stops = pd.DataFrame([
+        {"graph_node_id": 20422, "snap_distance_m": 6.616963, "snap_ok": True},
+        {"graph_node_id": 20422, "snap_distance_m": 38.834751, "snap_ok": True},
+        {"graph_node_id": 25624, "snap_distance_m": 31.562315, "snap_ok": True},
+        {"graph_node_id": 25624, "snap_distance_m": 6.906021, "snap_ok": True},
+        {"graph_node_id": 99999, "snap_distance_m": 1.0, "snap_ok": False},
+    ])
+    forward = _stop_seed_walk_minutes(stops, 80.0)
+    reversed_rows = _stop_seed_walk_minutes(stops.iloc[::-1].reset_index(drop=True), 80.0)
+    assert forward == reversed_rows
+    assert forward[20422] == pytest.approx(6.616963 / 80.0)
+    assert forward[25624] == pytest.approx(6.906021 / 80.0)
+    assert 99999 not in forward

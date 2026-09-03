@@ -85,6 +85,37 @@ def build_section_pieces(buildings: gpd.GeoDataFrame, section_geometry: gpd.GeoD
     return out
 
 
+def _stop_seed_walk_minutes(stops: pd.DataFrame, connector_m_per_min: float) -> dict[int, float]:
+    """Return one deterministic minimum stop-connector seed per graph node.
+
+    Gate B may contain multiple official GTFS stops snapped to the same walking
+    graph node.  A DiGraph stores only one parallel edge for a given
+    ``super_source -> graph_node`` pair, so adding stops row by row would make
+    the result depend on row order.  The mathematically correct multi-source
+    seed is the minimum valid stop snap time for each graph node.
+    """
+    required = {"graph_node_id", "snap_distance_m", "snap_ok"}
+    if not required.issubset(stops.columns):
+        raise ValueError(f"GTFS stop seed columns missing: {required - set(stops.columns)}")
+    if not math.isfinite(connector_m_per_min) or connector_m_per_min <= 0:
+        raise ValueError("connector_m_per_min must be finite and positive")
+
+    valid = stops.loc[stops["snap_ok"].astype(bool), ["graph_node_id", "snap_distance_m"]].copy()
+    if valid.empty:
+        raise RuntimeError("no valid official GTFS stops snapped in Gate B")
+    valid["graph_node_id"] = pd.to_numeric(valid["graph_node_id"], errors="raise").astype(int)
+    valid["snap_distance_m"] = pd.to_numeric(valid["snap_distance_m"], errors="raise").astype(float)
+    if (~valid["snap_distance_m"].map(math.isfinite)).any() or (valid["snap_distance_m"] < 0).any():
+        raise RuntimeError("invalid GTFS stop snap distance in Gate B")
+
+    seed = (
+        valid.groupby("graph_node_id", sort=True)["snap_distance_m"]
+        .min()
+        .div(connector_m_per_min)
+    )
+    return {int(node): float(minutes) for node, minutes in seed.items()}
+
+
 def compute_accessibility(
     building_allocations: pd.DataFrame,
     _building_points: pd.DataFrame,
@@ -113,11 +144,9 @@ def compute_accessibility(
     reverse = graph.reverse(copy=True)
     super_source = -1
     reverse.add_node(super_source)
-    valid_stops = stops.loc[stops["snap_ok"].astype(bool)].copy()
-    if valid_stops.empty:
-        raise RuntimeError("no valid official GTFS stops snapped in Gate B")
-    for row in valid_stops.itertuples(index=False):
-        reverse.add_edge(super_source, int(row.graph_node_id), weight=float(row.snap_distance_m) / connector_m_per_min)
+    stop_seed_minutes = _stop_seed_walk_minutes(stops, connector_m_per_min)
+    for graph_node_id, snap_walk_min in stop_seed_minutes.items():
+        reverse.add_edge(super_source, graph_node_id, weight=snap_walk_min)
     network_minutes = nx.single_source_dijkstra_path_length(reverse, super_source, weight="weight")
 
     node_ids = nodes["node_id"].astype(int).tolist()
