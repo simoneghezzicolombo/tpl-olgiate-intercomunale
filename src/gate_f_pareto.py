@@ -1,8 +1,9 @@
-"""Gate F: provenance-aware Pareto comparison for transit service scenarios.
+"""Gate F: provenance-aware and uncertainty-aware Pareto comparison.
 
 This module intentionally contains no project scenario values and no default
-preference weights. It can compare only upstream scenario metrics carrying
-explicit epistemic status and source fields.
+preference weights. It compares only upstream scenario metrics carrying
+explicit epistemic status and source fields. Gate D road feasibility is an
+eligibility constraint and must already be true for every row entering Pareto.
 """
 from __future__ import annotations
 
@@ -13,7 +14,14 @@ import numpy as np
 import pandas as pd
 
 
-ALLOWED_INPUT_STATUSES = {"FACT", "DERIVED", "ESTIMATE", "RECONSTRUCTED", "MODEL OUTPUT"}
+ALLOWED_INPUT_STATUSES = {
+    "FACT",
+    "DERIVED",
+    "ESTIMATE",
+    "RECONSTRUCTED",
+    "MODEL OUTPUT",
+    "FIELD CHECK",
+}
 REQUIRED_GATES = ("A", "B", "C", "D", "E")
 
 
@@ -23,6 +31,7 @@ class Objective:
     direction: str
     gate: str
     label: str
+    unit: str = ""
 
     def __post_init__(self) -> None:
         if self.direction not in {"max", "min"}:
@@ -30,12 +39,12 @@ class Objective:
 
 
 DEFAULT_OBJECTIVES: tuple[Objective, ...] = (
-    Objective("population_covered_pct", "max", "B", "population accessibility"),
-    Objective("headway_combined_min", "min", "E", "combined service headway"),
-    Objective("annual_bus_km", "min", "E", "annual bus-km"),
-    Objective("peak_buses_required", "min", "E", "peak buses required"),
-    Objective("s8_useful_connection_pct", "max", "C", "useful S8 connections"),
-    Objective("territories_served_count", "max", "B", "territories served"),
+    Objective("population_covered_pct", "max", "B", "population accessibility", "%"),
+    Objective("headway_combined_min", "min", "E", "combined service headway", "min"),
+    Objective("annual_bus_km", "min", "E", "annual bus-km", "bus-km/year"),
+    Objective("peak_buses_required", "min", "E", "peak buses required", "vehicles"),
+    Objective("s8_useful_connection_pct", "max", "C", "useful S8 connections", "%"),
+    Objective("territories_served_count", "max", "B", "territories served", "count"),
 )
 
 
@@ -43,22 +52,84 @@ def blocker_labels(gate_status: Mapping[str, str]) -> list[str]:
     return [f"BLOCKED_BY_GATE_{gate}" for gate in REQUIRED_GATES if gate_status.get(gate) != "PASS"]
 
 
+def objective_manifest(objectives: Sequence[Objective] = DEFAULT_OBJECTIVES) -> list[dict[str, str]]:
+    return [
+        {
+            "column": obj.column,
+            "direction": obj.direction,
+            "gate": obj.gate,
+            "label": obj.label,
+            "unit": obj.unit,
+        }
+        for obj in objectives
+    ]
+
+
 def _required_columns(objectives: Sequence[Objective]) -> set[str]:
-    cols = {"scenario_id", "scenario_name", "scenario_epistemic_status", "scenario_source", "is_baseline"}
+    cols = {
+        "scenario_id",
+        "scenario_name",
+        "topology_family",
+        "scenario_epistemic_status",
+        "scenario_source",
+        "is_baseline",
+        "road_feasible",
+        "road_feasible__status",
+        "road_feasible__source",
+    }
     for obj in objectives:
         cols.update({obj.column, f"{obj.column}__status", f"{obj.column}__source"})
     return cols
 
 
-def _baseline_mask(series: pd.Series) -> pd.Series:
+def _strict_bool_series(series: pd.Series, field: str) -> pd.Series:
     if pd.api.types.is_bool_dtype(series):
-        return series.fillna(False)
+        if series.isna().any():
+            raise ValueError(f"{field} contains null values")
+        return series.astype(bool)
     normalized = series.astype(str).str.strip().str.lower()
-    invalid = ~normalized.isin({"true", "false", "1", "0"})
+    mapping = {"true": True, "false": False, "1": True, "0": False}
+    invalid = ~normalized.isin(mapping)
     if invalid.any():
         bad = sorted(set(series.loc[invalid].astype(str)))
-        raise ValueError(f"is_baseline must be boolean-like, found: {bad}")
-    return normalized.isin({"true", "1"})
+        raise ValueError(f"{field} must be boolean-like, found: {bad}")
+    return normalized.map(mapping).astype(bool)
+
+
+def _baseline_mask(series: pd.Series) -> pd.Series:
+    return _strict_bool_series(series, "is_baseline")
+
+
+def _validate_status_source(frame: pd.DataFrame, status_col: str, source_col: str, label: str) -> None:
+    status = frame[status_col].astype(str).str.strip().str.upper()
+    invalid = ~status.isin(ALLOWED_INPUT_STATUSES)
+    if invalid.any():
+        bad = sorted(set(frame.loc[invalid, status_col].astype(str)))
+        raise ValueError(f"Unsupported epistemic status for {label}: {bad}")
+    source = frame[source_col]
+    if source.isna().any() or (source.astype(str).str.strip() == "").any():
+        raise ValueError(f"Every {label} value requires a traceable source")
+
+
+def _validate_uncertainty_columns(df: pd.DataFrame, obj: Objective, values: pd.Series) -> None:
+    lower_col = f"{obj.column}__lower"
+    upper_col = f"{obj.column}__upper"
+    present = {col for col in (lower_col, upper_col) if col in df.columns}
+    if present and len(present) != 2:
+        raise ValueError(f"{obj.column}: uncertainty requires both {lower_col} and {upper_col}")
+    if not present:
+        return
+    lower = pd.to_numeric(df[lower_col], errors="coerce")
+    upper = pd.to_numeric(df[upper_col], errors="coerce")
+    finite = np.isfinite(lower.to_numpy(dtype=float)) & np.isfinite(upper.to_numpy(dtype=float))
+    estimate = df[f"{obj.column}__status"].astype(str).str.strip().str.upper().eq("ESTIMATE")
+    if estimate.any() and not finite[estimate.to_numpy()].all():
+        raise ValueError(f"{obj.column}: ESTIMATE rows require finite uncertainty bounds")
+    bounded = lower.notna() & upper.notna()
+    if (lower[bounded] > upper[bounded]).any():
+        raise ValueError(f"{obj.column}: lower bound exceeds upper bound")
+    if ((values[bounded] < lower[bounded]) | (values[bounded] > upper[bounded])).any():
+        raise ValueError(f"{obj.column}: point value must lie inside uncertainty bounds")
 
 
 def validate_scenarios(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAULT_OBJECTIVES) -> None:
@@ -67,16 +138,30 @@ def validate_scenarios(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAU
         raise ValueError(f"Missing Gate F input columns: {', '.join(missing)}")
     if len(df) < 2:
         raise ValueError("Gate F requires at least two scenarios for comparison")
-    if df["scenario_id"].isna().any() or df["scenario_id"].duplicated().any():
-        raise ValueError("scenario_id must be non-null and unique")
+    ids = df["scenario_id"]
+    if ids.isna().any() or (ids.astype(str).str.strip() == "").any() or ids.duplicated().any():
+        raise ValueError("scenario_id must be non-null, non-empty and unique")
     baseline_count = int(_baseline_mask(df["is_baseline"]).sum())
     if baseline_count != 1:
         raise ValueError(f"Exactly one baseline scenario is required, found {baseline_count}")
-    if (~df["scenario_epistemic_status"].isin(ALLOWED_INPUT_STATUSES)).any():
-        bad = sorted(set(df.loc[~df["scenario_epistemic_status"].isin(ALLOWED_INPUT_STATUSES), "scenario_epistemic_status"].astype(str)))
+
+    feasible = _strict_bool_series(df["road_feasible"], "road_feasible")
+    if (~feasible).any():
+        bad = sorted(df.loc[~feasible, "scenario_id"].astype(str).tolist())
+        raise ValueError(
+            "Road-infeasible scenarios must be excluded before Pareto analysis; "
+            f"found: {bad}"
+        )
+    _validate_status_source(df, "road_feasible__status", "road_feasible__source", "road_feasible")
+
+    scenario_status = df["scenario_epistemic_status"].astype(str).str.strip().str.upper()
+    if (~scenario_status.isin(ALLOWED_INPUT_STATUSES)).any():
+        bad = sorted(set(df.loc[~scenario_status.isin(ALLOWED_INPUT_STATUSES), "scenario_epistemic_status"].astype(str)))
         raise ValueError(f"Unsupported scenario epistemic status: {bad}")
-    if df["scenario_source"].isna().any() or (df["scenario_source"].astype(str).str.strip() == "").any():
-        raise ValueError("Every scenario requires a traceable scenario_source")
+    for col in ("scenario_name", "topology_family", "scenario_source"):
+        values = df[col]
+        if values.isna().any() or (values.astype(str).str.strip() == "").any():
+            raise ValueError(f"{col} must be non-empty")
 
     for obj in objectives:
         values = pd.to_numeric(df[obj.column], errors="coerce")
@@ -86,24 +171,34 @@ def validate_scenarios(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAU
             raise ValueError("headway_combined_min must be > 0")
         if obj.column in {"population_covered_pct", "s8_useful_connection_pct"} and (~values.between(0, 100)).any():
             raise ValueError(f"{obj.column} must be between 0 and 100")
-        if obj.column in {"annual_bus_km", "peak_buses_required", "territories_served_count"} and (values < 0).any():
-            raise ValueError(f"{obj.column} must be >= 0")
-        status_col = f"{obj.column}__status"
-        source_col = f"{obj.column}__source"
-        if (~df[status_col].isin(ALLOWED_INPUT_STATUSES)).any():
-            bad = sorted(set(df.loc[~df[status_col].isin(ALLOWED_INPUT_STATUSES), status_col].astype(str)))
-            raise ValueError(f"Unsupported epistemic status for {obj.column}: {bad}")
-        if df[source_col].isna().any() or (df[source_col].astype(str).str.strip() == "").any():
-            raise ValueError(f"Every {obj.column} value requires a traceable source")
+        if obj.column == "annual_bus_km" and (values <= 0).any():
+            raise ValueError("annual_bus_km must be > 0")
+        if obj.column == "peak_buses_required":
+            if (values < 1).any() or not np.equal(values, np.floor(values)).all():
+                raise ValueError("peak_buses_required must be an integer >= 1")
+        if obj.column == "territories_served_count":
+            if (values < 0).any() or not np.equal(values, np.floor(values)).all():
+                raise ValueError("territories_served_count must be a non-negative integer")
+        _validate_status_source(
+            df,
+            f"{obj.column}__status",
+            f"{obj.column}__source",
+            obj.column,
+        )
+        _validate_uncertainty_columns(df, obj, values)
+
+
+def _utility_matrix(df: pd.DataFrame, objectives: Sequence[Objective]) -> np.ndarray:
+    matrix = df[[o.column for o in objectives]].astype(float).to_numpy()
+    signs = np.array([1.0 if o.direction == "max" else -1.0 for o in objectives])
+    return matrix * signs
 
 
 def identify_pareto_frontier(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAULT_OBJECTIVES) -> pd.DataFrame:
-    """Return scenarios with Pareto flags and the IDs that dominate each row."""
+    """Return point-estimate Pareto flags and IDs that dominate each scenario."""
     validate_scenarios(df, objectives)
     out = df.copy().reset_index(drop=True)
-    matrix = out[[o.column for o in objectives]].astype(float).to_numpy()
-    signs = np.array([1.0 if o.direction == "max" else -1.0 for o in objectives])
-    utility = matrix * signs
+    utility = _utility_matrix(out, objectives)
     dominated_by: list[list[str]] = [[] for _ in range(len(out))]
 
     for i in range(len(out)):
@@ -114,14 +209,48 @@ def identify_pareto_frontier(df: pd.DataFrame, objectives: Sequence[Objective] =
                 dominated_by[i].append(str(out.loc[j, "scenario_id"]))
 
     out["pareto_optimal"] = [not ids for ids in dominated_by]
-    out["dominated_by"] = [";".join(ids) for ids in dominated_by]
+    out["dominated_by"] = [";".join(sorted(ids)) for ids in dominated_by]
     return out
+
+
+def dominance_pairs(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAULT_OBJECTIVES) -> pd.DataFrame:
+    """Return an auditable table of point-estimate dominance relations."""
+    out = identify_pareto_frontier(df, objectives)
+    lookup = out.set_index("scenario_id")
+    rows: list[dict[str, object]] = []
+    for dominated_id, raw in out.set_index("scenario_id")["dominated_by"].items():
+        if not raw:
+            continue
+        for dominator_id in raw.split(";"):
+            strict = []
+            equal = []
+            for obj in objectives:
+                a = float(lookup.loc[dominator_id, obj.column])
+                b = float(lookup.loc[dominated_id, obj.column])
+                (equal if a == b else strict).append(obj.column)
+            rows.append(
+                {
+                    "dominator_scenario_id": dominator_id,
+                    "dominated_scenario_id": dominated_id,
+                    "strictly_better_objectives": ";".join(strict),
+                    "equal_objectives": ";".join(equal),
+                }
+            )
+    return pd.DataFrame(
+        rows,
+        columns=[
+            "dominator_scenario_id",
+            "dominated_scenario_id",
+            "strictly_better_objectives",
+            "equal_objectives",
+        ],
+    )
 
 
 def leave_one_objective_out_robustness(
     df: pd.DataFrame, objectives: Sequence[Objective] = DEFAULT_OBJECTIVES
 ) -> pd.DataFrame:
-    """Preference-free sensitivity: full frontier plus one frontier per omitted objective."""
+    """Preference-free sensitivity: full frontier plus one run per omitted objective."""
     full = identify_pareto_frontier(df, objectives)
     counts = full.set_index("scenario_id")["pareto_optimal"].astype(int)
     runs = 1
@@ -139,6 +268,72 @@ def leave_one_objective_out_robustness(
     return result
 
 
+def unbounded_estimate_metrics(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAULT_OBJECTIVES) -> list[str]:
+    """Return scenario:metric labels for ESTIMATE values without finite lower/upper bounds."""
+    issues: list[str] = []
+    for obj in objectives:
+        status = df[f"{obj.column}__status"].astype(str).str.strip().str.upper()
+        estimate_rows = status.eq("ESTIMATE")
+        if not estimate_rows.any():
+            continue
+        lower_col = f"{obj.column}__lower"
+        upper_col = f"{obj.column}__upper"
+        if lower_col not in df.columns or upper_col not in df.columns:
+            issues.extend(f"{sid}:{obj.column}" for sid in df.loc[estimate_rows, "scenario_id"].astype(str))
+            continue
+        lower = pd.to_numeric(df[lower_col], errors="coerce")
+        upper = pd.to_numeric(df[upper_col], errors="coerce")
+        bounded = np.isfinite(lower.to_numpy(dtype=float)) & np.isfinite(upper.to_numpy(dtype=float))
+        bad_mask = estimate_rows.to_numpy() & ~bounded
+        issues.extend(f"{sid}:{obj.column}" for sid in df.loc[bad_mask, "scenario_id"].astype(str))
+    return sorted(issues)
+
+
+def _utility_bounds(df: pd.DataFrame, obj: Objective) -> tuple[np.ndarray, np.ndarray]:
+    point = pd.to_numeric(df[obj.column], errors="raise").to_numpy(dtype=float)
+    lower_col = f"{obj.column}__lower"
+    upper_col = f"{obj.column}__upper"
+    if lower_col in df.columns and upper_col in df.columns:
+        lower = pd.to_numeric(df[lower_col], errors="coerce").to_numpy(dtype=float)
+        upper = pd.to_numeric(df[upper_col], errors="coerce").to_numpy(dtype=float)
+        lower = np.where(np.isfinite(lower), lower, point)
+        upper = np.where(np.isfinite(upper), upper, point)
+    else:
+        lower = point.copy()
+        upper = point.copy()
+    if obj.direction == "max":
+        return lower, upper
+    return -upper, -lower
+
+
+def identify_robust_pareto_frontier(
+    df: pd.DataFrame, objectives: Sequence[Objective] = DEFAULT_OBJECTIVES
+) -> pd.DataFrame:
+    """Interval-robust Pareto frontier.
+
+    Scenario j robustly dominates i only when j's worst-case utility is at least
+    i's best-case utility for every objective and strictly better for at least one.
+    ESTIMATE values without finite bounds are refused rather than treated as exact.
+    """
+    validate_scenarios(df, objectives)
+    unbounded = unbounded_estimate_metrics(df, objectives)
+    if unbounded:
+        raise ValueError(f"Unbounded ESTIMATE metrics prevent robust Pareto: {unbounded}")
+    out = df.copy().reset_index(drop=True)
+    worst = np.column_stack([_utility_bounds(out, obj)[0] for obj in objectives])
+    best = np.column_stack([_utility_bounds(out, obj)[1] for obj in objectives])
+    dominated_by: list[list[str]] = [[] for _ in range(len(out))]
+    for i in range(len(out)):
+        for j in range(len(out)):
+            if i == j:
+                continue
+            if np.all(worst[j] >= best[i]) and np.any(worst[j] > best[i]):
+                dominated_by[i].append(str(out.loc[j, "scenario_id"]))
+    out["robust_pareto_optimal"] = [not ids for ids in dominated_by]
+    out["robustly_dominated_by"] = [";".join(sorted(ids)) for ids in dominated_by]
+    return out
+
+
 def build_tradeoffs(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAULT_OBJECTIVES) -> pd.DataFrame:
     """Add deltas versus the input baseline; no baseline value is hardcoded here."""
     validate_scenarios(df, objectives)
@@ -149,36 +344,88 @@ def build_tradeoffs(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAULT_
     return out
 
 
+def build_epistemic_audit(df: pd.DataFrame, objectives: Sequence[Objective] = DEFAULT_OBJECTIVES) -> pd.DataFrame:
+    """Return one row per scenario/objective with status, source and uncertainty."""
+    validate_scenarios(df, objectives)
+    rows: list[dict[str, object]] = []
+    for _, scenario in df.iterrows():
+        for obj in objectives:
+            lower_col = f"{obj.column}__lower"
+            upper_col = f"{obj.column}__upper"
+            rows.append(
+                {
+                    "scenario_id": scenario["scenario_id"],
+                    "objective": obj.column,
+                    "objective_gate": obj.gate,
+                    "direction": obj.direction,
+                    "unit": obj.unit,
+                    "value": float(scenario[obj.column]),
+                    "lower": scenario[lower_col] if lower_col in df.columns else np.nan,
+                    "upper": scenario[upper_col] if upper_col in df.columns else np.nan,
+                    "epistemic_status": scenario[f"{obj.column}__status"],
+                    "source": scenario[f"{obj.column}__source"],
+                }
+            )
+    return pd.DataFrame(rows)
+
+
 def decision_summary(
     pareto_df: pd.DataFrame,
     gate_status: Mapping[str, str],
     objectives: Sequence[Objective] = DEFAULT_OBJECTIVES,
 ) -> dict:
     blockers = blocker_labels(gate_status)
-    frontier_ids = pareto_df.loc[pareto_df["pareto_optimal"], "scenario_id"].astype(str).tolist()
+    point_frontier_ids = sorted(
+        pareto_df.loc[pareto_df["pareto_optimal"], "scenario_id"].astype(str).tolist()
+    )
     if blockers:
         return {
             "verdict": "PROVISIONAL",
             "dependency_status": blockers,
+            "evidence_status": [],
             "recommendation_status": "BLOCKED",
             "recommended_scenario_id": None,
-            "pareto_scenario_ids": frontier_ids,
+            "pareto_scenario_ids": point_frontier_ids,
+            "robust_pareto_scenario_ids": None,
             "reason": "Upstream gates are not all PASS; no definitive recommendation is permitted.",
         }
-    if len(frontier_ids) == 1:
+
+    unbounded = unbounded_estimate_metrics(pareto_df, objectives)
+    if unbounded:
+        return {
+            "verdict": "PROVISIONAL",
+            "dependency_status": [],
+            "evidence_status": ["UNBOUNDED_ESTIMATE_UNCERTAINTY"],
+            "recommendation_status": "NO_DEFINITIVE_RECOMMENDATION_UNCERTAINTY",
+            "recommended_scenario_id": None,
+            "pareto_scenario_ids": point_frontier_ids,
+            "robust_pareto_scenario_ids": None,
+            "unbounded_estimates": unbounded,
+            "reason": "At least one ESTIMATE objective lacks finite uncertainty bounds.",
+        }
+
+    robust = identify_robust_pareto_frontier(pareto_df, objectives)
+    robust_ids = sorted(
+        robust.loc[robust["robust_pareto_optimal"], "scenario_id"].astype(str).tolist()
+    )
+    if len(robust_ids) == 1:
         return {
             "verdict": "PASS",
             "dependency_status": [],
-            "recommendation_status": "UNIQUE_PARETO_DOMINANT",
-            "recommended_scenario_id": frontier_ids[0],
-            "pareto_scenario_ids": frontier_ids,
-            "reason": "Exactly one scenario remains non-dominated across the declared Gate F objectives.",
+            "evidence_status": [],
+            "recommendation_status": "UNIQUE_ROBUST_PARETO_DOMINANT",
+            "recommended_scenario_id": robust_ids[0],
+            "pareto_scenario_ids": point_frontier_ids,
+            "robust_pareto_scenario_ids": robust_ids,
+            "reason": "Exactly one scenario remains non-dominated under worst-vs-best uncertainty bounds.",
         }
     return {
         "verdict": "PASS",
         "dependency_status": [],
-        "recommendation_status": "NO_SINGLE_WINNER_PARETO_TRADEOFF",
+        "evidence_status": [],
+        "recommendation_status": "NO_SINGLE_WINNER_ROBUST_PARETO_TRADEOFF",
         "recommended_scenario_id": None,
-        "pareto_scenario_ids": frontier_ids,
-        "reason": "Multiple non-dominated scenarios remain; choosing one requires explicit decision preferences or constraints.",
+        "pareto_scenario_ids": point_frontier_ids,
+        "robust_pareto_scenario_ids": robust_ids,
+        "reason": "Multiple robustly non-dominated scenarios remain; choosing one requires explicit decision preferences or constraints.",
     }
