@@ -1,0 +1,37 @@
+name: Phase 2 mobility context employment aggregate fix
+
+on:
+  push:
+    branches: [phase2-od-2011-audit]
+    paths:
+      - .github/workflows/phase2-mobility-context-age-fix.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-od-2011-audit
+      - name: Use directly published occupied age 15+ aggregate
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/phase2_fetch_mobility_context.py')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('''    # REAS=ALL. Prefer AGE=TOTAL if published; otherwise we report NOT IDENTIFIED\n    # rather than summing overlapping age aggregates.\n''','''    # REAS=ALL. The published aggregate Y_GE15 means age 15 and over and is\n    # directly usable as the total employed-resident population. We do not sum\n    # the overlapping age categories.\n''')
+          s=s.replace('''        if r.get("AGE_NOCLASS") != "TOTAL":\n            continue\n''','''        if r.get("AGE_NOCLASS") != "Y_GE15":\n            continue\n''')
+          p.write_text(s,encoding='utf-8')
+          PY
+          python -m py_compile scripts/phase2_fetch_mobility_context.py
+      - name: Commit fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/phase2_fetch_mobility_context.py
+          git commit -m "fix(phase2): use published Y_GE15 occupied aggregate"
+          git push origin HEAD:phase2-od-2011-audit
