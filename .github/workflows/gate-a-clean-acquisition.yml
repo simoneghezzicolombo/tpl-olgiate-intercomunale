@@ -49,4 +49,4 @@ jobs:
             tests/test_audit_provenance.py::test_sfr_clean_network_fetch \
             tests/test_audit_provenance.py::test_osm_clean_network_fetch
 
-# Gate A validation revision 6: corrected Overpass recursion and semantic highway test.
+# Gate A validation revision 7: 500 m metric OSM buffer plus corrected recursion.
