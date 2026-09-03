@@ -71,6 +71,14 @@ def test_checksums_cover_every_materialized_output():
         assert got[name]==h
 
 
+def test_generated_stop_universe_text_has_no_known_mojibake_markers():
+    targets=[p for p in OUT.iterdir() if p.suffix.lower() in {'.csv','.geojson','.json'} and p.name.startswith(('existing_','accessibility_','settlement_','proposed_','interchange_','candidate_','stop_universe_'))]
+    assert targets
+    for path in targets:
+        text=path.read_text(encoding='utf-8')
+        assert 'Ã' not in text and 'Â' not in text, path
+
+
 def test_no_final_service_design_fields_are_generated():
     df=pd.read_csv(OUT/'proposed_stop_candidates.csv')
     forbidden={'headway_min','timetable','annual_bus_km','budget_eur','recommended','rank','score','final_topology'}
