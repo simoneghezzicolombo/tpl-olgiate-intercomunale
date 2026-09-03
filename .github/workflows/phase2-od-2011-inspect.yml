@@ -1,0 +1,79 @@
+name: Phase 2 inspect ISTAT 2011 OD source
+
+on:
+  push:
+    branches: [phase2-od-2011-audit]
+    paths:
+      - .github/workflows/phase2-od-2011-inspect.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-od-2011-audit
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Download and inventory official ISTAT 2011 ZIP
+        run: |
+          python - <<'PY'
+          import hashlib, io, json, pathlib, re, urllib.request, zipfile
+
+          url='https://www.istat.it/storage/cartografia/matrici_pendolarismo/matrici_pendolarismo_2011.zip'
+          req=urllib.request.Request(url,headers={'User-Agent':'tpl-olgiate-phase2-od-audit/1.0'})
+          with urllib.request.urlopen(req,timeout=300) as r:
+              data=r.read()
+              print('HTTP',r.status,'bytes',len(data),'content-type',r.headers.get('Content-Type'))
+          if data[:2] != b'PK':
+              raise SystemExit('not a ZIP')
+          out=pathlib.Path('outputs/phase2/istat2011_source_inspection')
+          out.mkdir(parents=True,exist_ok=True)
+          (out/'source_sha256.txt').write_text(hashlib.sha256(data).hexdigest()+'\n',encoding='utf-8')
+          z=zipfile.ZipFile(io.BytesIO(data))
+          names=z.namelist()
+          (out/'zip_inventory.txt').write_text('\n'.join(names)+'\n',encoding='utf-8')
+          print('\n'.join(names))
+          candidates=[]
+          for info in z.infolist():
+              if info.is_dir(): continue
+              low=info.filename.lower()
+              if any(k in low for k in ('leggimi','tracciat','readme','record','descriz','metodo')) or low.endswith(('.txt','.csv','.rtf')):
+                  if info.file_size <= 2_000_000:
+                      candidates.append(info)
+          manifest=[]
+          for i,info in enumerate(candidates):
+              raw=z.read(info)
+              decoded=None; enc=None
+              for e in ('utf-8-sig','cp1252','latin-1'):
+                  try:
+                      decoded=raw.decode(e); enc=e; break
+                  except UnicodeDecodeError: pass
+              safe=re.sub(r'[^A-Za-z0-9._-]+','_',pathlib.PurePosixPath(info.filename).name)
+              entry={'zip_member':info.filename,'bytes':info.file_size,'encoding':enc}
+              if decoded is not None:
+                  p=out/f'{i:02d}_{safe}.txt'
+                  p.write_text(decoded,encoding='utf-8')
+                  entry['saved_as']=str(p)
+                  print('\n===',info.filename,'===')
+                  print(decoded[:12000])
+              manifest.append(entry)
+          (out/'inspection_manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+
+      - name: Commit source inspection evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/phase2/istat2011_source_inspection
+          git diff --cached --quiet && exit 0
+          git commit -m "audit(phase2): inventory official ISTAT 2011 OD source"
+          git push origin HEAD:phase2-od-2011-audit
