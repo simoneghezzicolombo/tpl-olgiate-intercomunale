@@ -14,6 +14,7 @@ from typing import Iterable
 
 import geopandas as gpd
 import pandas as pd
+from shapely import make_valid as shapely_make_valid
 
 BUILDING_ID_STATUS = "DERIVED_COMPOSITE_DBGT_KEY_COD_CONS_PLUS_LOCAL_ID"
 RAW_FOOTPRINT_STATUS = "FACT_DBGT_ACTIVE_FOOTPRINT_SOURCE_PART"
@@ -92,7 +93,7 @@ def normalize_footprints(
     rows = []
     for building_id, group in work.groupby("building_id", sort=True):
         delivery, local = split_composite_id(building_id)
-        union = group.geometry.union_all().make_valid()
+        union = shapely_make_valid(group.geometry.union_all())
         if union.is_empty:
             raise RuntimeError(f"empty normalized DBGT building geometry: {building_id}")
         rows.append({
