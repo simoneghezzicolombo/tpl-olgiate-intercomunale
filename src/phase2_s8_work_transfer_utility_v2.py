@@ -14,12 +14,22 @@ from __future__ import annotations
 from dataclasses import dataclass
 import math
 from statistics import mean
-from typing import Mapping
+from typing import Mapping, Sequence
 
 
 CONNECTION_TYPES = ("BUS_TO_RAIL", "RAIL_TO_BUS")
 DIRECTIONS = ("LECCO", "MILANO")
+EXPECTED_S8_PHASE_CONTRACT = "PHASE2_S8_PHASE_OPPORTUNITY_SURFACE_V2"
+EXPECTED_S8_PHASE_STATUS = "PASS_S8_PHASE_OPPORTUNITY_V2_BUILD"
 FORBIDDEN_SUPPORT_EVIDENCE = {"", "ASSUMED", "INFERRED_FROM_VEHICLE_CLOSURE", "PLACEHOLDER", "INVALIDATED"}
+
+
+def _strict_bool(value: object, *, field: str) -> bool:
+    if value is True or value == "true":
+        return True
+    if value is False or value == "false":
+        return False
+    raise ValueError(f"{field} must be explicit true/false")
 
 
 @dataclass(frozen=True)
@@ -84,6 +94,87 @@ class WeightedTransferUtility:
     weighted_connection_count: float
     roundtrip_passenger_supported: bool
     support_evidence_status: str
+
+
+def validate_s8_phase_opportunity_support(
+    validation: Mapping[str, object],
+    route_rows: Sequence[Mapping[str, object]],
+) -> dict[str, PassengerConnectionSupport]:
+    """Fail closed unless the audited S8 opportunity surface is GJT-safe.
+
+    In particular this rejects the superseded winner-search contract and any
+    route table that promotes an operational vehicle closure to passenger
+    BUS_TO_RAIL service.
+    """
+    if validation.get("status") != EXPECTED_S8_PHASE_STATUS:
+        raise ValueError("S8 phase opportunity artifact is not certified PASS")
+    if validation.get("contract") != EXPECTED_S8_PHASE_CONTRACT:
+        raise ValueError("Unsupported or superseded S8 phasing contract")
+    required_false = (
+        "phase_selected",
+        "phase_pruned",
+        "passenger_demand_weights_applied",
+        "passenger_utility_calculated",
+        "topology_ranked",
+        "service_policy_selected",
+    )
+    for field in required_false:
+        if validation.get(field) is not False:
+            raise ValueError(f"S8 phase contract requires {field}=false")
+    if validation.get("all_integer_phases_evaluated") is not True:
+        raise ValueError("S8 phase contract did not evaluate all integer phases")
+    if validation.get("all_phases_retained_downstream") is not True:
+        raise ValueError("S8 phase contract pruned the downstream phase domain")
+    if validation.get("vehicle_cycle_return_is_passenger_event_for_open_routes") is not False:
+        raise ValueError("S8 contract promotes vehicle closure to passenger event")
+    if validation.get("passenger_bus_to_rail_event_requires_public_return_to_hub") is not True:
+        raise ValueError("S8 contract lacks public-return BUS_TO_RAIL protection")
+
+    supports: dict[str, PassengerConnectionSupport] = {}
+    open_count = 0
+    closed_count = 0
+    for row in route_rows:
+        route_id = str(row.get("route_id", "")).strip()
+        if not route_id or route_id in supports:
+            raise ValueError("S8 route universe has missing or duplicate route_id")
+        starts = _strict_bool(row.get("public_service_starts_at_hub"), field="public_service_starts_at_hub")
+        returns = _strict_bool(row.get("public_service_returns_to_hub"), field="public_service_returns_to_hub")
+        closure = _strict_bool(row.get("vehicle_closure_added"), field="vehicle_closure_added")
+        r2b = _strict_bool(row.get("rail_to_bus_passenger_event_supported"), field="rail_to_bus_passenger_event_supported")
+        b2r = _strict_bool(row.get("bus_to_rail_passenger_event_supported"), field="bus_to_rail_passenger_event_supported")
+        if not starts or not r2b:
+            raise ValueError("Current Phase 2 route universe must expose passenger RAIL_TO_BUS service from the hub")
+        if returns == closure:
+            raise ValueError("S8 route public-return and vehicle-closure semantics conflict")
+        if b2r != returns:
+            raise ValueError("BUS_TO_RAIL support must equal explicit public return-to-hub geometry")
+        if closure and b2r:
+            raise ValueError("Vehicle-only closure cannot support passenger BUS_TO_RAIL")
+        if returns:
+            closed_count += 1
+        else:
+            open_count += 1
+        supports[route_id] = PassengerConnectionSupport(
+            route_id=route_id,
+            bus_to_rail_supported=b2r,
+            rail_to_bus_supported=r2b,
+            evidence_status="DERIVED_FROM_S8_PHASE_OPPORTUNITY_V2_PUBLIC_SERVICE_GEOMETRY",
+        )
+
+    if not supports:
+        raise ValueError("S8 route universe is empty")
+    expected_routes = int(validation.get("unique_route_count", -1))
+    if expected_routes != len(supports):
+        raise ValueError("S8 route count does not match validation contract")
+    if int(validation.get("vehicle_closure_route_count", -1)) != open_count:
+        raise ValueError("S8 vehicle-closure route count does not match route universe")
+    if int(validation.get("public_service_return_hub_route_count", -1)) != closed_count:
+        raise ValueError("S8 public-return route count does not match route universe")
+    if int(validation.get("rail_to_bus_passenger_supported_route_count", -1)) != len(supports):
+        raise ValueError("S8 RAIL_TO_BUS support count mismatch")
+    if int(validation.get("bus_to_rail_passenger_supported_route_count", -1)) != closed_count:
+        raise ValueError("S8 BUS_TO_RAIL support count mismatch")
+    return supports
 
 
 def _parse_profile_cells(profile_cell_quality: Mapping[str, float]) -> dict[str, dict[tuple[str, str], float]]:
