@@ -2,7 +2,7 @@
 
 ## Status
 
-Workstream: `phase2-analysis-envelope`  
+Workstream: `phase2-analysis-envelope`
 Baseline: `phase2-optimizer-core` @ `147ad941579eb7ef17a5a54c19a5f820e5a226d4`.
 
 This workstream changes **no V1 PASS output**. It only adds a V2 spatial acquisition/context layer.
@@ -29,7 +29,9 @@ Three topology-neutral rules are compared from official ISTAT municipal geometri
 
 No external municipality name is whitelisted in production code. Adjacency is derived spatially with a 5 m topology tolerance to avoid tiny geometry-gap artefacts.
 
-The selected analysis rule is `ADJACENCY_1_PLUS_V1_WALK_GUARD`. Its epistemic state is `ASSUMPTION_RULE_EXPLICIT_AND_TOPOLOGY_NEUTRAL`, not FACT. It is chosen as the smallest tested rule that preserves a complete first-order supramunicipal context shell while remaining inside the frozen Gate D source epoch.
+The primary rule is selected mechanically after comparison: choose the **largest nested tested rule** that fully contains the inherited V1 core walk+snap guard and remains fully supported by the frozen Gate D source bbox with the 250 m graph probe. Its epistemic state is `ASSUMPTION_RULE_EXPLICIT_AND_TOPOLOGY_NEUTRAL`, not FACT. Wider rules that fail source support remain published sensitivity geometries instead of being clipped or silently accepted.
+
+The first CI red-team was useful: the full first-order municipal shell plus guard exceeded the frozen Gate D source bbox and was therefore rejected. This is an edge-effect finding, not a reason to expand or shrink the frozen road epoch silently. The audited primary rule is therefore `METRIC_GUARD_ONLY` unless a future explicitly versioned road epoch makes a wider tested rule source-complete.
 
 ## Edge guard
 
@@ -65,12 +67,14 @@ The selected envelope materialises separate inventories for:
 
 Buildings and sections intersecting the acquisition guard remain available in the frozen source bundle so the next building-population model can clip without a source hole at the analysis boundary.
 
+The analysis envelope is not a routing clip. Later route/path calculations continue to use the complete frozen Gate D graph. The envelope controls spatial evidence acquisition and population/building accounting, which prevents administrative-boundary truncation without artificially forcing every route to remain inside a buffer polygon.
+
 ## Edge-effect audit
 
 PASS requires all of the following:
 
-- the full core plus its 1,210 m V1 guard is contained;
-- the full first-order municipal shell plus the same guard is contained;
+- the selected rule contains the full core plus its 1,210 m V1 guard;
+- wider first-order and second-order municipal rules remain explicitly reported as sensitivities, including whether the frozen road epoch can fully support them;
 - the selected envelope plus a 250 m graph probe remains inside the frozen Gate D source bbox;
 - municipalities, sections, buildings, roads and stops are all non-empty and source-labelled;
 - all frozen-source checksums reconcile;
