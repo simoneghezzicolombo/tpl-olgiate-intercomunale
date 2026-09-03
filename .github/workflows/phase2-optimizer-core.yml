@@ -8,14 +8,20 @@ on:
       - src/phase2_service_engine.py
       - src/phase2_service_search.py
       - src/phase2_frontier.py
+      - src/phase2_s8_interchange.py
+      - src/phase2_s8_service_bridge.py
       - scripts/phase2_run_structural_search.py
       - tests/test_phase2_optimizer_core.py
       - tests/test_phase2_structural_runner.py
       - tests/test_phase2_service_engine.py
       - tests/test_phase2_service_search.py
       - tests/test_phase2_frontier.py
+      - tests/test_phase2_s8_interchange.py
+      - tests/test_phase2_s8_service_bridge.py
       - docs/PHASE2_OPTIMIZER_CORE.md
       - docs/PHASE2_SERVICE_EVALUATION_ENGINE.md
+      - docs/PHASE2_S8_INTERCHANGE_MODEL.md
+      - docs/PHASE2_S8_INTERCHANGE_RESULTS.md
       - .github/workflows/phase2-optimizer-core.yml
   workflow_dispatch:
 
@@ -44,14 +50,24 @@ jobs:
           python -m py_compile src/phase2_service_engine.py
           python -m py_compile src/phase2_service_search.py
           python -m py_compile src/phase2_frontier.py
+          python -m py_compile src/phase2_s8_interchange.py
+          python -m py_compile src/phase2_s8_service_bridge.py
           python -m py_compile scripts/phase2_run_structural_search.py
 
-      - name: Run optimizer-core tests
-        run: pytest -q tests/test_phase2_optimizer_core.py tests/test_phase2_structural_runner.py tests/test_phase2_service_engine.py tests/test_phase2_service_search.py tests/test_phase2_frontier.py
+      - name: Run optimizer-core and integrated S8 tests
+        run: >-
+          pytest -q
+          tests/test_phase2_optimizer_core.py
+          tests/test_phase2_structural_runner.py
+          tests/test_phase2_service_engine.py
+          tests/test_phase2_service_search.py
+          tests/test_phase2_frontier.py
+          tests/test_phase2_s8_interchange.py
+          tests/test_phase2_s8_service_bridge.py
 
       - name: Guard deterministic implementation
         run: |
-          SEARCH_FILES="src/phase2_optimizer_core.py src/phase2_service_engine.py src/phase2_service_search.py src/phase2_frontier.py scripts/phase2_run_structural_search.py"
+          SEARCH_FILES="src/phase2_optimizer_core.py src/phase2_service_engine.py src/phase2_service_search.py src/phase2_frontier.py src/phase2_s8_interchange.py src/phase2_s8_service_bridge.py scripts/phase2_run_structural_search.py"
           if grep -R "np.random\|numpy.random\|import random\|from random" $SEARCH_FILES; then
             echo "Random generation is forbidden in the Phase 2 optimizer core."
             exit 1
