@@ -7,7 +7,7 @@
     "official_record_layout_member": "MATRICE PENDOLARISMO 2011/leggimi file matrix_pendo2011_10112014.doc",
     "raw_S_records": 988625,
     "selected_work_domestic_core_strata": 1402,
-    "selected_unique_harmonised_od_pairs": 861,
+    "selected_unique_harmonised_od_pairs": 856,
     "excluded_study_after_core_filter": 320,
     "excluded_abroad_after_core_work_filter": 5,
     "excluded_noncore_origin_S_records": 986898,
@@ -30,8 +30,19 @@
     "reason_filter": "2 = work",
     "location_filter": "1/2 = domestic, excludes 3 = abroad",
     "administrative_harmonisation": {
-      "097066": "097092 Perego -> La Valletta Brianza",
-      "097073": "097092 Rovagnate -> La Valletta Brianza"
+      "097066": "097092",
+      "097073": "097092",
+      "097087": "097091",
+      "097088": "097091",
+      "097080": "016215",
+      "012028": "012143",
+      "012111": "012143",
+      "013019": "013250",
+      "013068": "013250",
+      "015235": "015251",
+      "015246": "015251",
+      "016039": "016253",
+      "016112": "016253"
     }
   },
   "2021": {
@@ -697,7 +708,7 @@
       }
     ]
   },
-  "unmapped_2011_destination_codes_not_observed_in_2021": 7,
+  "unmapped_2011_destination_codes_not_observed_in_2021": 0,
   "outputs": [
     "data/raw/od/matrice_pendolarismo_istat_2011_work_core_canonical.csv",
     "outputs/phase2/od_2011_core_summary.csv",
