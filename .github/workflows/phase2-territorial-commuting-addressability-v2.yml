@@ -80,6 +80,13 @@ jobs:
           assert validation['intermunicipal_worker_od_mass'] == 7439
           assert validation['footprint_intermunicipal_od_relation_count'] > 0
           assert validation['footprint_intermunicipal_worker_od_mass'] > 0
+          assert 'Santa Maria Hoè' in validation['structural_footprint_municipalities']
+          assert 'Santa Maria Hoè' in validation['footprint_destination_municipalities']
+          assert all('Ã' not in name and 'Â' not in name for name in validation['structural_footprint_municipalities'])
+          assert {
+              'source_label': 'Santa Maria HoÃ¨',
+              'repaired_label': 'Santa Maria Hoè',
+          } in validation['anchor_municipality_label_repairs']
           assert validation['max_public_structurally_addressable_worker_od_mass_upper_bound'] <= validation['footprint_intermunicipal_worker_od_mass']
           assert validation['max_public_plus_extensions_structurally_addressable_worker_od_mass_upper_bound'] <= validation['footprint_intermunicipal_worker_od_mass']
           assert validation['max_public_plus_extensions_structurally_addressable_worker_od_mass_upper_bound'] >= validation['max_public_structurally_addressable_worker_od_mass_upper_bound']
@@ -141,7 +148,8 @@ jobs:
               'max_public_mass': validation['max_public_structurally_addressable_worker_od_mass_upper_bound'],
               'max_public_plus_extensions_mass': validation['max_public_plus_extensions_structurally_addressable_worker_od_mass_upper_bound'],
               'extension_improvement_scenarios': validation['scenarios_where_optional_extensions_increase_addressable_worker_mass'],
-          }, indent=2))
+              'anchor_municipality_label_repairs': validation['anchor_municipality_label_repairs'],
+          }, indent=2, ensure_ascii=False))
           PY
 
       - name: Deterministic byte-for-byte rebuild
