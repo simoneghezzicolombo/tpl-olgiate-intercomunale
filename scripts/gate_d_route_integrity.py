@@ -13,6 +13,8 @@ OSM maxspeed is a legal limit, not an observed bus operating speed.
 from __future__ import annotations
 
 import argparse
+import heapq
+import itertools
 import math
 import re
 from pathlib import Path
@@ -113,6 +115,15 @@ def endpoint_key(x: float, y: float, ndigits: int = 2) -> tuple[float, float]:
     return round(float(x), ndigits), round(float(y), ndigits)
 
 
+def normalize_way_id(value):
+    if value is None or (isinstance(value, float) and math.isnan(value)):
+        return None
+    try:
+        return int(float(value))
+    except (TypeError, ValueError):
+        return str(value)
+
+
 def _add_segment(
     graph: nx.MultiDiGraph,
     start_xy,
@@ -154,6 +165,7 @@ def build_bus_graph(highways: gpd.GeoDataFrame) -> nx.MultiDiGraph:
         direction, _ = oneway_direction(tags)
         attrs = {
             "source_index": int(idx),
+            "osm_way_id": normalize_way_id(row.get("osm_way_id")),
             "highway": highway,
             "speed_kmh": speed_kmh,
             "speed_status": speed_status,
@@ -161,12 +173,7 @@ def build_bus_graph(highways: gpd.GeoDataFrame) -> nx.MultiDiGraph:
         }
         coords = list(geom.coords)
         for start_xy, end_xy in zip(coords[:-1], coords[1:]):
-            if direction == -1:
-                _add_segment(graph, start_xy, end_xy, attrs, -1)
-            elif direction == 1:
-                _add_segment(graph, start_xy, end_xy, attrs, 1)
-            else:
-                _add_segment(graph, start_xy, end_xy, attrs, 0)
+            _add_segment(graph, start_xy, end_xy, attrs, direction)
     if graph.number_of_edges() == 0:
         raise ValueError("No bus-eligible OSM road edges were built")
     return graph
@@ -178,11 +185,121 @@ def nearest_node_with_distance(graph: nx.MultiDiGraph, x: float, y: float) -> tu
     return node, distance_m
 
 
+def load_turn_restrictions(path: str | Path) -> dict:
+    """Load bus-applicable via-node OSM turn restrictions into projected graph keys."""
+    df = pd.read_csv(path)
+    required = {"restriction", "from_ref", "to_ref", "via_lon", "via_lat", "applies_to_bus"}
+    missing = required - set(df.columns)
+    if missing:
+        raise ValueError(f"Turn restriction CSV missing columns: {sorted(missing)}")
+    applicable = df[df["applies_to_bus"].astype(str).str.lower().isin({"true", "1", "yes"})].copy()
+    if applicable.empty:
+        return {}
+    applicable = applicable.dropna(subset=["via_lon", "via_lat", "from_ref", "to_ref", "restriction"])
+    points = gpd.GeoDataFrame(
+        applicable,
+        geometry=gpd.points_from_xy(applicable["via_lon"].astype(float), applicable["via_lat"].astype(float)),
+        crs=4326,
+    ).to_crs(32632)
+    index: dict[tuple[tuple[float, float], object], list[dict]] = {}
+    for _, row in points.iterrows():
+        restriction = str(row["restriction"]).strip().lower()
+        if not (restriction.startswith("no_") or restriction.startswith("only_")):
+            continue
+        via = endpoint_key(row.geometry.x, row.geometry.y)
+        from_way = normalize_way_id(row["from_ref"])
+        to_way = normalize_way_id(row["to_ref"])
+        rule = {
+            "restriction": restriction,
+            "to_way": to_way,
+            "relation_id": normalize_way_id(row.get("relation_id")),
+        }
+        index.setdefault((via, from_way), []).append(rule)
+    return index
+
+
+def transition_allowed(
+    restrictions: dict,
+    via_node,
+    previous_node,
+    incoming_way,
+    outgoing_node,
+    outgoing_way,
+) -> bool:
+    if not restrictions or incoming_way is None:
+        return True
+    for rule in restrictions.get((via_node, incoming_way), []):
+        kind = rule["restriction"]
+        to_way = rule["to_way"]
+        if kind == "no_u_turn":
+            if outgoing_way == to_way and outgoing_node == previous_node:
+                return False
+        elif kind == "only_u_turn":
+            if not (outgoing_way == to_way and outgoing_node == previous_node):
+                return False
+        elif kind.startswith("no_"):
+            if outgoing_way == to_way:
+                return False
+        elif kind.startswith("only_"):
+            if outgoing_way != to_way:
+                return False
+    return True
+
+
+def shortest_bus_edges(graph: nx.MultiDiGraph, start, end, restrictions: dict | None = None) -> list[tuple]:
+    """Dijkstra with stateful incoming-way context for OSM turn restrictions."""
+    if start == end:
+        return []
+    restrictions = restrictions or {}
+    counter = itertools.count()
+    start_state = (start, None, None)  # node, previous node, incoming way id
+    dist = {start_state: 0.0}
+    previous = {}
+    heap = [(0.0, next(counter), start_state)]
+    final_state = None
+    while heap:
+        current_dist, _, state = heapq.heappop(heap)
+        if current_dist != dist.get(state):
+            continue
+        node, previous_node, incoming_way = state
+        if node == end:
+            final_state = state
+            break
+        for _, outgoing_node, key, data in graph.out_edges(node, keys=True, data=True):
+            outgoing_way = data.get("osm_way_id")
+            if not transition_allowed(
+                restrictions,
+                node,
+                previous_node,
+                incoming_way,
+                outgoing_node,
+                outgoing_way,
+            ):
+                continue
+            next_state = (outgoing_node, node, outgoing_way)
+            next_dist = current_dist + float(data["running_minutes"])
+            if next_dist < dist.get(next_state, float("inf")):
+                dist[next_state] = next_dist
+                previous[next_state] = (state, node, outgoing_node, key)
+                heapq.heappush(heap, (next_dist, next(counter), next_state))
+    if final_state is None:
+        raise nx.NetworkXNoPath(f"No restriction-compliant path from {start} to {end}")
+    edge_path = []
+    state = final_state
+    while state != start_state:
+        prev_state, u, v, key = previous[state]
+        edge_path.append((u, v, key))
+        state = prev_state
+    edge_path.reverse()
+    return edge_path
+
+
 def route_candidate(
     graph: nx.MultiDiGraph,
     waypoints: gpd.GeoDataFrame,
     candidate_id: str,
     max_snap_m: float = 250.0,
+    turn_restrictions: dict | None = None,
 ) -> tuple[dict, LineString]:
     candidate = waypoints[waypoints["candidate_id"] == candidate_id].sort_values("sequence")
     if len(candidate) < 2:
@@ -199,12 +316,11 @@ def route_candidate(
     route_m = route_min = uncertain_m = assumed_speed_m = 0.0
     for a, b in zip(nodes[:-1], nodes[1:]):
         try:
-            path = nx.shortest_path(graph, a, b, weight="running_minutes")
+            edge_path = shortest_bus_edges(graph, a, b, turn_restrictions)
         except nx.NetworkXNoPath as exc:
             raise ValueError(f"{candidate_id}: no directed bus path between snapped waypoints {a} and {b}") from exc
-        for u, v in zip(path[:-1], path[1:]):
-            edges = graph.get_edge_data(u, v)
-            edge = min(edges.values(), key=lambda item: item["running_minutes"])
+        for u, v, key in edge_path:
+            edge = graph.get_edge_data(u, v, key)
             route_m += edge["length_m"]
             route_min += edge["running_minutes"]
             edge_geoms.append(edge["geometry"])
@@ -229,6 +345,7 @@ def route_candidate(
         "route_geometry_status": "DERIVED_OSM",
         "distance_status": "DERIVED_OSM",
         "running_time_status": "MODEL_OUTPUT",
+        "turn_restrictions_status": "ENFORCED_OSM" if turn_restrictions is not None else "NOT_PROVIDED",
         "candidate_input_status": ";".join(sorted(set(candidate["epistemic_status"].astype(str)))),
     }, geometry
 
@@ -252,18 +369,26 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("waypoints_csv")
     parser.add_argument("--osm", default=str(OSM_HIGHWAYS))
+    parser.add_argument("--turn-restrictions")
     parser.add_argument("--out-metrics", default=str(OUT_METRICS))
     parser.add_argument("--out-geometry", default=str(OUT_GEOMETRY))
     parser.add_argument("--max-snap-m", type=float, default=250.0)
     args = parser.parse_args()
     highways = gpd.read_file(args.osm)
     graph = build_bus_graph(highways)
+    restrictions = load_turn_restrictions(args.turn_restrictions) if args.turn_restrictions else None
     raw = pd.read_csv(args.waypoints_csv)
     validate_waypoints(raw)
     points = gpd.GeoDataFrame(raw, geometry=gpd.points_from_xy(raw.lon, raw.lat), crs=4326)
     metrics, geoms = [], []
     for candidate_id in points["candidate_id"].drop_duplicates():
-        row, geometry = route_candidate(graph, points, candidate_id, args.max_snap_m)
+        row, geometry = route_candidate(
+            graph,
+            points,
+            candidate_id,
+            args.max_snap_m,
+            restrictions,
+        )
         metrics.append(row)
         geoms.append({"candidate_id": candidate_id, "geometry": geometry})
     out_metrics, out_geometry = Path(args.out_metrics), Path(args.out_geometry)
