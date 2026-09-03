@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gate_f_status_bundle.schema.json",
+  "title": "Gate F upstream gate status evidence bundle",
+  "type": "object",
+  "required": ["schema_version", "integration_id", "gates"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "integration_id": {"type": "string", "minLength": 1},
+    "gates": {
+      "type": "object",
+      "required": ["A", "B", "C", "D", "E"],
+      "additionalProperties": false,
+      "properties": {
+        "A": {"$ref": "#/$defs/gate"},
+        "B": {"$ref": "#/$defs/gate"},
+        "C": {"$ref": "#/$defs/gate"},
+        "D": {"$ref": "#/$defs/gate"},
+        "E": {"$ref": "#/$defs/gate"}
+      }
+    }
+  },
+  "$defs": {
+    "gate": {
+      "type": "object",
+      "required": ["verdict", "commit_sha", "source_branch", "evidence_files"],
+      "additionalProperties": false,
+      "properties": {
+        "verdict": {"enum": ["PASS", "PROVISIONAL", "FAIL", "IN_PROGRESS"]},
+        "commit_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_branch": {"type": "string", "minLength": 1},
+        "evidence_files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["path", "sha256"],
+            "additionalProperties": false,
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+            }
+          }
+        }
+      }
+    }
+  }
+}

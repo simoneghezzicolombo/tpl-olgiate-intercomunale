@@ -23,6 +23,7 @@ from src.gate_f_pareto import (  # noqa: E402
     objective_manifest,
     unbounded_estimate_metrics,
 )
+from src.gate_f_status import enforce_verified_status_evidence, load_gate_status_bundle  # noqa: E402
 
 LEGACY_FORBIDDEN = {
     (ROOT / "outputs/route_variants.csv").resolve(),
@@ -49,7 +50,11 @@ def main() -> int:
     parser.add_argument("--input", default="outputs/gate_f_scenario_metrics.csv")
     parser.add_argument("--output-dir", default="outputs/gate_f")
     parser.add_argument("--gate-status", action="append", default=[])
+    parser.add_argument("--gate-status-file", type=Path)
     args = parser.parse_args()
+
+    if args.gate_status_file and args.gate_status:
+        raise SystemExit("REFUSED: use either --gate-status-file or manual --gate-status, not both")
 
     input_path = Path(args.input)
     resolved_input = (input_path if input_path.is_absolute() else ROOT / input_path).resolve()
@@ -59,11 +64,25 @@ def main() -> int:
     if not resolved_input.exists():
         raise SystemExit(f"BLOCKED: upstream scenario table not found: {resolved_input}")
 
-    gate_status = parse_gate_status(args.gate_status)
+    verified_status_evidence = False
+    if args.gate_status_file:
+        status_path = args.gate_status_file
+        if not status_path.is_absolute():
+            status_path = ROOT / status_path
+        try:
+            gate_status, status_bundle = load_gate_status_bundle(status_path, ROOT)
+        except ValueError as exc:
+            raise SystemExit(f"REFUSED_GATE_STATUS_EVIDENCE: {exc}") from exc
+        verified_status_evidence = True
+    else:
+        gate_status = parse_gate_status(args.gate_status)
+        status_bundle = None
+
     df = pd.read_csv(resolved_input)
     pareto = leave_one_objective_out_robustness(df, DEFAULT_OBJECTIVES)
     tradeoffs = build_tradeoffs(pareto, DEFAULT_OBJECTIVES)
     summary = decision_summary(pareto, gate_status, DEFAULT_OBJECTIVES)
+    summary = enforce_verified_status_evidence(summary, verified_status_evidence)
     pairs = dominance_pairs(df, DEFAULT_OBJECTIVES)
     epistemic = build_epistemic_audit(df, DEFAULT_OBJECTIVES)
 
@@ -100,6 +119,11 @@ def main() -> int:
         json.dumps(objective_manifest(DEFAULT_OBJECTIVES), indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
+    if status_bundle is not None:
+        (output_dir / "verified_gate_status_bundle.json").write_text(
+            json.dumps(status_bundle, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
     (output_dir / "verdict.json").write_text(
         json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
