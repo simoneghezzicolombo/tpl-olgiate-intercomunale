@@ -6,14 +6,22 @@ on:
     paths:
       - src/phase2_building_population.py
       - scripts/phase2_build_building_population.py
+      - scripts/phase2_run_building_population.py
       - tests/test_phase2_building_population.py
       - .github/workflows/phase2-building-population.yml
   workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
 
 jobs:
   building-population-audit:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
+    env:
+      GATE_B_ARTIFACT_ID: '9873385893'
+      GATE_B_ARTIFACT_SHA256: 'aca8889c8f1a4148c252c3530a56e8c68fa3f33c8e6ddf81a9ed743c51c1cfd1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,14 +29,114 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install focused dependencies
-        run: python -m pip install --upgrade pandas pytest
-      - name: Compile deterministic allocation core
-        run: python -m py_compile src/phase2_building_population.py
+      - name: Install deterministic geospatial dependencies
+        run: >-
+          python -m pip install --upgrade
+          pandas pytest requests geopandas pyogrio shapely pyproj openpyxl
+          networkx scipy
+      - name: Compile production and allocation core
+        run: |
+          python -m py_compile src/phase2_building_population.py
+          python -m py_compile scripts/phase2_build_building_population.py
+          if test -f scripts/phase2_run_building_population.py; then
+            python -m py_compile scripts/phase2_run_building_population.py
+          fi
       - name: Building-population focused tests
         run: PYTHONPATH=. pytest -q tests/test_phase2_building_population.py
       - name: Reject synthetic and random active implementation
         run: |
-          ! grep -R --line-number -E 'np\.random|random\.' src/phase2_building_population.py tests/test_phase2_building_population.py
+          ! grep -R --line-number -E 'np\.random|random\.' \
+            src/phase2_building_population.py \
+            scripts/phase2_build_building_population.py \
+            tests/test_phase2_building_population.py
+          ! grep -R --line-number -E 'PLACEHOLDER|synthetic population|hardcoded population' \
+            src/phase2_building_population.py scripts/phase2_build_building_population.py
+      - name: Fetch checksum-validated Gate B evidence artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${GATE_B_ARTIFACT_ID}/zip" \
+            -o /tmp/gate-b-pass.zip
+          echo "${GATE_B_ARTIFACT_SHA256}  /tmp/gate-b-pass.zip" | sha256sum -c -
+          mkdir -p /tmp/gate_b
+          unzip -q /tmp/gate-b-pass.zip -d /tmp/gate_b
+          test -s /tmp/gate_b/population_cells_real.csv
+          test -s /tmp/gate_b/coverage_summary.csv
+          test -s /tmp/gate_b/walk_graph_nodes.csv
+          test -s /tmp/gate_b/walk_graph_edges.csv
+          test -s /tmp/gate_b/gtfs_core_stops.csv
+      - name: Build real official-source building population
+        shell: bash
+        run: |
+          set -euo pipefail
+          ENTRY=scripts/phase2_build_building_population.py
+          if test -f scripts/phase2_run_building_population.py; then
+            ENTRY=scripts/phase2_run_building_population.py
+          fi
+          python "$ENTRY" \
+            --gate-b-dir /tmp/gate_b \
+            --core-boundaries data/raw/boundaries/comuni_core_istat_2026.geojson \
+            --output-dir outputs/phase2 \
+            --source-cache /tmp/building_population_sources \
+            | tee /tmp/building-population-run.log
+      - name: Validate exact calibration and epistemic guardrails
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('outputs/phase2/building_population_validation.json')
+          assert p.is_file(), p
+          v = json.loads(p.read_text())
+          assert v['status'] == 'PASS_BUILDING_POPULATION_BUILD'
+          assert v['core_posas_2025_total'] == 22914.0
+          assert v['all_selected_municipalities_reconcile_exactly'] is True
+          assert abs(v['max_abs_reconciliation_error']) <= 1e-7
+          assert abs(
+              v['core_building_population_located']
+              + v['core_population_residual_unlocated']
+              - 22914.0
+          ) <= 1e-7
+          assert v['random_used'] is False
+          assert v['legacy_synthetic_population_used'] is False
+          assert v['building_resident_estimates_observed'] is False
+          assert v['building_resident_estimate_status'] == 'MODEL_OUTPUT_DASYMETRIC_BUILDING_POPULATION'
+          assert v['final_stop_ranking_produced'] is False
+          assert v['final_network_selected'] is False
+          assert v['headway_modified'] is False
+          assert v['timetable_modified'] is False
+          assert v['budget_modified'] is False
+          for threshold in ('5', '8', '10', '12'):
+              assert threshold in v['core_v2_coverage_pct_total_posas']
+              assert threshold in v['core_v1_coverage_pct_worldpop_posas']
+          print(json.dumps(v, indent=2))
+          PY
+          (cd outputs/phase2 && sha256sum -c building_population_checksums.sha256)
       - name: Whitespace check
         run: git diff --check 147ad941579eb7ef17a5a54c19a5f820e5a226d4...HEAD
+      - name: Stage reproducibility evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/building-population-evidence/source-snapshots
+          cp outputs/phase2/building_population_* /tmp/building-population-evidence/ 2>/dev/null || true
+          cp /tmp/building-population-run.log /tmp/building-population-evidence/
+          find /tmp/building_population_sources -maxdepth 1 -type f \
+            \( -name 'dbgt_*.gz' -o -name 'R03*.xlsx' \) \
+            -exec cp {} /tmp/building-population-evidence/source-snapshots/ \;
+          find /tmp/building-population-evidence -type f -print0 | sort -z | xargs -0 sha256sum \
+            > /tmp/building-population-evidence/artifact_contents.sha256
+      - name: Upload building-population evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-building-population-evidence-${{ github.sha }}
+          path: /tmp/building-population-evidence
+          if-no-files-found: error
+          retention-days: 90
