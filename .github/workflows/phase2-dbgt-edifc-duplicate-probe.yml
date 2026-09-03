@@ -1,0 +1,58 @@
+name: Phase 2 DBGT EDIFC duplicate probe
+
+on:
+  push:
+    branches: [phase2-building-population]
+    paths:
+      - scripts/phase2_probe_dbgt_edifc_duplicates.py
+      - .github/workflows/phase2-dbgt-edifc-duplicate-probe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  edifc-duplicate-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install focused geospatial dependencies
+        run: >-
+          python -m pip install --upgrade
+          pandas requests geopandas pyogrio shapely pyproj openpyxl networkx scipy
+      - name: Compile probe
+        run: python -m py_compile scripts/phase2_probe_dbgt_edifc_duplicates.py
+      - name: Exhaustively inspect repeated active EDIFC rows
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=. python scripts/phase2_probe_dbgt_edifc_duplicates.py \
+            | tee /tmp/dbgt-edifc-duplicate-probe.log
+      - name: Reject random or sampled audit and validate completeness
+        run: |
+          ! grep -R --line-number -E 'np\.random|random\.' scripts/phase2_probe_dbgt_edifc_duplicates.py
+          python - <<'PY'
+          import json
+          p = json.load(open('/tmp/dbgt-edifc-duplicate-probe.json'))
+          assert p['random_used'] is False
+          assert p['sampling_used'] is False
+          assert p['layer3_candidate_object_ids'] == p['layer3_attribute_rows']
+          assert p['unique_nonblank_classref'] > 0
+          assert p['active_edifc_rows'] > 0
+          print(json.dumps({k:v for k,v in p.items() if k != 'details'}, indent=2))
+          PY
+      - name: Upload EDIFC duplicate evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-dbgt-edifc-duplicate-probe-${{ github.sha }}
+          path: |
+            /tmp/dbgt-edifc-duplicate-probe.json
+            /tmp/dbgt-edifc-duplicate-rows.csv
+            /tmp/dbgt-edifc-semantic-conflicts.json
+            /tmp/dbgt-edifc-duplicate-probe.log
+          if-no-files-found: error
+          retention-days: 30
