@@ -7,6 +7,7 @@ on:
       - src/phase2_building_population.py
       - src/phase2_dbgt_composite.py
       - src/phase2_building_piece_access.py
+      - src/phase2_dbgt_unlinked_footprints.py
       - scripts/phase2_build_building_population.py
       - scripts/phase2_run_building_population.py
       - scripts/phase2_run_building_population_v2.py
@@ -15,6 +16,7 @@ on:
       - tests/test_phase2_building_population.py
       - tests/test_phase2_dbgt_composite.py
       - tests/test_phase2_building_piece_access.py
+      - tests/test_phase2_dbgt_unlinked_footprints.py
       - .github/workflows/phase2-building-population.yml
   workflow_dispatch:
 
@@ -46,6 +48,7 @@ jobs:
           python -m py_compile src/phase2_building_population.py
           python -m py_compile src/phase2_dbgt_composite.py
           python -m py_compile src/phase2_building_piece_access.py
+          python -m py_compile src/phase2_dbgt_unlinked_footprints.py
           python -m py_compile scripts/phase2_build_building_population.py
           python -m py_compile scripts/phase2_run_building_population.py
           python -m py_compile scripts/phase2_run_building_population_v2.py
@@ -57,12 +60,14 @@ jobs:
           tests/test_phase2_building_population.py
           tests/test_phase2_dbgt_composite.py
           tests/test_phase2_building_piece_access.py
+          tests/test_phase2_dbgt_unlinked_footprints.py
       - name: Reject synthetic and random active implementation
         run: |
           ! grep -R --line-number -E 'np\.random|random\.' \
             src/phase2_building_population.py \
             src/phase2_dbgt_composite.py \
             src/phase2_building_piece_access.py \
+            src/phase2_dbgt_unlinked_footprints.py \
             scripts/phase2_build_building_population.py \
             scripts/phase2_run_building_population.py \
             scripts/phase2_run_building_population_v2.py \
@@ -70,11 +75,13 @@ jobs:
             scripts/phase2_run_building_population_v6.py \
             tests/test_phase2_building_population.py \
             tests/test_phase2_dbgt_composite.py \
-            tests/test_phase2_building_piece_access.py
+            tests/test_phase2_building_piece_access.py \
+            tests/test_phase2_dbgt_unlinked_footprints.py
           ! grep -R --line-number -E 'PLACEHOLDER|hardcoded population' \
             src/phase2_building_population.py \
             src/phase2_dbgt_composite.py \
             src/phase2_building_piece_access.py \
+            src/phase2_dbgt_unlinked_footprints.py \
             scripts/phase2_build_building_population.py \
             scripts/phase2_run_building_population.py \
             scripts/phase2_run_building_population_v2.py \
@@ -86,6 +93,7 @@ jobs:
               Path('src/phase2_building_population.py'),
               Path('src/phase2_dbgt_composite.py'),
               Path('src/phase2_building_piece_access.py'),
+              Path('src/phase2_dbgt_unlinked_footprints.py'),
               Path('scripts/phase2_run_building_population_v6.py'),
           ]
           for p in authoritative:
@@ -159,7 +167,12 @@ jobs:
           assert v['dbgt_composite_random_used'] is False
           assert v['dbgt_composite_sampling_used'] is False
           assert fp['random_used'] is False and fp['sampling_used'] is False
-          assert fp['raw_selected_active_footprint_rows'] - fp['extra_active_footprint_rows_collapsed_by_composite_union'] == fp['normalized_composite_building_count']
+          assert fp['raw_selected_active_footprint_rows'] == fp['raw_linked_active_footprint_rows'] + fp['raw_active_footprints_without_classref_excluded']
+          assert fp['raw_linked_active_footprint_rows'] - fp['extra_active_footprint_rows_collapsed_by_composite_union'] == fp['normalized_composite_building_count']
+          assert fp['unlinked_footprints_population_assigned'] is False
+          assert v['dbgt_unlinked_footprints_population_assigned'] is False
+          assert m['dbgt_unlinked_footprint_semantics']['synthetic_id_created'] is False
+          assert m['dbgt_unlinked_footprint_semantics']['proximity_join_used'] is False
           assert dbgt['normalized_composite_edifc_records'] == fp['normalized_composite_building_count']
           assert dbgt['composite_edifc_semantic_conflicts'] == 0
           assert dbgt['composite_volume_numeric_conflicts'] == 0
