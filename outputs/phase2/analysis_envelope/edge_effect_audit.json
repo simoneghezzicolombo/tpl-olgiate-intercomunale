@@ -1,0 +1,16 @@
+{
+  "buildings_touching_analysis_boundary": 148,
+  "core_guard_contained": true,
+  "edge_guard_formula": "12 min * (4.8 km/h * 1000 / 60) + 250 m = 1210 m",
+  "edge_guard_m": 1210.0,
+  "first_order_shell_guard_contained": false,
+  "frozen_graph_probe_m": 250.0,
+  "guard_status": "DERIVED_FROM_V1_ACCESSIBILITY_ASSUMPTION_CONTRACT",
+  "outer_source_guard_m": 1210.0,
+  "outer_source_guard_purpose": "Source completeness only; never equal equity obligation.",
+  "road_edges_crossing_analysis_boundary": 385,
+  "sections_touching_analysis_boundary": 118,
+  "selected_plus_probe_within_frozen_gate_d_bbox": true,
+  "selected_rule": "METRIC_GUARD_ONLY",
+  "selected_to_frozen_bbox_boundary_min_m": 824.879347268296
+}

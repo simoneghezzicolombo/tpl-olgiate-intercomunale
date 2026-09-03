@@ -1,0 +1,255 @@
+{
+  "acquisition_used_this_run": false,
+  "baseline_commit": "147ad941579eb7ef17a5a54c19a5f820e5a226d4",
+  "core_context_contract": {
+    "CONTEXT": "External residents/buildings/stops provide edge-safe context, not equal municipal equity obligations.",
+    "CORE": "Five-municipality decision/equity denominator unless later policy explicitly changes it.",
+    "SOURCE_GUARD": "Acquisition-only outer margin, not an analysis constituency."
+  },
+  "counts": {
+    "anchor_records": 187,
+    "buildings": 12359,
+    "census_sections": 621,
+    "frozen_road_edges": 60519,
+    "municipalities": 25,
+    "official_bus_stop_records": 174,
+    "rail_anchor_records": 1
+  },
+  "decision_core_municipalities": {
+    "097010": "Brivio",
+    "097012": "Calco",
+    "097058": "Olgiate Molgora",
+    "097074": "Santa Maria Hoè",
+    "097092": "La Valletta Brianza"
+  },
+  "edge_effect_audit": {
+    "buildings_touching_analysis_boundary": 148,
+    "core_guard_contained": true,
+    "edge_guard_formula": "12 min * (4.8 km/h * 1000 / 60) + 250 m = 1210 m",
+    "edge_guard_m": 1210.0,
+    "first_order_shell_guard_contained": false,
+    "frozen_graph_probe_m": 250.0,
+    "guard_status": "DERIVED_FROM_V1_ACCESSIBILITY_ASSUMPTION_CONTRACT",
+    "outer_source_guard_m": 1210.0,
+    "outer_source_guard_purpose": "Source completeness only; never equal equity obligation.",
+    "road_edges_crossing_analysis_boundary": 385,
+    "sections_touching_analysis_boundary": 118,
+    "selected_plus_probe_within_frozen_gate_d_bbox": true,
+    "selected_rule": "METRIC_GUARD_ONLY",
+    "selected_to_frozen_bbox_boundary_min_m": 824.879347268296
+  },
+  "edge_guard_m": 1210.0,
+  "first_order_context_codes": [
+    "016074",
+    "016171",
+    "016238",
+    "097002",
+    "097013",
+    "097019",
+    "097024",
+    "097039",
+    "097048",
+    "097049",
+    "097052",
+    "097053",
+    "097059",
+    "097076"
+  ],
+  "frozen_gate_d_epoch": "gate-d-2026-09-03-834d5caa0bfd",
+  "municipalities_intersected": [
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Airuno",
+      "procom": "097002"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Calolziocorte",
+      "procom": "097013"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Castello di Brianza",
+      "procom": "097019"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Cisano Bergamasco",
+      "procom": "016074"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Colle Brianza",
+      "procom": "097024"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Imbersago",
+      "procom": "097039"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Merate",
+      "procom": "097048"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Missaglia",
+      "procom": "097049"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Monte Marenzo",
+      "procom": "097052"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Montevecchia",
+      "procom": "097053"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Olginate",
+      "procom": "097059"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Pontida",
+      "procom": "016171"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Sirtori",
+      "procom": "097076"
+    },
+    {
+      "adjacency_order_from_core": 1,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Villa d'Adda",
+      "procom": "016238"
+    },
+    {
+      "adjacency_order_from_core": 2,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Barzago",
+      "procom": "097005"
+    },
+    {
+      "adjacency_order_from_core": 2,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "BarzanÃ²",
+      "procom": "097006"
+    },
+    {
+      "adjacency_order_from_core": 2,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Cernusco Lombardone",
+      "procom": "097020"
+    },
+    {
+      "adjacency_order_from_core": 2,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Torre de' Busi",
+      "procom": "016215"
+    },
+    {
+      "adjacency_order_from_core": 2,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "Valgreghentino",
+      "procom": "097082"
+    },
+    {
+      "adjacency_order_from_core": 2,
+      "analysis_role": "CONTEXT",
+      "municipality_name": "ViganÃ²",
+      "procom": "097090"
+    },
+    {
+      "adjacency_order_from_core": 0,
+      "analysis_role": "CORE",
+      "municipality_name": "Brivio",
+      "procom": "097010"
+    },
+    {
+      "adjacency_order_from_core": 0,
+      "analysis_role": "CORE",
+      "municipality_name": "Calco",
+      "procom": "097012"
+    },
+    {
+      "adjacency_order_from_core": 0,
+      "analysis_role": "CORE",
+      "municipality_name": "La Valletta Brianza",
+      "procom": "097092"
+    },
+    {
+      "adjacency_order_from_core": 0,
+      "analysis_role": "CORE",
+      "municipality_name": "Olgiate Molgora",
+      "procom": "097058"
+    },
+    {
+      "adjacency_order_from_core": 0,
+      "analysis_role": "CORE",
+      "municipality_name": "Santa Maria HoÃ¨",
+      "procom": "097074"
+    }
+  ],
+  "prohibitions": {
+    "final_stop_selected": false,
+    "headway_selected": false,
+    "manual_external_municipality_whitelist_used": false,
+    "np_random_used": false,
+    "synthetic_data_used": false,
+    "topology_selected": false,
+    "v1_outputs_modified": false
+  },
+  "rule_epistemic_status": "ASSUMPTION_RULE_EXPLICIT_AND_TOPOLOGY_NEUTRAL",
+  "second_order_sensitivity_codes": [
+    "016009",
+    "016046",
+    "016052",
+    "016057",
+    "016156",
+    "016203",
+    "016215",
+    "097005",
+    "097006",
+    "097014",
+    "097016",
+    "097020",
+    "097031",
+    "097033",
+    "097034",
+    "097036",
+    "097038",
+    "097044",
+    "097054",
+    "097061",
+    "097071",
+    "097082",
+    "097086",
+    "097090",
+    "108038"
+  ],
+  "selected_rule": "METRIC_GUARD_ONLY",
+  "selection_principle": "Largest nested topology-neutral rule among the tested candidates that contains the inherited V1 core walk+snap guard and remains fully supported by the frozen Gate D source with a 250 m probe. Wider unsupported rules remain explicit sensitivity results rather than being forced into the primary envelope.",
+  "source_acquisition_outer_guard_m": 1210.0,
+  "source_manifest_sha256": "5447fe1beefac53d826c27d0e56bb3aa62e0c8645c71e57ec22e1336b8368aa1",
+  "source_snapshot_state": "FROZEN_AFTER_PRIMARY_ACQUISITION",
+  "status": "PASS_ANALYSIS_ENVELOPE",
+  "workstream": "phase2-analysis-envelope"
+}
