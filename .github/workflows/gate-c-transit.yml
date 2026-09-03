@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install Gate C test dependencies
-        run: python -m pip install pytest pandas pypdf
+        run: python -m pip install pytest pandas pypdf pdfplumber
       - name: Gate C targeted tests
         run: python -m pytest tests/test_gate_c_transit.py tests/test_gate_c_quarantine.py -q
       - name: Audit covered bus date
