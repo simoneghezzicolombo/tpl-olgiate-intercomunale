@@ -24,7 +24,10 @@ jobs:
       - name: Compile read-only source probe
         run: python -m py_compile scripts/phase2_probe_building_population_sources.py
       - name: Probe official ISTAT and Regione Lombardia sources
-        run: python scripts/phase2_probe_building_population_sources.py | tee /tmp/building-source-probe.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/phase2_probe_building_population_sources.py | tee /tmp/building-source-probe.json
       - name: Reject synthetic/random source probe
         run: |
           ! grep -R --line-number -E 'np\.random|random\.' scripts/phase2_probe_building_population_sources.py
