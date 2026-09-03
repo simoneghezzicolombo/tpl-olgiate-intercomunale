@@ -18,7 +18,10 @@ METRIC_CONTRACT: dict[str, dict[str, str]] = {
     "s8_useful_connection_pct": {"unit": "%", "semantics": "PERCENT_OF_DEFINED_S8_CONNECTION_DENOMINATOR"},
     "headway_combined_min": {"unit": "min", "semantics": "RATE_EQUIVALENT_NOT_MAX_GAP"},
     "annual_bus_km": {"unit": "bus-km/year", "semantics": "ANNUAL_SCHEDULED_BUS_DISTANCE"},
-    "peak_buses_required": {"unit": "vehicles", "semantics": "SIMULTANEOUS_PEAK_VEHICLES"},
+    "minimum_scheduled_vehicles": {
+        "unit": "vehicles",
+        "semantics": "THEORETICAL_IN_SERVICE_SCHEDULED_MINIMUM_EXCLUDES_DEADHEAD_RELIEFS_MAINTENANCE_SPARES",
+    },
 }
 
 
