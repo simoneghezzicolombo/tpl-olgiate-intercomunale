@@ -16,7 +16,7 @@ Gate B sostituisce integralmente la precedente modellazione spaziale sintetica. 
 
 ## Popolazione
 
-Ogni cella popolata del raster WorldPop conserva `worldpop_2020_raw`. La variabile `pop_calibrated_2025` è distinta e classificata `DERIVED`: per ogni comune il raster viene moltiplicato per un unico fattore in modo da quadrare esattamente con il totale POSAS 2025. La calibrazione non modifica la distribuzione relativa interna a ciascun comune.
+Ogni cella popolata del raster WorldPop conserva `worldpop_2020_raw`. La variabile `pop_calibrated_2025` è distinta e classificata `ESTIMATE`: per ogni comune il raster viene moltiplicato per un unico fattore in modo da quadrare esattamente con il totale POSAS 2025. Il totale comunale POSAS è letto dalla riga ufficiale `Età=999` e viene verificato indipendentemente contro la somma delle età 0–100, così da impedire il doppio conteggio della riga aggregata. La calibrazione non modifica la distribuzione relativa interna a ciascun comune.
 
 ## Grafo pedonale
 
@@ -40,7 +40,9 @@ Spot-check obbligatori su cinque punti GTFS pubblicati:
 
 ## Accessibilità
 
-Per ogni cella WorldPop viene calcolato il tempo minimo verso una fermata GTFS sul grafo pedonale slope-adjusted. Le soglie di audit sono 5, 8, 10 e 12 minuti. Il valore di popolazione della cella è attribuito in base al punto rappresentativo centrale del pixel raster; questa approssimazione è documentata e non viene confusa con una localizzazione puntuale dei residenti.
+Per ogni cella WorldPop viene calcolato il tempo minimo verso una **localizzazione di fermata presente nel GTFS ufficiale** sul grafo pedonale slope-adjusted. Le soglie di audit sono 5, 8, 10 e 12 minuti. Il valore di popolazione della cella è attribuito in base al punto rappresentativo centrale del pixel raster; questa approssimazione è documentata e non viene confusa con una localizzazione puntuale dei residenti.
+
+Gate B misura quindi l'accessibilità spaziale all'infrastruttura di fermata ufficiale. Non implica che ogni fermata abbia un servizio attivo, una determinata frequenza o un servizio utile in ciascuna fascia oraria. La validazione di route, calendari, corse e orari appartiene a Gate C.
 
 ## Condizioni minime per PASS
 
@@ -48,7 +50,7 @@ Gate B non può essere dichiarato PASS finché non sono contemporaneamente verif
 
 1. acquisizione OSM che copre l'intera geometria dei cinque comuni;
 2. separazione raw WorldPop 2020 / calibrazione 2025;
-3. quadratura esatta con POSAS per tutti i comuni;
+3. quadratura esatta con POSAS per tutti i comuni senza doppio conteggio della riga aggregata;
 4. grafo OSM sufficientemente connesso e con pendenze reali dal DSM;
 5. fermate provenienti dal GTFS ufficiale e spot-check superati;
 6. almeno l'85% della popolazione calibrata collegabile al grafo entro il limite di 300 m;
