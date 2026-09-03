@@ -1,0 +1,181 @@
+name: Phase 2 Structural Catalog V2
+
+on:
+  push:
+    branches:
+      - phase2-structural-catalog-v2
+    paths:
+      - 'src/phase2_balanced_structural_search.py'
+      - 'src/phase2_optimizer_core.py'
+      - 'scripts/phase2_run_structural_search.py'
+      - 'scripts/phase2_run_balanced_structural_search.py'
+      - 'scripts/phase2_run_balanced_structural_search_v2.py'
+      - 'tests/test_phase2_balanced_structural_search.py'
+      - 'tests/test_phase2_structural_catalog_v2.py'
+      - '.github/workflows/phase2-structural-catalog-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-structural-catalog-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile audited structural engine and V2 wrapper
+        run: |
+          python -m py_compile src/phase2_optimizer_core.py
+          python -m py_compile src/phase2_balanced_structural_search.py
+          python -m py_compile scripts/phase2_run_structural_search.py
+          python -m py_compile scripts/phase2_run_balanced_structural_search.py
+          python -m py_compile scripts/phase2_run_balanced_structural_search_v2.py
+
+      - name: Run balanced-search and V2 epistemic tests
+        run: |
+          python -m pytest -q tests/test_phase2_balanced_structural_search.py
+          python -m pytest -q tests/test_phase2_structural_catalog_v2.py
+
+      - name: Validate persisted Reduced Path Matrix V2 upstream contract
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from scripts.phase2_run_balanced_structural_search_v2 import (
+              load_v2_anchor_universe,
+              validate_upstream_matrix_contract,
+          )
+          root = Path('outputs/phase2/reduced_path_matrix_v2')
+          anchors = root/'routing_anchor_universe.csv'
+          matrix = root/'reduced_path_matrix.csv'
+          validation = root/'reduced_path_matrix_v2_validation.json'
+          upstream = validate_upstream_matrix_contract(validation, anchor_path=anchors, matrix_path=matrix)
+          ids, evidence, kinds, epoch = load_v2_anchor_universe(anchors)
+          assert len(ids) == upstream['routing_anchor_count'] == 198
+          assert epoch == upstream['epoch_id']
+          assert sum(evidence.values()) == 198
+          assert kinds['HUB_RAIL'] == 1
+          assert 'FACT' not in evidence
+          assert 'DERIVED' not in evidence
+          print('V2 routing anchors:', len(ids))
+          print('evidence:', evidence)
+          print('source kinds:', kinds)
+          PY
+
+      - name: Generate 100000 Structural Catalog V2 scenarios
+        run: >-
+          python scripts/phase2_run_balanced_structural_search_v2.py
+          --anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv
+          --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv
+          --upstream-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json
+          --output outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv
+          --validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json
+          --max-scenarios 100000
+          --max-loop-intermediate-anchors 4
+
+      - name: Validate Structural Catalog V2 contract
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          root = Path('outputs/phase2/structural_catalog_v2')
+          validation = json.loads((root/'structural_scenario_catalog_balanced_v2_validation.json').read_text(encoding='utf-8'))
+          assert validation['status'] == 'PASS_STRUCTURAL_CATALOG_V2_BUILD'
+          assert validation['contract'] == 'PHASE2_BALANCED_STRUCTURAL_SEARCH_V2'
+          assert validation['evidence_label'] == 'V2_STRUCTURAL_CATALOG_NOT_RECOMMENDATION'
+          assert validation['source_routing_anchor_count'] == 198
+          assert validation['requested_scenario_count'] == 100000
+          assert validation['generated_scenario_count'] == 100000, validation
+          assert validation['hub_bidirectional_nonhub_anchor_count'] == validation['valid_single_radial_count']
+          assert validation['allocation_rule'] == 'EQUAL_FAMILY_AFTER_FINITE_SINGLE_RADIAL_CAPACITY'
+          assert validation['deterministic'] is True
+          assert validation['uses_live_osm'] is False
+          assert validation['uses_random_generation'] is False
+          assert validation['uses_legacy_candidate_routes'] is False
+          assert validation['uses_topology_preference_score'] is False
+          assert validation['search_allocation_is_decision_weight'] is False
+          assert validation['selects_topology'] is False
+          assert validation['selects_stops'] is False
+          assert validation['chooses_service_policy'] is False
+          counts = validation['family_counts']
+          targets = validation['family_targets']
+          assert len(counts) == 11
+          assert set(counts) == set(targets)
+          assert all(counts[name] > 0 for name in counts)
+          assert sum(counts.values()) == 100000
+          assert 'FACT' not in validation['source_evidence_status_counts']
+          assert 'DERIVED' not in validation['source_evidence_status_counts']
+          with (root/'structural_scenario_catalog_balanced_v2.csv').open(encoding='utf-8', newline='') as handle:
+              rows = list(csv.DictReader(handle))
+          assert len(rows) == 100000
+          ids = [row['scenario_id'] for row in rows]
+          assert len(ids) == len(set(ids))
+          forbidden = {'rank', 'score', 'winner', 'recommended', 'primary_recommendation'}
+          assert not (forbidden & set(rows[0]))
+          print(json.dumps(validation, indent=2))
+          PY
+
+      - name: Deterministic byte-for-byte catalog rebuild
+        run: |
+          rm -rf /tmp/phase2-structural-catalog-v2
+          mkdir -p /tmp/phase2-structural-catalog-v2
+          python scripts/phase2_run_balanced_structural_search_v2.py \
+            --anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --upstream-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --output /tmp/phase2-structural-catalog-v2/catalog.csv \
+            --validation /tmp/phase2-structural-catalog-v2/validation.json \
+            --max-scenarios 100000 \
+            --max-loop-intermediate-anchors 4
+          cmp outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv /tmp/phase2-structural-catalog-v2/catalog.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a = json.loads(Path('outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json').read_text())
+          b = json.loads(Path('/tmp/phase2-structural-catalog-v2/validation.json').read_text())
+          for payload in (a, b):
+              payload['lineage'].pop('scenario_catalog')
+              payload['lineage'].pop('scenario_catalog_sha256')
+          assert a == b
+          PY
+
+      - name: Guard topology-neutral deterministic V2 search
+        run: |
+          FILES="src/phase2_balanced_structural_search.py scripts/phase2_run_balanced_structural_search_v2.py"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|08_candidate_routes|route_variants\.csv|current_service_baseline\.csv' $FILES
+          ! grep -n -E 'primary recommendation|runner-up|recommended topology' $FILES
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-reduced-path-matrix-v2...HEAD
+
+      - name: Persist validated Structural Catalog V2
+        run: |
+          git config user.name "phase2-structural-catalog-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/structural_catalog_v2
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist audited Structural Catalog V2 [skip ci]"
+            git push origin HEAD:phase2-structural-catalog-v2
+          fi
+
+      - name: Upload Structural Catalog V2 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-structural-catalog-v2-${{ github.sha }}
+          retention-days: 90
+          path: outputs/phase2/structural_catalog_v2
