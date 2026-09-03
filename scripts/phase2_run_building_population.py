@@ -2,8 +2,9 @@
 """Canonical fail-closed entrypoint for Phase 2 building population.
 
 The current official ISTAT 2023 regional package is identified from the package
-contents, not from a guessed filename. Header/schema discovery inspects only the
-first rows in read-only mode, then loads the selected table exactly once.
+contents, not from a guessed filename. Building allocations are spatially split
+by census section and accessibility is evaluated at a representative point of
+each building-section intersection, preserving boundary integrity.
 """
 from __future__ import annotations
 
@@ -14,8 +15,10 @@ from pathlib import Path
 import sys
 import zipfile
 
+import geopandas as gpd
 from openpyxl import load_workbook
 import pandas as pd
+from shapely.geometry import Point
 
 import phase2_build_building_population as impl
 
@@ -38,8 +41,6 @@ def _single(items: list, label: str):
 
 
 def _workbook_member(names: list[str]) -> str:
-    # The URL itself fixes the release year. Do not require the provider to repeat
-    # "2023" in the internal filename, which is not part of the data contract.
     preferred = [
         n for n in names
         if n.lower().endswith(".xlsx")
@@ -202,7 +203,179 @@ def load_istat_2023_sections(source_dir: Path, selected_codes: set[str]):
     return out, info
 
 
+def build_section_pieces(buildings: gpd.GeoDataFrame, section_geometry: gpd.GeoDataFrame) -> pd.DataFrame:
+    eligible = buildings.loc[
+        buildings["eligible_primary"] | buildings["eligible_fallback"],
+        [
+            "CLASSREF", "footprint_area_m2", "dbgt_volume_complete", "dbgt_volume_proxy_m3",
+            "eligible_primary", "eligible_fallback", "allocation_weight_basis", "geometry",
+        ],
+    ].copy()
+    sec = section_geometry[["section_id", "municipality_code", "geometry"]].copy()
+    joined = gpd.sjoin(eligible, sec, how="inner", predicate="intersects")
+    sec_geom = sec.geometry.to_dict()
+    rows = []
+    for row in joined.itertuples():
+        inter = row.geometry.intersection(sec_geom[row.index_right])
+        area = float(inter.area) if not inter.is_empty else 0.0
+        if area <= 0:
+            continue
+        piece_point = inter.representative_point()
+        footprint_area = float(row.footprint_area_m2)
+        if bool(row.dbgt_volume_complete) and pd.notna(row.dbgt_volume_proxy_m3) and footprint_area > 0:
+            weight = float(row.dbgt_volume_proxy_m3) * area / footprint_area
+            basis = "DBGT_VOLUME_PROXY_COMPLETE_PRORATED_BY_SECTION_INTERSECTION"
+        else:
+            weight = area
+            basis = "DBGT_FOOTPRINT_SECTION_INTERSECTION_AREA"
+        rows.append({
+            "building_id": row.CLASSREF,
+            "section_id": row.section_id,
+            "municipality_code": row.municipality_code,
+            "eligible_primary": bool(row.eligible_primary),
+            "eligible_fallback": bool(row.eligible_fallback),
+            "intersection_area_m2": area,
+            "allocation_weight": weight,
+            "allocation_weight_basis_piece": basis,
+            "piece_x_utm32": float(piece_point.x),
+            "piece_y_utm32": float(piece_point.y),
+            "piece_representative_point_epistemic_status": "DERIVED_FROM_DBGT_SECTION_INTERSECTION",
+            "weight_epistemic_status": "DERIVED_FROM_DBGT_GEOMETRY_AND_AVAILABLE_VOLUME",
+        })
+    return pd.DataFrame(rows)
+
+
+def compute_accessibility(
+    building_allocations: pd.DataFrame,
+    building_points: pd.DataFrame,
+    gate_b_dir: Path,
+) -> pd.DataFrame:
+    del building_points
+    _, _, _, network_minutes, tree, node_ids, _ = impl.build_gate_b_access(gate_b_dir)
+    core_alloc = building_allocations.loc[
+        building_allocations["municipality_code"].isin(impl.CORE_CODES)
+    ].copy()
+    required = {"piece_x_utm32", "piece_y_utm32"}
+    if not required.issubset(core_alloc.columns):
+        raise RuntimeError(f"building-section piece coordinates missing: {required - set(core_alloc.columns)}")
+    distances, indexes = tree.query(core_alloc[["piece_x_utm32", "piece_y_utm32"]].to_numpy(), k=1)
+    core_alloc["nearest_graph_node_id"] = [node_ids[int(i)] for i in indexes]
+    core_alloc["connector_distance_m"] = [float(v) for v in distances]
+    core_alloc["connector_walk_min"] = core_alloc["connector_distance_m"] / impl.CONNECTOR_M_PER_MIN
+    core_alloc["connector_within_limit"] = core_alloc["connector_distance_m"] <= impl.POP_CONNECTOR_MAX_M
+    core_alloc["network_walk_min_to_gtfs_stop"] = core_alloc["nearest_graph_node_id"].map(network_minutes)
+    core_alloc["walk_min_to_nearest_gtfs_stop"] = (
+        core_alloc["network_walk_min_to_gtfs_stop"] + core_alloc["connector_walk_min"]
+    )
+    core_alloc.loc[
+        ~core_alloc["connector_within_limit"] | core_alloc["network_walk_min_to_gtfs_stop"].isna(),
+        "walk_min_to_nearest_gtfs_stop",
+    ] = math.nan
+    for threshold in (5, 8, 10, 12):
+        core_alloc[f"covered_{threshold}min"] = core_alloc[
+            "walk_min_to_nearest_gtfs_stop"
+        ].le(threshold).fillna(False)
+    core_alloc["accessibility_epistemic_status"] = (
+        "MODEL_OUTPUT_GATE_B_WALK_GRAPH_BUILDING_SECTION_PIECE_REPRESENTATIVE_POINT"
+    )
+    return core_alloc
+
+
+def boundary_comparison(
+    building_allocations: pd.DataFrame,
+    building_points: pd.DataFrame,
+    gate_b_dir: Path,
+    core_boundaries_path: Path,
+) -> pd.DataFrame:
+    del building_points
+    boundaries = gpd.read_file(core_boundaries_path).to_crs(32632)
+    boundaries["municipality_code"] = boundaries["PRO_COM_T"].map(impl.normalise_municipality)
+    boundary_map = boundaries.set_index("municipality_code").geometry.to_dict()
+
+    cells = pd.read_csv(gate_b_dir / "population_cells_real.csv")
+    cells["municipality_code"] = cells["PRO_COM_T"].map(impl.normalise_municipality)
+    cell_pts = gpd.GeoDataFrame(cells, geometry=gpd.points_from_xy(cells.lon, cells.lat), crs=4326).to_crs(32632)
+    cell_pts["distance_to_municipal_boundary_m"] = [
+        row.geometry.distance(boundary_map[row.municipality_code].boundary)
+        for row in cell_pts.itertuples()
+    ]
+    v1_band = cell_pts.loc[
+        cell_pts["distance_to_municipal_boundary_m"] <= impl.BOUNDARY_COMPARISON_BAND_M
+    ]
+    v1 = v1_band.groupby("municipality_code")["pop_calibrated_2025"].sum().to_dict()
+
+    alloc = building_allocations.loc[
+        building_allocations["municipality_code"].isin(impl.CORE_CODES)
+    ].copy()
+    alloc["distance_to_municipal_boundary_m"] = [
+        Point(float(r.piece_x_utm32), float(r.piece_y_utm32)).distance(
+            boundary_map[r.municipality_code].boundary
+        )
+        for r in alloc.itertuples()
+    ]
+    v2_band = alloc.loc[
+        alloc["distance_to_municipal_boundary_m"] <= impl.BOUNDARY_COMPARISON_BAND_M
+    ]
+    v2 = v2_band.groupby("municipality_code")["building_piece_population_model"].sum().to_dict()
+    return pd.DataFrame([
+        {
+            "municipality_code": code,
+            "boundary_band_m_assumption": impl.BOUNDARY_COMPARISON_BAND_M,
+            "v1_worldpop_population_near_boundary": float(v1.get(code, 0.0)),
+            "v2_building_population_near_boundary": float(v2.get(code, 0.0)),
+            "v2_minus_v1_population_near_boundary": float(v2.get(code, 0.0) - v1.get(code, 0.0)),
+            "epistemic_status": "MODEL_OUTPUT_SPATIAL_COMPARISON",
+        }
+        for code in sorted(impl.CORE_CODES)
+    ])
+
+
+def spatial_distribution_comparison(
+    building_allocations: pd.DataFrame,
+    building_points: pd.DataFrame,
+    gate_b_dir: Path,
+) -> pd.DataFrame:
+    del building_points
+    cells = pd.read_csv(gate_b_dir / "population_cells_real.csv")
+    cells["municipality_code"] = cells["PRO_COM_T"].map(impl.normalise_municipality)
+    cells_gdf = gpd.GeoDataFrame(
+        cells,
+        geometry=gpd.points_from_xy(cells.lon, cells.lat),
+        crs=4326,
+    ).to_crs(32632)
+    cells_gdf["x"] = cells_gdf.geometry.x
+    cells_gdf["y"] = cells_gdf.geometry.y
+    alloc = building_allocations.loc[
+        building_allocations["municipality_code"].isin(impl.CORE_CODES)
+    ].copy()
+    rows = []
+    for code in sorted(impl.CORE_CODES) + ["CORE_TOTAL"]:
+        v1 = cells_gdf if code == "CORE_TOTAL" else cells_gdf.loc[cells_gdf["municipality_code"] == code]
+        v2 = alloc if code == "CORE_TOTAL" else alloc.loc[alloc["municipality_code"] == code]
+        w1 = v1["pop_calibrated_2025"].astype(float)
+        w2 = v2["building_piece_population_model"].astype(float)
+        x1 = float((v1["x"] * w1).sum() / w1.sum())
+        y1 = float((v1["y"] * w1).sum() / w1.sum())
+        x2 = float((v2["piece_x_utm32"] * w2).sum() / w2.sum()) if w2.sum() else math.nan
+        y2 = float((v2["piece_y_utm32"] * w2).sum() / w2.sum()) if w2.sum() else math.nan
+        shift = math.hypot(x2 - x1, y2 - y1) if math.isfinite(x2) else math.nan
+        rows.append({
+            "municipality_code": code,
+            "v1_worldpop_weighted_centroid_x_utm32": x1,
+            "v1_worldpop_weighted_centroid_y_utm32": y1,
+            "v2_building_weighted_centroid_x_utm32": x2,
+            "v2_building_weighted_centroid_y_utm32": y2,
+            "weighted_centroid_shift_m": shift,
+            "epistemic_status": "DERIVED_SPATIAL_DISTRIBUTION_COMPARISON",
+        })
+    return pd.DataFrame(rows)
+
+
 impl.load_istat_2023_sections = load_istat_2023_sections
+impl.build_section_pieces = build_section_pieces
+impl.compute_accessibility = compute_accessibility
+impl.boundary_comparison = boundary_comparison
+impl.spatial_distribution_comparison = spatial_distribution_comparison
 
 if __name__ == "__main__":
     sys.exit(impl.main())
