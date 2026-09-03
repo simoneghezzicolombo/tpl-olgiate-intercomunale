@@ -148,6 +148,8 @@ jobs:
           dbgt = m['sources']['lombardia_dbgt_attributes']
           alloc = pd.read_csv('outputs/phase2/building_population_allocations.csv')
           access = pd.read_csv('outputs/phase2/building_population_accessibility.csv')
+          core_geo_path = Path('outputs/phase2/building_population_core_pieces.geojson')
+          legacy_core_geo_path = Path('outputs/phase2/building_population_buildings_core.geojson')
           assert v['status'] == 'PASS_BUILDING_POPULATION_BUILD'
           assert v['core_posas_2025_total'] == 22914.0
           assert v['all_selected_municipalities_reconcile_exactly'] is True
@@ -185,6 +187,20 @@ jobs:
           for frame in (alloc, access):
               assert {'piece_x_utm32','piece_y_utm32','piece_point_epistemic_status'}.issubset(frame.columns)
               assert frame[['piece_x_utm32','piece_y_utm32']].notna().all().all()
+          assert core_geo_path.is_file()
+          assert not legacy_core_geo_path.exists()
+          core_geo = json.loads(core_geo_path.read_text())
+          features = core_geo.get('features', [])
+          assert len(features) == len(access)
+          core_geo_population = sum(float(f['properties']['building_piece_population_model']) for f in features)
+          assert abs(core_geo_population - v['core_building_population_located']) <= 1e-7
+          assert v['core_spatial_export_status'] == 'MODEL_OUTPUT_CORE_BUILDING_SECTION_PIECE_POINT'
+          assert v['core_spatial_export_file'] == 'building_population_core_pieces.geojson'
+          assert v['core_spatial_export_feature_count'] == len(access)
+          assert abs(v['core_spatial_export_population_model'] - v['core_building_population_located']) <= 1e-7
+          assert v['legacy_whole_building_core_geojson_emitted'] is False
+          assert m['core_spatial_export']['whole_building_core_membership_rule_used'] is False
+          assert m['core_spatial_export']['legacy_whole_building_core_geojson_emitted'] is False
           assert v['final_stop_ranking_produced'] is False
           assert v['final_network_selected'] is False
           assert v['headway_modified'] is False
