@@ -1,0 +1,155 @@
+name: Phase 2 Reference Service Plan Shortlist V2
+
+on:
+  push:
+    branches:
+      - phase2-passenger-gjt-v2
+    paths:
+      - 'src/phase2_service_plan_tournament_v2.py'
+      - 'scripts/phase2_build_reference_service_plan_shortlist_v2.py'
+      - 'tests/test_phase2_service_plan_tournament_v2.py'
+      - 'docs/PHASE2_DECISION_CONTRACT_V2.md'
+      - '.github/workflows/phase2-reference-service-plan-shortlist-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-reference-service-plan-shortlist-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/reference_service_plan_shortlist_v2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile shortlist engine
+        run: |
+          python -m py_compile src/phase2_service_plan_tournament_v2.py
+          python -m py_compile scripts/phase2_build_reference_service_plan_shortlist_v2.py
+
+      - name: Run tournament core tests
+        run: python -m pytest -q tests/test_phase2_service_plan_tournament_v2.py
+
+      - name: Materialise reference service-plan shortlist
+        run: >-
+          python scripts/phase2_build_reference_service_plan_shortlist_v2.py
+          --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz
+          --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+          --territorial outputs/phase2/territorial_demand_v2/scenario_territorial_commuting_addressability_v2.csv.gz
+          --territorial-validation outputs/phase2/territorial_demand_v2/territorial_commuting_addressability_v2_validation.json
+          --service-feasibility outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz
+          --service-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json
+          --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv
+          --operational outputs/phase2/operational_screening_v2/operational_screening_v2.csv
+          --operational-validation outputs/phase2/operational_screening_v2/operational_screening_v2_validation.json
+          --s8-feeder outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2.csv.gz
+          --s8-validation outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2_validation.json
+          --output $OUTDIR/reference_service_plan_shortlist_v2.csv
+          --validation $OUTDIR/reference_service_plan_shortlist_v2_validation.json
+
+      - name: Validate shortlist semantics
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root=Path('outputs/phase2/reference_service_plan_shortlist_v2')
+          v=json.loads((root/'reference_service_plan_shortlist_v2_validation.json').read_text())
+          assert v['status']=='PASS_REFERENCE_SERVICE_PLAN_SHORTLIST_V2_BUILD'
+          assert v['contract']=='PHASE2_REFERENCE_SERVICE_PLAN_SHORTLIST_V2'
+          assert v['reference_budget_bus_km_year']==111419.0
+          assert v['scenario_count_upstream']==100000
+          assert v['reference_feasible_scenario_count_upstream']==69186
+          assert v['passenger_facing_plan_signature_count']==96
+          assert v['recovery_sensitivities_min']==[5,10,15]
+          assert 0 < v['shortlist_scenario_plan_count'] <= v['robust_reference_feasible_scenario_plan_pair_count']
+          assert 0 < v['shortlist_unique_scenario_count'] <= 69186
+          assert 0 < v['frequent_30min_or_better_shortlist_count'] <= v['shortlist_scenario_plan_count']
+          for key in ('weighted_composite_score_used','worker_reference_assigned_to_routes','full_passenger_gjt_calculated','s8_phase_selected','joint_vehicle_block_timetable_feasibility_evaluated','exact_timetable_constructed','topology_ranked','service_policy_selected','primary_selected','runner_up_selected'):
+              assert v[key] is False, key
+          rows=[]
+          with (root/'reference_service_plan_shortlist_v2.csv').open(encoding='utf-8', newline='') as h:
+              for r in csv.DictReader(h):
+                  rows.append(r)
+                  assert float(r['annual_bus_km']) <= 111419.000001
+                  assert r['reference_budget_robust_all_recoveries']=='true'
+                  assert r['structural_shortlist']=='true'
+                  assert r['extension_access_realised']=='false'
+                  assert r['worker_reference_assigned_to_routes']=='false'
+                  assert r['s8_phase_selected']=='false'
+                  assert r['exact_timetable_constructed']=='false'
+                  assert r['topology_ranked']=='false'
+                  assert r['service_policy_selected']=='false'
+                  assert r['primary_selected']=='false' and r['runner_up_selected']=='false'
+          assert len(rows)==v['shortlist_scenario_plan_count']
+          assert len({r['plan_id'] for r in rows})==len(rows)
+          assert sum(r['frequent_service_30min_or_better']=='true' for r in rows)==v['frequent_30min_or_better_shortlist_count']
+          print(json.dumps({
+            'robust_pairs':v['robust_reference_feasible_scenario_plan_pair_count'],
+            'shortlist_plans':v['shortlist_scenario_plan_count'],
+            'unique_scenarios':v['shortlist_unique_scenario_count'],
+            'frequent_plans':v['frequent_30min_or_better_shortlist_count'],
+            'headways':v['shortlist_headway_counts'],
+            'families':v['shortlist_family_counts'],
+          }, indent=2))
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/reference-service-plan-shortlist-v2
+          mkdir -p /tmp/reference-service-plan-shortlist-v2
+          python scripts/phase2_build_reference_service_plan_shortlist_v2.py \
+            --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz \
+            --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json \
+            --territorial outputs/phase2/territorial_demand_v2/scenario_territorial_commuting_addressability_v2.csv.gz \
+            --territorial-validation outputs/phase2/territorial_demand_v2/territorial_commuting_addressability_v2_validation.json \
+            --service-feasibility outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz \
+            --service-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json \
+            --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv \
+            --operational outputs/phase2/operational_screening_v2/operational_screening_v2.csv \
+            --operational-validation outputs/phase2/operational_screening_v2/operational_screening_v2_validation.json \
+            --s8-feeder outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2.csv.gz \
+            --s8-validation outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2_validation.json \
+            --output /tmp/reference-service-plan-shortlist-v2/shortlist.csv \
+            --validation /tmp/reference-service-plan-shortlist-v2/validation.json >/dev/null
+          cmp $OUTDIR/reference_service_plan_shortlist_v2.csv /tmp/reference-service-plan-shortlist-v2/shortlist.csv
+          cmp $OUTDIR/reference_service_plan_shortlist_v2_validation.json /tmp/reference-service-plan-shortlist-v2/validation.json
+
+      - name: Guard against hidden selection
+        run: |
+          FILES="src/phase2_service_plan_tournament_v2.py scripts/phase2_build_reference_service_plan_shortlist_v2.py docs/PHASE2_DECISION_CONTRACT_V2.md"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -n -E 'weighted_score|primary_selected.: true|runner_up_selected.: true|service_policy_selected.: true|topology_selected.: true|s8_phase_selected.: true' $FILES
+          git diff --check
+
+      - name: Persist validated shortlist V2
+        run: |
+          git config user.name "phase2-reference-shortlist-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add $OUTDIR
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist reference service-plan shortlist V2 [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+
+      - name: Upload shortlist evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-reference-service-plan-shortlist-v2-${{ github.sha }}
+          retention-days: 90
+          path: ${{ env.OUTDIR }}
