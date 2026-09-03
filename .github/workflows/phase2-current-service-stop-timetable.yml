@@ -23,7 +23,7 @@ on:
       - '.github/workflows/phase2-current-service-stop-timetable.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   current-service-stop-timetable:
@@ -90,8 +90,10 @@ jobs:
           assert sum(r['active_on_reference_date']=='True' for r in stop_times)==990
           assert len(matrix)==3089
           assert sum(r['cell_state']=='PUBLISHED_TIME' for r in matrix)==1145
-          assert all(r['unpublished_time_interpolated']=='False' for r in matrix)
+          assert sum(r['cell_state']=='OUTSIDE_PUBLISHED_TIMED_SPAN' for r in matrix)==1477
+          assert sum(r['cell_state']=='NO_PUBLISHED_TIME_WITHIN_COLUMN_SPAN' for r in matrix)==454
           assert sum(r['cell_state']=='EXPLICITLY_SUSPENDED_STOP' for r in matrix)==13
+          assert all(r['unpublished_time_interpolated']=='False' for r in matrix)
           assert stops
           assert all(r['runtime_semantics']=='SCHEDULED_PUBLISHED_TIME_NOT_OBSERVED_RUNTIME' for r in trips)
           assert all(r['epistemic_status']=='RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE' for r in stop_times)
@@ -117,6 +119,24 @@ jobs:
           ! grep -E "outputs/current_service_baseline.csv|scripts/05_current_service.py" \
             src/phase2_current_service_stop_timetable.py \
             src/phase2_current_service_matrix.py
+
+      - name: Persist validated outputs on branch
+        if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
+        shell: bash
+        run: |
+          mkdir -p outputs/phase2
+          for file in /tmp/current_service/*; do
+            cp "$file" "outputs/phase2/$(basename "$file")"
+          done
+          if git diff --quiet -- outputs/phase2/current_service_*2026-09-03*; then
+            echo "Committed outputs already match regenerated evidence."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/phase2/current_service_*2026-09-03*
+          git commit -m "data(phase2-current): materialise audited stop timetable [skip ci]"
+          git push origin HEAD:phase2-current-service-stop-timetable
 
       - name: Upload reproducible current-service evidence
         uses: actions/upload-artifact@v4
