@@ -1,0 +1,163 @@
+name: Analysis Meratese mobility
+
+on:
+  push:
+    branches: [analysis-meratese-mobility]
+    paths:
+      - .github/workflows/analysis-meratese-mobility.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-istat-2019:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: analysis-meratese-mobility
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fetch official ISTAT 2019 municipal mobility and population
+        run: |
+          python - <<'PY'
+          import csv, io, json, pathlib, urllib.parse, urllib.request
+
+          OUT = pathlib.Path('data/analysis')
+          OUT.mkdir(parents=True, exist_ok=True)
+
+          communes = {
+              '097002':'Airuno',
+              '097010':'Brivio',
+              '097012':'Calco',
+              '097020':'Cernusco Lombardone',
+              '097039':'Imbersago',
+              '097092':'La Valletta Brianza',
+              '097044':'Lomagna',
+              '097048':'Merate',
+              '097053':'Montevecchia',
+              '097058':'Olgiate Molgora',
+              '097061':'Osnago',
+              '097062':"Paderno d'Adda",
+              '097071':'Robbiate',
+              '097074':'Santa Maria Hoe',
+              '097091':'Verderio',
+          }
+          codes = list(communes)
+          base = 'https://esploradati.istat.it/SDMXWS/rest/data'
+          accept = 'application/vnd.sdmx.data+csv;version=1.0.0'
+
+          def fetch(flow, key, filename):
+              url = f'{base}/IT1,{flow},1.0/{key}?startPeriod=2019&endPeriod=2019'
+              req = urllib.request.Request(url, headers={'Accept': accept, 'User-Agent': 'tpl-olgiate-intercomunale/analysis'})
+              with urllib.request.urlopen(req, timeout=300) as r:
+                  raw = r.read()
+                  print(flow, r.status, r.headers.get('Content-Type'), len(raw))
+              (OUT/filename).write_bytes(raw)
+              return raw.decode('utf-8-sig')
+
+          # 10 dimensions documented by ISTAT/AgID:
+          # FREQ.REF_AREA.INDICATOR.GENDER.AGE_NOCLASS.CITIZENSHIP.EDU_ATTAIN.CUR_ACT_STAT.LOC_DEST.REAS_COMMUTING
+          code_or = '+'.join(codes)
+          mobility_key = f'A.{code_or}.RP_COM_DAY.T.TOTAL.TOTAL.ALL.99..'
+          mobility_text = fetch('DF_DCSS_ISTR_LAV_PEN_2_TV_5', mobility_key, 'istat_2019_mobility_raw.csv')
+
+          # Population resident, municipal level. Dimensions: FREQ.REF_AREA.INDICATOR
+          pop_key = f'A.{code_or}.RESPOP_AV'
+          pop_text = fetch('DF_DCSS_FAM_POP_TV_1', pop_key, 'istat_2019_population_raw.csv')
+
+          def read_rows(text):
+              return list(csv.DictReader(io.StringIO(text)))
+
+          mob = read_rows(mobility_text)
+          pop = read_rows(pop_text)
+          print('mobility columns:', list(mob[0]) if mob else [])
+          print('mobility rows:', len(mob))
+          print('population columns:', list(pop[0]) if pop else [])
+          print('population rows:', len(pop))
+
+          # Keep all work/study x inside/outside combinations, not only the five AgID KPIs.
+          vals = {c:{} for c in codes}
+          for r in mob:
+              c = r.get('REF_AREA','')
+              if c not in vals: continue
+              loc = r.get('LOC_DEST','')
+              reason = r.get('REAS_COMMUTING','')
+              try: v = float(r['OBS_VALUE'])
+              except (ValueError, TypeError, KeyError): continue
+              vals[c][(loc, reason)] = v
+
+          pops = {}
+          for r in pop:
+              c = r.get('REF_AREA','')
+              if c not in communes: continue
+              try: pops[c] = float(r['OBS_VALUE'])
+              except (ValueError, TypeError, KeyError): pass
+
+          metrics = [
+              ('commuters_total','ALL','ALL'),
+              ('commuters_outside','OMPUR','ALL'),
+              ('commuters_inside','SMPUR','ALL'),
+              ('work_total','ALL','WK'),
+              ('work_outside','OMPUR','WK'),
+              ('work_inside','SMPUR','WK'),
+              ('study_total','ALL','STD'),
+              ('study_outside','OMPUR','STD'),
+              ('study_inside','SMPUR','STD'),
+          ]
+          outpath = OUT/'meratese_mobility_2019.csv'
+          fields = ['istat','comune','population_2019'] + [m[0] for m in metrics]
+          with outpath.open('w', newline='', encoding='utf-8') as f:
+              w=csv.DictWriter(f, fieldnames=fields)
+              w.writeheader()
+              for c,n in communes.items():
+                  row={'istat':c,'comune':n,'population_2019':pops.get(c,'')}
+                  for name,loc,reason in metrics:
+                      row[name]=vals[c].get((loc,reason),'')
+                  w.writerow(row)
+
+          # Diagnostics / provenance, including exact API URLs and algebra checks.
+          diagnostics=[]
+          for c,n in communes.items():
+              d=vals[c]
+              total=d.get(('ALL','ALL'))
+              outside=d.get(('OMPUR','ALL'))
+              inside=d.get(('SMPUR','ALL'))
+              work=d.get(('ALL','WK'))
+              study=d.get(('ALL','STD'))
+              diagnostics.append({
+                  'istat':c,'comune':n,
+                  'outside_plus_inside_minus_total': None if None in (outside,inside,total) else outside+inside-total,
+                  'work_plus_study_minus_total': None if None in (work,study,total) else work+study-total,
+              })
+          meta={
+              'source':'ISTAT EsploraDati SDMX REST API',
+              'year':2019,
+              'mobility_flow':'DF_DCSS_ISTR_LAV_PEN_2_TV_5',
+              'population_flow':'DF_DCSS_FAM_POP_TV_1',
+              'mobility_key':mobility_key,
+              'population_key':pop_key,
+              'definitions':{'OMPUR':'fuori comune','SMPUR':'stesso comune','WK':'lavoro','STD':'studio'},
+              'diagnostics':diagnostics,
+          }
+          (OUT/'meratese_mobility_2019_provenance.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2),encoding='utf-8')
+          PY
+
+      - name: Show extracted values
+        run: |
+          cat data/analysis/meratese_mobility_2019.csv
+          cat data/analysis/meratese_mobility_2019_provenance.json
+
+      - name: Commit reproducible 2019 data snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/analysis/istat_2019_mobility_raw.csv data/analysis/istat_2019_population_raw.csv data/analysis/meratese_mobility_2019.csv data/analysis/meratese_mobility_2019_provenance.json
+          git diff --cached --quiet && exit 0
+          git commit -m "analysis: add official ISTAT 2019 Meratese mobility snapshot"
+          git push origin HEAD:analysis-meratese-mobility
