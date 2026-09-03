@@ -114,8 +114,9 @@ def main() -> int:
             return 0
         if not args.input.exists():
             print(
-                f"BLOCKED_BY_GATE_C_AND_D: missing integrated {CONTRACT_VERSION} input {args.input}. "
-                "Gate E will not reuse legacy hardcoded route/service outputs.",
+                f"BLOCKED_BY_GATE_D_OR_MISSING_INTEGRATED_INPUT: missing {CONTRACT_VERSION} input {args.input}. "
+                "Gate C is formally PASS, but Gate E still requires validated Gate D route metrics and will not "
+                "reuse legacy hardcoded route/service outputs.",
                 file=sys.stderr,
             )
             return 2
