@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gate_f_gate_e_policy.schema.json",
+  "title": "Gate F explicit Gate E comparison policy",
+  "type": "object",
+  "required": ["schema_version", "comparison_id", "service_day_group", "headway_band_id", "fleet_measure"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "comparison_id": {"type": "string", "minLength": 1},
+    "service_day_group": {"type": "string", "minLength": 1},
+    "headway_band_id": {"type": "string", "minLength": 1},
+    "fleet_measure": {
+      "enum": ["DIRECTION_LOCKED_TOTAL", "HUB_INTERLINING_ALLOWED"]
+    }
+  }
+}
