@@ -5,16 +5,20 @@ on:
     branches: [phase2-current-service-stop-timetable]
     paths:
       - 'src/phase2_current_service_stop_timetable.py'
+      - 'src/phase2_current_service_matrix.py'
       - 'scripts/phase2_build_current_service_stop_timetable.py'
       - 'tests/test_phase2_current_service_stop_timetable.py'
+      - 'tests/test_phase2_current_service_matrix.py'
       - 'docs/PHASE2_CURRENT_SERVICE_STOP_TIMETABLE.md'
       - '.github/workflows/phase2-current-service-stop-timetable.yml'
       - 'outputs/phase2/current_service_*2026-09-03*'
   pull_request:
     paths:
       - 'src/phase2_current_service_stop_timetable.py'
+      - 'src/phase2_current_service_matrix.py'
       - 'scripts/phase2_build_current_service_stop_timetable.py'
       - 'tests/test_phase2_current_service_stop_timetable.py'
+      - 'tests/test_phase2_current_service_matrix.py'
       - 'docs/PHASE2_CURRENT_SERVICE_STOP_TIMETABLE.md'
       - '.github/workflows/phase2-current-service-stop-timetable.yml'
 
@@ -46,11 +50,16 @@ jobs:
         run: >-
           python -m py_compile
           src/phase2_current_service_stop_timetable.py
+          src/phase2_current_service_matrix.py
           scripts/phase2_build_current_service_stop_timetable.py
           tests/test_phase2_current_service_stop_timetable.py
+          tests/test_phase2_current_service_matrix.py
 
       - name: Unit and adversarial parser tests
-        run: pytest -q tests/test_phase2_current_service_stop_timetable.py
+        run: >-
+          pytest -q
+          tests/test_phase2_current_service_stop_timetable.py
+          tests/test_phase2_current_service_matrix.py
 
       - name: Build from pinned Gate C primary sources
         run: >-
@@ -67,6 +76,7 @@ jobs:
           root=Path('/tmp/current_service')
           trips=list(csv.DictReader((root/'current_service_trips_2026-09-03.csv').open(encoding='utf-8')))
           stop_times=list(csv.DictReader((root/'current_service_stop_times_2026-09-03.csv').open(encoding='utf-8')))
+          matrix=list(csv.DictReader((root/'current_service_stop_trip_matrix_2026-09-03.csv').open(encoding='utf-8')))
           stops=list(csv.DictReader((root/'current_service_pdf_stop_rows_2026-09-03.csv').open(encoding='utf-8')))
           conditions=list(csv.DictReader((root/'current_service_temporary_conditions_2026-09-03.csv').open(encoding='utf-8')))
           validation=json.load((root/'current_service_stop_timetable_validation.json').open(encoding='utf-8'))
@@ -74,8 +84,14 @@ jobs:
           assert len(trips)==119
           assert sum(r['active_on_reference_date']=='True' for r in trips)==104
           assert {r['route_id'] for r in trips}=={'D184','D185','D150','D170'}
+          assert all(r['operator_trip_id']=='' for r in trips)
+          assert all('NOT_OPERATOR_TRIP_ID' in r['trip_identity_semantics'] for r in trips)
           assert len(stop_times)==1145
           assert sum(r['active_on_reference_date']=='True' for r in stop_times)==990
+          assert len(matrix)==3089
+          assert sum(r['cell_state']=='PUBLISHED_TIME' for r in matrix)==1145
+          assert all(r['unpublished_time_interpolated']=='False' for r in matrix)
+          assert sum(r['cell_state']=='EXPLICITLY_SUSPENDED_STOP' for r in matrix)==13
           assert stops
           assert all(r['runtime_semantics']=='SCHEDULED_PUBLISHED_TIME_NOT_OBSERVED_RUNTIME' for r in trips)
           assert all(r['epistemic_status']=='RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE' for r in stop_times)
@@ -84,8 +100,11 @@ jobs:
           assert conditions[0]['ordinary_network_baseline_replaced']=='False'
           assert validation['legacy_current_service_files_used'] is False
           assert validation['runtime_semantics']['observed_runtime_substitution'] is False
+          assert validation['runtime_semantics']['unpublished_stop_time_interpolation']=='FORBIDDEN_NOT_USED'
           assert validation['calendar_semantics']['annual_service_days']=='NOT_INFERRED'
           assert validation['historical_gtfs_crosscheck']['D185']['active_stop_patterns_on_2026_05_06']==9
+          assert validation['complete_stop_trip_cells_total']==3089
+          assert validation['operator_trip_ids_available_for_current_pdf_columns'] is False
           PY
 
       - name: Static anti-shortcut guard
@@ -93,9 +112,11 @@ jobs:
         run: |
           ! grep -R "np.random" \
             src/phase2_current_service_stop_timetable.py \
+            src/phase2_current_service_matrix.py \
             scripts/phase2_build_current_service_stop_timetable.py
           ! grep -E "outputs/current_service_baseline.csv|scripts/05_current_service.py" \
-            src/phase2_current_service_stop_timetable.py
+            src/phase2_current_service_stop_timetable.py \
+            src/phase2_current_service_matrix.py
 
       - name: Upload reproducible current-service evidence
         uses: actions/upload-artifact@v4
