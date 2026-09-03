@@ -1,78 +1,93 @@
 # Gate C — Transit integrity
 
 **Workstream:** `gate-c-workstream`
-**Baseline:** `549198743e7265b333da565ce6990f9241cfd1fd` (`antigravity-real-data`)
-**Stato:** PROVISIONAL / IN VALIDAZIONE
+**Original baseline:** `549198743e7265b333da565ce6990f9241cfd1fd`
+**Stato:** `PASS`
+**Documento di chiusura:** `docs/GATE_C_PASS.md`
 
 ## Obiettivo
 
-Gate C verifica esclusivamente l'integrità del livello di trasporto pubblico: feed GTFS ufficiali, operatori, service dates, linee D184/D185/D150/D170, fermate e pattern reali, nonché l'orario S8 derivato dalle tabelle GTFS Trenord. La geometria territoriale e lo snapping alle fermate restano dipendenze di Gate B.
+Gate C verifica l'integrità del livello TPL per D184, D185, D150, D170 e S8: fonti ufficiali, operatori, service dates, fermate, pattern, timetable S8 e distinzione tra servizio ordinario e deviazioni temporanee. Le metriche spaziali consumano gli output validati di Gate B, che è PASS.
 
-## Fonti ammesse
+## Gerarchia delle fonti
 
-### Autobus
+### Autobus, struttura GTFS
 
-Fonte primaria: snapshot GTFS ufficiale Agenzia TPL Como-Lecco-Varese / Arriva Italia + Addabus presente in `data/raw/gtfs/agency_arriva`.
+Lo snapshot GTFS ufficiale Agenzia TPL Como-Lecco-Varese / Arriva in `data/raw/gtfs/agency_arriva` è usato esclusivamente nel proprio periodo dichiarato `2026-01-01` → `2026-06-08`.
 
-Lo snapshot dichiara in `feed_info.txt`:
+Da questo feed derivano:
 
-- `feed_start_date = 20260101`;
-- `feed_end_date = 20260608`;
-- `feed_version = 20251217`.
+- presenza di D184, D185, D150, D170;
+- operatori tramite `routes.agency_id -> agency.agency_id`;
+- service dates tramite `calendar.txt` + `calendar_dates.txt`;
+- fermate e pattern tramite `trips.txt`, `stop_times.txt`, `stops.txt`.
 
-`calendar.txt` contiene solo l'intestazione; la risoluzione dei giorni di servizio deve quindi applicare `calendar_dates.txt`. È vietato dedurre il servizio da stringhe nel `service_id` quando esistono le tabelle GTFS previste per il calendario.
+Poiché `calendar.txt` è header-only, l'attivazione effettiva dei servizi è ricavata da `calendar_dates.txt`. È vietato inferire il calendario dal testo del `service_id`.
 
-Le quattro linee core D184, D185, D150 e D170 risultano nel feed Arriva. L'operatore viene risolto relazionalmente tramite `routes.agency_id -> agency.agency_id`, non inserito a mano.
+### Autobus, servizio corrente
+
+Per il 3 settembre 2026 il GTFS bus conservato è scaduto. Gate C non lo estende e non crea un GTFS sostitutivo.
+
+La validità corrente viene verificata dai timetable ufficiali Lecco Trasporti / Arriva:
+
+- `https://www.leccotrasporti.it/percorsi/estivo/linea-d184.pdf`
+- `https://www.leccotrasporti.it/percorsi/estivo/linea-d185.pdf`
+- `https://www.leccotrasporti.it/percorsi/estivo/linea-d150.pdf`
+- `https://www.leccotrasporti.it/percorsi/estivo/linea-d170.pdf`
+
+Tutti dichiarano validità 9 giugno → 13 settembre 2026. `scripts/gate_c_live_bus_timetables.py` scarica i PDF, calcola SHA256, verifica direzioni e validità e associa day-code e note A/B/D/V usando coordinate PDF.
+
+Questi record sono `RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE`, mai etichettati come GTFS.
 
 ### Ferrovia
 
-Fonte primaria: snapshot GTFS ufficiale Trenord in `data/raw/gtfs/rail_trenord`.
+Per il servizio corrente S8 si usa il GTFS ufficiale Regione Lombardia / Trenord:
 
-La linea S8 è identificata tramite `routes.route_id == S8`; gli eventi a Olgiate-Calco-Brivio devono essere estratti da `trips.txt`, `stop_times.txt` e `stops.txt`.
+- dataset: `https://www.dati.lombardia.it/Mobilit-e-trasporti/Orario-Ferroviario-Regionale-Gtfs/3z4k-mxz9`
+- download: `https://www.dati.lombardia.it/download/3z4k-mxz9/application/zip`
 
-Lo snapshot ferroviario conservato nel repository non contiene né `calendar.txt` né `calendar_dates.txt`. Di conseguenza Gate C può derivare gli eventi/orari S8 presenti nello snapshot, mantenendo il relativo `service_id`, ma non può attestare con regole GTFS standard l'attivazione di un trip in una specifica data civile. Tale limite è classificato `PROVISIONAL_SERVICE_DATE_UNRESOLVED`.
+`scripts/gate_c_live_trenord.py` scarica il feed, ne verifica le tabelle core, applica `calendar.txt` + `calendar_dates.txt`, seleziona S8 e risolve `S01514` / `Olgiate-Calco-Brivio`.
 
-## Invalidazioni esplicite
+Lo snapshot Trenord storico privo di calendario resta una fonte congelata ma non viene usato per dichiarare l'attività di una specifica data corrente.
 
-I seguenti artefatti **non sono evidenza ammessa per Gate C**:
+## Regole epistemiche
 
-| Artefatto | Stato Gate C | Motivo |
-|---|---|---|
-| `data/raw/gtfs/network_structural/` | `RECONSTRUCTED`, `INVALIDATED` | pseudo-GTFS costruito dal progetto, non feed istituzionale |
-| `data/raw/gtfs/network_2026_emergency/` | `RECONSTRUCTED`, `INVALIDATED` | deviazione costruita manualmente, inclusi tempi a passo fisso |
-| `scripts/02_parse_gtfs.py` | `INVALIDATED_AS_EVIDENCE` | contiene orari, sequenze e route metadata hard-coded |
-| `src/gtfs_loader.py` | `INVALIDATED_AS_EVIDENCE` | contiene database fermate manuale e calendario ricostruito; la riga `SCOLASTICO` ha inoltre start date successiva alla end date |
-| `scripts/05_current_service.py` | `INVALIDATED_AS_EVIDENCE` per metriche transit | baseline di corse/headway/coincidenze inserita a mano |
-| `src/timetable_engine.py::TRENI_S8_VIGENTI` | `INVALIDATED_AS_EVIDENCE` | minuti S8 hard-coded pur essendo disponibile il GTFS Trenord |
-| `scripts/11_train_coordination.py` | `INVALIDATED_AS_EVIDENCE` | configurazioni nodo e coincidenze giornaliere hard-coded |
+- record letti direttamente da fonti ufficiali: `FACT`;
+- metriche calcolate direttamente da GTFS ufficiale: `DERIVED_FROM_OFFICIAL_GTFS` o `DERIVED_FROM_LIVE_OFFICIAL_GTFS`;
+- colonne ricostruite dai timetable bus ufficiali: `RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE`;
+- scenari di rete futuri: `MODEL OUTPUT` / `ASSUMPTION` secondo il Gate downstream;
+- pseudo-GTFS e metriche manuali legacy: `INVALIDATED_AS_EVIDENCE`.
 
-Questi file possono rimanere nel repository come legacy finché non vengono refactorati, ma nessun risultato Gate C o downstream deve usarli come FACT.
+Una ricostruzione da timetable primario non viene mai rinominata `FACT GTFS`.
 
-## Distinzione servizio ordinario / deviazioni temporanee
+## Distinzione ordinario / temporaneo
 
-Una deviazione temporanea può essere promossa a `FACT` solo se supportata da un feed GTFS ufficiale specifico, da un avviso ufficiale dell'ente/operatore con percorso e validità verificabili oppure da altra fonte primaria equivalente. Non è ammesso costruire una deviazione inserendo manualmente fermate o aggiungendo minuti alla percorrenza.
+La D185 del periodo corrente contiene una deviazione esplicita dovuta ai lavori al ponte di Brivio, con transito via Ponte Cantù e sospensione di `CISANO Sosta`. È una condizione temporanea di fonte primaria e non viene incorporata come geometria ordinaria storica.
 
-Lo snapshot Arriva 2025-2026 rappresenta una fonte ufficiale per il periodo da esso dichiarato. Non prova automaticamente né il servizio ordinario successivo all'8 giugno 2026 né eventuali deviazioni in vigore a settembre 2026.
+Il vecchio `network_2026_emergency` e il `+25 min` manuale restano invalidati.
 
-## Regole di calcolo
+## Quarantena legacy
 
-1. Le service dates autobus derivano da `calendar.txt` + `calendar_dates.txt` secondo GTFS.
-2. I pattern sono sequenze ordinate di `stop_id` prese da `stop_times.txt` per trip realmente attivi nella data auditata.
-3. Gli operatori derivano dalle chiavi GTFS, non dal nome della linea.
-4. Gli eventi S8 derivano dal GTFS Trenord, senza utilizzare minuti dell'ora hard-coded.
-5. L'assenza di calendario GTFS ferroviario non viene colmata interpretando il testo del `service_id`; viene riportata come limite.
-6. Risultati territoriali che richiedono confini, snapping o accessibilità sono `BLOCKED_BY_GATE_B` finché Gate B non è PASS.
+Non sono evidenza ammessa:
 
-## Condizioni per PASS definitivo
+- `data/raw/gtfs/network_structural/`;
+- `data/raw/gtfs/network_2026_emergency/`;
+- `src/gtfs_loader.py` per il database fermate/calendario manuale;
+- `src/timetable_engine.py::TRENI_S8_VIGENTI`;
+- i precedenti output hard-coded di `scripts/05_current_service.py` e `scripts/11_train_coordination.py`.
 
-Gate C potrà essere PASS solo quando:
+`scripts/02_parse_gtfs.py`, `scripts/05_current_service.py` e `scripts/11_train_coordination.py` sono fail-closed: se eseguiti terminano con errore esplicito.
 
-1. le quattro linee core sono verificate nel feed ufficiale e i relativi operatori sono risolti;
-2. service dates, corse, fermate e pattern sono derivati dalle tabelle ufficiali;
-3. l'orario S8 a Olgiate-Calco-Brivio è derivato dal GTFS Trenord;
-4. è disponibile una base ufficiale temporalmente valida per il periodo di progetto corrente, oppure il periodo di riferimento viene congelato esplicitamente a una data coperta dal feed;
-5. servizio ordinario e deviazioni temporanee sono distinti con provenance primaria;
-6. nessun output downstream usa gli artefatti ricostruiti invalidati come se fossero FACT;
-7. i test Gate C passano su clone pulito e i risultati numerici vengono ispezionati sostanzialmente.
+## Criteri di validazione
 
-Alla data del workstream (3 settembre 2026), la condizione 4 non è soddisfatta dal feed autobus conservato, che termina l'8 giugno 2026; inoltre il calendario standard del feed Trenord snapshot non è disponibile. Il verdetto resta quindi **PROVISIONAL** anche in presenza di test verdi.
+Gate C richiede contemporaneamente:
+
+1. route/operator/stop/pattern verificati dal GTFS bus ufficiale nel periodo coperto;
+2. servizio bus corrente verificato da fonte primaria valida alla data di audit senza generare dati sintetici;
+3. S8 corrente risolto da GTFS ufficiale con calendario;
+4. note di servizio e deviazioni temporanee applicate senza assunzioni nascoste;
+5. Gate B PASS per le dipendenze spaziali;
+6. legacy hard-coded non utilizzabile come evidenza;
+7. test mirati, guardrail anti-synthetic e `git diff --check` verdi su runner pulito.
+
+Tutti i criteri sono soddisfatti. Il verdetto e i risultati numerici autorevoli sono in `docs/GATE_C_PASS.md`.
