@@ -15,6 +15,10 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from src.service_contract_integrity import (  # noqa: E402
+    headway_cycle_count_audit,
+    validate_contract_cross_rows,
+)
 from src.service_math import (  # noqa: E402
     CONTRACT_VERSION,
     GATE_E_V2_COLUMNS,
@@ -125,11 +129,12 @@ def main() -> int:
             return 2
 
         plans = read_service_band_plans(args.input)
+        validate_contract_cross_rows(plans)
         if args.validate_only:
             print(f"{CONTRACT_VERSION} input valid: {len(plans)} direction-band rows")
             return 0
 
-        detail_rows = [plan.metrics() for plan in plans]
+        detail_rows = [{**plan.metrics(), **headway_cycle_count_audit(plan)} for plan in plans]
         band_rows = aggregate_service_bands(plans, float(budget["D184+D185"]))
         scenario_rows = aggregate_service_scenarios(plans, float(budget["D184+D185"]))
         write_csv(args.detail_output, detail_rows)
