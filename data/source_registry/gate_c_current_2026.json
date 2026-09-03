@@ -51,11 +51,18 @@
       "download_url": "https://www.dati.lombardia.it/download/3z4k-mxz9/application/zip",
       "verified_active_service_from": "2026-07-26",
       "verified_active_service_to": "2026-12-12",
+      "live_audit_service_date": "2026-09-03",
+      "live_download_sha256": "b4296f145b42ccb35c26085470ff4b3fd5dffe533251c0aab312312a73820ad6",
+      "live_active_service_ids_count": 2871,
+      "live_active_s8_trips_count": 74,
+      "live_olgiate_station_events_count": 74,
+      "station_stop_id": "S01514",
+      "station_name": "Olgiate-Calco-Brivio",
       "verification_aids": [
         "https://www.transit.land/feeds/f-u0n-trenord",
         "https://mobilitydatabase.org/feeds/gtfs/mdb-855"
       ],
-      "epistemic_status": "FACT_OFFICIAL_SOURCE_IDENTIFIED_INGEST_PENDING"
+      "epistemic_status": "FACT_OFFICIAL_SOURCE_AND_DERIVED_LIVE_GTFS_AUDIT"
     }
   ]
 }
