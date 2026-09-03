@@ -139,3 +139,33 @@ def test_reconciliation_keeps_posas_total_exact_with_residuals():
     )
     assert result.loc[0, "reconciliation_pass"]
     assert abs(result.loc[0, "accounted_population"] - 100) < 1e-10
+
+
+def test_reconciliation_accepts_production_allocations_with_municipality_code():
+    section_targets = pd.DataFrame({
+        "section_id": ["S1", "S2"],
+        "municipality_code": ["M", "M"],
+    })
+    allocations = pd.DataFrame({
+        "section_id": ["S1"],
+        "municipality_code": ["M"],
+        "building_piece_population_model": [70.0],
+    })
+    residuals = pd.DataFrame({
+        "section_id": ["S1", "S2"],
+        "municipality_code": ["M", "M"],
+        "unallocated_population": [0.0, 30.0],
+    })
+    municipalities = pd.DataFrame({
+        "municipality_code": ["M"],
+        "population_2025_posas_fact": [100.0],
+    })
+    result = reconcile_municipal_population(
+        building_allocations=allocations,
+        section_targets=section_targets,
+        section_residuals=residuals,
+        municipal_targets=municipalities,
+    )
+    assert result.loc[0, "reconciliation_pass"]
+    assert result.loc[0, "building_population_model"] == 70.0
+    assert result.loc[0, "section_residual_population"] == 30.0
