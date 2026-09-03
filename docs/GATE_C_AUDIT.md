@@ -1,99 +1,123 @@
 # Gate C audit findings
 
 **Workstream:** `gate-c-workstream`
-**Baseline:** `549198743e7265b333da565ce6990f9241cfd1fd`
-**Verdict corrente:** `PROVISIONAL`
+**Original baseline:** `549198743e7265b333da565ce6990f9241cfd1fd`
+**Verdict corrente:** `PASS`
+**Chiusura autorevole:** `docs/GATE_C_PASS.md`
 
-## Stato upstream verificato
+## Stato upstream
 
-- Gate A: `PASS` documentato in `docs/GATE_A_PASS.md` e `AGENT_STATUS.md`.
-- Gate B: `IN VALIDAZIONE` in `docs/GATE_B_METHOD.md`, quindi non viene trattato come PASS.
-- `AGENT_PROTOCOL.md`: non presente nella baseline; il protocollo operativo presente è `COLLABORATION_PROTOCOL.md`.
+- Gate A: `PASS`.
+- Gate B: `PASS`; computational commit validato `55d726564e13acca55ce563cc911263ac513acb0`.
+- La dipendenza spaziale di Gate C non è più bloccante.
+- `AGENT_PROTOCOL.md` non era presente nella baseline originaria; il protocollo operativo presente era `COLLABORATION_PROTOCOL.md`.
 
-Gate C non assume output spaziali di Gate B. Qualsiasi successivo conteggio basato su snapping, catchment o appartenenza territoriale dovrà essere marcato `BLOCKED_BY_GATE_B` finché Gate B non è PASS.
-
-## Finding C-01 — pseudo-GTFS ricostruito usato come se fosse sorgente
+## Finding C-01 — pseudo-GTFS ricostruito usato come sorgente
 
 **Severità:** critica
-**Stato:** corretto nel workstream / legacy invalidato
+**Stato:** `CORRECTED / INVALIDATED / QUARANTINED`
 
-`scripts/02_parse_gtfs.py` non effettua il parsing del feed istituzionale. Costruisce manualmente D184/D185, assegna sequenze fermata e orari hard-coded e genera anche una variante `network_2026_emergency` con tempi artificialmente dilatati. I test legacy `tests/test_gtfs_integrity.py` verificano soltanto la coerenza interna di questi file ricostruiti, perciò possono risultare verdi senza dimostrare la veridicità del dato transit.
+La pipeline legacy `scripts/02_parse_gtfs.py` costruiva D184/D185, fermate, orari e una variante emergenziale manualmente. I test legacy potevano quindi risultare verdi contro un dataset internamente coerente ma non istituzionale.
 
-**Azione:** Gate C legge esclusivamente `agency_arriva`, `agency_lineelecco` e `rail_trenord`. `network_structural` e `network_2026_emergency` sono `RECONSTRUCTED` + `INVALIDATED_AS_EVIDENCE`.
+`network_structural` e `network_2026_emergency` sono `RECONSTRUCTED` + `INVALIDATED_AS_EVIDENCE`. `scripts/02_parse_gtfs.py` è ora fail-closed.
 
-## Finding C-02 — service dates autobus lette dal file sbagliato
-
-**Severità:** alta
-**Stato:** corretto
-
-Nel feed Arriva ufficiale `calendar.txt` contiene solo l'intestazione. L'effettiva attivazione dei `service_id` è espressa da `calendar_dates.txt`. Un parser che guarda soltanto `calendar.txt` conclude erroneamente che non esiste alcun servizio.
-
-**Azione:** `active_service_ids()` applica prima l'eventuale calendario ordinario e poi le eccezioni GTFS di `calendar_dates.txt`, senza inferire date dal testo del `service_id`.
-
-## Finding C-03 — snapshot autobus non valido per settembre 2026
+## Finding C-02 — calendario bus effettivo in calendar_dates
 
 **Severità:** alta
-**Stato:** blocker temporale
+**Stato:** `CORRECTED`
 
-Il `feed_info.txt` Arriva nel repository dichiara validità `2026-01-01` → `2026-06-08`, versione `20251217`. La pagina Open Data dell'Agenzia TPL Como-Lecco-Varese consultata il 3 settembre 2026 continua a presentare come dataset GTFS pubblicato l'"orario invernale ed estivo 2025-2026" e non espone nella stessa sezione un GTFS 2026-2027.
+Nel GTFS Arriva ufficiale `calendar.txt` è header-only. Le attivazioni reali sono in `calendar_dates.txt`. Il parser Gate C applica entrambe le tabelle secondo GTFS e non interpreta il testo del `service_id`.
 
-Fonte primaria: `https://www.tplcomoleccovarese.it/atpcolc/zf/index.php/servizi-aggiuntivi/index/index/idtesto/172`
+Su 2026-05-06 risultano:
 
-**Conseguenza:** il feed resta FACT per il periodo dichiarato, ma qualunque conclusione sulle corse autobus del 3 settembre 2026 basata esclusivamente su quel GTFS è `PROVISIONAL`.
+- D184: 15 trip attivi, 8 pattern;
+- D185: 19 trip attivi, 9 pattern;
+- D150: 33 trip attivi, 28 pattern;
+- D170: 96 trip attivi, 49 pattern.
+
+## Finding C-03 — GTFS bus conservato scaduto a settembre 2026
+
+**Severità:** alta
+**Stato:** `RESOLVED_WITH_PRIMARY_CURRENT_TIMETABLES`
+
+Il feed Arriva conservato termina l'8 giugno 2026 e non viene estrapolato. Per il 3 settembre 2026 Gate C usa invece i timetable ufficiali Lecco Trasporti / Arriva validi dal 9 giugno al 13 settembre 2026.
+
+Il parser live usa coordinate PDF per associare day-code e note alle singole colonne. I risultati sono classificati `RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE`, non GTFS.
+
+Dopo l'applicazione delle note A/B/D/V al 3 settembre 2026:
+
+- D184: 12 colonne attive;
+- D185: 13 colonne attive;
+- D150: 30 colonne attive;
+- D170: 49 colonne attive.
 
 ## Finding C-04 — deviazione D185 reale diversa dalla ricostruzione legacy
 
 **Severità:** critica
-**Stato:** fonte primaria trovata; ricostruzione legacy invalidata
+**Stato:** `RESOLVED / PRIMARY-SOURCE FACT`
 
-Fonti ufficiali Agenzia TPL, Provincia di Lecco, Arriva Italia e Lecco Trasporti attestano che dal 4 maggio 2026 la chiusura del Ponte di Brivio modifica la D185 con deviazione via Olginate / Ponte Cesare Cantù / Calolziocorte-Bisone. L'Agenzia e la Provincia indicano un allungamento di circa 12 km e un incremento stimato dei tempi di percorrenza di 30-40 minuti.
+Le fonti ufficiali attestano la deviazione D185 dovuta ai lavori al ponte di Brivio. Il timetable corrente indica transito via Ponte Cantù e sospensione di `CISANO Sosta`.
 
-Fonti:
+La precedente ricostruzione con aumento manuale `+25 min` resta invalidata. La deviazione temporanea non viene trasformata in servizio ordinario.
+
+Fonti primarie registrate:
 
 - `https://tplcomoleccovarese.it/atpcolc/po/mostra_news.php?area=H&id=1137`
 - `https://www.provincia.lecco.it/2026/04/23/chiusura-ponte-di-brivio-le-modifiche-alle-linee-bus/`
 - `https://www.leccotrasporti.it/avvisi/linea-d185-chiusura-ponte-di-brivio/`
 - `https://www.leccotrasporti.it/percorsi/estivo/linea-d185.pdf`
 
-L'orario ufficiale D185 estivo è dichiarato in vigore dal 9 giugno al 13 settembre 2026 e riporta esplicitamente la deviazione via Ponte Cantù e la sospensione di `CISANO Sosta`. Il 3 settembre 2026 ricade quindi nel periodo di validità dichiarato di tale timetable.
-
-La precedente ricostruzione del progetto usa invece una dilatazione temporale manuale e non può essere promossa a FACT. In particolare, qualunque `+25 min` costruito nel codice non sostituisce il dato ufficiale 30-40 minuti, che peraltro è un intervallo stimato dall'ente e non una costante da sommare a ogni corsa.
-
-## Finding C-05 — stazione S8 cercata con denominazione non ufficiale
+## Finding C-05 — denominazione ufficiale della stazione S8
 
 **Severità:** media
-**Stato:** corretto e coperto da regressione
+**Stato:** `CORRECTED / REGRESSION-TESTED`
 
-Nel GTFS Trenord la stazione è `Olgiate-Calco-Brivio`, `stop_id = S01514`. Una prima implementazione Gate C cercava erroneamente anche il token `Molgora`, producendo zero match. La CI ha intercettato il bug. Il resolver ora usa i token ufficiali `Olgiate`, `Calco`, `Brivio` e il test fissa nome e stop ID di fonte.
+La stazione GTFS è `S01514`, `Olgiate-Calco-Brivio`. Una prima implementazione cercava anche il token `Molgora`, producendo zero match. Il resolver e il test sono stati corretti.
 
-## Finding C-06 — GTFS Trenord snapshot senza calendario standard
-
-**Severità:** alta
-**Stato:** blocker di service-date, non di estrazione timetable
-
-Nel folder `data/raw/gtfs/rail_trenord` sono presenti `routes.txt`, `trips.txt`, `stop_times.txt`, `stops.txt` e `feed_info.txt`, ma non `calendar.txt` né `calendar_dates.txt`.
-
-La S8 e gli eventi alla stazione possono quindi essere estratti dalle tabelle GTFS e mantenuti con il loro `service_id`, ma non viene dichiarato che un trip sia attivo in una specifica data civile usando convenzioni non standard o interpretando il testo dell'ID. Lo stato è `PROVISIONAL_SERVICE_DATE_UNRESOLVED`.
-
-## Finding C-07 — timetable S8 hard-coded nel motore legacy
+## Finding C-06 — snapshot Trenord senza calendario standard
 
 **Severità:** alta
-**Stato:** invalidato come evidenza
+**Stato:** `RESOLVED_WITH_CURRENT_OFFICIAL_GTFS`
 
-`src/timetable_engine.py` contiene `TRENI_S8_VIGENTI` con minuti dell'ora hard-coded. `scripts/11_train_coordination.py` contiene ulteriori minuti e conteggi di coincidenze inseriti manualmente. Entrambi sono incompatibili con Gate C come fonte di verità.
+Lo snapshot ferroviario storico nel repository manca di `calendar.txt` e `calendar_dates.txt`, quindi non viene usato per attestare il servizio corrente.
 
-**Azione:** `s8_station_events()` deriva gli eventi da `routes` → `trips` → `stop_times` → `stops` del GTFS Trenord.
+Gate C scarica ora il GTFS ufficiale Regione Lombardia / Trenord. Il feed auditato copre 2026-07-26 → 2026-12-12. Il 3 settembre 2026 risultano 74 trip S8 attivi e 74 eventi S8 a `S01514`.
 
-## Evidenza corrente extra-GTFS per D184
+## Finding C-07 — S8 e current-service hard-coded
 
-Il timetable ufficiale Lecco Trasporti / Arriva della D184 pubblicato nel percorso estivo dichiara validità dal 9 giugno al 13 settembre 2026, quindi costituisce evidenza primaria corrente per quella linea nel giorno di audit. Non viene però usato per colmare artificialmente il GTFS scaduto o per generare record GTFS sintetici.
+**Severità:** alta
+**Stato:** `QUARANTINED`
 
-Fonte: `https://www.leccotrasporti.it/percorsi/estivo/linea-d184.pdf`
+`src/timetable_engine.py::TRENI_S8_VIGENTI` resta `INVALIDATED_AS_EVIDENCE`. I precedenti script che lo consumavano o incorporavano metriche transit manuali non possono più produrre output:
 
-## Cosa manca per PASS
+- `scripts/02_parse_gtfs.py` — fail-closed;
+- `scripts/05_current_service.py` — fail-closed;
+- `scripts/11_train_coordination.py` — fail-closed.
 
-1. Una fonte autobus ufficiale strutturata e temporalmente valida per il periodo operativo che il progetto vuole modellare, idealmente GTFS 2026-2027, oppure una decisione metodologica esplicita di congelare la baseline a una data coperta dallo snapshot 2025-2026.
-2. Una modalità source-grounded per risolvere le service dates Trenord, senza inferirle informalmente dal `service_id`.
-3. Verifica current-period anche di D150 e D170 se il periodo di progetto resta settembre 2026; lo snapshot GTFS 2025-2026 ne prova struttura e storico, non la validità corrente.
-4. Refactor o quarantena downstream dei consumatori legacy hard-coded prima che Gate E/F possano trattarne gli output come input validi.
-5. Gate B PASS per qualunque metrica Gate C che dipenda da snapping, catchment o classificazione territoriale delle fermate.
+`tests/test_gate_c_quarantine.py` verifica questo comportamento.
+
+## Finding C-08 — parser PDF, falsi positivi e coordinate
+
+**Severità:** media
+**Stato:** `CORRECTED / TESTED`
+
+Durante il Gate C sono stati scoperti e corretti tre failure reali prima del PASS:
+
+1. ricerca troppo generica della parola `SOLO`, che poteva confondere la nota B con il testo del contact center;
+2. uso di `visitor_text` in modalità layout `pypdf`, che non restituiva le coordinate necessarie;
+3. dipendenza dal glifo grafico `D185`, non sempre esposto come testo dal PDF.
+
+La versione finale usa `pdfplumber.extract_words()` per le coordinate, verifica la fonte tramite URL ufficiale route-specific, verifica contenuto/direzioni e periodo di validità separatamente e applica le note per posizione orizzontale.
+
+## Chiusura
+
+Tutti i blocker precedenti sono risolti:
+
+- Gate B è PASS;
+- D150/D170 correnti sono verificati;
+- il calendario S8 corrente è risolto da GTFS ufficiale;
+- il gap temporale del GTFS bus è coperto da timetable primari, senza creare GTFS sintetico;
+- i consumer legacy hard-coded sono quarantinati;
+- CI source-grounded, test avversariali, anti-synthetic guardrails e `git diff --check` sono verdi.
+
+**VERDICT: PASS.**
