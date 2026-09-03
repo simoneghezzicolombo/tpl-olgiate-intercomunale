@@ -1,7 +1,7 @@
 # Gate F v2 — real-upstream integration state
 
-**Workstream:** `gate-f-workstream`  
-**Stato upstream:** A/B/C/D/E formalmente PASS al 2026-09-03.  
+**Workstream:** `gate-f-workstream`
+**Stato upstream:** A/B/C/D/E formalmente PASS al 2026-09-03.
 **Stato Gate F:** READY_FOR_SCENARIO_CONSTRUCTION, non ancora recommendation PASS.
 
 ## 1. Perché il PASS A-E non produce automaticamente una raccomandazione
