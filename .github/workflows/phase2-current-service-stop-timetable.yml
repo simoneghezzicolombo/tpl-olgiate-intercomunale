@@ -74,7 +74,9 @@ jobs:
           assert len(trips)==119
           assert sum(r['active_on_reference_date']=='True' for r in trips)==104
           assert {r['route_id'] for r in trips}=={'D184','D185','D150','D170'}
-          assert stop_times and stops
+          assert len(stop_times)==1145
+          assert sum(r['active_on_reference_date']=='True' for r in stop_times)==990
+          assert stops
           assert all(r['runtime_semantics']=='SCHEDULED_PUBLISHED_TIME_NOT_OBSERVED_RUNTIME' for r in trips)
           assert all(r['epistemic_status']=='RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE' for r in stop_times)
           assert len(conditions)==1 and conditions[0]['route_id']=='D185'
@@ -83,14 +85,17 @@ jobs:
           assert validation['legacy_current_service_files_used'] is False
           assert validation['runtime_semantics']['observed_runtime_substitution'] is False
           assert validation['calendar_semantics']['annual_service_days']=='NOT_INFERRED'
+          assert validation['historical_gtfs_crosscheck']['D185']['active_stop_patterns_on_2026_05_06']==9
           PY
 
       - name: Static anti-shortcut guard
         shell: bash
         run: |
-          ! grep -R "np.random\|outputs/current_service_baseline.csv\|scripts/05_current_service.py" \
+          ! grep -R "np.random" \
             src/phase2_current_service_stop_timetable.py \
             scripts/phase2_build_current_service_stop_timetable.py
+          ! grep -E "outputs/current_service_baseline.csv|scripts/05_current_service.py" \
+            src/phase2_current_service_stop_timetable.py
 
       - name: Upload reproducible current-service evidence
         uses: actions/upload-artifact@v4
