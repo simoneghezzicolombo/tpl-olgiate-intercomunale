@@ -31,7 +31,7 @@ EXCEPTION_FROM = date(2026, 7, 27)
 EXCEPTION_TO = date(2026, 8, 30)
 DAY_CODES = {"123456", "12345", "6"}
 NOTE_CODES = {"A", "B", "D", "V"}
-VALIDITY_PHRASE = "ORARIO IN VIGORE DAL 9 GIUGNO AL 13 SETTEMBRE 2026"
+VALIDITY_TOKENS = ("ORARIO IN VIGORE", "9 GIUGNO", "13 SETTEMBRE 2026")
 DIRECTIONS = {
     "D184": (("OLGIATE", "RAVELLINO"), ("RAVELLINO", "OLGIATE")),
     "D185": (("CELANA", "BRIVIO", "OLGIATE"), ("OLGIATE", "BRIVIO", "CELANA")),
@@ -145,15 +145,16 @@ def audit_route(route_id: str, service_date: date) -> dict[str, object]:
         raise RuntimeError(f"{route_id}: {service_date} outside timetable validity")
 
     pages_out = []
-    text_parts = []
+    linear_text_parts = []
     with pdfplumber.open(io.BytesIO(payload)) as pdf:
         if len(pdf.pages) != EXPECTED_PAGE_COUNTS[route_id]:
             raise RuntimeError(f"{route_id}: unexpected PDF page count {len(pdf.pages)}")
         for page_number, page in enumerate(pdf.pages, start=1):
-            text = page.extract_text(layout=True) or page.extract_text() or ""
+            linear_text = page.extract_text() or ""
+            layout_text = page.extract_text(layout=True) or linear_text
             words = page.extract_words(x_tolerance=1, y_tolerance=1, keep_blank_chars=False)
-            text_parts.append(text)
-            if not _direction_ok(route_id, text):
+            linear_text_parts.append(linear_text)
+            if not _direction_ok(route_id, linear_text + "\n" + layout_text):
                 raise RuntimeError(f"{route_id} page {page_number}: route direction not resolved")
             columns = _audit_columns(words, service_date)
             pages_out.append({
@@ -164,10 +165,14 @@ def audit_route(route_id: str, service_date: date) -> dict[str, object]:
                 "columns": columns,
             })
 
-    full_text = "\n".join(text_parts)
-    normalised = _normalise(full_text)
-    if route_id not in normalised or VALIDITY_PHRASE not in normalised:
-        raise RuntimeError(f"{route_id}: source identity/validity statement not verified")
+    normalised = _normalise("\n".join(linear_text_parts))
+    identity_ok = route_id in normalised
+    validity_ok = all(token in normalised for token in VALIDITY_TOKENS)
+    if not identity_ok or not validity_ok:
+        raise RuntimeError(
+            f"{route_id}: source identity/validity statement not verified "
+            f"(identity={identity_ok}, validity={validity_ok})"
+        )
 
     return {
         "route_id": route_id,
