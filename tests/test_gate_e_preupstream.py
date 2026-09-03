@@ -95,3 +95,61 @@ def test_sensitivity_break_even_uses_both_directions_in_cycle_count(tmp_path):
     row = next(csv.DictReader(budget_out.open(encoding="utf-8")))
     assert int(row["directional_cycles_year_total_CW_plus_CCW"]) == 13 * 303 * 2
     assert float(row["break_even_mean_route_km_per_directional_cycle"]) == pytest.approx(111419 / (13 * 303 * 2))
+
+
+def write_rows(path, header, rows):
+    with path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=header)
+        w.writeheader()
+        w.writerows(rows)
+
+
+def valid_handoff_rows():
+    c, d = [], []
+    for direction in ("CW", "CCW"):
+        c.append({
+            "scenario_id": "S", "service_day_group": "WEEKDAY", "band_id": "ALL", "direction": direction,
+            "band_start_time": "06:00:00", "band_end_time": "19:00:00", "upstream_gate_c_status": "PASS",
+            "gate_c_artifact": "c.csv", "gate_c_commit": "c123", "shared_stop_pattern_status": "CONFIRMED",
+            "target_headway_min": "60", "target_headway_status": "DERIVED", "daily_cycles": "13",
+            "daily_cycles_status": "DERIVED", "service_days_year": "300", "service_days_status": "DERIVED",
+            "dwell_min": "5", "dwell_status": "DERIVED", "recovery_min": "5", "recovery_status": "DERIVED",
+        })
+        d.append({
+            "scenario_id": "S", "service_day_group": "WEEKDAY", "band_id": "ALL", "direction": direction,
+            "upstream_gate_d_status": "PASS", "gate_d_artifact": "d.csv", "gate_d_commit": "d123",
+            "route_km": "10", "route_km_status": "DERIVED", "pure_running_min": "50", "pure_running_status": "DERIVED",
+        })
+    return c, d
+
+
+def test_builder_joins_c_and_d_without_manual_result_transcription(tmp_path):
+    from scripts.gate_e_build_input import C_COLUMNS, D_COLUMNS
+    c, d = valid_handoff_rows()
+    cp, dp, out = tmp_path / "c.csv", tmp_path / "d.csv", tmp_path / "e.csv"
+    write_rows(cp, C_COLUMNS, c)
+    write_rows(dp, D_COLUMNS, d)
+    proc = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/gate_e_build_input.py"), "--gate-c", str(cp), "--gate-d", str(dp), "--output", str(out)],
+        cwd=ROOT, text=True, capture_output=True,
+    )
+    assert proc.returncode == 0, proc.stderr
+    rows = list(csv.DictReader(out.open(encoding="utf-8")))
+    assert len(rows) == 2 and {r["direction"] for r in rows} == {"CW", "CCW"}
+    assert all(r["gate_c_commit"] == "c123" and r["gate_d_commit"] == "d123" for r in rows)
+
+
+def test_builder_rejects_unmatched_handoff_keys(tmp_path):
+    from scripts.gate_e_build_input import C_COLUMNS, D_COLUMNS
+    c, d = valid_handoff_rows()
+    d.pop()
+    cp, dp, out = tmp_path / "c.csv", tmp_path / "d.csv", tmp_path / "e.csv"
+    write_rows(cp, C_COLUMNS, c)
+    write_rows(dp, D_COLUMNS, d)
+    proc = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/gate_e_build_input.py"), "--gate-c", str(cp), "--gate-d", str(dp), "--output", str(out)],
+        cwd=ROOT, text=True, capture_output=True,
+    )
+    assert proc.returncode == 1
+    assert "keys differ" in proc.stderr
+    assert not out.exists()
