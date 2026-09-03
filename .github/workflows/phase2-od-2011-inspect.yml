@@ -23,7 +23,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Download and inventory official ISTAT 2011 ZIP
+      - name: Install legacy DOC reader
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq antiword
+
+      - name: Download, inventory and extract official ISTAT 2011 documentation
         run: |
           python - <<'PY'
           import hashlib, io, json, pathlib, re, urllib.request, zipfile
@@ -41,33 +44,31 @@ jobs:
           z=zipfile.ZipFile(io.BytesIO(data))
           names=z.namelist()
           (out/'zip_inventory.txt').write_text('\n'.join(names)+'\n',encoding='utf-8')
-          print('\n'.join(names))
-          candidates=[]
-          for info in z.infolist():
-              if info.is_dir(): continue
-              low=info.filename.lower()
-              if any(k in low for k in ('leggimi','tracciat','readme','record','descriz','metodo')) or low.endswith(('.txt','.csv','.rtf')):
-                  if info.file_size <= 2_000_000:
-                      candidates.append(info)
-          manifest=[]
-          for i,info in enumerate(candidates):
-              raw=z.read(info)
-              decoded=None; enc=None
-              for e in ('utf-8-sig','cp1252','latin-1'):
-                  try:
-                      decoded=raw.decode(e); enc=e; break
-                  except UnicodeDecodeError: pass
-              safe=re.sub(r'[^A-Za-z0-9._-]+','_',pathlib.PurePosixPath(info.filename).name)
-              entry={'zip_member':info.filename,'bytes':info.file_size,'encoding':enc}
-              if decoded is not None:
-                  p=out/f'{i:02d}_{safe}.txt'
-                  p.write_text(decoded,encoding='utf-8')
-                  entry['saved_as']=str(p)
-                  print('\n===',info.filename,'===')
-                  print(decoded[:12000])
-              manifest.append(entry)
+          doc='MATRICE PENDOLARISMO 2011/leggimi file matrix_pendo2011_10112014.doc'
+          matrix='MATRICE PENDOLARISMO 2011/matrix_pendo2011_10112014.txt'
+          pathlib.Path('/tmp/leggimi.doc').write_bytes(z.read(doc))
+          raw=z.read(matrix).decode('latin-1')
+          samples={'S':[],'L':[]}
+          for line in raw.splitlines():
+              t=line[:1]
+              if t in samples and len(samples[t])<40:
+                  samples[t].append(line)
+              if all(len(v)>=40 for v in samples.values()): break
+          for t,lines in samples.items():
+              (out/f'record_samples_{t}.txt').write_text('\n'.join(lines)+'\n',encoding='utf-8')
+          ruler1=''.join(str((i//10)%10) for i in range(1,121))
+          ruler2=''.join(str(i%10) for i in range(1,121))
+          (out/'fixed_width_ruler.txt').write_text(ruler1+'\n'+ruler2+'\n',encoding='utf-8')
+          manifest=[{'zip_member':n} for n in names]
           (out/'inspection_manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
           PY
+          antiword /tmp/leggimi.doc > outputs/phase2/istat2011_source_inspection/leggimi_official_extracted.txt
+          echo '=== OFFICIAL LEGGIMI ==='
+          cat outputs/phase2/istat2011_source_inspection/leggimi_official_extracted.txt
+          echo '=== S RECORDS ==='
+          head -15 outputs/phase2/istat2011_source_inspection/record_samples_S.txt
+          echo '=== L RECORDS ==='
+          head -15 outputs/phase2/istat2011_source_inspection/record_samples_L.txt
 
       - name: Commit source inspection evidence
         run: |
@@ -75,5 +76,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add outputs/phase2/istat2011_source_inspection
           git diff --cached --quiet && exit 0
-          git commit -m "audit(phase2): inventory official ISTAT 2011 OD source"
+          git commit -m "audit(phase2): extract official ISTAT 2011 record layout"
           git push origin HEAD:phase2-od-2011-audit
