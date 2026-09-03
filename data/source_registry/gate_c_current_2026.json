@@ -10,7 +10,13 @@
       "url": "https://www.leccotrasporti.it/percorsi/estivo/linea-d184.pdf",
       "valid_from": "2026-06-09",
       "valid_to": "2026-09-13",
-      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE"
+      "audit_service_date": "2026-09-03",
+      "download_sha256": "6d5246976d369a283ee5ec3f6a49481755cfce851dd81839ccca4588205dd6ea",
+      "page_count": 2,
+      "scheduled_columns_by_page": [6, 6],
+      "weekday_eligible_columns_before_note_exceptions": 12,
+      "column_level_exception_application_status": "PENDING_COORDINATE_VALIDATION",
+      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE_WITH_RECONSTRUCTED_DOCUMENT_AUDIT"
     },
     {
       "id": "bus_D185_summer_2026",
@@ -20,7 +26,14 @@
       "url": "https://www.leccotrasporti.it/percorsi/estivo/linea-d185.pdf",
       "valid_from": "2026-06-09",
       "valid_to": "2026-09-13",
-      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE"
+      "audit_service_date": "2026-09-03",
+      "download_sha256": "31f2da4a8f6539bbb08da8b7ec08b8d4a475f38482f880d3d1206ef9fbd90c66",
+      "page_count": 2,
+      "scheduled_columns_by_page": [6, 7],
+      "weekday_eligible_columns_before_note_exceptions": 13,
+      "brivio_bridge_cantu_deviation_detected": true,
+      "column_level_exception_application_status": "PENDING_COORDINATE_VALIDATION",
+      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE_WITH_RECONSTRUCTED_DOCUMENT_AUDIT"
     },
     {
       "id": "bus_D150_summer_2026",
@@ -30,7 +43,14 @@
       "url": "https://www.leccotrasporti.it/percorsi/estivo/linea-d150.pdf",
       "valid_from": "2026-06-09",
       "valid_to": "2026-09-13",
-      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE"
+      "audit_service_date": "2026-09-03",
+      "download_sha256": "ee2707bdb4a2174008b6819e04b2f2a564e4bef5c2d6f8830e6dc9589f47349b",
+      "page_count": 2,
+      "scheduled_columns_by_page": [18, 21],
+      "weekday_eligible_columns_before_note_exceptions": 35,
+      "july_august_only_rule_detected": true,
+      "column_level_exception_application_status": "PENDING_COORDINATE_VALIDATION",
+      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE_WITH_RECONSTRUCTED_DOCUMENT_AUDIT"
     },
     {
       "id": "bus_D170_summer_2026",
@@ -40,7 +60,14 @@
       "url": "https://www.leccotrasporti.it/percorsi/estivo/linea-d170.pdf",
       "valid_from": "2026-06-09",
       "valid_to": "2026-09-13",
-      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE"
+      "audit_service_date": "2026-09-03",
+      "download_sha256": "87ab0fe1f2c68a38f8e54fd911f0ef38c9b29a22b3d875e34e4209a1a922f63b",
+      "page_count": 4,
+      "scheduled_columns_by_page": [24, 5, 24, 2],
+      "weekday_eligible_columns_before_note_exceptions": 54,
+      "july_august_only_rule_detected": true,
+      "column_level_exception_application_status": "PENDING_COORDINATE_VALIDATION",
+      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE_WITH_RECONSTRUCTED_DOCUMENT_AUDIT"
     },
     {
       "id": "rail_trenord_regione_lombardia_gtfs_current",
