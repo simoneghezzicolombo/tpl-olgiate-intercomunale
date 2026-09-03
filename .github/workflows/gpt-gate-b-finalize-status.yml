@@ -1,0 +1,56 @@
+name: GPT Gate B finalize status
+
+on:
+  push:
+    branches: [antigravity-real-data]
+    paths:
+      - .github/workflows/gpt-gate-b-finalize-status.yml
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch current status only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('AGENT_STATUS.md')
+          text = p.read_text(encoding='utf-8')
+          start = text.index('## Stato corrente')
+          end = text.index('\n---', start)
+          block = '''## Stato corrente
+
+**Data:** 2026-09-03
+**Autore:** GPT external reviewer / co-developer
+**Branch:** `antigravity-real-data`
+**Gate A:** **PASS**
+**Gate B:** **PASS**
+**Commit funzionale Gate A:** `bcdb9713fdb984c1754ca881ece67357542d6a9a`
+**Commit validato Gate A:** `019a12806af09d744f6f22032d980441ae60dc06`
+**Commit computazionale validato Gate B:** `55d726564e13acca55ce563cc911263ac513acb0`
+**CI Gate B:** run `33700372497`, job `100478156571`
+**Artifact Gate B:** `9873385893`, SHA256 `aca8889c8f1a4148c252c3530a56e8c68fa3f33c8e6ddf81a9ed743c51c1cfd1`
+**Risultati Gate B:** clean rebuild PASS, 10/10 test PASS, red-team persistente PASS, 5/5 spot-check GTFS PASS
+**Prossimo checkpoint:** `GATE C - Transit integrity`
+
+`docs/GATE_A_PASS.md` e `docs/GATE_B_PASS.md` sono i verbali autorevoli dei verdetti. Gli handoff sottostanti restano conservati come cronologia e non prevalgono sullo stato corrente.
+'''
+          p.write_text(text[:start] + block + text[end:], encoding='utf-8')
+          PY
+
+      - name: Commit status and remove one-shot workflow
+        run: |
+          rm .github/workflows/gpt-gate-b-finalize-status.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AGENT_STATUS.md .github/workflows/gpt-gate-b-finalize-status.yml
+          git commit -m "docs(gate-b): record PASS in agent status"
+          git push origin HEAD:antigravity-real-data
