@@ -1,0 +1,27 @@
+name: Gate C - Transit Integrity
+
+on:
+  push:
+    branches: [gate-c-workstream]
+  workflow_dispatch:
+
+jobs:
+  gate-c:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependency
+        run: python -m pip install pytest
+      - name: Gate C targeted tests
+        run: python -m pytest tests/test_gate_c_transit.py -q
+      - name: Audit covered bus date
+        run: python scripts/gate_c_transit_audit.py --service-date 2026-05-06 --output outputs/gate_c/transit_integrity_2026-05-06.json
+      - name: Audit current project date
+        run: python scripts/gate_c_transit_audit.py --service-date 2026-09-03 --output outputs/gate_c/transit_integrity_2026-09-03.json
+      - name: Anti-synthetic guardrails
+        run: python -m pytest tests/test_audit_anti_synthetic_guardrails.py -q
+      - name: Diff whitespace check
+        run: git diff --check HEAD^
