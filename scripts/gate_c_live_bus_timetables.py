@@ -44,6 +44,32 @@ EXPECTED_DIRECTION_TOKENS = {
     "D170": (("MONTEVECCHIA", "CARNATE", "VIMERCATE"), ("VIMERCATE", "CARNATE", "MONTEVECCHIA")),
 }
 
+# These are source assertions, not model outputs. They deliberately make the
+# audit fail if the operator republishes a timetable with different rules so a
+# human can inspect the changed primary document instead of silently accepting it.
+EXPECTED_DOCUMENT_RULES = {
+    "D184": {
+        "suspended_27_july_to_30_august": True,
+        "only_27_july_to_30_august": False,
+        "brivio_bridge_cantu_deviation": False,
+    },
+    "D185": {
+        "suspended_27_july_to_30_august": True,
+        "only_27_july_to_30_august": False,
+        "brivio_bridge_cantu_deviation": True,
+    },
+    "D150": {
+        "suspended_27_july_to_30_august": True,
+        "only_27_july_to_30_august": True,
+        "brivio_bridge_cantu_deviation": False,
+    },
+    "D170": {
+        "suspended_27_july_to_30_august": True,
+        "only_27_july_to_30_august": True,
+        "brivio_bridge_cantu_deviation": False,
+    },
+}
+
 
 def _download(url: str) -> tuple[bytes, str]:
     request = urllib.request.Request(url, headers={"User-Agent": "gate-c-transit-audit/1.0"})
@@ -77,12 +103,11 @@ def _header_day_tokens(page_text: str) -> list[str]:
             tokens = DAY_TOKEN_RE.findall(line)
             if tokens:
                 return tokens
-            # Some PDF generators split the label and values into adjacent lines.
             for nearby in lines[index + 1 : index + 3]:
                 tokens = DAY_TOKEN_RE.findall(nearby)
                 if tokens:
                     return tokens
-    # Fallback is deliberately narrow: only inspect the first quarter of a page.
+    # Deliberately narrow fallback, only the header area.
     top = "\n".join(lines[: max(12, len(lines) // 4)])
     return DAY_TOKEN_RE.findall(top)
 
@@ -90,6 +115,32 @@ def _header_day_tokens(page_text: str) -> list[str]:
 def _direction_matches(route_id: str, normalised_page: str) -> bool:
     candidates = EXPECTED_DIRECTION_TOKENS[route_id]
     return any(all(token in normalised_page for token in tokens) for tokens in candidates)
+
+
+def _detect_notes(route_id: str, normalised: str) -> dict[str, bool]:
+    notes = {
+        "suspended_27_july_to_30_august": bool(
+            re.search(r"SOSPESA\s+DAL\s+27\s+LUGLIO\s+AL\s+30\s+AGOSTO", normalised)
+        ),
+        "only_27_july_to_30_august": bool(
+            re.search(
+                r"SI\s+EFFETTUA\s+SOLO\s+DAL\s+27\s+LUGLIO\s+AL\s+30\s+AGOSTO",
+                normalised,
+            )
+        ),
+        "brivio_bridge_cantu_deviation": (
+            route_id == "D185"
+            and "PONTE CANT" in normalised
+            and "CISANO SOSTA" in normalised
+            and "SOSPESA" in normalised
+        ),
+    }
+    if notes != EXPECTED_DOCUMENT_RULES[route_id]:
+        raise RuntimeError(
+            f"{route_id}: primary timetable service rules changed or parser drifted; "
+            f"expected {EXPECTED_DOCUMENT_RULES[route_id]}, found {notes}"
+        )
+    return notes
 
 
 def audit_route(route_id: str, service_date: date) -> dict[str, object]:
@@ -110,6 +161,7 @@ def audit_route(route_id: str, service_date: date) -> dict[str, object]:
     if not (VALID_FROM <= service_date <= VALID_TO):
         raise RuntimeError(f"{route_id}: requested date is outside primary timetable validity")
 
+    weekday = service_date.isoweekday()
     page_audits = []
     for page_number, page_text in enumerate(pages, start=1):
         page_norm = _normalise(page_text)
@@ -118,34 +170,23 @@ def audit_route(route_id: str, service_date: date) -> dict[str, object]:
             raise RuntimeError(f"{route_id} page {page_number}: no scheduled-day columns resolved")
         if not _direction_matches(route_id, page_norm):
             raise RuntimeError(f"{route_id} page {page_number}: expected route direction tokens absent")
+        weekday_eligible = (
+            sum(str(weekday) in token for token in day_tokens)
+            if 1 <= weekday <= 6
+            else 0
+        )
         page_audits.append(
             {
                 "page": page_number,
                 "scheduled_columns": len(day_tokens),
                 "scheduled_day_codes": day_tokens,
+                "weekday_eligible_columns_before_note_exceptions": weekday_eligible,
                 "time_tokens_count": len(TIME_RE.findall(page_text)),
             }
         )
 
-    notes = {
-        "suspended_27_july_to_30_august": (
-            "27 LUGLIO" in normalised and "30 AGOSTO" in normalised and "SOSPESA" in normalised
-        ),
-        "only_27_july_to_30_august": (
-            "27 LUGLIO" in normalised and "30 AGOSTO" in normalised and "SOLO" in normalised
-        ),
-        "brivio_bridge_cantu_deviation": (
-            route_id == "D185"
-            and "PONTE CANT" in normalised
-            and "CISANO SOSTA" in normalised
-            and "SOSPESA" in normalised
-        ),
-    }
+    notes = _detect_notes(route_id, normalised)
 
-    # On 3 September, note A's Jul-Aug suspension has ended and note B's
-    # Jul-Aug-only service is no longer active. We record those rules, but do
-    # not assign note letters to individual columns until coordinate-level
-    # table reconstruction is separately validated.
     return {
         "route_id": route_id,
         "url": url,
@@ -156,11 +197,16 @@ def audit_route(route_id: str, service_date: date) -> dict[str, object]:
         "service_date_requested": service_date.isoformat(),
         "service_date_within_validity": True,
         "pages": page_audits,
+        "weekday_eligible_columns_before_note_exceptions_total": sum(
+            page["weekday_eligible_columns_before_note_exceptions"] for page in page_audits
+        ),
         "notes_detected": notes,
+        "column_level_exception_application_status": "PENDING_COORDINATE_VALIDATION",
         "epistemic_status": "RECONSTRUCTED_FROM_PRIMARY_TIMETABLE",
         "warning": (
-            "Scheduled columns and document rules are reconstructed from the official PDF; "
-            "they are not GTFS trips and are not yet a column-level trip parse."
+            "Document columns/day codes and source rules are reconstructed from the official PDF. "
+            "Weekday-eligible columns are not active-trip counts until note letters are reliably "
+            "mapped to their individual columns."
         ),
     }
 
@@ -193,6 +239,8 @@ def main() -> None:
             route["route_id"],
             "pages=", route["page_count"],
             "columns=", [p["scheduled_columns"] for p in route["pages"]],
+            "weekday_eligible_before_notes=",
+            route["weekday_eligible_columns_before_note_exceptions_total"],
             "sha256=", route["download_sha256"],
         )
     print(f"Wrote {output}")
