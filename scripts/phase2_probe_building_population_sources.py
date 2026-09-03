@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Read-only schema probe for Phase 2 building-population official sources.
 
-This script does not produce modelling outputs. It verifies that the official ISTAT
-2021 census-section packages and Regione Lombardia DBGT Edificato service can be
-read on a clean runner before the production pipeline is specified.
+The probe verifies current official ISTAT census-section and Regione Lombardia
+DBGT Edificato schemas on a clean runner. It produces no modelling output.
 """
 from __future__ import annotations
 
@@ -17,10 +16,15 @@ import pandas as pd
 import requests
 
 ISTAT_GEOM_URL = "https://www.istat.it/storage/cartografia/basi_territoriali/2021/R03_21.zip"
-ISTAT_DATA_URL = "https://esploradati.istat.it/databrowser/DWL/PERMPOP/SUBCOM/Dati_regionali_2021.zip"
+ISTAT_DATA_2023_URL = "https://esploradati.istat.it/databrowser/DWL/PERMPOP/SUBCOM/Dati_regionali_2023.zip"
 DBGT_BASE = "https://www.cartografia.servizirl.it/arcgis5/rest/services/BaseMap/DBGT_Tema0201_Edificato/MapServer"
 CORE_CODES = {"097010", "097012", "097058", "097074", "097092"}
-HEADERS = {"User-Agent": "tpl-olgiate-building-population/1.0 (+https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale)"}
+HEADERS = {
+    "User-Agent": (
+        "tpl-olgiate-building-population/1.0 "
+        "(+https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale)"
+    )
+}
 
 
 def get(url: str, *, params: dict | None = None, timeout: int = 180) -> requests.Response:
@@ -29,13 +33,19 @@ def get(url: str, *, params: dict | None = None, timeout: int = 180) -> requests
     return r
 
 
+def _normalise_code(series: pd.Series, width: int = 6) -> pd.Series:
+    return (
+        series.astype(str)
+        .str.replace(r"\.0$", "", regex=True)
+        .str.strip()
+        .str.zfill(width)
+    )
+
+
 def inspect_istat() -> dict:
     geom = get(ISTAT_GEOM_URL).content
-    data = get(ISTAT_DATA_URL).content
-    out: dict = {
-        "geometry_bytes": len(geom),
-        "data_bytes": len(data),
-    }
+    data = get(ISTAT_DATA_2023_URL).content
+    out: dict = {"geometry_bytes": len(geom), "data_2023_bytes": len(data)}
 
     with zipfile.ZipFile(io.BytesIO(geom)) as z:
         out["geometry_members"] = z.namelist()
@@ -45,47 +55,73 @@ def inspect_istat() -> dict:
     out["geometry_columns"] = list(gdf.columns)
     out["geometry_crs"] = str(gdf.crs)
     out["geometry_rows"] = int(len(gdf))
-    for candidate in ("PRO_COM_T", "PRO_COM", "COMUNE", "COD_REG", "SEZ2021", "SEZIONE"):
-        if candidate in gdf.columns:
-            vals = gdf[candidate].astype(str)
-            out[f"geometry_{candidate}_sample"] = vals.head(10).tolist()
-    # Identify rows belonging to province 097 if a municipal code exists.
+
     code_col = next((c for c in ("PRO_COM_T", "PRO_COM") if c in gdf.columns), None)
-    if code_col:
-        codes = gdf[code_col].astype(str).str.replace(r"\.0$", "", regex=True).str.zfill(6)
-        out["geometry_rows_province_097"] = int(codes.str.startswith("097").sum())
-        out["geometry_rows_core"] = int(codes.isin(CORE_CODES).sum())
-        core = gdf.loc[codes.isin(CORE_CODES)].copy().to_crs(7791)
-        if len(core):
-            minx, miny, maxx, maxy = core.total_bounds
-            out["core_bbox_epsg7791"] = [float(minx), float(miny), float(maxx), float(maxy)]
+    if code_col is None:
+        raise RuntimeError(f"ISTAT geometry lacks municipal code: {list(gdf.columns)}")
+    codes = _normalise_code(gdf[code_col])
+    out["geometry_rows_province_097"] = int(codes.str.startswith("097").sum())
+    out["geometry_rows_core"] = int(codes.isin(CORE_CODES).sum())
+    core = gdf.loc[codes.isin(CORE_CODES)].copy().to_crs(7791)
+    minx, miny, maxx, maxy = core.total_bounds
+    out["core_bbox_epsg7791"] = [float(minx), float(miny), float(maxx), float(maxy)]
 
     with zipfile.ZipFile(io.BytesIO(data)) as z:
-        out["data_members"] = z.namelist()
-        csv_members = [n for n in z.namelist() if n.lower().endswith((".csv", ".txt"))]
-        inspected = []
-        for name in csv_members[:30]:
-            raw = z.read(name)
-            text = None
-            used_encoding = None
-            for enc in ("utf-8-sig", "utf-8", "latin-1"):
-                try:
-                    text = raw.decode(enc)
-                    used_encoding = enc
-                    break
-                except UnicodeDecodeError:
-                    continue
-            if text is None:
-                continue
-            first = text.splitlines()[:4]
-            inspected.append({"name": name, "encoding": used_encoding, "first_lines": first})
-        out["data_text_previews"] = inspected
+        out["data_2023_members"] = z.namelist()
+        member = next(
+            n for n in z.namelist()
+            if n.lower().endswith("r03_indicatori_2023_sezioni.xlsx")
+        )
+        raw = z.read(member)
+    xls = pd.ExcelFile(io.BytesIO(raw), engine="openpyxl")
+    out["data_2023_sheets"] = xls.sheet_names
+    df = pd.read_excel(xls, sheet_name=xls.sheet_names[0], dtype=object)
+    out["data_2023_columns"] = [str(c) for c in df.columns]
+    out["data_2023_rows"] = int(len(df))
+    out["data_2023_head"] = df.head(5).fillna("").astype(str).to_dict("records")
+
+    # Probe candidate keys without assuming schema before observing it.
+    section_candidates = [c for c in df.columns if "sez" in str(c).lower()]
+    municipality_candidates = [
+        c for c in df.columns
+        if any(k in str(c).lower() for k in ("pro_com", "comune", "cod_com", "com_"))
+    ]
+    population_candidates = [
+        c for c in df.columns
+        if str(c).upper() in {"P1", "POP", "POP2023", "POP23", "POP_TOT"}
+        or "popol" in str(c).lower()
+    ]
+    out["section_key_candidates"] = [str(c) for c in section_candidates]
+    out["municipality_key_candidates"] = [str(c) for c in municipality_candidates]
+    out["population_field_candidates"] = [str(c) for c in population_candidates]
+
+    # For each plausible population field, report numeric sum and non-null count.
+    candidate_stats = {}
+    for c in population_candidates:
+        num = pd.to_numeric(df[c], errors="coerce")
+        candidate_stats[str(c)] = {
+            "numeric_non_null": int(num.notna().sum()),
+            "numeric_sum": float(num.fillna(0).sum()),
+        }
+    out["population_candidate_stats"] = candidate_stats
+
+    # Report fake-section incidence for each section-like field. ISTAT documents
+    # 888888x and 999999x as non-ordinary/fictitious section identifiers.
+    fake_stats = {}
+    for c in section_candidates:
+        s = df[c].astype(str).str.replace(r"\.0$", "", regex=True).str.strip()
+        fake = s.str.contains(r"(?:888888|999999)\d?$", regex=True, na=False)
+        fake_stats[str(c)] = {
+            "unique": int(s.nunique(dropna=True)),
+            "fake_rows": int(fake.sum()),
+            "sample": s.head(10).tolist(),
+        }
+    out["section_candidate_stats"] = fake_stats
     return out
 
 
 def arc_query(layer: int, params: dict) -> dict:
-    p = {"f": "json", **params}
-    payload = get(f"{DBGT_BASE}/{layer}/query", params=p).json()
+    payload = get(f"{DBGT_BASE}/{layer}/query", params={"f": "json", **params}).json()
     if "error" in payload:
         raise RuntimeError(json.dumps(payload["error"], ensure_ascii=False))
     return payload
@@ -95,8 +131,7 @@ def inspect_dbgt(core_bbox: list[float]) -> dict:
     out: dict = {}
     service = get(DBGT_BASE, params={"f": "pjson"}).json()
     out["service_spatial_reference"] = service.get("spatialReference")
-    out["service_layers"] = service.get("layers")
-    for layer in (3, 5, 22, 24):
+    for layer in (0, 3, 5, 22, 24):
         meta = get(f"{DBGT_BASE}/{layer}", params={"f": "pjson"}).json()
         out[f"layer_{layer}_name"] = meta.get("name")
         out[f"layer_{layer}_fields"] = [
@@ -105,7 +140,6 @@ def inspect_dbgt(core_bbox: list[float]) -> dict:
         ]
         out[f"layer_{layer}_relationships"] = meta.get("relationships")
 
-    # Broad acquisition probe: the core bbox expanded by 5 km in the DBGT metric CRS.
     minx, miny, maxx, maxy = core_bbox
     envelope = f"{minx-5000},{miny-5000},{maxx+5000},{maxy+5000}"
     id_payload = arc_query(3, {
@@ -119,29 +153,40 @@ def inspect_dbgt(core_bbox: list[float]) -> dict:
     object_ids = id_payload.get("objectIds") or []
     out["footprint_layer3_ids_5km_envelope"] = len(object_ids)
     sample_ids = object_ids[:20]
-    if sample_ids:
-        sample = arc_query(3, {
-            "objectIds": ",".join(map(str, sample_ids)),
-            "outFields": "OBJECTID,CLASSREF,COD_CONS,DATA_FIN",
-            "returnGeometry": "false",
-        })
-        attrs = [f["attributes"] for f in sample.get("features", [])]
-        out["footprint_sample"] = attrs
-        refs = [str(a["CLASSREF"]) for a in attrs if a.get("CLASSREF")]
-        if refs:
-            safe = ",".join("'" + r.replace("'", "''") + "'" for r in refs)
-            buildings = arc_query(22, {
-                "where": f"CLASSID IN ({safe})",
-                "outFields": "*",
-                "returnGeometry": "false",
-            })
-            uses = arc_query(24, {
-                "where": f"CLASSREF IN ({safe})",
-                "outFields": "*",
-                "returnGeometry": "false",
-            })
-            out["building_table_sample"] = [f["attributes"] for f in buildings.get("features", [])]
-            out["use_table_sample"] = [f["attributes"] for f in uses.get("features", [])]
+    if not sample_ids:
+        return out
+
+    sample = arc_query(3, {
+        "objectIds": ",".join(map(str, sample_ids)),
+        "outFields": "OBJECTID,CLASSREF,COD_CONS,DATA_FIN",
+        "returnGeometry": "false",
+    })
+    attrs = [f["attributes"] for f in sample.get("features", [])]
+    out["footprint_sample"] = attrs
+    refs = [str(a["CLASSREF"]) for a in attrs if a.get("CLASSREF")]
+    if not refs:
+        return out
+    safe = ",".join("'" + r.replace("'", "''") + "'" for r in refs)
+
+    buildings = arc_query(22, {
+        "where": f"CLASSID IN ({safe})",
+        "outFields": "*",
+        "returnGeometry": "false",
+    })
+    uses = arc_query(24, {
+        "where": f"CLASSREF IN ({safe})",
+        "outFields": "*",
+        "returnGeometry": "false",
+    })
+    # Layer 0 official relationship uses CEDIUV as building identifier.
+    volumes = arc_query(0, {
+        "where": f"CEDIUV IN ({safe})",
+        "outFields": "CLASSID,CEDIUV,UN_VOL_AV,UN_VOL_EX,UN_VOL_QE,Shape_Area,DATA_FIN",
+        "returnGeometry": "false",
+    })
+    out["building_table_sample"] = [f["attributes"] for f in buildings.get("features", [])]
+    out["use_table_sample"] = [f["attributes"] for f in uses.get("features", [])]
+    out["volume_unit_sample"] = [f["attributes"] for f in volumes.get("features", [])]
     return out
 
 
