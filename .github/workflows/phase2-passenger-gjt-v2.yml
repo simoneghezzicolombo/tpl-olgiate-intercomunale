@@ -10,14 +10,17 @@ on:
       - 'src/phase2_s8_destination_direction_v2.py'
       - 'src/phase2_s8_work_transfer_utility_v2.py'
       - 'src/phase2_s8_passenger_support_mask_v2.py'
+      - 'src/phase2_s8_transfer_gap_envelope_v2.py'
       - 'scripts/phase2_build_passenger_journey_universe_v2.py'
       - 'scripts/phase2_build_s8_work_direction_weights_v2.py'
       - 'scripts/phase2_build_s8_passenger_support_mask_v2.py'
+      - 'scripts/phase2_build_s8_transfer_gap_envelope_v2.py'
       - 'tests/test_phase2_passenger_gjt_v2.py'
       - 'tests/test_phase2_passenger_journey_universe_v2.py'
       - 'tests/test_phase2_s8_destination_direction_v2.py'
       - 'tests/test_phase2_s8_work_transfer_utility_v2.py'
       - 'tests/test_phase2_s8_passenger_support_mask_v2.py'
+      - 'tests/test_phase2_s8_transfer_gap_envelope_v2.py'
       - 'docs/PHASE2_PASSENGER_GJT_V2.md'
       - '.github/workflows/phase2-passenger-gjt-v2.yml'
   workflow_dispatch:
@@ -53,9 +56,11 @@ jobs:
           python -m py_compile src/phase2_s8_destination_direction_v2.py
           python -m py_compile src/phase2_s8_work_transfer_utility_v2.py
           python -m py_compile src/phase2_s8_passenger_support_mask_v2.py
+          python -m py_compile src/phase2_s8_transfer_gap_envelope_v2.py
           python -m py_compile scripts/phase2_build_passenger_journey_universe_v2.py
           python -m py_compile scripts/phase2_build_s8_work_direction_weights_v2.py
           python -m py_compile scripts/phase2_build_s8_passenger_support_mask_v2.py
+          python -m py_compile scripts/phase2_build_s8_transfer_gap_envelope_v2.py
 
       - name: Run Passenger GJT V2 tests
         run: >-
@@ -65,6 +70,7 @@ jobs:
           tests/test_phase2_s8_destination_direction_v2.py
           tests/test_phase2_s8_work_transfer_utility_v2.py
           tests/test_phase2_s8_passenger_support_mask_v2.py
+          tests/test_phase2_s8_transfer_gap_envelope_v2.py
 
       - name: Materialise empirical journey universe and sensitivity grid
         run: >-
@@ -97,6 +103,18 @@ jobs:
           --route-output outputs/phase2/passenger_gjt_v2/s8_route_passenger_support_v2.csv
           --scenario-output outputs/phase2/passenger_gjt_v2/s8_scenario_passenger_support_v2.csv.gz
           --validation outputs/phase2/passenger_gjt_v2/s8_passenger_support_mask_v2_validation.json
+
+      - name: Materialise exact S8 transfer-gap envelope
+        run: >-
+          python scripts/phase2_build_s8_transfer_gap_envelope_v2.py
+          --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json
+          --support-validation outputs/phase2/passenger_gjt_v2/s8_passenger_support_mask_v2_validation.json
+          --route-support outputs/phase2/passenger_gjt_v2/s8_route_passenger_support_v2.csv
+          --s8-events outputs/phase2/s8_events.csv
+          --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv
+          --work-direction-summary outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv
+          --output outputs/phase2/passenger_gjt_v2/s8_transfer_gap_envelope_v2.csv.gz
+          --validation outputs/phase2/passenger_gjt_v2/s8_transfer_gap_envelope_v2_validation.json
 
       - name: Validate Passenger GJT V2 contracts
         run: |
@@ -179,6 +197,24 @@ jobs:
           assert all(r['scenario_passenger_utility_calculated']=='false' for r in scenario_rows)
           assert all(r['topology_ranked']=='false' for r in scenario_rows)
 
+          g=json.loads((root/'s8_transfer_gap_envelope_v2_validation.json').read_text(encoding='utf-8'))
+          assert g['status']=='PASS_S8_TRANSFER_GAP_ENVELOPE_V2_BUILD'
+          assert g['contract']=='PHASE2_S8_TRANSFER_GAP_ENVELOPE_V2'
+          assert g['route_count']==50115
+          assert g['timing_archetype_count']==8
+          assert g['route_timing_row_count']==400920
+          assert g['roundtrip_route_timing_row_count']==280952
+          assert g['rail_to_bus_only_route_timing_row_count']==119968
+          assert g['worker_direction_weight_reference']==1882.0
+          assert g['worker_reference_assigned_to_routes'] is False
+          assert g['phase_selected'] is False
+          assert g['all_integer_phases_retained'] is True
+          assert g['passenger_utility_calculated'] is False
+          assert g['full_gjt_calculated'] is False
+          assert g['topology_ranked'] is False
+          assert g['service_policy_selected'] is False
+          assert g['demand_weight_semantics']=='DIRECTION_WEIGHT_ONLY_NOT_ROUTE_DEMAND_NOT_MODAL_SHARE'
+
           print(json.dumps({
               'journey_count': val['journey_count'],
               'demand_weight_sum': val['demand_weight_sum'],
@@ -188,6 +224,8 @@ jobs:
               'roundtrip_route_count': s['roundtrip_passenger_supported_route_count'],
               'directional_only_route_count': s['rail_to_bus_only_route_count'],
               'scenario_support_count': s['scenario_count'],
+              'transfer_gap_rows': g['route_timing_row_count'],
+              'transfer_gap_complete_rows': g['rows_with_at_least_one_complete_match_phase'],
           }, indent=2))
           PY
 
@@ -218,6 +256,15 @@ jobs:
             --route-output /tmp/phase2-passenger-gjt-v2/route-support.csv \
             --scenario-output /tmp/phase2-passenger-gjt-v2/scenario-support.csv.gz \
             --validation /tmp/phase2-passenger-gjt-v2/support-validation.json
+          python scripts/phase2_build_s8_transfer_gap_envelope_v2.py \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --support-validation outputs/phase2/passenger_gjt_v2/s8_passenger_support_mask_v2_validation.json \
+            --route-support outputs/phase2/passenger_gjt_v2/s8_route_passenger_support_v2.csv \
+            --s8-events outputs/phase2/s8_events.csv \
+            --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv \
+            --work-direction-summary outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv \
+            --output /tmp/phase2-passenger-gjt-v2/transfer-gap.csv.gz \
+            --validation /tmp/phase2-passenger-gjt-v2/transfer-gap-validation.json
           cmp outputs/phase2/passenger_gjt_v2/empirical_journey_universe_v2.csv /tmp/phase2-passenger-gjt-v2/journey.csv
           cmp outputs/phase2/passenger_gjt_v2/behavioural_sensitivity_grid_v2.csv /tmp/phase2-passenger-gjt-v2/sensitivity.csv
           cmp outputs/phase2/passenger_gjt_v2/passenger_journey_universe_v2_validation.json /tmp/phase2-passenger-gjt-v2/validation.json
@@ -225,6 +272,7 @@ jobs:
           cmp outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv /tmp/phase2-passenger-gjt-v2/direction-summary.csv
           cmp outputs/phase2/passenger_gjt_v2/s8_route_passenger_support_v2.csv /tmp/phase2-passenger-gjt-v2/route-support.csv
           cmp outputs/phase2/passenger_gjt_v2/s8_scenario_passenger_support_v2.csv.gz /tmp/phase2-passenger-gjt-v2/scenario-support.csv.gz
+          cmp outputs/phase2/passenger_gjt_v2/s8_transfer_gap_envelope_v2.csv.gz /tmp/phase2-passenger-gjt-v2/transfer-gap.csv.gz
           python - <<'PY'
           import json
           from pathlib import Path
@@ -241,11 +289,16 @@ jobs:
               p['lineage']['route_support_output']=None
               p['lineage']['scenario_support_output']=None
           assert a==b
+          a=json.loads(Path('outputs/phase2/passenger_gjt_v2/s8_transfer_gap_envelope_v2_validation.json').read_text())
+          b=json.loads(Path('/tmp/phase2-passenger-gjt-v2/transfer-gap-validation.json').read_text())
+          for p in (a,b):
+              p['lineage']['output']=None
+          assert a==b
           PY
 
       - name: Guard Passenger GJT epistemic separation
         run: |
-          FILES="config/phase2_passenger_gjt_sensitivity_v2.json src/phase2_passenger_gjt_v2.py src/phase2_s8_destination_direction_v2.py src/phase2_s8_work_transfer_utility_v2.py src/phase2_s8_passenger_support_mask_v2.py scripts/phase2_build_passenger_journey_universe_v2.py scripts/phase2_build_s8_work_direction_weights_v2.py scripts/phase2_build_s8_passenger_support_mask_v2.py"
+          FILES="config/phase2_passenger_gjt_sensitivity_v2.json src/phase2_passenger_gjt_v2.py src/phase2_s8_destination_direction_v2.py src/phase2_s8_work_transfer_utility_v2.py src/phase2_s8_passenger_support_mask_v2.py scripts/phase2_build_passenger_journey_universe_v2.py scripts/phase2_build_s8_work_direction_weights_v2.py scripts/phase2_build_s8_passenger_support_mask_v2.py src/phase2_s8_transfer_gap_envelope_v2.py scripts/phase2_build_s8_transfer_gap_envelope_v2.py"
           ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
           ! grep -n -E 'S8_DIRECT_is_modal_share[^f]*true|population_proportional_worker_allocation_performed[^f]*true|nearest_stop_imputation_performed[^f]*true|full_gjt_ready[^f]*true' $FILES
           ! grep -n -E 'passenger_demand_assigned_to_routes[^f]*true|passenger_demand_assigned_to_route[^f]*true|topology_ranked[^f]*true|service_policy_selected[^f]*true' $FILES

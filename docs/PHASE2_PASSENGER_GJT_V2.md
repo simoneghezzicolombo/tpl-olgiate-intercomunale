@@ -48,6 +48,16 @@ The support-mask contract therefore keeps:
 - `topology_ranked=false`;
 - `service_policy_selected=false`.
 
+### Exact S8 transfer-gap envelope
+
+`s8_transfer_gap_envelope_v2.csv.gz` evaluates every route under all eight retained headway/span timing archetypes without selecting a clock phase.
+
+The 1,882-worker reference enters here only as a directional weight between Milano and Lecco. It is explicitly labelled `DIRECTION_WEIGHT_ONLY_NOT_ROUTE_DEMAND_NOT_MODAL_SHARE`: the same empirical destination mix is used to describe interchange quality, not to claim that 1,882 people ride each candidate route.
+
+For routes with explicit public return to the hub, the metric combines `BUS_TO_RAIL` and `RAIL_TO_BUS` gaps at the same clock phase. For open public routes, only the supported `RAIL_TO_BUS` leg is evaluated. Best and worst values are taken across the complete integer phase domain only among phases with zero unmatched source events in every required direction cell.
+
+No phase, topology or service policy is selected by this envelope.
+
 ## Full GJT components
 
 A full passenger chain is admitted only after an upstream spatial allocation method has explicit evidence lineage. The GJT contract keeps bus IVT and rail IVT separate:
