@@ -15,8 +15,9 @@
       "page_count": 2,
       "scheduled_columns_by_page": [6, 6],
       "weekday_eligible_columns_before_note_exceptions": 12,
-      "column_level_exception_application_status": "PENDING_COORDINATE_VALIDATION",
-      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE_WITH_RECONSTRUCTED_DOCUMENT_AUDIT"
+      "active_timetable_columns_after_note_exceptions": 12,
+      "column_level_exception_application_status": "VALIDATED_BY_PDF_COORDINATES",
+      "epistemic_status": "RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE"
     },
     {
       "id": "bus_D185_summer_2026",
@@ -31,9 +32,10 @@
       "page_count": 2,
       "scheduled_columns_by_page": [6, 7],
       "weekday_eligible_columns_before_note_exceptions": 13,
+      "active_timetable_columns_after_note_exceptions": 13,
       "brivio_bridge_cantu_deviation_detected": true,
-      "column_level_exception_application_status": "PENDING_COORDINATE_VALIDATION",
-      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE_WITH_RECONSTRUCTED_DOCUMENT_AUDIT"
+      "column_level_exception_application_status": "VALIDATED_BY_PDF_COORDINATES",
+      "epistemic_status": "RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE"
     },
     {
       "id": "bus_D150_summer_2026",
@@ -48,9 +50,10 @@
       "page_count": 2,
       "scheduled_columns_by_page": [18, 21],
       "weekday_eligible_columns_before_note_exceptions": 35,
+      "active_timetable_columns_after_note_exceptions": 30,
       "july_august_only_rule_detected": true,
-      "column_level_exception_application_status": "PENDING_COORDINATE_VALIDATION",
-      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE_WITH_RECONSTRUCTED_DOCUMENT_AUDIT"
+      "column_level_exception_application_status": "VALIDATED_BY_PDF_COORDINATES",
+      "epistemic_status": "RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE"
     },
     {
       "id": "bus_D170_summer_2026",
@@ -65,9 +68,10 @@
       "page_count": 4,
       "scheduled_columns_by_page": [24, 5, 24, 2],
       "weekday_eligible_columns_before_note_exceptions": 54,
+      "active_timetable_columns_after_note_exceptions": 49,
       "july_august_only_rule_detected": true,
-      "column_level_exception_application_status": "PENDING_COORDINATE_VALIDATION",
-      "epistemic_status": "FACT_CURRENT_PRIMARY_TIMETABLE_WITH_RECONSTRUCTED_DOCUMENT_AUDIT"
+      "column_level_exception_application_status": "VALIDATED_BY_PDF_COORDINATES",
+      "epistemic_status": "RECONSTRUCTED_FROM_OFFICIAL_PRIMARY_TIMETABLE"
     },
     {
       "id": "rail_trenord_regione_lombardia_gtfs_current",
@@ -85,11 +89,7 @@
       "live_olgiate_station_events_count": 74,
       "station_stop_id": "S01514",
       "station_name": "Olgiate-Calco-Brivio",
-      "verification_aids": [
-        "https://www.transit.land/feeds/f-u0n-trenord",
-        "https://mobilitydatabase.org/feeds/gtfs/mdb-855"
-      ],
-      "epistemic_status": "FACT_OFFICIAL_SOURCE_AND_DERIVED_LIVE_GTFS_AUDIT"
+      "epistemic_status": "DERIVED_FROM_LIVE_OFFICIAL_GTFS"
     }
   ]
 }
