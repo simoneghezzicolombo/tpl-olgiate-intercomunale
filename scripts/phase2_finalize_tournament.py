@@ -10,8 +10,9 @@ turns them into the decision artefacts required by the Phase 2 specification:
 - primary and runner-up finalists;
 - final recommendation record with explicit decision-rule provenance.
 
-The uncertainty band is a mandatory CLI argument. The script will not silently
-choose a tolerance for declaring two candidates practically indistinguishable.
+Both the uncertainty band and the decision budget are mandatory caller choices.
+The script will not silently choose a tolerance or promote the largest available
+budget envelope into the normative decision budget.
 """
 from __future__ import annotations
 
@@ -19,6 +20,7 @@ import argparse
 import csv
 from hashlib import sha256
 import json
+import math
 from pathlib import Path
 from typing import Iterable
 
@@ -46,6 +48,9 @@ REQUIRED_COLUMNS = {
     "n_sensitivity_runs",
 }
 
+BUDGET_MATCH_REL_TOL = 1e-9
+BUDGET_MATCH_ABS_TOL_KM = 1e-6
+
 
 def _sha256_path(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
@@ -58,6 +63,13 @@ def _parse_bool(raw: object) -> bool:
     if value in {"false", "0", "no"}:
         return False
     raise ValueError(f"Cannot parse boolean value {raw!r}")
+
+
+def _finite_float(name: str, raw: object) -> float:
+    value = float(raw)
+    if not math.isfinite(value):
+        raise ValueError(f"{name} must be finite")
+    return value
 
 
 def load_candidates(path: Path) -> list[CandidateEvaluation]:
@@ -80,13 +92,21 @@ def load_candidates(path: Path) -> list[CandidateEvaluation]:
                     plan_id=str(row["plan_id"]).strip(),
                 ),
                 eligible=_parse_bool(row["eligible"]),
-                median_gjt_improvement_min=float(row["median_gjt_improvement_min"]),
-                lower_quantile_gjt_improvement_min=float(row["lower_quantile_gjt_improvement_min"]),
-                median_missed_connection_probability=float(row["median_missed_connection_probability"]),
-                annual_bus_km=float(row["annual_bus_km"]),
+                median_gjt_improvement_min=_finite_float(
+                    "median_gjt_improvement_min", row["median_gjt_improvement_min"]
+                ),
+                lower_quantile_gjt_improvement_min=_finite_float(
+                    "lower_quantile_gjt_improvement_min", row["lower_quantile_gjt_improvement_min"]
+                ),
+                median_missed_connection_probability=_finite_float(
+                    "median_missed_connection_probability", row["median_missed_connection_probability"]
+                ),
+                annual_bus_km=_finite_float("annual_bus_km", row["annual_bus_km"]),
                 public_pattern_complexity=int(row["public_pattern_complexity"]),
                 unverified_elements=int(row["unverified_elements"]),
-                retained_existing_stops_share=float(row["retained_existing_stops_share"]),
+                retained_existing_stops_share=_finite_float(
+                    "retained_existing_stops_share", row["retained_existing_stops_share"]
+                ),
                 n_sensitivity_runs=int(row["n_sensitivity_runs"]),
             )
         except (TypeError, ValueError) as exc:
@@ -110,10 +130,37 @@ def load_budget_envelopes(path: Path) -> list[float]:
         rows = list(reader)
     if not rows:
         raise ValueError("Budget envelope input is empty")
-    budgets = sorted({float(row["annual_bus_km_cap"]) for row in rows})
-    if any(value <= 0 for value in budgets):
+    try:
+        values = [_finite_float("annual_bus_km_cap", row["annual_bus_km_cap"]) for row in rows]
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"Invalid budget envelope input: {exc}") from exc
+    if any(value <= 0 for value in values):
         raise ValueError("Budget envelopes must be positive")
-    return budgets
+    return sorted(set(values))
+
+
+def _match_declared_budget(decision_budget_km: object, budgets: list[float]) -> float:
+    if decision_budget_km is None:
+        raise ValueError("decision_budget_km is required and has no implicit default")
+    decision_budget = _finite_float("decision_budget_km", decision_budget_km)
+    if decision_budget <= 0:
+        raise ValueError("decision_budget_km must be positive")
+    matches = [
+        value
+        for value in budgets
+        if math.isclose(
+            decision_budget,
+            value,
+            rel_tol=BUDGET_MATCH_REL_TOL,
+            abs_tol=BUDGET_MATCH_ABS_TOL_KM,
+        )
+    ]
+    if len(matches) != 1:
+        raise ValueError(
+            "decision_budget_km must match exactly one declared budget envelope "
+            f"within rel_tol={BUDGET_MATCH_REL_TOL} and abs_tol={BUDGET_MATCH_ABS_TOL_KM} km"
+        )
+    return matches[0]
 
 
 def _write_csv(path: Path, rows: Iterable[dict[str, object]], *, fieldnames: list[str] | None = None) -> None:
@@ -134,16 +181,15 @@ def finalise(
     budget_path: Path,
     output_dir: Path,
     uncertainty_band_min: float,
-    decision_budget_km: float | None = None,
+    decision_budget_km: float | None,
 ) -> dict[str, object]:
-    if uncertainty_band_min < 0:
+    uncertainty_band = _finite_float("uncertainty_band_min", uncertainty_band_min)
+    if uncertainty_band < 0:
         raise ValueError("uncertainty_band_min cannot be negative")
 
     evaluations = load_candidates(candidates_path)
     budgets = load_budget_envelopes(budget_path)
-    decision_budget = max(budgets) if decision_budget_km is None else float(decision_budget_km)
-    if decision_budget <= 0:
-        raise ValueError("decision_budget_km must be positive")
+    decision_budget = _match_declared_budget(decision_budget_km, budgets)
 
     decision_pool = [row for row in evaluations if row.eligible and row.annual_bus_km <= decision_budget]
     if not decision_pool:
@@ -151,7 +197,7 @@ def finalise(
 
     frontier = candidate_frontier(evaluations)
     budget_curve = candidate_budget_frontier(evaluations, budgets)
-    selection = select_candidates(decision_pool, uncertainty_band_min=uncertainty_band_min)
+    selection = select_candidates(decision_pool, uncertainty_band_min=uncertainty_band)
 
     frontier_rows = [candidate_to_dict(row) for row in frontier]
     finalist_rows = [
@@ -173,7 +219,10 @@ def finalise(
     recommendation: dict[str, object] = {
         "status": "DECISION_MATERIALISED_FROM_EVALUATED_CANDIDATES",
         "decision_budget_bus_km_year": decision_budget,
-        "uncertainty_band_min": uncertainty_band_min,
+        "decision_budget_contract": "EXPLICIT_CALLER_DECLARED_MATCHED_TO_MATERIALISED_ENVELOPE",
+        "budget_match_rel_tol": BUDGET_MATCH_REL_TOL,
+        "budget_match_abs_tol_km": BUDGET_MATCH_ABS_TOL_KM,
+        "uncertainty_band_min": uncertainty_band,
         "tie_break_invoked": selection.tie_break_invoked,
         "decision_rule": {
             "step_1": "HARD_ELIGIBILITY",
@@ -189,6 +238,7 @@ def finalise(
                 "STABLE_CANDIDATE_ID",
             ],
             "weighted_composite_score": False,
+            "implicit_budget_default": False,
         },
         "primary": candidate_to_dict(selection.primary),
         "runner_up": candidate_to_dict(selection.runner_up) if selection.runner_up else None,
@@ -215,7 +265,7 @@ def finalise(
     return recommendation
 
 
-def main() -> None:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidates", required=True, type=Path)
     parser.add_argument("--budgets", required=True, type=Path)
@@ -223,11 +273,15 @@ def main() -> None:
     parser.add_argument("--uncertainty-band-min", required=True, type=float)
     parser.add_argument(
         "--decision-budget-km",
+        required=True,
         type=float,
-        default=None,
-        help="Budget used for primary/runner-up selection. If omitted, highest declared envelope is used.",
+        help="Explicit normative budget for primary/runner-up selection; must match a declared envelope.",
     )
-    args = parser.parse_args()
+    return parser
+
+
+def main() -> None:
+    args = build_parser().parse_args()
 
     result = finalise(
         candidates_path=args.candidates,

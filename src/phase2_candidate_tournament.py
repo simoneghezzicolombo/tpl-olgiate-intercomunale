@@ -15,11 +15,19 @@ from __future__ import annotations
 from dataclasses import dataclass
 from hashlib import sha256
 import json
+import math
 from statistics import median
 from typing import Mapping, Sequence
 
 from src.phase2_optimizer_core import HardConstraintResult
 from src.phase2_service_engine import JourneyComparison
+
+
+def _require_finite(name: str, value: float) -> float:
+    number = float(value)
+    if not math.isfinite(number):
+        raise ValueError(f"{name} must be finite")
+    return number
 
 
 @dataclass(frozen=True)
@@ -52,7 +60,10 @@ class CandidateSensitivityResult:
     def __post_init__(self) -> None:
         if not self.sensitivity_id:
             raise ValueError("sensitivity_id is required")
-        if not 0.0 <= self.missed_connection_probability <= 1.0:
+        _require_finite("demand_weighted_gjt_improvement_min", self.demand_weighted_gjt_improvement_min)
+        _require_finite("worst_municipality_utility_change_min", self.worst_municipality_utility_change_min)
+        missed = _require_finite("missed_connection_probability", self.missed_connection_probability)
+        if not 0.0 <= missed <= 1.0:
             raise ValueError("missed_connection_probability must be within [0,1]")
 
 
@@ -70,15 +81,23 @@ class CandidateEvaluation:
     n_sensitivity_runs: int
 
     def __post_init__(self) -> None:
-        if self.annual_bus_km <= 0:
+        _require_finite("median_gjt_improvement_min", self.median_gjt_improvement_min)
+        _require_finite("lower_quantile_gjt_improvement_min", self.lower_quantile_gjt_improvement_min)
+        missed = _require_finite(
+            "median_missed_connection_probability",
+            self.median_missed_connection_probability,
+        )
+        annual_km = _require_finite("annual_bus_km", self.annual_bus_km)
+        retained = _require_finite("retained_existing_stops_share", self.retained_existing_stops_share)
+        if annual_km <= 0:
             raise ValueError("annual_bus_km must be positive")
         if self.public_pattern_complexity <= 0 or self.unverified_elements < 0:
             raise ValueError("Invalid practical tie-break metrics")
-        if not 0.0 <= self.retained_existing_stops_share <= 1.0:
+        if not 0.0 <= retained <= 1.0:
             raise ValueError("retained_existing_stops_share must be within [0,1]")
         if self.n_sensitivity_runs <= 0:
             raise ValueError("n_sensitivity_runs must be positive")
-        if not 0.0 <= self.median_missed_connection_probability <= 1.0:
+        if not 0.0 <= missed <= 1.0:
             raise ValueError("median missed-connection probability must be within [0,1]")
 
     @property
@@ -109,14 +128,15 @@ def candidate_sensitivity_from_comparison(
 
 
 def _linear_quantile(values: Sequence[float], q: float) -> float:
-    ordered = sorted(float(value) for value in values)
+    q_value = _require_finite("q", q)
+    ordered = sorted(_require_finite("quantile value", value) for value in values)
     if not ordered:
         raise ValueError("Cannot compute quantile of empty values")
-    if not 0.0 <= q <= 1.0:
+    if not 0.0 <= q_value <= 1.0:
         raise ValueError("q must be within [0,1]")
     if len(ordered) == 1:
         return ordered[0]
-    position = (len(ordered) - 1) * q
+    position = (len(ordered) - 1) * q_value
     low = int(position)
     high = min(low + 1, len(ordered) - 1)
     fraction = position - low
@@ -173,7 +193,8 @@ def select_candidates(
     *,
     uncertainty_band_min: float,
 ) -> CandidateSelection:
-    if uncertainty_band_min < 0:
+    uncertainty_band = _require_finite("uncertainty_band_min", uncertainty_band_min)
+    if uncertainty_band < 0:
         raise ValueError("uncertainty_band_min cannot be negative")
     ids = [row.candidate_id for row in evaluations]
     if len(set(ids)) != len(ids):
@@ -185,22 +206,22 @@ def select_candidates(
     best_median = max(row.median_gjt_improvement_min for row in eligible)
     contenders = [
         row for row in eligible
-        if best_median - row.median_gjt_improvement_min <= uncertainty_band_min
+        if best_median - row.median_gjt_improvement_min <= uncertainty_band
     ]
     tie_break = len(contenders) > 1
     primary = sorted(contenders, key=_tie_key)[0] if tie_break else contenders[0]
 
     remaining = [row for row in eligible if row.candidate_id != primary.candidate_id]
     if not remaining:
-        return CandidateSelection(primary, None, tie_break, uncertainty_band_min)
+        return CandidateSelection(primary, None, tie_break, uncertainty_band)
 
     second_best = max(row.median_gjt_improvement_min for row in remaining)
     second_contenders = [
         row for row in remaining
-        if second_best - row.median_gjt_improvement_min <= uncertainty_band_min
+        if second_best - row.median_gjt_improvement_min <= uncertainty_band
     ]
     runner = sorted(second_contenders, key=_tie_key)[0] if len(second_contenders) > 1 else second_contenders[0]
-    return CandidateSelection(primary, runner, tie_break, uncertainty_band_min)
+    return CandidateSelection(primary, runner, tie_break, uncertainty_band)
 
 
 def _dominates(left: CandidateEvaluation, right: CandidateEvaluation, *, tolerance: float) -> bool:
@@ -224,14 +245,15 @@ def candidate_frontier(
     *,
     tolerance: float = 1e-9,
 ) -> list[CandidateEvaluation]:
-    if tolerance < 0:
+    tolerance_value = _require_finite("tolerance", tolerance)
+    if tolerance_value < 0:
         raise ValueError("tolerance cannot be negative")
     eligible = [row for row in evaluations if row.eligible]
     frontier = [
         row for row in eligible
         if not any(
             other.candidate_id != row.candidate_id
-            and _dominates(other, row, tolerance=tolerance)
+            and _dominates(other, row, tolerance=tolerance_value)
             for other in eligible
         )
     ]
@@ -251,7 +273,10 @@ def candidate_budget_frontier(
     evaluations: Sequence[CandidateEvaluation],
     budget_envelopes_km: Sequence[float],
 ) -> list[dict[str, object]]:
-    budgets = sorted({float(value) for value in budget_envelopes_km if value > 0})
+    raw_budgets = [_require_finite("budget envelope", value) for value in budget_envelopes_km]
+    if any(value <= 0 for value in raw_budgets):
+        raise ValueError("Budget envelopes must all be positive")
+    budgets = sorted(set(raw_budgets))
     if not budgets:
         raise ValueError("At least one positive budget envelope is required")
 
