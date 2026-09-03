@@ -1,0 +1,28 @@
+name: GPT Gate B finalize status
+
+on:
+  push:
+    branches: [antigravity-real-data]
+    paths:
+      - .github/workflows/gpt-gate-b-finalize-status.yml
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch current status
+        run: python -c "from pathlib import Path; import base64; p=Path('AGENT_STATUS.md'); t=p.read_text(encoding='utf-8'); s=t.index('## Stato corrente'); e=t.index('\\n---', s); b=base64.b64decode('IyMgU3RhdG8gY29ycmVudGUKCioqRGF0YToqKiAyMDI2LTA5LTAzCioqQXV0b3JlOioqIEdQVCBleHRlcm5hbCByZXZpZXdlciAvIGNvLWRldmVsb3BlcgoqKkJyYW5jaDoqKiBgYW50aWdyYXZpdHktcmVhbC1kYXRhYAoqKkdhdGUgQToqKiAqKlBBU1MqKgoqKkdhdGUgQjoqKiAqKlBBU1MqKgoqKkNvbW1pdCBmdW56aW9uYWxlIEdhdGUgQToqKiBgYmNkYjk3MTNmZGI5ODRjMTc1NGNhODgxZWNlNjczNTc1NDJkNmE5YWAKKipDb21taXQgdmFsaWRhdG8gR2F0ZSBBOioqIGAwMTlhMTI4MDZhZjA5ZDc0NGY2ZjIyMDMyZDk4MDQ0MWFlNjBkYzA2YAoqKkNvbW1pdCBjb21wdXRhemlvbmFsZSB2YWxpZGF0byBHYXRlIEI6KiogYDU1ZDcyNjU2NGUxM2FjY2E1NWNlNTYzY2M5MTEyNjNhYzUxM2FjYjBgCioqQ0kgR2F0ZSBCOioqIHJ1biBgMzM3MDAzNzI0OTdgLCBqb2IgYDEwMDQ3ODE1NjU3MWAKKipBcnRpZmFjdCBHYXRlIEI6KiogYDk4NzMzODU4OTNgLCBTSEEyNTYgYGFjYTg4ODljOGYxYTQxNDhjMjUyYzM1MzBhNTZlOGM2OGZhM2YzM2M4ZTZkZGY4MWE5ZWQ3NDNjNTFjMWNmZDFgCioqUmlzdWx0YXRpIEdhdGUgQjoqKiBjbGVhbiByZWJ1aWxkIFBBU1MsIDEwLzEwIHRlc3QgUEFTUywgcmVkLXRlYW0gcGVyc2lzdGVudGUgUEFTUywgNS81IHNwb3QtY2hlY2sgR1RGUyBQQVNTCioqUHJvc3NpbW8gY2hlY2twb2ludDoqKiBgR0FURSBDIC0gVHJhbnNpdCBpbnRlZ3JpdHlgCgpgZG9jcy9HQVRFX0FfUEFTUy5tZGAgZSBgZG9jcy9HQVRFX0JfUEFTUy5tZGAgc29ubyBpIHZlcmJhbGkgYXV0b3Jldm9saSBkZWkgdmVyZGV0dGkuIEdsaSBoYW5kb2ZmIHNvdHRvc3RhbnRpIHJlc3Rhbm8gY29uc2VydmF0aSBjb21lIGNyb25vbG9naWEgZSBub24gcHJldmFsZ29ubyBzdWxsbyBzdGF0byBjb3JyZW50ZS4K').decode('utf-8'); p.write_text(t[:s]+b+t[e:], encoding='utf-8')"
+      - name: Commit status and remove one-shot workflow
+        run: |
+          rm .github/workflows/gpt-gate-b-finalize-status.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AGENT_STATUS.md .github/workflows/gpt-gate-b-finalize-status.yml
+          git commit -m "docs(gate-b): record PASS in agent status"
+          git push origin HEAD:antigravity-real-data
