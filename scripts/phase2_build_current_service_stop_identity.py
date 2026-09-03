@@ -102,14 +102,31 @@ def build() -> dict[str, object]:
         ]
         resolutions = resolve_page(page_rows, route_patterns=patterns[route_id], stops=gtfs_stops)
         for source, resolution in zip(rows, resolutions, strict=True):
-            stop = gtfs_stops.get(resolution.stop_id or "")
-            phase2 = phase2_by_stop_id.get(resolution.stop_id or "")
-            if resolution.stop_id and phase2:
-                phase2_join_status = "JOINED_V1_PHYSICAL_CLUSTER_BY_EXACT_GTFS_STOP_ID"
+            equivalent_ids = resolution.equivalent_stop_ids
+            phase2_matches = [
+                (stop_id, phase2_by_stop_id[stop_id])
+                for stop_id in equivalent_ids
+                if stop_id in phase2_by_stop_id
+            ]
+            if phase2_matches:
+                cluster_ids = {row["physical_cluster_id"] for _, row in phase2_matches}
+                if len(cluster_ids) != 1:
+                    raise ValueError(
+                        f"Exact-name/coordinate GTFS equivalence maps to multiple Phase 2 clusters: "
+                        f"{equivalent_ids} -> {sorted(cluster_ids)}"
+                    )
+                canonical_stop_id, phase2 = sorted(phase2_matches, key=lambda item: item[0])[0]
+                phase2_join_status = "JOINED_V1_PHYSICAL_CLUSTER_BY_EQUIVALENT_EXACT_GTFS_RECORD"
             elif resolution.stop_id:
+                canonical_stop_id = resolution.stop_id
+                phase2 = None
                 phase2_join_status = "GTFS_IDENTIFIED_NOT_IN_V1_STOP_UNIVERSE"
             else:
+                canonical_stop_id = ""
+                phase2 = None
                 phase2_join_status = "NO_RESOLVED_GTFS_IDENTITY"
+
+            stop = gtfs_stops.get(canonical_stop_id)
             row_out: dict[str, object] = {
                 "route_id": route_id,
                 "source_page": source_page,
@@ -117,7 +134,9 @@ def build() -> dict[str, object]:
                 "stop_label_pdf": resolution.row.stop_label_pdf,
                 "normalized_pdf_tokens": "|".join(normalize_stop_label(resolution.row.stop_label_pdf)),
                 "identity_status": resolution.status,
-                "historical_gtfs_stop_id": resolution.stop_id or "",
+                "historical_gtfs_stop_id": canonical_stop_id,
+                "historical_gtfs_equivalent_stop_ids": "|".join(equivalent_ids),
+                "historical_gtfs_equivalent_record_count": len(equivalent_ids),
                 "historical_gtfs_stop_name": stop.stop_name if stop else "",
                 "historical_gtfs_stop_lat": stop.stop_lat if stop else "",
                 "historical_gtfs_stop_lon": stop.stop_lon if stop else "",
@@ -127,16 +146,17 @@ def build() -> dict[str, object]:
                 "tied_best_pattern_count": resolution.tied_best_pattern_count,
                 "physical_cluster_id_v1": phase2.get("physical_cluster_id", "") if phase2 else "",
                 "phase2_stop_name_v1": phase2.get("stop_name", "") if phase2 else "",
+                "phase2_join_gtfs_stop_id": canonical_stop_id if phase2 else "",
                 "phase2_join_status": phase2_join_status,
                 "identity_evidence": (
                     "CURRENT_PRIMARY_PDF_LABEL_AND_ORDER_PLUS_VALIDITY_BOUNDED_HISTORICAL_OFFICIAL_GTFS"
-                    if resolution.stop_id
+                    if canonical_stop_id
                     else "CURRENT_PRIMARY_PDF_LABEL_WITHOUT_UNIQUE_HISTORICAL_GTFS_IDENTITY"
                 ),
                 "current_service_epistemic_status": source["epistemic_status"],
                 "identity_epistemic_status": (
                     "DERIVED_IDENTITY_CROSSCHECK_NOT_CURRENT_GTFS_SERVICE_FACT"
-                    if resolution.stop_id
+                    if canonical_stop_id
                     else "UNRESOLVED_IDENTITY"
                 ),
             }
@@ -208,8 +228,11 @@ def build() -> dict[str, object]:
             "forced_nearest_coordinate_matching_used": False,
             "manual_stop_alias_whitelist_used": False,
             "route_specific_manual_stop_mapping_used": False,
+            "exact_name_coordinate_duplicate_gtfs_records_collapsed": True,
+            "coordinate_distance_tolerance_for_equivalence_used": False,
             "name_rule": "CONSERVATIVE_TOKEN_CONTAINMENT_WITH_LONG_TOKEN_PREFIX_ONLY",
             "sequence_rule": "MAXIMUM_ORDERED_HISTORICAL_PATTERN_AGREEMENT; TIES PRESERVED",
+            "duplicate_record_rule": "SAME_NORMALIZED_OFFICIAL_GTFS_NAME_AND_EXACT_NUMERIC_COORDINATES",
             "ambiguous_identity_policy": "UNRESOLVED_FAIL_OPEN_FOR_DATA_PRESERVATION_BUT_FORBIDDEN_FOR_WALKING_GJT_JOIN",
         },
         "historical_gtfs_semantics": {
@@ -219,7 +242,7 @@ def build() -> dict[str, object]:
             "current_pdf_times_remain_authoritative_for_2026_09_03": True,
         },
         "v1_cluster_semantics": {
-            "join_key": "EXACT_HISTORICAL_GTFS_STOP_ID",
+            "join_key": "EXACT_GTFS_STOP_ID_OR_EXACT_NAME_COORDINATE_EQUIVALENT_GTFS_RECORD",
             "external_or_not_in_v1_stops_are_not_force_joined": True,
             "v2_refresh_expected": True,
         },
