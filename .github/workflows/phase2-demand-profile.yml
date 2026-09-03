@@ -5,6 +5,7 @@ on:
     branches: [phase2-service-design]
     paths:
       - scripts/phase2_build_demand_profile.py
+      - scripts/phase2_normalize_text_encoding.py
       - tests/test_phase2_demand_profile.py
       - .github/workflows/phase2-demand-profile.yml
       - data/raw/od/matrice_pendolarismo_istat_2021_core.csv
@@ -35,11 +36,15 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pandas geopandas pyogrio shapely requests pytest
 
-      - name: Compile builder
-        run: python -m py_compile scripts/phase2_build_demand_profile.py
+      - name: Compile builders
+        run: |
+          python -m py_compile scripts/phase2_build_demand_profile.py
+          python -m py_compile scripts/phase2_normalize_text_encoding.py
 
       - name: Build audited demand outputs
-        run: python scripts/phase2_build_demand_profile.py
+        run: |
+          python scripts/phase2_build_demand_profile.py
+          python scripts/phase2_normalize_text_encoding.py
 
       - name: Run Phase 2 demand tests
         run: pytest -q tests/test_phase2_demand_profile.py
@@ -53,6 +58,12 @@ jobs:
           test -s outputs/phase2/s8_station_municipalities.csv
           test -s outputs/phase2/od_2021_demand_profile_validation.json
           test -s docs/PHASE2_DEMAND_PROFILE_2021.md
+          ! grep -R -n -E 'Ã|Â' \
+            outputs/phase2/od_2021_destinations_by_origin.csv \
+            outputs/phase2/od_2021_top_destinations_aggregate.csv \
+            outputs/phase2/od_2021_inbound_origins_by_destination.csv \
+            outputs/phase2/s8_station_municipalities.csv \
+            docs/PHASE2_DEMAND_PROFILE_2021.md
           git diff --check
 
       - name: Commit deterministic demand outputs
