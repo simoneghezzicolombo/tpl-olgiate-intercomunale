@@ -7,9 +7,12 @@ on:
     paths:
       - 'config/phase2_passenger_gjt_sensitivity_v2.json'
       - 'src/phase2_passenger_gjt_v2.py'
+      - 'src/phase2_s8_destination_direction_v2.py'
       - 'scripts/phase2_build_passenger_journey_universe_v2.py'
+      - 'scripts/phase2_build_s8_work_direction_weights_v2.py'
       - 'tests/test_phase2_passenger_gjt_v2.py'
       - 'tests/test_phase2_passenger_journey_universe_v2.py'
+      - 'tests/test_phase2_s8_destination_direction_v2.py'
       - 'docs/PHASE2_PASSENGER_GJT_V2.md'
       - '.github/workflows/phase2-passenger-gjt-v2.yml'
   workflow_dispatch:
@@ -42,13 +45,16 @@ jobs:
       - name: Compile Passenger GJT V2
         run: |
           python -m py_compile src/phase2_passenger_gjt_v2.py
+          python -m py_compile src/phase2_s8_destination_direction_v2.py
           python -m py_compile scripts/phase2_build_passenger_journey_universe_v2.py
+          python -m py_compile scripts/phase2_build_s8_work_direction_weights_v2.py
 
       - name: Run Passenger GJT V2 tests
         run: >-
           python -m pytest -q
           tests/test_phase2_passenger_gjt_v2.py
           tests/test_phase2_passenger_journey_universe_v2.py
+          tests/test_phase2_s8_destination_direction_v2.py
 
       - name: Materialise empirical journey universe and sensitivity grid
         run: >-
@@ -60,7 +66,19 @@ jobs:
           --sensitivity-output outputs/phase2/passenger_gjt_v2/behavioural_sensitivity_grid_v2.csv
           --validation outputs/phase2/passenger_gjt_v2/passenger_journey_universe_v2_validation.json
 
-      - name: Validate Passenger GJT V2 universe contract
+      - name: Materialise official S8 work direction weights
+        run: >-
+          python scripts/phase2_build_s8_work_direction_weights_v2.py
+          --journeys outputs/phase2/passenger_gjt_v2/empirical_journey_universe_v2.csv
+          --s8-events outputs/phase2/s8_events.csv
+          --station-municipalities outputs/phase2/s8_station_municipalities.csv
+          --s8-contract outputs/phase2/s8_interchange_contract.json
+          --gtfs-zip data/raw/gtfs/rail_trenord/trenord_gtfs.zip
+          --output outputs/phase2/passenger_gjt_v2/s8_work_direction_weights_v2.csv
+          --summary outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv
+          --validation outputs/phase2/passenger_gjt_v2/s8_work_direction_weights_v2_validation.json
+
+      - name: Validate Passenger GJT V2 contracts
         run: |
           python - <<'PY'
           import csv, json
@@ -71,7 +89,9 @@ jobs:
           assert val['contract']=='PHASE2_PASSENGER_JOURNEY_UNIVERSE_V2'
           assert val['source_scope']=='ISTAT_2021_WORK_COMMUTING_ONLY'
           assert val['source_resolution']=='MUNICIPAL_OD'
+          assert val['journey_count']==50
           assert val['origin_municipality_count']==5
+          assert val['destination_municipality_count']==10
           assert val['demand_weight_sum']==1882.0
           assert val['expected_demand_weight_sum']==1882.0
           assert val['sensitivity_case_count']==81
@@ -83,14 +103,40 @@ jobs:
           assert val['fine_walking_access_combined_with_empirical_OD'] is False
           with (root/'empirical_journey_universe_v2.csv').open(encoding='utf-8',newline='') as f:
               rows=list(csv.DictReader(f))
-          assert len(rows)==val['journey_count'] and rows
+          assert len(rows)==50
           assert all(r['full_gjt_ready']=='false' for r in rows)
           assert all(r['source_resolution']=='MUNICIPAL_OD' for r in rows)
           assert all(r['spatial_allocation_status']=='MUNICIPAL_OD_ONLY_NO_SPATIAL_ALLOCATION' for r in rows)
           with (root/'behavioural_sensitivity_grid_v2.csv').open(encoding='utf-8',newline='') as f:
               cases=list(csv.DictReader(f))
           assert len(cases)==81
-          print(json.dumps({k:val[k] for k in ('journey_count','demand_weight_sum','sensitivity_case_count')}, indent=2))
+
+          d=json.loads((root/'s8_work_direction_weights_v2_validation.json').read_text(encoding='utf-8'))
+          assert d['status']=='PASS_S8_WORK_DIRECTION_WEIGHTS_V2_BUILD'
+          assert d['contract']=='PHASE2_S8_WORK_DIRECTION_WEIGHTS_V2'
+          assert d['journey_count']==50
+          assert d['destination_municipality_count']==10
+          assert d['demand_weight_sum']==1882.0
+          assert d['expected_demand_weight_sum']==1882.0
+          assert d['S8_DIRECT_is_modal_share'] is False
+          assert d['full_gjt_ready'] is False
+          assert d['spatial_allocation_performed'] is False
+          assert sum(d['outbound_direction_demand'].values())==1882.0
+          assert sum(d['return_direction_demand'].values())==1882.0
+          assert d['outbound_direction_demand']['LECCO']==d['return_direction_demand']['MILANO']
+          assert d['outbound_direction_demand']['MILANO']==d['return_direction_demand']['LECCO']
+          with (root/'s8_work_direction_weights_v2.csv').open(encoding='utf-8',newline='') as f:
+              directions=list(csv.DictReader(f))
+          assert len(directions)==50
+          assert all(r['outbound_bus_to_rail_direction'] in {'LECCO','MILANO'} for r in directions)
+          assert all(r['return_rail_to_bus_direction'] in {'LECCO','MILANO'} for r in directions)
+          assert all(r['full_gjt_ready']=='false' for r in directions)
+          print(json.dumps({
+              'journey_count': val['journey_count'],
+              'demand_weight_sum': val['demand_weight_sum'],
+              'sensitivity_case_count': val['sensitivity_case_count'],
+              'outbound_direction_demand': d['outbound_direction_demand'],
+          }, indent=2))
           PY
 
       - name: Deterministic byte-for-byte rebuild
@@ -104,13 +150,35 @@ jobs:
             --journey-output /tmp/phase2-passenger-gjt-v2/journey.csv \
             --sensitivity-output /tmp/phase2-passenger-gjt-v2/sensitivity.csv \
             --validation /tmp/phase2-passenger-gjt-v2/validation.json
+          python scripts/phase2_build_s8_work_direction_weights_v2.py \
+            --journeys /tmp/phase2-passenger-gjt-v2/journey.csv \
+            --s8-events outputs/phase2/s8_events.csv \
+            --station-municipalities outputs/phase2/s8_station_municipalities.csv \
+            --s8-contract outputs/phase2/s8_interchange_contract.json \
+            --gtfs-zip data/raw/gtfs/rail_trenord/trenord_gtfs.zip \
+            --output /tmp/phase2-passenger-gjt-v2/directions.csv \
+            --summary /tmp/phase2-passenger-gjt-v2/direction-summary.csv \
+            --validation /tmp/phase2-passenger-gjt-v2/direction-validation.json
           cmp outputs/phase2/passenger_gjt_v2/empirical_journey_universe_v2.csv /tmp/phase2-passenger-gjt-v2/journey.csv
           cmp outputs/phase2/passenger_gjt_v2/behavioural_sensitivity_grid_v2.csv /tmp/phase2-passenger-gjt-v2/sensitivity.csv
           cmp outputs/phase2/passenger_gjt_v2/passenger_journey_universe_v2_validation.json /tmp/phase2-passenger-gjt-v2/validation.json
+          cmp outputs/phase2/passenger_gjt_v2/s8_work_direction_weights_v2.csv /tmp/phase2-passenger-gjt-v2/directions.csv
+          cmp outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv /tmp/phase2-passenger-gjt-v2/direction-summary.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/passenger_gjt_v2/s8_work_direction_weights_v2_validation.json').read_text())
+          b=json.loads(Path('/tmp/phase2-passenger-gjt-v2/direction-validation.json').read_text())
+          for p in (a,b):
+              p['lineage'].pop('journeys_sha256')
+              p['lineage'].pop('output_sha256')
+              p['lineage'].pop('summary_sha256')
+          assert a==b
+          PY
 
       - name: Guard Passenger GJT epistemic separation
         run: |
-          FILES="config/phase2_passenger_gjt_sensitivity_v2.json src/phase2_passenger_gjt_v2.py scripts/phase2_build_passenger_journey_universe_v2.py"
+          FILES="config/phase2_passenger_gjt_sensitivity_v2.json src/phase2_passenger_gjt_v2.py src/phase2_s8_destination_direction_v2.py scripts/phase2_build_passenger_journey_universe_v2.py scripts/phase2_build_s8_work_direction_weights_v2.py"
           ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
           ! grep -n -E 'S8_DIRECT_is_modal_share[^f]*true|population_proportional_worker_allocation_performed[^f]*true|nearest_stop_imputation_performed[^f]*true|full_gjt_ready[^f]*true' $FILES
           git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-access-equity-v2...HEAD
