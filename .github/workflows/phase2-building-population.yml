@@ -210,8 +210,13 @@ jobs:
           find /tmp/building_population_sources -maxdepth 1 -type f \
             \( -name 'dbgt_*.gz' -o -name 'R03*.xlsx' \) \
             -exec cp {} /tmp/building-population-evidence/source-snapshots/ \;
-          find /tmp/building-population-evidence -type f -print0 | sort -z | xargs -0 sha256sum \
-            > /tmp/building-population-evidence/artifact_contents.sha256
+          (
+            cd /tmp/building-population-evidence
+            find . -type f ! -name 'artifact_contents.sha256' -print0 \
+              | sort -z \
+              | xargs -0 sha256sum > artifact_contents.sha256
+            sha256sum -c artifact_contents.sha256
+          )
       - name: Upload building-population evidence
         uses: actions/upload-artifact@v4
         with:
