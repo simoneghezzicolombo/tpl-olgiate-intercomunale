@@ -1,0 +1,78 @@
+name: Phase 2 finalize OD provenance manifest
+
+on:
+  push:
+    branches: [phase2-od-2011-audit]
+    paths:
+      - .github/workflows/phase2-od-manifest-finalize.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-od-2011-audit
+      - name: Upsert canonical 2011 OD provenance and invalidate legacy use
+        run: |
+          python - <<'PY'
+          import csv, hashlib, pathlib
+          p=pathlib.Path('data/manifest.csv')
+          rows=list(csv.DictReader(p.open(encoding='utf-8')))
+          fields=list(rows[0])
+          legacy='istat_matrice_pendolarismo_2011_core'
+          found=False
+          for r in rows:
+              if r['dataset_id']==legacy:
+                  found=True
+                  note=(r.get('note_provenance') or '').strip()
+                  warning='INVALIDATO PER ANALISI OD/TREND: estrazione legacy con offset fixed-width e codici Perego/Rovagnate errati; usare istat_matrice_pendolarismo_2011_work_core_canonical.'
+                  if warning not in note:
+                      r['note_provenance']=(note+' '+warning).strip()
+          assert found
+          f=pathlib.Path('data/raw/od/matrice_pendolarismo_istat_2011_work_core_canonical.csv')
+          b=f.read_bytes()
+          new={k:'' for k in fields}
+          new.update({
+            'dataset_id':'istat_matrice_pendolarismo_2011_work_core_canonical',
+            'ente_fonte':'ISTAT (15° Censimento Generale Popolazione)',
+            'url_ufficiale':'https://www.istat.it/storage/cartografia/matrici_pendolarismo/matrici_pendolarismo_2011.zip',
+            'data_accesso':'2026-09-03',
+            'anno_riferimento':'2011',
+            'licenza':'IODL 2.0',
+            'filepath_locale':str(f),
+            'sha256_hash':hashlib.sha256(b).hexdigest(),
+            'dimensione_bytes':str(len(b)),
+            'stato_epistemico':'DERIVED',
+            'trasformazioni':'Parser fixed-width aderente al leggimi ISTAT; soli record S; motivo=2 lavoro; destinazioni italiane; somma Numero di individui col.51-60; armonizzazione amministrativa esplicita; groupby OD.',
+            'note_provenance':'Fonte canonica Phase 2 per il trend 2011→2021. Audit: docs/PHASE2_OD_TREND_2011_2021.md; script: scripts/phase2_audit_istat_od_2011.py.',
+          })
+          rows=[r for r in rows if r['dataset_id']!=new['dataset_id']]
+          rows.append(new)
+          with p.open('w',newline='',encoding='utf-8') as out:
+              w=csv.DictWriter(out,fieldnames=fields,lineterminator='\n')
+              w.writeheader(); w.writerows(rows)
+          print(new)
+          PY
+      - name: Validate manifest row
+        run: |
+          python - <<'PY'
+          import csv,hashlib,pathlib
+          rows={r['dataset_id']:r for r in csv.DictReader(open('data/manifest.csv',encoding='utf-8'))}
+          c=rows['istat_matrice_pendolarismo_2011_work_core_canonical']
+          f=pathlib.Path(c['filepath_locale']); assert f.exists()
+          assert hashlib.sha256(f.read_bytes()).hexdigest()==c['sha256_hash']
+          assert 'INVALIDATO PER ANALISI OD/TREND' in rows['istat_matrice_pendolarismo_2011_core']['note_provenance']
+          print('MANIFEST OD PROVENANCE PASS')
+          PY
+      - name: Commit manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/manifest.csv
+          git commit -m "audit(phase2): register canonical 2011 OD provenance [skip ci]"
+          git push origin HEAD:phase2-od-2011-audit
