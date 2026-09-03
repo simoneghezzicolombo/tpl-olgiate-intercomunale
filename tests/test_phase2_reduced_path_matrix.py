@@ -3,7 +3,6 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from src.phase2_frozen_graph import EPOCH_ID
 from src.phase2_reduced_path_matrix import (
     HUB_ID,
     build_path_matrix,
@@ -154,9 +153,15 @@ def test_source_builder_rejects_promoted_proposed_stop_status() -> None:
             "included_in_reduced_graph": "true", "lon": 9.4, "lat": 45.7,
         }
     ])
-    existing = pd.DataFrame(columns=[
-        "stop_id", "stop_name", "stop_lat", "stop_lon", "physical_cluster_id",
-        "epistemic_status", "COMUNE",
+    # Keep the fixture spatially non-empty so the test exercises the intended
+    # epistemic guard rather than scipy's empty-query behaviour.
+    existing = pd.DataFrame([
+        {
+            "stop_id": "1", "stop_name": "Fixture stop", "stop_lat": 45.7,
+            "stop_lon": 9.4, "physical_cluster_id": "EX_FIX",
+            "epistemic_status": "FACT_OFFICIAL_GTFS_REFERENCE_PERIOD_NOT_CURRENT_SERVICE",
+            "COMUNE": "Olgiate Molgora",
+        }
     ])
     proposed = pd.DataFrame([
         {
