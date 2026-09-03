@@ -16,8 +16,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install project dependencies
-        run: python -m pip install -r requirements.txt
+      - name: Install Gate C test dependencies
+        run: python -m pip install pytest pandas
       - name: Gate C targeted tests
         run: python -m pytest tests/test_gate_c_transit.py -q
       - name: Audit covered bus date
