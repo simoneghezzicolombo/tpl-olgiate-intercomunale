@@ -54,7 +54,7 @@ jobs:
           scripts/13_gate_f_pareto_v2.py scripts/gate_f_build_inputs_v2.py scripts/gate_f_build_status_bundle.py
           scripts/gate_f_build_population_coverage.py scripts/gate_f_adapt_gate_d.py scripts/gate_f_adapt_gate_e.py
           scripts/gate_f_build_s8_connections.py scripts/gate_f_regression_gate_b_baseline.py
-      - name: Verify real cross-workstream status evidence mechanism
+      - name: Verify real A-E PASS evidence across workstreams
         shell: bash
         run: |
           set -euo pipefail
@@ -63,18 +63,17 @@ jobs:
           D=$(git rev-parse origin/gate-d-workstream)
           E=$(git rev-parse origin/gate-e-workstream)
           python scripts/gate_f_build_status_bundle.py \
-            --integration-id CI_EVIDENCE_MECHANISM_TEST_NOT_GATE_STATE \
+            --integration-id CI_ALL_UPSTREAM_PASS_EVIDENCE \
             --gate "A,PASS,$AB,antigravity-real-data,docs/GATE_A_PASS.md" \
             --gate "B,PASS,$AB,antigravity-real-data,docs/GATE_B_PASS.md" \
             --gate "C,PASS,$C,gate-c-workstream,docs/GATE_C_PASS.md" \
             --gate "D,PASS,$D,gate-d-workstream,docs/GATE_D_PASS.md" \
-            --gate "E,PROVISIONAL,$E,gate-e-workstream,docs/GATE_E_WORKSTREAM.md" \
+            --gate "E,PASS,$E,gate-e-workstream,docs/GATE_E_PASS.md" \
             --output /tmp/gate_f_status_v2.json
           python - <<'PY'
           from src.gate_f_status import load_gate_status_bundle
           statuses, _ = load_gate_status_bundle('/tmp/gate_f_status_v2.json', '.')
-          assert statuses['A'] == statuses['B'] == statuses['C'] == statuses['D'] == 'PASS'
-          assert statuses['E'] == 'PROVISIONAL'
+          assert statuses == {gate: 'PASS' for gate in 'ABCDE'}
           PY
       - name: Replay validated Gate B baseline through Gate F bridge
         env:
