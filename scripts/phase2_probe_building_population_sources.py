@@ -42,6 +42,26 @@ def _normalise_code(series: pd.Series, width: int = 6) -> pd.Series:
     )
 
 
+def _select_lombardia_2023_workbook(names: list[str]) -> str:
+    candidates = []
+    for name in names:
+        low = name.lower()
+        if not low.endswith(".xlsx"):
+            continue
+        if "r03" not in low or "2023" not in low:
+            continue
+        if "tracciato" in low:
+            continue
+        if "sez" in low or "indicator" in low:
+            candidates.append(name)
+    if len(candidates) != 1:
+        raise RuntimeError(
+            "Could not identify exactly one Lombardia 2023 section workbook; "
+            f"candidates={candidates}; xlsx={[n for n in names if n.lower().endswith('.xlsx')]}"
+        )
+    return candidates[0]
+
+
 def inspect_istat() -> dict:
     geom = get(ISTAT_GEOM_URL).content
     data = get(ISTAT_DATA_2023_URL).content
@@ -67,20 +87,35 @@ def inspect_istat() -> dict:
     out["core_bbox_epsg7791"] = [float(minx), float(miny), float(maxx), float(maxy)]
 
     with zipfile.ZipFile(io.BytesIO(data)) as z:
-        out["data_2023_members"] = z.namelist()
-        member = next(
-            n for n in z.namelist()
-            if n.lower().endswith("r03_indicatori_2023_sezioni.xlsx")
-        )
+        names = z.namelist()
+        out["data_2023_members"] = names
+        member = _select_lombardia_2023_workbook(names)
+        out["data_2023_selected_member"] = member
         raw = z.read(member)
     xls = pd.ExcelFile(io.BytesIO(raw), engine="openpyxl")
     out["data_2023_sheets"] = xls.sheet_names
-    df = pd.read_excel(xls, sheet_name=xls.sheet_names[0], dtype=object)
+
+    sheet_summaries = []
+    chosen_df = None
+    chosen_sheet = None
+    for sheet in xls.sheet_names:
+        df = pd.read_excel(xls, sheet_name=sheet, dtype=object)
+        columns = [str(c) for c in df.columns]
+        summary = {"sheet": sheet, "rows": int(len(df)), "columns": columns}
+        sheet_summaries.append(summary)
+        low_cols = {str(c).lower() for c in df.columns}
+        if chosen_df is None and any("sez" in c for c in low_cols):
+            chosen_df = df
+            chosen_sheet = sheet
+    out["data_2023_sheet_summaries"] = sheet_summaries
+    if chosen_df is None:
+        raise RuntimeError("No sheet with a section-like field found in Lombardia 2023 workbook")
+    df = chosen_df
+    out["data_2023_selected_sheet"] = chosen_sheet
     out["data_2023_columns"] = [str(c) for c in df.columns]
     out["data_2023_rows"] = int(len(df))
     out["data_2023_head"] = df.head(5).fillna("").astype(str).to_dict("records")
 
-    # Probe candidate keys without assuming schema before observing it.
     section_candidates = [c for c in df.columns if "sez" in str(c).lower()]
     municipality_candidates = [
         c for c in df.columns
@@ -95,7 +130,6 @@ def inspect_istat() -> dict:
     out["municipality_key_candidates"] = [str(c) for c in municipality_candidates]
     out["population_field_candidates"] = [str(c) for c in population_candidates]
 
-    # For each plausible population field, report numeric sum and non-null count.
     candidate_stats = {}
     for c in population_candidates:
         num = pd.to_numeric(df[c], errors="coerce")
@@ -105,8 +139,6 @@ def inspect_istat() -> dict:
         }
     out["population_candidate_stats"] = candidate_stats
 
-    # Report fake-section incidence for each section-like field. ISTAT documents
-    # 888888x and 999999x as non-ordinary/fictitious section identifiers.
     fake_stats = {}
     for c in section_candidates:
         s = df[c].astype(str).str.replace(r"\.0$", "", regex=True).str.strip()
@@ -178,7 +210,6 @@ def inspect_dbgt(core_bbox: list[float]) -> dict:
         "outFields": "*",
         "returnGeometry": "false",
     })
-    # Layer 0 official relationship uses CEDIUV as building identifier.
     volumes = arc_query(0, {
         "where": f"CEDIUV IN ({safe})",
         "outFields": "CLASSID,CEDIUV,UN_VOL_AV,UN_VOL_EX,UN_VOL_QE,Shape_Area,DATA_FIN",
