@@ -1,10 +1,10 @@
 # Gate C — PASS
 
-**Gate:** C — Transit integrity  
-**Verdict:** `PASS`  
-**Workstream:** `gate-c-workstream`  
-**Original baseline:** `549198743e7265b333da565ce6990f9241cfd1fd`  
-**Gate B dependency:** `PASS`, validated computational commit `55d726564e13acca55ce563cc911263ac513acb0`; canonical status subsequently recorded on `antigravity-real-data`.  
+**Gate:** C — Transit integrity
+**Verdict:** `PASS`
+**Workstream:** `gate-c-workstream`
+**Original baseline:** `549198743e7265b333da565ce6990f9241cfd1fd`
+**Gate B dependency:** `PASS`, validated computational commit `55d726564e13acca55ce563cc911263ac513acb0`; canonical status subsequently recorded on `antigravity-real-data`.
 **Audit date:** 2026-09-03
 
 ## Scope closed
