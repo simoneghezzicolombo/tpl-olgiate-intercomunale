@@ -56,6 +56,8 @@ Only destination municipalities represented by enabled routing-anchor lineage in
 
 This prevents the metric from penalising a local bus design for not directly reaching every external workplace municipality in the full national OD matrix.
 
+The frozen routing-anchor CSV contains a reversible UTF-8-as-Latin-1 display-label artefact for `Santa Maria Hoè`. The builder repairs only such reversible municipality display labels before matching them to the OD source and records every repair in the validation JSON. Anchor IDs, graph nodes, geometries, route sequences, source bytes and source checksums remain unchanged. Unrepaired `Ã`/`Â` mojibake is rejected.
+
 ## Explicit non-claims
 
 This workstream does not:
@@ -89,4 +91,4 @@ The certified build materialises:
 - `outputs/phase2/territorial_demand_v2/scenario_territorial_commuting_addressability_v2.csv.gz`;
 - `outputs/phase2/territorial_demand_v2/territorial_commuting_addressability_v2_validation.json`.
 
-The validation report records certified lineage, the full 8,754-worker inventory, the structurally scorable footprint mass, scenario maxima and how many optional-extension scenarios increase structural addressability.
+The validation report records certified lineage, the full 8,754-worker inventory, the structurally scorable footprint mass, municipality-label repairs, scenario maxima and how many optional-extension scenarios increase structural addressability.
