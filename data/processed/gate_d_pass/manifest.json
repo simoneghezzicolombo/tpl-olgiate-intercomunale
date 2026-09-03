@@ -10,9 +10,9 @@
   "source_waypoints_sha256": "a8bf8fe133590230b4cd063b58c3332d27243c11b501c160979a2e1a94de054b",
   "snapshot_files": {
     "structural_candidate_metrics.csv": "0d2c187b888ce711da04fb96a8ff8f6e638f67980099e9d9e67a073b9b6cc2a1",
-    "candidate_loop_evidence.csv": "50d177dbd575b7e14c77e8e59f99770ac0017913a266e96680d7fa8405bda5b3"
+    "candidate_loop_evidence.csv": "b12a047efc70f8cf816cd905a9a6de56ebfee200b1815295f42f75d2b9fbbf4e"
   },
   "epistemic_status": "RECONSTRUCTED",
   "snapshot_semantics": "METRICS_BYTE_IDENTICAL_TO_PASS_ARTIFACT_PLUS_DERIVED_LOOP_CLOSURE_EVIDENCE",
-  "note": "The complete waypoint file is identified by SHA256 but not duplicated in Gate E. candidate_loop_evidence.csv is deterministically derived from it and preserves only loop closure, hub, count and assumption-presence information required by Gate E. Closure CI verifies it against artifact 9891607118."
+  "note": "The complete waypoint file is identified by SHA256 but not duplicated in Gate E. candidate_loop_evidence.csv is deterministically derived from it with canonical LF line endings and preserves only loop closure, hub, count and assumption-presence information required by Gate E. Closure CI verifies it against artifact 9891607118."
 }
