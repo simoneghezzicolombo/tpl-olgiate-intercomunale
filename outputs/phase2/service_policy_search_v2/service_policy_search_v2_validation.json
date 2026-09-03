@@ -1,0 +1,165 @@
+{
+  "status": "PASS_SERVICE_POLICY_SEARCH_V2_BUILD",
+  "contract": "PHASE2_SERVICE_POLICY_FEASIBILITY_SEARCH_V2",
+  "evidence_label": "ASSUMPTION_DESIGN_SPACE_FEASIBILITY_NOT_SERVICE_PLAN",
+  "scenario_count": 100000,
+  "family_counts": {
+    "bidirectional_loop_pair": 9981,
+    "blank_slate": 9981,
+    "hybrid_interlined": 9981,
+    "interlined_figure8": 9981,
+    "multiple_short_radials": 191,
+    "scheduled_extensions": 9981,
+    "short_turn_overlay": 9981,
+    "single_compact_loop": 9981,
+    "trunk_plus_branches": 9981,
+    "two_independent_loops": 9981,
+    "two_radial_out_and_back_feeders": 9980
+  },
+  "policy_count": 288,
+  "nonextension_applicable_policy_count": 72,
+  "scheduled_extension_applicable_policy_count": 288,
+  "feasible_scenario_counts_by_budget": {
+    "m20pct": 54396,
+    "m10pct": 62433,
+    "reference": 69186,
+    "p10pct": 75270,
+    "p20pct": 80636,
+    "p30pct": 85049
+  },
+  "feasible_policy_pair_counts_by_budget": {
+    "m20pct": 1643964,
+    "m10pct": 1965846,
+    "reference": 2287755,
+    "p10pct": 2600823,
+    "p20pct": 2911671,
+    "p30pct": 3207462
+  },
+  "zero_feasible_examples_at_highest_budget": [
+    "P2_00002d4ae8b567e2",
+    "P2_001a9784aebaf10c",
+    "P2_0037da486b7425b7",
+    "P2_00721452bb51cbfa",
+    "P2_00823a07657b7549",
+    "P2_008d1ba4661ddc8e",
+    "P2_0096aaa77ca897d8",
+    "P2_009976eff2bdd213",
+    "P2_009addc9e3a34006",
+    "P2_00d547f2dbee23f9",
+    "P2_00ded6c126649aba",
+    "P2_00f80db16abb5793",
+    "P2_01019fd81cd5351f",
+    "P2_0109d5e1b4f590e2",
+    "P2_010e68ac03095d3e",
+    "P2_010eddb205b1df00",
+    "P2_013a34a5697a86e5",
+    "P2_013c4bd60401c69a",
+    "P2_0145e34b54684e71",
+    "P2_01584378e7d89291"
+  ],
+  "policy_mask_hex_width": 72,
+  "budget_change_fractions": [
+    -0.2,
+    -0.1,
+    0.0,
+    0.1,
+    0.2,
+    0.3
+  ],
+  "budget_caps_annual_bus_km": [
+    89135.20000000001,
+    100277.1,
+    111419.0,
+    122560.90000000001,
+    133702.8,
+    144844.7
+  ],
+  "uniform_clockface_baseline": true,
+  "peak_offpeak_differentiation": false,
+  "production_semantics": "MODEL_OUTPUT_CONTINUOUS_CLOCKFACE_PRODUCTION_APPROXIMATION",
+  "exact_departure_count": false,
+  "exact_timetable_constructed": false,
+  "s8_phase_selected": false,
+  "passenger_utility_calculated": false,
+  "topology_ranked": false,
+  "service_policy_selected": false,
+  "stop_set_selected": false,
+  "fleet_is_lower_bound_not_block_plan": true,
+  "current_annual_service_days_inferred": false,
+  "s8_factual_reference": {
+    "service_date": "2026-09-03",
+    "active_events": 74,
+    "milano_median_headway_min": 30.0,
+    "lecco_median_headway_min": 30.0
+  },
+  "design_space": {
+    "headways_min": [
+      15,
+      20,
+      30,
+      60
+    ],
+    "spans": [
+      {
+        "span_id": "CORE_0600_2200",
+        "start_min": 360,
+        "end_min": 1320,
+        "status": "ASSUMPTION_DESIGN_SPACE"
+      },
+      {
+        "span_id": "S8_EXTENDED_0530_2400",
+        "start_min": 330,
+        "end_min": 1440,
+        "status": "ASSUMPTION_DESIGN_SPACE",
+        "note": "Broad design span informed by the verified 2026-09-03 S8 operating window; it is not an observed bus span and exact S8 event phasing is deferred."
+      }
+    ],
+    "annual_service_days": [
+      {
+        "calendar_id": "IDEALISED_5_DAY_52_WEEK",
+        "days": 260,
+        "status": "ASSUMPTION_DESIGN_SPACE_NOT_ACTUAL_CALENDAR"
+      },
+      {
+        "calendar_id": "IDEALISED_6_DAY_52_WEEK",
+        "days": 312,
+        "status": "ASSUMPTION_DESIGN_SPACE_NOT_ACTUAL_CALENDAR"
+      },
+      {
+        "calendar_id": "IDEALISED_DAILY_YEAR",
+        "days": 365,
+        "status": "ASSUMPTION_DESIGN_SPACE_NOT_ACTUAL_CALENDAR"
+      }
+    ],
+    "recovery_min": [
+      5,
+      10,
+      15
+    ],
+    "scheduled_extension_shares": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ]
+  },
+  "lineage": {
+    "operational_screening": "outputs/phase2/operational_screening_v2/operational_screening_v2.csv",
+    "operational_screening_sha256": "360769388efad25d64f0f6510d78509e0b78ac579ab80d3007b03df337013ddd",
+    "operational_validation": "outputs/phase2/operational_screening_v2/operational_screening_v2_validation.json",
+    "operational_validation_sha256": "e4b7b0dd933ea883751f7bf48fb61e4ebd6d1b18ad058508f624ab91c2937aae",
+    "design_space": "config/phase2_service_policy_design_space_v2.json",
+    "design_space_sha256": "3f5667ec09e70b530e3adff7240c8445027fb62073b25e4b0617652f43a1a468",
+    "s8_contract": "outputs/phase2/s8_interchange_contract.json",
+    "s8_contract_sha256": "4b2c3f2a9d05fb1fc42b3b1c1a8d9fbc153c36267721b332dbb2a643df613d72",
+    "s8_characterization": "outputs/phase2/s8_timetable_characterization.json",
+    "s8_characterization_sha256": "ae9241273661c08b7ec03529af4ff76e7272ef8ba70af75df2aeef019cd4ba0f",
+    "current_timetable_validation": "outputs/phase2/current_service_stop_timetable_validation_2026-09-03.json",
+    "current_timetable_validation_sha256": "16b8c372741bed4b1bc5a871f1cd12a852506f2d0723bdfd74dbcfd6c29c889b",
+    "policy_grid": "outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv",
+    "policy_grid_sha256": "35c4890c0d97ab8f7af43ed71c3628767f5c177f9a9387c4db6a1c02bcc188ff",
+    "feasibility_output": "outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz",
+    "feasibility_output_sha256": "ee15939cefd4ec2a67381bf3aeb7dc7936d74041bf0cab33998dd1bf2296c8e6"
+  },
+  "epistemic_note": "The policy universe is an explicit ASSUMPTION/DESIGN_SPACE. Feasibility masks losslessly retain every budget-feasible policy in the declared grid for each operationally valid topology. No passenger utility, S8 clock phase, exact timetable or recommendation is computed here."
+}
