@@ -17,7 +17,7 @@ from src.service_math import ServiceMathError
 METRICS = ROOT / 'data/processed/gate_d_pass/structural_candidate_metrics.csv'
 LOOPS = ROOT / 'data/processed/gate_d_pass/candidate_loop_evidence.csv'
 METRICS_SHA = '0d2c187b888ce711da04fb96a8ff8f6e638f67980099e9d9e67a073b9b6cc2a1'
-LOOPS_SHA = '50d177dbd575b7e14c77e8e59f99770ac0017913a266e96680d7fa8405bda5b3'
+LOOPS_SHA = 'b12a047efc70f8cf816cd905a9a6de56ebfee200b1815295f42f75d2b9fbbf4e'
 SOURCE_WAYPOINTS_SHA = 'a8bf8fe133590230b4cd063b58c3332d27243c11b501c160979a2e1a94de054b'
 
 
