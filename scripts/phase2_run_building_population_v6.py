@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import shutil
 import sys
 
 import geopandas as gpd
@@ -27,6 +28,8 @@ impl = v5.impl
 CORE_EXPORT_STATUS = "MODEL_OUTPUT_CORE_BUILDING_SECTION_PIECE_POINT"
 CORE_EXPORT_FILE = "building_population_core_pieces.geojson"
 LEGACY_CORE_BUILDING_FILE = "building_population_buildings_core.geojson"
+FROZEN_GEOMETRY_FILE = "building_population_source_istat_R03_21.zip"
+FROZEN_POSAS_FILE = "building_population_source_posas_2025.zip"
 
 # v5.fetch_dbgt_footprints resolves this global at call time. Replace only the
 # normalization stage: source acquisition and raw snapshot remain unchanged.
@@ -124,7 +127,53 @@ def _write_core_piece_export(output_dir: Path) -> tuple[int, float]:
     return len(core), population
 
 
-def _postprocess_piece_outputs(output_dir: Path) -> None:
+def _freeze_official_inputs(output_dir: Path, source_cache: Path, manifest: dict) -> dict:
+    """Copy the modest official archives needed for a source-frozen replay.
+
+    The 2023 census package is large, but the exact original regional workbook
+    extracted from it is already staged by CI. Geometry 2021 and POSAS 2025 are
+    small enough to carry as their original downloaded archives. Their bytes are
+    verified against the hashes recorded during the live official-source build
+    before being admitted to the evidence bundle.
+    """
+    specs = [
+        (
+            source_cache / "istat_R03_21.zip",
+            output_dir / FROZEN_GEOMETRY_FILE,
+            manifest["sources"]["istat_2021_geometry"]["sha256"],
+            "ISTAT 2021 Lombardia territorial-bases archive",
+        ),
+        (
+            source_cache / "POSAS_2025_it_Comuni.zip",
+            output_dir / FROZEN_POSAS_FILE,
+            manifest["sources"]["istat_posas_2025"]["sha256"],
+            "ISTAT POSAS 2025 municipal archive",
+        ),
+    ]
+    frozen = {}
+    for source, destination, expected_sha, label in specs:
+        if not source.is_file():
+            raise RuntimeError(f"official source archive missing before evidence freeze: {source}")
+        actual_sha = impl.sha256_file(source)
+        if actual_sha != expected_sha:
+            raise RuntimeError(
+                f"official source archive checksum changed before evidence freeze: "
+                f"{label}: {actual_sha} != {expected_sha}"
+            )
+        shutil.copyfile(source, destination)
+        copied_sha = impl.sha256_file(destination)
+        if copied_sha != expected_sha:
+            raise RuntimeError(f"copied official source archive checksum mismatch: {destination}")
+        frozen[destination.name] = {
+            "label": label,
+            "sha256": copied_sha,
+            "bytes": destination.stat().st_size,
+            "epistemic_status": "FACT_OFFICIAL_SOURCE_ARCHIVE_FROZEN_FOR_REPLAY",
+        }
+    return frozen
+
+
+def _postprocess_piece_outputs(output_dir: Path, source_cache: Path) -> None:
     validation_path = output_dir / "building_population_validation.json"
     manifest_path = output_dir / "building_population_source_manifest.json"
     if not validation_path.is_file() or not manifest_path.is_file():
@@ -133,6 +182,7 @@ def _postprocess_piece_outputs(output_dir: Path) -> None:
     core_feature_count, core_population = _write_core_piece_export(output_dir)
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    frozen_inputs = _freeze_official_inputs(output_dir, source_cache, manifest)
     fp = manifest["sources"]["lombardia_dbgt_footprints"]
     validation = json.loads(validation_path.read_text(encoding="utf-8"))
     if abs(core_population - float(validation["core_building_population_located"])) > 1e-7:
@@ -151,6 +201,8 @@ def _postprocess_piece_outputs(output_dir: Path) -> None:
         "core_spatial_export_feature_count": int(core_feature_count),
         "core_spatial_export_population_model": core_population,
         "legacy_whole_building_core_geojson_emitted": False,
+        "official_geometry_2021_archive_frozen": True,
+        "official_posas_2025_archive_frozen": True,
         "dbgt_unlinked_active_footprints_excluded": int(fp["raw_active_footprints_without_classref_excluded"]),
         "dbgt_unlinked_active_footprint_area_m2_excluded": float(fp["raw_active_footprints_without_classref_excluded_area_m2"]),
         "dbgt_unlinked_footprint_status": UNLINKED_STATUS,
@@ -185,6 +237,7 @@ def _postprocess_piece_outputs(output_dir: Path) -> None:
         "whole_building_core_membership_rule_used": False,
         "legacy_whole_building_core_geojson_emitted": False,
     }
+    manifest["frozen_official_input_archives"] = frozen_inputs
     manifest["dbgt_unlinked_footprint_semantics"] = {
         "status": UNLINKED_STATUS,
         "population_assigned": False,
@@ -208,6 +261,9 @@ if __name__ == "__main__":
     output_dir = Path("outputs/phase2")
     if "--output-dir" in sys.argv:
         output_dir = Path(sys.argv[sys.argv.index("--output-dir") + 1])
+    source_cache = Path("/tmp/building_population_sources")
+    if "--source-cache" in sys.argv:
+        source_cache = Path(sys.argv[sys.argv.index("--source-cache") + 1])
     v5._postprocess_outputs(output_dir)
-    _postprocess_piece_outputs(output_dir)
+    _postprocess_piece_outputs(output_dir, source_cache)
     sys.exit(result)
