@@ -72,10 +72,10 @@ def exact_physical_equivalence(stops: Mapping[str, GtfsStop]) -> dict[str, tuple
             lat = float(stop.stop_lat)
             lon = float(stop.stop_lon)
         except (TypeError, ValueError):
-            groups[("UNMERGEABLE", stop_id)].append(stop_id)
+            groups.setdefault(("UNMERGEABLE", stop_id), []).append(stop_id)
             continue
         if not tokens:
-            groups[("UNMERGEABLE", stop_id)].append(stop_id)
+            groups.setdefault(("UNMERGEABLE", stop_id), []).append(stop_id)
             continue
         key = (tokens, lat, lon)
         groups.setdefault(key, []).append(stop_id)
