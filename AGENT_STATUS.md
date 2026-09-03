@@ -145,3 +145,35 @@ In conformità alla regola di arresto (§ 10), il lavoro a valle rimane congelat
 **Autore:** GPT
 **Branch revisionato:** `antigravity-real-data`
 **Verdetto:** GATE A provenance: FAIL MIRATO / RESUBMIT REQUIRED (superato con Handoff 4).
+---
+
+## Handoff GPT — Phase 2 frozen Gate D graph
+
+**Timestamp:** 2026-09-03  
+**Autore:** GPT reviewer/co-developer  
+**Branch:** `phase2-graph-freeze`  
+**Commit computazionale validato:** `6f239484fdcdc04a98eb3777d2cd0bb5228f0dd3`  
+**CI source-closed:** run `33770304214`, job `100694808106` — SUCCESS  
+**Task:** materializzazione persistente e deterministica del grafo bus-eligible Gate D e primo reduced transfer graph.
+
+### Risultati principali
+
+- Gate D epoch canonico: `7c220f7586d0f6e5cccd14a2d518be52eb1c4a55`.
+- Raw OSM Gate D canonico SHA256: `834d5caa0bfd6e9f4a1400ef5d2f5083ed0da60ba51c0331f59fcbcb5d4b097c`.
+- Frozen directed bus graph: 104.071 nodi e 199.217 archi.
+- Turn restrictions: 564 regole serializzate, 551 chiavi, 535 chiavi presenti nel grafo.
+- Reduced transfer layer: 597 anchor rows, 480 nodi stradali unici, 476 nella componente principale e 4 in componenti minori preservate.
+- Seed shortest-path cache: 240 percorsi ordinati, 118 coppie con asimmetria direzionale.
+- Source closure: `SOURCE_CLOSED`; build policy `FORBID_LIVE_OSM_AND_OVERPASS`.
+
+### Stato epistemico e limiti
+
+- Il grafo è `DERIVED` dal frozen snapshot Gate D PASS, non da OSM live.
+- Le fermate GTFS restano evidenza ufficiale; gli anchor progettuali Gate D mantengono il proprio stato `ASSUMPTION` e non vengono promossi a FACT.
+- Nessuna proposed stop è stata generata e nessuna topologia è stata selezionata.
+- Restano ereditate le limitazioni Gate D sulle 8 restriction `via-way` non approssimate; future topologie che le attraversano richiederanno supporto completo.
+- I 4 reduced nodes fuori dalla componente principale sono conservati e devono essere gestiti esplicitamente dai workstream downstream, non eliminati silenziosamente.
+
+### Contratto per il workstream successivo
+
+Usare `data/phase2/frozen_gate_d/source/` e `outputs/phase2/frozen_gate_d/` come input canonici. Non sostituire il frozen graph con acquisizioni live Overpass. Proposed stops possono essere aggiunte soltanto come nuove entità tracciate e con stato `PROPOSED_STOP/FIELD_CHECK_PENDING`.
