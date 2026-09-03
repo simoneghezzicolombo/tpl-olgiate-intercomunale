@@ -36,12 +36,8 @@ def _toy_roads():
 def test_legacy_candidate_script_contains_no_precomputed_metrics_or_recommendation():
     text = Path("scripts/08_candidate_routes.py").read_text(encoding="utf-8")
     forbidden = [
-        "pop_servita_5min",
-        "od_flusso_intercettato",
-        "runtime_ovest_min",
-        "km_ovest",
-        "PARETO-OTTIMALE",
-        "(Raccomandata)",
+        "pop_servita_5min", "od_flusso_intercettato", "runtime_ovest_min",
+        "km_ovest", "PARETO-OTTIMALE", "(Raccomandata)",
     ]
     for token in forbidden:
         assert token not in text
@@ -49,17 +45,67 @@ def test_legacy_candidate_script_contains_no_precomputed_metrics_or_recommendati
 
 def test_bus_graph_honours_oneway_and_uses_projected_metric_lengths():
     graph = gate_d.build_bus_graph(_toy_roads())
-    assert graph.number_of_edges() == 3  # one directed + one bidirectional segment
+    assert graph.number_of_edges() == 3
     lengths = [d["length_m"] for _, _, d in graph.edges(data=True)]
     assert all(50 < x < 150 for x in lengths)
     assert all(d["running_minutes"] > 0 for _, _, d in graph.edges(data=True))
 
 
-def test_explicit_access_restriction_is_excluded():
+def test_multivertex_osm_way_is_split_at_internal_vertices():
+    roads = gpd.GeoDataFrame(
+        [{
+            "highway": "residential",
+            "other_tags": '"maxspeed"=>"30"',
+            "geometry": LineString([
+                (9.4000, 45.7300), (9.4010, 45.7300), (9.4020, 45.7300)
+            ]),
+        }],
+        crs=4326,
+    )
+    graph = gate_d.build_bus_graph(roads)
+    assert graph.number_of_edges() == 4
+    assert graph.number_of_nodes() == 3
+
+
+def test_oneway_minus_one_routes_only_reverse_direction():
+    roads = gpd.GeoDataFrame(
+        [{
+            "highway": "residential",
+            "other_tags": '"oneway"=>"-1"',
+            "geometry": LineString([(9.4000, 45.7300), (9.4010, 45.7300)]),
+        }],
+        crs=4326,
+    )
+    graph = gate_d.build_bus_graph(roads)
+    assert graph.number_of_edges() == 1
+    u, v = next(iter(graph.edges()))
+    assert u[0] > v[0]
+
+
+def test_roundabout_defaults_to_oneway_when_tag_missing():
+    direction, warning = gate_d.oneway_direction({"junction": "roundabout"})
+    assert direction == 1
+    assert warning is None
+
+
+def test_explicit_access_restriction_is_excluded_unless_bus_override_exists():
     row = pd.Series({"highway": "residential", "other_tags": '"access"=>"private"'})
     eligible, reasons = gate_d.bus_eligibility(row)
     assert not eligible
     assert "explicit_access_restriction" in reasons
+    override = pd.Series({
+        "highway": "residential",
+        "other_tags": '"access"=>"private","bus"=>"yes"',
+    })
+    eligible, _ = gate_d.bus_eligibility(override)
+    assert eligible
+
+
+def test_explicit_bus_no_always_excluded():
+    row = pd.Series({"highway": "residential", "other_tags": '"bus"=>"no"'})
+    eligible, reasons = gate_d.bus_eligibility(row)
+    assert not eligible
+    assert "explicit_bus_restriction" in reasons
 
 
 def test_unknown_road_class_not_silently_routed():
@@ -67,6 +113,14 @@ def test_unknown_road_class_not_silently_routed():
     eligible, reasons = gate_d.bus_eligibility(row)
     assert not eligible
     assert reasons == ["highway=footway"]
+
+
+def test_top_level_maxspeed_column_is_not_lost():
+    row = pd.Series({"highway": "residential", "maxspeed": "30", "other_tags": ""})
+    tags = gate_d.row_tags(row)
+    speed, status = gate_d.parse_speed_kmh(tags, "residential")
+    assert speed == pytest.approx(21.0)
+    assert status == "MODEL_OUTPUT_FROM_OSM_MAXSPEED"
 
 
 def test_missing_maxspeed_is_explicit_assumption_not_fact():
@@ -78,24 +132,34 @@ def test_missing_maxspeed_is_explicit_assumption_not_fact():
 def test_osm_maxspeed_still_produces_model_output_not_observed_runtime():
     speed, status = gate_d.parse_speed_kmh({"maxspeed": "30"}, "residential")
     assert speed == pytest.approx(21.0)
-    assert status == "MODEL OUTPUT_FROM_OSM_MAXSPEED"
+    assert status == "MODEL_OUTPUT_FROM_OSM_MAXSPEED"
 
 
 def test_waypoint_schema_requires_epistemic_status_and_rejects_duplicates():
-    good = pd.DataFrame(
-        {
-            "candidate_id": ["A", "A"],
-            "sequence": [1, 2],
-            "lat": [45.73, 45.731],
-            "lon": [9.40, 9.41],
-            "epistemic_status": ["ASSUMPTION", "FACT"],
-        }
-    )
+    good = pd.DataFrame({
+        "candidate_id": ["A", "A"], "sequence": [1, 2],
+        "lat": [45.73, 45.731], "lon": [9.40, 9.41],
+        "epistemic_status": ["ASSUMPTION", "FACT"],
+    })
     gate_d.validate_waypoints(good)
     bad = good.copy()
     bad.loc[1, "sequence"] = 1
     with pytest.raises(ValueError, match="Duplicate sequence"):
         gate_d.validate_waypoints(bad)
+
+
+def test_far_waypoint_fails_closed_instead_of_snapping_anywhere():
+    graph = gate_d.build_bus_graph(_toy_roads())
+    points = gpd.GeoDataFrame(
+        {
+            "candidate_id": ["A", "A"], "sequence": [1, 2],
+            "epistemic_status": ["ASSUMPTION", "ASSUMPTION"],
+        },
+        geometry=gpd.points_from_xy([9.9, 9.901], [46.0, 46.001]),
+        crs=4326,
+    )
+    with pytest.raises(ValueError, match="snap distance"):
+        gate_d.route_candidate(graph, points, "A", max_snap_m=100.0)
 
 
 def test_no_random_generation_in_gate_d_pipeline():
