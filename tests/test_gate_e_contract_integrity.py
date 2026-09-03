@@ -1,11 +1,17 @@
+from pathlib import Path
+import sys
+
 import pytest
 
-from src.service_contract_integrity import (
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from src.service_contract_integrity import (  # noqa: E402
     headway_cycle_count_audit,
     regular_pattern_departure_count_bounds,
     validate_nonoverlapping_bands,
 )
-from src.service_math import ServiceBandDirectionPlan, ServiceMathError
+from src.service_math import ServiceBandDirectionPlan, ServiceMathError  # noqa: E402
 
 
 def plan(*, band_id="AM", start="06:00:00", end="09:00:00", direction="CW", headway=60, cycles=3):
