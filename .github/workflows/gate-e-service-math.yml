@@ -18,6 +18,7 @@ on:
       - 'scripts/gate_e_operating_envelope.py'
       - 'scripts/gate_e_normalize_gate_d.py'
       - 'scripts/gate_e_screen_gate_d.py'
+      - 'scripts/gate_e_gtfs_runtime_benchmark.py'
       - 'tests/test_gate_e_*.py'
       - 'tests/test_cycle_times.py'
       - 'schemas/gate_e_*.csv'
@@ -43,6 +44,7 @@ on:
       - 'scripts/gate_e_operating_envelope.py'
       - 'scripts/gate_e_normalize_gate_d.py'
       - 'scripts/gate_e_screen_gate_d.py'
+      - 'scripts/gate_e_gtfs_runtime_benchmark.py'
       - 'tests/test_gate_e_*.py'
       - 'tests/test_cycle_times.py'
       - 'schemas/gate_e_*.csv'
@@ -81,7 +83,7 @@ jobs:
           scripts/gate_e_build_input.py scripts/gate_e_headway_audit.py
           scripts/gate_e_fleet_audit.py scripts/gate_e_gate_c_baseline.py
           scripts/gate_e_operating_envelope.py scripts/gate_e_normalize_gate_d.py
-          scripts/gate_e_screen_gate_d.py
+          scripts/gate_e_screen_gate_d.py scripts/gate_e_gtfs_runtime_benchmark.py
       - name: Gate E tests
         run: pytest -q tests/test_gate_e_*.py tests/test_cycle_times.py
       - name: Gate C PASS pinned integration
@@ -103,6 +105,25 @@ jobs:
           assert all(r['annualization_status'] == 'FORBIDDEN_FROM_SINGLE_DATE_BASELINE' for r in rows)
           assert all(r['gate_c_commit'] == 'dcc3e75ae3b4f4ea5170f48e85345b83620c5536' for r in rows)
           assert {r['epistemic_status'] for r in rows} <= {'RECONSTRUCTED', 'DERIVED'}
+          PY
+      - name: Gate C pinned D184/D185 GTFS runtime calibration
+        shell: bash
+        run: |
+          GATE_C_PASS=dcc3e75ae3b4f4ea5170f48e85345b83620c5536
+          git show "$GATE_C_PASS:data/raw/gtfs/agency_arriva/trips.txt" > /tmp/arriva_trips.txt
+          git show "$GATE_C_PASS:data/raw/gtfs/agency_arriva/stop_times.txt" > /tmp/arriva_stop_times.txt
+          python scripts/gate_e_gtfs_runtime_benchmark.py \
+            --trips /tmp/arriva_trips.txt \
+            --stop-times /tmp/arriva_stop_times.txt \
+            --source-commit "$GATE_C_PASS" \
+            --output /tmp/gate_e_gtfs_runtime_benchmark.csv
+          python - <<'PY'
+          import csv
+          rows = list(csv.DictReader(open('/tmp/gate_e_gtfs_runtime_benchmark.csv', encoding='utf-8')))
+          assert rows
+          assert {'D184', 'D185'} <= {r['route_id'] for r in rows}
+          assert all(r['epistemic_status'] == 'DERIVED' for r in rows)
+          assert all('NOT_OBSERVED' in r['runtime_semantics'] for r in rows)
           PY
       - name: Benchmark audit
         run: python scripts/10_service_simulation.py --benchmark-only --budget-output /tmp/gate_e_budget.csv
