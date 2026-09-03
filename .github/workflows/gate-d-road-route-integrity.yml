@@ -23,6 +23,10 @@ on:
       - .github/workflows/gate-d-road-route-integrity.yml
   workflow_dispatch:
 
+concurrency:
+  group: gate-d-workstream-road-audit
+  cancel-in-progress: true
+
 jobs:
   gate-d-unit-and-static:
     runs-on: ubuntu-latest
