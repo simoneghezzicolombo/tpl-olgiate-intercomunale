@@ -19,7 +19,7 @@ jobs:
     env:
       PYTHONPATH: .
     permissions:
-      contents: read
+      contents: write
       actions: read
     steps:
       - uses: actions/checkout@v4
@@ -134,6 +134,35 @@ jobs:
 
       - name: Diff and whitespace check
         run: git diff --check 1b9b3d359be48bf58e592e0698702f58e7559e19...HEAD
+
+      - name: Persist audited optimizer-facing outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "phase2-stop-universe-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add \
+            outputs/phase2/existing_official_stops.csv \
+            outputs/phase2/existing_official_stops.geojson \
+            outputs/phase2/existing_stop_catchment_summary.csv \
+            outputs/phase2/existing_stop_catchment_cells_12min.csv \
+            outputs/phase2/accessibility_gap_cells.csv \
+            outputs/phase2/accessibility_gap_cells.geojson \
+            outputs/phase2/settlement_destination_anchors.csv \
+            outputs/phase2/settlement_destination_anchors.geojson \
+            outputs/phase2/proposed_stop_candidates.csv \
+            outputs/phase2/proposed_stop_candidates.geojson \
+            outputs/phase2/proposed_stop_candidate_catchment_cells_10min.csv \
+            outputs/phase2/interchange_opportunities.csv \
+            outputs/phase2/candidate_pruning_audit.csv \
+            outputs/phase2/stop_universe_validation.json \
+            outputs/phase2/stop_universe_checksums.sha256
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist audited candidate-stop universe"
+            git push origin HEAD:phase2-stop-universe
+          else
+            echo "Audited stop-universe outputs already match the branch."
+          fi
 
       - name: Upload stop-universe evidence
         uses: actions/upload-artifact@v4
