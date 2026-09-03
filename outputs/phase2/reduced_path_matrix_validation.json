@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "contract": "PHASE2_REDUCED_STOP_PATH_MATRIX_V1",
+  "epoch_id": "gate-d-2026-09-03-834d5caa0bfd",
+  "hub_anchor_id": "rail:S01514",
+  "source_anchor_count": 224,
+  "source_anchor_counts": {
+    "EXISTING_PHYSICAL_STOP_CLUSTER": 43,
+    "HUB_RAIL": 1,
+    "PROPOSED_STOP": 180
+  },
+  "source_snap_status_counts": {
+    "ROUTE_READY_LE_75M": 224
+  },
+  "route_ready_source_anchors": 224,
+  "collapsed_same_graph_node_source_anchors": 2,
+  "routing_anchor_count": 223,
+  "unique_graph_node_count": 223,
+  "one_to_many_dijkstra_runs": 223,
+  "ordered_path_rows": 46442,
+  "ordered_path_rows_possible": 49506,
+  "path_matrix_completeness": 0.9381085120995435,
+  "missing_ordered_pairs": 3064,
+  "directionally_asymmetric_unordered_pairs": 20140,
+  "uncertainty_counts": {
+    "QUANTIFIED": 45177,
+    "UNKNOWN": 1265
+  },
+  "cache_strategy": "ONE_RESTRICTION_AWARE_ONE_TO_MANY_DIJKSTRA_PER_UNIQUE_ROUTING_SOURCE_NODE",
+  "lineage": {
+    "frozen_graph_validation": "outputs/phase2/frozen_gate_d/graph_validation.json",
+    "frozen_graph_validation_sha256": "21304644c9ba9f5e66a28c661af8da7661634b7aeba4958603ad94c9301291fa",
+    "existing_stops": "outputs/phase2/existing_official_stops.csv",
+    "existing_stops_sha256": "63187ecd6b8a3ef1b433c55b829c241e2622a0abb3b695afb2733cc470c01071",
+    "proposed_stops": "outputs/phase2/proposed_stop_candidates.csv",
+    "proposed_stops_sha256": "3f67eefb2a31f4f7f1aa0ae2223406fc9e68f961a248ecdcfe39724d8d4600b4",
+    "routing_anchor_universe_sha256": "e15487685adc357485320764946b1b965ca6caf74e2515a5d9d3237862f6a2ed",
+    "routing_anchor_membership_sha256": "34e29f086571dfd70d04b6c2527ef4524d7d08af9602adba17c3c2277f64fb19",
+    "reduced_path_matrix_sha256": "3d19d043449be8d0d9812ba8156c1cc90cfef1994c218dee2a9a1f814e19b0b5"
+  },
+  "prohibitions": {
+    "live_osm_used": false,
+    "random_generation_used": false,
+    "topology_selected": false,
+    "proposed_stop_physically_certified": false,
+    "headway_or_timetable_selected": false
+  },
+  "epistemic_note": "The path matrix makes candidate locations routable on the frozen Gate D epoch. It does not turn PROPOSED_STOP/FIELD_CHECK_PENDING into a verified physical stop."
+}
