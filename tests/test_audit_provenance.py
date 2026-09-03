@@ -156,6 +156,7 @@ def test_osm_acquisition_extent_covers_core_boundaries():
     assert meta.exists(), "OSM bbox metadata missing"
     import json
     payload = json.loads(meta.read_text(encoding="utf-8"))
+    assert payload.get("buffer_m") == 500.0
     south, west, north, east = payload["bbox_south_west_north_east"]
     bounds = gpd.read_file("data/raw/boundaries/comuni_core_istat_2026.geojson").to_crs(4326)
     minx, miny, maxx, maxy = bounds.total_bounds

@@ -10,7 +10,7 @@ Gate B sostituisce integralmente la precedente modellazione spaziale sintetica. 
 - confini comunali ISTAT 2026 dei cinque comuni core;
 - WorldPop 2020 100 m reale, con valore raw preservato;
 - POSAS ISTAT 2025 per i totali comunali;
-- OpenStreetMap acquisito via Overpass con estensione derivata dall'intera geometria ufficiale dei cinque comuni e buffer di continuità;
+- OpenStreetMap acquisito via Overpass con estensione derivata dall'intera geometria ufficiale dei cinque comuni e buffer metrico UTM di 500 m, maggiore del contesto stradale Gate B di 350 m;
 - Copernicus DEM GLO-30, trattato correttamente come DSM;
 - `stops.txt` del GTFS ufficiale Agenzia TPL Como-Lecco-Varese come fonte primaria delle fermate.
 

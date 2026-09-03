@@ -531,21 +531,18 @@ def step_7_osm_real_data(boundaries: gpd.GeoDataFrame) -> None:
     bbox_meta_file = out_dir / "osm_core_bbox.meta.json"
 
     # Gate B spatial-integrity prerequisite: derive the acquisition extent from the
-    # full official municipal geometry rather than from a hand-written bbox. A
-    # small buffer preserves road-network continuity just outside administrative
-    # borders. This matters especially for northern Brivio, which extended beyond
-    # the earlier 45.760 N cutoff.
-    minx, miny, maxx, maxy = boundaries.to_crs(4326).total_bounds
-    bbox_pad_deg = 0.002
-    bbox = (
-        float(miny - bbox_pad_deg),
-        float(minx - bbox_pad_deg),
-        float(maxy + bbox_pad_deg),
-        float(maxx + bbox_pad_deg),
-    )
+    # full official municipal geometry rather than from a hand-written bbox. Use a
+    # metric buffer, not angular-degree padding, so east-west and north-south margins
+    # have a defensible physical meaning. 500 m exceeds Gate B's 350 m road-context
+    # buffer and avoids artificially truncating the pedestrian graph at borders.
+    buffered_core_utm = boundaries.to_crs(32632).geometry.union_all().buffer(500.0)
+    buffered_wgs84 = gpd.GeoSeries([buffered_core_utm], crs=32632).to_crs(4326)
+    minx, miny, maxx, maxy = buffered_wgs84.total_bounds
+    bbox = (float(miny), float(minx), float(maxy), float(maxx))
     bbox_meta = {
         "bbox_south_west_north_east": [round(x, 8) for x in bbox],
-        "derived_from": "ISTAT 2026 five-core-municipality total_bounds + 0.002 degree buffer",
+        "derived_from": "ISTAT 2026 five-core-municipality geometry + 500 m UTM32N buffer",
+        "buffer_m": 500.0,
     }
 
     cached_bbox_matches = False
@@ -609,7 +606,7 @@ out center;"""
         stato_epistemico="FACT",
         note=(
             f"Access date 2026-09-03; bbox={bbox}; extent derived from the full "
-            "ISTAT core-municipality geometry with 0.002 degree buffer; raw snapshot "
+            "ISTAT core-municipality geometry with a 500 m UTM32N buffer; raw snapshot "
             "checksum recorded here."
         ),
     )
