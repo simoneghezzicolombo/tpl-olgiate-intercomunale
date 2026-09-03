@@ -34,7 +34,9 @@ def test_phase2_destination_ranking_is_complete_and_unique() -> None:
     assert set(destinations["category"]).issubset({"SELF", "OTHER_CORE", "S8_DIRECT", "OTHER_EXTERNAL"})
     for _, group in destinations.groupby("procom_res"):
         assert list(group["rank"]) == list(range(1, len(group) + 1))
-        assert abs(float(group["share_of_origin_pct"].sum()) - 100.0) < 1e-5
+        # Shares are persisted to six decimal places, so the sum can differ from
+        # 100 by a few 1e-5 purely from CSV rounding across many destinations.
+        assert abs(float(group["share_of_origin_pct"].sum()) - 100.0) < 1e-4
 
 
 def test_s8_municipalities_come_from_gtfs_spatial_join() -> None:
