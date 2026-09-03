@@ -215,8 +215,9 @@ def fetch_recent_population_and_employment() -> dict:
     # Pull labour-condition data for 2019-2024. We only materialise rows whose
     # category semantics are already documented in the repo/official flow:
     # CUR_ACT_STAT=1 occupied, GENDER=T, CITIZENSHIP=TOTAL, EDU=ALL, LOC=ALL,
-    # REAS=ALL. Prefer AGE=TOTAL if published; otherwise we report NOT IDENTIFIED
-    # rather than summing overlapping age aggregates.
+    # REAS=ALL. The published aggregate Y_GE15 means age 15 and over and is
+    # directly usable as the total employed-resident population. We do not sum
+    # the overlapping age categories.
     lab_url, lab_rows = fetch_sdmx("DF_DCSS_ISTR_LAV_PEN_2_TV_3", f"A.{codes}........", 2019, 2024)
     occupied: dict[tuple[str,int],float]={}
     age_values=set()
@@ -226,7 +227,7 @@ def fetch_recent_population_and_employment() -> dict:
         if r.get("GENDER") != "T" or r.get("CITIZENSHIP") != "TOTAL" or r.get("EDU_ATTAIN") != "ALL" or r.get("LOC_DEST") != "ALL" or r.get("REAS_COMMUTING") != "ALL":
             continue
         age_values.add(r.get("AGE_NOCLASS",""))
-        if r.get("AGE_NOCLASS") != "TOTAL":
+        if r.get("AGE_NOCLASS") != "Y_GE15":
             continue
         try:
             occupied[(r["REF_AREA"],int(str(r["TIME_PERIOD"])[:4]))]=float(r["OBS_VALUE"])
