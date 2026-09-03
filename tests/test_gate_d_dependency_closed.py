@@ -53,6 +53,30 @@ def test_non_loop_existing_corridor_alternatives_are_present():
     )
 
 
+def test_feed_without_target_routes_returns_schema_correct_empty_geodataframe():
+    feed = {
+        "feed_label": "OTHER_OPERATOR",
+        "routes": pd.DataFrame(
+            {"route_id": ["R1"], "route_short_name": ["UNRELATED"]}
+        ),
+        "trips": pd.DataFrame(
+            {"route_id": ["R1"], "trip_id": ["T1"], "shape_id": ["S1"]}
+        ),
+        "shapes": pd.DataFrame(
+            {
+                "shape_id": ["S1", "S1"],
+                "shape_pt_lat": [45.70, 45.71],
+                "shape_pt_lon": [9.40, 9.41],
+                "shape_pt_sequence": ["1", "2"],
+            }
+        ),
+    }
+    result = module.shape_lines(feed, {"D184", "D185"})
+    assert result.empty
+    assert result.crs.to_epsg() == 4326
+    assert "geometry" in result.columns
+
+
 def test_dependency_closed_summary_does_not_claim_a_route_recommendation():
     metrics = pd.DataFrame(
         [
