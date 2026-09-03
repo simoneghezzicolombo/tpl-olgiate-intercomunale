@@ -60,7 +60,7 @@ def aggregate(rows: list[dict[str, str]]) -> list[dict[str, object]]:
         )
         cw_stats = observed_headway_stats([r["departure_time"] for r in directions["CW"]])
         ccw_stats = observed_headway_stats([r["departure_time"] for r in directions["CCW"]])
-        combined_allowed = (
+        combined_allowed = bool(
             shared_pattern == {"CONFIRMED"} and directions["CW"] and directions["CCW"]
         )
         combined = (
