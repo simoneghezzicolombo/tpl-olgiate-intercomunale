@@ -25,6 +25,7 @@ def _frame():
         data[metric] = [values[metric], values[metric]]
         data[f"{metric}__unit"] = [spec["unit"], spec["unit"]]
         data[f"{metric}__semantics"] = [spec["semantics"], spec["semantics"]]
+        data[f"{metric}__comparison_basis"] = [f"BASIS_{metric}", f"BASIS_{metric}"]
     return pd.DataFrame(data)
 
 
@@ -52,8 +53,22 @@ def test_rate_equivalent_semantics_are_mandatory():
         validate_gate_f_metric_contract(df)
 
 
+def test_missing_comparison_basis_fails_closed():
+    df = _frame().drop(columns=["s8_useful_connection_pct__comparison_basis"])
+    with pytest.raises(ValueError, match="missing comparison-basis"):
+        validate_gate_f_metric_contract(df)
+
+
+def test_different_denominators_or_timebases_are_rejected():
+    df = _frame()
+    df["population_covered_pct__comparison_basis"] = ["POP_10MIN", "POP_12MIN"]
+    with pytest.raises(ValueError, match="comparison bases differ"):
+        validate_gate_f_metric_contract(df)
+
+
 def test_contract_manifest_is_data_free_and_declares_all_metrics():
     manifest = metric_contract_manifest()
     assert set(manifest) == set(METRIC_CONTRACT)
     assert manifest["annual_bus_km"]["unit"] == "bus-km/year"
     assert manifest["headway_combined_min"]["semantics"] == "RATE_EQUIVALENT_NOT_MAX_GAP"
+    assert manifest["population_covered_pct"]["comparison_basis_rule"].startswith("NONEMPTY")

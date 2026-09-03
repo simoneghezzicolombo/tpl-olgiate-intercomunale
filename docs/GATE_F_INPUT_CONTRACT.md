@@ -6,7 +6,7 @@ This contract is deliberately data-free. It defines how Gate F will ingest outpu
 
 `scenario_id` is the only join key. Gate F never joins on labels, route names or topology names. The scenario catalog is authoritative for the universe of alternatives. Gate D must assess road feasibility for the **entire** catalog. B/C/E must cover every Gate-D-eligible scenario. Missing eligible rows are a hard failure; silent inner-join row loss is forbidden.
 
-Every metric requires four pieces of metadata: epistemic `__status`, traceable `__source`, canonical `__unit` and explicit `__semantics`. Wrong units or semantics fail closed.
+Every metric requires epistemic `__status`, traceable `__source`, canonical `__unit`, explicit `__semantics` and a non-empty `__comparison_basis`. For each metric the comparison basis must be identical across compared scenarios. Gate F therefore refuses, for example, population percentages calculated on different access thresholds/denominators or S8 percentages calculated on different service-date universes.
 
 ## Scenario catalog
 
@@ -18,45 +18,45 @@ For every eligible scenario:
 
 - `population_covered_pct`, unit `%`, semantics `PERCENT_OF_DEFINED_POPULATION_DENOMINATOR`;
 - `territories_served_count`, unit `count`, semantics `COUNT_OF_DEFINED_TERRITORIAL_UNITS`;
-- matching `__status` and `__source` columns.
+- matching status/source/comparison-basis metadata.
 
-These must be scenario-specific outputs from the validated Gate B accessibility machinery. The denominator/territorial-unit definition must remain documented upstream.
+The comparison basis must identify the same accessibility threshold, population denominator/calibration and territorial universe for all scenarios. Gate F does not choose those definitions on Gate B's behalf.
 
 ## Gate C fragment
 
 For every eligible scenario:
 
 - `s8_useful_connection_pct`, unit `%`, semantics `PERCENT_OF_DEFINED_S8_CONNECTION_DENOMINATOR`;
-- matching `__status` and `__source`.
+- matching status/source/comparison-basis metadata.
 
-The denominator must be defined by Gate C. Hand-typed train or bus clock-minute arrays are not admissible.
+The basis must identify one common definition of useful connection and one common S8/service-date evaluation universe. Hand-typed train or bus clock-minute arrays are not admissible.
 
 ## Gate D eligibility fragment
 
 For every catalog scenario:
 
 - `road_feasible`, unit `boolean`, semantics `HARD_ELIGIBILITY_CONSTRAINT`;
-- matching `__status` and `__source`.
+- matching status/source/comparison-basis metadata.
 
-Road feasibility is a constraint, not a Pareto objective. A road-infeasible scenario is excluded before comparison.
+The Gate D comparison basis must identify one common road-feasibility ruleset. Road feasibility is a constraint, not a Pareto objective.
 
 ## Gate E fragment
 
 For every eligible scenario:
 
-- `headway_combined_min`, unit `min`, semantics **exactly** `RATE_EQUIVALENT_NOT_MAX_GAP`;
+- `headway_combined_min`, unit `min`, semantics exactly `RATE_EQUIVALENT_NOT_MAX_GAP`;
 - `annual_bus_km`, unit `bus-km/year`, semantics `ANNUAL_SCHEDULED_BUS_DISTANCE`;
 - `peak_buses_required`, unit `vehicles`, semantics `SIMULTANEOUS_PEAK_VEHICLES`;
-- matching `__status` and `__source`.
+- matching status/source/comparison-basis metadata.
 
-Gate E currently calls the first metric `headway_combined_rate_equiv_min`. Integration may alias that field to the canonical Gate F column only while carrying `RATE_EQUIVALENT_NOT_MAX_GAP`. It is a service-rate equivalent and **must never be described as a guaranteed maximum gap or passenger wait**.
+Gate E currently calls the first metric `headway_combined_rate_equiv_min`. Integration may alias that field to the canonical Gate F column only while retaining `RATE_EQUIVALENT_NOT_MAX_GAP`. Its comparison basis must identify the same service window. It must never be described as a guaranteed maximum gap or passenger wait.
 
 ## Epistemic states and estimates
 
-Production Gate F fragments accept `FACT`, `DERIVED`, `ESTIMATE`, `RECONSTRUCTED`, `MODEL OUTPUT` and `FIELD CHECK`. `ASSUMPTION` is reserved for explicit sensitivity work and is not accepted in the definitive production table. `PLACEHOLDER` and `INVALIDATED` are rejected.
+Production fragments accept `FACT`, `DERIVED`, `ESTIMATE`, `RECONSTRUCTED`, `MODEL OUTPUT` and `FIELD CHECK`. `ASSUMPTION` is reserved for explicit sensitivity work and is not accepted in the definitive production table. `PLACEHOLDER` and `INVALIDATED` are rejected.
 
-If an objective is `ESTIMATE`, a definitive recommendation additionally requires finite source-grounded `<metric>__lower` and `<metric>__upper` bounds. Gate F does not invent those bounds.
+If an objective is `ESTIMATE`, a definitive recommendation additionally requires finite source-grounded lower/upper bounds. Gate F does not invent those bounds.
 
 ## Assembly
 
-Use `scripts/gate_f_build_inputs.py` with explicit catalog/B/C/D/E fragment paths. It writes the canonical scenario table, explicit road-infeasible exclusions and a deterministic SHA256 assembly manifest. No missing metric is imputed, defaulted or reconstructed by Gate F.
+`scripts/gate_f_build_inputs.py` writes the canonical scenario table, explicit road-infeasible exclusions and a deterministic SHA256 assembly manifest. No missing metric is imputed, defaulted or reconstructed by Gate F.
