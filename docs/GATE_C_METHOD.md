@@ -1,7 +1,7 @@
 # Gate C — Transit integrity
 
-**Workstream:** `gate-c-workstream`  
-**Baseline:** `549198743e7265b333da565ce6990f9241cfd1fd` (`antigravity-real-data`)  
+**Workstream:** `gate-c-workstream`
+**Baseline:** `549198743e7265b333da565ce6990f9241cfd1fd` (`antigravity-real-data`)
 **Stato:** PROVISIONAL / IN VALIDAZIONE
 
 ## Obiettivo
