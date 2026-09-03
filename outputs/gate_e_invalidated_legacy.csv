@@ -1,0 +1,6 @@
+artifact,status,gate_e_use,reason
+outputs/route_variants.csv,INVALIDATED,FORBIDDEN_AS_GATE_E_INPUT,Legacy route metrics were manually/hardcoded and are not validated Gate D outputs
+outputs/service_simulation_scenarios.csv,INVALIDATED,FORBIDDEN_AS_GATE_E_INPUT,Legacy service scenarios embedded route/runtime/fleet/frequency/bus-km results directly
+outputs/scenario_comparison.csv,INVALIDATED,FORBIDDEN_AS_GATE_E_INPUT,Depends on legacy scenario metrics rather than validated A-E chain
+data/simulazione_scenari.json,INVALIDATED,FORBIDDEN_AS_GATE_E_INPUT,Legacy scenario values are not provenance-complete Gate E inputs
+data/scenario0_tempi_percorsi.csv,INVALIDATED,FORBIDDEN_AS_GATE_E_INPUT,Legacy route/runtime benchmark is not validated Gate D evidence
