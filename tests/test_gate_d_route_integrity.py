@@ -4,6 +4,7 @@ import importlib.util
 from pathlib import Path
 
 import geopandas as gpd
+import networkx as nx
 import pandas as pd
 import pytest
 from shapely.geometry import LineString
@@ -19,17 +20,32 @@ def _toy_roads():
     return gpd.GeoDataFrame(
         [
             {
+                "osm_way_id": 1,
                 "highway": "residential",
                 "other_tags": '"oneway"=>"yes","maxspeed"=>"30"',
                 "geometry": LineString([(9.4000, 45.7300), (9.4010, 45.7300)]),
             },
             {
+                "osm_way_id": 2,
                 "highway": "residential",
                 "other_tags": '"maxspeed"=>"30"',
                 "geometry": LineString([(9.4010, 45.7300), (9.4020, 45.7300)]),
             },
         ],
         crs=4326,
+    )
+
+
+def _edge(graph, u, v, way, minutes=1.0):
+    graph.add_edge(
+        u,
+        v,
+        osm_way_id=way,
+        running_minutes=minutes,
+        length_m=100.0,
+        speed_status="MODEL_OUTPUT_FROM_OSM_MAXSPEED",
+        uncertainty_flags="",
+        geometry=LineString([u, v]),
     )
 
 
@@ -49,11 +65,13 @@ def test_bus_graph_honours_oneway_and_uses_projected_metric_lengths():
     lengths = [d["length_m"] for _, _, d in graph.edges(data=True)]
     assert all(50 < x < 150 for x in lengths)
     assert all(d["running_minutes"] > 0 for _, _, d in graph.edges(data=True))
+    assert {d["osm_way_id"] for _, _, d in graph.edges(data=True)} == {1, 2}
 
 
 def test_multivertex_osm_way_is_split_at_internal_vertices():
     roads = gpd.GeoDataFrame(
         [{
+            "osm_way_id": 10,
             "highway": "residential",
             "other_tags": '"maxspeed"=>"30"',
             "geometry": LineString([
@@ -70,6 +88,7 @@ def test_multivertex_osm_way_is_split_at_internal_vertices():
 def test_oneway_minus_one_routes_only_reverse_direction():
     roads = gpd.GeoDataFrame(
         [{
+            "osm_way_id": 10,
             "highway": "residential",
             "other_tags": '"oneway"=>"-1"',
             "geometry": LineString([(9.4000, 45.7300), (9.4010, 45.7300)]),
@@ -133,6 +152,45 @@ def test_osm_maxspeed_still_produces_model_output_not_observed_runtime():
     speed, status = gate_d.parse_speed_kmh({"maxspeed": "30"}, "residential")
     assert speed == pytest.approx(21.0)
     assert status == "MODEL_OUTPUT_FROM_OSM_MAXSPEED"
+
+
+def test_no_turn_restriction_forces_legal_alternative_path():
+    graph = nx.MultiDiGraph()
+    start, via, dest, alt = (0.0, 0.0), (1.0, 0.0), (2.0, 0.0), (1.0, 1.0)
+    _edge(graph, start, via, 100, 1.0)
+    _edge(graph, via, dest, 200, 1.0)
+    _edge(graph, via, alt, 300, 1.1)
+    _edge(graph, alt, dest, 400, 1.1)
+    restrictions = {
+        (via, 100): [{"restriction": "no_straight_on", "to_way": 200, "relation_id": 1}]
+    }
+    path = gate_d.shortest_bus_edges(graph, start, dest, restrictions)
+    used_ways = [graph.get_edge_data(u, v, key)["osm_way_id"] for u, v, key in path]
+    assert used_ways == [100, 300, 400]
+
+
+def test_only_turn_restriction_forces_named_to_way():
+    graph = nx.MultiDiGraph()
+    start, via, dest, forbidden = (0.0, 0.0), (1.0, 0.0), (2.0, 0.0), (1.0, 1.0)
+    _edge(graph, start, via, 100, 1.0)
+    _edge(graph, via, dest, 200, 2.0)
+    _edge(graph, via, forbidden, 300, 0.1)
+    _edge(graph, forbidden, dest, 400, 0.1)
+    restrictions = {
+        (via, 100): [{"restriction": "only_straight_on", "to_way": 200, "relation_id": 2}]
+    }
+    path = gate_d.shortest_bus_edges(graph, start, dest, restrictions)
+    used_ways = [graph.get_edge_data(u, v, key)["osm_way_id"] for u, v, key in path]
+    assert used_ways == [100, 200]
+
+
+def test_no_u_turn_does_not_block_straight_continuation_on_same_osm_way():
+    via, previous, straight = (1.0, 0.0), (0.0, 0.0), (2.0, 0.0)
+    restrictions = {
+        (via, 10): [{"restriction": "no_u_turn", "to_way": 10, "relation_id": 3}]
+    }
+    assert not gate_d.transition_allowed(restrictions, via, previous, 10, previous, 10)
+    assert gate_d.transition_allowed(restrictions, via, previous, 10, straight, 10)
 
 
 def test_waypoint_schema_requires_epistemic_status_and_rejects_duplicates():
