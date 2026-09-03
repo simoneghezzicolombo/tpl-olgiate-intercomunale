@@ -1,0 +1,1 @@
+scenario_id,service_day_group,band_id,stop_id,direction,departure_time,analysis_mode,epistemic_status,upstream_gate_c_status,gate_c_artifact,gate_c_commit,shared_stop_pattern_status
