@@ -2,9 +2,8 @@
 """Audit current official Arriva/Lecco Trasporti timetable PDFs.
 
 Current summer-2026 bus service is published as primary timetable PDFs while
-the Agency GTFS snapshot in the repository ends on 2026-06-08. This audit
-keeps the distinction explicit: PDF timetable columns are source-grounded
-RECONSTRUCTED records, never GTFS trips.
+the Agency GTFS snapshot in the repository ends on 2026-06-08. PDF timetable
+columns are therefore source-grounded RECONSTRUCTED records, never GTFS trips.
 """
 from __future__ import annotations
 
@@ -17,7 +16,7 @@ import urllib.request
 from datetime import date
 from pathlib import Path
 
-from pypdf import PdfReader
+import pdfplumber
 
 SOURCES = {
     "D184": "https://www.leccotrasporti.it/percorsi/estivo/linea-d184.pdf",
@@ -45,8 +44,8 @@ DIRECTIONS = {
 
 
 def _download(url: str) -> tuple[bytes, str]:
-    req = urllib.request.Request(url, headers={"User-Agent": "gate-c-transit-audit/1.0"})
-    with urllib.request.urlopen(req, timeout=90) as response:
+    request = urllib.request.Request(url, headers={"User-Agent": "gate-c-transit-audit/1.0"})
+    with urllib.request.urlopen(request, timeout=90) as response:
         payload = response.read()
     if not payload.startswith(b"%PDF"):
         raise RuntimeError(f"Official timetable URL did not return PDF: {url}")
@@ -57,75 +56,53 @@ def _normalise(text: str) -> str:
     return re.sub(r"\s+", " ", text.upper()).strip()
 
 
-def _page_text_and_fragments(page) -> tuple[str, list[dict[str, object]]]:
-    # pypdf deliberately ignores visitor_text in layout mode, so extract the
-    # human-readable layout and coordinates in two separate passes.
-    try:
-        layout_text = page.extract_text(extraction_mode="layout") or ""
-    except TypeError:
-        layout_text = page.extract_text() or ""
-
-    fragments: list[dict[str, object]] = []
-
-    def visitor(text, cm, tm, font_dict, font_size):
-        value = (text or "").strip()
-        if value:
-            fragments.append({"text": value, "x": float(tm[4]), "y": float(tm[5])})
-
-    page.extract_text(visitor_text=visitor)
-    return layout_text, fragments
-
-
-def _cluster_y(fragments: list[dict[str, object]], allowed: set[str]) -> list[list[dict[str, object]]]:
-    selected = [f for f in fragments if str(f["text"]).strip().upper() in allowed]
-    selected.sort(key=lambda f: float(f["y"]), reverse=True)
+def _cluster_top(words: list[dict[str, object]], allowed: set[str]) -> list[list[dict[str, object]]]:
+    selected = [w for w in words if str(w["text"]).strip().upper() in allowed]
+    selected.sort(key=lambda w: float(w["top"]))
     clusters: list[list[dict[str, object]]] = []
-    for frag in selected:
-        y = float(frag["y"])
-        placed = False
+    for word in selected:
+        top = float(word["top"])
         for cluster in clusters:
-            cy = sum(float(x["y"]) for x in cluster) / len(cluster)
-            if abs(y - cy) <= 2.5:
-                cluster.append(frag)
-                placed = True
+            ctop = sum(float(x["top"]) for x in cluster) / len(cluster)
+            if abs(top - ctop) <= 2.5:
+                cluster.append(word)
                 break
-        if not placed:
-            clusters.append([frag])
+        else:
+            clusters.append([word])
     return clusters
 
 
-def _header_columns(fragments: list[dict[str, object]]) -> tuple[list[dict[str, object]], list[str | None]]:
-    day_clusters = _cluster_y(fragments, DAY_CODES)
+def _header_columns(words: list[dict[str, object]]) -> tuple[list[dict[str, object]], list[str | None]]:
+    day_clusters = _cluster_top(words, DAY_CODES)
     if not day_clusters:
-        raise RuntimeError("No scheduled-day coordinate clusters found")
-    day_cluster = max(day_clusters, key=len)
-    if len(day_cluster) < 2:
-        raise RuntimeError("Scheduled-day header could not be distinguished from legend text")
-    day_y = sum(float(f["y"]) for f in day_cluster) / len(day_cluster)
-    days = sorted(day_cluster, key=lambda f: float(f["x"]))
+        raise RuntimeError("No scheduled-day word-coordinate clusters found")
+    day_row = max(day_clusters, key=len)
+    if len(day_row) < 2:
+        raise RuntimeError("Scheduled-day header could not be separated from legend")
+    day_top = sum(float(w["top"]) for w in day_row) / len(day_row)
+    days = sorted(day_row, key=lambda w: float(w["x0"]))
 
-    note_clusters = _cluster_y(fragments, NOTE_CODES)
-    candidates = []
-    for cluster in note_clusters:
-        y = sum(float(f["y"]) for f in cluster) / len(cluster)
-        distance = abs(y - day_y)
-        if 1.0 < distance <= 30.0:
-            candidates.append((distance, cluster))
-    notes_row = min(candidates, key=lambda item: item[0])[1] if candidates else []
+    note_candidates = []
+    for cluster in _cluster_top(words, NOTE_CODES):
+        top = sum(float(w["top"]) for w in cluster) / len(cluster)
+        distance = abs(top - day_top)
+        if 1.0 < distance <= 25.0:
+            note_candidates.append((distance, cluster))
+    note_row = min(note_candidates, key=lambda item: item[0])[1] if note_candidates else []
 
     notes: list[str | None] = [None] * len(days)
-    if notes_row:
-        xs = [float(f["x"]) for f in days]
+    if note_row:
+        xs = [float(w["x0"]) for w in days]
         spacings = [b - a for a, b in zip(xs, xs[1:]) if b > a]
-        tolerance = (min(spacings) * 0.55) if spacings else 20.0
-        for note in notes_row:
-            distances = [abs(float(note["x"]) - x) for x in xs]
-            idx = min(range(len(distances)), key=distances.__getitem__)
-            if distances[idx] > tolerance:
-                raise RuntimeError(f"Unmapped note {note['text']} at x={note['x']}")
-            if notes[idx] is not None:
-                raise RuntimeError(f"Multiple notes mapped to column {idx + 1}")
-            notes[idx] = str(note["text"]).strip().upper()
+        tolerance = (min(spacings) * 0.6) if spacings else 20.0
+        for note in note_row:
+            distances = [abs(float(note["x0"]) - x) for x in xs]
+            index = min(range(len(distances)), key=distances.__getitem__)
+            if distances[index] > tolerance:
+                raise RuntimeError(f"Unmapped note {note['text']} at x={note['x0']}")
+            if notes[index] is not None:
+                raise RuntimeError(f"Multiple notes mapped to column {index + 1}")
+            notes[index] = str(note["text"]).strip().upper()
     return days, notes
 
 
@@ -137,27 +114,27 @@ def _note_allows(note: str | None, service_date: date) -> bool:
         return within
     if note == "D":
         return not (within and service_date.weekday() == 5)
-    return True  # blank or V; V changes stop pattern, not service date
+    return True
 
 
-def _audit_columns(fragments: list[dict[str, object]], service_date: date) -> list[dict[str, object]]:
-    days, notes = _header_columns(fragments)
+def _audit_columns(words: list[dict[str, object]], service_date: date) -> list[dict[str, object]]:
+    days, notes = _header_columns(words)
     weekday_code = str(service_date.weekday() + 1)
     holiday = (service_date.month, service_date.day) in {(1, 1), (8, 15), (12, 25)}
-    rows = []
+    output = []
     for index, (day, note) in enumerate(zip(days, notes), start=1):
         day_code = str(day["text"]).strip()
         weekday_ok = weekday_code in day_code
         active = weekday_ok and not holiday and _note_allows(note, service_date)
-        rows.append({
+        output.append({
             "column": index,
-            "x": round(float(day["x"]), 3),
+            "x": round(float(day["x0"]), 3),
             "day_code": day_code,
             "note": note,
             "scheduled_for_weekday": weekday_ok,
             "active_on_service_date": active,
         })
-    return rows
+    return output
 
 
 def _direction_ok(route_id: str, text: str) -> bool:
@@ -167,27 +144,28 @@ def _direction_ok(route_id: str, text: str) -> bool:
 
 def audit_route(route_id: str, service_date: date) -> dict[str, object]:
     payload, sha256 = _download(SOURCES[route_id])
-    reader = PdfReader(io.BytesIO(payload))
-    if len(reader.pages) != EXPECTED_PAGE_COUNTS[route_id]:
-        raise RuntimeError(f"{route_id}: unexpected PDF page count {len(reader.pages)}")
     if not (VALID_FROM <= service_date <= VALID_TO):
         raise RuntimeError(f"{route_id}: {service_date} outside timetable validity")
 
-    pages = []
+    pages_out = []
     text_parts = []
-    for page_number, page in enumerate(reader.pages, start=1):
-        text, fragments = _page_text_and_fragments(page)
-        text_parts.append(text)
-        if not _direction_ok(route_id, text):
-            raise RuntimeError(f"{route_id} page {page_number}: route direction not resolved")
-        columns = _audit_columns(fragments, service_date)
-        pages.append({
-            "page": page_number,
-            "scheduled_columns": len(columns),
-            "weekday_eligible_columns": sum(bool(c["scheduled_for_weekday"]) for c in columns),
-            "active_columns": sum(bool(c["active_on_service_date"]) for c in columns),
-            "columns": columns,
-        })
+    with pdfplumber.open(io.BytesIO(payload)) as pdf:
+        if len(pdf.pages) != EXPECTED_PAGE_COUNTS[route_id]:
+            raise RuntimeError(f"{route_id}: unexpected PDF page count {len(pdf.pages)}")
+        for page_number, page in enumerate(pdf.pages, start=1):
+            text = page.extract_text(layout=True) or page.extract_text() or ""
+            words = page.extract_words(x_tolerance=1, y_tolerance=1, keep_blank_chars=False)
+            text_parts.append(text)
+            if not _direction_ok(route_id, text):
+                raise RuntimeError(f"{route_id} page {page_number}: route direction not resolved")
+            columns = _audit_columns(words, service_date)
+            pages_out.append({
+                "page": page_number,
+                "scheduled_columns": len(columns),
+                "weekday_eligible_columns": sum(bool(c["scheduled_for_weekday"]) for c in columns),
+                "active_columns": sum(bool(c["active_on_service_date"]) for c in columns),
+                "columns": columns,
+            })
 
     full_text = "\n".join(text_parts)
     normalised = _normalise(full_text)
@@ -201,10 +179,10 @@ def audit_route(route_id: str, service_date: date) -> dict[str, object]:
         "valid_from": VALID_FROM.isoformat(),
         "valid_to": VALID_TO.isoformat(),
         "service_date": service_date.isoformat(),
-        "pages": pages,
-        "scheduled_columns_total": sum(p["scheduled_columns"] for p in pages),
-        "weekday_eligible_columns_before_notes": sum(p["weekday_eligible_columns"] for p in pages),
-        "active_timetable_columns": sum(p["active_columns"] for p in pages),
+        "pages": pages_out,
+        "scheduled_columns_total": sum(p["scheduled_columns"] for p in pages_out),
+        "weekday_eligible_columns_before_notes": sum(p["weekday_eligible_columns"] for p in pages_out),
+        "active_timetable_columns": sum(p["active_columns"] for p in pages_out),
         "notes_detected": {
             "A_suspension_rule": "SOSPESA DAL 27 LUGLIO AL 30 AGOSTO" in normalised,
             "B_only_rule": (
@@ -222,12 +200,11 @@ def audit_route(route_id: str, service_date: date) -> dict[str, object]:
 
 
 def build_report(service_date: date) -> dict[str, object]:
-    routes = [audit_route(route_id, service_date) for route_id in SOURCES]
     return {
         "gate": "C",
         "source_class": "OFFICIAL_OPERATOR_PRIMARY_TIMETABLE_PDFS",
         "service_date": service_date.isoformat(),
-        "routes": routes,
+        "routes": [audit_route(route_id, service_date) for route_id in SOURCES],
         "epistemic_status": "FACT_PRIMARY_SOURCES_WITH_RECONSTRUCTED_COLUMN_AUDIT",
     }
 
