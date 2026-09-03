@@ -99,7 +99,7 @@ Questo file è la lavagna di handoff tra Antigravity e GPT.
 | `istat_posas_2025_lecco` | ISTAT | 2025 | IODL 2.0 | [ISTAT Demografia POSAS 2025](https://demo.istat.it/app/?l=it&a=2025&i=POS) | `data/raw/istat/POSAS_2025_it_097_Lecco.csv` (479 KB) | `3756f20b9b1b...` | `FACT` |
 | `sfr_trenord_serie_storica_2015_2025` | Regione Lombardia D.G. Trasporti / Trenord | 2025 | IODL 2.0 | [Open Data Frequentazione stazioni SFR (s8-analisi)](https://dati.lombardia.it/Mobilit-e-trasporti/Frequentazione-stazioni-SFR/) | `data/raw/sfr/stazioni_s8_indice_2015_2025.csv` (11,8 KB) | `0f66710b0d1b...` | `DERIVED` |
 | `pdb_como_lecco_varese_relazione_v7_2` | Agenzia TPL Como-Lecco-Varese | 2025 | Atto Pubblico di Pianificazione | [PdB Relazione Generale v7.2](https://www.tplcomoleccovarese.it/atpcolc/images/Programma%20di%20Bacino/Rev7.2/programma%20di%20bacino%20del%20trasporto%20pubblico%20locale%20-%20v7.2_def.pdf) | `data/raw/pdb/PdB_Como_Lecco_Varese_Relazione_v7.2.pdf` (6,12 MB) | `aedff739f2e5...` | `FACT` |
-| `pdb_allegato_3_4_meratese` | Agenzia TPL Como-Lecco-Varese | 2025 | Atto Pubblico di Pianificazione | [PdB Allegato 3.4 Meratese](https://www.tplcomoleccovarese.it/atpcolc/images/File%20GTFS%20inv.%202025-2026/GTFS%20invernale%202025-2026%20Linee%20Lecco.zip) | `data/raw/pdb/PdB_Allegato3.4_Meratese.pdf` (10,58 MB) | `e0657cb4e8a0...` | `FACT` |
+| `pdb_allegato_3_4_meratese` | Agenzia TPL Como-Lecco-Varese | 2025 | Atto Pubblico di Pianificazione | [PdB Allegato 3.4 Meratese](https://www.tplcomoleccovarese.it/atpcolc/images/Programma%20di%20Bacino/Rev7.2/Allegato3.4_PdB_SchedaAmbito_Meratese.pdf) | `data/raw/pdb/PdB_Allegato3.4_Meratese.pdf` (10,58 MB) | `e0657cb4e8a0...` | `FACT` |
 
 ---
 
