@@ -1,0 +1,148 @@
+name: Phase 2 Structural Screening V2
+
+on:
+  push:
+    branches:
+      - phase2-structural-screening-v2
+    paths:
+      - 'src/phase2_structural_screening.py'
+      - 'scripts/phase2_screen_structural_catalog.py'
+      - 'scripts/phase2_screen_structural_catalog_v2.py'
+      - 'tests/test_phase2_structural_screening.py'
+      - 'tests/test_phase2_structural_screening_v2.py'
+      - '.github/workflows/phase2-structural-screening-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-structural-screening-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile topology-neutral screening engine and V2 wrapper
+        run: |
+          python -m py_compile src/phase2_structural_screening.py
+          python -m py_compile scripts/phase2_screen_structural_catalog.py
+          python -m py_compile scripts/phase2_screen_structural_catalog_v2.py
+
+      - name: Run structural-screening and V2 lineage tests
+        run: |
+          python -m pytest -q tests/test_phase2_structural_screening.py
+          python -m pytest -q tests/test_phase2_structural_screening_v2.py
+
+      - name: Screen certified V2 100k catalog
+        run: >-
+          python scripts/phase2_screen_structural_catalog_v2.py
+          --catalog outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv
+          --catalog-validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json
+          --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv
+          --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json
+          --anchor-universe outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv
+          --output outputs/phase2/structural_screening_v2/structural_screening_v2.csv
+          --validation outputs/phase2/structural_screening_v2/structural_screening_v2_validation.json
+          --on-path-abs-tol-km 0.000001
+          --on-path-rel-tol 0.000000001
+
+      - name: Validate Structural Screening V2 contract
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          root = Path('outputs/phase2/structural_screening_v2')
+          val = json.loads((root/'structural_screening_v2_validation.json').read_text(encoding='utf-8'))
+          catalog_val = json.loads(Path('outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json').read_text(encoding='utf-8'))
+          assert val['status'] == 'PASS_STRUCTURAL_SCREENING_V2_BUILD'
+          assert val['contract'] == 'PHASE2_TOPOLOGY_NEUTRAL_STRUCTURAL_SCREENING_V2'
+          assert val['evidence_label'] == 'V2_STRUCTURAL_SCREENING_NOT_RECOMMENDATION'
+          assert val['scenario_count'] == 100000
+          assert val['family_counts'] == catalog_val['family_counts']
+          assert val['unique_directed_scenario_legs_screened'] > 0
+          assert val['uses_live_osm'] is False
+          assert val['uses_random_generation'] is False
+          assert val['uses_legacy_candidate_routes'] is False
+          assert val['selects_topology'] is False
+          assert val['ranks_topology_family'] is False
+          assert val['selects_stops'] is False
+          assert val['annualises_service'] is False
+          assert val['chooses_service_policy'] is False
+          with (root/'structural_screening_v2.csv').open(encoding='utf-8', newline='') as handle:
+              rows = list(csv.DictReader(handle))
+          assert len(rows) == 100000
+          ids = [row['scenario_id'] for row in rows]
+          assert len(ids) == len(set(ids))
+          forbidden = {'rank', 'score', 'winner', 'recommended', 'primary_recommendation'}
+          assert not (forbidden & set(rows[0]))
+          assert all(float(row['public_distance_km']) > 0 for row in rows)
+          assert all(float(row['public_runtime_min']) > 0 for row in rows)
+          print(json.dumps(val, indent=2))
+          PY
+
+      - name: Deterministic byte-for-byte screening rebuild
+        run: |
+          rm -rf /tmp/phase2-structural-screening-v2
+          mkdir -p /tmp/phase2-structural-screening-v2
+          python scripts/phase2_screen_structural_catalog_v2.py \
+            --catalog outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv \
+            --catalog-validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --anchor-universe outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --output /tmp/phase2-structural-screening-v2/screening.csv \
+            --validation /tmp/phase2-structural-screening-v2/validation.json \
+            --on-path-abs-tol-km 0.000001 \
+            --on-path-rel-tol 0.000000001
+          cmp outputs/phase2/structural_screening_v2/structural_screening_v2.csv /tmp/phase2-structural-screening-v2/screening.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a = json.loads(Path('outputs/phase2/structural_screening_v2/structural_screening_v2_validation.json').read_text())
+          b = json.loads(Path('/tmp/phase2-structural-screening-v2/validation.json').read_text())
+          for payload in (a, b):
+              payload['lineage'].pop('screening_output')
+              payload['lineage'].pop('screening_output_sha256')
+          assert a == b
+          PY
+
+      - name: Guard topology-neutral V2 screening
+        run: |
+          FILES="src/phase2_structural_screening.py scripts/phase2_screen_structural_catalog_v2.py"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|08_candidate_routes|route_variants\.csv' $FILES
+          ! grep -n -E 'primary recommendation|runner-up|recommended topology' $FILES
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-structural-catalog-v2...HEAD
+
+      - name: Persist validated Structural Screening V2
+        run: |
+          git config user.name "phase2-structural-screening-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/structural_screening_v2
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist audited Structural Screening V2 [skip ci]"
+            git push origin HEAD:phase2-structural-screening-v2
+          fi
+
+      - name: Upload Structural Screening V2 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-structural-screening-v2-${{ github.sha }}
+          retention-days: 90
+          path: outputs/phase2/structural_screening_v2
