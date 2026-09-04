@@ -1,0 +1,631 @@
+{
+  "block_comparison_row_count": 51252,
+  "block_mismatch_matrix": {},
+  "block_mismatch_row_count": 0,
+  "block_unexplained_comparable_mismatch_count": 0,
+  "budget_selected": false,
+  "bus_runtime_engineering_stress_is_empirical_probability": false,
+  "bus_runtime_engineering_stress_minutes": [
+    0.0,
+    5.0,
+    10.0,
+    15.0
+  ],
+  "calendar_selected": false,
+  "change_classification_counts": {
+    "CHANGED_TIMETABLE_TRIP_UNIVERSE_NEW_ONLY": 54,
+    "CHANGED_TIMETABLE_TRIP_UNIVERSE_OLD_ONLY": 74,
+    "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1313,
+    "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION_WITHIN_RT001_SPLIT": 118,
+    "RT001_CONTEXT_SPLIT_NEW_PHASE": 766,
+    "RT001_CONTEXT_SPLIT_REPLACED_LEGACY_PHASE": 91,
+    "RT001_PHASE_RESELECTION_WITHOUT_CONTEXT_SPLIT_NEW_PHASE": 909,
+    "RT001_PHASE_RESELECTION_WITHOUT_CONTEXT_SPLIT_OLD_PHASE": 909,
+    "UNCHANGED_CASE": 2415,
+    "UNCHANGED_COMMON_PHASE_WITHIN_RT001_CONTEXT_SPLIT": 425
+  },
+  "common_semantic_timetables_with_changed_operational_trip_universe_count": 0,
+  "common_semantic_timetables_with_equal_operational_trip_universe_count": 4271,
+  "connection_types": [
+    "BUS_TO_RAIL",
+    "RAIL_TO_BUS"
+  ],
+  "contract": "PHASE2_SEMANTIC_OLD_VS_RT001_STAGE_E_ROBUSTNESS_AUDIT_V1",
+  "deterministic_rebuild": true,
+  "directions": [
+    "LECCO",
+    "MILANO"
+  ],
+  "expected_rt001_context_split_stage_d_input_count": 634,
+  "failure_reasons": [],
+  "legacy_direct_out_of_span_bus_to_rail_row_count": 13368,
+  "legacy_exact_trip_count": 262149,
+  "legacy_out_of_span_bus_to_rail_connection_row_count": 13368,
+  "legacy_out_of_span_bus_to_rail_planned_connection_row_count": 9798,
+  "legacy_out_of_span_examples": [
+    {
+      "direction": "LECCO",
+      "profile_id": "LOW_TRANSFER_FRICTION",
+      "route_id": "R2_23d58cd05658247380d7",
+      "source_time_min": "1442.099655",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_00072591a4fc918b"
+    },
+    {
+      "direction": "MILANO",
+      "profile_id": "LOW_TRANSFER_FRICTION",
+      "route_id": "R2_23d58cd05658247380d7",
+      "source_time_min": "1442.099655",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_00072591a4fc918b"
+    },
+    {
+      "direction": "LECCO",
+      "profile_id": "MID_TRANSFER_FRICTION",
+      "route_id": "R2_23d58cd05658247380d7",
+      "source_time_min": "1442.099655",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_00072591a4fc918b"
+    },
+    {
+      "direction": "MILANO",
+      "profile_id": "MID_TRANSFER_FRICTION",
+      "route_id": "R2_23d58cd05658247380d7",
+      "source_time_min": "1442.099655",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_00072591a4fc918b"
+    },
+    {
+      "direction": "LECCO",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "route_id": "R2_23d58cd05658247380d7",
+      "source_time_min": "1442.099655",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_00072591a4fc918b"
+    },
+    {
+      "direction": "MILANO",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "route_id": "R2_23d58cd05658247380d7",
+      "source_time_min": "1442.099655",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_00072591a4fc918b"
+    },
+    {
+      "direction": "LECCO",
+      "profile_id": "LOW_TRANSFER_FRICTION",
+      "route_id": "R2_3fefc0a4235e6c4bfa00",
+      "source_time_min": "1448.372940",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_005b642152a6fb70"
+    },
+    {
+      "direction": "MILANO",
+      "profile_id": "LOW_TRANSFER_FRICTION",
+      "route_id": "R2_3fefc0a4235e6c4bfa00",
+      "source_time_min": "1448.372940",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_005b642152a6fb70"
+    },
+    {
+      "direction": "LECCO",
+      "profile_id": "MID_TRANSFER_FRICTION",
+      "route_id": "R2_3fefc0a4235e6c4bfa00",
+      "source_time_min": "1448.372940",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_005b642152a6fb70"
+    },
+    {
+      "direction": "MILANO",
+      "profile_id": "MID_TRANSFER_FRICTION",
+      "route_id": "R2_3fefc0a4235e6c4bfa00",
+      "source_time_min": "1448.372940",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_005b642152a6fb70"
+    },
+    {
+      "direction": "LECCO",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "route_id": "R2_3fefc0a4235e6c4bfa00",
+      "source_time_min": "1448.372940",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_005b642152a6fb70"
+    },
+    {
+      "direction": "MILANO",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "route_id": "R2_3fefc0a4235e6c4bfa00",
+      "source_time_min": "1448.372940",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_005b642152a6fb70"
+    },
+    {
+      "direction": "LECCO",
+      "profile_id": "LOW_TRANSFER_FRICTION",
+      "route_id": "R2_c2fcb3b6689d162093c9",
+      "source_time_min": "1332.573074",
+      "span_end_min": "1320.000000",
+      "span_start_min": "360.000000",
+      "timetable_id": "D4I2_0082a07a8e6e6422"
+    },
+    {
+      "direction": "MILANO",
+      "profile_id": "LOW_TRANSFER_FRICTION",
+      "route_id": "R2_c2fcb3b6689d162093c9",
+      "source_time_min": "1332.573074",
+      "span_end_min": "1320.000000",
+      "span_start_min": "360.000000",
+      "timetable_id": "D4I2_0082a07a8e6e6422"
+    },
+    {
+      "direction": "LECCO",
+      "profile_id": "MID_TRANSFER_FRICTION",
+      "route_id": "R2_c2fcb3b6689d162093c9",
+      "source_time_min": "1332.573074",
+      "span_end_min": "1320.000000",
+      "span_start_min": "360.000000",
+      "timetable_id": "D4I2_0082a07a8e6e6422"
+    },
+    {
+      "direction": "MILANO",
+      "profile_id": "MID_TRANSFER_FRICTION",
+      "route_id": "R2_c2fcb3b6689d162093c9",
+      "source_time_min": "1332.573074",
+      "span_end_min": "1320.000000",
+      "span_start_min": "360.000000",
+      "timetable_id": "D4I2_0082a07a8e6e6422"
+    },
+    {
+      "direction": "LECCO",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "route_id": "R2_c2fcb3b6689d162093c9",
+      "source_time_min": "1332.573074",
+      "span_end_min": "1320.000000",
+      "span_start_min": "360.000000",
+      "timetable_id": "D4I2_0082a07a8e6e6422"
+    },
+    {
+      "direction": "MILANO",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "route_id": "R2_c2fcb3b6689d162093c9",
+      "source_time_min": "1332.573074",
+      "span_end_min": "1320.000000",
+      "span_start_min": "360.000000",
+      "timetable_id": "D4I2_0082a07a8e6e6422"
+    },
+    {
+      "direction": "LECCO",
+      "profile_id": "LOW_TRANSFER_FRICTION",
+      "route_id": "R2_3fefc0a4235e6c4bfa00",
+      "source_time_min": "1448.372940",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_00e410104721c801"
+    },
+    {
+      "direction": "MILANO",
+      "profile_id": "LOW_TRANSFER_FRICTION",
+      "route_id": "R2_3fefc0a4235e6c4bfa00",
+      "source_time_min": "1448.372940",
+      "span_end_min": "1440.000000",
+      "span_start_min": "330.000000",
+      "timetable_id": "D4I2_00e410104721c801"
+    }
+  ],
+  "legacy_raw_out_of_span_public_return_trip_count": 2228,
+  "legacy_stage_e_fixture_is_final_selection_lineage": false,
+  "legacy_stage_e_status": "PASS_PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_V2",
+  "legacy_timetable_count": 5345,
+  "lineage": {
+    "legacy_route_input_sha256": "7688cf62275d57242b614cbcdf56237f142fd34f3e69995671303af84f64a4b7",
+    "legacy_stage_d_summary_sha256": "b80ede01ba304c2ff2873a9eb12e91c5903a82601097f24e1cf23b6801e4ebde",
+    "legacy_stage_d_trips_sha256": "14b5ff475c0af67212e9e3e1156ce3d353e82e270f18ed1efb83a24a35b1b515",
+    "legacy_stage_e_block_sha256": "55ba92b7bbf9915c6c8f8434f5fb48b3f5efe382dedbd26081bca9b375c95d0a",
+    "legacy_stage_e_connection_sha256": "6a495c442f4489b0da5a4cdca7d29a2d7f8afbc996254cbd8271a73224599e24",
+    "legacy_stage_e_surface_sha256": "ad0697738230d9d45d447d5c87d8aef560c37e637a6c47ce2f2cf62fb30ea6c8",
+    "legacy_stage_e_validation_sha256": "8f64aef481872a2bb6b06211e207d6c046a75e3e914b182e1208ba88cfac1810",
+    "new_route_input_sha256": "12772a5f7df8fb2379da827286544c7d4840ac2c365143841b05ea41b3446386",
+    "new_stage_d_contexts_sha256": "0a817e73bacd44005a819473aedef6f549cc0dd22475624b34bae39d3ef79e4d",
+    "new_stage_d_timetables_sha256": "b2d511c811fae6641584fddb846d78dee459f03eba95e2029ca8b9566d1e57bb",
+    "new_stage_d_trips_sha256": "69e9ca7e362a23e3cea080030532d131d0ac6296045ab1d3d5d025242a4fa284",
+    "new_stage_d_validation_sha256": "1150e8449282096de71c1db2db4a10d78298f7ed67dd4c43e640ad7ebfb39381",
+    "new_stage_e_block_sha256": "1207fc148937a52433a12d7cdb76712649ea25cfa55957d772e2631a410ec35b",
+    "new_stage_e_connection_sha256": "b3eccc8f9adb00c03057e138142e7b3711e4122f3734149d8e199a9203551555",
+    "new_stage_e_surface_sha256": "5a88d8effcfe80f4bf26a56db725c65c74814dab3a97bf8d73d45b43e44f5b07",
+    "new_stage_e_validation_sha256": "ab4eb719ed3ef5cffbc1f114c29db05626c6d38a76f15e80c58036e0c26b8a95",
+    "rt001_context_split_inputs_sha256": "f4a10e3953646b3a17e20919fb0dc90ec6d3ac9099f79b8a1723a921ed9b077f",
+    "semantic_block_sensitivity_comparison_sha256": "4120690e9aedce3362a22a24577014940267b13251da6b3aaf5175c360da63ce",
+    "semantic_robustness_surface_comparison_sha256": "9d77c332842f4886ced72f86a7255fe01dc5125c17eebedc74dde22229f23b1c",
+    "semantic_timetable_change_classification_sha256": "d4c724be97a685b6f3aaabc6cc7f2a4ff6d8f88ab8afe465a71a5dfff1efa728",
+    "span_return_rule_audit_sha256": "b7ec38f435e6bf55a426ce2769818002a14e059db9074fc858d4055546639ef3"
+  },
+  "mismatch_examples": [
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "10.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "4ba960c3cd212c0a138ed12e"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "10.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "ca6c1edc7a62bec631ff505f"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "03cd4a08ae27a3080d1aa1df"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "076cef8ef4bafd363061a4dc"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "0f664d5cb4d627383d277e6f"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "10613f96f5e0a7f440dc2f66"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "1945387f856f86a9dcc84d4d"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "19ed877a81e305139865d848"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "1d29fa2eed2b84a0f5af0e01"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "1d2ba08d5caeacd2686f6da1"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "28d8862182680af419082993"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "2d89e1326969b3416044e671"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "4ba960c3cd212c0a138ed12e"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "4c64cdcfb4d626b86a29d463"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "4d5b3f2a1b1305907d9791f3"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "51caad3a20f4dd241acee528"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "5227ce00f3cf62e5581f234c"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "52a5ca308a1e8e21bd22262d"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "5616e80771b6f4aef9eae1fc"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "56997d4bdee71ec401464e84"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "59c57a6b424adbf8b191ef7a"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "5f628b33da973297e7920049"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "684b4c74a39a655fa92b5009"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "6852317817743a104a07c722"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "71163dfb345f19e57386401c"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "73d3f747c6b4a7bec636ea1c"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "7b4e6ef5953fcc3265840f85"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "7fc242d1a9b2f1ea46b1446e"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "830bef2bb4aed9ccfc523a4b"
+    },
+    {
+      "connection_type": "BUS_TO_RAIL",
+      "difference_class": "OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION",
+      "direction": "LECCO",
+      "kind": "SURFACE",
+      "mismatch_fields_json": "[\"source_event_count\",\"planned_s8_connection_count\",\"useful_s8_connection_count_nominal\",\"planned_connections_missed\",\"alternative_connection_available_after_miss_count\"]",
+      "perturbation_min": "15.000000000",
+      "profile_id": "HIGH_TRANSFER_FRICTION",
+      "semantic_hash": "8b7eeb97999a624f7e221834"
+    }
+  ],
+  "municipal_od_allocated": false,
+  "new_direct_out_of_span_bus_to_rail_row_count": 0,
+  "new_exact_trip_count": 285748,
+  "new_out_of_span_bus_to_rail_connection_row_count": 0,
+  "new_out_of_span_bus_to_rail_planned_connection_row_count": 0,
+  "new_out_of_span_violation_examples": [],
+  "new_raw_physical_out_of_span_return_trip_count": 2578,
+  "new_represented_plan_context_count": 16495,
+  "new_selected_timetable_count": 6000,
+  "new_source_daily_timing_input_count": 5325,
+  "new_stage_e_fixture_is_final_selection_lineage": true,
+  "new_stage_e_status": "PASS_PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_RT001_V3",
+  "pass_semantics": "PASS_MEANS_SOURCE_CLOSED_SEMANTIC_COMPARISON_COMPLETED_AND_ALL_COMPARABLE_DIFFERENCES_ARE_EXPLAINED_BY_CERTIFIED_LINEAGE_CHANGES_NOT_THAT_OLD_AND_NEW_ARE_AGGREGATE_IDENTICAL",
+  "passenger_weights_created": false,
+  "primary_selected": false,
+  "rail_to_bus_delay_evidence_minutes": [
+    0.0
+  ],
+  "rail_to_bus_nominal_unexplained_comparable_mismatch_count": 0,
+  "recovery_minutes_evaluated_not_selected": [
+    5,
+    10,
+    15
+  ],
+  "recovery_selected": false,
+  "ridership_created": false,
+  "rt001_context_split_count_exactly_confirmed": true,
+  "rt001_context_split_stage_d_input_count": 634,
+  "runner_up_selected": false,
+  "semantic_timetable_common_count": 4271,
+  "semantic_timetable_new_only_count": 1729,
+  "semantic_timetable_old_only_count": 1074,
+  "span_start_inclusive_end_exclusive_rule_enforced_in_new_stage_e": true,
+  "status": "PASS_PHASE2_STAGE_E_OLD_VS_NEW_ROBUSTNESS_AUDIT",
+  "surface_common_present_both_row_count": 111426,
+  "surface_comparison_row_count": 111426,
+  "surface_mismatch_explained_by_out_of_span_return_correction_count": 34344,
+  "surface_mismatch_matrix": {
+    "BUS_TO_RAIL|HIGH_TRANSFER_FRICTION|LECCO|0.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|HIGH_TRANSFER_FRICTION|LECCO|10.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|HIGH_TRANSFER_FRICTION|LECCO|15.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|HIGH_TRANSFER_FRICTION|LECCO|5.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|HIGH_TRANSFER_FRICTION|MILANO|0.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|HIGH_TRANSFER_FRICTION|MILANO|10.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|HIGH_TRANSFER_FRICTION|MILANO|15.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|HIGH_TRANSFER_FRICTION|MILANO|5.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|LOW_TRANSFER_FRICTION|LECCO|0.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|LOW_TRANSFER_FRICTION|LECCO|10.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|LOW_TRANSFER_FRICTION|LECCO|15.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|LOW_TRANSFER_FRICTION|LECCO|5.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|LOW_TRANSFER_FRICTION|MILANO|0.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|LOW_TRANSFER_FRICTION|MILANO|10.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|LOW_TRANSFER_FRICTION|MILANO|15.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|LOW_TRANSFER_FRICTION|MILANO|5.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|MID_TRANSFER_FRICTION|LECCO|0.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|MID_TRANSFER_FRICTION|LECCO|10.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|MID_TRANSFER_FRICTION|LECCO|15.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|MID_TRANSFER_FRICTION|LECCO|5.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|MID_TRANSFER_FRICTION|MILANO|0.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|MID_TRANSFER_FRICTION|MILANO|10.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|MID_TRANSFER_FRICTION|MILANO|15.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431,
+    "BUS_TO_RAIL|MID_TRANSFER_FRICTION|MILANO|5.000000000|OUT_OF_SPAN_PUBLIC_RETURN_CORRECTION": 1431
+  },
+  "surface_mismatch_row_count": 34344,
+  "surface_unexplained_comparable_mismatch_count": 0,
+  "synthetic_observations_created": false,
+  "technical_return_used_as_passenger_service_legacy": false,
+  "technical_return_used_as_passenger_service_new": false,
+  "topologies_ranked": false,
+  "transfer_profile_ids": [
+    "HIGH_TRANSFER_FRICTION",
+    "LOW_TRANSFER_FRICTION",
+    "MID_TRANSFER_FRICTION"
+  ],
+  "weighted_composite_score": false
+}
