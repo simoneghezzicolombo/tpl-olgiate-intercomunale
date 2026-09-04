@@ -63,7 +63,9 @@ jobs:
           v=json.loads((outdir/'stage_d_input_manifest_v2_validation.json').read_text())
           assert v['status'] == 'PASS_PHASE2_STAGE_D_INPUT_MANIFEST_V2'
           assert v['contract'] == 'PHASE2_LOSSLESS_DAILY_TIMING_INPUT_MANIFEST_V2'
+          assert v['passenger_plan_context_count_represented'] == 16883
           assert v['passenger_plan_count_represented'] == 16883
+          assert v['passenger_plan_id_is_global_across_budgets'] is False
           assert v['stage_d_daily_timing_input_count'] == 5345
           assert v['unique_stage_d_scenario_count'] == 2056
           assert v['recovery_values_retained_not_selected'] == [5,10,15]
@@ -78,7 +80,8 @@ jobs:
           for k in ('phase_selected','exact_timetable_constructed','joint_vehicle_block_feasibility_evaluated','candidate_eliminated','decision_budget_selected','calendar_selected','recovery_selected','primary_selected','runner_up_selected','worker_reference_assigned_to_routes','municipal_od_downscaled','ridership_forecast','weighted_composite_score'):
               assert v[k] is False, k
 
-          plan_ids=[]
+          context_ids=[]
+          bare_plan_ids=[]
           with gzip.open(outdir/'stage_d_daily_timing_inputs_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
               rows=list(csv.DictReader(f))
           assert len(rows)==5345
@@ -88,11 +91,15 @@ jobs:
               assert r['phase_selected']=='false'
               assert r['exact_timetable_constructed']=='false'
               assert r['candidate_eliminated']=='false'
+              contexts=json.loads(r['represented_plan_context_ids_json'])
               ids=json.loads(r['represented_plan_ids_json'])
-              assert len(ids)==int(r['represented_plan_count'])
-              plan_ids.extend(ids)
-          assert len(plan_ids)==16883
-          assert len(set(plan_ids))==16883
+              assert len(contexts)==int(r['represented_plan_count'])
+              assert len(ids) <= len(contexts)
+              context_ids.extend(contexts)
+              bare_plan_ids.extend(ids)
+          assert len(context_ids)==16883
+          assert len(set(context_ids))==16883
+          assert len(set(bare_plan_ids)) < 16883
 
           with (outdir/'stage_d_public_route_inputs_v2.csv').open(encoding='utf-8',newline='') as f:
               routes=list(csv.DictReader(f))
