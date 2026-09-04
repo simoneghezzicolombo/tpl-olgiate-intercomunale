@@ -1,0 +1,123 @@
+name: Phase 2 Robustness Tournament V2
+
+on:
+  push:
+    branches:
+      - phase2-robustness-final-v2
+    paths:
+      - 'scripts/phase2_build_robustness_frontier_v2.py'
+      - '.github/workflows/phase2-robustness-tournament-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-robustness-tournament-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  scenario-timing-frontiers:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile frontier builder
+        run: python -m py_compile scripts/phase2_build_robustness_frontier_v2.py
+
+      - name: Build no-weight non-regression frontiers
+        run: >-
+          python scripts/phase2_build_robustness_frontier_v2.py
+          --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz
+          --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+          --pre-gjt outputs/phase2/pre_gjt_screening_v2/pre_gjt_scenario_timing_screening_v2.csv.gz
+          --pre-gjt-validation outputs/phase2/pre_gjt_screening_v2/pre_gjt_screening_v2_validation.json
+          --current-baseline-validation outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json
+          --frontier-output outputs/phase2/robustness_frontier_v2/scenario_timing_frontier_v2.csv
+          --audit-output outputs/phase2/robustness_frontier_v2/scenario_timing_frontier_audit_v2.csv
+          --validation-output outputs/phase2/robustness_frontier_v2/robustness_frontier_v2_validation.json
+
+      - name: Validate frontier contract
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root=Path('outputs/phase2/robustness_frontier_v2')
+          v=json.loads((root/'robustness_frontier_v2_validation.json').read_text(encoding='utf-8'))
+          assert v['status']=='PASS_PHASE2_ROBUSTNESS_FRONTIER_V2'
+          assert v['contract']=='PHASE2_NO_WEIGHT_NON_REGRESSION_SCENARIO_TIMING_PARETO_V2'
+          assert v['candidate_scenario_count']==100000
+          assert v['current_lower_bound_non_regression_pass_scenario_count'] > 0
+          assert v['current_lower_bound_non_regression_fail_scenario_count'] > 0
+          assert v['unresolved_current_stops_used'] is False
+          assert v['positive_extensions_in_main_frontier'] is False
+          assert v['weighted_composite_score'] is False
+          assert v['full_gjt_calculated'] is False
+          assert v['passenger_demand_assigned_to_routes'] is False
+          assert set(v['timing_frontiers']) == {
+              'H15_CORE_0600_2200','H15_S8_EXTENDED_0530_2400',
+              'H20_CORE_0600_2200','H20_S8_EXTENDED_0530_2400',
+              'H30_CORE_0600_2200','H30_S8_EXTENDED_0530_2400',
+              'H60_CORE_0600_2200','H60_S8_EXTENDED_0530_2400',
+          }
+          rows=list(csv.DictReader((root/'scenario_timing_frontier_v2.csv').open(encoding='utf-8',newline='')))
+          assert rows
+          for row in rows:
+              assert row['current_lower_bound_non_regression_pass']=='True'
+          print(json.dumps({
+              'non_regression_pass': v['current_lower_bound_non_regression_pass_scenario_count'],
+              'non_regression_fail': v['current_lower_bound_non_regression_fail_scenario_count'],
+              'timing_frontiers': v['timing_frontiers'],
+              'frontier_rows': len(rows),
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/phase2-robustness-frontier-v2
+          mkdir -p /tmp/phase2-robustness-frontier-v2
+          python scripts/phase2_build_robustness_frontier_v2.py \
+            --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz \
+            --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json \
+            --pre-gjt outputs/phase2/pre_gjt_screening_v2/pre_gjt_scenario_timing_screening_v2.csv.gz \
+            --pre-gjt-validation outputs/phase2/pre_gjt_screening_v2/pre_gjt_screening_v2_validation.json \
+            --current-baseline-validation outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json \
+            --frontier-output /tmp/phase2-robustness-frontier-v2/frontier.csv \
+            --audit-output /tmp/phase2-robustness-frontier-v2/audit.csv \
+            --validation-output /tmp/phase2-robustness-frontier-v2/validation.json >/dev/null
+          cmp outputs/phase2/robustness_frontier_v2/scenario_timing_frontier_v2.csv /tmp/phase2-robustness-frontier-v2/frontier.csv
+          cmp outputs/phase2/robustness_frontier_v2/scenario_timing_frontier_audit_v2.csv /tmp/phase2-robustness-frontier-v2/audit.csv
+          cmp outputs/phase2/robustness_frontier_v2/robustness_frontier_v2_validation.json /tmp/phase2-robustness-frontier-v2/validation.json
+
+      - name: Guard no synthetic/no weighted score
+        run: |
+          FILE=scripts/phase2_build_robustness_frontier_v2.py
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILE
+          ! grep -n -E 'weighted_score|composite_score|normaliz.*weight' $FILE
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-pre-gjt-screening-v2...HEAD
+
+      - name: Persist robustness frontier evidence
+        run: |
+          git config user.name "phase2-robustness-final-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/robustness_frontier_v2
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist no-weight robustness frontiers [skip ci]"
+            git push origin HEAD:phase2-robustness-final-v2
+          fi
+
+      - name: Upload robustness frontier evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-robustness-frontier-v2-${{ github.sha }}
+          retention-days: 90
+          path: outputs/phase2/robustness_frontier_v2
