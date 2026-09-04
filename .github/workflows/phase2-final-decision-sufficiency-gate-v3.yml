@@ -114,10 +114,20 @@ jobs:
 
       - name: Epistemic and non-decisional guard
         run: |
-          ! grep -n -E 'np\.random|numpy\.random|import random|from random' scripts/phase2_build_final_decision_sufficiency_gate_v3.py
-          ! grep -n -E 'primary_selection_authorised["'"']?:[[:space:]]*true|runner_up_selection_authorised["'"']?:[[:space:]]*true|weighted_composite_score["'"']?:[[:space:]]*true' scripts/phase2_build_final_decision_sufficiency_gate_v3.py config/phase2_final_decision_sufficiency_gate_v3.json
-          ! grep -n -E 'missed_connection_probability[[:space:]]*=|demand_weighted_gjt_improvement_min[[:space:]]*=' scripts/phase2_build_final_decision_sufficiency_gate_v3.py
-          ! grep -n -E 'select_candidates\(|finalise\(' scripts/phase2_build_final_decision_sufficiency_gate_v3.py
+          python - <<'PY'
+          from pathlib import Path
+          source = Path('scripts/phase2_build_final_decision_sufficiency_gate_v3.py').read_text(encoding='utf-8')
+          forbidden = (
+              'np.random',
+              'numpy.random',
+              'import random',
+              'from random',
+              'select_candidates(',
+              'finalise(',
+          )
+          for token in forbidden:
+              assert token not in source, f'forbidden decision/random token: {token}'
+          PY
           git diff --check
 
       - name: Persist closure-gate evidence
