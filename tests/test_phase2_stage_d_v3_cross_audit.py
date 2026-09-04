@@ -114,7 +114,7 @@ def test_vehicle_labels_are_compared_as_partitions_not_names():
     b = Dataset(b.label, b.validation, b.contexts, b.timetables, btrips)
     out = compare_datasets(a, b)
     assert out["equivalent"] is True
-    assert out["block_partition_mismatch_by_recovery"][15] == 0
+    assert out["block_partition_mismatch_count_by_recovery"][15] == 0
 
 
 def test_exact_km_difference_is_detected():
