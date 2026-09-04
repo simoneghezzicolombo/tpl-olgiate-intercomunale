@@ -1,13 +1,17 @@
 from __future__ import annotations
 
-from decimal import Decimal
-
-from scripts.phase2_dry_run_final_policy_v3 import dominates, pareto_rows, strict_lexicographic_trace
+from scripts.phase2_dry_run_final_policy_v3 import (
+    dominates,
+    h60_exception_test,
+    pareto_rows,
+    strict_lexicographic_trace,
+)
 
 
 def row(**overrides):
     base = {
         "plan_context_id": "P",
+        "selected_timetable_id": "T",
         "stage_e_any_block_infeasibility_under_sensitivity": "false",
         "public_population_coverage_share_10min": "0.70",
         "public_population_coverage_share_8min": "0.60",
@@ -25,6 +29,17 @@ def row(**overrides):
     }
     base.update(overrides)
     return base
+
+
+def territorial_dims():
+    return [
+        {"field": "public_population_coverage_share_10min", "direction": "max", "dimension_group": "TOTAL"},
+        {"field": "public_population_coverage_share_8min", "direction": "max", "dimension_group": "TOTAL"},
+        {"field": "public_population_coverage_share_5min", "direction": "max", "dimension_group": "TOTAL"},
+        {"field": "public_worst_municipality_coverage_share_10min", "direction": "max", "dimension_group": "EQUITY"},
+        {"field": "public_worst_municipality_coverage_share_8min", "direction": "max", "dimension_group": "EQUITY"},
+        {"field": "public_worst_municipality_coverage_share_5min", "direction": "max", "dimension_group": "EQUITY"},
+    ]
 
 
 def test_useful_service_pareto_preserves_coverage_frequency_tradeoff():
@@ -47,6 +62,49 @@ def test_dominated_service_is_removed_without_weights():
     worse = row(plan_context_id="B", public_population_coverage_share_10min="0.70", uniform_headway_min="60")
     assert dominates(better, worse, dims)
     assert [item["plan_context_id"] for item in pareto_rows([better, worse], dims)] == ["A"]
+
+
+def test_h60_does_not_override_frequent_for_coverage_only_gain():
+    frequent = [row(plan_context_id="H30", selected_timetable_id="T30")]
+    hourly = [row(
+        plan_context_id="H60", selected_timetable_id="T60", uniform_headway_min="60",
+        public_population_coverage_share_10min="0.80",
+        public_population_coverage_share_8min="0.70",
+        public_population_coverage_share_5min="0.60",
+        public_worst_municipality_coverage_share_10min="0.39",
+    )]
+    _audit, qualifying = h60_exception_test(frequent, hourly, territorial_dims())
+    assert qualifying == []
+
+
+def test_h60_exception_requires_broad_total_and_equity_superiority():
+    frequent = [row(plan_context_id="H30", selected_timetable_id="T30")]
+    hourly = [row(
+        plan_context_id="H60", selected_timetable_id="T60", uniform_headway_min="60",
+        public_population_coverage_share_10min="0.80",
+        public_population_coverage_share_8min="0.70",
+        public_population_coverage_share_5min="0.60",
+        public_worst_municipality_coverage_share_10min="0.50",
+        public_worst_municipality_coverage_share_8min="0.40",
+        public_worst_municipality_coverage_share_5min="0.30",
+    )]
+    audit, qualifying = h60_exception_test(frequent, hourly, territorial_dims())
+    assert [item["plan_context_id"] for item in qualifying] == ["H60"]
+    assert audit[0]["h60_exception_pass"] == "true"
+
+
+def test_h60_must_beat_componentwise_best_across_multiple_frequent_frontier_rows():
+    frequent = [
+        row(plan_context_id="F1", public_population_coverage_share_10min="0.80", public_worst_municipality_coverage_share_10min="0.30"),
+        row(plan_context_id="F2", public_population_coverage_share_10min="0.70", public_worst_municipality_coverage_share_10min="0.50"),
+    ]
+    hourly = [row(
+        plan_context_id="H60", selected_timetable_id="T60", uniform_headway_min="60",
+        public_population_coverage_share_10min="0.79",
+        public_worst_municipality_coverage_share_10min="0.55",
+    )]
+    _audit, qualifying = h60_exception_test(frequent, hourly, territorial_dims())
+    assert qualifying == []
 
 
 def test_strict_lexicographic_trace_exposes_exact_brittleness():
