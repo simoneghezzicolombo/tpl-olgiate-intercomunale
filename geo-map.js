@@ -34,12 +34,12 @@
           <h2>La rete, <em>sulla mappa.</em></h2>
         </div>
         <div class="map-intro-copy">
-          <p><strong>Qui il confronto diventa geografico.</strong> La rete ordinaria D184/D185 resta sullo sfondo; sopra puoi accendere il pacchetto finalistico e cliccare tracciati e fermate. L'ordine delle fermate è certificato. Il percorso sulle strade è una ricostruzione visuale, non un allineamento ufficiale.</p>
+          <p><strong>Qui il confronto diventa geografico.</strong> I pattern ordinari rappresentativi D184/D185, congelati dal GTFS, restano sullo sfondo; sopra puoi accendere il pacchetto finalistico e cliccare tracciati e fermate. L'ordine delle fermate è certificato. Il percorso sulle strade è una ricostruzione visuale, non un allineamento ufficiale.</p>
         </div>
       </div>
       <div class="map-workbench reveal revealed">
         <div class="map-toolbar">
-          <div class="map-toolbar-title"><i></i><div><strong>Route Explorer</strong><span id="mapToolbarStatus">rete proposta + rete attuale</span></div></div>
+          <div class="map-toolbar-title"><i></i><div><strong>Route Explorer</strong><span id="mapToolbarStatus">rete proposta + baseline GTFS</span></div></div>
           <div class="map-segment" aria-label="Vista geografica">
             <button type="button" data-map-mode="proposal">Proposta</button>
             <button type="button" data-map-mode="overlay">Sovrapposta</button>
@@ -61,7 +61,7 @@
             <div class="map-legend" aria-label="Legenda mappa">
               <div class="map-legend-row"><i class="map-legend-line r1"></i>Ramo proposto 1</div>
               <div class="map-legend-row"><i class="map-legend-line r2"></i>Ramo proposto 2</div>
-              <div class="map-legend-row"><i class="map-legend-line old"></i>D184 / D185 attuali</div>
+              <div class="map-legend-row"><i class="map-legend-line old"></i>D184 / D185 · pattern GTFS</div>
               <div class="map-legend-row"><i class="map-legend-dot hub"></i>Nodo ferroviario</div>
               <div class="map-legend-row"><i class="map-legend-dot"></i>Fermata esistente</div>
               <div class="map-legend-row"><i class="map-legend-dot new"></i>Fermata candidata</div>
@@ -168,7 +168,7 @@
   }
 
   function addStopMarker(stop, context = "", key = stop.id) {
-    const markerKey = `${key}:${context}`;
+    const markerKey = key;
     if (markerLayers.has(markerKey)) return markerLayers.get(markerKey);
     const marker = L.marker([stop.lat, stop.lon], { icon: divIcon(stop.kind || "existing"), keyboard: true, riseOnHover: true });
     marker.bindPopup(popupHtml(stop, context), { className: "tp-popup", closeButton: false, offset: [0,-3] });
@@ -185,7 +185,7 @@
   }
 
   function mapModeLabel() {
-    return mapMode === "proposal" ? "solo proposta" : mapMode === "current" ? "solo rete attuale" : "rete proposta + rete attuale";
+    return mapMode === "proposal" ? "solo proposta" : mapMode === "current" ? "solo baseline GTFS" : "proposta + baseline GTFS";
   }
 
   function topologyLabel() {
@@ -205,7 +205,7 @@
         <div><span>km / anno</span><b>${new Intl.NumberFormat("it-IT",{maximumFractionDigits:0}).format(pkg.annualKm)}</b></div>
         <div><span>technical closure</span><b>0′</b></div>
       </div>
-      <div class="map-contract"><strong>Contratto cartografico.</strong> Fermate e ordine derivano dagli output certificati. Le linee sulle strade sono ricostruite via routing a partire da quei punti e servono a leggere il territorio, non costituiscono un tracciato ufficiale definitivo.</div>`;
+      <div class="map-contract"><strong>Contratto cartografico.</strong> Fermate e ordine derivano dagli output certificati. Le linee sulle strade sono ricostruite via routing a partire da quei punti e servono a leggere il territorio, non costituiscono un tracciato ufficiale definitivo. La baseline D184/D185 mostra i pattern ordinari rappresentativi più frequenti nelle due direzioni, non ogni micro-variante del GTFS.</div>`;
   }
 
   function showRouteDetail(route) {
@@ -229,7 +229,7 @@
       const stop = allAnchor(btn.dataset.mapStop);
       if (!stop) return;
       map.flyTo([stop.lat, stop.lon], Math.max(map.getZoom(), 15), { duration: .55 });
-      const marker = [...markerLayers.values()].find(m => Math.abs(m.getLatLng().lat-stop.lat)<1e-7 && Math.abs(m.getLatLng().lng-stop.lon)<1e-7);
+      const marker = markerLayers.get(stop.id);
       if (marker) marker.openPopup();
     }));
   }
@@ -238,12 +238,12 @@
     const points = currentPatternPoints(pattern);
     const side = document.querySelector("#mapSide");
     side.innerHTML = `
-      <p class="map-detail-kicker">Rete attuale · ${pattern.route}</p>
+      <p class="map-detail-kicker">Baseline GTFS · ${pattern.route}</p>
       <h3 class="map-detail-title">${pattern.direction}</h3>
       <p class="map-detail-sub">Pattern ordinario rappresentativo congelato dal GTFS ufficiale 2025–2026. Per D185 la perturbazione temporanea del ponte di Brivio è esclusa dalla baseline strutturale.</p>
       <div class="map-detail-meta"><div><span>linea</span><b>${pattern.route}</b></div><div><span>occorrenze GTFS</span><b>${pattern.tripCount}</b></div><div><span>fermate pattern</span><b>${points.length}</b></div><div><span>ruolo</span><b>baseline</b></div></div>
       <div class="map-stop-list">${points.map(stop => `<button class="map-stop-button" type="button" data-current-stop="${stop.id}"><strong>${stop.name}</strong><small>${stop.id}</small></button>`).join("")}</div>
-      <div class="map-contract"><strong>Rete attuale.</strong> Sequenza fermate dal GTFS congelato. Anche qui il road-following è una ricostruzione cartografica della sequenza, non una shape GTFS ufficiale.</div>`;
+      <div class="map-contract"><strong>Baseline attuale.</strong> Sequenza fermate dal GTFS congelato. Anche qui il road-following è una ricostruzione cartografica della sequenza, non una shape GTFS ufficiale.</div>`;
     side.querySelectorAll("[data-current-stop]").forEach(btn => btn.addEventListener("click", () => {
       const stop = GEO.currentStops[btn.dataset.currentStop];
       if (stop) map.flyTo([stop.lat, stop.lon], Math.max(map.getZoom(), 15), { duration: .55 });
@@ -254,9 +254,9 @@
     const side = document.querySelector("#mapSide");
     const pkgRoutes = GEO.proposedPackages[activePackage].filter(r => r.anchors.includes(stop.id));
     side.innerHTML = `
-      <p class="map-detail-kicker">${stop.kind === "proposed" ? "Fermata candidata" : stop.kind === "hub" ? "Nodo ferroviario" : stop.kind === "current" ? "Fermata attuale" : "Fermata esistente"}</p>
+      <p class="map-detail-kicker">${stop.kind === "proposed" ? "Fermata candidata" : stop.kind === "hub" ? "Nodo ferroviario" : stop.kind === "current" ? "Fermata baseline" : "Fermata esistente"}</p>
       <h3 class="map-detail-title">${stop.name}</h3>
-      <p class="map-detail-sub">${stop.municipality || context || "Rete attuale"}</p>
+      <p class="map-detail-sub">${stop.municipality || context || "Baseline GTFS"}</p>
       <div class="map-detail-meta">
         <div><span>lat</span><b>${stop.lat.toFixed(5)}</b></div><div><span>lon</span><b>${stop.lon.toFixed(5)}</b></div>
         <div><span>stato</span><b>${stop.kind === "proposed" ? "candidata" : stop.kind === "hub" ? "hub S8" : "esistente"}</b></div>
@@ -310,7 +310,7 @@
   function routeRail() {
     const rail = document.querySelector("#mapRouteRail");
     if (mapMode === "current") {
-      rail.innerHTML = ["D184","D185"].map(route => `<button class="map-route-chip" type="button" data-current-focus="${route}"><span>Rete attuale</span><strong>${route}</strong><small>pattern ordinari GTFS · clicca per esplorare</small></button>`).join("");
+      rail.innerHTML = ["D184","D185"].filter(route => currentEnabled[route]).map(route => `<button class="map-route-chip" type="button" data-current-focus="${route}"><span>Baseline GTFS</span><strong>${route}</strong><small>pattern ordinari · clicca per esplorare</small></button>`).join("");
       rail.querySelectorAll("[data-current-focus]").forEach(btn => btn.addEventListener("click", () => {
         const pattern = GEO.currentPatterns.find(p => p.route === btn.dataset.currentFocus);
         const key = pattern ? `current:${pattern.id}` : null;
@@ -331,10 +331,10 @@
   }
 
   function updateControlState() {
-    document.querySelectorAll("[data-map-mode]").forEach(btn => btn.classList.toggle("active", btn.dataset.mapMode === mapMode));
-    document.querySelectorAll("[data-map-package]").forEach(btn => btn.classList.toggle("active", btn.dataset.mapPackage === activePackage));
-    document.querySelectorAll("[data-map-topology]").forEach(btn => btn.classList.toggle("active", btn.dataset.mapTopology === activeTopology));
-    document.querySelectorAll("[data-current-route]").forEach(btn => btn.classList.toggle("active", currentEnabled[btn.dataset.currentRoute]));
+    document.querySelectorAll("[data-map-mode]").forEach(btn => { const active = btn.dataset.mapMode === mapMode; btn.classList.toggle("active", active); btn.setAttribute("aria-pressed", String(active)); });
+    document.querySelectorAll("[data-map-package]").forEach(btn => { const active = btn.dataset.mapPackage === activePackage; btn.classList.toggle("active", active); btn.setAttribute("aria-pressed", String(active)); });
+    document.querySelectorAll("[data-map-topology]").forEach(btn => { const active = btn.dataset.mapTopology === activeTopology; btn.classList.toggle("active", active); btn.setAttribute("aria-pressed", String(active)); });
+    document.querySelectorAll("[data-current-route]").forEach(btn => { const active = currentEnabled[btn.dataset.currentRoute]; btn.classList.toggle("active", active); btn.setAttribute("aria-pressed", String(active)); });
     const status = document.querySelector("#mapToolbarStatus");
     if (status) status.textContent = `${mapModeLabel()} · ${DATA.packages[activePackage].spanLabel} · ${topologyLabel()}`;
   }
