@@ -5,9 +5,9 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 ## Stato corrente
 
 **Data:** 2026-09-04  
-**Fase:** Phase 2 — final-tournament input readiness  
-**Ultima lineage operativa integrata:** Stage E RT001 V3 @ `063e119` + repaired Stage-C evidence  
-**Final-tournament readiness audit:** **PASS; execution remains BLOCKED by six explicit input/decision gaps**  
+**Fase:** Phase 2 — final-tournament input readiness
+**Ultima lineage operativa integrata:** Stage E RT001 V3 @ `063e119` + repaired Stage-C evidence
+**Final-tournament readiness audit:** **PASS; execution remains BLOCKED by six explicit input/decision gaps**
 **PRIMARY selection authorised:** **false**  
 **RUNNER-UP selection authorised:** **false**
 
