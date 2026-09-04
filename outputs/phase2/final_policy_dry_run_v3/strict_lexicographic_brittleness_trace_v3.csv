@@ -1,0 +1,14 @@
+step,field,direction,best_exact_value,survivor_count
+1,stage_e_any_block_infeasibility_under_sensitivity,min,0,776
+2,public_population_coverage_share_10min,max,0.387838225005,2
+3,public_population_coverage_share_8min,max,0.282363997327,2
+4,public_population_coverage_share_5min,max,0.119763877674,2
+5,public_worst_municipality_coverage_share_10min,max,0.0,2
+6,public_worst_municipality_coverage_share_8min,max,0.0,2
+7,public_worst_municipality_coverage_share_5min,max,0.0,2
+8,uniform_headway_min,min,60,2
+9,stage_e_bidirectional_worst_retention_share_engineering,max,0.483870968,2
+10,bidirectional_reachable_share,max,0.337776874966,2
+11,span_minutes,max,960,2
+12,exact_annual_bus_km,min,100159.180547000,2
+13,public_explicit_field_check_pending_count,min,4,2

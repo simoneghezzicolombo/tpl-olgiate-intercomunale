@@ -1,0 +1,160 @@
+{
+  "annual_bus_km_cap": 111419.0,
+  "budget_suffix": "reference",
+  "continuity_used_for_selection": false,
+  "contract": "PHASE2_HUMAN_APPROVED_FINAL_POLICY_V3",
+  "current_service_v4_consumed": false,
+  "current_service_v4_required_before_final_selection": true,
+  "decision_pathway": "V3_CERTIFIED_METRICS_DETERMINISTIC_ROBUSTNESS",
+  "diagnostic_interpretation": "The layered Pareto cascade is a policy-shape diagnostic, not a final shortlist or recommendation. The strict lexicographic trace exists only to expose exact-zero-tolerance brittleness. Current-Service Baseline V4 must be reviewed before the finalizer may run.",
+  "dry_run_only": true,
+  "final_layer_headway_values": [
+    60.0
+  ],
+  "final_layer_survivor_count": 2,
+  "final_layer_unique_scenario_count": 2,
+  "final_selection_authorized": false,
+  "global_scalar_uncertainty_band_used": false,
+  "layer_trace": [
+    {
+      "input_count": 2633,
+      "method": "FILTER",
+      "stage": "REFERENCE_BIDIRECTIONAL_INPUT",
+      "survivor_count": 2259
+    },
+    {
+      "input_count": 2259,
+      "method": "HARD_GATE",
+      "stage": "OPERATIONAL_ROBUSTNESS_GATE",
+      "survivor_count": 776
+    },
+    {
+      "input_count": 776,
+      "method": "PARETO_NONDOMINANCE",
+      "stage": "L1_USEFUL_TERRITORIAL_SERVICE",
+      "survivor_count": 78
+    },
+    {
+      "input_count": 78,
+      "method": "PARETO_NONDOMINANCE",
+      "stage": "L2_INTERCHANGE_AND_ENGINEERING_ROBUSTNESS",
+      "survivor_count": 18
+    },
+    {
+      "input_count": 18,
+      "method": "PARETO_NONDOMINANCE",
+      "stage": "L3_IMPLEMENTABILITY_AND_EFFICIENCY",
+      "survivor_count": 2
+    }
+  ],
+  "lineage": {
+    "context_readiness_sha256": "edd6f9e313fa9896158e75cb1edf2748cfbb7983e8f5ae0df62d882860fe1be4",
+    "policy_sha256": "0f3df38a30691c3d4fe305aa634551d096d093e652bf53ee3cde46892d5428ef",
+    "readiness_validation_sha256": "02625b749e26d115873f2251c6b3ec56ddeabe69b636f29fc2e2f40ee4e07b19"
+  },
+  "olgiate_frazione_diagnostic_used_for_selection": false,
+  "operational_gate_survivor_count": 776,
+  "primary_selected": false,
+  "reference_bidirectional_context_count": 2259,
+  "reference_context_count": 2633,
+  "runner_up_selected": false,
+  "status": "PASS_PHASE2_FINAL_POLICY_DRY_RUN_V3",
+  "strict_lexicographic_diagnostic": {
+    "selection_authorized": false,
+    "survivor_count": 2,
+    "trace": [
+      {
+        "best_exact_value": "0",
+        "direction": "min",
+        "field": "stage_e_any_block_infeasibility_under_sensitivity",
+        "step": 1,
+        "survivor_count": 776
+      },
+      {
+        "best_exact_value": "0.387838225005",
+        "direction": "max",
+        "field": "public_population_coverage_share_10min",
+        "step": 2,
+        "survivor_count": 2
+      },
+      {
+        "best_exact_value": "0.282363997327",
+        "direction": "max",
+        "field": "public_population_coverage_share_8min",
+        "step": 3,
+        "survivor_count": 2
+      },
+      {
+        "best_exact_value": "0.119763877674",
+        "direction": "max",
+        "field": "public_population_coverage_share_5min",
+        "step": 4,
+        "survivor_count": 2
+      },
+      {
+        "best_exact_value": "0.0",
+        "direction": "max",
+        "field": "public_worst_municipality_coverage_share_10min",
+        "step": 5,
+        "survivor_count": 2
+      },
+      {
+        "best_exact_value": "0.0",
+        "direction": "max",
+        "field": "public_worst_municipality_coverage_share_8min",
+        "step": 6,
+        "survivor_count": 2
+      },
+      {
+        "best_exact_value": "0.0",
+        "direction": "max",
+        "field": "public_worst_municipality_coverage_share_5min",
+        "step": 7,
+        "survivor_count": 2
+      },
+      {
+        "best_exact_value": "60",
+        "direction": "min",
+        "field": "uniform_headway_min",
+        "step": 8,
+        "survivor_count": 2
+      },
+      {
+        "best_exact_value": "0.483870968",
+        "direction": "max",
+        "field": "stage_e_bidirectional_worst_retention_share_engineering",
+        "step": 9,
+        "survivor_count": 2
+      },
+      {
+        "best_exact_value": "0.337776874966",
+        "direction": "max",
+        "field": "bidirectional_reachable_share",
+        "step": 10,
+        "survivor_count": 2
+      },
+      {
+        "best_exact_value": "960",
+        "direction": "max",
+        "field": "span_minutes",
+        "step": 11,
+        "survivor_count": 2
+      },
+      {
+        "best_exact_value": "100159.180547000",
+        "direction": "min",
+        "field": "exact_annual_bus_km",
+        "step": 12,
+        "survivor_count": 2
+      },
+      {
+        "best_exact_value": "4",
+        "direction": "min",
+        "field": "public_explicit_field_check_pending_count",
+        "step": 13,
+        "survivor_count": 2
+      }
+    ]
+  },
+  "weighted_composite_score": false
+}
