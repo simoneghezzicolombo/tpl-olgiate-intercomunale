@@ -70,14 +70,17 @@ jobs:
           from pathlib import Path
           out=Path('outputs/phase2/stage_d_exact_bruteforce_v2')
           v=json.loads((out/'stage_d_exact_bruteforce_v2_validation.json').read_text())
+          manifest=json.loads(Path('outputs/phase2/stage_d_input_manifest_v2/stage_d_input_manifest_v2_validation.json').read_text())
+          certified_vectors=int(manifest['naive_joint_phase_vector_count_sum'])
+          assert certified_vectors==6758835
           assert v['status']=='PASS_PHASE2_STAGE_D_EXACT_BRUTEFORCE_REFERENCE_V2'
           assert v['contract']=='PHASE2_EXHAUSTIVE_ROUTE_SPECIFIC_EXACT_TIMETABLE_REFERENCE_V2'
           assert v['exhaustive_phase_enumeration'] is True
           assert v['approximate_or_heuristic_phase_search'] is False
           assert v['stage_d_daily_timing_input_count']==5345
           assert v['stage_c_plan_context_count']==16883
-          assert v['phase_vectors_evaluated']==6755285
-          assert v['certified_phase_vectors_expected']==6755285
+          assert v['phase_vectors_evaluated']==certified_vectors
+          assert v['certified_phase_vectors_expected']==certified_vectors
           assert v['max_public_route_count']==2
           assert v['max_phase_vectors_per_timing_input']==3600
           assert v['transfer_profile_ids']==['LOW_TRANSFER_FRICTION','MID_TRANSFER_FRICTION','HIGH_TRANSFER_FRICTION']
