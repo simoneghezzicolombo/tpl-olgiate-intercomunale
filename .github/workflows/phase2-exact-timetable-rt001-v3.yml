@@ -1,0 +1,161 @@
+name: Phase 2 Stage-D Exact Timetable RT001 V3
+
+on:
+  push:
+    branches: [phase2-stage-d-exact-rt001-v3]
+    paths:
+      - 'src/phase2_exact_timetable_optimizer_v2.py'
+      - 'src/phase2_exact_timetable_contract_v2.py'
+      - 'scripts/phase2_run_exact_timetable_rt001_v3.py'
+      - 'tests/test_phase2_exact_timetable_rt001_v3.py'
+      - '.github/workflows/phase2-exact-timetable-rt001-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/exact_timetable_rt001_v3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: |
+          python -m py_compile \
+            src/phase2_exact_timetable_optimizer_v2.py \
+            src/phase2_exact_timetable_contract_v2.py \
+            scripts/phase2_run_exact_timetable_rt001_v3.py
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<9'
+      - name: Regression tests
+        run: python -m pytest -q tests/test_phase2_exact_timetable_rt001_v3.py
+      - name: Build lossless exact Stage D
+        run: |
+          mkdir -p "$OUTDIR"
+          python scripts/phase2_run_exact_timetable_rt001_v3.py \
+            --timing-inputs outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_daily_timing_inputs_rt001_v3.csv.gz \
+            --route-inputs outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv \
+            --manifest-validation outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_input_manifest_rt001_v3_validation.json \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3_validation.json \
+            --budget-lossless-validation outputs/phase2/budget_lossless_policy_surface_v2/budget_lossless_policy_surface_v2_validation.json \
+            --budget-envelopes outputs/phase2/budget_envelopes.csv \
+            --budget-envelope-validation outputs/phase2/budget_envelopes_validation.json \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --s8-events outputs/phase2/s8_events.csv \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --s8-sensitivity-config config/phase2_s8_phasing_sensitivity_v2.json \
+            --context-output "$OUTDIR/exact_plan_context_results_rt001_v3.csv.gz" \
+            --timetable-output "$OUTDIR/exact_selected_timetables_rt001_v3.csv" \
+            --trip-output "$OUTDIR/exact_selected_trips_rt001_v3.csv.gz" \
+            --validation "$OUTDIR/exact_timetable_rt001_v3_validation.json"
+      - name: Validate exact contract
+        run: |
+          python - <<'PY'
+          import csv,gzip,json
+          from pathlib import Path
+          out=Path('outputs/phase2/exact_timetable_rt001_v3')
+          v=json.loads((out/'exact_timetable_rt001_v3_validation.json').read_text())
+          assert v['status']=='PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_RT001_V3'
+          assert v['contract']=='PHASE2_RT001_LOSSLESS_BUDGET_QUALIFIED_EXACT_CLOCKFACE_TIMETABLE_V3'
+          assert v['rt001_repair'] is True
+          assert v['stage_d_daily_timing_input_count']==5325
+          assert v['stage_c_plan_context_count']==16495
+          assert v['used_public_route_count']==803
+          assert v['phase_vectors_evaluated_once']==6772755
+          assert v['manifest_phase_vector_count']==6772755
+          assert v['exhaustive_route_specific_phase_domain'] is True
+          assert v['exact_phase_domain_pruned'] is False
+          assert v['approximate_or_heuristic_phase_search'] is False
+          assert v['s8_target_selection_semantics']=='MAX_CONTINUOUS_TRANSFER_QUALITY_OVER_FINITE_EXPLICIT_TARGET_EVENTS'
+          assert v['s8_target_localisation_is_exact_not_heuristic'] is True
+          assert v['bus_to_rail_public_returns_start_inclusive_end_exclusive'] is True
+          assert v['vehicle_only_technical_return_used_as_passenger_service'] is False
+          assert v['exact_budget_hard_cap_reapplied_after_materialisation'] is True
+          assert v['upstream_exact_existential_budget_invariant_enforced'] is True
+          assert v['exact_budget_hard_eligible_context_count']==16495
+          assert v['exact_budget_hard_ineligible_context_count']==0
+          assert sum(v['eligible_context_count_by_budget'].values())==16495
+          for key in ('passenger_weighting_applied','topology_weighting_applied','worker_reference_used_for_phase_selection','worker_reference_assigned_to_routes','municipal_od_downscaled','ridership_forecast','weighted_composite_score','decision_budget_selected','calendar_selected','recovery_selected','topology_ranked','primary_selected','runner_up_selected','delay_stress_certified_as_robustness'):
+              assert v[key] is False,key
+          with gzip.open(out/'exact_plan_context_results_rt001_v3.csv.gz','rt',encoding='utf-8',newline='') as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==16495
+          assert len({r['plan_context_id'] for r in rows})==16495
+          assert all(r['exact_budget_hard_eligible']=='true' for r in rows)
+          for r in rows:
+              assert r['selected_timetable_id']
+              assert float(r['exact_annual_bus_km']) <= float(r['budget_cap_annual_bus_km']) + 1e-6
+              assert float(r['exact_annual_bus_km']) + 1e-6 >= float(r['upstream_exact_min_annual_bus_km'])
+          with (out/'exact_selected_timetables_rt001_v3.csv').open(encoding='utf-8',newline='') as f:
+              tables=list(csv.DictReader(f))
+          assert len(tables)==v['selected_timetable_count']
+          assert len({r['selected_timetable_id'] for r in tables})==len(tables)
+          print(json.dumps({k:v[k] for k in ('stage_d_daily_timing_input_count','stage_c_plan_context_count','phase_vectors_evaluated_once','selected_timetable_count','explicit_public_trip_count','phase_divergent_context_group_count','selected_timetable_production_above_upstream_phase_domain_minimum_context_count','exact_fleet_min_by_recovery','exact_fleet_max_by_recovery','eligible_context_count_by_budget')},indent=2,sort_keys=True))
+          PY
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/exact-rt001-v3 && mkdir -p /tmp/exact-rt001-v3
+          python scripts/phase2_run_exact_timetable_rt001_v3.py \
+            --timing-inputs outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_daily_timing_inputs_rt001_v3.csv.gz \
+            --route-inputs outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv \
+            --manifest-validation outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_input_manifest_rt001_v3_validation.json \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3_validation.json \
+            --budget-lossless-validation outputs/phase2/budget_lossless_policy_surface_v2/budget_lossless_policy_surface_v2_validation.json \
+            --budget-envelopes outputs/phase2/budget_envelopes.csv \
+            --budget-envelope-validation outputs/phase2/budget_envelopes_validation.json \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --s8-events outputs/phase2/s8_events.csv \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --s8-sensitivity-config config/phase2_s8_phasing_sensitivity_v2.json \
+            --context-output /tmp/exact-rt001-v3/contexts.csv.gz \
+            --timetable-output /tmp/exact-rt001-v3/timetables.csv \
+            --trip-output /tmp/exact-rt001-v3/trips.csv.gz \
+            --validation /tmp/exact-rt001-v3/validation.json
+          cmp "$OUTDIR/exact_plan_context_results_rt001_v3.csv.gz" /tmp/exact-rt001-v3/contexts.csv.gz
+          cmp "$OUTDIR/exact_selected_timetables_rt001_v3.csv" /tmp/exact-rt001-v3/timetables.csv
+          cmp "$OUTDIR/exact_selected_trips_rt001_v3.csv.gz" /tmp/exact-rt001-v3/trips.csv.gz
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/exact_timetable_rt001_v3/exact_timetable_rt001_v3_validation.json').read_text())
+          b=json.loads(Path('/tmp/exact-rt001-v3/validation.json').read_text())
+          assert a==b
+          PY
+      - name: Guard epistemic boundary
+        run: |
+          ! grep -REn 'np\.random|random\.' \
+            src/phase2_exact_timetable_optimizer_v2.py \
+            src/phase2_exact_timetable_contract_v2.py \
+            scripts/phase2_run_exact_timetable_rt001_v3.py
+          ! grep -REn 'primary_selected["'"']?[[:space:]]*[:=][[:space:]]*(True|true)|runner_up_selected["'"']?[[:space:]]*[:=][[:space:]]*(True|true)' \
+            scripts/phase2_run_exact_timetable_rt001_v3.py
+      - name: Persist evidence
+        run: |
+          git config user.name 'phase2-stage-d-exact-rt001-v3-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$OUTDIR"
+          if git diff --cached --quiet; then
+            echo 'No evidence changes to persist'
+          else
+            git commit -m 'data(phase2): persist lossless Stage-D exact RT001 V3 [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-exact-timetable-rt001-v3-${{ github.sha }}
+          path: outputs/phase2/exact_timetable_rt001_v3
+          if-no-files-found: error
