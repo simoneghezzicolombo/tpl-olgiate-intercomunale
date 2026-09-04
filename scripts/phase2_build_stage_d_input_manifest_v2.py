@@ -65,6 +65,20 @@ def stable_input_id(scenario_id: str, headway: int, span_id: str) -> str:
     return "D4I2_" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
 
 
+def plan_context_id(row: dict[str, str]) -> str:
+    """Budget-qualified identity for a Stage-C row.
+
+    Passenger Utility plan_id intentionally excludes the budget envelope, so the
+    same plan_id may occur in more than one budget. Stage-D packaging must retain
+    those decision contexts separately even though they share one daily timetable.
+    """
+    budget = str(row["budget_suffix"])
+    plan_id = str(row["plan_id"])
+    if not budget or not plan_id:
+        raise ValueError("Stage-C row lacks budget-qualified plan identity")
+    return f"{budget}|{plan_id}"
+
+
 def validate_upstream(args):
     passenger = read_json(args.passenger_validation)
     s8opp = read_json(args.s8_opportunity_validation)
@@ -107,17 +121,19 @@ def validate_upstream(args):
 
 def load_passenger_groups(path: Path):
     groups: dict[tuple[str, int, str], list[dict[str, str]]] = defaultdict(list)
-    plan_ids: set[str] = set()
+    context_ids: set[str] = set()
     for row in read_gzip_csv(path):
-        plan_id = str(row["plan_id"])
-        if plan_id in plan_ids:
-            raise ValueError(f"Duplicate Passenger Utility plan_id {plan_id}")
-        plan_ids.add(plan_id)
+        context_id = plan_context_id(row)
+        if context_id in context_ids:
+            raise ValueError(f"Duplicate Passenger Utility budget-qualified plan context {context_id}")
+        context_ids.add(context_id)
+        enriched = dict(row)
+        enriched["_plan_context_id"] = context_id
         key = (str(row["scenario_id"]), int(row["uniform_headway_min"]), str(row["span_id"]))
-        groups[key].append(row)
-    if len(plan_ids) != 16883:
-        raise ValueError(f"Unexpected Passenger Utility plan count {len(plan_ids)}")
-    return groups, plan_ids
+        groups[key].append(enriched)
+    if len(context_ids) != 16883:
+        raise ValueError(f"Unexpected Passenger Utility plan-context count {len(context_ids)}")
+    return groups, context_ids
 
 
 def load_s8_opportunity(path: Path) -> dict[tuple[str, int, str], dict[str, str]]:
@@ -125,7 +141,6 @@ def load_s8_opportunity(path: Path) -> dict[tuple[str, int, str], dict[str, str]
     for row in read_gzip_csv(path):
         key = (str(row["scenario_id"]), int(row["uniform_headway_min"]), str(row["span_id"]))
         if key in out:
-            # This file is plan-level, so duplicate scenario/timing keys are expected.
             prior = out[key]
             invariant = [
                 "s8_opportunity_class", "s8_public_complete_match_route_count",
@@ -213,7 +228,7 @@ def main() -> int:
     args = p.parse_args()
 
     passenger_v, s8opp_v, continuity_v, s8_v = validate_upstream(args)
-    groups, all_plan_ids = load_passenger_groups(args.passenger_frontier)
+    groups, all_plan_context_ids = load_passenger_groups(args.passenger_frontier)
     if len(groups) != int(s8opp_v.get("unique_stage_c_scenario_timing_key_count", -1)):
         raise ValueError(f"Stage-D grouping count differs from certified S8 opportunity keys: {len(groups)}")
     s8opp = load_s8_opportunity(args.s8_opportunity)
@@ -228,8 +243,9 @@ def main() -> int:
         "stage_d_input_id", "scenario_id", "topology_family", "uniform_headway_min", "span_id",
         "span_start_min", "span_end_min", "public_route_count", "public_route_ids_json",
         "naive_joint_phase_vector_count", "naive_joint_phase_vector_log10",
-        "represented_plan_count", "represented_plan_ids_json", "represented_budget_suffixes_json",
-        "represented_calendar_ids_json", "represented_annual_service_days_json", "recovery_values_json",
+        "represented_plan_count", "represented_plan_context_ids_json", "represented_plan_ids_json",
+        "represented_budget_suffixes_json", "represented_calendar_ids_json",
+        "represented_annual_service_days_json", "recovery_values_json",
         "s8_opportunity_class", "s8_public_complete_match_route_count", "s8_public_complete_match_route_share",
         "s8_public_all_routes_have_some_complete_match_phase", "s8_public_any_route_has_some_complete_match_phase",
         "retained_current_localizable_cluster_count", "retained_current_localizable_cluster_share",
@@ -270,10 +286,11 @@ def main() -> int:
                 raise ValueError(f"Public route count mismatch for {sid}")
 
             plan_ids = [str(r["plan_id"]) for r in group]
-            overlap = represented_seen.intersection(plan_ids)
+            plan_context_ids = [str(r["_plan_context_id"]) for r in group]
+            overlap = represented_seen.intersection(plan_context_ids)
             if overlap:
-                raise ValueError(f"Passenger plans represented in multiple Stage-D inputs: {sorted(overlap)[:3]}")
-            represented_seen.update(plan_ids)
+                raise ValueError(f"Passenger plan contexts represented in multiple Stage-D inputs: {sorted(overlap)[:3]}")
+            represented_seen.update(plan_context_ids)
 
             phase_vectors = headway ** len(route_ids)
             route_count_dist[len(route_ids)] += 1
@@ -293,7 +310,8 @@ def main() -> int:
                 "public_route_ids_json": json.dumps(route_ids, separators=(",", ":")),
                 "naive_joint_phase_vector_count": str(phase_vectors),
                 "naive_joint_phase_vector_log10": f"{math.log10(phase_vectors):.9f}",
-                "represented_plan_count": len(plan_ids),
+                "represented_plan_count": len(plan_context_ids),
+                "represented_plan_context_ids_json": _json_sorted(plan_context_ids),
                 "represented_plan_ids_json": _json_sorted(plan_ids),
                 "represented_budget_suffixes_json": _json_sorted(str(r["budget_suffix"]) for r in group),
                 "represented_calendar_ids_json": _json_sorted(str(r["calendar_id"]) for r in group),
@@ -323,8 +341,8 @@ def main() -> int:
         text.close()
         raw.close()
 
-    if represented_seen != all_plan_ids:
-        raise ValueError("Stage-D manifest does not losslessly represent all Passenger Utility plans")
+    if represented_seen != all_plan_context_ids:
+        raise ValueError("Stage-D manifest does not losslessly represent all Passenger Utility budget-qualified plan contexts")
 
     used_routes = sorted(route_use_count)
     route_fields = [
@@ -339,8 +357,10 @@ def main() -> int:
         w.writeheader()
         for rid in used_routes:
             row = routes[rid]
-            w.writerow({**{field: row[field] for field in route_fields if field != "stage_d_timing_input_occurrence_count"},
-                        "stage_d_timing_input_occurrence_count": route_use_count[rid]})
+            w.writerow({
+                **{field: row[field] for field in route_fields if field != "stage_d_timing_input_occurrence_count"},
+                "stage_d_timing_input_occurrence_count": route_use_count[rid],
+            })
 
     threshold_counts = {
         ">=1e4": sum(v >= 10_000 for v in complexity_values),
@@ -351,7 +371,9 @@ def main() -> int:
     report = {
         "status": STATUS,
         "contract": CONTRACT,
-        "passenger_plan_count_represented": len(all_plan_ids),
+        "passenger_plan_context_count_represented": len(all_plan_context_ids),
+        "passenger_plan_count_represented": len(all_plan_context_ids),
+        "passenger_plan_id_is_global_across_budgets": False,
         "stage_d_daily_timing_input_count": len(groups),
         "unique_stage_d_scenario_count": len(wanted_scenarios),
         "used_public_route_count": len(used_routes),
@@ -381,11 +403,12 @@ def main() -> int:
         "ridership_forecast": False,
         "weighted_composite_score": False,
         "epistemic_note": (
-            "This manifest is a lossless computational packaging layer for Stage D. Multiple Stage-C plan rows are grouped "
-            "only when they share the exact same structural scenario, headway and daily span. Budget and annual calendar "
-            "memberships remain explicitly listed. The reported headway^route_count quantity is only the naive Cartesian "
-            "phase-vector cardinality diagnostic; it is not an objective, threshold or pruning rule. No equivalence across "
-            "different scenario IDs or public route sets is assumed."
+            "This manifest is a lossless computational packaging layer for Stage D. Multiple Stage-C rows are grouped "
+            "only when they share the exact same structural scenario, headway and daily span. Passenger Utility plan_id "
+            "is not globally unique across budget envelopes, so every row is preserved with a budget-qualified plan-context "
+            "identity. Budget and annual calendar memberships remain explicitly listed. The reported headway^route_count "
+            "quantity is only the naive Cartesian phase-vector cardinality diagnostic; it is not an objective, threshold "
+            "or pruning rule. No equivalence across different scenario IDs or public route sets is assumed."
         ),
         "lineage": {
             "passenger_frontier_sha256": sha256_path(args.passenger_frontier),
@@ -406,7 +429,7 @@ def main() -> int:
     args.validation.parent.mkdir(parents=True, exist_ok=True)
     args.validation.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({k: report[k] for k in (
-        "status", "passenger_plan_count_represented", "stage_d_daily_timing_input_count",
+        "status", "passenger_plan_context_count_represented", "stage_d_daily_timing_input_count",
         "unique_stage_d_scenario_count", "used_public_route_count", "route_count_distribution",
         "naive_joint_phase_vector_count_max", "naive_complexity_threshold_counts",
     )}, indent=2))
