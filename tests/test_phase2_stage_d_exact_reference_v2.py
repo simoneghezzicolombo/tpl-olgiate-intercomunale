@@ -4,6 +4,9 @@ from src.phase2_stage_d_exact_reference_v2 import (
     ExactRailEvent,
     ExactRoute,
     TransferProfile,
+    _best_quality_and_slack_exhaustive,
+    _best_target_quality_and_slack,
+    _quality_peak_is_preferred_wait,
     clockface_departures,
     materialise_route_trips,
     minimum_common_hub_blocks,
@@ -24,7 +27,7 @@ def profiles():
 
 
 def rail_events():
-    # Synthetic timing fixture only for unit-test mathematics, never production evidence.
+    # Constructed unit-test timing fixture only, never production evidence.
     rows = []
     for direction, offset in (("MILANO", 6), ("LECCO", 13)):
         for hour in (6, 7, 8):
@@ -36,6 +39,24 @@ def rail_events():
 def test_clockface_departures_are_end_exclusive_and_phase_sensitive():
     assert clockface_departures(phase_min=0, headway_min=30, span_start_min=360, span_end_min=420) == (D(360), D(390))
     assert clockface_departures(phase_min=5, headway_min=30, span_start_min=360, span_end_min=420) == (D(365), D(395))
+
+
+def test_current_profiles_prove_preferred_wait_is_global_quality_peak():
+    assert all(_quality_peak_is_preferred_wait(p.as_model_profile()) for p in profiles())
+
+
+def test_localised_target_search_equals_exhaustive_target_search_for_current_profiles():
+    targets = tuple(D(str(x)) for x in (95, 101, 106.5, 120, 151, 181))
+    for raw in profiles():
+        profile = raw.as_model_profile()
+        for source in tuple(D(str(x)) for x in (90, 99.25, 103, 118.5, 145, 182)):
+            fast = _best_target_quality_and_slack(source, targets, profile)
+            exhaustive = _best_quality_and_slack_exhaustive(
+                [float(target - source) - profile.transfer_walk_min for target in targets],
+                profile,
+            )
+            assert abs(fast[0] - exhaustive[0]) < 1e-15
+            assert abs(fast[1] - exhaustive[1]) < 1e-15
 
 
 def test_open_route_technical_return_never_creates_bus_to_rail_quality_cells():
