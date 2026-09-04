@@ -1,0 +1,201 @@
+name: Phase 2 Stage E OLD-vs-NEW Robustness Audit
+
+on:
+  push:
+    branches: [phase2-stage-e-old-vs-new-robustness-audit-a]
+    paths:
+      - 'scripts/phase2_audit_stage_e_old_vs_new_robustness.py'
+      - 'tests/test_phase2_stage_e_old_vs_new_robustness_audit.py'
+      - 'docs/PHASE2_STAGE_E_OLD_VS_NEW_ROBUSTNESS_AUDIT.md'
+      - '.github/workflows/phase2-stage-e-old-vs-new-robustness-audit.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-stage-e-old-vs-new-robustness-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: .
+  OLD_STAGE_E_COMMIT: a0bd5f01c75c9316eff4977ab9648343e1a7ffbc
+  NEW_STAGE_E_COMMIT: 063e1190a7be1e948edc7239ab2e5946908afe70
+  NEW_STAGE_D_COMMIT: d41bb678382d018929c1c6b46542f12549f20d4f
+  OUTDIR: outputs/phase2/stage_e_old_vs_new_robustness_audit
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Materialise frozen certified lineages
+        run: |
+          git fetch origin "$OLD_STAGE_E_COMMIT" "$NEW_STAGE_E_COMMIT" "$NEW_STAGE_D_COMMIT"
+          git cat-file -e "$OLD_STAGE_E_COMMIT^{commit}"
+          git cat-file -e "$NEW_STAGE_E_COMMIT^{commit}"
+          git cat-file -e "$NEW_STAGE_D_COMMIT^{commit}"
+          rm -rf /tmp/stage-e-old /tmp/stage-e-new /tmp/stage-d-new
+          git worktree add --detach /tmp/stage-e-old "$OLD_STAGE_E_COMMIT"
+          git worktree add --detach /tmp/stage-e-new "$NEW_STAGE_E_COMMIT"
+          git worktree add --detach /tmp/stage-d-new "$NEW_STAGE_D_COMMIT"
+          test -f /tmp/stage-e-old/outputs/phase2/final_operational_robustness_v2/final_operational_robustness_v2_validation.json
+          test -f /tmp/stage-e-new/outputs/phase2/final_operational_robustness_rt001_v3/final_operational_robustness_rt001_v3_validation.json
+          test -f /tmp/stage-d-new/outputs/phase2/stage_d_exact_rt001_v3/stage_d_exact_rt001_v3_validation.json
+
+      - name: Compile audit
+        run: python -m py_compile scripts/phase2_audit_stage_e_old_vs_new_robustness.py
+
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<10'
+
+      - name: Run audit regressions
+        run: python -m pytest -q tests/test_phase2_stage_e_old_vs_new_robustness_audit.py
+
+      - name: Build semantic old-vs-new audit
+        run: |
+          rm -rf "$OUTDIR"
+          set +e
+          python scripts/phase2_audit_stage_e_old_vs_new_robustness.py \
+            --old-stage-e-dir /tmp/stage-e-old/outputs/phase2/final_operational_robustness_v2 \
+            --new-stage-e-dir /tmp/stage-e-new/outputs/phase2/final_operational_robustness_rt001_v3 \
+            --old-stage-d-summary /tmp/stage-e-old/outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_timing_summary_v2.csv.gz \
+            --old-stage-d-trips /tmp/stage-e-old/outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_public_trips_v2.csv.gz \
+            --old-route-input /tmp/stage-e-old/outputs/phase2/stage_d_input_manifest_v2/stage_d_public_route_inputs_v2.csv \
+            --new-stage-d-validation /tmp/stage-d-new/outputs/phase2/stage_d_exact_rt001_v3/stage_d_exact_rt001_v3_validation.json \
+            --new-stage-d-contexts /tmp/stage-d-new/outputs/phase2/stage_d_exact_rt001_v3/exact_plan_context_results_rt001_v3.csv.gz \
+            --new-stage-d-timetables /tmp/stage-d-new/outputs/phase2/stage_d_exact_rt001_v3/exact_selected_timetables_rt001_v3.csv \
+            --new-stage-d-trips /tmp/stage-d-new/outputs/phase2/stage_d_exact_rt001_v3/exact_selected_trips_rt001_v3.csv.gz \
+            --new-route-input /tmp/stage-d-new/outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv \
+            --output-dir "$OUTDIR"
+          code=$?
+          set -e
+          test "$code" -eq 0 -o "$code" -eq 2
+          echo "$code" > /tmp/audit_exit_code
+          test -f "$OUTDIR/stage_e_old_vs_new_robustness_audit_validation.json"
+
+      - name: Validate audit contract and non-decisional boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('outputs/phase2/stage_e_old_vs_new_robustness_audit/stage_e_old_vs_new_robustness_audit_validation.json')
+          v=json.loads(p.read_text())
+          assert v['contract']=='PHASE2_SEMANTIC_OLD_VS_RT001_STAGE_E_ROBUSTNESS_AUDIT_V1'
+          assert v['status'] in {'PASS_PHASE2_STAGE_E_OLD_VS_NEW_ROBUSTNESS_AUDIT','FAIL_PHASE2_STAGE_E_OLD_VS_NEW_ROBUSTNESS_AUDIT'}
+          assert v['legacy_stage_e_status']=='PASS_PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_V2'
+          assert v['new_stage_e_status']=='PASS_PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_RT001_V3'
+          assert v['legacy_stage_e_fixture_is_final_selection_lineage'] is False
+          assert v['new_stage_e_fixture_is_final_selection_lineage'] is True
+          assert v['legacy_timetable_count']==5345
+          assert v['new_selected_timetable_count']==6000
+          assert v['new_source_daily_timing_input_count']==5325
+          assert v['new_represented_plan_context_count']==16495
+          assert v['rt001_context_split_stage_d_input_count']==634
+          assert v['rt001_context_split_count_exactly_confirmed'] is True
+          assert v['bus_runtime_engineering_stress_minutes']==[0.0,5.0,10.0,15.0]
+          assert v['bus_runtime_engineering_stress_is_empirical_probability'] is False
+          assert v['rail_to_bus_delay_evidence_minutes']==[0.0]
+          assert v['recovery_minutes_evaluated_not_selected']==[5,10,15]
+          assert v['new_direct_out_of_span_bus_to_rail_row_count']==0
+          assert v['new_out_of_span_bus_to_rail_connection_row_count']==0
+          assert v['span_start_inclusive_end_exclusive_rule_enforced_in_new_stage_e'] is True
+          assert v['technical_return_used_as_passenger_service_new'] is False
+          assert v['deterministic_rebuild'] is True
+          for key in (
+              'ridership_created','municipal_od_allocated','passenger_weights_created','synthetic_observations_created',
+              'topologies_ranked','budget_selected','calendar_selected','recovery_selected','primary_selected',
+              'runner_up_selected','weighted_composite_score',
+          ):
+              assert v[key] is False,key
+          print(json.dumps({
+              'status':v['status'],
+              'common_semantic_timetables':v['semantic_timetable_common_count'],
+              'split_inputs':v['rt001_context_split_stage_d_input_count'],
+              'legacy_outspan_returns':v['legacy_raw_out_of_span_public_return_trip_count'],
+              'legacy_outspan_connection_rows':v['legacy_out_of_span_bus_to_rail_connection_row_count'],
+              'new_outspan_connection_rows':v['new_out_of_span_bus_to_rail_connection_row_count'],
+              'surface_unexplained':v['surface_unexplained_comparable_mismatch_count'],
+              'block_unexplained':v['block_unexplained_comparable_mismatch_count'],
+              'change_classes':v['change_classification_counts'],
+          },indent=2,sort_keys=True))
+          PY
+
+      - name: Deterministic byte-for-byte rebuild
+        run: |
+          rm -rf /tmp/stage-e-old-vs-new-rebuild
+          set +e
+          python scripts/phase2_audit_stage_e_old_vs_new_robustness.py \
+            --old-stage-e-dir /tmp/stage-e-old/outputs/phase2/final_operational_robustness_v2 \
+            --new-stage-e-dir /tmp/stage-e-new/outputs/phase2/final_operational_robustness_rt001_v3 \
+            --old-stage-d-summary /tmp/stage-e-old/outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_timing_summary_v2.csv.gz \
+            --old-stage-d-trips /tmp/stage-e-old/outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_public_trips_v2.csv.gz \
+            --old-route-input /tmp/stage-e-old/outputs/phase2/stage_d_input_manifest_v2/stage_d_public_route_inputs_v2.csv \
+            --new-stage-d-validation /tmp/stage-d-new/outputs/phase2/stage_d_exact_rt001_v3/stage_d_exact_rt001_v3_validation.json \
+            --new-stage-d-contexts /tmp/stage-d-new/outputs/phase2/stage_d_exact_rt001_v3/exact_plan_context_results_rt001_v3.csv.gz \
+            --new-stage-d-timetables /tmp/stage-d-new/outputs/phase2/stage_d_exact_rt001_v3/exact_selected_timetables_rt001_v3.csv \
+            --new-stage-d-trips /tmp/stage-d-new/outputs/phase2/stage_d_exact_rt001_v3/exact_selected_trips_rt001_v3.csv.gz \
+            --new-route-input /tmp/stage-d-new/outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv \
+            --output-dir /tmp/stage-e-old-vs-new-rebuild >/dev/null
+          code=$?
+          set -e
+          test "$code" -eq 0 -o "$code" -eq 2
+          test "$code" = "$(cat /tmp/audit_exit_code)"
+          for f in \
+            rt001_context_split_inputs.csv.gz \
+            span_return_rule_audit.csv.gz \
+            semantic_robustness_surface_comparison.csv.gz \
+            semantic_block_sensitivity_comparison.csv.gz \
+            semantic_timetable_change_classification.csv.gz \
+            stage_e_old_vs_new_robustness_audit_validation.json; do
+            cmp "$OUTDIR/$f" "/tmp/stage-e-old-vs-new-rebuild/$f"
+          done
+
+      - name: Epistemic and source-closed guard
+        run: |
+          FILES='scripts/phase2_audit_stage_e_old_vs_new_robustness.py'
+          ! grep -En 'np\.random|numpy\.random|(^|[[:space:]])import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -En 'demand_weighted_gjt_improvement_min|missed_connection_probability' $FILES
+          ! grep -En 'primary_selected[^\n]{0,60}(True|"true")|runner_up_selected[^\n]{0,60}(True|"true")|weighted_composite_score[^\n]{0,60}(True|"true")' $FILES
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check
+
+      - name: Persist audit evidence
+        run: |
+          git config user.name 'phase2-stage-e-old-vs-new-audit-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$OUTDIR"
+          if git diff --cached --quiet; then
+            echo 'No audit evidence changes to persist'
+          else
+            git commit -m 'data(phase2): persist Stage-E old-vs-new robustness audit [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-stage-e-old-vs-new-robustness-audit-${{ github.sha }}
+          path: outputs/phase2/stage_e_old_vs_new_robustness_audit
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: Audit verdict gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('outputs/phase2/stage_e_old_vs_new_robustness_audit/stage_e_old_vs_new_robustness_audit_validation.json').read_text())
+          if v['status'] != 'PASS_PHASE2_STAGE_E_OLD_VS_NEW_ROBUSTNESS_AUDIT':
+              raise SystemExit('Audit FAIL: '+', '.join(v['failure_reasons']))
+          assert v['surface_unexplained_comparable_mismatch_count']==0
+          assert v['rail_to_bus_nominal_unexplained_comparable_mismatch_count']==0
+          assert v['block_unexplained_comparable_mismatch_count']==0
+          PY
