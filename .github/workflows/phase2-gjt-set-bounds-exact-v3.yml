@@ -47,7 +47,7 @@ jobs:
           test -f /tmp/stage-d-v3/outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv
           test -f /tmp/stage-d-v3/outputs/phase2/s8_events.csv
 
-      - name: Compile exact set-bound kernel and adapter
+      - name: Compile fixed-event set-bound kernel and builder
         run: |
           python -m py_compile src/phase2_gjt_set_bounds_exact_v3.py
           python -m py_compile scripts/phase2_build_gjt_set_bounds_exact_v3.py
@@ -56,7 +56,7 @@ jobs:
       - name: Install test runner
         run: python -m pip install --disable-pip-version-check 'pytest>=8,<10'
 
-      - name: Run exact semantic regressions
+      - name: Run exact semantic and oracle regressions
         run: python -m pytest -q tests/test_phase2_gjt_set_bounds_exact_v3.py
 
       - name: Verify certified upstream semantic boundaries
@@ -65,6 +65,7 @@ jobs:
           import json
           from pathlib import Path
           d=json.loads(Path('/tmp/stage-d-v3/outputs/phase2/stage_d_exact_rt001_v3/stage_d_exact_rt001_v3_validation.json').read_text())
+          e=json.loads(Path('outputs/phase2/final_operational_robustness_rt001_v3/final_operational_robustness_rt001_v3_validation.json').read_text())
           f=json.loads(Path('outputs/phase2/feeder_generalized_access_v2/feeder_generalized_access_v2_validation.json').read_text())
           a=json.loads(Path('outputs/phase2/access_equity_v2/access_equity_v2_validation.json').read_text())
           assert d['status']=='PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_RT001_V3'
@@ -72,6 +73,11 @@ jobs:
           assert d['selected_exact_trip_row_count']==285748
           assert d['passenger_return_events_restricted_to_declared_service_span'] is True
           assert d['technical_vehicle_closure_used_as_passenger_return'] is False
+          assert e['status']=='PASS_PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_RT001_V3'
+          assert e['planned_connection_identity_preserved'] is True
+          assert e['next_train_rebinding_used_as_success'] is False
+          assert e['next_alternative_connection_reported_separately'] is True
+          assert e['technical_return_used_as_passenger_service'] is False
           assert f['status']=='PASS_FEEDER_GENERALIZED_ACCESS_V2_BUILD'
           assert f['population_unit_count']==4348
           assert f['municipal_work_od_downscaled'] is False
@@ -82,10 +88,10 @@ jobs:
           assert b['status']=='VERIFIED_APPLIED'
           assert b['rail_anchor_id']=='rail:S01514'
           assert b['physical_cluster_id']=='EX_039'
-          assert b['bridge_type']=='PEDESTRIAN_ACCESS_ONLY'
+          assert b['scope']=='PEDESTRIAN_ACCESS_ONLY'
           PY
 
-      - name: Build exact fine-origin set bounds
+      - name: Build fixed-event fine-origin set bounds
         run: |
           rm -rf "$OUTDIR"
           python scripts/phase2_run_gjt_set_bounds_exact_v3.py \
@@ -94,6 +100,7 @@ jobs:
             --stage-d-trips /tmp/stage-d-v3/outputs/phase2/stage_d_exact_rt001_v3/exact_selected_trips_rt001_v3.csv.gz \
             --route-input /tmp/stage-d-v3/outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv \
             --s8-events /tmp/stage-d-v3/outputs/phase2/s8_events.csv \
+            --stage-e-validation outputs/phase2/final_operational_robustness_rt001_v3/final_operational_robustness_rt001_v3_validation.json \
             --feeder-validation outputs/phase2/feeder_generalized_access_v2/feeder_generalized_access_v2_validation.json \
             --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json \
             --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
@@ -105,7 +112,7 @@ jobs:
             --output "$OUTDIR/exact_feeder_s8_set_bounds_v3.csv.gz" \
             --validation-output "$OUTDIR/exact_feeder_s8_set_bounds_v3_validation.json"
 
-      - name: Validate exact set-bound contract
+      - name: Validate fixed-event set-bound contract
         run: |
           python - <<'PY'
           import csv,gzip,json,math
@@ -113,16 +120,26 @@ jobs:
           out=Path('outputs/phase2/gjt_set_bounds_exact_v3')
           v=json.loads((out/'exact_feeder_s8_set_bounds_v3_validation.json').read_text())
           assert v['status']=='PASS_PHASE2_EXACT_FEEDER_S8_SET_BOUNDS_V3'
-          assert v['contract']=='PHASE2_EXACT_FEEDER_S8_SET_IDENTIFICATION_BOUNDS_V3'
+          assert v['contract']=='PHASE2_FIXED_EVENT_FINE_ORIGIN_SET_IDENTIFICATION_BOUNDS_V3'
           assert v['selected_exact_timetable_count']==6000
           assert v['selected_exact_trip_count']==285748
           assert v['population_unit_count']==4348
           assert v['municipality_count']==5
           assert v['rail_directions']==['LECCO','MILANO']
+          assert v['rail_event_count_by_direction']=={'LECCO':37,'MILANO':37}
           assert v['output_row_count']==60000
           assert v['full_factorial_sensitivity_case_count']==243
           assert v['evaluated_reduced_sensitivity_case_count']==6
           assert v['parameter_reduction_exact'] is True
+          assert v['fixed_event_bus_component_optimizer_exact'] is True
+          assert v['fixed_event_bus_component_optimizer_bruteforce_oracle_tested'] is True
+          assert v['rail_event_conditioned_before_set_envelope'] is True
+          assert v['fixed_rail_event_identity_preserved_within_itinerary'] is True
+          assert v['next_train_rebinding_used'] is False
+          assert v['stage_e_no_rebinding_boundary_consumed'] is True
+          assert v['passenger_hub_return_span_semantics']=='START_INCLUSIVE_END_EXCLUSIVE'
+          assert v['next_explicit_public_hub_occurrence_only'] is True
+          assert v['technical_vehicle_closure_used_as_passenger_return'] is False
           assert v['fine_origin_set_identification_materialized'] is True
           assert v['fine_origin_point_assignment_performed'] is False
           assert v['municipal_od_consumed'] is False
@@ -130,17 +147,17 @@ jobs:
           assert v['worker_locations_imputed'] is False
           assert v['resident_population_used_as_passenger_demand'] is False
           assert v['resident_population_used_as_worker_location_capacity'] is False
-          assert v['rail_direction_conditioned_not_destination_inferred'] is True
           assert v['rail_direction_inferred_from_destination'] is False
-          assert v['next_explicit_public_hub_occurrence_only'] is True
-          assert v['technical_vehicle_closure_used_as_passenger_return'] is False
           assert v['origin_bus_wait_imputed'] is False
           assert v['half_headway_wait_used'] is False
           assert v['departure_time_distribution_used'] is False
+          assert v['rail_event_probability_weighting_used'] is False
+          assert v['best_available_departure_opportunity_used'] is False
           assert v['expected_daily_gjt_identified'] is False
           assert v['full_point_demand_weighted_gjt_identified'] is False
           assert v['conditional_cost_is_full_gjt'] is False
           assert v['ranking_or_pruning_authorized'] is False
+          assert v['interval_dominance_applied'] is False
           assert v['weighted_composite_score'] is False
           assert v['decision_budget_selected'] is False
           assert v['uncertainty_band_selected'] is False
@@ -149,10 +166,10 @@ jobs:
           assert v['finite_upper_bound_row_count']+v['unbounded_upper_bound_row_count']==60000
           with gzip.open(out/'exact_feeder_s8_set_bounds_v3.csv.gz','rt',encoding='utf-8',newline='') as f:
               reader=csv.DictReader(f)
-              rows=0
-              tids=set(); directions=set(); munis=set()
+              rows=0; tids=set(); directions=set(); munis=set()
               for r in reader:
                   rows+=1; tids.add(r['selected_timetable_id']); directions.add(r['rail_direction']); munis.add(r['origin_municipality_code'])
+                  assert r['fixed_event_semantics']=='ONE_EXPLICIT_S8_DEPARTURE_HELD_FIXED_PER_ITINERARY__NO_NEXT_TRAIN_REBINDING'
                   assert r['origin_bus_wait_imputed']=='false'
                   assert r['expected_daily_gjt_identified']=='false'
                   assert r['municipal_od_downscaled']=='false'
@@ -161,21 +178,25 @@ jobs:
                   assert r['ranking_or_pruning_authorized']=='false'
                   if r['full_grid_lower_conditional_cost_min']:
                       assert math.isfinite(float(r['full_grid_lower_conditional_cost_min']))
+                      assert r['lower_witness_population_unit_id'] and r['lower_rail_event_id']
                   if r['upper_bound_unbounded']=='true':
                       assert r['full_grid_upper_conditional_cost_min']==''
-                      assert r['unbounded_witness_population_unit_id']
-                  elif r['full_grid_upper_conditional_cost_min']:
-                      assert math.isfinite(float(r['full_grid_upper_conditional_cost_min']))
+                      assert r['unbounded_witness_population_unit_id'] and r['unbounded_witness_rail_event_id']
+                  else:
+                      assert r['all_origin_event_stationwalk_states_reachable']=='true'
+                      if r['full_grid_upper_conditional_cost_min']:
+                          assert math.isfinite(float(r['full_grid_upper_conditional_cost_min']))
+                          assert r['upper_witness_population_unit_id'] and r['upper_rail_event_id']
               assert rows==60000
               assert len(tids)==6000
               assert directions=={'LECCO','MILANO'}
               assert len(munis)==5
           print(json.dumps({
-              'status':v['status'],
-              'rows':v['output_row_count'],
+              'status':v['status'], 'rows':v['output_row_count'],
               'finite_upper':v['finite_upper_bound_row_count'],
               'unbounded_upper':v['unbounded_upper_bound_row_count'],
               'no_finite_lower':v['row_with_no_finite_lower_bound_count'],
+              'unreachable_states':v['total_unreachable_origin_event_stationwalk_state_count'],
               'direct_lower_witnesses':v['direct_option_lower_witness_count'],
               'bus_lower_witnesses':v['bus_option_lower_witness_count'],
           },indent=2,sort_keys=True))
@@ -191,6 +212,7 @@ jobs:
             --stage-d-trips /tmp/stage-d-v3/outputs/phase2/stage_d_exact_rt001_v3/exact_selected_trips_rt001_v3.csv.gz \
             --route-input /tmp/stage-d-v3/outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv \
             --s8-events /tmp/stage-d-v3/outputs/phase2/s8_events.csv \
+            --stage-e-validation outputs/phase2/final_operational_robustness_rt001_v3/final_operational_robustness_rt001_v3_validation.json \
             --feeder-validation outputs/phase2/feeder_generalized_access_v2/feeder_generalized_access_v2_validation.json \
             --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json \
             --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
@@ -202,20 +224,14 @@ jobs:
             --output /tmp/gjt-set-bounds-v3/output.csv.gz \
             --validation-output /tmp/gjt-set-bounds-v3/validation.json >/dev/null
           cmp "$OUTDIR/exact_feeder_s8_set_bounds_v3.csv.gz" /tmp/gjt-set-bounds-v3/output.csv.gz
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          a=json.loads(Path('outputs/phase2/gjt_set_bounds_exact_v3/exact_feeder_s8_set_bounds_v3_validation.json').read_text())
-          b=json.loads(Path('/tmp/gjt-set-bounds-v3/validation.json').read_text())
-          assert a==b
-          PY
+          cmp "$OUTDIR/exact_feeder_s8_set_bounds_v3_validation.json" /tmp/gjt-set-bounds-v3/validation.json
 
       - name: Guard epistemic boundary
         run: |
           FILES='src/phase2_gjt_set_bounds_exact_v3.py scripts/phase2_build_gjt_set_bounds_exact_v3.py scripts/phase2_run_gjt_set_bounds_exact_v3.py'
           ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
-          ! grep -n -E 'municipal_od_downscaled.*True|resident_population_used_as_passenger_demand.*True|worker_locations_imputed.*True|expected_daily_gjt_identified.*True|full_point_demand_weighted_gjt_identified.*True|rail_direction_inferred_from_destination.*True|ranking_or_pruning_authorized.*True|primary_selected.*True|runner_up_selected.*True' $FILES
-          ! grep -n -E 'average_random_arrival_wait|half.?headway.*used.*true' $FILES
+          ! grep -n -E 'municipal_od_downscaled.*True|resident_population_used_as_passenger_demand.*True|worker_locations_imputed.*True|expected_daily_gjt_identified.*True|full_point_demand_weighted_gjt_identified.*True|rail_direction_inferred_from_destination.*True|ranking_or_pruning_authorized.*True|interval_dominance_applied.*True|primary_selected.*True|runner_up_selected.*True' $FILES
+          ! grep -n -E 'average_random_arrival_wait|half.?headway.*used.*true|first_feasible_rail_departure' $FILES
 
       - name: Persist evidence
         run: |
@@ -223,7 +239,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add "$OUTDIR"
           if ! git diff --cached --quiet; then
-            git commit -m "data(phase2): persist exact GJT set bounds V3 [skip ci]"
+            git commit -m "data(phase2): persist fixed-event GJT set bounds V3 [skip ci]"
             git push origin HEAD:${GITHUB_REF_NAME}
           fi
 
