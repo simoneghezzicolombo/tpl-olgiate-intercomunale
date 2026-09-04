@@ -1,0 +1,119 @@
+name: Phase 2 Final Policy Contract V3
+
+on:
+  push:
+    branches:
+      - phase2-final-policy-contract-v3
+    paths:
+      - 'config/phase2_final_policy_contract_v3.json'
+      - 'scripts/phase2_dry_run_final_policy_v3.py'
+      - 'tests/test_phase2_final_policy_v3.py'
+      - '.github/workflows/phase2-final-policy-contract-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: phase2-final-policy-contract-v3-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install pytest
+
+      - name: Compile
+        run: python -m py_compile scripts/phase2_dry_run_final_policy_v3.py
+
+      - name: Unit and policy regression tests
+        run: python -m pytest -q tests/test_phase2_final_policy_v3.py
+
+      - name: Materialise policy dry-run
+        run: |
+          rm -rf outputs/phase2/final_policy_dry_run_v3
+          python scripts/phase2_dry_run_final_policy_v3.py
+
+      - name: Validate non-decisional boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('outputs/phase2/final_policy_dry_run_v3/final_policy_dry_run_v3_validation.json').read_text())
+          assert p['status'] == 'PASS_PHASE2_FINAL_POLICY_DRY_RUN_V3'
+          assert p['dry_run_only'] is True
+          assert p['decision_pathway'] == 'V3_CERTIFIED_METRICS_DETERMINISTIC_ROBUSTNESS'
+          assert p['budget_suffix'] == 'reference'
+          assert p['annual_bus_km_cap'] == 111419.0
+          assert p['reference_context_count'] == 2633
+          assert p['reference_bidirectional_context_count'] == 2259
+          assert p['operational_gate_survivor_count'] > 0
+          assert p['global_scalar_uncertainty_band_used'] is False
+          assert p['weighted_composite_score'] is False
+          assert p['continuity_used_for_selection'] is False
+          assert p['olgiate_frazione_diagnostic_used_for_selection'] is False
+          assert p['current_service_v4_required_before_final_selection'] is True
+          assert p['current_service_v4_consumed'] is False
+          assert p['final_selection_authorized'] is False
+          assert p['primary_selected'] is False
+          assert p['runner_up_selected'] is False
+          assert p['final_layer_survivor_count'] > 0
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          ROOT="$(mktemp -d)"
+          python scripts/phase2_dry_run_final_policy_v3.py --output-dir "$ROOT"
+          for file in \
+            final_policy_dry_run_v3_validation.json \
+            policy_layer_trace_v3.csv \
+            headway_tradeoff_reference_v3.csv \
+            final_layer_topology_diagnostic_v3.csv \
+            strict_lexicographic_brittleness_trace_v3.csv \
+            final_layer_survivors_diagnostic_v3.csv; do
+            cmp "$ROOT/$file" "outputs/phase2/final_policy_dry_run_v3/$file"
+          done
+
+      - name: Epistemic and selection guards
+        run: |
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random' scripts/phase2_dry_run_final_policy_v3.py
+          ! grep -n -E 'weighted[_ -]?score|primary_selected["'"']? *[:=] *[Tt]rue|runner_up_selected["'"']? *[:=] *[Tt]rue' config/phase2_final_policy_contract_v3.json scripts/phase2_dry_run_final_policy_v3.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c = json.loads(Path('config/phase2_final_policy_contract_v3.json').read_text())
+          assert c['human_policy_decisions']['continuity_with_d184_d185_decision_role'] == 'REPORTING_ONLY'
+          assert c['human_policy_decisions']['olgiate_frazione_diagnostic_decision_role'] == 'REPORTING_ONLY'
+          assert c['diagnostic_boundaries']['public_route_count_is_certified_complexity_score'] is False
+          assert c['diagnostic_boundaries']['legacy_continuity_may_select_candidate'] is False
+          assert c['selection_boundary']['current_service_v4_required_before_final_selection'] is True
+          PY
+
+      - name: Persist dry-run evidence
+        run: |
+          git config user.name "phase2-final-policy-contract-v3-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/final_policy_dry_run_v3
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist final policy V3 dry-run [skip ci]"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-final-policy-contract-v3-${{ github.sha }}
+          path: |
+            config/phase2_final_policy_contract_v3.json
+            outputs/phase2/final_policy_dry_run_v3
+          if-no-files-found: error
+          retention-days: 90
