@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build scenario-level Territorial Commuting Addressability V2.
 
-The output is a structural municipal OD worker-mass upper bound.  It is not a
+The output is a structural municipal OD worker-mass upper bound. It is not a
 ridership forecast and does not assign workers to routes or infer mode choice.
 """
 from __future__ import annotations
@@ -36,6 +36,11 @@ CORE_NAMES = frozenset({
     canonical_place("Santa Maria Hoè"),
 })
 
+OD_REQUIRED_FIELDS = frozenset({
+    "procom_res", "origin_name", "procom_lav", "destination_name",
+    "workers", "category",
+})
+
 OUTPUT_FIELDS = [
     "scenario_id", "topology_family", "public_route_count",
     "evaluated_od_relation_count", "evaluated_od_worker_mass",
@@ -64,12 +69,27 @@ def read_json(path: Path) -> dict:
 
 def read_csv(path: Path):
     with path.open(encoding="utf-8-sig", newline="") as handle:
-        yield from csv.DictReader(handle)
+        reader = csv.DictReader(handle)
+        if reader.fieldnames is None:
+            raise ValueError(f"{path}: CSV has no header")
+        yield from reader
 
 
 def read_gzip_csv(path: Path):
     with gzip.open(path, "rt", encoding="utf-8-sig", newline="") as handle:
-        yield from csv.DictReader(handle)
+        reader = csv.DictReader(handle)
+        if reader.fieldnames is None:
+            raise ValueError(f"{path}: CSV has no header")
+        yield from reader
+
+
+def csv_header(path: Path) -> tuple[str, ...]:
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        reader = csv.reader(handle)
+        try:
+            return tuple(next(reader))
+        except StopIteration as exc:
+            raise ValueError(f"{path}: empty CSV") from exc
 
 
 def parse_json_ids(value: str, *, scenario_id: str, field: str) -> list[str]:
@@ -104,6 +124,15 @@ def load_anchor_municipalities(path: Path) -> dict[str, frozenset[str]]:
 
 
 def load_od_relations(path: Path, validation: dict, represented: set[str]):
+    header = frozenset(csv_header(path))
+    missing = OD_REQUIRED_FIELDS - header
+    if missing:
+        raise ValueError(f"OD artifact schema mismatch, missing fields: {sorted(missing)}")
+    # These names are the certified output schema of phase2_build_demand_profile.py.
+    # We intentionally bind to that schema rather than accepting guessed aliases.
+    origin_code_field = "procom_res"
+    destination_code_field = "procom_lav"
+
     all_rows: list[ODRelation] = []
     seen_pairs: set[tuple[str, str]] = set()
     category_workers: dict[str, int] = {}
@@ -118,14 +147,18 @@ def load_od_relations(path: Path, validation: dict, represented: set[str]):
             raise ValueError("OD relation has non-positive worker count")
         if origin_key not in CORE_NAMES:
             raise ValueError(f"Unexpected OD origin outside core: {origin_name}")
-        pair = (str(row["origin_code"]), str(row["destination_code"]))
+        pair = (str(row[origin_code_field]).strip(), str(row[destination_code_field]).strip())
+        if not all(pair):
+            raise ValueError("OD relation has blank certified municipality code")
         if pair in seen_pairs:
             raise ValueError(f"Duplicate OD code pair: {pair}")
         seen_pairs.add(pair)
         if category not in EVALUATED_CATEGORIES | EXCLUDED_CATEGORIES:
             raise ValueError(f"Unexpected OD category {category}")
         category_workers[category] = category_workers.get(category, 0) + workers
-        all_rows.append(ODRelation(origin_name, destination_name, origin_key, destination_key, workers, category))
+        all_rows.append(
+            ODRelation(origin_name, destination_name, origin_key, destination_key, workers, category)
+        )
 
     expected = {
         "SELF": int(validation["self_workers"]),
@@ -134,7 +167,9 @@ def load_od_relations(path: Path, validation: dict, represented: set[str]):
         "OTHER_EXTERNAL": int(validation["other_external_workers"]),
     }
     if category_workers != expected:
-        raise ValueError(f"OD category totals differ from certified validation: {category_workers} != {expected}")
+        raise ValueError(
+            f"OD category totals differ from certified validation: {category_workers} != {expected}"
+        )
     if sum(category_workers.values()) != int(validation["resident_workers"]):
         raise ValueError("OD resident-worker total differs from validation")
 
@@ -180,7 +215,12 @@ def main() -> int:
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--validation-output", type=Path, required=True)
     args = p.parse_args()
-    for path in (args.od, args.od_validation, args.routing_anchors, args.route_universe, args.scenario_route_mapping, args.phasing_validation):
+
+    required_paths = (
+        args.od, args.od_validation, args.routing_anchors, args.route_universe,
+        args.scenario_route_mapping, args.phasing_validation,
+    )
+    for path in required_paths:
         if not path.is_file():
             raise FileNotFoundError(path)
 
@@ -188,7 +228,10 @@ def main() -> int:
     phasing = read_json(args.phasing_validation)
     if int(od_validation.get("resident_workers", -1)) != 8754:
         raise ValueError("OD validation is not the certified 2021 resident-worker profile")
-    if phasing.get("status") != "PASS_S8_PHASE_OPPORTUNITY_V2_BUILD" or phasing.get("contract") != "PHASE2_S8_PHASE_OPPORTUNITY_SURFACE_V2":
+    if (
+        phasing.get("status") != "PASS_S8_PHASE_OPPORTUNITY_V2_BUILD"
+        or phasing.get("contract") != "PHASE2_S8_PHASE_OPPORTUNITY_SURFACE_V2"
+    ):
         raise ValueError("S8 route/mapping lineage is not certified")
     if int(phasing.get("scenario_count", -1)) != 100000 or int(phasing.get("unique_route_count", -1)) != 50115:
         raise ValueError("Unexpected S8 route/mapping universe size")
@@ -200,8 +243,11 @@ def main() -> int:
 
     anchor_municipalities = load_anchor_municipalities(args.routing_anchors)
     represented = set().union(*anchor_municipalities.values())
-    evaluated, unrepresented, category_totals = load_od_relations(args.od, od_validation, represented)
+    evaluated, unrepresented, category_totals = load_od_relations(
+        args.od, od_validation, represented
+    )
     routes = load_routes(args.route_universe, set(anchor_municipalities))
+    known_routes = set(routes)
 
     eval_workers = sum(r.workers for r in evaluated)
     eval_core_workers = sum(r.workers for r in evaluated if r.category == "OTHER_CORE")
@@ -224,8 +270,11 @@ def main() -> int:
         for row in read_gzip_csv(args.scenario_route_mapping):
             scenario_id = str(row["scenario_id"])
             family = str(row["topology_family"])
-            public_ids = parse_json_ids(row["public_route_ids_json"], scenario_id=scenario_id, field="public_route_ids_json")
-            unknown_routes = set(public_ids) - set(routes)
+            public_ids = parse_json_ids(
+                row["public_route_ids_json"], scenario_id=scenario_id,
+                field="public_route_ids_json",
+            )
+            unknown_routes = set(public_ids) - known_routes
             if unknown_routes:
                 raise ValueError(f"{scenario_id}: unknown public route IDs")
             result = evaluate_scenario(
@@ -274,7 +323,6 @@ def main() -> int:
         raise ValueError(f"Expected 100,000 scenarios, got {scenario_count}")
 
     unrepresented_workers = sum(r.workers for r in unrepresented)
-    unrepresented_relations = len(unrepresented)
     validation = {
         "status": STATUS,
         "contract": CONTRACT,
@@ -290,7 +338,7 @@ def main() -> int:
         "evaluated_od_worker_mass": eval_workers,
         "evaluated_other_core_worker_mass": eval_core_workers,
         "evaluated_other_external_worker_mass": eval_ext_workers,
-        "otherwise_territorial_but_destination_not_in_routing_anchor_universe_relation_count": unrepresented_relations,
+        "otherwise_territorial_but_destination_not_in_routing_anchor_universe_relation_count": len(unrepresented),
         "otherwise_territorial_but_destination_not_in_routing_anchor_universe_worker_mass": unrepresented_workers,
         "minimum_structurally_addressable_worker_mass": min_mass,
         "maximum_structurally_addressable_worker_mass": max_mass,
@@ -319,10 +367,18 @@ def main() -> int:
             "phasing_validation_sha256": sha256_path(args.phasing_validation),
             "output_sha256": sha256_path(args.output),
         },
-        "epistemic_note": "Worker counts are municipal OD mass whose origin and destination municipalities are structurally connected by the scenario public-anchor graph. They are not predicted bus passengers. Exact household/workplace location, walking access, modal choice and route assignment remain unknown. S8_DIRECT is intentionally excluded from the primary territorial metric and is evaluated separately in the feeder block.",
+        "epistemic_note": (
+            "Worker counts are municipal OD mass whose origin and destination municipalities are "
+            "structurally connected by the scenario public-anchor graph. They are not predicted bus "
+            "passengers. Exact household/workplace location, walking access, modal choice and route "
+            "assignment remain unknown. S8_DIRECT is intentionally excluded from the primary "
+            "territorial metric and is evaluated separately in the feeder block."
+        ),
     }
     args.validation_output.parent.mkdir(parents=True, exist_ok=True)
-    args.validation_output.write_text(json.dumps(validation, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    args.validation_output.write_text(
+        json.dumps(validation, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(json.dumps(validation, indent=2, sort_keys=True))
     return 0
 
