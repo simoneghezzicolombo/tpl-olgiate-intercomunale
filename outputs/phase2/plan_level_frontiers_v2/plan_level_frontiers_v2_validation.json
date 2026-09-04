@@ -1,0 +1,68 @@
+{
+  "base_frontier_semantics": "REALISED_BASE_PUBLIC_STRUCTURAL_ACCESS_PLUS_ROUTE_UNWEIGHTED_S8_ENVELOPE_AND_JOINT_SERVICE_POLICY_RESOURCES",
+  "base_plan_input_count": 418,
+  "contract": "PHASE2_PLAN_LEVEL_FRONTIERS_V2",
+  "dominance_axes": {
+    "maximize": [
+      "resident_10min_access",
+      "worst_municipality_10min_access",
+      "territorial_work_od_addressability_upper_bound",
+      "s8_public_complete_match_route_share",
+      "span_minutes",
+      "annual_service_days"
+    ],
+    "minimize": [
+      "uniform_headway_min",
+      "annual_bus_km",
+      "fleet_lower_bound_recovery15"
+    ]
+  },
+  "exact_timetable_constructed": false,
+  "extension_frontier_semantics": "ALL_EXTENSION_ANCHORS_STRUCTURAL_UPPER_BOUND_ONLY; NOT_REALISED_ACCESS; PRESERVED_FOR_EXACT_TIMETABLE_TEST",
+  "frontier_class_plan_counts": {
+    "BASE_FREQUENT_30": 268,
+    "BASE_UNRESTRICTED": 394,
+    "EXTENSION_UPPER_BOUND_FREQUENT_30": 416,
+    "EXTENSION_UPPER_BOUND_UNRESTRICTED": 572
+  },
+  "frontier_class_unique_metric_signature_counts": {
+    "BASE_FREQUENT_30": 134,
+    "BASE_UNRESTRICTED": 197,
+    "EXTENSION_UPPER_BOUND_FREQUENT_30": 416,
+    "EXTENSION_UPPER_BOUND_UNRESTRICTED": 572
+  },
+  "frontier_union_family_counts": {
+    "blank_slate": 145,
+    "hybrid_interlined": 20,
+    "interlined_figure8": 31,
+    "scheduled_extensions": 572,
+    "short_turn_overlay": 1,
+    "single_compact_loop": 145,
+    "trunk_plus_branches": 1,
+    "two_independent_loops": 31,
+    "two_radial_out_and_back_feeders": 20
+  },
+  "frontier_union_headway_counts": {
+    "15": 153,
+    "20": 223,
+    "30": 308,
+    "60": 282
+  },
+  "frontier_union_plan_count": 966,
+  "frontier_union_unique_scenario_count": 234,
+  "lineage": {
+    "output_sha256": "ad61e99edd68b22b5ea9f6eae6bdbd2bee9254642451c91dafb351d670531a58",
+    "shortlist_sha256": "f227d53f6ae7eb330f00c1ffc9fd333d7b690d8e07a6a3090e29cc4314a01216",
+    "shortlist_validation_sha256": "9a3e1a0a5b27ba3d97e44dadd3462b5300ed6969dec4983c6de00a42e3b38d9b"
+  },
+  "positive_extension_plan_input_count": 6312,
+  "primary_selected": false,
+  "runner_up_selected": false,
+  "s8_phase_selected": false,
+  "service_policy_selected": false,
+  "shortlist_input_count": 6730,
+  "status": "PASS_PLAN_LEVEL_FRONTIERS_V2_BUILD",
+  "topology_ranked": false,
+  "weighted_composite_score_used": false,
+  "worker_reference_assigned_to_routes": false
+}
