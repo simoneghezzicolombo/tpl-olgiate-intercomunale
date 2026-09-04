@@ -1,4 +1,5 @@
 {
+  "access_correction": "CERTIFIED_HUB_BOARDING_CATCHMENT_INCLUDED",
   "contract": "PHASE2_BUILDING_CATCHMENT_ACCESS_EQUITY_V2",
   "current_service_baseline_compared": false,
   "exact_population_access_thresholds_min": [
@@ -8,28 +9,31 @@
   ],
   "exact_timetable_constructed": false,
   "extension_scenario_count": 9981,
+  "hub_access_proxy_cluster_id": "EX_039",
+  "hub_boarding_access_included": true,
   "limitations": [
     "Building resident counts are model outputs, not observed residents by address.",
     "The 93.16-person core residual remains unlocated and is not assigned to any catchment.",
-    "Proposed-stop unit memberships are certified only through 10 minutes in Stop Universe V2; 12-minute candidate coverage is therefore reported only as a conservative lower bound.",
-    "Existing official stop evidence is reference-period GTFS evidence and is not promoted to exact current-service truth.",
-    "No resident is treated as a passenger and no municipal OD is downscaled to a building or stop in this stage."
+    "Proposed-stop unit memberships are certified only through 10 minutes; 12-minute candidate coverage remains a conservative lower bound.",
+    "The hub walking catchment is inherited from the uniquely identified official Olgiate station bus-stop cluster within 100 m; this is a boarding-access proxy, not a current-service activation claim.",
+    "No resident is treated as a passenger and no municipal OD is downscaled to a building or stop."
   ],
   "lineage": {
     "catalog_sha256": "2385fdb53f3953613b6289f42ba812c645217429302687daa0bde0d8c35a3f6f",
     "catalog_validation_sha256": "6a16a990e2f75e4d6e268f10a9400bac68b3f61333c3f3cb2842c841a2abbedc",
     "epoch_id": "gate-d-2026-09-03-834d5caa0bfd",
     "existing_catchments_sha256": "3128cb1f894d001226795434cd75d007d4e7796522935515c514981de89fe49e",
+    "hub_access_bridge_sha256": "57423ff2d63231c8dc388953e4c6d674ef8ebd8c9134202358e7122a53507466",
     "matrix_validation_sha256": "ca4faa25a72ac0f0b07f4a4099c660945c8c824db1cd5baf641b26eae89fc79d",
     "population_units_sha256": "a4fa70338225ef7b0c2213a569f866fe91acf9e5ae357c5b49e448b463b511a9",
     "proposed_catchments_sha256": "a90d72c3b577270dbfcc55cde77ea2d74288121fddfde3ca1a2086704e905fad",
     "routing_anchor_universe_sha256": "123a5e25a25207ec3d38a6ffa80fc9ea70b6da4793581b19f1d55dad3ae24cf7",
-    "scenario_output_sha256": "4cb53431c40a19b39c0357f5358400a7fadc6364c53f7545787d852bb87e8eca",
+    "scenario_output_sha256": "7ae326fedde6379c66c7d60613e15cd18eb4256278123b83869a0792cc2f05e3",
     "stop_validation_sha256": "8c938317e043eac225f7138db25a1058930a371c15d8c5e8136b1bb9de5c9e67"
   },
   "located_population": 22820.83993743439,
-  "max_public_population_coverage_share_10min": 0.4510246960448101,
-  "max_public_worst_municipality_coverage_share_10min": 0.32232392497256124,
+  "max_public_population_coverage_share_10min": 0.5089128641421082,
+  "max_public_worst_municipality_coverage_share_10min": 0.3357044786181034,
   "municipalities": [
     {
       "code": "097010",
@@ -49,7 +53,7 @@
     {
       "code": "097074",
       "located_population": 2108.9999999999995,
-      "name": "Santa Maria Ho\u00e8"
+      "name": "Santa Maria Hoè"
     },
     {
       "code": "097092",
@@ -65,6 +69,7 @@
   "runner_up_selected": false,
   "s8_demand_used": false,
   "scenario_count": 100000,
+  "scenarios_missing_required_hub": 0,
   "service_policy_selected": false,
   "status": "PASS_ACCESS_EQUITY_V2_BUILD",
   "stop_set_selected": false,

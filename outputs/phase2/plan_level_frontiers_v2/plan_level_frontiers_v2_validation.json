@@ -1,6 +1,6 @@
 {
   "base_frontier_semantics": "REALISED_BASE_PUBLIC_STRUCTURAL_ACCESS_PLUS_ROUTE_UNWEIGHTED_S8_ENVELOPE_AND_JOINT_SERVICE_POLICY_RESOURCES",
-  "base_plan_input_count": 418,
+  "base_plan_input_count": 372,
   "contract": "PHASE2_PLAN_LEVEL_FRONTIERS_V2",
   "dominance_axes": {
     "maximize": [
@@ -20,47 +20,45 @@
   "exact_timetable_constructed": false,
   "extension_frontier_semantics": "ALL_EXTENSION_ANCHORS_STRUCTURAL_UPPER_BOUND_ONLY; NOT_REALISED_ACCESS; PRESERVED_FOR_EXACT_TIMETABLE_TEST",
   "frontier_class_plan_counts": {
-    "BASE_FREQUENT_30": 268,
-    "BASE_UNRESTRICTED": 394,
-    "EXTENSION_UPPER_BOUND_FREQUENT_30": 416,
-    "EXTENSION_UPPER_BOUND_UNRESTRICTED": 572
+    "BASE_FREQUENT_30": 228,
+    "BASE_UNRESTRICTED": 354,
+    "EXTENSION_UPPER_BOUND_FREQUENT_30": 272,
+    "EXTENSION_UPPER_BOUND_UNRESTRICTED": 392
   },
   "frontier_class_unique_metric_signature_counts": {
-    "BASE_FREQUENT_30": 134,
-    "BASE_UNRESTRICTED": 197,
-    "EXTENSION_UPPER_BOUND_FREQUENT_30": 416,
-    "EXTENSION_UPPER_BOUND_UNRESTRICTED": 572
+    "BASE_FREQUENT_30": 114,
+    "BASE_UNRESTRICTED": 177,
+    "EXTENSION_UPPER_BOUND_FREQUENT_30": 272,
+    "EXTENSION_UPPER_BOUND_UNRESTRICTED": 392
   },
   "frontier_union_family_counts": {
-    "blank_slate": 145,
-    "hybrid_interlined": 20,
-    "interlined_figure8": 31,
-    "scheduled_extensions": 572,
-    "short_turn_overlay": 1,
-    "single_compact_loop": 145,
-    "trunk_plus_branches": 1,
-    "two_independent_loops": 31,
-    "two_radial_out_and_back_feeders": 20
+    "blank_slate": 143,
+    "hybrid_interlined": 18,
+    "interlined_figure8": 16,
+    "scheduled_extensions": 392,
+    "single_compact_loop": 143,
+    "two_independent_loops": 16,
+    "two_radial_out_and_back_feeders": 18
   },
   "frontier_union_headway_counts": {
-    "15": 153,
-    "20": 223,
-    "30": 308,
-    "60": 282
+    "15": 112,
+    "20": 163,
+    "30": 225,
+    "60": 246
   },
-  "frontier_union_plan_count": 966,
-  "frontier_union_unique_scenario_count": 234,
+  "frontier_union_plan_count": 746,
+  "frontier_union_unique_scenario_count": 219,
   "lineage": {
-    "output_sha256": "ad61e99edd68b22b5ea9f6eae6bdbd2bee9254642451c91dafb351d670531a58",
-    "shortlist_sha256": "f227d53f6ae7eb330f00c1ffc9fd333d7b690d8e07a6a3090e29cc4314a01216",
-    "shortlist_validation_sha256": "9a3e1a0a5b27ba3d97e44dadd3462b5300ed6969dec4983c6de00a42e3b38d9b"
+    "output_sha256": "c4d7950bb0ffd879783558b9b2b3dd81e7c14cfee314e8d7824d6d036346fe8e",
+    "shortlist_sha256": "06d9eeb8d5b081b52243b6cb84d96e63cf711eb1f7a5f72a45a4906bfda943da",
+    "shortlist_validation_sha256": "25a1211e696a83e2a4a023d012b8ce756a6f33326732a672a3ac8188f350a5ec"
   },
-  "positive_extension_plan_input_count": 6312,
+  "positive_extension_plan_input_count": 5358,
   "primary_selected": false,
   "runner_up_selected": false,
   "s8_phase_selected": false,
   "service_policy_selected": false,
-  "shortlist_input_count": 6730,
+  "shortlist_input_count": 5730,
   "status": "PASS_PLAN_LEVEL_FRONTIERS_V2_BUILD",
   "topology_ranked": false,
   "weighted_composite_score_used": false,

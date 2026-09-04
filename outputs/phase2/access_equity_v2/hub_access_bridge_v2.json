@@ -1,0 +1,30 @@
+{
+  "boarding_access_proxy_evidence_status": "FACT_OFFICIAL_GTFS_REFERENCE_PERIOD_NOT_CURRENT_SERVICE",
+  "boarding_access_proxy_physical_cluster_id": "EX_039",
+  "boarding_access_proxy_stop_id": "L00407",
+  "boarding_access_proxy_stop_lat": 45.72917,
+  "boarding_access_proxy_stop_lon": 9.40441,
+  "boarding_access_proxy_stop_name": "Olgiate Molgora (stazione f.s.)",
+  "contract": "PHASE2_HUB_ACCESS_BRIDGE_V2",
+  "coordinates_modified": false,
+  "current_service_activation_asserted": false,
+  "epistemic_note": "The structural hub and the official bus stop remain distinct source records. The official station bus-stop cluster is used only to supply an already-certified walking catchment to the hub boarding event because every Phase 2 structural public route starts at rail:S01514. This does not assert that historical GTFS service is currently active.",
+  "hub_anchor_id": "rail:S01514",
+  "hub_evidence_status": "FACT_FROZEN_GATE_D_RAIL_ANCHOR",
+  "hub_lat": 45.729187766,
+  "hub_lon": 9.403662947,
+  "lineage": {
+    "epoch_id": "gate-d-2026-09-03-834d5caa0bfd",
+    "existing_catchments_sha256": "3128cb1f894d001226795434cd75d007d4e7796522935515c514981de89fe49e",
+    "existing_stops_sha256": "8a1879ca5cd2fa23072e9f4b1b284c6b1be455847cb70b6d5399b2db35d05a55",
+    "matrix_validation_sha256": "ca4faa25a72ac0f0b07f4a4099c660945c8c824db1cd5baf641b26eae89fc79d",
+    "routing_membership_sha256": "97ff5fa29ac0cc5e9a02da0b8c7a105f4104d3ec0e58a101401dd48aad10f470",
+    "stop_validation_sha256": "8c938317e043eac225f7138db25a1058930a371c15d8c5e8136b1bb9de5c9e67"
+  },
+  "maximum_allowed_bridge_distance_m": 100.0,
+  "selection_rule": "UNIQUE_OFFICIAL_GTFS_OLGIATE_STATION_STOP_WITHIN_100M_OF_FROZEN_RAIL_ANCHOR",
+  "semantics": "PASSENGER_BOARDING_ACCESS_PROXY_FOR_STRUCTURAL_HUB_ONLY",
+  "status": "PASS_HUB_ACCESS_BRIDGE_V2_BUILD",
+  "straight_line_bridge_distance_m": 58.01966943096027,
+  "walking_catchment_recomputed": false
+}
