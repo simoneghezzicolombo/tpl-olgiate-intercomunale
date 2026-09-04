@@ -1,0 +1,232 @@
+name: Phase 2 Hub Access Cascade V2
+
+on:
+  push:
+    branches:
+      - phase2-passenger-gjt-v2
+    paths:
+      - 'scripts/phase2_build_hub_access_bridge_v2.py'
+      - 'scripts/phase2_run_access_equity_hub_corrected_v2.py'
+      - '.github/workflows/phase2-hub-access-cascade-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-hub-access-cascade-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile corrected cascade
+        run: |
+          python -m py_compile scripts/phase2_build_hub_access_bridge_v2.py
+          python -m py_compile scripts/phase2_run_access_equity_hub_corrected_v2.py
+          python -m py_compile scripts/phase2_build_frequency_capability_frontiers_v2.py
+          python -m py_compile scripts/phase2_build_reference_service_plan_shortlist_v2.py
+          python -m py_compile scripts/phase2_build_plan_level_frontiers_v2.py
+          python -m py_compile scripts/phase2_build_base_exact_timetables_v2.py
+          python -m pytest -q tests/test_phase2_access_equity_v2.py tests/test_phase2_service_plan_tournament_v2.py tests/test_phase2_exact_timetable_v2.py
+
+      - name: Certify hub walking-access bridge
+        run: >-
+          python scripts/phase2_build_hub_access_bridge_v2.py
+          --routing-membership outputs/phase2/reduced_path_matrix_v2/routing_anchor_membership.csv
+          --existing-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv
+          --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv
+          --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json
+          --stop-validation outputs/phase2/stop_universe_v2/stop_universe_v2_validation.json
+          --output outputs/phase2/access_equity_v2/hub_access_bridge_v2.json
+
+      - name: Rebuild hub-corrected Access Equity V2
+        run: >-
+          python scripts/phase2_run_access_equity_hub_corrected_v2.py
+          --catalog outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv
+          --catalog-validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json
+          --stop-validation outputs/phase2/stop_universe_v2/stop_universe_v2_validation.json
+          --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json
+          --anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv
+          --proposed-catchments outputs/phase2/stop_universe_v2/proposed_stop_candidate_catchment_units_10min.csv
+          --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv
+          --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv
+          --hub-access-bridge outputs/phase2/access_equity_v2/hub_access_bridge_v2.json
+          --scenario-output outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz
+          --validation-output outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+
+      - name: Rebuild current-service one-sided access lower bound lineage
+        run: >-
+          python scripts/phase2_build_current_access_baseline_v2.py
+          --identity outputs/phase2/current_service_stop_identity_2026-09-03.csv
+          --identity-validation outputs/phase2/current_service_stop_identity_validation.json
+          --v2-existing-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv
+          --stop-validation outputs/phase2/stop_universe_v2/stop_universe_v2_validation.json
+          --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv
+          --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv
+          --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+          --mapping-output outputs/phase2/current_access_baseline_v2/current_d184_d185_v2_stop_mapping.csv
+          --validation-output outputs/phase2/current_access_baseline_v2/current_access_lower_bound_v2_validation.json
+
+      - name: Rebuild frequency capability frontiers
+        run: >-
+          python scripts/phase2_build_frequency_capability_frontiers_v2.py
+          --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz
+          --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+          --territorial outputs/phase2/territorial_demand_v2/scenario_territorial_commuting_addressability_v2.csv.gz
+          --territorial-validation outputs/phase2/territorial_demand_v2/territorial_commuting_addressability_v2_validation.json
+          --service-feasibility outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz
+          --service-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json
+          --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv
+          --frontier-output outputs/phase2/frequency_frontiers_v2/frequency_capability_structural_frontiers_v2.csv
+          --validation outputs/phase2/frequency_frontiers_v2/frequency_capability_frontiers_v2_validation.json
+
+      - name: Rebuild reference service-plan shortlist
+        run: >-
+          python scripts/phase2_build_reference_service_plan_shortlist_v2.py
+          --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz
+          --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+          --territorial outputs/phase2/territorial_demand_v2/scenario_territorial_commuting_addressability_v2.csv.gz
+          --territorial-validation outputs/phase2/territorial_demand_v2/territorial_commuting_addressability_v2_validation.json
+          --service-feasibility outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz
+          --service-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json
+          --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv
+          --operational outputs/phase2/operational_screening_v2/operational_screening_v2.csv
+          --operational-validation outputs/phase2/operational_screening_v2/operational_screening_v2_validation.json
+          --s8-feeder outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2.csv.gz
+          --s8-validation outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2_validation.json
+          --output outputs/phase2/reference_service_plan_shortlist_v2/reference_service_plan_shortlist_v2.csv
+          --validation outputs/phase2/reference_service_plan_shortlist_v2/reference_service_plan_shortlist_v2_validation.json
+
+      - name: Rebuild plan-level frontiers
+        run: >-
+          python scripts/phase2_build_plan_level_frontiers_v2.py
+          --shortlist outputs/phase2/reference_service_plan_shortlist_v2/reference_service_plan_shortlist_v2.csv
+          --shortlist-validation outputs/phase2/reference_service_plan_shortlist_v2/reference_service_plan_shortlist_v2_validation.json
+          --output outputs/phase2/plan_level_frontiers_v2/plan_level_frontier_union_v2.csv
+          --validation outputs/phase2/plan_level_frontiers_v2/plan_level_frontiers_v2_validation.json
+
+      - name: Rebuild exact base timetables
+        run: >-
+          python scripts/phase2_build_base_exact_timetables_v2.py
+          --frontier outputs/phase2/plan_level_frontiers_v2/plan_level_frontier_union_v2.csv
+          --frontier-validation outputs/phase2/plan_level_frontiers_v2/plan_level_frontiers_v2_validation.json
+          --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz
+          --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv
+          --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json
+          --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv
+          --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json
+          --s8-events outputs/phase2/s8_events.csv
+          --work-direction-summary outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv
+          --work-weights-validation outputs/phase2/passenger_gjt_v2/s8_work_direction_weights_v2_validation.json
+          --plan-output outputs/phase2/base_exact_timetables_v2/base_exact_timetable_candidates_v2.csv
+          --trip-output outputs/phase2/base_exact_timetables_v2/base_exact_timetable_trips_v2.csv.gz
+          --validation outputs/phase2/base_exact_timetables_v2/base_exact_timetables_v2_validation.json
+
+      - name: Validate corrected cascade semantics
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/access_equity_v2/access_equity_v2_validation.json').read_text())
+          b=json.loads(Path('outputs/phase2/current_access_baseline_v2/current_access_lower_bound_v2_validation.json').read_text())
+          f=json.loads(Path('outputs/phase2/frequency_frontiers_v2/frequency_capability_frontiers_v2_validation.json').read_text())
+          s=json.loads(Path('outputs/phase2/reference_service_plan_shortlist_v2/reference_service_plan_shortlist_v2_validation.json').read_text())
+          p=json.loads(Path('outputs/phase2/plan_level_frontiers_v2/plan_level_frontiers_v2_validation.json').read_text())
+          e=json.loads(Path('outputs/phase2/base_exact_timetables_v2/base_exact_timetables_v2_validation.json').read_text())
+          assert a['status']=='PASS_ACCESS_EQUITY_V2_BUILD' and a['hub_boarding_access_included'] is True
+          assert a['hub_access_proxy_cluster_id']=='EX_039' and a['scenarios_missing_required_hub']==0
+          assert b['status']=='PASS_CURRENT_ACCESS_LOWER_BOUND_V2_BUILD' and b['full_current_service_spatial_baseline_complete'] is False
+          assert f['status']=='PASS_FREQUENCY_CAPABILITY_FRONTIERS_V2_BUILD' and f['scenario_count']==100000
+          assert s['status']=='PASS_REFERENCE_SERVICE_PLAN_SHORTLIST_V2_BUILD' and s['scenario_count_upstream']==100000
+          assert p['status']=='PASS_PLAN_LEVEL_FRONTIERS_V2_BUILD'
+          assert e['status']=='PASS_BASE_EXACT_TIMETABLES_V2_BUILD' and e['exact_timetable_constructed'] is True
+          assert e['exact_timetable_plan_count']==p['frontier_class_plan_counts']['BASE_UNRESTRICTED']
+          for v in (a,s,p,e):
+              assert v.get('primary_selected') is False and v.get('runner_up_selected') is False
+          print(json.dumps({
+            'hub_cluster':a['hub_access_proxy_cluster_id'],
+            'max_coverage10':a['max_public_population_coverage_share_10min'],
+            'max_worst10':a['max_public_worst_municipality_coverage_share_10min'],
+            'reference_h30_eligible':f['eligible_scenario_counts']['reference__h30'],
+            'shortlist_plans':s['shortlist_scenario_plan_count'],
+            'base_frontier_plans':p['frontier_class_plan_counts']['BASE_UNRESTRICTED'],
+            'exact_plans':e['exact_timetable_plan_count'],
+            'exact_frequent_plans':e['frequent_30min_or_better_exact_plan_count'],
+          },indent=2))
+          PY
+
+      - name: Deterministic hub/access rebuild
+        run: |
+          rm -rf /tmp/hub-access-cascade && mkdir -p /tmp/hub-access-cascade
+          python scripts/phase2_build_hub_access_bridge_v2.py \
+            --routing-membership outputs/phase2/reduced_path_matrix_v2/routing_anchor_membership.csv \
+            --existing-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --stop-validation outputs/phase2/stop_universe_v2/stop_universe_v2_validation.json \
+            --output /tmp/hub-access-cascade/bridge.json >/dev/null
+          cmp outputs/phase2/access_equity_v2/hub_access_bridge_v2.json /tmp/hub-access-cascade/bridge.json
+          python scripts/phase2_run_access_equity_hub_corrected_v2.py \
+            --catalog outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv \
+            --catalog-validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json \
+            --stop-validation outputs/phase2/stop_universe_v2/stop_universe_v2_validation.json \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --proposed-catchments outputs/phase2/stop_universe_v2/proposed_stop_candidate_catchment_units_10min.csv \
+            --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv \
+            --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
+            --hub-access-bridge /tmp/hub-access-cascade/bridge.json \
+            --scenario-output /tmp/hub-access-cascade/access.csv.gz \
+            --validation-output /tmp/hub-access-cascade/access.json >/dev/null
+          cmp outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz /tmp/hub-access-cascade/access.csv.gz
+          cmp outputs/phase2/access_equity_v2/access_equity_v2_validation.json /tmp/hub-access-cascade/access.json
+
+      - name: Guard corrected evidence semantics
+        run: |
+          FILES="scripts/phase2_build_hub_access_bridge_v2.py scripts/phase2_run_access_equity_hub_corrected_v2.py"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -n -E 'primary_selected *[:=] *True|runner_up_selected *[:=] *True|service_policy_selected *[:=] *True' $FILES
+          git diff --check
+
+      - name: Persist corrected cascade
+        run: |
+          git config user.name "phase2-hub-access-cascade-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add \
+            outputs/phase2/access_equity_v2 \
+            outputs/phase2/current_access_baseline_v2 \
+            outputs/phase2/frequency_frontiers_v2 \
+            outputs/phase2/reference_service_plan_shortlist_v2 \
+            outputs/phase2/plan_level_frontiers_v2 \
+            outputs/phase2/base_exact_timetables_v2
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): rebuild tournament after hub access correction [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+
+      - name: Upload corrected cascade evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-hub-access-cascade-v2-${{ github.sha }}
+          retention-days: 90
+          path: |
+            outputs/phase2/access_equity_v2
+            outputs/phase2/current_access_baseline_v2
+            outputs/phase2/frequency_frontiers_v2
+            outputs/phase2/reference_service_plan_shortlist_v2
+            outputs/phase2/plan_level_frontiers_v2
+            outputs/phase2/base_exact_timetables_v2
