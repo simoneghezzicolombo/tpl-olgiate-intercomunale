@@ -8,6 +8,9 @@ on:
       - index.html
       - styles.css
       - app.js
+      - network-data.js
+      - robots.txt
+      - .nojekyll
       - .github/workflows/phase2-site-tra-paesi-qa.yml
   workflow_dispatch:
 
@@ -22,7 +25,33 @@ jobs:
         uses: actions/checkout@v4
 
       - name: JavaScript syntax
-        run: node --check app.js
+        run: |
+          node --check network-data.js
+          node --check app.js
+
+      - name: Certified data contract
+        run: |
+          node <<'NODE'
+          global.window = {};
+          require('./network-data.js');
+          const d = window.TRA_PAESI_DATA;
+          const fail = (m) => { throw new Error(m); };
+          d.evidence.diagnostic === 'aa16a9934a78be9a3ee1230996fcaf72c5657f92' || fail('wrong diagnostic evidence commit');
+          Object.keys(d.finalists).length === 4 || fail('site must expose exactly 4 finalists');
+          d.packages['16'].exactTrips === 32 || fail('16h exact trip count drift');
+          d.packages['18.5'].exactTrips === 36 || fail('18h30 exact trip count drift');
+          d.packages['16'].routes.length === 2 || fail('16h route count drift');
+          d.packages['18.5'].routes.length === 2 || fail('18h30 route count drift');
+          for (const pkg of Object.values(d.packages)) {
+            for (const route of pkg.routes) {
+              route.perfectClockface === true || fail('all finalist public routes must remain H60 clockface');
+              route.technicalClosureMin === 0 || fail('technical closure drift');
+              route.anchors[0].kind === 'hub' || fail('route must start at certified hub');
+              route.anchors.at(-1).kind === 'hub' || fail('route must return to certified hub');
+            }
+          }
+          console.log('PASS: certified finalist snapshot matches aa16a993 contract');
+          NODE
 
       - name: Static semantic checks
         shell: python
@@ -31,9 +60,10 @@ jobs:
           from pathlib import Path
           import re
 
-          html = Path("index.html").read_text(encoding="utf-8")
-          js = Path("app.js").read_text(encoding="utf-8")
-          css = Path("styles.css").read_text(encoding="utf-8")
+          html = Path('index.html').read_text(encoding='utf-8')
+          js = Path('app.js').read_text(encoding='utf-8')
+          data = Path('network-data.js').read_text(encoding='utf-8')
+          css = Path('styles.css').read_text(encoding='utf-8')
 
           class AuditParser(HTMLParser):
               def __init__(self):
@@ -42,47 +72,50 @@ jobs:
                   self.buttons_without_type = []
               def handle_starttag(self, tag, attrs):
                   attrs = dict(attrs)
-                  if "id" in attrs:
-                      self.ids.append(attrs["id"])
-                  if tag == "button" and not attrs.get("type"):
+                  if 'id' in attrs:
+                      self.ids.append(attrs['id'])
+                  if tag == 'button' and not attrs.get('type'):
                       self.buttons_without_type.append(attrs)
 
           p = AuditParser()
           p.feed(html)
-
           duplicates = sorted({x for x in p.ids if p.ids.count(x) > 1})
-          assert not duplicates, f"Duplicate HTML ids: {duplicates}"
-          assert not p.buttons_without_type, "All buttons must declare type=button"
-          assert 'name="robots" content="noindex,nofollow,noarchive"' in html, "Preview must remain noindex"
-          assert 'href="styles.css"' in html and 'src="app.js"' in html, "Static assets must remain linked"
+          assert not duplicates, f'Duplicate HTML ids: {duplicates}'
+          assert not p.buttons_without_type, 'All buttons must declare type=button'
+          assert 'name="robots" content="noindex,nofollow,noarchive"' in html, 'Preview must remain noindex'
+          assert 'href="styles.css"' in html and 'src="network-data.js"' in html and 'src="app.js"' in html, 'Static assets must remain linked'
 
-          forbidden = ["Modello Merate", "LINEA 8 OLGIATE", "Sistema Circolare Intercomunale a Doppio Verso"]
+          forbidden = ['Modello Merate', 'LINEA 8 OLGIATE', 'Sistema Circolare Intercomunale a Doppio Verso']
           for term in forbidden:
-              assert term.lower() not in html.lower(), f"Legacy branding regression: {term}"
+              assert term.lower() not in html.lower(), f'Legacy branding regression: {term}'
 
           selectors = set(re.findall(r'querySelector\([\"\']#([A-Za-z0-9_-]+)[\"\']\)', js))
           missing = sorted(selectors - set(p.ids))
-          assert not missing, f"JS references missing HTML ids: {missing}"
+          assert not missing, f'JS references missing HTML ids: {missing}'
 
-          required = ["--paper", "--ink", "--accent", "prefers-reduced-motion", ":focus-visible"]
+          required = ['--paper', '--ink', '--accent', 'prefers-reduced-motion', ':focus-visible']
           for token in required:
-              assert token in css, f"Missing CSS contract token: {token}"
+              assert token in css, f'Missing CSS contract token: {token}'
 
-          assert "document.startViewTransition" in js, "Smooth state transition layer missing"
-          assert "IntersectionObserver" in js, "Progressive reveal/navigation layer missing"
-
-          print(f"PASS: {len(p.ids)} unique ids, {len(selectors)} JS id references, semantic guards intact")
+          assert 'document.startViewTransition' in js, 'Smooth state transition layer missing'
+          assert 'IntersectionObserver' in js, 'Progressive reveal/navigation layer missing'
+          assert 'history.replaceState' in js, 'Shareable decision state missing'
+          assert 'aa16a9934a78be9a3ee1230996fcaf72c5657f92' in data, 'Evidence pin missing from data snapshot'
+          print(f'PASS: {len(p.ids)} unique ids, {len(selectors)} JS id references, semantic guards intact')
 
       - name: Epistemic UI guard
         shell: python
         run: |
           from pathlib import Path
-          text = (Path("index.html").read_text() + Path("app.js").read_text()).lower()
+          text = (Path('index.html').read_text() + Path('app.js').read_text() + Path('network-data.js').read_text()).lower()
           forbidden_claims = [
-              "probabilità empirica di perdita",
-              "punteggio complessivo",
-              "vincitore automatico",
+              'probabilità empirica di perdita',
+              'punteggio complessivo',
+              'vincitore automatico',
+              'geometria stradale certificata',
           ]
           for claim in forbidden_claims:
-              assert claim not in text, f"Unsupported decision claim in site: {claim}"
-          print("PASS: no unsupported decision claims")
+              assert claim not in text, f'Unsupported decision claim in site: {claim}'
+          assert 'non geometria stradale' in text or 'routing stradale non lo è' in text, 'Schematic-geometry caveat missing'
+          assert 'primary / runner-up' in text and 'non assegnati' in text, 'Non-decision contract missing'
+          print('PASS: no unsupported decision claims and schematic geometry caveat intact')
