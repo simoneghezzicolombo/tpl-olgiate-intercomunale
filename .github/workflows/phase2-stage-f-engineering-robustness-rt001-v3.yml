@@ -1,0 +1,155 @@
+name: Phase 2 Stage F Engineering Robustness RT001 V3
+
+on:
+  push:
+    branches: [phase2-stage-f-engineering-robustness-rt001-v3]
+    paths:
+      - 'src/phase2_stage_f_engineering_robustness_rt001_v3.py'
+      - 'scripts/phase2_build_stage_f_engineering_robustness_rt001_v3.py'
+      - 'tests/test_phase2_stage_f_engineering_robustness_rt001_v3.py'
+      - 'config/phase2_stage_f_engineering_sensitivity_rt001_v3.json'
+      - '.github/workflows/phase2-stage-f-engineering-robustness-rt001-v3.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-stage-f-engineering-robustness-rt001-v3-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: .
+  STAGE_D_EVIDENCE_COMMIT: d41bb678382d018929c1c6b46542f12549f20d4f
+  SOURCE_SENSITIVITY_COMMIT: 8d79cbd74c3ec99ec3eff5fca7a799975210356b
+  OUTDIR: outputs/phase2/stage_f_engineering_robustness_rt001_v3
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Materialise frozen Stage-D and historical sensitivity evidence
+        run: |
+          git fetch origin "$STAGE_D_EVIDENCE_COMMIT" "$SOURCE_SENSITIVITY_COMMIT"
+          git worktree add --detach /tmp/stage-d-v3 "$STAGE_D_EVIDENCE_COMMIT"
+          git worktree add --detach /tmp/stage-f-source "$SOURCE_SENSITIVITY_COMMIT"
+          test -f /tmp/stage-d-v3/outputs/phase2/stage_d_exact_rt001_v3/stage_d_exact_rt001_v3_validation.json
+          test -f /tmp/stage-f-source/config/phase2_robustness_tournament_v2.json
+
+      - name: Compile Stage F kernel and builder
+        run: |
+          python -m py_compile src/phase2_stage_f_engineering_robustness_rt001_v3.py
+          python -m py_compile scripts/phase2_build_stage_f_engineering_robustness_rt001_v3.py
+
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<10'
+
+      - name: Run Stage F regression tests
+        run: python -m pytest -q tests/test_phase2_stage_f_engineering_robustness_rt001_v3.py tests/test_phase2_final_operational_robustness_v2.py
+
+      - name: Build Stage F RT001 V3 engineering surface
+        run: |
+          rm -rf "$OUTDIR"
+          python scripts/phase2_build_stage_f_engineering_robustness_rt001_v3.py \
+            --stage-d-validation /tmp/stage-d-v3/outputs/phase2/stage_d_exact_rt001_v3/stage_d_exact_rt001_v3_validation.json \
+            --stage-d-timetables /tmp/stage-d-v3/outputs/phase2/stage_d_exact_rt001_v3/exact_selected_timetables_rt001_v3.csv \
+            --stage-d-trips /tmp/stage-d-v3/outputs/phase2/stage_d_exact_rt001_v3/exact_selected_trips_rt001_v3.csv.gz \
+            --route-input /tmp/stage-d-v3/outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv \
+            --s8-events /tmp/stage-d-v3/outputs/phase2/s8_events.csv \
+            --s8-sensitivity /tmp/stage-d-v3/config/phase2_s8_phasing_sensitivity_v2.json \
+            --stage-e-validation outputs/phase2/final_operational_robustness_rt001_v3/final_operational_robustness_rt001_v3_validation.json \
+            --stage-f-sensitivity config/phase2_stage_f_engineering_sensitivity_rt001_v3.json \
+            --source-sensitivity-grid /tmp/stage-f-source/config/phase2_robustness_tournament_v2.json \
+            --output-dir "$OUTDIR"
+
+      - name: Validate Stage F contract and cardinalities
+        run: |
+          python - <<'PY'
+          import csv,gzip,json
+          from pathlib import Path
+          out=Path('outputs/phase2/stage_f_engineering_robustness_rt001_v3')
+          v=json.loads((out/'stage_f_engineering_robustness_rt001_v3_validation.json').read_text())
+          assert v['status']=='PASS_PHASE2_STAGE_F_ENGINEERING_SENSITIVITY_RT001_V3'
+          assert v['contract']=='PHASE2_STAGE_F_CERTIFIED_ENGINEERING_SENSITIVITY_RT001_V3'
+          assert v['selected_exact_timetable_count']==6000
+          assert v['represented_plan_context_count']==16495
+          assert v['exact_public_trip_count']==285748
+          assert v['stress_case_count_per_timetable']==81
+          assert v['connection_surface_row_count']==6000*81
+          assert v['block_surface_row_count']==6000*3*3*3
+          assert v['summary_row_count']==6000*3
+          assert v['runtime_multiplier']==[0.9,1.0,1.1]
+          assert v['dwell_per_nonhub_public_stop_occurrence_min']==[0.0,0.5,1.0]
+          assert v['rail_event_clock_shift_min']==[-5.0,0.0,5.0]
+          assert v['recovery_minutes']==[5,10,15]
+          assert v['planned_connection_identity_preserved'] is True
+          assert v['next_target_rebinding_used_as_success'] is False
+          assert v['technical_return_connection_count']==0
+          for key in ('sensitivity_is_empirical_probability','runtime_multiplier_is_empirical_interval','dwell_is_empirical_distribution','rail_shift_is_empirical_delay_distribution','missed_connection_probability_inferred','full_gjt_calculated','passenger_route_weights_inferred','municipal_od_downscaled','ridership_forecast','random_search','decision_budget_selected','calendar_selected','recovery_selected','primary_selected','runner_up_selected','weighted_composite_score','final_selection_authorized'):
+              assert v[key] is False,key
+          for name,expected in (
+              ('stage_f_engineering_connection_surface_rt001_v3.csv.gz',6000*81),
+              ('stage_f_engineering_block_surface_rt001_v3.csv.gz',6000*27),
+              ('stage_f_engineering_timetable_summary_rt001_v3.csv.gz',6000*3),
+          ):
+              with gzip.open(out/name,'rt',encoding='utf-8',newline='') as f:
+                  r=csv.DictReader(f); fields=set(r.fieldnames or []); rows=sum(1 for _ in r)
+              assert rows==expected,(name,rows,expected)
+              assert 'selected_timetable_id' in fields
+              assert 'primary_selected' in fields or 'recovery_selected' in fields
+          print(json.dumps({k:v[k] for k in ('status','connection_surface_row_count','block_surface_row_count','nominal_block_assignment_infeasible_case_count','cases_requiring_additional_vehicle_count')},indent=2,sort_keys=True))
+          PY
+
+      - name: Deterministic byte-for-byte rebuild
+        run: |
+          rm -rf /tmp/stage-f-rebuild
+          python scripts/phase2_build_stage_f_engineering_robustness_rt001_v3.py \
+            --stage-d-validation /tmp/stage-d-v3/outputs/phase2/stage_d_exact_rt001_v3/stage_d_exact_rt001_v3_validation.json \
+            --stage-d-timetables /tmp/stage-d-v3/outputs/phase2/stage_d_exact_rt001_v3/exact_selected_timetables_rt001_v3.csv \
+            --stage-d-trips /tmp/stage-d-v3/outputs/phase2/stage_d_exact_rt001_v3/exact_selected_trips_rt001_v3.csv.gz \
+            --route-input /tmp/stage-d-v3/outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv \
+            --s8-events /tmp/stage-d-v3/outputs/phase2/s8_events.csv \
+            --s8-sensitivity /tmp/stage-d-v3/config/phase2_s8_phasing_sensitivity_v2.json \
+            --stage-e-validation outputs/phase2/final_operational_robustness_rt001_v3/final_operational_robustness_rt001_v3_validation.json \
+            --stage-f-sensitivity config/phase2_stage_f_engineering_sensitivity_rt001_v3.json \
+            --source-sensitivity-grid /tmp/stage-f-source/config/phase2_robustness_tournament_v2.json \
+            --output-dir /tmp/stage-f-rebuild >/dev/null
+          for f in stage_f_engineering_connection_surface_rt001_v3.csv.gz stage_f_engineering_block_surface_rt001_v3.csv.gz stage_f_engineering_timetable_summary_rt001_v3.csv.gz stage_f_engineering_robustness_rt001_v3_validation.json; do
+            cmp "$OUTDIR/$f" "/tmp/stage-f-rebuild/$f"
+          done
+
+      - name: Guard epistemic and non-decisional semantics
+        run: |
+          FILES='src/phase2_stage_f_engineering_robustness_rt001_v3.py scripts/phase2_build_stage_f_engineering_robustness_rt001_v3.py'
+          ! grep -En 'np\.random|numpy\.random|(^|[[:space:]])import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -En 'missed_connection_probability[[:space:]]*=[^F]|primary_selected[^\n]{0,40}(True|"true")|runner_up_selected[^\n]{0,40}(True|"true")' $FILES
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check
+
+      - name: Persist Stage F evidence
+        run: |
+          git config user.name 'phase2-stage-f-rt001-v3-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$OUTDIR"
+          if git diff --cached --quiet; then
+            echo 'No Stage F evidence changes to persist'
+          else
+            git commit -m 'data(phase2): persist Stage F engineering robustness RT001 V3 [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-stage-f-engineering-robustness-rt001-v3-${{ github.sha }}
+          path: outputs/phase2/stage_f_engineering_robustness_rt001_v3
+          retention-days: 90
+          if-no-files-found: error
