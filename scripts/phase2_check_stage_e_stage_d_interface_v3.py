@@ -26,6 +26,7 @@ def main() -> int:
     p.add_argument("--validation", type=Path, required=True)
     p.add_argument("--summary", type=Path, required=True)
     p.add_argument("--trips", type=Path, required=True)
+    p.add_argument("--contexts", type=Path)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--input-role", default="UNSPECIFIED_STAGE_D_INPUT_ROLE")
     args = p.parse_args()
@@ -33,16 +34,25 @@ def main() -> int:
     for path in (args.validation, args.summary, args.trips):
         if not path.is_file():
             raise FileNotFoundError(path)
+    if args.contexts is not None and not args.contexts.is_file():
+        raise FileNotFoundError(args.contexts)
 
     validation = json.loads(args.validation.read_text(encoding="utf-8"))
     summary_fields, summary_rows = _read_rows(args.summary)
     trip_fields, trip_rows = _read_rows(args.trips)
+    context_fields = None
+    context_rows = None
+    if args.contexts is not None:
+        context_fields, context_rows = _read_rows(args.contexts)
+
     report = validate_exact_interface(
         validation,
         summary_rows,
         trip_rows,
         summary_fields=summary_fields,
         trip_fields=trip_fields,
+        context_rows=context_rows,
+        context_fields=context_fields,
     )
     report.update({
         "status": "PASS_PHASE2_STAGE_E_STAGE_D_INTERFACE_V3_READINESS",
