@@ -7,7 +7,7 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 **Data:** 2026-09-04  
 **Fase:** Phase 2 — final-tournament input readiness
 **Ultima lineage operativa integrata:** Stage E RT001 V3 @ `063e119` + repaired Stage-C evidence
-**Final-tournament readiness audit:** **PASS; execution remains BLOCKED by six explicit input/decision gaps**
+**Final-tournament contract audit:** **V2 INCOMPATIBLE; V3 non-decisional Pareto frontier PASS; final selection BLOCKED**
 **PRIMARY selection authorised:** **false**  
 **RUNNER-UP selection authorised:** **false**
 
@@ -19,6 +19,26 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 - Le evidenze computazionali devono essere identificate tramite branch/commit, validation contract e SHA256.
 
 ## Phase 2 — evidenze correnti
+
+### Tournament Contract Audit + Non-Decisional Frontier RT001 V3
+
+- branch `codex/phase2-final-tournament-rt001-v3`;
+- evidence/source commit `8d858793200b3ab644d2612a272ad0ac614d6c34`;
+- CI `33885550489` SUCCESS;
+- artifact `9941685708`, SHA256 `e1db684c081373d6cd4ddc76785501f7f9e144e7f7e797a9641e3654beddf0af`;
+- contract audit `PASS_PHASE2_LEGACY_TOURNAMENT_CONTRACT_AUDIT_RT001_V3`;
+- frontier validation `PASS_PHASE2_NON_DECISIONAL_TOURNAMENT_FRONTIER_RT001_V3`.
+
+Verdetto sul contratto V2: **incompatibile con l'evidenza certificata corrente**. I campi GJT demand-weighted e missed-connection probability non esistono; Stage-E engineering retention non viene reinterpretata come probabilità; current continuity resta lower-bound; complexity/unverified fields non hanno equivalenti certificati. Inoltre la chiave V2 `(scenario_id, plan_id)` ha 9.534 identità uniche su 16.495 contesti e comprimerebbe 6.961 contesti budget/timetable distinti.
+
+Il contratto V3 usa invece `(plan_context_id, selected_timetable_id)`, 29 assi certificati senza pesi, confronto decimal exact a tolleranza zero e 12 partizioni separate per sei budget e due classi di completezza. Missing values non sono imputati. Risultato descrittivo: 12.284 contesti non dominati e 4.211 dominati. La frontiera non è ranking, shortlist o raccomandazione.
+
+`legacy_v2_finalizer_invoked=false`
+`candidate_evaluation_rows_materialized=false`
+`decision_budget_selected=false`
+`uncertainty_band_selected=false`
+`primary_selection_authorised=false`
+`runner_up_selection_authorised=false`
 
 ### Final Tournament Readiness RT001 V3
 
