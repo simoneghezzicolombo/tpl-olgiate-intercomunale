@@ -1,0 +1,116 @@
+name: Phase 2 Stage-C Evidence Rejoin RT001 V3
+
+on:
+  push:
+    branches: [phase2-rt001-budget-lossless-v2]
+    paths:
+      - 'scripts/phase2_build_s8_robust_opportunity_rt001_v3.py'
+      - 'scripts/phase2_build_current_service_continuity_rt001_v3.py'
+      - '.github/workflows/phase2-stage-c-evidence-rejoin-rt001-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: .
+  PINNED_S8_COMMIT: 8d79cbd74c3ec99ec3eff5fca7a799975210356b
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Compile
+        run: python -m py_compile scripts/phase2_build_s8_robust_opportunity_surface_v2.py scripts/phase2_build_s8_robust_opportunity_rt001_v3.py scripts/phase2_build_current_service_continuity_v2.py scripts/phase2_build_current_service_continuity_rt001_v3.py
+      - name: Extract pinned S8 evidence
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/pinned-s8
+          git show "${PINNED_S8_COMMIT}:outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2.csv.gz" > /tmp/pinned-s8/envelope.csv.gz
+          git show "${PINNED_S8_COMMIT}:outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2_validation.json" > /tmp/pinned-s8/envelope_validation.json
+          git show "${PINNED_S8_COMMIT}:outputs/phase2/passenger_gjt_v2/s8_transfer_gap_envelope_v2_validation.json" > /tmp/pinned-s8/transfer_validation.json
+          git show "${PINNED_S8_COMMIT}:outputs/phase2/passenger_gjt_v2/s8_passenger_support_mask_v2_validation.json" > /tmp/pinned-s8/support_validation.json
+          git show "${PINNED_S8_COMMIT}:outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv" > /tmp/pinned-s8/work_direction_summary.csv
+          git show "${PINNED_S8_COMMIT}:outputs/phase2/passenger_gjt_v2/s8_work_direction_weights_v2_validation.json" > /tmp/pinned-s8/work_weights_validation.json
+      - name: Build repaired S8 opportunity join
+        run: |
+          mkdir -p outputs/phase2/s8_robust_opportunity_rt001_v3
+          python scripts/phase2_build_s8_robust_opportunity_rt001_v3.py \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3_validation.json \
+            --current-s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --current-route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --current-scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --current-s8-events outputs/phase2/s8_events.csv \
+            --current-policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv \
+            --current-s8-contract outputs/phase2/s8_interchange_contract.json \
+            --legacy-envelope /tmp/pinned-s8/envelope.csv.gz \
+            --legacy-envelope-validation /tmp/pinned-s8/envelope_validation.json \
+            --legacy-transfer-validation /tmp/pinned-s8/transfer_validation.json \
+            --legacy-support-validation /tmp/pinned-s8/support_validation.json \
+            --legacy-work-direction-summary /tmp/pinned-s8/work_direction_summary.csv \
+            --legacy-work-weights-validation /tmp/pinned-s8/work_weights_validation.json \
+            --output outputs/phase2/s8_robust_opportunity_rt001_v3/passenger_plans_s8_opportunity_rt001_v3.csv.gz \
+            --validation outputs/phase2/s8_robust_opportunity_rt001_v3/s8_robust_opportunity_rt001_v3_validation.json >/dev/null
+      - name: Build repaired continuity join
+        run: |
+          mkdir -p outputs/phase2/current_service_continuity_rt001_v3
+          python scripts/phase2_build_current_service_continuity_rt001_v3.py \
+            --current-localized outputs/phase2/current_service_access_baseline_v2/current_service_localized_rows_v2.csv \
+            --current-validation outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json \
+            --routing-anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3_validation.json \
+            --scenario-output outputs/phase2/current_service_continuity_rt001_v3/scenario_current_service_continuity_rt001_v3.csv.gz \
+            --plan-output outputs/phase2/current_service_continuity_rt001_v3/passenger_plans_current_service_continuity_rt001_v3.csv.gz \
+            --validation outputs/phase2/current_service_continuity_rt001_v3/current_service_continuity_rt001_v3_validation.json >/dev/null
+      - name: Validate rejoined evidence
+        run: |
+          python - <<'PY'
+          import csv,gzip,json
+          from pathlib import Path
+          s=json.loads(Path('outputs/phase2/s8_robust_opportunity_rt001_v3/s8_robust_opportunity_rt001_v3_validation.json').read_text())
+          c=json.loads(Path('outputs/phase2/current_service_continuity_rt001_v3/current_service_continuity_rt001_v3_validation.json').read_text())
+          assert s['status']=='PASS_PHASE2_S8_ROBUST_OPPORTUNITY_RT001_V3'
+          assert s['contract']=='PHASE2_LINEAGE_PINNED_PRE_TIMETABLE_S8_OPPORTUNITY_RT001_V3'
+          assert s['passenger_utility_plan_count']==16495
+          assert sum(s['s8_opportunity_class_counts'].values())==16495
+          assert s['rt001_repair'] is True
+          for k in ('worker_reference_assigned_to_routes','route_weighting_applied','cross_route_phase_selected','exact_timetable_constructed','hard_s8_threshold_applied','candidate_eliminated_by_s8_opportunity_class','primary_selected','runner_up_selected'):
+              assert s[k] is False,k
+          assert c['status']=='PASS_PHASE2_CURRENT_SERVICE_CONTINUITY_RT001_V3'
+          assert c['contract']=='PHASE2_CERTIFIED_LOCALIZABLE_CURRENT_SERVICE_CONTINUITY_LOWER_BOUND_RT001_V3'
+          assert c['passenger_utility_plan_count']==16495
+          assert c['rt001_repair'] is True
+          assert c['continuity_is_true_current_service_nonregression_proof'] is False
+          assert c['current_localizable_row_count']==12 and c['current_unresolved_or_unlocalized_row_count']==39
+          for k in ('continuity_is_complete_current_service_measure','unresolved_current_rows_inferred','proximity_used_as_stop_retention','continuity_used_to_eliminate_candidate','continuity_used_to_select_primary','continuity_used_to_select_runner_up','weighted_composite_score'):
+              assert c[k] is False,k
+          print(json.dumps({'s8_classes':s['s8_opportunity_class_counts'],'stage_c_timing_keys':s['unique_stage_c_scenario_timing_key_count'],'continuity_distribution':c['passenger_plan_retained_cluster_count_distribution'],'unique_scenarios':c['passenger_utility_unique_scenario_count']},indent=2,sort_keys=True))
+          PY
+      - name: Persist evidence
+        run: |
+          git config user.name 'phase2-stage-c-rejoin-rt001-v3-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add outputs/phase2/s8_robust_opportunity_rt001_v3 outputs/phase2/current_service_continuity_rt001_v3
+          if ! git diff --cached --quiet; then
+            git commit -m 'data(phase2): persist repaired Stage-C evidence joins [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-stage-c-evidence-rejoin-rt001-v3-${{ github.sha }}
+          path: |
+            outputs/phase2/s8_robust_opportunity_rt001_v3
+            outputs/phase2/current_service_continuity_rt001_v3
+          if-no-files-found: error
