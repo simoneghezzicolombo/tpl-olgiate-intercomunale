@@ -11,6 +11,7 @@ from scripts.phase2_run_final_operational_robustness_rt001_v3 import (
     rewrite_engine_outputs,
 )
 from scripts.phase2_run_final_operational_robustness_rt001_v3_stream import (
+    load_exact_trips_v3,
     materialise_compatibility_inputs_in_span,
     rewrite_engine_outputs_streaming,
 )
@@ -115,6 +116,33 @@ def test_adapter_uses_selected_timetable_and_enforces_public_return_contract(tmp
     for recovery in (5, 10, 15):
         assert normalized[("Rclosed", "0")][f"vehicle_block_recovery{recovery}"] == "1"
         assert normalized[("Ropen", "0")][f"vehicle_block_recovery{recovery}"] == "1"
+
+    route_semantics = {
+        "Rclosed": {"bus_to_rail_passenger_event_supported": True},
+        "Ropen": {"bus_to_rail_passenger_event_supported": False},
+    }
+    loaded = load_exact_trips_v3(trip_path, recoveries=(5, 10, 15), route_semantics=route_semantics)
+    assert len(loaded["T1"]) == 3
+    by_key = {(t.route_id, t.trip_ordinal): t for t in loaded["T1"]}
+    assert by_key[("Rclosed", 0)].public_hub_return_min == 430.0
+    assert by_key[("Rclosed", 1)].public_hub_return_min is None
+    assert by_key[("Ropen", 0)].public_hub_return_min is None
+
+
+def test_v3_loader_still_rejects_passenger_return_on_unsupported_route(tmp_path):
+    path = tmp_path / "bad.csv.gz"
+    row = {
+        "stage_d_input_id": "T1", "scenario_id": "S1", "route_id": "Ropen", "trip_ordinal": "0",
+        "hub_departure_min": "400", "public_hub_return_min": "430", "vehicle_hub_return_min": "440",
+        "vehicle_block_recovery5": "1", "vehicle_block_recovery10": "1", "vehicle_block_recovery15": "1",
+    }
+    _write_gz(path, list(row), [row])
+    with pytest.raises(ValueError, match="technical return leaked"):
+        load_exact_trips_v3(
+            path,
+            recoveries=(5, 10, 15),
+            route_semantics={"Ropen": {"bus_to_rail_passenger_event_supported": False}},
+        )
 
 
 def test_streaming_relabel_is_byte_equivalent_to_reference_adapter(tmp_path):
