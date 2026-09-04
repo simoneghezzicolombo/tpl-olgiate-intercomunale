@@ -1,0 +1,90 @@
+name: Phase 2 Accessibility Utility Frontier V2
+
+on:
+  push:
+    branches: [phase2-passenger-gjt-v2]
+    paths:
+      - 'scripts/phase2_build_accessibility_utility_frontier_v2.py'
+      - '.github/workflows/phase2-accessibility-utility-frontier-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and unit smoke test
+        run: |
+          python -m py_compile scripts/phase2_build_accessibility_utility_frontier_v2.py
+          python - <<'PY'
+          from scripts.phase2_build_accessibility_utility_frontier_v2 import auc_5_10
+          assert abs(auc_5_10(0.1,0.2,0.3)-0.19)<1e-12
+          assert auc_5_10(0,0,0)==0
+          PY
+      - name: Build accessibility utility frontier
+        run: >-
+          python scripts/phase2_build_accessibility_utility_frontier_v2.py
+          --strata outputs/phase2/robustness_v2/decision_strata_v2.csv
+          --strata-validation outputs/phase2/robustness_v2/decision_strata_v2_validation.json
+          --exact-plans outputs/phase2/base_exact_timetables_v2/base_exact_timetable_candidates_v2.csv
+          --exact-validation outputs/phase2/base_exact_timetables_v2/base_exact_timetables_v2_validation.json
+          --output outputs/phase2/robustness_v2/accessibility_utility_v2.csv
+          --frontier-output outputs/phase2/robustness_v2/accessibility_utility_frontier_v2.csv
+          --validation outputs/phase2/robustness_v2/accessibility_utility_frontier_v2_validation.json
+      - name: Validate semantics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('outputs/phase2/robustness_v2/accessibility_utility_frontier_v2_validation.json').read_text())
+          assert v['status']=='PASS_ACCESSIBILITY_UTILITY_FRONTIER_V2_BUILD'
+          assert v['input_decision_stratum_count']==148
+          assert 0 < v['frontier_count'] <= 148
+          assert v['accessibility_utility_is_passenger_trip_count'] is False
+          assert v['accessibility_utility_is_modal_share'] is False
+          assert v['worker_od_service_opportunity_is_upper_bound'] is True
+          assert v['full_gjt_calculated'] is False
+          assert v['weighted_composite_score_used'] is False
+          for k in ('topology_ranked','service_policy_selected','primary_selected','runner_up_selected'): assert v[k] is False
+          print(json.dumps(v,indent=2))
+          PY
+      - name: Deterministic rebuild
+        run: |
+          mkdir -p /tmp/p2utility
+          python scripts/phase2_build_accessibility_utility_frontier_v2.py \
+            --strata outputs/phase2/robustness_v2/decision_strata_v2.csv \
+            --strata-validation outputs/phase2/robustness_v2/decision_strata_v2_validation.json \
+            --exact-plans outputs/phase2/base_exact_timetables_v2/base_exact_timetable_candidates_v2.csv \
+            --exact-validation outputs/phase2/base_exact_timetables_v2/base_exact_timetables_v2_validation.json \
+            --output /tmp/p2utility/all.csv --frontier-output /tmp/p2utility/frontier.csv --validation /tmp/p2utility/validation.json >/dev/null
+          cmp outputs/phase2/robustness_v2/accessibility_utility_v2.csv /tmp/p2utility/all.csv
+          cmp outputs/phase2/robustness_v2/accessibility_utility_frontier_v2.csv /tmp/p2utility/frontier.csv
+          cmp outputs/phase2/robustness_v2/accessibility_utility_frontier_v2_validation.json /tmp/p2utility/validation.json
+      - name: Persist
+        run: |
+          git config user.name "phase2-accessibility-utility-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/robustness_v2/accessibility_utility_v2.csv outputs/phase2/robustness_v2/accessibility_utility_frontier_v2.csv outputs/phase2/robustness_v2/accessibility_utility_frontier_v2_validation.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist service-adjusted accessibility utility V2 [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-accessibility-utility-frontier-v2-${{ github.sha }}
+          retention-days: 90
+          path: |
+            outputs/phase2/robustness_v2/accessibility_utility_v2.csv
+            outputs/phase2/robustness_v2/accessibility_utility_frontier_v2.csv
+            outputs/phase2/robustness_v2/accessibility_utility_frontier_v2_validation.json
