@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Build the finite Phase 2 final-decision sufficiency / blocker-closure gate.
+"""Finite Phase 2 decision-sufficiency and blocker-closure gate.
 
-The gate does not rank or select networks. It freezes the currently certified
-blocker universe, distinguishes evidence gaps from caller decisions, and reports
-two explicit decision pathways without silently choosing either one.
+This audit never ranks or selects a network. It freezes the current blocker
+universe, separates certified evidence gaps from human policy choices, and
+reports two explicit decision pathways without silently selecting either one.
 """
 from __future__ import annotations
 
@@ -24,32 +24,17 @@ ALLOWED_STATES = {
     "HUMAN_DECISION_REQUIRED",
     "NOT_REQUIRED_UNDER_V3_CONTRACT",
 }
-
 MATRIX_FIELDS = [
-    "requirement_id",
-    "requirement",
-    "certified_source",
-    "certified_evidence_semantics",
-    "global_state",
-    "legacy_v2_state",
-    "v3_deterministic_state",
-    "engineering_work_authorized_now",
-    "human_action_required",
-    "notes",
+    "requirement_id", "requirement", "certified_source", "certified_evidence_semantics",
+    "global_state", "legacy_v2_state", "v3_deterministic_state",
+    "engineering_work_authorized_now", "human_action_required", "notes",
 ]
-
 PATHWAY_FIELDS = [
-    "pathway_id",
-    "pathway_selected",
-    "technical_open_data_requirement_count",
-    "human_decision_requirement_count_after_pathway_selection",
-    "not_required_requirement_count",
-    "can_materialize_final_decision_now",
-    "full_demand_weighted_gjt_required",
-    "empirical_missed_connection_probability_required",
-    "complete_current_service_nonregression_required",
-    "route_level_demand_weight_sensitivity_required",
-    "decision_semantics",
+    "pathway_id", "pathway_selected", "technical_open_data_requirement_count",
+    "human_decision_requirement_count_after_pathway_selection", "not_required_requirement_count",
+    "can_materialize_final_decision_now", "full_demand_weighted_gjt_required",
+    "empirical_missed_connection_probability_required", "complete_current_service_nonregression_required",
+    "route_level_demand_weight_sensitivity_required", "decision_semantics",
 ]
 
 
@@ -58,16 +43,16 @@ def read_json(path: Path) -> dict:
 
 
 def sha256_path(path: Path) -> str:
-    h = hashlib.sha256()
+    digest = hashlib.sha256()
     with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            h.update(chunk)
-    return h.hexdigest()
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def write_csv(path: Path, fields: list[str], rows: list[dict[str, object]]) -> None:
     if not rows:
-        raise ValueError(f"refusing to write empty CSV: {path}")
+        raise ValueError(f"refusing to write empty CSV {path}")
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n", extrasaction="raise")
@@ -75,18 +60,13 @@ def write_csv(path: Path, fields: list[str], rows: list[dict[str, object]]) -> N
         writer.writerows(rows)
 
 
-def strict_false(obj: Mapping[str, object], field: str, *, source: str) -> None:
-    if obj.get(field) is not False:
-        raise ValueError(f"{source}: expected {field}=false")
-
-
-def strict_true(obj: Mapping[str, object], field: str, *, source: str) -> None:
-    if obj.get(field) is not True:
-        raise ValueError(f"{source}: expected {field}=true")
+def require_bool(obj: Mapping[str, object], field: str, expected: bool, source: str) -> None:
+    if obj.get(field) is not expected:
+        raise ValueError(f"{source}: expected {field}={str(expected).lower()}")
 
 
 def validate_sources(args: argparse.Namespace, cfg: Mapping[str, object]) -> dict[str, dict]:
-    sources = {
+    s = {
         "stage_e": read_json(args.stage_e_validation),
         "readiness": read_json(args.readiness_validation),
         "codex_redteam": read_json(args.codex_redteam_validation),
@@ -96,395 +76,250 @@ def validate_sources(args: argparse.Namespace, cfg: Mapping[str, object]) -> dic
         "current_baseline": read_json(args.current_baseline_validation),
         "old_vs_new": read_json(args.old_vs_new_validation),
     }
+    n_contexts = int(cfg["expected_plan_context_count"])
 
-    stage_e = sources["stage_e"]
-    if stage_e.get("status") != "PASS_PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_RT001_V3":
+    e = s["stage_e"]
+    if e.get("status") != "PASS_PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_RT001_V3":
         raise ValueError("Stage E RT001 V3 is not certified PASS")
-    strict_true(stage_e, "stage_d_cross_implementation_audit_pass", source="Stage E")
-    strict_true(stage_e, "stage_d_fixture_is_final_selection_lineage", source="Stage E")
-    strict_true(stage_e, "planned_connection_identity_preserved", source="Stage E")
-    strict_false(stage_e, "delay_sensitivity_is_empirical_probability", source="Stage E")
-    strict_false(stage_e, "passenger_weighting_applied", source="Stage E")
-    strict_false(stage_e, "municipal_od_downscaled", source="Stage E")
-    strict_false(stage_e, "final_selection_authorized", source="Stage E")
-    if int(stage_e.get("represented_plan_context_count", -1)) != int(cfg["expected_plan_context_count"]):
-        raise ValueError("Stage E context count does not match closure-gate contract")
+    for field in ("stage_d_cross_implementation_audit_pass", "stage_d_fixture_is_final_selection_lineage", "planned_connection_identity_preserved"):
+        require_bool(e, field, True, "Stage E")
+    for field in ("delay_sensitivity_is_empirical_probability", "passenger_weighting_applied", "municipal_od_downscaled", "final_selection_authorized"):
+        require_bool(e, field, False, "Stage E")
+    if int(e.get("represented_plan_context_count", -1)) != n_contexts or int(e.get("selected_exact_timetable_count", -1)) != 6000:
+        raise ValueError("Stage E certified universe changed")
 
-    readiness = sources["readiness"]
-    if readiness.get("status") != "PASS_PHASE2_FINAL_TOURNAMENT_READINESS_AUDIT_RT001_V3":
-        raise ValueError("Codex tournament readiness is not certified PASS")
-    strict_false(readiness, "final_tournament_execution_ready", source="readiness")
-    strict_false(readiness, "full_demand_weighted_gjt_available", source="readiness")
-    strict_false(readiness, "empirical_missed_connection_probability_available", source="readiness")
-    strict_false(readiness, "candidate_evaluation_rows_materialized", source="readiness")
-    strict_false(readiness, "primary_selected", source="readiness")
-    strict_false(readiness, "runner_up_selected", source="readiness")
+    r = s["readiness"]
+    if r.get("status") != "PASS_PHASE2_FINAL_TOURNAMENT_READINESS_AUDIT_RT001_V3":
+        raise ValueError("tournament readiness is not certified PASS")
+    for field in ("final_tournament_execution_ready", "full_demand_weighted_gjt_available", "empirical_missed_connection_probability_available", "candidate_evaluation_rows_materialized", "primary_selected", "runner_up_selected"):
+        require_bool(r, field, False, "readiness")
+    if int(r.get("represented_plan_context_count", -1)) != n_contexts:
+        raise ValueError("readiness context universe changed")
 
-    redteam = sources["codex_redteam"]
-    if redteam.get("status") != "PASS_PHASE2_CODEX_TOURNAMENT_READINESS_REDTEAM_RT001_V3":
-        raise ValueError("independent tournament-readiness red-team is not PASS")
-    strict_true(redteam, "audit_pass", source="Codex red-team")
-    strict_false(redteam, "manufactured_demand_weighted_gjt", source="Codex red-team")
-    strict_false(redteam, "manufactured_missed_connection_probability", source="Codex red-team")
-    strict_false(redteam, "stage_e_engineering_retention_reinterpreted_as_probability", source="Codex red-team")
-    strict_false(redteam, "municipal_od_spatially_downscaled", source="Codex red-team")
-    strict_false(redteam, "nonfrontier_pruning_authorized", source="Codex red-team")
-    strict_false(redteam, "frontier_membership_may_authorize_pruning", source="Codex red-team")
-    if int(redteam.get("input_context_count", -1)) != int(cfg["expected_plan_context_count"]):
-        raise ValueError("Codex red-team context count mismatch")
+    rt = s["codex_redteam"]
+    if rt.get("status") != "PASS_PHASE2_CODEX_TOURNAMENT_READINESS_REDTEAM_RT001_V3":
+        raise ValueError("independent tournament red-team is not PASS")
+    require_bool(rt, "audit_pass", True, "Codex red-team")
+    for field in (
+        "manufactured_demand_weighted_gjt", "manufactured_missed_connection_probability",
+        "stage_e_engineering_retention_reinterpreted_as_probability", "municipal_od_spatially_downscaled",
+        "nonfrontier_pruning_authorized", "frontier_membership_may_authorize_pruning",
+    ):
+        require_bool(rt, field, False, "Codex red-team")
+    if int(rt.get("input_context_count", -1)) != n_contexts:
+        raise ValueError("Codex red-team context universe changed")
 
-    legacy = sources["legacy_contract_audit"]
+    legacy = s["legacy_contract_audit"]
     if legacy.get("status") != "PASS_PHASE2_LEGACY_TOURNAMENT_CONTRACT_AUDIT_RT001_V3":
-        raise ValueError("legacy tournament contract audit is not PASS")
-    strict_false(legacy, "legacy_v2_tournament_schema_compatible", source="legacy contract audit")
-    strict_false(legacy, "legacy_v2_finalizer_run_authorized", source="legacy contract audit")
-    strict_false(legacy, "full_demand_weighted_gjt_available", source="legacy contract audit")
-    strict_false(legacy, "empirical_missed_connection_probability_available", source="legacy contract audit")
+        raise ValueError("legacy contract audit is not PASS")
+    for field in ("legacy_v2_tournament_schema_compatible", "legacy_v2_finalizer_run_authorized", "full_demand_weighted_gjt_available", "empirical_missed_connection_probability_available"):
+        require_bool(legacy, field, False, "legacy contract audit")
 
-    frontier = sources["frontier"]
-    if frontier.get("status") != "PASS_PHASE2_NON_DECISIONAL_TOURNAMENT_FRONTIER_RT001_V3":
+    f = s["frontier"]
+    if f.get("status") != "PASS_PHASE2_NON_DECISIONAL_TOURNAMENT_FRONTIER_RT001_V3":
         raise ValueError("V3 descriptive frontier is not PASS")
-    strict_false(frontier, "legacy_v2_finalizer_invoked", source="frontier")
-    strict_false(frontier, "candidate_evaluation_rows_materialized", source="frontier")
-    strict_false(frontier, "recommendation_materialized", source="frontier")
-    strict_false(frontier, "primary_selection_authorised", source="frontier")
-    strict_false(frontier, "runner_up_selection_authorised", source="frontier")
-    if int(frontier.get("input_context_count", -1)) != int(cfg["expected_plan_context_count"]):
-        raise ValueError("frontier context count mismatch")
+    for field in ("legacy_v2_finalizer_invoked", "candidate_evaluation_rows_materialized", "recommendation_materialized", "primary_selection_authorised", "runner_up_selection_authorised"):
+        require_bool(f, field, False, "frontier")
+    if int(f.get("input_context_count", -1)) != n_contexts:
+        raise ValueError("frontier context universe changed")
 
-    stage_f = sources["stage_f"]
-    if stage_f.get("status") != "PASS_PHASE2_STAGE_F_ENGINEERING_ROBUSTNESS_RT001_V3":
-        raise ValueError("Stage F engineering robustness is not PASS")
-    if stage_f.get("contract") != "PHASE2_STAGE_F_DETERMINISTIC_ENGINEERING_SENSITIVITY_RT001_V3":
+    sf = s["stage_f"]
+    if sf.get("status") != "PASS_PHASE2_STAGE_F_ENGINEERING_SENSITIVITY_RT001_V3":
+        raise ValueError("Stage F engineering sensitivity is not certified PASS")
+    if sf.get("contract") != "PHASE2_STAGE_F_CERTIFIED_ENGINEERING_SENSITIVITY_RT001_V3":
         raise ValueError("unexpected Stage F contract")
-    strict_true(stage_f, "validation_pass", source="Stage F")
-    strict_true(stage_f, "full_stage_f_surface_materialized", source="Stage F")
-    strict_true(stage_f, "stage_f_blocker_closed_for_engineering_sensitivity", source="Stage F")
-    strict_true(stage_f, "runtime_decrease_sensitivity_materialized", source="Stage F")
-    strict_true(stage_f, "dwell_sensitivity_materialized", source="Stage F")
-    strict_true(stage_f, "nonzero_rail_shift_sensitivity_materialized", source="Stage F")
-    strict_false(stage_f, "assumption_sensitivity_is_empirical_probability", source="Stage F")
-    strict_false(stage_f, "connection_retention_is_probability", source="Stage F")
-    strict_false(stage_f, "passenger_weighting_applied", source="Stage F")
-    strict_false(stage_f, "municipal_od_downscaled", source="Stage F")
-    strict_false(stage_f, "final_selection_authorized", source="Stage F")
-    if int(stage_f.get("timetable_count", -1)) != 6000:
-        raise ValueError("Stage F does not cover all 6,000 exact timetables")
+    if sf.get("runtime_multiplier") != [0.9, 1.0, 1.1]:
+        raise ValueError("Stage F runtime grid changed")
+    if sf.get("dwell_per_nonhub_public_stop_occurrence_min") != [0.0, 0.5, 1.0]:
+        raise ValueError("Stage F dwell grid changed")
+    if sf.get("rail_event_clock_shift_min") != [-5.0, 0.0, 5.0]:
+        raise ValueError("Stage F rail-shift grid changed")
+    if sf.get("recovery_minutes") != [5, 10, 15] or int(sf.get("stress_case_count_per_timetable", -1)) != 81:
+        raise ValueError("Stage F sensitivity grid is incomplete")
+    if int(sf.get("selected_exact_timetable_count", -1)) != 6000 or int(sf.get("represented_plan_context_count", -1)) != n_contexts:
+        raise ValueError("Stage F universe changed")
+    require_bool(sf, "planned_connection_identity_preserved", True, "Stage F")
+    for field in (
+        "sensitivity_is_empirical_probability", "missed_connection_probability_inferred", "passenger_route_weights_inferred",
+        "municipal_od_downscaled", "full_gjt_calculated", "next_target_rebinding_used_as_success",
+        "technical_return_used_as_passenger_service", "final_selection_authorized", "primary_selected", "runner_up_selected",
+        "weighted_composite_score",
+    ):
+        require_bool(sf, field, False, "Stage F")
 
-    baseline = sources["current_baseline"]
-    if baseline.get("overall_status") != "PASS_CURRENT_SERVICE_ACCESS_BASELINE_V3":
-        raise ValueError("current-service baseline V3 is not PASS")
-    if baseline.get("contract") != "PHASE2_CURRENT_SERVICE_CERTIFIED_LOCALIZABLE_ACCESS_LOWER_BOUND_V3":
-        raise ValueError("unexpected current-service baseline V3 contract")
-    strict_false(baseline, "baseline_complete", source="current baseline")
-    strict_false(baseline, "may_infer_true_current_total_coverage", source="current baseline")
-    governance = baseline.get("comparison_governance", {})
-    if not isinstance(governance, dict):
-        raise ValueError("current-service comparison governance missing")
-    strict_false(governance, "true_current_total_coverage_available", source="current baseline governance")
-    strict_false(governance, "candidate_vs_current_fair_ordering_possible", source="current baseline governance")
-    strict_false(governance, "no_regression_decision_authorized", source="current baseline governance")
-    if int(baseline.get("localized_rows", -1)) != 12 or int(baseline.get("unresolved_rows", -1)) != 39:
-        raise ValueError("current-service localization counts changed; closure gate requires review")
+    b = s["current_baseline"]
+    if b.get("status") != "PASS_CURRENT_SERVICE_ACCESS_LOWER_BOUND_V3":
+        raise ValueError("current-service baseline V3 is not certified PASS")
+    if b.get("contract") != "PHASE2_CURRENT_SERVICE_CERTIFIED_LOCALIZABLE_ACCESS_LOWER_BOUND_V3":
+        raise ValueError("unexpected current-service baseline contract")
+    if b.get("baseline_role") != "CERTIFIED_LOCALIZABLE_LOWER_BOUND_ONLY":
+        raise ValueError("current-service lower-bound semantics changed")
+    require_bool(b, "baseline_complete", False, "current-service baseline")
+    require_bool(b, "may_infer_true_current_total_coverage", False, "current-service baseline")
+    if int(b.get("target_pdf_stop_rows", -1)) != 51 or int(b.get("localized_rows", -1)) != 15 or int(b.get("unresolved_or_unlocalized_rows", -1)) != 36:
+        raise ValueError("current-service V3 localization counts changed")
+    expected_safeguard = "CANDIDATE_MAY_BE_REJECTED_ONLY_FOR_REGRESSION_BELOW_PROVEN_LOCALIZABLE_CURRENT_LOWER_BOUND; UNRESOLVED_CURRENT_STOPS_CANNOT_PROMOTE_OR_REJECT"
+    if b.get("non_regression_safeguard_semantics") != expected_safeguard:
+        raise ValueError("current-service non-regression safeguard semantics changed")
 
-    old_new = sources["old_vs_new"]
-    if old_new.get("contract") != "PHASE2_SEMANTIC_OLD_VS_RT001_STAGE_E_ROBUSTNESS_AUDIT_V1":
-        raise ValueError("unexpected Stage E old-vs-new audit contract")
-    if old_new.get("failure_reasons") != []:
-        raise ValueError("Stage E old-vs-new audit reports failures")
-    strict_true(old_new, "deterministic_rebuild", source="old-vs-new")
-    strict_false(old_new, "bus_runtime_engineering_stress_is_empirical_probability", source="old-vs-new")
-    if int(old_new.get("block_unexplained_comparable_mismatch_count", -1)) != 0:
-        raise ValueError("unexplained comparable block mismatch remains")
-    if int(old_new.get("surface_unexplained_comparable_mismatch_count", -1)) != 0:
-        raise ValueError("unexplained comparable robustness mismatch remains")
+    ovn = s["old_vs_new"]
+    if ovn.get("contract") != "PHASE2_SEMANTIC_OLD_VS_RT001_STAGE_E_ROBUSTNESS_AUDIT_V1":
+        raise ValueError("unexpected old-vs-new Stage E audit contract")
+    if ovn.get("failure_reasons") != []:
+        raise ValueError("old-vs-new Stage E audit reports failure")
+    require_bool(ovn, "deterministic_rebuild", True, "old-vs-new")
+    require_bool(ovn, "bus_runtime_engineering_stress_is_empirical_probability", False, "old-vs-new")
+    if int(ovn.get("block_unexplained_comparable_mismatch_count", -1)) != 0 or int(ovn.get("surface_unexplained_comparable_mismatch_count", -1)) != 0:
+        raise ValueError("unexplained old-vs-new comparable mismatch remains")
+    return s
 
-    return sources
+
+def row(rid: str, requirement: str, source: str, semantics: str, global_state: str,
+        legacy_state: str, v3_state: str, notes: str, human: bool = False) -> dict[str, object]:
+    values = (global_state, legacy_state, v3_state)
+    if any(value not in ALLOWED_STATES for value in values):
+        raise ValueError(f"invalid blocker state for {rid}")
+    return {
+        "requirement_id": rid,
+        "requirement": requirement,
+        "certified_source": source,
+        "certified_evidence_semantics": semantics,
+        "global_state": global_state,
+        "legacy_v2_state": legacy_state,
+        "v3_deterministic_state": v3_state,
+        "engineering_work_authorized_now": "false",
+        "human_action_required": str(human).lower(),
+        "notes": notes,
+    }
 
 
 def matrix_rows() -> list[dict[str, object]]:
     rows = [
-        {
-            "requirement_id": "EVID-001",
-            "requirement": "RT001 lossless exact timetable lineage and independent Stage-D convergence",
-            "certified_source": "Stage E RT001 V3 + Stage-D cross-audit lineage",
-            "certified_evidence_semantics": "6,000 exact timetables over 16,495 exact-budget contexts with cross-implementation audit PASS",
-            "global_state": "CLOSED",
-            "legacy_v2_state": "CLOSED",
-            "v3_deterministic_state": "CLOSED",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "No further Stage-D rebuild is required unless a certified lineage contradiction appears.",
-        },
-        {
-            "requirement_id": "EVID-002",
-            "requirement": "Final-lineage Stage E planned-connection and vehicle-block robustness",
-            "certified_source": "Stage E RT001 V3",
-            "certified_evidence_semantics": "Deterministic engineering robustness with frozen planned targets; not empirical probability",
-            "global_state": "CLOSED",
-            "legacy_v2_state": "CLOSED",
-            "v3_deterministic_state": "CLOSED",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "Stage E must not be reinterpreted as a delay-probability model.",
-        },
-        {
-            "requirement_id": "EVID-003",
-            "requirement": "Legacy-vs-RT001 Stage E semantic regression audit",
-            "certified_source": "A Stage E OLD-vs-NEW audit",
-            "certified_evidence_semantics": "Comparable differences fully attributed; zero unexplained comparable robustness or block mismatches",
-            "global_state": "CLOSED",
-            "legacy_v2_state": "CLOSED",
-            "v3_deterministic_state": "CLOSED",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "Out-of-span passenger-return correction is certified and does not require another rerun.",
-        },
-        {
-            "requirement_id": "EVID-004",
-            "requirement": "Tournament-readiness semantics and non-decisional Pareto safety",
-            "certified_source": "Codex readiness/contract audit + A red-team",
-            "certified_evidence_semantics": "No fabricated GJT/probability; Pareto membership is descriptive and cannot authorize pruning",
-            "global_state": "CLOSED",
-            "legacy_v2_state": "CLOSED",
-            "v3_deterministic_state": "CLOSED",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "All 16,495 contexts remain preserved until a separately authorized final decision.",
-        },
-        {
-            "requirement_id": "EVID-005",
-            "requirement": "Stage F deterministic engineering sensitivity surface",
-            "certified_source": "Stage F Engineering Robustness RT001 V3",
-            "certified_evidence_semantics": "81-case deterministic sensitivity over runtime 0.9/1.0/1.1, dwell 0/0.5/1.0, rail shift -5/0/+5 and certified transfer profiles; block surface with recovery 5/10/15",
-            "global_state": "CLOSED",
-            "legacy_v2_state": "CLOSED",
-            "v3_deterministic_state": "CLOSED",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "This closes the engineering-sensitivity sub-blocker only; it does not create passenger probabilities or demand weights.",
-        },
-        {
-            "requirement_id": "EVID-006",
-            "requirement": "Certified current-service localisable access reference",
-            "certified_source": "Current Service Access Baseline V3",
-            "certified_evidence_semantics": "12/51 rows localized, 39 unresolved; certified access lower bound only",
-            "global_state": "CLOSED_WITH_CERTIFIED_BOUND",
-            "legacy_v2_state": "CLOSED_WITH_CERTIFIED_BOUND",
-            "v3_deterministic_state": "CLOSED_WITH_CERTIFIED_BOUND",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "The lower-bound artifact is complete as a lower bound. It must never be relabeled as complete current service.",
-        },
-        {
-            "requirement_id": "DATA-001",
-            "requirement": "Complete current-service non-regression / fair candidate-vs-current ordering",
-            "certified_source": "Current Service Access Baseline V3 comparison governance",
-            "certified_evidence_semantics": "True current total coverage and complete no-regression ordering are unavailable",
-            "global_state": "OPEN_DATA_EVIDENCE",
-            "legacy_v2_state": "OPEN_DATA_EVIDENCE",
-            "v3_deterministic_state": "NOT_REQUIRED_UNDER_V3_CONTRACT",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "V3 may proceed only if its human-selected semantics explicitly retain the current-service evidence as a labelled lower bound rather than claiming true non-regression.",
-        },
-        {
-            "requirement_id": "DATA-002",
-            "requirement": "Full candidate-level demand-weighted GJT improvement",
-            "certified_source": "Final Tournament Readiness RT001 V3 + legacy contract audit",
-            "certified_evidence_semantics": "full_demand_weighted_gjt_available=false; municipal OD has no authorized route/passenger spatial allocation",
-            "global_state": "OPEN_DATA_EVIDENCE",
-            "legacy_v2_state": "OPEN_DATA_EVIDENCE",
-            "v3_deterministic_state": "NOT_REQUIRED_UNDER_V3_CONTRACT",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "Do not create a point GJT estimate or route-level demand by proxy. A future certified evidence/model contract could reopen this gate.",
-        },
-        {
-            "requirement_id": "DATA-003",
-            "requirement": "Empirical missed-connection probability",
-            "certified_source": "Stage E/Stage F + Final Tournament Readiness RT001 V3",
-            "certified_evidence_semantics": "Deterministic engineering retention exists; empirical missed-connection probability does not",
-            "global_state": "OPEN_DATA_EVIDENCE",
-            "legacy_v2_state": "OPEN_DATA_EVIDENCE",
-            "v3_deterministic_state": "NOT_REQUIRED_UNDER_V3_CONTRACT",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "Engineering stress must remain deterministic evidence and must not be assigned empirical probability mass.",
-        },
-        {
-            "requirement_id": "DATA-004",
-            "requirement": "Route-level demand-weight perturbation sensitivity",
-            "certified_source": "Final Tournament Readiness RT001 V3",
-            "certified_evidence_semantics": "No authorized route-level demand attribution exists from municipal OD",
-            "global_state": "OPEN_DATA_EVIDENCE",
-            "legacy_v2_state": "OPEN_DATA_EVIDENCE",
-            "v3_deterministic_state": "NOT_REQUIRED_UNDER_V3_CONTRACT",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "The Stage F engineering surface is complete without inventing demand perturbations; this remains a legacy/full-passenger-evaluation evidence gap.",
-        },
-        {
-            "requirement_id": "HUMAN-001",
-            "requirement": "Select final decision semantics pathway",
-            "certified_source": "This closure-gate contract",
-            "certified_evidence_semantics": "Choose either wait for legacy full-evidence semantics or explicitly authorize V3 certified-metrics deterministic-robustness semantics",
-            "global_state": "HUMAN_DECISION_REQUIRED",
-            "legacy_v2_state": "HUMAN_DECISION_REQUIRED",
-            "v3_deterministic_state": "HUMAN_DECISION_REQUIRED",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "true",
-            "notes": "Selecting V3 means accepting that the recommendation will not claim full demand-weighted GJT, empirical missed-connection probability or complete-current-service non-regression.",
-        },
-        {
-            "requirement_id": "HUMAN-002",
-            "requirement": "Select decision annual bus-km envelope",
-            "certified_source": "Six exact materialized budget envelopes",
-            "certified_evidence_semantics": "Normative caller choice; no implicit largest/default budget is authorized",
-            "global_state": "HUMAN_DECISION_REQUIRED",
-            "legacy_v2_state": "HUMAN_DECISION_REQUIRED",
-            "v3_deterministic_state": "HUMAN_DECISION_REQUIRED",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "true",
-            "notes": "Must match one of the six certified exact annual bus-km envelopes.",
-        },
-        {
-            "requirement_id": "HUMAN-003",
-            "requirement": "Select uncertainty band semantics/value if retained in final Decision Contract",
-            "certified_source": "Decision Contract boundary",
-            "certified_evidence_semantics": "Caller-declared finite non-negative policy input; no default authorized",
-            "global_state": "HUMAN_DECISION_REQUIRED",
-            "legacy_v2_state": "HUMAN_DECISION_REQUIRED",
-            "v3_deterministic_state": "HUMAN_DECISION_REQUIRED",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "true",
-            "notes": "The gate does not choose or infer a tolerance.",
-        },
-        {
-            "requirement_id": "HUMAN-004",
-            "requirement": "Specify a normative no-weight decision rule over the V3 trade-off set",
-            "certified_source": "V3 non-decisional Pareto contract",
-            "certified_evidence_semantics": "Pareto non-dominance exposes trade-offs but does not rank, shortlist or recommend",
-            "global_state": "HUMAN_DECISION_REQUIRED",
-            "legacy_v2_state": "NOT_REQUIRED_UNDER_V3_CONTRACT",
-            "v3_deterministic_state": "HUMAN_DECISION_REQUIRED",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "true",
-            "notes": "This can be an explicit lexicographic/policy rule; the implementation must not invent hidden weights.",
-        },
-        {
-            "requirement_id": "NREQ-001",
-            "requirement": "Pre-select one recovery value before final network decision",
-            "certified_source": "Stage E/Stage F sensitivity semantics",
-            "certified_evidence_semantics": "Recovery 5/10/15 is an engineering sensitivity dimension and is intentionally not selected",
-            "global_state": "NOT_REQUIRED_UNDER_V3_CONTRACT",
-            "legacy_v2_state": "NOT_REQUIRED_UNDER_V3_CONTRACT",
-            "v3_deterministic_state": "NOT_REQUIRED_UNDER_V3_CONTRACT",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "Recovery may be chosen later as an operational implementation parameter; it is not a prerequisite for comparing network evidence.",
-        },
-        {
-            "requirement_id": "NREQ-002",
-            "requirement": "Prune the 4,211 descriptive Pareto-nonfrontier contexts",
-            "certified_source": "A Codex Tournament Readiness Red-Team",
-            "certified_evidence_semantics": "nonfrontier_pruning_authorized=false; lower-bound axes do not establish latent true-system dominance",
-            "global_state": "NOT_REQUIRED_UNDER_V3_CONTRACT",
-            "legacy_v2_state": "NOT_REQUIRED_UNDER_V3_CONTRACT",
-            "v3_deterministic_state": "NOT_REQUIRED_UNDER_V3_CONTRACT",
-            "engineering_work_authorized_now": "false",
-            "human_action_required": "false",
-            "notes": "Preserve all 16,495 contexts until a separately certified final decision contract authorizes elimination.",
-        },
+        row("EVID-001", "RT001 lossless exact timetable lineage and independent Stage-D convergence",
+            "Stage E RT001 V3 + Stage-D cross-audit lineage",
+            "6,000 exact timetables over 16,495 exact-budget contexts with cross-implementation audit PASS",
+            "CLOSED", "CLOSED", "CLOSED",
+            "No further Stage-D rebuild is required unless a certified lineage contradiction appears."),
+        row("EVID-002", "Final-lineage Stage E planned-connection and vehicle-block robustness",
+            "Stage E RT001 V3", "Deterministic engineering robustness with frozen planned targets; not empirical probability",
+            "CLOSED", "CLOSED", "CLOSED", "Do not reinterpret Stage E as a probability model."),
+        row("EVID-003", "Legacy-vs-RT001 Stage E semantic regression audit", "A Stage E OLD-vs-NEW audit",
+            "Zero unexplained comparable robustness or block mismatches; out-of-span correction explicitly isolated",
+            "CLOSED", "CLOSED", "CLOSED", "The corrected passenger-return rule does not require another rerun."),
+        row("EVID-004", "Tournament-readiness semantics and non-decisional Pareto safety",
+            "Codex readiness/contract audit + A red-team",
+            "No fabricated GJT/probability; descriptive Pareto membership cannot authorize pruning",
+            "CLOSED", "CLOSED", "CLOSED", "All 16,495 contexts remain preserved until a separately authorized final decision."),
+        row("EVID-005", "Stage F deterministic engineering sensitivity surface", "Stage F Engineering Sensitivity RT001 V3",
+            "81 deterministic cases per exact timetable over runtime 0.9/1.0/1.1, dwell 0/0.5/1.0 and rail shift -5/0/+5; recovery 5/10/15 block sensitivity",
+            "CLOSED", "CLOSED", "CLOSED", "Closes engineering sensitivity only; it creates neither passenger probabilities nor demand weights."),
+        row("EVID-006", "Certified current-service localisable access reference", "Current Service Access Baseline V3",
+            "15/51 official D184/D185 rows localized, 36 unresolved; certified localisable access lower bound only",
+            "CLOSED_WITH_CERTIFIED_BOUND", "CLOSED_WITH_CERTIFIED_BOUND", "CLOSED_WITH_CERTIFIED_BOUND",
+            "The artifact is complete as a certified lower bound and must never be relabeled as complete current service."),
+        row("DATA-001", "Complete current-service non-regression / fair candidate-vs-current ordering", "Current Service Access Baseline V3",
+            "True total current coverage remains unknown; unresolved current stops cannot promote or reject candidates",
+            "OPEN_DATA_EVIDENCE", "OPEN_DATA_EVIDENCE", "NOT_REQUIRED_UNDER_V3_CONTRACT",
+            "A V3 decision may proceed only if the selected semantics keep current-service evidence explicitly lower-bound and make no true non-regression claim."),
+        row("DATA-002", "Full candidate-level demand-weighted GJT improvement", "Certified tournament readiness + legacy contract audit",
+            "full_demand_weighted_gjt_available=false; municipal OD has no authorized route/passenger spatial allocation",
+            "OPEN_DATA_EVIDENCE", "OPEN_DATA_EVIDENCE", "NOT_REQUIRED_UNDER_V3_CONTRACT",
+            "Do not create a point GJT estimate or route-level demand by proxy."),
+        row("DATA-003", "Empirical missed-connection probability", "Stage E/Stage F + certified tournament readiness",
+            "Deterministic engineering retention exists; an empirical missed-connection probability does not",
+            "OPEN_DATA_EVIDENCE", "OPEN_DATA_EVIDENCE", "NOT_REQUIRED_UNDER_V3_CONTRACT",
+            "Do not assign empirical probability mass to engineering stress cases."),
+        row("DATA-004", "Route-level demand-weight perturbation sensitivity", "Stage F certified limitations + tournament readiness",
+            "No authorized route-level demand attribution exists from municipal OD",
+            "OPEN_DATA_EVIDENCE", "OPEN_DATA_EVIDENCE", "NOT_REQUIRED_UNDER_V3_CONTRACT",
+            "Stage F engineering sensitivity is complete without inventing demand perturbations."),
+        row("HUMAN-001", "Select final decision semantics pathway", "This closure-gate contract",
+            "Choose legacy full-evidence semantics or explicitly authorize V3 certified-metrics deterministic-robustness semantics",
+            "HUMAN_DECISION_REQUIRED", "HUMAN_DECISION_REQUIRED", "HUMAN_DECISION_REQUIRED",
+            "Selecting V3 accepts that the recommendation will not claim full demand-weighted GJT, empirical missed probability or complete-current-service non-regression.", True),
+        row("HUMAN-002", "Select decision annual bus-km envelope", "Six exact materialized budget envelopes",
+            "Normative caller choice; no implicit largest/default budget is authorized",
+            "HUMAN_DECISION_REQUIRED", "HUMAN_DECISION_REQUIRED", "HUMAN_DECISION_REQUIRED",
+            "Must match one of the six certified exact annual bus-km envelopes.", True),
+        row("HUMAN-003", "Select uncertainty-band semantics/value if retained in the final Decision Contract", "Decision Contract boundary",
+            "Caller-declared finite non-negative policy input; no default authorized",
+            "HUMAN_DECISION_REQUIRED", "HUMAN_DECISION_REQUIRED", "HUMAN_DECISION_REQUIRED",
+            "The gate does not choose or infer a tolerance.", True),
+        row("HUMAN-004", "Specify a normative no-weight decision rule over the V3 trade-off set", "V3 non-decisional Pareto contract",
+            "Pareto non-dominance exposes trade-offs but does not rank, shortlist or recommend",
+            "HUMAN_DECISION_REQUIRED", "NOT_REQUIRED_UNDER_V3_CONTRACT", "HUMAN_DECISION_REQUIRED",
+            "If V3 is chosen, supply an explicit policy/lexicographic rule; implementation must not invent hidden weights.", True),
+        row("NREQ-001", "Pre-select one recovery value before final network decision", "Stage E/Stage F sensitivity semantics",
+            "Recovery 5/10/15 is an engineering sensitivity dimension and is intentionally not selected",
+            "NOT_REQUIRED_UNDER_V3_CONTRACT", "NOT_REQUIRED_UNDER_V3_CONTRACT", "NOT_REQUIRED_UNDER_V3_CONTRACT",
+            "Recovery may be chosen later as an operational implementation parameter."),
+        row("NREQ-002", "Prune the 4,211 descriptive Pareto-nonfrontier contexts", "A Codex Tournament Readiness Red-Team",
+            "nonfrontier_pruning_authorized=false; lower-bound axes do not establish latent true-system dominance",
+            "NOT_REQUIRED_UNDER_V3_CONTRACT", "NOT_REQUIRED_UNDER_V3_CONTRACT", "NOT_REQUIRED_UNDER_V3_CONTRACT",
+            "Preserve all 16,495 contexts until a separately certified final decision contract authorizes elimination."),
     ]
-    rows.sort(key=lambda row: str(row["requirement_id"]))
-    for row in rows:
-        for field in ("global_state", "legacy_v2_state", "v3_deterministic_state"):
-            if row[field] not in ALLOWED_STATES:
-                raise ValueError(f"invalid blocker state {row[field]} for {row['requirement_id']}")
-    return rows
+    return sorted(rows, key=lambda item: str(item["requirement_id"]))
 
 
 def pathway_rows(rows: list[dict[str, object]], cfg: Mapping[str, object]) -> list[dict[str, object]]:
-    indexed = {str(row["requirement_id"]): row for row in rows}
-    legacy_open = [row for row in rows if row["legacy_v2_state"] == "OPEN_DATA_EVIDENCE"]
-    v3_open = [row for row in rows if row["v3_deterministic_state"] == "OPEN_DATA_EVIDENCE"]
-    legacy_human = [
-        indexed["HUMAN-002"],
-        indexed["HUMAN-003"],
-    ]
-    v3_human = [
-        indexed["HUMAN-002"],
-        indexed["HUMAN-003"],
-        indexed["HUMAN-004"],
-    ]
-    result = [
+    legacy_open = sum(r["legacy_v2_state"] == "OPEN_DATA_EVIDENCE" for r in rows)
+    v3_open = sum(r["v3_deterministic_state"] == "OPEN_DATA_EVIDENCE" for r in rows)
+    return [
         {
-            "pathway_id": cfg["legacy_v2_pathway_id"],
-            "pathway_selected": "false",
-            "technical_open_data_requirement_count": len(legacy_open),
-            "human_decision_requirement_count_after_pathway_selection": len(legacy_human),
-            "not_required_requirement_count": sum(row["legacy_v2_state"] == "NOT_REQUIRED_UNDER_V3_CONTRACT" for row in rows),
-            "can_materialize_final_decision_now": "false",
-            "full_demand_weighted_gjt_required": "true",
-            "empirical_missed_connection_probability_required": "true",
-            "complete_current_service_nonregression_required": "true",
+            "pathway_id": cfg["legacy_v2_pathway_id"], "pathway_selected": "false",
+            "technical_open_data_requirement_count": legacy_open,
+            "human_decision_requirement_count_after_pathway_selection": 2,
+            "not_required_requirement_count": sum(r["legacy_v2_state"] == "NOT_REQUIRED_UNDER_V3_CONTRACT" for r in rows),
+            "can_materialize_final_decision_now": "false", "full_demand_weighted_gjt_required": "true",
+            "empirical_missed_connection_probability_required": "true", "complete_current_service_nonregression_required": "true",
             "route_level_demand_weight_sensitivity_required": "true",
-            "decision_semantics": "Retain legacy evaluated-candidate semantics; wait for the missing certified passenger/reliability/current-service evidence before final selection.",
+            "decision_semantics": "Retain legacy evaluated-candidate semantics; wait for missing passenger, reliability, demand-sensitivity and complete-current-service evidence, then supply budget and uncertainty band.",
         },
         {
-            "pathway_id": cfg["v3_candidate_pathway_id"],
-            "pathway_selected": "false",
-            "technical_open_data_requirement_count": len(v3_open),
-            "human_decision_requirement_count_after_pathway_selection": len(v3_human),
-            "not_required_requirement_count": sum(row["v3_deterministic_state"] == "NOT_REQUIRED_UNDER_V3_CONTRACT" for row in rows),
-            "can_materialize_final_decision_now": "false",
-            "full_demand_weighted_gjt_required": "false",
-            "empirical_missed_connection_probability_required": "false",
-            "complete_current_service_nonregression_required": "false",
+            "pathway_id": cfg["v3_candidate_pathway_id"], "pathway_selected": "false",
+            "technical_open_data_requirement_count": v3_open,
+            "human_decision_requirement_count_after_pathway_selection": 3,
+            "not_required_requirement_count": sum(r["v3_deterministic_state"] == "NOT_REQUIRED_UNDER_V3_CONTRACT" for r in rows),
+            "can_materialize_final_decision_now": "false", "full_demand_weighted_gjt_required": "false",
+            "empirical_missed_connection_probability_required": "false", "complete_current_service_nonregression_required": "false",
             "route_level_demand_weight_sensitivity_required": "false",
-            "decision_semantics": "Use only certified V3 accessibility, exact production, deterministic connection/block robustness, field-uncertainty and explicitly labelled current-service lower-bound evidence; make no claims of unavailable passenger GJT, empirical reliability or complete-current-service non-regression.",
+            "decision_semantics": "Use only certified V3 accessibility, exact production, deterministic connection/block robustness, field uncertainty and explicitly labelled current-service lower-bound evidence; make no unavailable GJT, probability or true-current non-regression claim.",
         },
     ]
-    return result
 
 
 def build(args: argparse.Namespace) -> dict[str, object]:
     cfg = read_json(args.config)
-    if cfg.get("contract") != CONTRACT:
-        raise ValueError("unexpected closure-gate contract")
-    if set(cfg.get("allowed_states", [])) != ALLOWED_STATES:
-        raise ValueError("allowed blocker-state universe changed")
+    if cfg.get("contract") != CONTRACT or set(cfg.get("allowed_states", [])) != ALLOWED_STATES:
+        raise ValueError("closure-gate contract/state universe changed")
     if cfg.get("preserve_all_plan_contexts_until_final_decision") is not True:
-        raise ValueError("closure gate must preserve all contexts")
-    new_policy = cfg.get("new_blocker_creation_policy", {})
-    if new_policy.get("blocker_universe_closed") is not True or new_policy.get("new_blocker_creation_authorized") is not False:
+        raise ValueError("closure gate must preserve all plan contexts")
+    policy = cfg.get("new_blocker_creation_policy", {})
+    if policy.get("blocker_universe_closed") is not True or policy.get("new_blocker_creation_authorized") is not False:
         raise ValueError("new-blocker freeze policy changed")
+    validate_sources(args, cfg)
 
-    sources = validate_sources(args, cfg)
     rows = matrix_rows()
     pathways = pathway_rows(rows, cfg)
-
-    output_dir = args.output_dir
-    output_dir.mkdir(parents=True, exist_ok=True)
-    matrix_path = output_dir / "final_decision_blocker_matrix_v3.csv"
-    pathway_path = output_dir / "final_decision_pathway_summary_v3.csv"
-    validation_path = output_dir / "final_decision_sufficiency_gate_v3_validation.json"
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    matrix_path = args.output_dir / "final_decision_blocker_matrix_v3.csv"
+    pathway_path = args.output_dir / "final_decision_pathway_summary_v3.csv"
+    validation_path = args.output_dir / "final_decision_sufficiency_gate_v3_validation.json"
     write_csv(matrix_path, MATRIX_FIELDS, rows)
     write_csv(pathway_path, PATHWAY_FIELDS, pathways)
 
-    global_counts = Counter(str(row["global_state"]) for row in rows)
-    legacy_counts = Counter(str(row["legacy_v2_state"]) for row in rows)
-    v3_counts = Counter(str(row["v3_deterministic_state"]) for row in rows)
+    global_counts = Counter(str(r["global_state"]) for r in rows)
+    legacy_counts = Counter(str(r["legacy_v2_state"]) for r in rows)
+    v3_counts = Counter(str(r["v3_deterministic_state"]) for r in rows)
     external = cfg["external_sources"]
-    result: dict[str, object] = {
+    result = {
         "status": STATUS,
         "contract": CONTRACT,
         "audit_pass": True,
         "blocker_universe_closed": True,
         "new_blocker_creation_authorized": False,
         "new_blocker_creation_requires_gate_reopen": True,
-        "new_blocker_creation_allowed_reasons": new_policy["gate_reopen_allowed_only_for"],
+        "new_blocker_creation_allowed_reasons": policy["gate_reopen_allowed_only_for"],
         "legacy_field_absence_alone_may_create_new_blocker": False,
         "descriptive_pareto_nonmembership_may_create_new_blocker": False,
         "preserve_all_plan_contexts": True,
@@ -506,6 +341,8 @@ def build(args: argparse.Namespace) -> dict[str, object]:
         "stage_f_engineering_sensitivity_closed": True,
         "stage_f_empirical_reliability_created": False,
         "current_service_baseline_state": "CLOSED_WITH_CERTIFIED_BOUND",
+        "current_service_localized_rows": 15,
+        "current_service_unresolved_rows": 36,
         "current_service_complete_nonregression_available": False,
         "full_demand_weighted_gjt_available": False,
         "empirical_missed_connection_probability_available": False,
@@ -514,19 +351,14 @@ def build(args: argparse.Namespace) -> dict[str, object]:
         "global_state_counts": dict(sorted(global_counts.items())),
         "legacy_v2_state_counts": dict(sorted(legacy_counts.items())),
         "v3_deterministic_state_counts": dict(sorted(v3_counts.items())),
-        "legacy_v2_technical_open_data_requirement_count": sum(row["legacy_v2_state"] == "OPEN_DATA_EVIDENCE" for row in rows),
-        "v3_deterministic_technical_open_data_requirement_count": sum(row["v3_deterministic_state"] == "OPEN_DATA_EVIDENCE" for row in rows),
-        "human_decision_requirement_ids_before_final_selection": [
-            "HUMAN-001",
-            "HUMAN-002",
-            "HUMAN-003",
-            "HUMAN-004_IF_V3_SELECTED"
-        ],
+        "legacy_v2_technical_open_data_requirement_count": sum(r["legacy_v2_state"] == "OPEN_DATA_EVIDENCE" for r in rows),
+        "v3_deterministic_technical_open_data_requirement_count": sum(r["v3_deterministic_state"] == "OPEN_DATA_EVIDENCE" for r in rows),
+        "human_decision_requirement_ids_before_final_selection": ["HUMAN-001", "HUMAN-002", "HUMAN-003", "HUMAN-004_IF_V3_SELECTED"],
         "finite_next_step_tree": {
             "step_1": "HUMAN_SELECT_FINAL_DECISION_SEMANTICS_PATHWAY",
             "if_legacy_v2": "WAIT_FOR_DATA_001_DATA_002_DATA_003_DATA_004_THEN_SUPPLY_BUDGET_AND_UNCERTAINTY_BAND",
             "if_v3_deterministic": "SUPPLY_BUDGET_UNCERTAINTY_BAND_AND_EXPLICIT_NO_WEIGHT_NORMATIVE_DECISION_RULE",
-            "no_other_engineering_task_authorized_by_this_gate": True
+            "no_other_engineering_task_authorized_by_this_gate": True,
         },
         "non_certified_gjt_identifiability_workstream_consumed": False,
         "non_certified_gjt_identifiability_workstream_reason": cfg["non_certified_informative_workstreams"]["gjt_identifiability_bounds_v3"]["reason"],
@@ -546,11 +378,7 @@ def build(args: argparse.Namespace) -> dict[str, object]:
             "blocker_matrix_sha256": sha256_path(matrix_path),
             "pathway_summary_sha256": sha256_path(pathway_path),
         },
-        "decision_boundary": (
-            "This gate closes the blocker-discovery phase, not the network decision. "
-            "No new engineering blocker is authorized unless the gate is reopened by a certified validation failure, "
-            "an explicit selected-contract requirement without a certified source, or a certified lineage contradiction."
-        ),
+        "decision_boundary": "This gate closes blocker discovery, not the network decision. New engineering blockers require a gate reopen caused by certified validation failure, an explicit selected-contract requirement without certified source, or a certified lineage contradiction.",
     }
     validation_path.write_text(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return result
@@ -572,8 +400,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
-    result = build(build_parser().parse_args())
-    print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
+    print(json.dumps(build(build_parser().parse_args()), ensure_ascii=False, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":
