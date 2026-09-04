@@ -1,0 +1,110 @@
+name: Phase 2 Stage-D Input Manifest RT001 V3
+
+on:
+  push:
+    branches: [phase2-rt001-budget-lossless-v2]
+    paths:
+      - 'scripts/phase2_build_stage_d_input_manifest_rt001_v3.py'
+      - '.github/workflows/phase2-stage-d-input-manifest-rt001-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env: {PYTHONPATH: .}
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Compile
+        run: python -m py_compile scripts/phase2_build_stage_d_input_manifest_v2.py scripts/phase2_build_stage_d_input_manifest_rt001_v3.py
+      - name: Build dynamic repaired manifest
+        run: |
+          mkdir -p outputs/phase2/stage_d_input_manifest_rt001_v3
+          python scripts/phase2_build_stage_d_input_manifest_rt001_v3.py \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3_validation.json \
+            --s8-opportunity outputs/phase2/s8_robust_opportunity_rt001_v3/passenger_plans_s8_opportunity_rt001_v3.csv.gz \
+            --s8-opportunity-validation outputs/phase2/s8_robust_opportunity_rt001_v3/s8_robust_opportunity_rt001_v3_validation.json \
+            --continuity-scenarios outputs/phase2/current_service_continuity_rt001_v3/scenario_current_service_continuity_rt001_v3.csv.gz \
+            --continuity-validation outputs/phase2/current_service_continuity_rt001_v3/current_service_continuity_rt001_v3_validation.json \
+            --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --timing-output outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_daily_timing_inputs_rt001_v3.csv.gz \
+            --route-output outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv \
+            --validation outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_input_manifest_rt001_v3_validation.json
+      - name: Validate manifest contract
+        run: |
+          python - <<'PY'
+          import csv,gzip,json
+          from pathlib import Path
+          root=Path('outputs/phase2/stage_d_input_manifest_rt001_v3')
+          v=json.loads((root/'stage_d_input_manifest_rt001_v3_validation.json').read_text())
+          assert v['status']=='PASS_PHASE2_STAGE_D_INPUT_MANIFEST_RT001_V3'
+          assert v['contract']=='PHASE2_LOSSLESS_DAILY_TIMING_INPUT_MANIFEST_RT001_V3'
+          assert v['rt001_repair'] is True
+          assert v['passenger_plan_context_count_represented']==16495
+          assert v['stage_d_daily_timing_input_count']==5325
+          assert v['candidate_count_dynamic_from_repaired_stage_c'] is True
+          assert v['historical_stage_d_input_count_assumed'] is False
+          assert v['historical_stage_c_plan_count_assumed'] is False
+          assert v['exact_budget_eligibility_repaired_upstream'] is True
+          assert v['daily_timing_context_deduplicated_losslessly'] is True
+          for k in ('cross_scenario_or_route_set_equivalence_assumed','route_set_signature_used_to_remove_inputs','naive_complexity_used_to_remove_inputs','phase_selected','exact_timetable_constructed','candidate_eliminated','decision_budget_selected','calendar_selected','recovery_selected','primary_selected','runner_up_selected','worker_reference_assigned_to_routes','municipal_od_downscaled','ridership_forecast','weighted_composite_score'):
+              assert v[k] is False,k
+          assert v['naive_joint_phase_vector_count_min']>0
+          assert v['naive_joint_phase_vector_count_max']<=3600
+          with gzip.open(root/'stage_d_daily_timing_inputs_rt001_v3.csv.gz','rt',encoding='utf-8',newline='') as f: rows=list(csv.DictReader(f))
+          assert len(rows)==v['stage_d_daily_timing_input_count']
+          assert len({r['stage_d_input_id'] for r in rows})==len(rows)
+          assert sum(int(r['represented_plan_count']) for r in rows)==16495
+          print(json.dumps({k:v[k] for k in ('stage_d_daily_timing_input_count','unique_stage_d_scenario_count','used_public_route_count','route_count_distribution','headway_distribution','naive_joint_phase_vector_count_sum','naive_joint_phase_vector_count_max')},indent=2,sort_keys=True))
+          PY
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/stage-d-rt001 && mkdir -p /tmp/stage-d-rt001
+          python scripts/phase2_build_stage_d_input_manifest_rt001_v3.py \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3_validation.json \
+            --s8-opportunity outputs/phase2/s8_robust_opportunity_rt001_v3/passenger_plans_s8_opportunity_rt001_v3.csv.gz \
+            --s8-opportunity-validation outputs/phase2/s8_robust_opportunity_rt001_v3/s8_robust_opportunity_rt001_v3_validation.json \
+            --continuity-scenarios outputs/phase2/current_service_continuity_rt001_v3/scenario_current_service_continuity_rt001_v3.csv.gz \
+            --continuity-validation outputs/phase2/current_service_continuity_rt001_v3/current_service_continuity_rt001_v3_validation.json \
+            --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --timing-output /tmp/stage-d-rt001/timing.csv.gz \
+            --route-output /tmp/stage-d-rt001/routes.csv \
+            --validation /tmp/stage-d-rt001/validation.json >/dev/null
+          cmp outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_daily_timing_inputs_rt001_v3.csv.gz /tmp/stage-d-rt001/timing.csv.gz
+          cmp outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv /tmp/stage-d-rt001/routes.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_input_manifest_rt001_v3_validation.json').read_text())
+          b=json.loads(Path('/tmp/stage-d-rt001/validation.json').read_text())
+          for x in (a,b):
+              x['lineage'].pop('timing_output',None); x['lineage'].pop('route_output',None)
+          assert a==b
+          PY
+      - name: Persist evidence
+        run: |
+          git config user.name 'phase2-stage-d-manifest-rt001-v3-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add outputs/phase2/stage_d_input_manifest_rt001_v3
+          if ! git diff --cached --quiet; then
+            git commit -m 'data(phase2): persist repaired Stage-D manifest [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-stage-d-input-manifest-rt001-v3-${{ github.sha }}
+          path: outputs/phase2/stage_d_input_manifest_rt001_v3
+          if-no-files-found: error
