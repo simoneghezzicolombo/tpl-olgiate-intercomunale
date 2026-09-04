@@ -4,47 +4,117 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 ## Stato corrente
 
-**Data:** 2026-09-03
-**Fase:** Phase 2 — service-design optimisation
-**Branch di integrazione:** `phase2-optimizer-core`
-**HEAD dopo integrazione screening:** `c79088c70c313e98600991c118da3f767654650b`
+**Data:** 2026-09-04  
+**Fase:** Phase 2 — final robustness / decision preparation  
+**Ultimo snapshot integrato pre-fix RT-001:** `phase2-robustness-final-v2` @ `864c83accb81c615f9778396408b21e31ca72983`  
+**Final selection:** **BLOCKED**  
+**PRIMARY selection authorised:** **false**  
+**RUNNER-UP selection authorised:** **false**
+
+### Governance
+
+- La GitHub Issue #1 `Agent Coordination Bus` resta il bus di coordinamento operativo.
+- `COLLABORATION_PROTOCOL.md` è il documento di collaborazione esistente.
+- `AGENT_PROTOCOL.md` **non risulta essere mai esistito nella lineage auditata**. Non viene creato retroattivamente e nessuna run precedente viene dichiarata dipendente da quel file.
+- Le evidenze computazionali devono essere identificate tramite branch/commit, validation contract e SHA256, non tramite copie narrative di conteggi.
 
 ### Gate A–F
 
-A, B, C, D, E e F: **PASS**. Gate F finale: `e84c409ffdbcd0313c93d248496862b5c5356663`.
+A, B, C, D, E e F restano **PASS** nei rispettivi contratti storici. Phase 2 è un programma successivo e i blocker attuali non retroagiscono sui Gate A–F.
 
-### Phase 2 — evidenze validate e integrate
+## Phase 2 — stato della lineage
 
-- **ISTAT 2021 work OD / demand profile:** PASS, SHA `1b9b3d359be48bf58e592e0698702f58e7559e19`; 8.754 resident workers. Work OD resta una sola componente della domanda.
-- **Frozen Gate D graph:** PASS, branch `phase2-graph-freeze`, final HEAD `892c6906168fd658a4733a5b31a7fa3e7ed49207`, CI `33770304214`; 104.071 nodi, 199.217 archi diretti, epoca OSM congelata e routing restriction-aware.
-- **Candidate-stop universe V1:** PASS, branch `phase2-stop-universe`, final HEAD `07091300259491c2c9915b41c819af336f89d34a`, CI `33771932566`; 43 cluster fisici esistenti, 180 candidate proposed stops, tutte `PROPOSED_STOP/FIELD_CHECK_PENDING`. Resta un benchmark V1 da rigenerare dopo il layer building-population.
-- **Analysis envelope V2:** PASS, branch `phase2-analysis-envelope`, validated computational commit `8a4608a60ecb367535814d965822e7502ae31eb9`, CI `33780587046`; regola primaria `METRIC_GUARD_ONLY`, cioè decision core + 1.210 m derivati dal contratto V1 walk+snap. Intercetta 25 comuni, 621 sezioni censuarie, 12.359 edifici, 60.519 archi del frozen graph, 174 fermate bus ufficiali e 1 rail anchor. `CORE` e `CONTEXT` restano separati; la sensitivity di primo ordine comunale è esplicitamente non supportata dall'epoch Gate D ai bordi e quindi non viene forzata. Snapshot sorgente, checksum e rebuild source-closed sono PASS; nessun output V1 è stato modificato.
-- **Current/reference stop×trip timetable:** PASS, source branch final HEAD `dbda7ee2a6f2c3b5f6bfc7d4c6e0e936b2e26189`; 119 colonne di corsa, 104 attive al 2026-09-03, 1.145 orari pubblicati e matrice completa da 3.089 celle. Ricostruzione da fonti primarie ufficiali, nessuna interpolazione degli orari non pubblicati.
-- **Current-service stop identity bridge:** PASS / PARTIAL COVERAGE, source branch final HEAD `2616f58a758591adc12bd6a5abe1d1779d2d0b1e`; 209 righe PDF preservate, 54 identità GTFS storiche risolte, 155 ambigue/non risolte. Nessun fuzzy matching, nearest-coordinate forcing o whitelist manuale; le righe non risolte sono vietate come identità spaziali nel walking GJT.
-- **Decision-contract hardening:** PASS, source branch `phase2-decision-contract-hardening`, final HEAD `13050318d269eea1dc6779639d8e9e5993090043`; budget decisionale e uncertainty band sono input espliciti, nessun default implicito verso il budget massimo e nessun weighted composite score nascosto.
-- **V2 prerequisites integration:** PR #14 MERGED in `phase2-optimizer-core`, merge commit `cdc72eab5ba853144e52e47fb6f98c993352608b`. Il blocker CI era esclusivamente l'interpretazione CRLF del `git diff --check`; correzione al commit `3b0dec7e56657262175ee545397a8d99a94050c9`. Run finale timetable `33795636848`, job `100782538267`: SUCCESS completo, inclusi whitespace audit, test, source rebuild, byte comparison e anti-shortcut guard. Gli altri workflow del PR sono SUCCESS.
-- **Topology-neutral structural screening V1:** PASS / BENCHMARK ONLY, source branch HEAD `afe44aac71e0dd9d4d51aeb92c5a80e624f3d471`, PR #15 MERGED in `phase2-optimizer-core` con merge commit `c79088c70c313e98600991c118da3f767654650b`. CI `33795730762`, job `100782848163`: SUCCESS. Screenate esattamente 100.000 configurazioni strutturali su 25.421 gambe dirette uniche; rebuild deterministico byte-for-byte PASS; nessun ranking di famiglie, scelta di topologia, scelta fermate, annualizzazione o service-policy selection. Artifact `9909090951`, SHA256 ZIP `641254b6661bd6436a0a70ff5287b8d47936ed942f0ec6030b64d42b62eb56b0`; CSV interno SHA256 `504879d2fbfc26de3b7c7095c56c406c690701f9e8bcdf9008d4dbb6b4cebced`, verificato contro il validation JSON. Il motore di union delle catchment è input-agnostic e può ricevere unità V1 o edifici V2 senza cambiare algoritmo.
-- **S8 interchange:** PASS, branch `phase2-s8-interchange`, final HEAD `88ea13a79bc3a731433dbeeee4985ea11d977580`, CI `33767531076`; 74 eventi S8 reali il 2026-09-03, scoring continuo e topology-neutral.
-- **ISTAT 2011 trend audit:** `VALIDATED_WITH_SERIES_BREAK`, branch `phase2-od-2011-audit`, HEAD `329e3b15a3c31c8edc2252babf3e5bb1f6248b8c`; utile come contesto storico, non come serie perfettamente omogenea e non come blocker. PR storico separato non è sulla critical path.
-- **Optimizer core:** multi-family topology search, explicit service-policy search, service production, passenger GJT, equity/non-regression, S8 bridge, robust candidate tournament, budget frontier e structural screening. Nessun `np.random`, nessun legacy hardcoded candidate/current-service output.
+### Red-team metodologico finale V2
 
-### Vincoli metodologici invariati
+- Branch: `phase2-final-method-redteam-v2`.
+- Report commit: `9122e6664df0ba29447cb76e4c6a695a90831602`.
+- CI: `33868348370` — SUCCESS.
+- Artifact: `9934869206`.
+- Verdict: **BLOCKED for final PRIMARY / RUNNER-UP selection**.
+- Findings principali: RT-001 budget exactness BLOCKING; RT-002 final-decision completeness BLOCKING; RT-003 current-service lower-bound limitation MAJOR; RT-004 governance drift MAJOR; RT-006 Stage-C screening semantics MAJOR.
+
+### RT-001 — critical-path blocker
+
+RT-001 ha dimostrato che il prefilter di produzione annuale usa una continuous clockface approximation in contesti span/headway non integrali. La frontier upstream deve quindi essere ricostruita in modo lossless rispetto ai budget cap prima di autorizzare una lineage di selezione finale.
+
+**Questo workstream Stage E non prende ownership di RT-001 e non modifica budget-policy, Passenger Utility o Stage-D manifest.**
+
+### Stage D exact — PASS tecnico, non final-selection lineage
+
+Lo Stage D exact corrente resta tecnicamente **PASS rispetto al proprio input**:
+
+- branch: `phase2-exact-timetable-optimizer-v2`;
+- evidence commit: `96e033e77f2b9b7b82ff4555b682816bf8c71111`;
+- workflow run: `33866312583`;
+- artifact: `9934216350`;
+- status: `PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_V2`;
+- exact timetable + route-specific phase + vehicle blocks costruiti;
+- recovery 5/10/15 valutati e non selezionati;
+- runtime stress 0/+5/+10/+15 riportato come engineering sensitivity, non probabilità empirica.
+
+A causa di RT-001 questo Stage D è utilizzabile come **development/regression fixture**, ma non deve essere usato per selezionare PRIMARY/RUNNER-UP.
+
+### Stage E — Final Operational Robustness V2
+
+Workstream indipendente:
+
+- branch: `phase2-final-operational-robustness-v2`;
+- stato: **IN DEVELOPMENT / REAL FIXTURE CI PENDING**;
+- input di sviluppo: Stage D exact `96e033e…`, esplicitamente marcato `CURRENT_STAGE_D_USED_AS_ENGINE_VALIDATION_FIXTURE_NOT_FINAL_SELECTION_LINEAGE`;
+- obiettivo: motore source-closed e deterministic di planned-connection-preserving reliability, recovery e vehicle-block sensitivity;
+- nessun budget, calendar, recovery, PRIMARY o RUNNER-UP selezionato;
+- nessun weighted reliability score;
+- BUS_TO_RAIL e RAIL_TO_BUS mantenuti separati;
+- technical vehicle return vietato come passenger service.
+
+Lo Stage-E PASS, quando eventualmente ottenuto, certificherà **il motore di robustness**, non una rete.
+
+### RT-003 — current-service baseline limitation
+
+RT-003 è formalizzato in `docs/PHASE2_RT003_CURRENT_SERVICE_BASELINE_LIMITATION.md`.
+
+Snapshot certificato corrente:
+
+- 51 righe D184/D185 considerate;
+- 12 righe spatially localisable;
+- 39 unresolved/unlocalised;
+- 7 cluster correnti esattamente localizzabili;
+- accessibility lower bound circa 7,69% / 15,03% / 19,24% a 5/8/10 minuti;
+- worst-municipality lower bound = 0.
+
+Il non-regression test prova soltanto non-regressione rispetto al **certified localisable lower bound**. Non prova che nessun comune peggiori rispetto al servizio attuale reale completo. Nessun fuzzy matching, nearest-neighbour forcing o stop placement inventato è autorizzato per chiudere questa limitation.
+
+### RT-004 — governance drift
+
+RT-004 è preso in carico con questo aggiornamento. Il vecchio `AGENT_STATUS.md` del 2026-09-03 puntava a `phase2-optimizer-core` e a una critical path ormai superata. Questo file ora registra esplicitamente lo snapshot integrato pre-fix, il red-team, RT-001, lo Stage D tecnico e lo Stage E parallelo.
+
+## Vincoli metodologici invariati
 
 - zero dati sintetici o inventati;
+- zero `np.random` / random search;
 - niente live Overpass nel normale optimisation loop;
-- proposed stops non sono fermate fisicamente certificate finché manca il field check;
+- niente live GTFS update nel robustness run;
+- proposed stops restano `FIELD_CHECK_PENDING` finché non verificati fisicamente;
 - `S8_DIRECT` non è modal share;
-- popolazione, OD lavoro, accessibilità, S8, opportunità locali e produzione di servizio restano layer distinti;
+- 1.882 worker S8 non sono route ridership;
+- niente municipal OD downscaling a passenger/route/stop non supportato;
 - nessun weighted composite score nascosto;
-- una candidata finale è `scenario_id + plan_id`, quindi topologia e piano di servizio competono con identità distinta;
-- il catalogo e lo screening V1 sono benchmark congelati, non un universo autorizzato per la raccomandazione finale.
+- technical vehicle return ≠ passenger service;
+- nessun default implicito di budget, calendar o recovery;
+- final selection richiede esplicito Decision Contract e lineage lossless.
 
-## Prossimo checkpoint / dipendenze
+## Critical path corrente
 
-**BLOCKED sulla validazione del workstream `phase2-building-population`.** Non pubblicare primary, runner-up, fermate definitive o classifica finale usando il benchmark V1.
+La critical path autorizzata verso una raccomandazione finale è:
 
-Dopo building population validato, la catena autorizzata è:
+1. **RT-001 repair** su workstream separato: rendere lossless l'hard-budget eligibility attorno ai cap;
+2. rebuild downstream di budget-policy, Passenger Utility e packaging dipendente;
+3. nuovo **Stage D exact** sulla lineage lossless, con ricontrollo della produzione annua del timetable selezionato;
+4. rerun del **Final Operational Robustness Engine V2** sul nuovo Stage D senza cambiare algoritmo;
+5. final robustness tournament sul set di sensitività autorizzato e materializzazione degli input espliciti del Decision Contract, inclusa uncertainty band se e solo se dichiarata;
+6. soltanto dopo, eventuale PRIMARY e RUNNER-UP.
 
-**building population + analysis envelope → Stop Universe V2 → reduced path matrix V2 → rigenerazione/replay del catalogo strutturale V2 → structural/operational screening → service-policy search → S8 phasing → passenger GJT/equity → robustness tournament → primary + runner-up + budget frontier.**
+Fino al completamento di questa catena:
 
-Il budget di riferimento resta quello validato Gate E, 111.419 bus-km/anno; gli envelope inferiori e superiori sono sensitivity di progetto, non un default implicito per la decisione finale.
+`primary_selection_authorised=false`  
+`runner_up_selection_authorised=false`
