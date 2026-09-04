@@ -1,0 +1,176 @@
+name: Phase 2 Final Operational Robustness V2
+
+on:
+  push:
+    branches:
+      - phase2-final-operational-robustness-v2
+    paths:
+      - 'src/phase2_final_operational_robustness_v2.py'
+      - 'scripts/phase2_build_final_operational_robustness_v2.py'
+      - 'tests/test_phase2_final_operational_robustness_v2.py'
+      - 'config/phase2_final_operational_robustness_v2.json'
+      - 'docs/PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_V2.md'
+      - 'docs/PHASE2_RT003_CURRENT_SERVICE_BASELINE_LIMITATION.md'
+      - 'AGENT_STATUS.md'
+      - '.github/workflows/phase2-final-operational-robustness-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-final-operational-robustness-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: .
+  OUTDIR: outputs/phase2/final_operational_robustness_v2
+  STAGE_D_LINEAGE_ROLE: CURRENT_STAGE_D_USED_AS_ENGINE_VALIDATION_FIXTURE_NOT_FINAL_SELECTION_LINEAGE
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify exact Stage-D fixture ancestry
+        run: |
+          git merge-base --is-ancestor 96e033e77f2b9b7b82ff4555b682816bf8c71111 HEAD
+          test -f outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_timetable_v2_validation.json
+
+      - name: Compile Stage-E engine
+        run: |
+          python -m py_compile src/phase2_final_operational_robustness_v2.py
+          python -m py_compile scripts/phase2_build_final_operational_robustness_v2.py
+
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<10'
+
+      - name: Run Stage-E regression tests
+        run: >-
+          python -m pytest -q
+          tests/test_phase2_final_operational_robustness_v2.py
+          tests/test_phase2_exact_timetable_optimizer_v2.py
+
+      - name: Build real Stage-E robustness fixture
+        run: |
+          python scripts/phase2_build_final_operational_robustness_v2.py \
+            --stage-d-validation outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_timetable_v2_validation.json \
+            --stage-d-summary outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_timing_summary_v2.csv.gz \
+            --stage-d-trips outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_public_trips_v2.csv.gz \
+            --route-input outputs/phase2/stage_d_input_manifest_v2/stage_d_public_route_inputs_v2.csv \
+            --s8-events outputs/phase2/s8_events.csv \
+            --s8-sensitivity config/phase2_s8_phasing_sensitivity_v2.json \
+            --stage-e-sensitivity config/phase2_final_operational_robustness_v2.json \
+            --output-dir "$OUTDIR" \
+            --stage-d-lineage-role "$STAGE_D_LINEAGE_ROLE"
+
+      - name: Validate Stage-E contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          out=Path('outputs/phase2/final_operational_robustness_v2')
+          v=json.loads((out/'final_operational_robustness_v2_validation.json').read_text())
+          d=json.loads(Path('outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_timetable_v2_validation.json').read_text())
+          assert v['status']=='PASS_PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_V2'
+          assert v['contract']=='PHASE2_PLANNED_CONNECTION_PRESERVING_OPERATIONAL_ROBUSTNESS_V2'
+          required_true=(
+              'exact_timetable_input_required','planned_connection_identity_preserved',
+              'next_alternative_connection_reported_separately','bus_to_rail_and_rail_to_bus_separate',
+              'deterministic_rebuild','fixed_target_runtime_retention_monotonic_sanity',
+          )
+          required_false=(
+              'next_train_rebinding_used_as_success','technical_return_used_as_passenger_service',
+              'recovery_values_selected','budget_selected','calendar_selected','primary_selected',
+              'runner_up_selected','weighted_composite_score','passenger_weighting_applied',
+              'municipal_od_downscaled','ridership_forecast','random_search',
+              'delay_sensitivity_is_empirical_probability','stage_d_fixture_is_final_selection_lineage',
+              'final_selection_authorized','nonzero_rail_delay_sensitivity_authorized',
+          )
+          for key in required_true:
+              assert v[key] is True, key
+          for key in required_false:
+              assert v[key] is False, key
+          assert v['stage_d_lineage_role']=='CURRENT_STAGE_D_USED_AS_ENGINE_VALIDATION_FIXTURE_NOT_FINAL_SELECTION_LINEAGE'
+          assert v['timetable_count']==d['stage_d_daily_timing_input_count']
+          assert v['exact_public_trip_count']==d['explicit_timetable_trip_count']
+          assert v['transfer_profile_count']==d['transfer_profile_count']
+          assert v['bus_runtime_delay_minutes']==d['runtime_stress_minutes_reported_not_selected']
+          assert v['recovery_minutes']==d['recovery_values_evaluated_not_selected']
+          assert v['rail_arrival_delay_minutes']==[0.0]
+          assert v['connection_candidate_row_count']>0
+          assert v['planned_connection_count_across_profiles_and_directions']>0
+          assert v['robustness_surface_row_count']>0
+          assert v['block_sensitivity_row_count']>0
+          assert v['summary_row_count']==v['timetable_count']*v['transfer_profile_count']
+          assert v['technical_return_connection_count']==0
+          print(json.dumps({
+              'status':v['status'],
+              'timetables':v['timetable_count'],
+              'planned_connections':v['planned_connection_count_across_profiles_and_directions'],
+              'surface_rows':v['robustness_surface_row_count'],
+              'block_rows':v['block_sensitivity_row_count'],
+              'block_infeasible_cases':v['nominal_block_assignment_infeasible_case_count'],
+              'additional_vehicle_cases':v['cases_requiring_additional_vehicle_count'],
+              'misses_by_runtime':v['planned_bus_to_rail_misses_by_runtime_delay'],
+          },indent=2,sort_keys=True))
+          PY
+
+      - name: Deterministic byte-for-byte rebuild
+        run: |
+          rm -rf /tmp/stage-e-rebuild
+          mkdir -p /tmp/stage-e-rebuild
+          python scripts/phase2_build_final_operational_robustness_v2.py \
+            --stage-d-validation outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_timetable_v2_validation.json \
+            --stage-d-summary outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_timing_summary_v2.csv.gz \
+            --stage-d-trips outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_public_trips_v2.csv.gz \
+            --route-input outputs/phase2/stage_d_input_manifest_v2/stage_d_public_route_inputs_v2.csv \
+            --s8-events outputs/phase2/s8_events.csv \
+            --s8-sensitivity config/phase2_s8_phasing_sensitivity_v2.json \
+            --stage-e-sensitivity config/phase2_final_operational_robustness_v2.json \
+            --output-dir /tmp/stage-e-rebuild \
+            --stage-d-lineage-role "$STAGE_D_LINEAGE_ROLE" >/dev/null
+          for f in \
+            final_operational_connection_audit_v2.csv.gz \
+            final_operational_robustness_surface_v2.csv.gz \
+            final_operational_block_sensitivity_v2.csv.gz \
+            final_operational_robustness_summary_v2.csv.gz \
+            final_operational_robustness_v2_validation.json; do
+            cmp "$OUTDIR/$f" "/tmp/stage-e-rebuild/$f"
+          done
+
+      - name: Guard source-closed and non-decisional semantics
+        run: |
+          FILES='src/phase2_final_operational_robustness_v2.py scripts/phase2_build_final_operational_robustness_v2.py'
+          ! grep -En 'np\.random|numpy\.random|(^|[[:space:]])import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -En '\b(5345|16883)\b' $FILES
+          ! grep -En 'weighted_composite_score[^\n]{0,40}(True|"true")|primary_selected[^\n]{0,40}(True|"true")|runner_up_selected[^\n]{0,40}(True|"true")' $FILES
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check
+
+      - name: Persist Stage-E evidence
+        run: |
+          git config user.name 'phase2-stage-e-robustness-v2-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$OUTDIR"
+          if git diff --cached --quiet; then
+            echo 'No Stage-E evidence changes to persist'
+          else
+            git commit -m 'data(phase2): persist Stage-E operational robustness V2 [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-final-operational-robustness-v2-${{ github.sha }}
+          path: outputs/phase2/final_operational_robustness_v2
+          retention-days: 90
+          if-no-files-found: error
