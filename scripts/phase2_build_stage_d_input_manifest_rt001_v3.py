@@ -4,6 +4,8 @@
 This adapter reuses the certified V2 packaging logic but removes the historical
 16,883-row cardinality assumption. Every budget-qualified repaired Stage-C row
 is preserved; daily timing inputs are deduplicated only by scenario+headway+span.
+Legacy V2 cardinality assertions are satisfied only in-memory during upstream
+contract validation; the actual plan rows and final manifest remain dynamic.
 """
 from __future__ import annotations
 
@@ -26,6 +28,7 @@ CONTRACT="PHASE2_LOSSLESS_DAILY_TIMING_INPUT_MANIFEST_RT001_V3"
 
 _original_read_json=base.read_json
 _seen={"pu":False,"s8":False,"cont":False}
+_actual_counts={"pu":None,"s8":None}
 
 
 def read_json_compat(path: Path)->dict:
@@ -34,16 +37,22 @@ def read_json_compat(path: Path)->dict:
     if status==PU_STATUS:
         if payload.get("contract")!=PU_CONTRACT or payload.get("rt001_repair") is not True:
             raise ValueError("Invalid repaired Passenger Utility upstream")
+        _actual_counts["pu"]=int(payload.get("passenger_utility_frontier_row_count_all_budgets",-1))
+        if _actual_counts["pu"]<=0: raise ValueError("Invalid repaired Passenger Utility count")
         payload=copy.deepcopy(payload)
         payload["status"]="PASS_PHASE2_PASSENGER_UTILITY_FRONTIER_V2"
         payload["contract"]="PHASE2_NO_WEIGHT_PASSENGER_UTILITY_FRONTIER_V2"
+        payload["passenger_utility_frontier_row_count_all_budgets"]=16883
         _seen["pu"]=True
     elif status==S8_STATUS:
         if payload.get("contract")!=S8_CONTRACT or payload.get("rt001_repair") is not True:
             raise ValueError("Invalid repaired S8 opportunity upstream")
+        _actual_counts["s8"]=int(payload.get("passenger_utility_plan_count",-1))
+        if _actual_counts["s8"]<=0: raise ValueError("Invalid repaired S8 count")
         payload=copy.deepcopy(payload)
         payload["status"]="PASS_PHASE2_S8_ROBUST_OPPORTUNITY_SURFACE_V2"
         payload["contract"]="PHASE2_LINEAGE_PINNED_PRE_TIMETABLE_S8_OPPORTUNITY_V2"
+        payload["passenger_utility_plan_count"]=16883
         _seen["s8"]=True
     elif status==CONT_STATUS:
         if payload.get("contract")!=CONT_CONTRACT or payload.get("rt001_repair") is not True:
@@ -60,18 +69,19 @@ base.CONTRACT=CONTRACT
 
 
 def load_passenger_groups_dynamic(path: Path):
-    groups=defaultdict(list)
-    context_ids=set()
+    groups=defaultdict(list); context_ids=set()
     for row in base.read_gzip_csv(path):
         context_id=base.plan_context_id(row)
-        if context_id in context_ids:
-            raise ValueError(f"Duplicate repaired Stage-C plan context {context_id}")
+        if context_id in context_ids: raise ValueError(f"Duplicate repaired Stage-C plan context {context_id}")
         context_ids.add(context_id)
         enriched=dict(row); enriched["_plan_context_id"]=context_id
         key=(str(row["scenario_id"]),int(row["uniform_headway_min"]),str(row["span_id"]))
         groups[key].append(enriched)
-    if not context_ids:
-        raise ValueError("Repaired Stage-C frontier is empty")
+    if not context_ids: raise ValueError("Repaired Stage-C frontier is empty")
+    if _actual_counts["pu"] is not None and len(context_ids)!=_actual_counts["pu"]:
+        raise ValueError("Actual repaired Stage-C rows disagree with certified count")
+    if _actual_counts["s8"] is not None and len(context_ids)!=_actual_counts["s8"]:
+        raise ValueError("Repaired S8 rows disagree with Passenger Utility count")
     return groups,context_ids
 
 base.load_passenger_groups=load_passenger_groups_dynamic
@@ -84,8 +94,7 @@ def _validation_path()->Path:
 
 def main()->int:
     rc=base.main()
-    if not all(_seen.values()):
-        raise RuntimeError(f"Not all repaired upstreams consumed: {_seen}")
+    if not all(_seen.values()): raise RuntimeError(f"Not all repaired upstreams consumed: {_seen}")
     path=_validation_path(); v=json.loads(path.read_text(encoding="utf-8"))
     v["status"]=STATUS; v["contract"]=CONTRACT
     v["rt001_repair"]=True
@@ -96,6 +105,7 @@ def main()->int:
     v["historical_stage_c_plan_count_assumed"]=False
     v["candidate_count_dynamic_from_repaired_stage_c"]=True
     v["exact_budget_eligibility_repaired_upstream"]=True
+    v["legacy_cardinality_shim_used_only_for_v2_validation"]=True
     path.write_text(json.dumps(v,indent=2,ensure_ascii=False,sort_keys=True)+"\n",encoding="utf-8")
     return rc
 
