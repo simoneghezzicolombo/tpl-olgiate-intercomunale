@@ -346,7 +346,11 @@ def build(args: argparse.Namespace) -> dict:
     if frequent:
         if hourly_qualifying:
             chosen_class = "HOURLY_H60"
-            chosen_initial = hourly_territorial
+            # Critical policy invariant: once H60 enters only by proving the
+            # territorial exception, only those exception-qualified H60
+            # candidates may continue. Later cost/fleet metrics cannot rescue
+            # an hourly candidate that never justified the lower frequency.
+            chosen_initial = sorted(hourly_qualifying, key=lambda row: row["plan_context_id"])
             class_reason = "H60_EXCEPTION_TERRITORIALLY_JUSTIFIED"
         else:
             chosen_class = "FREQUENT_H_LE_30"
@@ -362,6 +366,7 @@ def build(args: argparse.Namespace) -> dict:
         {"headway_class": "FREQUENT_H_LE_30", "stage": territorial_layer["layer_id"], "method": territorial_layer["method"], "input_count": len(frequent), "survivor_count": len(frequent_territorial)},
         {"headway_class": "HOURLY_H60", "stage": "ROBUST_INPUT", "method": "FILTER", "input_count": len(hourly), "survivor_count": len(hourly)},
         {"headway_class": "HOURLY_H60", "stage": territorial_layer["layer_id"], "method": territorial_layer["method"], "input_count": len(hourly), "survivor_count": len(hourly_territorial)},
+        {"headway_class": "HOURLY_H60", "stage": "H60_TERRITORIAL_EXCEPTION", "method": "COMPONENTWISE_BENCHMARK", "input_count": len(hourly_territorial), "survivor_count": len(hourly_qualifying)},
     ]
     chosen_trace, survivors = run_layers(chosen_class, chosen_initial, layers[1:])
     class_trace.extend(chosen_trace)
@@ -424,6 +429,7 @@ def build(args: argparse.Namespace) -> dict:
         "frequent_territorial_frontier_count": len(frequent_territorial),
         "hourly_territorial_frontier_count": len(hourly_territorial),
         "h60_exception_qualifying_context_count": len(hourly_qualifying),
+        "h60_exception_pool_used_as_hourly_downstream_input": bool(frequent and hourly_qualifying),
         "headway_class_diagnostic_choice": chosen_class,
         "headway_class_diagnostic_reason": class_reason,
         "headway_class_selection_authorized": False,
@@ -437,7 +443,7 @@ def build(args: argparse.Namespace) -> dict:
         },
         "diagnostic_interpretation": (
             "The headway-class choice is a dry-run policy diagnostic, not PRIMARY/RUNNER-UP selection. "
-            "H60 cannot be rescued by later cost/fleet criteria after failing the explicit territorial exception. "
+            "When H60 is admitted through the territorial exception, only exception-qualified H60 contexts may continue downstream. "
             "Current-Service Baseline V4 must be reviewed before the finalizer may run."
         ),
         "lineage": {
