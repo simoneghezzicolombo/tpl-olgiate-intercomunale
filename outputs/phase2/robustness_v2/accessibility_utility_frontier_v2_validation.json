@@ -1,0 +1,48 @@
+{
+  "accessibility_utility_is_modal_share": false,
+  "accessibility_utility_is_passenger_trip_count": false,
+  "contract": "PHASE2_SERVICE_ADJUSTED_ACCESSIBILITY_UTILITY_V2",
+  "dominance_axes": {
+    "maximize": [
+      "resident_access_service_opportunity_index",
+      "worst_municipality_access_service_opportunity_index",
+      "territorial_worker_od_service_opportunity_upper_bound",
+      "stress_min_connection_match_share"
+    ],
+    "minimize": [
+      "stress_worst_route_weighted_mean_gap_min"
+    ]
+  },
+  "epistemic_note": "Service-adjusted accessibility indices multiply certified spatial accessibility or structural OD mass by the minimum exact annual route-pattern opportunities. They are deterministic accessibility indices, not passenger counts. S8 robust match/gap remains a separate frontier dimension rather than a weight inside the access index.",
+  "frontier_count": 63,
+  "frontier_family_alias_signature_counts": {
+    "blank_slate+single_compact_loop": 49,
+    "hybrid_interlined+two_radial_out_and_back_feeders": 11,
+    "interlined_figure8+two_independent_loops": 3
+  },
+  "frontier_headway_counts": {
+    "15": 15,
+    "20": 17,
+    "30": 19,
+    "60": 12
+  },
+  "full_gjt_calculated": false,
+  "input_decision_stratum_count": 148,
+  "lineage": {
+    "exact_plans_sha256": "bc575546d34a260dc4f8061cde7059a78a7b1dbb74af1b398ae710c7dd84785d",
+    "exact_validation_sha256": "a6f3ef5fc1cc85e6b02416dfce5a48eee34b8f1f5ec4a64ecaa49db57990bead",
+    "frontier_output_sha256": "3c906abb59bb4746b167bb36b621ed702e764e7eae2b7ad2b20c261fdc559702",
+    "output_sha256": "fd7235ee016abccdf19bc2d164ce86073de88ee7a68d8882dccc53c1c5a9c8c6",
+    "strata_sha256": "b93bf3dc499493aec864c9cf662e6a81d0e7e47e6d625b855defb0fd9a7ee98b",
+    "strata_validation_sha256": "20b3194e269b1becb6f30aaa811659ccd196159767abddeddafd44ba87bd1bb1"
+  },
+  "primary_selected": false,
+  "runner_up_selected": false,
+  "service_availability_summary": "MINIMUM_EXACT_CLOCKFACE_DEPARTURES_OF_ANY_PUBLIC_PATTERN_PER_YEAR",
+  "service_policy_selected": false,
+  "status": "PASS_ACCESSIBILITY_UTILITY_FRONTIER_V2_BUILD",
+  "topology_ranked": false,
+  "walking_access_summary": "TRAPEZOIDAL_MEAN_COVERAGE_SHARE_OVER_5_TO_10_MINUTES_USING_CERTIFIED_5_8_10_THRESHOLDS",
+  "weighted_composite_score_used": false,
+  "worker_od_service_opportunity_is_upper_bound": true
+}
