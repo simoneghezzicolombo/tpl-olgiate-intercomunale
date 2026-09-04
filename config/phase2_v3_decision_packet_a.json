@@ -1,0 +1,184 @@
+{
+  "contract": "PHASE2_V3_HUMAN_DECISION_PACKET_A",
+  "contract_version": 1,
+  "status": "READY_FOR_HUMAN_POLICY_INPUT",
+  "purpose": "Reduce the closed Phase 2 technical evidence to the finite policy choices required before a certified PRIMARY and RUNNER-UP may be materialised.",
+  "final_selection_authorized": false,
+  "primary_selected": false,
+  "runner_up_selected": false,
+  "weighted_composite_score": false,
+  "certified_sources": {
+    "final_decision_sufficiency_gate": {
+      "branch": "phase2-final-decision-sufficiency-gate-a",
+      "commit": "2b0d9e41477ebf3db2bd5d32f53ad7cfc9187d4e",
+      "status": "PASS_PHASE2_FINAL_DECISION_SUFFICIENCY_GATE_V3",
+      "v3_technical_open_data_requirement_count": 0
+    },
+    "alpha_gjt_set_bounds": {
+      "branch": "phase2-gjt-set-bounds-exact-v3",
+      "evidence_commit": "c90232d13fa9e4acde6f3e9732b9a0ec62a89aef",
+      "status": "PASS_PHASE2_EXACT_FEEDER_S8_SET_BOUNDS_V3",
+      "finite_upper_bound_row_count": 0,
+      "unbounded_upper_bound_row_count": 60000
+    },
+    "targeted_gjt_redteam_a": {
+      "branch": "phase2-gjt-bounds-targeted-redteam-a-pass",
+      "evidence_commit": "1f9c102f92a52cf6258f852735351cf00f7bbec1",
+      "status": "PASS_PHASE2_GJT_BOUNDS_TARGETED_REVIEW_A_V3",
+      "blocking_issue_count": 0
+    },
+    "stage_d_exact": {
+      "commit": "d41bb678382d018929c1c6b46542f12549f20d4f",
+      "status": "PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_RT001_V3",
+      "preserved_plan_context_count": 16495,
+      "selected_exact_timetable_count": 6000
+    },
+    "non_decisional_frontier": {
+      "commit": "8d858793200b3ab644d2612a272ad0ac614d6c34",
+      "status": "PASS_PHASE2_NON_DECISIONAL_TOURNAMENT_FRONTIER_RT001_V3",
+      "frontier_context_count": 12284,
+      "dominated_context_count": 4211,
+      "frontier_is_shortlist": false
+    },
+    "tournament_readiness_redteam": {
+      "commit": "4372154936de1609154b7bd0bcd4f03174eb1444",
+      "status": "PASS_PHASE2_CODEX_TOURNAMENT_READINESS_REDTEAM_RT001_V3",
+      "nonfrontier_pruning_authorized": false
+    }
+  },
+  "human_choices": {
+    "pathway": {
+      "selection": "PENDING_HUMAN_DECISION",
+      "recommended_option": "V3_CERTIFIED_METRICS_DETERMINISTIC_ROBUSTNESS",
+      "options": {
+        "LEGACY_V2_FULL_EVIDENCE": {
+          "technical_open_data_requirement_count": 4,
+          "can_materialize_final_decision_now": false
+        },
+        "V3_CERTIFIED_METRICS_DETERMINISTIC_ROBUSTNESS": {
+          "technical_open_data_requirement_count": 0,
+          "can_materialize_after_remaining_human_policy_inputs": true
+        }
+      },
+      "recommendation_basis": "V3 is the only currently certified pathway with zero technical/open-data blockers and it makes no unavailable demand-weighted GJT, empirical reliability or complete-current-service non-regression claim."
+    },
+    "decision_budget": {
+      "selection": "PENDING_HUMAN_DECISION",
+      "recommended_budget_suffix": "reference",
+      "recommended_annual_bus_km_cap": 111419.0,
+      "recommendation_basis": "The reference envelope is the validated reconstructed production reference and therefore adds neither an implicit service cut nor an implicit production expansion. This is a methodological default recommendation, not a claim that it is socially optimal."
+    },
+    "uncertainty_semantics": {
+      "selection": "PENDING_HUMAN_DECISION",
+      "recommended_option": "DO_NOT_RETAIN_LEGACY_SINGLE_MINUTE_UNCERTAINTY_BAND_UNDER_V3",
+      "recommendation_basis": "The legacy uncertainty_band_min was defined around a single GJT-like minute utility. V3 intentionally has no such scalar utility and contains heterogeneous certified metrics. A single minute tolerance cannot be applied coherently across shares, counts, minutes, kilometres and booleans without inventing a new aggregation model.",
+      "proposed_comparison_semantics": "Use the persisted certified values with exact deterministic comparison, as in the V3 non-decisional frontier. Any future practical-equivalence tolerance must be field-specific and separately declared rather than hidden in one scalar band."
+    },
+    "no_weight_rule": {
+      "selection": "PENDING_HUMAN_DECISION",
+      "recommended_rule_id": "V3_SERVICE_EQUITY_ROBUSTNESS_LEXICOGRAPHIC_A",
+      "weighted_score": false,
+      "missing_value_imputation": false,
+      "rule": {
+        "budget_partition": "Evaluate only the explicitly selected annual_bus_km envelope.",
+        "evidence_completeness_policy": "Require BIDIRECTIONAL_ENGINEERING_RETENTION_AVAILABLE for final selection when at least one such context exists in the selected budget. All six certified budgets have such contexts. This is a declared policy choice, not an imputation of missing BUS_TO_RAIL values.",
+        "comparison": "Sequential lexicographic elimination. At each criterion retain only candidates tied for the best persisted value on that criterion, then continue. No normalization, averaging or weights.",
+        "ordered_criteria": [
+          {"field": "stage_e_any_block_infeasibility_under_sensitivity", "direction": "min"},
+          {"field": "stage_e_maximum_vehicle_conflict_count_on_nominal_blocks_engineering", "direction": "min"},
+          {"field": "stage_e_worst_minimum_block_slack_min_engineering", "direction": "max"},
+          {"field": "public_worst_municipality_coverage_share_10min", "direction": "max"},
+          {"field": "public_worst_municipality_coverage_share_8min", "direction": "max"},
+          {"field": "public_worst_municipality_coverage_share_5min", "direction": "max"},
+          {"field": "public_population_coverage_share_10min", "direction": "max"},
+          {"field": "public_population_coverage_share_8min", "direction": "max"},
+          {"field": "public_population_coverage_share_5min", "direction": "max"},
+          {"field": "bidirectional_reachable_share", "direction": "max"},
+          {"field": "to_rail_reachable_share", "direction": "max"},
+          {"field": "from_rail_reachable_share", "direction": "max"},
+          {"field": "uniform_headway_min", "direction": "min"},
+          {"field": "stage_e_bidirectional_worst_retention_share_engineering", "direction": "max"},
+          {"field": "stage_e_bus_to_rail_worst_retention_share_engineering", "direction": "max"},
+          {"field": "stage_e_rail_to_bus_worst_retention_share_engineering", "direction": "max"},
+          {"field": "stage_e_bus_to_rail_max_service_gap_increase_min_engineering", "direction": "min"},
+          {"field": "stage_e_rail_to_bus_max_service_gap_increase_min_engineering", "direction": "min"},
+          {"field": "span_minutes", "direction": "max"},
+          {"field": "annual_service_days", "direction": "max"},
+          {"field": "retained_current_localizable_cluster_share_lower_bound", "direction": "max"},
+          {"field": "retained_current_localizable_directed_adjacent_pair_share_lower_bound", "direction": "max"},
+          {"field": "public_explicit_field_check_pending_count", "direction": "min"},
+          {"field": "public_operational_unknown_distance_share_lower_bound", "direction": "min"},
+          {"field": "stage_e_maximum_additional_vehicle_requirement_engineering", "direction": "min"},
+          {"field": "stage_e_maximum_minimum_vehicle_requirement_engineering", "direction": "min"},
+          {"field": "exact_annual_bus_km", "direction": "min"},
+          {"field": "to_rail_median_mean_generalized_access_min", "direction": "min"},
+          {"field": "from_rail_median_mean_generalized_access_min", "direction": "min"}
+        ],
+        "deterministic_final_tie_break": [
+          "plan_context_id",
+          "selected_timetable_id"
+        ]
+      },
+      "recommendation_basis": "The rule first protects deterministic operational feasibility, then territorial equity and access, service frequency and rail interchange robustness, then continuity/field uncertainty and resource efficiency. It never converts the 29 dimensions into a scalar score."
+    }
+  },
+  "budget_options": [
+    {
+      "budget_suffix": "m20pct",
+      "change_percent_vs_reference": -20.0,
+      "annual_bus_km_cap": 89135.2,
+      "eligible_context_count": 2181,
+      "bidirectional_engineering_context_count": 1911,
+      "no_planned_bus_to_rail_metric_context_count": 270,
+      "descriptive_frontier_context_count": 1695
+    },
+    {
+      "budget_suffix": "m10pct",
+      "change_percent_vs_reference": -10.0,
+      "annual_bus_km_cap": 100277.1,
+      "eligible_context_count": 2478,
+      "bidirectional_engineering_context_count": 2174,
+      "no_planned_bus_to_rail_metric_context_count": 304,
+      "descriptive_frontier_context_count": 1865
+    },
+    {
+      "budget_suffix": "reference",
+      "change_percent_vs_reference": 0.0,
+      "annual_bus_km_cap": 111419.0,
+      "eligible_context_count": 2633,
+      "bidirectional_engineering_context_count": 2259,
+      "no_planned_bus_to_rail_metric_context_count": 374,
+      "descriptive_frontier_context_count": 1877
+    },
+    {
+      "budget_suffix": "p10pct",
+      "change_percent_vs_reference": 10.0,
+      "annual_bus_km_cap": 122560.9,
+      "eligible_context_count": 2856,
+      "bidirectional_engineering_context_count": 2464,
+      "no_planned_bus_to_rail_metric_context_count": 392,
+      "descriptive_frontier_context_count": 2059
+    },
+    {
+      "budget_suffix": "p20pct",
+      "change_percent_vs_reference": 20.0,
+      "annual_bus_km_cap": 133702.8,
+      "eligible_context_count": 3112,
+      "bidirectional_engineering_context_count": 2668,
+      "no_planned_bus_to_rail_metric_context_count": 444,
+      "descriptive_frontier_context_count": 2301
+    },
+    {
+      "budget_suffix": "p30pct",
+      "change_percent_vs_reference": 30.0,
+      "annual_bus_km_cap": 144844.7,
+      "eligible_context_count": 3235,
+      "bidirectional_engineering_context_count": 2799,
+      "no_planned_bus_to_rail_metric_context_count": 436,
+      "descriptive_frontier_context_count": 2487
+    }
+  ],
+  "budget_interpretation_boundary": "Larger budgets expand the materialised feasible choice set, but neither eligible-context count nor descriptive-frontier count is a service-quality score. Budget partitions must not be ranked by these counts.",
+  "gjt_interpretation_boundary": "The targeted PASS certifies the fixed-event set-identification bounds as evidence enrichment only. Because all 60000 upper bounds are unbounded, the artifact cannot rank, prune or select alternatives and does not alter the V3 zero-technical-blocker conclusion.",
+  "next_authorized_step": "After explicit human approval of pathway, one budget and the no-weight/uncertainty semantics, implement one fail-closed V3 finalizer over all 16495 preserved contexts and materialise PRIMARY plus RUNNER-UP with a full elimination trace."
+}
