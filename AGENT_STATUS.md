@@ -163,3 +163,29 @@ RT-001, Stage D exact e Stage E final sono chiusi con PASS. Il prossimo lavoro a
 
 `primary_selection_authorised=false`  
 `runner_up_selection_authorised=false`
+
+## GPT handoff — Finalist Simplicity Diagnostic V3
+
+**Timestamp:** 2026-09-04 21:07 Europe/Rome  
+**Autore:** GPT  
+**Branch:** `phase2-final-policy-contract-v3`  
+**Source/workflow commit:** `ff776b7d0b7e768461011791e94d9e19e452e344`  
+**Evidence commit:** `aa16a9934a78be9a3ee1230996fcaf72c5657f92`  
+**Task:** chiusura e certificazione del Phase 2 Finalist Simplicity Diagnostic V3.  
+**Workflow:** `33909488053` SUCCESS  
+**Artifact:** `9950786078`, SHA256 `3d1be56ff2f42a2915724ca730d20a58389d1191cbae4aa7af3e76e1b7b46070`  
+**Validation:** `PASS_PHASE2_FINALIST_SIMPLICITY_DIAGNOSTIC_V3`.
+
+File persistiti:
+- `outputs/phase2/finalist_simplicity_diagnostic_v3/finalist_simplicity_diagnostic_v3_validation.json`
+- `outputs/phase2/finalist_simplicity_diagnostic_v3/finalist_timetable_structure_v3.csv`
+- `outputs/phase2/finalist_simplicity_diagnostic_v3/finalist_route_structure_v3.csv`
+- `outputs/phase2/finalist_simplicity_diagnostic_v3/finalist_exact_departures_v3.csv`
+- `outputs/phase2/finalist_simplicity_diagnostic_v3/finalist_stage_f_summary_v3.csv`
+
+Risultati principali: quattro timetable finalisti ricostruiti deterministicamente dal Final Policy Dry Run V3 e verificati contro lo Stage D pinned; due topology family (`interlined_figure8`, `two_independent_loops`), due span (960/1110 minuti), H60 uniforme; 8 route structure row, 136 exact public trip e 12 Stage-F summary row, pari a 3 profili di engineering robustness per finalista. Il diagnostic conserva sequenze di anchor certificate e non inventa geometrie stradali.
+
+Stato epistemico: **DERIVED / non-decisional descriptive diagnostic**. Nessun weighted/synthetic complexity score, nessun simplicity rank, nessun vincitore implicito, nessun PRIMARY o RUNNER-UP selezionato.
+
+Problemi aperti per questo workstream: **nessuno**.  
+Richiesta all'altro agente: usare questi output come input read-only per il sito, mantenendo separata la baseline Current Service V4 e senza reinterpretare il diagnostic come ranking o raccomandazione.
