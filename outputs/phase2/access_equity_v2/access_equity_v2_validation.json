@@ -8,12 +8,30 @@
   ],
   "exact_timetable_constructed": false,
   "extension_scenario_count": 9981,
+  "hub_access_bridge": {
+    "bus_km_changed": false,
+    "od_evidence_changed": false,
+    "official_bus_stop_id": "L00407",
+    "official_routes_reference_gtfs": "D184|D185",
+    "official_stop_name": "Olgiate Molgora (stazione f.s.)",
+    "operational_network_changed": false,
+    "physical_cluster_id": "EX_039",
+    "rail_anchor_id": "rail:S01514",
+    "route_geometry_changed": false,
+    "runtime_changed": false,
+    "s8_evidence_changed": false,
+    "scope": "PEDESTRIAN_ACCESS_ONLY",
+    "service_policy_changed": false,
+    "station_stop_evidence_path": "outputs/phase2/stop_universe_v2/existing_official_stops.csv",
+    "status": "VERIFIED_APPLIED"
+  },
   "limitations": [
     "Building resident counts are model outputs, not observed residents by address.",
     "The 93.16-person core residual remains unlocated and is not assigned to any catchment.",
     "Proposed-stop unit memberships are certified only through 10 minutes in Stop Universe V2; 12-minute candidate coverage is therefore reported only as a conservative lower bound.",
     "Existing official stop evidence is reference-period GTFS evidence and is not promoted to exact current-service truth.",
-    "No resident is treated as a passenger and no municipal OD is downscaled to a building or stop in this stage."
+    "No resident is treated as a passenger and no municipal OD is downscaled to a building or stop in this stage.",
+    "The rail routing anchor inherits only the certified pedestrian catchment of official station bus-stop cluster EX_039; this bridge is not an operational route merge and does not rewrite historical current-service stop identity."
   ],
   "lineage": {
     "catalog_sha256": "2385fdb53f3953613b6289f42ba812c645217429302687daa0bde0d8c35a3f6f",
@@ -24,12 +42,12 @@
     "population_units_sha256": "a4fa70338225ef7b0c2213a569f866fe91acf9e5ae357c5b49e448b463b511a9",
     "proposed_catchments_sha256": "a90d72c3b577270dbfcc55cde77ea2d74288121fddfde3ca1a2086704e905fad",
     "routing_anchor_universe_sha256": "123a5e25a25207ec3d38a6ffa80fc9ea70b6da4793581b19f1d55dad3ae24cf7",
-    "scenario_output_sha256": "4cb53431c40a19b39c0357f5358400a7fadc6364c53f7545787d852bb87e8eca",
+    "scenario_output_sha256": "50875f138246e31340f516aee1d31df932afb4b76471aac24d9555f99eb2c675",
     "stop_validation_sha256": "8c938317e043eac225f7138db25a1058930a371c15d8c5e8136b1bb9de5c9e67"
   },
   "located_population": 22820.83993743439,
-  "max_public_population_coverage_share_10min": 0.4510246960448101,
-  "max_public_worst_municipality_coverage_share_10min": 0.32232392497256124,
+  "max_public_population_coverage_share_10min": 0.5089128641421082,
+  "max_public_worst_municipality_coverage_share_10min": 0.3357044786181034,
   "municipalities": [
     {
       "code": "097010",
