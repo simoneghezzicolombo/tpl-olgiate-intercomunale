@@ -1,0 +1,84 @@
+name: Phase 2 Robust Service Identity V2
+
+on:
+  push:
+    branches: [phase2-passenger-gjt-v2]
+    paths:
+      - 'scripts/phase2_audit_robust_service_identity_v2.py'
+      - '.github/workflows/phase2-robust-service-identity-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-robust-service-identity-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile scripts/phase2_audit_robust_service_identity_v2.py
+      - name: Audit robust operational identities
+        run: >-
+          python scripts/phase2_audit_robust_service_identity_v2.py
+          --frontier outputs/phase2/robustness_v2/robustness_frontier_v2.csv
+          --robust-validation outputs/phase2/robustness_v2/robustness_tournament_v2_validation.json
+          --exact-plans outputs/phase2/base_exact_timetables_v2/base_exact_timetable_candidates_v2.csv
+          --exact-validation outputs/phase2/base_exact_timetables_v2/base_exact_timetables_v2_validation.json
+          --output outputs/phase2/robustness_v2/robust_service_identity_groups_v2.csv
+          --validation outputs/phase2/robustness_v2/robust_service_identity_v2_validation.json
+      - name: Validate semantics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('outputs/phase2/robustness_v2/robust_service_identity_v2_validation.json').read_text())
+          assert v['status']=='PASS_ROBUST_SERVICE_IDENTITY_AUDIT_V2'
+          assert v['robust_frontier_plan_count']==296
+          assert 0 < v['unique_operational_service_identity_count'] <= 296
+          assert v['metric_invariance_checked'] is True
+          assert v['family_label_used_to_select_representative'] is False
+          for k in ('weighted_composite_score_used','topology_ranked','service_policy_selected','primary_selected','runner_up_selected'):
+              assert v[k] is False
+          print(json.dumps(v,indent=2))
+          PY
+      - name: Deterministic rebuild
+        run: |
+          mkdir -p /tmp/p2identity
+          python scripts/phase2_audit_robust_service_identity_v2.py \
+            --frontier outputs/phase2/robustness_v2/robustness_frontier_v2.csv \
+            --robust-validation outputs/phase2/robustness_v2/robustness_tournament_v2_validation.json \
+            --exact-plans outputs/phase2/base_exact_timetables_v2/base_exact_timetable_candidates_v2.csv \
+            --exact-validation outputs/phase2/base_exact_timetables_v2/base_exact_timetables_v2_validation.json \
+            --output /tmp/p2identity/groups.csv \
+            --validation /tmp/p2identity/validation.json >/dev/null
+          cmp outputs/phase2/robustness_v2/robust_service_identity_groups_v2.csv /tmp/p2identity/groups.csv
+          cmp outputs/phase2/robustness_v2/robust_service_identity_v2_validation.json /tmp/p2identity/validation.json
+      - name: Persist
+        run: |
+          git config user.name "phase2-robust-identity-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/robustness_v2/robust_service_identity_groups_v2.csv outputs/phase2/robustness_v2/robust_service_identity_v2_validation.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist robust service identity audit V2 [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-robust-service-identity-v2-${{ github.sha }}
+          retention-days: 90
+          path: |
+            outputs/phase2/robustness_v2/robust_service_identity_groups_v2.csv
+            outputs/phase2/robustness_v2/robust_service_identity_v2_validation.json
