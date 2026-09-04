@@ -9,6 +9,9 @@ on:
       - styles.css
       - app.js
       - network-data.js
+      - geo-data.js
+      - geo-map.js
+      - geo-map.css
       - robots.txt
       - .nojekyll
       - .github/workflows/phase2-site-tra-paesi-qa.yml
@@ -28,13 +31,18 @@ jobs:
         run: |
           node --check network-data.js
           node --check app.js
+          node --check geo-data.js
+          node --check geo-map.js
 
       - name: Certified data contract
         run: |
           node <<'NODE'
           global.window = {};
+          global.document = { createElement: () => ({}), head: { appendChild: () => {} } };
           require('./network-data.js');
+          require('./geo-data.js');
           const d = window.TRA_PAESI_DATA;
+          const g = window.TRA_PAESI_GEO;
           const fail = (m) => { throw new Error(m); };
           d.evidence.diagnostic === 'aa16a9934a78be9a3ee1230996fcaf72c5657f92' || fail('wrong diagnostic evidence commit');
           Object.keys(d.finalists).length === 4 || fail('site must expose exactly 4 finalists');
@@ -50,7 +58,29 @@ jobs:
               route.anchors.at(-1).kind === 'hub' || fail('route must return to certified hub');
             }
           }
-          console.log('PASS: certified finalist snapshot matches aa16a993 contract');
+
+          g.provenance.finalists === d.evidence.diagnostic || fail('geo finalist evidence drift');
+          g.provenance.currentServiceV4 === '95d99b52bff4558c6ab40b5514fa6d09ba3b1e50' || fail('geo current-service V4 pin drift');
+          g.provenance.currentGtfsFrozen === '4ab527827456eb40572a72b4c7b87f8fe5f4dcac' || fail('geo GTFS freeze pin drift');
+          Object.keys(g.proposedPackages).sort().join(',') === '16,18.5' || fail('geo package set drift');
+          g.proposedPackages['16'].length === 2 && g.proposedPackages['18.5'].length === 2 || fail('geo proposed route count drift');
+          g.currentPatterns.length === 4 || fail('expected four frozen representative ordinary patterns');
+          new Set(g.currentPatterns.map(p => p.route)).size === 2 || fail('current map must contain D184 and D185');
+          for (const [pkg, routes] of Object.entries(g.proposedPackages)) {
+            for (const route of routes) {
+              route.anchors[0] === g.hub.id && route.anchors.at(-1) === g.hub.id || fail(`geo ${pkg} route must start/end at hub`);
+              for (const id of route.anchors) {
+                const stop = id === g.hub.id ? g.hub : g.proposedStops[id];
+                stop || fail(`missing geo stop ${id}`);
+                Number.isFinite(stop.lat) && Number.isFinite(stop.lon) || fail(`invalid coordinates ${id}`);
+              }
+            }
+          }
+          for (const pattern of g.currentPatterns) {
+            for (const id of pattern.stopIds) g.currentStops[id] || fail(`missing frozen current stop ${id}`);
+          }
+          /not official route alignments/i.test(g.provenance.geometryContract) || fail('geometry reconstruction caveat missing');
+          console.log('PASS: certified finalist snapshot and geographic lineage are internally closed');
           NODE
 
       - name: Static semantic checks
@@ -63,7 +93,10 @@ jobs:
           html = Path('index.html').read_text(encoding='utf-8')
           js = Path('app.js').read_text(encoding='utf-8')
           data = Path('network-data.js').read_text(encoding='utf-8')
+          geo_js = Path('geo-map.js').read_text(encoding='utf-8')
+          geo_data = Path('geo-data.js').read_text(encoding='utf-8')
           css = Path('styles.css').read_text(encoding='utf-8')
+          geo_css = Path('geo-map.css').read_text(encoding='utf-8')
 
           class AuditParser(HTMLParser):
               def __init__(self):
@@ -81,7 +114,7 @@ jobs:
           p.feed(html)
           duplicates = sorted({x for x in p.ids if p.ids.count(x) > 1})
           assert not duplicates, f'Duplicate HTML ids: {duplicates}'
-          assert not p.buttons_without_type, 'All buttons must declare type=button'
+          assert not p.buttons_without_type, 'All static buttons must declare type=button'
           assert 'name="robots" content="noindex,nofollow,noarchive"' in html, 'Preview must remain noindex'
           assert 'href="styles.css"' in html and 'src="network-data.js"' in html and 'src="app.js"' in html, 'Static assets must remain linked'
 
@@ -91,7 +124,7 @@ jobs:
 
           selectors = set(re.findall(r'querySelector\([\"\']#([A-Za-z0-9_-]+)[\"\']\)', js))
           missing = sorted(selectors - set(p.ids))
-          assert not missing, f'JS references missing HTML ids: {missing}'
+          assert not missing, f'JS references missing static HTML ids: {missing}'
 
           required = ['--paper', '--ink', '--accent', 'prefers-reduced-motion', ':focus-visible']
           for token in required:
@@ -101,21 +134,27 @@ jobs:
           assert 'IntersectionObserver' in js, 'Progressive reveal/navigation layer missing'
           assert 'history.replaceState' in js, 'Shareable decision state missing'
           assert 'aa16a9934a78be9a3ee1230996fcaf72c5657f92' in data, 'Evidence pin missing from data snapshot'
-          print(f'PASS: {len(p.ids)} unique ids, {len(selectors)} JS id references, semantic guards intact')
+          assert 'router.project-osrm.org' in geo_js, 'Road-following reconstruction provider missing'
+          assert 'fallback' in geo_js.lower(), 'Geographic graceful fallback missing'
+          assert 'leaflet' in geo_js.lower(), 'Interactive map engine missing'
+          assert 'section-map' in geo_css and 'tp-marker' in geo_css, 'Geographic visual system missing'
+          assert '4ab527827456eb40572a72b4c7b87f8fe5f4dcac' in geo_data, 'Frozen current GTFS lineage missing'
+          print(f'PASS: {len(p.ids)} static ids, map module present, semantic guards intact')
 
       - name: Epistemic UI guard
         shell: python
         run: |
           from pathlib import Path
-          text = (Path('index.html').read_text() + Path('app.js').read_text() + Path('network-data.js').read_text()).lower()
+          text = (Path('index.html').read_text() + Path('app.js').read_text() + Path('network-data.js').read_text() + Path('geo-map.js').read_text() + Path('geo-data.js').read_text()).lower()
           forbidden_claims = [
               'probabilità empirica di perdita',
               'punteggio complessivo',
               'vincitore automatico',
               'geometria stradale certificata',
+              'tracciato ufficiale definitivo',
           ]
           for claim in forbidden_claims:
               assert claim not in text, f'Unsupported decision claim in site: {claim}'
-          assert 'non geometria stradale' in text or 'routing stradale non lo è' in text, 'Schematic-geometry caveat missing'
+          assert 'ricostruzione' in text and 'non un allineamento ufficiale' in text, 'Road-geometry caveat missing'
           assert 'primary / runner-up' in text and 'non assegnati' in text, 'Non-decision contract missing'
-          print('PASS: no unsupported decision claims and schematic geometry caveat intact')
+          print('PASS: no unsupported decision claims and road-reconstruction caveat intact')
