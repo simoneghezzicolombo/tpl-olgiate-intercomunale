@@ -5,9 +5,9 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 ## Stato corrente
 
 **Data:** 2026-09-04  
-**Fase:** Phase 2 — final robustness / decision preparation  
-**Ultimo snapshot integrato pre-fix RT-001:** `phase2-robustness-final-v2` @ `864c83accb81c615f9778396408b21e31ca72983`  
-**Final selection:** **BLOCKED by RT-001 and downstream lineage rebuild**  
+**Fase:** Phase 2 — final-tournament input readiness  
+**Ultima lineage operativa integrata:** Stage E RT001 V3 @ `063e119` + repaired Stage-C evidence  
+**Final-tournament readiness audit:** **PASS; execution remains BLOCKED by six explicit input/decision gaps**  
 **PRIMARY selection authorised:** **false**  
 **RUNNER-UP selection authorised:** **false**
 
@@ -20,6 +20,48 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 ## Phase 2 — evidenze correnti
 
+### Final Tournament Readiness RT001 V3
+
+- branch `codex/phase2-final-tournament-rt001-v3`;
+- evidence/source commit `8a2d528ee2cc5e099b5b1efdb7c17b11b32d8032`;
+- CI `33883848887` SUCCESS;
+- artifact `9940994538`, SHA256 `adb31b6dfe28c36dddde3fb4a949403ea43febae1b1ad274b1ce5aefe52a34a3`;
+- validation `PASS_PHASE2_FINAL_TOURNAMENT_READINESS_AUDIT_RT001_V3`;
+- 16.495 contesti budget-qualified uniti losslessly a 6.000 timetable esatti;
+- tutti i 646 contesti di frontiera recuperati da RT-001 sono presenti;
+- sei envelope exact: 89.135,2 / 100.277,1 / 111.419,0 / 122.560,9 / 133.702,8 / 144.844,7 bus-km/anno;
+- test, rebuild byte-for-byte e guard anti-selezione PASS;
+- nessun `CandidateEvaluation`, ranking, budget decisionale, uncertainty band, calendario, recovery, PRIMARY o RUNNER-UP materializzato.
+
+Blocker finali formalizzati:
+
+1. full demand-weighted GJT non disponibile: il journey universe è municipal-OD e `full_gjt_ready=false`;
+2. missed-connection probability empirica non disponibile: Stage E è deterministic engineering stress;
+3. Stage-F incompleto per dwell variation, bus-runtime decrease, non-zero rail delay e route-level demand perturbation;
+4. current-service continuity resta un lower bound localizzabile incompleto;
+5. decision budget non selezionato dal caller;
+6. uncertainty band non selezionata dal caller.
+
+### Stage D exact RT001 V3 — PASS e cross-audit PASS
+
+- branch canonica `codex/phase2-stage-d-exact-rt001-v3`;
+- evidence commit `2e667db698e282542bc486e8f64ed4fa590549c6`;
+- CI `33872934005` SUCCESS;
+- cross-audit branch `phase2-stage-d-v3-cross-implementation-audit`, run `33875195829` SUCCESS;
+- 5.325 timing problem, 16.495 contesti, 6.772.755 phase vector exhaustive, 6.000 timetable selezionati, 285.748 trip;
+- zero differenze semantiche fra le due implementazioni indipendenti.
+
+### Stage E final operational robustness RT001 V3 — PASS
+
+- branch `phase2-stage-e-rt001-v3-final-a`;
+- evidence commit `063e119`;
+- CI `33876737866` SUCCESS;
+- artifact `9938582797`, SHA256 `c9aa25cfa09c0d4d9c21c0d9a8f0295185dae79711b4067f198a1a2e61dbda16`;
+- 6.000 timetable, 16.495 plan context, 285.748 trip, 3.260.753 planned connection e 157.968 robustness row;
+- delay bus 0/+5/+10/+15 e recovery 5/10/15 restano engineering sensitivity non probabilistiche e non selezionate;
+- rail delay resta nominale 0 per assenza di un contratto certificato non-zero;
+- nessuna selezione finale autorizzata.
+
 ### Final Methodological Red-Team V2
 
 - branch `phase2-final-method-redteam-v2`;
@@ -30,7 +72,7 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 RT-001 resta il blocker upstream: il prefilter annuale a continuous clockface non è lossless vicino ai budget cap in tutti i contesti span/headway. Questo Stage-E workstream non modifica budget-policy, Passenger Utility o Stage-D manifest.
 
-### Stage D exact — PASS tecnico, fixture non finale
+### Stage D exact V2 — PASS tecnico storico, fixture non finale
 
 Lo Stage D exact corrente resta tecnicamente **PASS rispetto al proprio input**:
 
@@ -42,7 +84,7 @@ Lo Stage D exact corrente resta tecnicamente **PASS rispetto al proprio input**:
 
 Recovery 5/10/15 e runtime stress 0/+5/+10/+15 sono sensitivity non selezionate. A causa di RT-001 questo Stage D è una **development/regression fixture**, non la final-selection lineage.
 
-### Stage E — Final Operational Robustness V2
+### Stage E — Final Operational Robustness V2 storico
 
 **PASS WITH LIMITATIONS come motore di robustness. Non PASS della scelta di rete.**
 
@@ -90,12 +132,14 @@ RT-004 è **formalizzato/mitigato sulla branch Stage E**: questo status sostitui
 
 ## Critical path corrente
 
-1. RT-001 repair su workstream separato: hard-budget eligibility lossless;
-2. rebuild downstream di budget-policy, Passenger Utility e packaging dipendente;
-3. nuovo Stage D exact sulla lineage lossless con produzione annua exact del timetable;
-4. rerun dello **stesso Stage-E engine** sul nuovo Stage D senza cambiare algoritmo;
-5. final robustness tournament e materializzazione degli input espliciti del Decision Contract;
-6. soltanto dopo, eventuale PRIMARY e RUNNER-UP.
+RT-001, Stage D exact e Stage E final sono chiusi con PASS. Il prossimo lavoro autorizzabile deve ora colmare evidenza, non produrre una classifica prematura:
+
+1. ottenere una lineage esplicita e supportata di allocazione spaziale/route-level della domanda, oppure mantenere formalmente `full_gjt_ready=false`;
+2. materializzare full Passenger GJT per candidato sulle sensitivity walk/wait e sulle altre dimensioni richieste;
+3. certificare le sensitivity Stage-F mancanti e una base empirica per la missed-connection probability, senza convertire arbitrariamente gli stress deterministici in probabilità;
+4. completare o esplicitamente accettare il limite del current-service baseline;
+5. richiedere al decisore una delle sei envelope di budget e una uncertainty band finita non negativa;
+6. solo a quel punto costruire reali `CandidateEvaluation` e invocare il finalizer per PRIMARY/RUNNER-UP.
 
 `primary_selection_authorised=false`  
 `runner_up_selection_authorised=false`
