@@ -1,0 +1,68 @@
+{
+  "status": "PASS_PHASE2_STAGE_D_INPUT_MANIFEST_V2",
+  "contract": "PHASE2_LOSSLESS_DAILY_TIMING_INPUT_MANIFEST_V2",
+  "passenger_plan_context_count_represented": 16883,
+  "passenger_plan_count_represented": 16883,
+  "passenger_plan_id_is_global_across_budgets": false,
+  "stage_d_daily_timing_input_count": 5345,
+  "unique_stage_d_scenario_count": 2056,
+  "used_public_route_count": 804,
+  "recovery_values_retained_not_selected": [
+    5,
+    10,
+    15
+  ],
+  "route_count_distribution": {
+    "1": 2572,
+    "2": 2773
+  },
+  "headway_distribution": {
+    "15": 835,
+    "20": 723,
+    "30": 1429,
+    "60": 2358
+  },
+  "naive_joint_phase_vector_count_min": 15,
+  "naive_joint_phase_vector_count_max": 3600,
+  "naive_joint_phase_vector_count_sum": 6758835,
+  "naive_complexity_threshold_counts": {
+    ">=1e4": 0,
+    ">=1e5": 0,
+    ">=1e6": 0,
+    ">=1e7": 0
+  },
+  "daily_timing_deduplication_semantics": "SAME_SCENARIO_ID__HEADWAY__SPAN_ONLY__BUDGET_AND_CALENDAR_RETAINED_AS_PLAN_CONTEXTS",
+  "daily_timing_context_deduplicated_losslessly": true,
+  "cross_scenario_or_route_set_equivalence_assumed": false,
+  "route_set_signature_used_to_remove_inputs": false,
+  "naive_complexity_used_to_remove_inputs": false,
+  "phase_selected": false,
+  "exact_timetable_constructed": false,
+  "joint_vehicle_block_feasibility_evaluated": false,
+  "candidate_eliminated": false,
+  "decision_budget_selected": false,
+  "calendar_selected": false,
+  "recovery_selected": false,
+  "primary_selected": false,
+  "runner_up_selected": false,
+  "worker_reference_assigned_to_routes": false,
+  "municipal_od_downscaled": false,
+  "ridership_forecast": false,
+  "weighted_composite_score": false,
+  "epistemic_note": "This manifest is a lossless computational packaging layer for Stage D. Multiple Stage-C rows are grouped only when they share the exact same structural scenario, headway and daily span. Passenger Utility plan_id is not globally unique across budget envelopes, so every row is preserved with a budget-qualified plan-context identity. Budget and annual calendar memberships remain explicitly listed. The reported headway^route_count quantity is only the naive Cartesian phase-vector cardinality diagnostic; it is not an objective, threshold or pruning rule. No equivalence across different scenario IDs or public route sets is assumed.",
+  "lineage": {
+    "passenger_frontier_sha256": "67fce03634f599834a7532260e88ae4c2e3323f7d0809ad7675a37bdd0b4e182",
+    "passenger_validation_sha256": "115d5fb06f877a886343d30cebad1538d1dc3e972d64094e66a82f2644312ff0",
+    "s8_opportunity_sha256": "fd656b3f66af9a658777486909c83dc170ecdc8066a7d2b68ef65b2c73cacbe8",
+    "s8_opportunity_validation_sha256": "e04750fca8bd5c28805194e8079b8aeed36ebcae452fdc6ced5ff5d7ab10d643",
+    "continuity_scenarios_sha256": "0bf66d92b4f6b2e50b45445b6be11c18e3e05242fb10bd99c5f673c634ef17cb",
+    "continuity_validation_sha256": "8dc23d1bbf664e079e11ff101398c92c5ae813cf59d817ccabc53d903cf628d3",
+    "scenario_mapping_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
+    "route_universe_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
+    "s8_validation_sha256": "b79e4dcbe1978e04c76ac7324c8c2e982185291529a8dc0c2b4a6a835360e490",
+    "timing_output": "outputs/phase2/stage_d_input_manifest_v2/stage_d_daily_timing_inputs_v2.csv.gz",
+    "timing_output_sha256": "2dd68751fb6fb0673aba7205450288260fcaedafac7c09c3f7b3d73820d605f5",
+    "route_output": "outputs/phase2/stage_d_input_manifest_v2/stage_d_public_route_inputs_v2.csv",
+    "route_output_sha256": "7688cf62275d57242b614cbcdf56237f142fd34f3e69995671303af84f64a4b7"
+  }
+}
