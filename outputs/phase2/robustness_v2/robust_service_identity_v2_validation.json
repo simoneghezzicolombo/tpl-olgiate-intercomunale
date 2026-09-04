@@ -1,0 +1,30 @@
+{
+  "contract": "PHASE2_ROBUST_SERVICE_IDENTITY_V2",
+  "cross_family_alias_group_count": 148,
+  "duplicate_plan_alias_count": 148,
+  "epistemic_note": "This audit removes label aliases only. Two plans are one operational identity only when their exact public route IDs, selected route phases, headway, span and calendar match and all declared invariant metrics are identical. No topology family is preferred.",
+  "family_alias_signature_counts": {
+    "blank_slate+single_compact_loop": 116,
+    "hybrid_interlined+two_radial_out_and_back_feeders": 16,
+    "interlined_figure8+two_independent_loops": 16
+  },
+  "family_label_used_to_select_representative": false,
+  "lineage": {
+    "exact_plans_sha256": "bc575546d34a260dc4f8061cde7059a78a7b1dbb74af1b398ae710c7dd84785d",
+    "exact_validation_sha256": "a6f3ef5fc1cc85e6b02416dfce5a48eee34b8f1f5ec4a64ecaa49db57990bead",
+    "output_sha256": "4263c9ee54f6c6a971b5d911f64b3fcab0d73bab6ccceb996bb15f89f73247b0",
+    "robust_frontier_sha256": "4ed14ef2689559051033c509d4bccc006487efdddd4e9182c2bfbc7cda4af62d",
+    "robust_validation_sha256": "9da85c7fec9646fe0fddaf735b7fcdab0e9fd3c76d8598ee476163b6fff9ca52"
+  },
+  "metric_invariance_checked": true,
+  "multi_plan_alias_group_count": 148,
+  "operational_identity_key": "SORTED_ROUTE_ID_PLUS_SELECTED_CLOCK_PHASE__HEADWAY__SPAN__CALENDAR",
+  "primary_selected": false,
+  "robust_frontier_plan_count": 296,
+  "runner_up_selected": false,
+  "service_policy_selected": false,
+  "status": "PASS_ROBUST_SERVICE_IDENTITY_AUDIT_V2",
+  "topology_ranked": false,
+  "unique_operational_service_identity_count": 148,
+  "weighted_composite_score_used": false
+}
