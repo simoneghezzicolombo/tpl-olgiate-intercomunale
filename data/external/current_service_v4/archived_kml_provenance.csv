@@ -1,0 +1,3 @@
+archive_id,legacy_line,current_line,archived_filename,sha256,archived_at_utc,archive_storage,renumbering_source_url,epistemic_role,used_in_numeric_coverage
+archived_kml_d84_2025,D84,D184,D84.kml,6cf715a83c1e85e7ebfeecd82b666eee623119e7b37e35875ed0be419fa5523a,2025-01-20T16:13:40Z,USER_ARCHIVE,https://www.tplcomoleccovarese.it/atpcolc/po/attachment_news.php?id=947,HISTORICAL_OFFICIAL_ROUTE_GEOMETRY_AND_STOP_ID_CORROBORATION,false
+archived_kml_e03_2025,E03,D185,E03.kml,10239544443134a10992b938a878ff62a906618f8f7f6babe2a339647f41bfa5,2025-01-20T16:13:44Z,USER_ARCHIVE,https://www.tplcomoleccovarese.it/atpcolc/po/attachment_news.php?id=947,HISTORICAL_OFFICIAL_ROUTE_GEOMETRY_AND_STOP_ID_CORROBORATION,false
