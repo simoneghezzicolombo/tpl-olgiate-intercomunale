@@ -105,7 +105,17 @@ jobs:
             --validation-output /tmp/phase2-robustness-frontier-v2/validation.json >/dev/null
           cmp outputs/phase2/robustness_frontier_v2/scenario_timing_frontier_v2.csv /tmp/phase2-robustness-frontier-v2/frontier.csv
           cmp outputs/phase2/robustness_frontier_v2/scenario_timing_frontier_audit_v2.csv /tmp/phase2-robustness-frontier-v2/audit.csv
-          cmp outputs/phase2/robustness_frontier_v2/robustness_frontier_v2_validation.json /tmp/phase2-robustness-frontier-v2/validation.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          left=json.loads(Path('outputs/phase2/robustness_frontier_v2/robustness_frontier_v2_validation.json').read_text(encoding='utf-8'))
+          right=json.loads(Path('/tmp/phase2-robustness-frontier-v2/validation.json').read_text(encoding='utf-8'))
+          for payload in (left, right):
+              lineage=payload['lineage']
+              lineage.pop('frontier_output', None)
+              lineage.pop('audit_output', None)
+          assert left == right
+          PY
 
       - name: Guard no synthetic/no weighted score
         run: |
