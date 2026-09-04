@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """Memory-safe, contract-preserving entry point for Stage-E RT001 V3.
 
-The certified Stage-E robustness calculations are untouched.  This entry point
-only performs two interface operations required by the repaired Stage-D V3
-contract:
+The certified Stage-E robustness calculations are untouched. This entry point
+only adapts the repaired Stage-D V3 interface:
 
 1. public BUS->RAIL return events are retained only inside the declared service
-   span, matching the Stage-D V3 START_INCLUSIVE_END_EXCLUSIVE semantics;
-2. legacy engine output identity is relabelled from its internal
+   span, matching START_INCLUSIVE_END_EXCLUSIVE Stage-D V3 semantics;
+2. the V2 trip loader is relaxed only in the direction required by that rule:
+   a closed route may have no passenger return on a trip whose physical return
+   is outside span, while a route without BUS->RAIL support can never expose a
+   passenger return;
+3. legacy engine output identity is relabelled from its internal
    ``stage_d_input_id`` alias to the real ``selected_timetable_id`` in a
    streaming, memory-safe pass.
 """
@@ -69,6 +72,63 @@ def materialise_compatibility_inputs_in_span(args, temp: Path, stage_d):
     return summary_path, rewritten, tables, context_count
 
 
+def load_exact_trips_v3(
+    path: Path,
+    *,
+    recoveries: tuple[int, ...],
+    route_semantics: dict[str, dict[str, object]],
+):
+    """V3 loader that permits an out-of-span closed-route return to be absent.
+
+    Absence on a BUS->RAIL-capable route is safe only because the normalization
+    step above deterministically removes exactly those returns that lie outside
+    the certified service span. Presence on a non-BUS->RAIL route remains a
+    hard error.
+    """
+    engine = target.engine
+    groups: dict[str, list[object]] = {}
+    seen: set[tuple[str, str, int]] = set()
+    with gzip.open(path, "rt", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        fields = set(reader.fieldnames or [])
+        required = {
+            "stage_d_input_id", "scenario_id", "route_id", "trip_ordinal", "hub_departure_min",
+            "public_hub_return_min", "vehicle_hub_return_min",
+        } | {f"vehicle_block_recovery{r}" for r in recoveries}
+        missing = required - fields
+        if missing:
+            raise ValueError(f"exact trip schema missing fields: {sorted(missing)}")
+        for row in reader:
+            rid = str(row["route_id"])
+            if rid not in route_semantics:
+                raise ValueError(f"exact trip references unknown route {rid}")
+            public_return = engine.optional_float(
+                row["public_hub_return_min"], field="public_hub_return_min"
+            )
+            b2r = bool(route_semantics[rid]["bus_to_rail_passenger_event_supported"])
+            if public_return is not None and not b2r:
+                raise ValueError(f"{rid}: technical return leaked into passenger return semantics")
+            trip = engine.ExactTrip(
+                stage_d_input_id=str(row["stage_d_input_id"]),
+                scenario_id=str(row["scenario_id"]),
+                route_id=rid,
+                trip_ordinal=int(row["trip_ordinal"]),
+                hub_departure_min=float(row["hub_departure_min"]),
+                public_hub_return_min=public_return,
+                vehicle_hub_return_min=float(row["vehicle_hub_return_min"]),
+                block_by_recovery={r: int(row[f"vehicle_block_recovery{r}"]) for r in recoveries},
+            )
+            trip.validate()
+            key = (trip.stage_d_input_id, rid, trip.trip_ordinal)
+            if key in seen:
+                raise ValueError(f"duplicate exact trip {key}")
+            seen.add(key)
+            groups.setdefault(trip.stage_d_input_id, []).append(trip)
+    for rows in groups.values():
+        rows.sort(key=lambda t: (t.hub_departure_min, t.route_id, t.trip_ordinal))
+    return groups
+
+
 def rewrite_engine_outputs_streaming(temp_out: Path, final_out: Path) -> dict[str, str]:
     hashes: dict[str, str] = {}
     for source_name, final_name in target.FINAL_FILES.items():
@@ -103,9 +163,11 @@ def rewrite_engine_outputs_streaming(temp_out: Path, final_out: Path) -> dict[st
 def main() -> int:
     original_rewrite = target.rewrite_engine_outputs
     original_materialise = target.materialise_compatibility_inputs
+    original_loader = target.engine.load_exact_trips
     target.rewrite_engine_outputs = rewrite_engine_outputs_streaming
-    # The wrapper calls target.materialise_compatibility_inputs internally, so
-    # preserve the original through a closure to avoid recursion.
+
+    # The span wrapper calls the original materialiser internally. Preserve it
+    # through a closure to avoid recursion while target.main() is executing.
     def materialise(args, temp, stage_d):
         target.materialise_compatibility_inputs = original_materialise
         try:
@@ -114,11 +176,13 @@ def main() -> int:
             target.materialise_compatibility_inputs = materialise
 
     target.materialise_compatibility_inputs = materialise
+    target.engine.load_exact_trips = load_exact_trips_v3
     try:
         return target.main()
     finally:
         target.rewrite_engine_outputs = original_rewrite
         target.materialise_compatibility_inputs = original_materialise
+        target.engine.load_exact_trips = original_loader
 
 
 if __name__ == "__main__":
