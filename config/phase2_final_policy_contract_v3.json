@@ -1,6 +1,6 @@
 {
   "contract": "PHASE2_HUMAN_APPROVED_FINAL_POLICY_V3",
-  "contract_version": 1,
+  "contract_version": 2,
   "status": "APPROVED_FOR_DRY_RUN_PENDING_CURRENT_SERVICE_V4",
   "purpose": "Translate the explicit human policy choices into a no-weight, fail-closed final-decision contract without selecting PRIMARY or RUNNER-UP before Current-Service Baseline V4 is certified.",
   "human_policy_decisions": {
@@ -15,9 +15,9 @@
     "s8_role": "HIGH_IMPORTANCE_BUT_NOT_DOMINANT_OVER_INTERMUNICIPAL_SERVICE",
     "accessibility_role": "CENTRAL_PASSENGER_FACING_OBJECTIVE",
     "territorial_equity_role": "STRONG_INTERMUNICIPAL_SAFEGUARD_NOT_SINGLE_MAXIMISATION_TARGET",
-    "frequency_role": "ESSENTIAL_SERVICE_USABILITY_DIMENSION_WITHOUT_PRESELECTING_H15_H20_H30",
+    "frequency_role": "FREQUENT_SERVICE_H_LE_30_IS_THE_DEFAULT_WHEN_ROBUSTLY_AVAILABLE; H60_IS_AN_EXCEPTION_ONLY_FOR_STRUCTURAL_TERRITORIAL_SUPERIORITY",
     "robustness_role": "STRONG_FAIL_CLOSED_OPERATIONAL_GATE_AND_COMPARISON_DIMENSION",
-    "simplicity_role": "HIGH_PRACTICAL_TIE_BREAK_WHERE_CERTIFIED_EVIDENCE_SUPPORTS_IT; DO_NOT_REINTERPRET_PUBLIC_ROUTE_COUNT_AS_A_CERTIFIED_COMPLEXITY_SCORE",
+    "simplicity_role": "HIGH_PRACTICAL_TIE_BREAK_WHERE_CERTIFIED_EVIDENCE SUPPORTS IT; DO_NOT_REINTERPRET_PUBLIC_ROUTE_COUNT_AS_A_CERTIFIED_COMPLEXITY_SCORE",
     "cost_role": "EFFICIENCY_TIE_BREAK_WITHIN_THE_111419_KM_HARD_CAP"
   },
   "selection_boundary": {
@@ -44,11 +44,28 @@
     ],
     "note": "Other exact budget and routability requirements are already upstream-certified and are not recomputed here."
   },
-  "ordered_no_weight_layers": [
+  "headway_class_policy": {
+    "frequent_class_id": "FREQUENT_H_LE_30",
+    "frequent_class_rule": "uniform_headway_min <= 30",
+    "hourly_class_id": "HOURLY_H60",
+    "hourly_class_rule": "uniform_headway_min == 60",
+    "unexpected_other_headway_rule": "FAIL_CLOSED",
+    "default_class_when_robust_frequent_exists": "FREQUENT_H_LE_30",
+    "hourly_exception_semantics": "H60 may displace the frequent-service class only when at least one H60 territorial-frontier candidate is no worse than every frequent-class territorial-frontier candidate on all six certified total/worst-municipality 5/8/10 accessibility dimensions, and is strictly better in at least one total-accessibility dimension and at least one worst-municipality equity dimension. No scalar percentage threshold is invented.",
+    "territorial_exception_dimensions": [
+      {"field": "public_population_coverage_share_10min", "direction": "max", "dimension_group": "TOTAL"},
+      {"field": "public_population_coverage_share_8min", "direction": "max", "dimension_group": "TOTAL"},
+      {"field": "public_population_coverage_share_5min", "direction": "max", "dimension_group": "TOTAL"},
+      {"field": "public_worst_municipality_coverage_share_10min", "direction": "max", "dimension_group": "EQUITY"},
+      {"field": "public_worst_municipality_coverage_share_8min", "direction": "max", "dimension_group": "EQUITY"},
+      {"field": "public_worst_municipality_coverage_share_5min", "direction": "max", "dimension_group": "EQUITY"}
+    ],
+    "reason": "The policy explicitly values a genuinely usable frequency and accepts hourly service only when the territorial/equity gain is structurally broad rather than purchased later through lower kilometres or fleet requirements."
+  },
+  "class_internal_layers": [
     {
-      "layer_id": "L1_USEFUL_TERRITORIAL_SERVICE",
+      "layer_id": "L1_TERRITORIAL_ACCESS_AND_AVAILABILITY",
       "method": "PARETO_NONDOMINANCE",
-      "purpose": "Treat total accessibility, territorial equity and service availability jointly so that raw coverage cannot win by itself and the worst municipality is a safeguard rather than the sole objective.",
       "dimensions": [
         {"field": "public_population_coverage_share_10min", "direction": "max"},
         {"field": "public_population_coverage_share_8min", "direction": "max"},
@@ -56,7 +73,6 @@
         {"field": "public_worst_municipality_coverage_share_10min", "direction": "max"},
         {"field": "public_worst_municipality_coverage_share_8min", "direction": "max"},
         {"field": "public_worst_municipality_coverage_share_5min", "direction": "max"},
-        {"field": "uniform_headway_min", "direction": "min"},
         {"field": "span_minutes", "direction": "max"},
         {"field": "annual_service_days", "direction": "max"}
       ]
@@ -64,7 +80,6 @@
     {
       "layer_id": "L2_INTERCHANGE_AND_ENGINEERING_ROBUSTNESS",
       "method": "PARETO_NONDOMINANCE",
-      "purpose": "Prefer networks that remain operationally credible and provide useful bidirectional S8 integration without turning the network into a rail shuttle only.",
       "dimensions": [
         {"field": "bidirectional_reachable_share", "direction": "max"},
         {"field": "to_rail_reachable_share", "direction": "max"},
@@ -83,7 +98,6 @@
     {
       "layer_id": "L3_IMPLEMENTABILITY_AND_EFFICIENCY",
       "method": "PARETO_NONDOMINANCE",
-      "purpose": "Break remaining trade-offs using implementation certainty and resource efficiency, never continuity with the legacy routes.",
       "dimensions": [
         {"field": "public_explicit_field_check_pending_count", "direction": "min"},
         {"field": "public_operational_unknown_distance_share_lower_bound", "direction": "min"},
@@ -102,7 +116,8 @@
     "legacy_continuity_may_select_candidate": false,
     "olgiate_frazione_diagnostic_may_select_candidate": false,
     "headway_30_min_is_hard_requirement": false,
-    "h60_may_be_selected_without_explicit_service_tradeoff_trace": false
+    "h60_may_be_selected_without_explicit_service_tradeoff_trace": false,
+    "later_efficiency_or_fleet_metrics_may_override_headway_class_policy": false
   },
   "strict_lexicographic_diagnostic": {
     "purpose": "Diagnostic only: expose how brittle an exact sequential rule would be under zero global tolerance. It must not select the final recommendation.",
