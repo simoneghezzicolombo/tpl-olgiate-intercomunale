@@ -86,17 +86,23 @@ jobs:
 
       - name: Epistemic and selection guards
         run: |
-          ! grep -n -E 'np\.random|numpy\.random|import random|from random' scripts/phase2_dry_run_final_policy_v3.py
-          ! grep -n -E 'weighted[_ -]?score|primary_selected["'"']? *[:=] *[Tt]rue|runner_up_selected["'"']? *[:=] *[Tt]rue' config/phase2_final_policy_contract_v3.json scripts/phase2_dry_run_final_policy_v3.py
           python - <<'PY'
           import json
           from pathlib import Path
-          c = json.loads(Path('config/phase2_final_policy_contract_v3.json').read_text())
-          assert c['human_policy_decisions']['continuity_with_d184_d185_decision_role'] == 'REPORTING_ONLY'
-          assert c['human_policy_decisions']['olgiate_frazione_diagnostic_decision_role'] == 'REPORTING_ONLY'
-          assert c['diagnostic_boundaries']['public_route_count_is_certified_complexity_score'] is False
-          assert c['diagnostic_boundaries']['legacy_continuity_may_select_candidate'] is False
-          assert c['selection_boundary']['current_service_v4_required_before_final_selection'] is True
+
+          script = Path('scripts/phase2_dry_run_final_policy_v3.py').read_text(encoding='utf-8')
+          config = json.loads(Path('config/phase2_final_policy_contract_v3.json').read_text(encoding='utf-8'))
+
+          for banned in ('np.random', 'numpy.random', 'import random', 'from random'):
+              assert banned not in script, banned
+          assert config['human_policy_decisions']['continuity_with_d184_d185_decision_role'] == 'REPORTING_ONLY'
+          assert config['human_policy_decisions']['olgiate_frazione_diagnostic_decision_role'] == 'REPORTING_ONLY'
+          assert config['diagnostic_boundaries']['public_route_count_is_certified_complexity_score'] is False
+          assert config['diagnostic_boundaries']['legacy_continuity_may_select_candidate'] is False
+          assert config['selection_boundary']['current_service_v4_required_before_final_selection'] is True
+          assert config['selection_boundary']['weighted_composite_score'] is False
+          assert config['selection_boundary']['primary_selection_authorised'] is False
+          assert config['selection_boundary']['runner_up_selection_authorised'] is False
           PY
 
       - name: Persist dry-run evidence
