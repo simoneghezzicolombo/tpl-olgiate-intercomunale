@@ -1,0 +1,125 @@
+name: Phase 2 Current Service Baseline V3
+
+on:
+  push:
+    branches:
+      - phase2-current-service-baseline-v3
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: .
+  OUTDIR: outputs/phase2/current_service_access_baseline_v3
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install pytest
+
+      - name: Compile
+        run: |
+          python -m py_compile src/phase2_current_service_baseline_v3.py
+          python -m py_compile scripts/phase2_build_current_service_access_baseline_v3.py
+
+      - name: Regression tests
+        run: pytest -q tests/test_phase2_current_service_baseline_v3.py
+
+      - name: Build V3 lower bound
+        run: |
+          mkdir -p "$OUTDIR"
+          python scripts/phase2_build_current_service_access_baseline_v3.py \
+            --identity outputs/phase2/current_service_stop_identity_2026-09-03.csv \
+            --identity-validation outputs/phase2/current_service_stop_identity_validation.json \
+            --v2-official-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv \
+            --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
+            --baseline-v2-validation outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json \
+            --localized-output "$OUTDIR/current_service_localized_rows_v3.csv" \
+            --validation-output "$OUTDIR/current_service_access_baseline_v3_validation.json"
+
+      - name: Validate epistemic contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('outputs/phase2/current_service_access_baseline_v3/current_service_access_baseline_v3_validation.json')
+          v = json.loads(p.read_text())
+          assert v['status'] == 'PASS_CURRENT_SERVICE_ACCESS_LOWER_BOUND_V3'
+          assert v['contract'] == 'PHASE2_CURRENT_SERVICE_CERTIFIED_LOCALIZABLE_ACCESS_LOWER_BOUND_V3'
+          assert v['baseline_role'] == 'CERTIFIED_LOCALIZABLE_LOWER_BOUND_ONLY'
+          assert v['baseline_complete'] is False
+          assert v['may_infer_true_current_total_coverage'] is False
+          assert v['may_use_ambiguous_rows_for_spatial_access'] is False
+          m = v['matching_contract']
+          assert m['current_service_activation_source'] == 'OFFICIAL_OPERATOR_PDF_ONLY'
+          assert m['historically_ambiguous_rows_overridden'] is False
+          assert m['same_route_required'] is True
+          assert m['minimum_official_name_token_count'] == 3
+          assert m['all_compatible_v2_records_must_share_one_physical_cluster'] is True
+          assert m['edit_distance_fuzzy_matching_used'] is False
+          assert m['coordinate_nearest_matching_used'] is False
+          assert m['manual_alias_map_used'] is False
+          assert v['localized_rows'] >= v['v2_comparison']['localized_rows_v2']
+          assert v['unresolved_or_unlocalized_rows'] <= v['v2_comparison']['unresolved_or_unlocalized_rows_v2']
+          for t in ('5','8','10'):
+              assert v['v2_comparison']['coverage_share_v3'][t] + 1e-12 >= v['v2_comparison']['coverage_share_v2'][t]
+          print(json.dumps({
+              'localized_rows': v['localized_rows'],
+              'new_bridge_rows': v['v3_new_bridge_rows'],
+              'unresolved': v['unresolved_or_unlocalized_rows'],
+              'coverage': v['v2_comparison']['coverage_share_v3'],
+          }, indent=2))
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/current_service_baseline_v3_rebuild
+          mkdir -p /tmp/current_service_baseline_v3_rebuild
+          python scripts/phase2_build_current_service_access_baseline_v3.py \
+            --identity outputs/phase2/current_service_stop_identity_2026-09-03.csv \
+            --identity-validation outputs/phase2/current_service_stop_identity_validation.json \
+            --v2-official-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv \
+            --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
+            --baseline-v2-validation outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json \
+            --localized-output /tmp/current_service_baseline_v3_rebuild/current_service_localized_rows_v3.csv \
+            --validation-output /tmp/current_service_baseline_v3_rebuild/current_service_access_baseline_v3_validation.json
+          cmp "$OUTDIR/current_service_localized_rows_v3.csv" /tmp/current_service_baseline_v3_rebuild/current_service_localized_rows_v3.csv
+          cmp "$OUTDIR/current_service_access_baseline_v3_validation.json" /tmp/current_service_baseline_v3_rebuild/current_service_access_baseline_v3_validation.json
+
+      - name: Static anti-shortcut guard
+        run: |
+          ! grep -R -nE 'np\.random|random\.|fuzzywuzzy|rapidfuzz|SequenceMatcher|nearest.*coordinate|manual.*whitelist' \
+            src/phase2_current_service_baseline_v3.py \
+            scripts/phase2_build_current_service_access_baseline_v3.py
+
+      - name: Persist evidence
+        run: |
+          if git diff --quiet -- "$OUTDIR"; then
+            echo 'No output changes to persist.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$OUTDIR"
+          git commit -m 'evidence(phase2): persist current-service baseline V3'
+          git push origin HEAD:phase2-current-service-baseline-v3
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-current-service-baseline-v3
+          path: outputs/phase2/current_service_access_baseline_v3/
+          if-no-files-found: error
