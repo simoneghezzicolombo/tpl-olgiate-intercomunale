@@ -140,8 +140,16 @@ jobs:
             src/phase2_exact_timetable_optimizer_v2.py \
             src/phase2_exact_timetable_contract_v2.py \
             scripts/phase2_run_exact_timetable_rt001_v3.py
-          ! grep -REn 'primary_selected["'"']?[[:space:]]*[:=][[:space:]]*(True|true)|runner_up_selected["'"']?[[:space:]]*[:=][[:space:]]*(True|true)' \
-            scripts/phase2_run_exact_timetable_rt001_v3.py
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          path = Path('scripts/phase2_run_exact_timetable_rt001_v3.py')
+          text = path.read_text(encoding='utf-8')
+          forbidden = re.compile(r'''(?:primary_selected|runner_up_selected)["']?\s*[:=]\s*(?:True|true)''')
+          match = forbidden.search(text)
+          if match:
+              raise SystemExit(f'forbidden final-selection flag in {path}: {match.group(0)}')
+          PY
       - name: Persist evidence
         run: |
           git config user.name 'phase2-stage-d-exact-rt001-v3-ci'
