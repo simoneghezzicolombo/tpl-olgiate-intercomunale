@@ -6,6 +6,8 @@
   "bus_runtime_delay_minutes": [0, 5, 10, 15],
   "bus_runtime_delay_source": "CARRIED_FORWARD_FROM_CERTIFIED_STAGE_D_V2_ENGINEERING_SENSITIVITY_GRID_NOT_EMPIRICAL_PROBABILITY",
   "bus_runtime_delay_source_contract": "PHASE2_EXHAUSTIVE_EXACT_TIMETABLE_S8_AND_VEHICLE_BLOCKS_V2",
+  "bus_runtime_delay_source_status": "PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_V2",
+  "bus_runtime_delay_source_validation": "outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_timetable_v2_validation.json",
   "bus_runtime_delay_source_semantics": "ENGINEERING_STRESS_ONLY_NOT_EMPIRICAL_DELAY_PROBABILITY_AND_NOT_PHASE_OBJECTIVE",
   "recovery_source": "STAGE_D_RT001_V3_VALIDATION_RECOVERY_VALUES_EVALUATED_NOT_SELECTED",
   "transfer_profile_source": "config/phase2_s8_phasing_sensitivity_v2.json",
