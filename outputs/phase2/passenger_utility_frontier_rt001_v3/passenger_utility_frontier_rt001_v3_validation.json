@@ -1,0 +1,151 @@
+{
+  "annual_bus_km_is_exact_phase_domain_minimum": true,
+  "annual_bus_km_is_selected_timetable_production": false,
+  "annual_bus_km_retained_for_tie_break_not_passenger_dominance": true,
+  "annual_bus_km_used_for_passenger_dominance": false,
+  "budget_count": 6,
+  "budget_is_hard_constraint_not_utility_axis": true,
+  "budget_policy_frontier_row_count_upstream": 493212,
+  "budget_summary": {
+    "m10pct": {
+      "collapsed_recovery_plan_count": 24504,
+      "passenger_context_count": 24,
+      "passenger_utility_frontier_plan_count": 2478,
+      "passenger_utility_frontier_plan_ids_sha256": "5f75e83a7f3776e9a5913de9133e13278b2d239d058692767080b95e24940054",
+      "passenger_utility_frontier_unique_scenario_count": 1487,
+      "passenger_utility_frontier_unique_scenario_count_headway_30_or_better": 753,
+      "stage1_context_frontier_union_plan_count": 5900
+    },
+    "m20pct": {
+      "collapsed_recovery_plan_count": 22469,
+      "passenger_context_count": 24,
+      "passenger_utility_frontier_plan_count": 2181,
+      "passenger_utility_frontier_plan_ids_sha256": "e90ed42526023bb94a530857e80965f29280a2897b4822fd5df325e6e2bf7bac",
+      "passenger_utility_frontier_unique_scenario_count": 1305,
+      "passenger_utility_frontier_unique_scenario_count_headway_30_or_better": 571,
+      "stage1_context_frontier_union_plan_count": 5219
+    },
+    "p10pct": {
+      "collapsed_recovery_plan_count": 28498,
+      "passenger_context_count": 24,
+      "passenger_utility_frontier_plan_count": 2856,
+      "passenger_utility_frontier_plan_ids_sha256": "47b5dc8c51d367475d5977e61cd216d325e55d50825d051a416ed69b71f9183d",
+      "passenger_utility_frontier_unique_scenario_count": 1518,
+      "passenger_utility_frontier_unique_scenario_count_headway_30_or_better": 743,
+      "stage1_context_frontier_union_plan_count": 7425
+    },
+    "p20pct": {
+      "collapsed_recovery_plan_count": 30407,
+      "passenger_context_count": 24,
+      "passenger_utility_frontier_plan_count": 3112,
+      "passenger_utility_frontier_plan_ids_sha256": "098a0c686d02a6e86d1127a810bba8616ef439d99fa533b25659b1b80b32a607",
+      "passenger_utility_frontier_unique_scenario_count": 1588,
+      "passenger_utility_frontier_unique_scenario_count_headway_30_or_better": 834,
+      "stage1_context_frontier_union_plan_count": 8198
+    },
+    "p30pct": {
+      "collapsed_recovery_plan_count": 32048,
+      "passenger_context_count": 24,
+      "passenger_utility_frontier_plan_count": 3235,
+      "passenger_utility_frontier_plan_ids_sha256": "a37de28fa1a0f2c10da2953bf9c0897015922854e2b731443dd54510eed30b1f",
+      "passenger_utility_frontier_unique_scenario_count": 1622,
+      "passenger_utility_frontier_unique_scenario_count_headway_30_or_better": 888,
+      "stage1_context_frontier_union_plan_count": 8984
+    },
+    "reference": {
+      "collapsed_recovery_plan_count": 26478,
+      "passenger_context_count": 24,
+      "passenger_utility_frontier_plan_count": 2633,
+      "passenger_utility_frontier_plan_ids_sha256": "916a694a7b818dfce5b9686a66854d47713f56715bd40bdbfd94b0d0f28dc8de",
+      "passenger_utility_frontier_unique_scenario_count": 1414,
+      "passenger_utility_frontier_unique_scenario_count_headway_30_or_better": 663,
+      "stage1_context_frontier_union_plan_count": 6482
+    }
+  },
+  "calendar_selected": false,
+  "collapsed_recovery_plan_count_all_budgets": 164404,
+  "contract": "PHASE2_NO_WEIGHT_PASSENGER_UTILITY_EXACT_EXISTENTIAL_BUDGET_V3",
+  "decision_budget_selected": false,
+  "exact_budget_eligibility_repaired_before_stage_c": true,
+  "exact_s8_phase_used": false,
+  "exact_timetable_constructed": false,
+  "field_checks_retained_for_tie_break_not_passenger_dominance": true,
+  "full_gjt_calculated": false,
+  "global_additional_availability_maximise_axes": [
+    "annual_service_days",
+    "span_minutes"
+  ],
+  "limitations": [
+    "This remains a Stage-C passenger-utility screening frontier, not final demand-weighted GJT.",
+    "The annual_bus_km compatibility field is the exact minimum over the integer phase domain and is not final timetable production.",
+    "Exact phase-specific budget production must be re-applied in rebuilt Stage D.",
+    "Current-service non-regression remains relative only to the certified localizable lower bound."
+  ],
+  "lineage": {
+    "budget_policy_frontier": "outputs/phase2/budget_lossless_policy_surface_v2/budget_lossless_policy_surface_v2.csv.gz",
+    "budget_policy_frontier_sha256": "75de8e496b72370ec364496bd82a0041c392d75b546ce7bd9bbfd50764de60e6",
+    "budget_policy_validation": "outputs/phase2/budget_lossless_policy_surface_v2/budget_lossless_policy_surface_v2_validation.json",
+    "budget_policy_validation_sha256": "a39315f6bf7aec5ac89e21cb172a87a15e6d8b3c79997df3b58c042d77361d4d",
+    "context_audit_output": "outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_context_audit_rt001_v3.csv",
+    "context_audit_output_sha256": "96d1c15879f9c3463e285ae1ea4e20cfe88b58f7143b846b89b34390c994383a",
+    "feeder_timing": "outputs/phase2/feeder_generalized_access_v2/scenario_timing_feeder_generalized_access_v2.csv.gz",
+    "feeder_timing_sha256": "fc655c5e48eb752b5d7587399322f79e5ca16dec13f6ff09dd21d9f65712aef7",
+    "feeder_validation": "outputs/phase2/feeder_generalized_access_v2/feeder_generalized_access_v2_validation.json",
+    "feeder_validation_sha256": "73a82e929f1fec6cd34aef174e10d7f2c729aa8bd22967398d9b75e55e3c9a38",
+    "frontier_output": "outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3.csv.gz",
+    "frontier_output_sha256": "f119d4b7acbfcea3280250fbd0a2ff06e2871f8c8465b9daace70664de7424c1"
+  },
+  "municipal_work_od_downscaled": false,
+  "passenger_maximise_axes_within_service_context": [
+    "public_population_coverage_share_5min",
+    "public_population_coverage_share_8min",
+    "public_population_coverage_share_10min",
+    "public_worst_municipality_coverage_share_5min",
+    "public_worst_municipality_coverage_share_8min",
+    "public_worst_municipality_coverage_share_10min",
+    "territorial_other_core_worker_mass_upper_bound",
+    "territorial_other_external_worker_mass_upper_bound",
+    "to_rail_reachable_share",
+    "to_rail_worst_municipality_reachable_share",
+    "from_rail_reachable_share",
+    "from_rail_worst_municipality_reachable_share",
+    "bidirectional_reachable_share",
+    "bidirectional_worst_municipality_reachable_share",
+    "s8_complete_supported_route_share"
+  ],
+  "passenger_minimise_axes_within_service_context": [
+    "to_rail_median_mean_generalized_access_min",
+    "to_rail_p90_mean_generalized_access_min",
+    "to_rail_worst_municipality_p90_mean_generalized_access_min",
+    "from_rail_median_mean_generalized_access_min",
+    "from_rail_p90_mean_generalized_access_min",
+    "from_rail_worst_municipality_p90_mean_generalized_access_min"
+  ],
+  "passenger_utility_frontier_row_count_all_budgets": 16495,
+  "primary_selected": false,
+  "recovery_selected": false,
+  "recovery_values_collapsed_not_selected": [
+    5,
+    10,
+    15
+  ],
+  "resident_population_is_passenger_demand": false,
+  "ridership_forecast": false,
+  "route_count_retained_for_tie_break_not_passenger_dominance": true,
+  "rt001_input_context_count": 493212,
+  "rt001_recovered_from_continuous_hard_filter_total": 2250,
+  "rt001_recovered_unique_scenario_count": 634,
+  "rt001_repair": true,
+  "rt001_upstream_contract": "PHASE2_EXACT_EXISTENTIAL_INTEGER_PHASE_BUDGET_SURFACE_V2",
+  "rt001_upstream_status": "PASS_PHASE2_BUDGET_LOSSLESS_POLICY_SURFACE_V2",
+  "runner_up_selected": false,
+  "service_policy_selected": false,
+  "status": "PASS_PHASE2_PASSENGER_UTILITY_FRONTIER_RT001_V3",
+  "two_stage_skyline_equivalence": "EXACT_BECAUSE_STAGE1_DOMINANCE_OCCURS_WITHIN_IDENTICAL_HEADWAY_SPAN_CALENDAR_AND_BUDGET_CONTEXT",
+  "unknown_distance_exposure_retained_for_tie_break_not_passenger_dominance": true,
+  "upstream_statuses": {
+    "budget_policy": "PASS_PHASE2_BUDGET_LOSSLESS_POLICY_SURFACE_V2",
+    "feeder_generalized_access": "PASS_FEEDER_GENERALIZED_ACCESS_V2_BUILD"
+  },
+  "weighted_composite_score": false
+}
