@@ -1,0 +1,70 @@
+name: Phase 2 V3 Decision Packet A
+
+on:
+  push:
+    branches:
+      - phase2-v3-decision-packet-a
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile validator
+        run: python -m py_compile scripts/phase2_validate_v3_decision_packet_a.py
+
+      - name: Materialize packet validation
+        run: |
+          mkdir -p outputs/phase2/v3_decision_packet_a
+          python scripts/phase2_validate_v3_decision_packet_a.py \
+            --validation outputs/phase2/v3_decision_packet_a/validation.json
+
+      - name: Validate fail-closed human boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('outputs/phase2/v3_decision_packet_a/validation.json').read_text())
+          assert p['status'] == 'PASS_PHASE2_V3_DECISION_PACKET_A_VALIDATION'
+          assert p['validation_pass'] is True
+          assert p['human_decision_required'] is True
+          assert p['final_selection_authorized'] is False
+          assert p['certified_dimension_count'] == 29
+          assert p['decision_rule_dimension_count'] == 29
+          assert p['dimension_set_and_directions_exact_match'] is True
+          assert p['budget_option_count'] == 6
+          assert p['eligible_context_count_total'] == 16495
+          assert p['descriptive_frontier_context_count_total'] == 12284
+          assert p['v3_technical_open_data_requirement_count'] == 0
+          assert p['gjt_interval_dominance_decision_signal_available'] is False
+          assert p['weighted_composite_score'] is False
+          assert p['primary_selected'] is False
+          assert p['runner_up_selected'] is False
+          PY
+
+      - name: Persist packet validation
+        run: |
+          git config user.name "phase2-v3-decision-packet-a-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/v3_decision_packet_a/validation.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist V3 decision packet validation [skip ci]"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-v3-decision-packet-a-${{ github.sha }}
+          path: outputs/phase2/v3_decision_packet_a/validation.json
+          retention-days: 90
