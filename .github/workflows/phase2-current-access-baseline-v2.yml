@@ -1,0 +1,125 @@
+name: Phase 2 Current Access Baseline V2
+
+on:
+  push:
+    branches:
+      - phase2-passenger-gjt-v2
+    paths:
+      - 'scripts/phase2_build_current_access_baseline_v2.py'
+      - '.github/workflows/phase2-current-access-baseline-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-current-access-baseline-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile current-access builder
+        run: python -m py_compile scripts/phase2_build_current_access_baseline_v2.py
+
+      - name: Materialise current D184+D185 access lower bound
+        run: >-
+          python scripts/phase2_build_current_access_baseline_v2.py
+          --identity outputs/phase2/current_service_stop_identity_2026-09-03.csv
+          --identity-validation outputs/phase2/current_service_stop_identity_validation.json
+          --v2-existing-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv
+          --stop-validation outputs/phase2/stop_universe_v2/stop_universe_v2_validation.json
+          --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv
+          --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv
+          --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+          --mapping-output outputs/phase2/current_access_baseline_v2/current_d184_d185_v2_stop_mapping.csv
+          --validation-output outputs/phase2/current_access_baseline_v2/current_access_lower_bound_v2_validation.json
+
+      - name: Validate lower-bound semantics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('outputs/phase2/current_access_baseline_v2/current_access_lower_bound_v2_validation.json')
+          v=json.loads(p.read_text(encoding='utf-8'))
+          assert v['status']=='PASS_CURRENT_ACCESS_LOWER_BOUND_V2_BUILD'
+          assert v['contract']=='PHASE2_CURRENT_D184_D185_ACCESS_LOWER_BOUND_V2'
+          assert v['routes']==['D184','D185']
+          assert v['current_pdf_stop_row_count']==51
+          assert v['resolved_historical_gtfs_identity_row_count']==20
+          assert v['unique_v2_physical_cluster_lower_bound_count'] > 0
+          assert v['full_current_service_spatial_baseline_complete'] is False
+          assert v['unresolved_rows_used_as_spatial_facts'] is False
+          assert v['historical_gtfs_used_to_assert_current_activation'] is False
+          for key in ('passenger_demand_inferred','topology_ranked','service_policy_selected','primary_selected','runner_up_selected'):
+              assert v[key] is False, key
+          for threshold in ('5','8','10','12'):
+              cell=v['access_lower_bound_by_threshold'][threshold]
+              assert 0 <= cell['coverage_share_lower_bound'] <= 1
+              assert 0 <= cell['worst_municipality_coverage_share_lower_bound'] <= 1
+          print(json.dumps({
+              'mapped_rows':v['v2_exactly_mapped_current_row_count'],
+              'unique_clusters':v['unique_v2_physical_cluster_lower_bound_count'],
+              'coverage10_lb':v['access_lower_bound_by_threshold']['10']['coverage_share_lower_bound'],
+              'worst10_lb':v['access_lower_bound_by_threshold']['10']['worst_municipality_coverage_share_lower_bound'],
+          },indent=2))
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/current-access-v2
+          mkdir -p /tmp/current-access-v2
+          python scripts/phase2_build_current_access_baseline_v2.py \
+            --identity outputs/phase2/current_service_stop_identity_2026-09-03.csv \
+            --identity-validation outputs/phase2/current_service_stop_identity_validation.json \
+            --v2-existing-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --stop-validation outputs/phase2/stop_universe_v2/stop_universe_v2_validation.json \
+            --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv \
+            --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
+            --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json \
+            --mapping-output /tmp/current-access-v2/mapping.csv \
+            --validation-output /tmp/current-access-v2/validation.json >/dev/null
+          cmp outputs/phase2/current_access_baseline_v2/current_d184_d185_v2_stop_mapping.csv /tmp/current-access-v2/mapping.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/current_access_baseline_v2/current_access_lower_bound_v2_validation.json').read_text())
+          b=json.loads(Path('/tmp/current-access-v2/validation.json').read_text())
+          # Output-path hashes differ only because validation includes the mapping hash, which must be identical.
+          assert a==b
+          PY
+
+      - name: Guard epistemic boundaries
+        run: |
+          FILE=scripts/phase2_build_current_access_baseline_v2.py
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' "$FILE"
+          ! grep -n -E 'full_current_service_spatial_baseline_complete *[:=] *True|primary_selected *[:=] *True|runner_up_selected *[:=] *True' "$FILE"
+
+      - name: Persist validated current-access lower bound V2
+        run: |
+          git config user.name "phase2-current-access-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/current_access_baseline_v2
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist current-service access lower bound V2 [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-current-access-baseline-v2-${{ github.sha }}
+          retention-days: 90
+          path: outputs/phase2/current_access_baseline_v2
