@@ -47,48 +47,119 @@ const CANDIDATES = {
 
 const fmt = new Intl.NumberFormat("it-IT", { maximumFractionDigits: 1, minimumFractionDigits: 1 });
 const fmtInt = new Intl.NumberFormat("it-IT", { maximumFractionDigits: 0 });
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const finePointer = window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+let currentThreshold = "10";
+let currentGlobal = BASELINE.global[10];
+let selected = [];
 
-function renderBaseline(threshold = "10") {
-  const global = BASELINE.global[threshold];
-  document.querySelector("#globalCoverage").textContent = `${fmt.format(global)}%`;
-  document.querySelector("#globalCoverageLabel").textContent = `entro ${threshold} minuti a piedi`;
-  const rows = [...BASELINE.municipalities].sort((a, b) => b.values[threshold] - a.values[threshold]);
-  document.querySelector("#municipalityBars").innerHTML = rows.map(row => `
-    <div class="bar-row">
-      <span class="bar-label">${row.name}</span>
-      <span class="bar-track" aria-hidden="true"><i class="bar-fill" style="width:${row.values[threshold]}%"></i></span>
-      <strong class="bar-value">${fmt.format(row.values[threshold])}%</strong>
-    </div>
-  `).join("");
+function transition(update) {
+  if (!reducedMotion && document.startViewTransition) return document.startViewTransition(update);
+  update();
+  return null;
+}
+
+function animateNumber(el, from, to, suffix = "%") {
+  if (reducedMotion || Math.abs(from - to) < 0.01) {
+    el.textContent = `${fmt.format(to)}${suffix}`;
+    return;
+  }
+  const start = performance.now();
+  const duration = 420;
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  function frame(now) {
+    const p = Math.min(1, (now - start) / duration);
+    el.textContent = `${fmt.format(from + (to - from) * ease(p))}${suffix}`;
+    if (p < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+function slug(value) {
+  return value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function renderBaseline(threshold = "10", animate = true) {
+  const key = String(threshold);
+  const global = BASELINE.global[key];
+  const rows = [...BASELINE.municipalities].sort((a, b) => b.values[key] - a.values[key]);
+  const high = rows[0];
+  const low = rows[rows.length - 1];
+  const gap = high.values[key] - low.values[key];
+
+  const update = () => {
+    const globalEl = document.querySelector("#globalCoverage");
+    if (animate) animateNumber(globalEl, currentGlobal, global);
+    else globalEl.textContent = `${fmt.format(global)}%`;
+    document.querySelector("#globalCoverageLabel").textContent = `entro ${key} minuti a piedi`;
+    document.querySelector("#municipalityBars").innerHTML = rows.map(row => `
+      <div class="bar-row" style="view-transition-name:bar-${slug(row.name)}">
+        <span class="bar-label">${row.name}</span>
+        <span class="bar-track" aria-hidden="true"><i class="bar-fill" style="width:${row.values[key]}%"></i></span>
+        <strong class="bar-value">${fmt.format(row.values[key])}%</strong>
+      </div>
+    `).join("");
+    document.querySelector("#rangeStoryTitle").textContent = `Tra ${low.name} e ${high.name} ci sono ${fmt.format(gap)} punti.`;
+    document.querySelector("#rangeStoryBody").textContent = `Con una soglia di ${key} minuti, ${high.name} raggiunge il ${fmt.format(high.values[key])}% della popolazione localizzata. ${low.name} si ferma al ${fmt.format(low.values[key])}%.`;
+    document.querySelector("#rangeMin").textContent = fmt.format(low.values[key]);
+    document.querySelector("#rangeMax").textContent = fmt.format(high.values[key]);
+    document.querySelector("#rangeGap").textContent = fmt.format(gap);
+    document.querySelectorAll("[data-threshold]").forEach(btn => {
+      const active = btn.dataset.threshold === key;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", String(active));
+    });
+  };
+
+  if (animate && currentThreshold !== key) transition(update); else update();
+  currentThreshold = key;
+  currentGlobal = global;
 }
 
 document.querySelectorAll("[data-threshold]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll("[data-threshold]").forEach(b => b.classList.toggle("active", b === btn));
-    renderBaseline(btn.dataset.threshold);
-  });
+  btn.setAttribute("aria-pressed", String(btn.classList.contains("active")));
+  btn.addEventListener("click", () => renderBaseline(btn.dataset.threshold));
 });
 
 function renderSpan(key) {
   const span = SPANS[key];
-  document.querySelector("#spanExplainer").innerHTML = `
-    <h4>${span.label}: cosa compra, cosa costa</h4>
-    <p>${span.intro}</p>
-    <div class="delta-line">${span.chips.map(x => `<span class="delta-chip">${x}</span>`).join("")}</div>
-  `;
-  document.querySelectorAll("[data-span]").forEach(btn => btn.classList.toggle("active", btn.dataset.span === key));
+  transition(() => {
+    document.querySelector("#spanExplainer").innerHTML = `
+      <h4>${span.label}: cosa compra, cosa costa</h4>
+      <p>${span.intro}</p>
+      <div class="delta-line">${span.chips.map(x => `<span class="delta-chip">${x}</span>`).join("")}</div>
+    `;
+    document.querySelectorAll("[data-span]").forEach(btn => {
+      const active = btn.dataset.span === key;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", String(active));
+    });
+  });
 }
 
 document.querySelectorAll("[data-span]").forEach(btn => btn.addEventListener("click", () => renderSpan(btn.dataset.span)));
 
-let selected = [];
+function updatePresetState() {
+  const sorted = [...selected].sort().join(",");
+  document.querySelectorAll("[data-preset]").forEach(btn => {
+    const preset = btn.dataset.preset.split(",").sort().join(",");
+    btn.classList.toggle("active", selected.length === 2 && sorted === preset);
+  });
+}
 
 function updateSelection() {
-  document.querySelectorAll(".candidate-card").forEach(card => card.classList.toggle("selected", selected.includes(card.dataset.candidate)));
+  document.querySelectorAll(".candidate-card").forEach(card => {
+    const active = selected.includes(card.dataset.candidate);
+    card.classList.toggle("selected", active);
+    card.setAttribute("aria-pressed", String(active));
+  });
   const a = selected[0] ? CANDIDATES[selected[0]] : null;
   const b = selected[1] ? CANDIDATES[selected[1]] : null;
   document.querySelector("#slotA p").textContent = a ? a.label : "Scegli una finalista";
   document.querySelector("#slotB p").textContent = b ? b.label : "Scegli una seconda finalista";
+  const hint = document.querySelector("#selectionHint");
+  hint.textContent = selected.length === 0 ? "Scegline due per vedere soltanto ciò che cambia." : selected.length === 1 ? "Una scelta fatta. Ora scegli con cosa confrontarla." : "Due alternative selezionate. Il confronto è pronto.";
+  updatePresetState();
   renderComparison(a, b);
 }
 
@@ -98,13 +169,41 @@ document.querySelectorAll(".candidate-card").forEach(card => {
     if (selected.includes(id)) selected = selected.filter(x => x !== id);
     else if (selected.length < 2) selected.push(id);
     else selected = [selected[1], id];
-    updateSelection();
-    if (selected.length === 2) document.querySelector("#confronta").scrollIntoView({ behavior: "smooth", block: "start" });
+    transition(updateSelection);
+    if (selected.length === 2) {
+      window.setTimeout(() => document.querySelector("#confronta").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" }), reducedMotion ? 0 : 100);
+    }
+  });
+
+  card.addEventListener("pointerenter", () => {
+    const matrix = document.querySelector("#candidateMatrix");
+    matrix.classList.add(`hover-${card.dataset.topology}`);
+    matrix.classList.add(`hover-${card.dataset.spanRow.replace(".", "-")}`);
+  });
+  card.addEventListener("pointerleave", () => {
+    document.querySelector("#candidateMatrix").className = "candidate-matrix";
   });
 });
 
-document.querySelector("#clearComparison").addEventListener("click", () => { selected = []; updateSelection(); });
-document.querySelector("#swapComparison").addEventListener("click", () => { if (selected.length === 2) { selected.reverse(); updateSelection(); } });
+document.querySelectorAll("[data-preset]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    selected = btn.dataset.preset.split(",");
+    transition(updateSelection);
+    window.setTimeout(() => document.querySelector("#comparisonResult").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "center" }), reducedMotion ? 0 : 100);
+  });
+});
+
+document.querySelector("#clearComparison").addEventListener("click", () => {
+  selected = [];
+  transition(updateSelection);
+});
+
+document.querySelector("#swapComparison").addEventListener("click", () => {
+  if (selected.length === 2) {
+    selected.reverse();
+    transition(updateSelection);
+  }
+});
 
 function diffRow(label, left, right, leftClass = "", rightClass = "") {
   return `<div class="diff-row"><div class="diff-value ${leftClass}">${left}</div><div class="diff-label">${label}</div><div class="diff-value right ${rightClass}">${right}</div></div>`;
@@ -149,6 +248,80 @@ function renderComparison(a, b) {
   `;
 }
 
-renderBaseline("10");
+function setupReveal() {
+  const nodes = document.querySelectorAll(".reveal");
+  if (reducedMotion || !("IntersectionObserver" in window)) {
+    nodes.forEach(node => node.classList.add("revealed"));
+    return;
+  }
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("revealed");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -4%" });
+  nodes.forEach(node => observer.observe(node));
+}
+
+function setupScrollUI() {
+  const header = document.querySelector("#siteHeader");
+  const progress = document.querySelector("#readingProgress");
+  let ticking = false;
+
+  function updateScroll() {
+    const y = window.scrollY;
+    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    header.classList.toggle("scrolled", y > 20);
+    progress.style.width = `${Math.min(100, Math.max(0, (y / max) * 100))}%`;
+    ticking = false;
+  }
+
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(updateScroll);
+      ticking = true;
+    }
+  }, { passive: true });
+  updateScroll();
+
+  const navLinks = [...document.querySelectorAll(".topnav a")];
+  const sections = navLinks.map(link => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+  if ("IntersectionObserver" in window) {
+    const sectionObserver = new IntersectionObserver(entries => {
+      const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${visible.target.id}`));
+    }, { rootMargin: "-30% 0px -55%", threshold: [0, .2, .5] });
+    sections.forEach(section => sectionObserver.observe(section));
+  }
+}
+
+function setupHeroMotion() {
+  if (!finePointer || reducedMotion) return;
+  const hero = document.querySelector("#heroVisual");
+  if (!hero) return;
+  hero.addEventListener("pointermove", event => {
+    const rect = hero.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+    hero.style.setProperty("--ry", `${(x - .5) * 3.2}deg`);
+    hero.style.setProperty("--rx", `${(.5 - y) * 3.2}deg`);
+    hero.style.setProperty("--mx", `${x * 100}%`);
+    hero.style.setProperty("--my", `${y * 100}%`);
+  });
+  hero.addEventListener("pointerleave", () => {
+    hero.style.setProperty("--ry", "0deg");
+    hero.style.setProperty("--rx", "0deg");
+    hero.style.setProperty("--mx", "50%");
+    hero.style.setProperty("--my", "50%");
+  });
+}
+
+renderBaseline("10", false);
 renderSpan("16");
 updateSelection();
+setupReveal();
+setupScrollUI();
+setupHeroMotion();
