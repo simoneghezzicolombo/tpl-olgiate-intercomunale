@@ -1,0 +1,47 @@
+{
+  "block_partition_mismatch_count_by_recovery": {
+    "15": 0
+  },
+  "common_block_assignment_recoveries_compared": [
+    15
+  ],
+  "comparison_identity": "PLAN_CONTEXT_ID_AND_STAGE_D_INPUT_PLUS_PHASE_VECTOR_NOT_IMPLEMENTATION_TIMETABLE_ID",
+  "context_count_a": 16495,
+  "context_count_b": 16495,
+  "contexts_missing_in_a_count": 0,
+  "contexts_missing_in_b_count": 0,
+  "contract": "PHASE2_STAGE_D_RT001_V3_INDEPENDENT_SEMANTIC_EQUIVALENCE_AUDIT",
+  "dataset_a": "CODEX_STAGE_D_RT001_V3",
+  "dataset_b": "INDEPENDENT_STAGE_D_RT001_V3",
+  "differing_context_count": 0,
+  "differing_selected_phase_context_count": 0,
+  "differing_semantic_timetable_count": 0,
+  "differing_semantic_trip_set_count": 0,
+  "equivalent": true,
+  "materialised_block_assignment_recoveries_a": [
+    5,
+    10,
+    15
+  ],
+  "materialised_block_assignment_recoveries_b": [
+    15
+  ],
+  "mismatch_examples": [],
+  "primary_selected": false,
+  "provenance": {
+    "codex_persisted_evidence_commit": "d41bb678382d018929c1c6b46542f12549f20d4f",
+    "independent_prior_run_final_failure_scope": "GUARD_ONLY_AFTER_SUCCESSFUL_DETERMINISTIC_REBUILD",
+    "independent_prior_run_with_successful_full_build_validation_and_deterministic_rebuild": 33873248969,
+    "independent_source_commit": "5a391b26ce31e016d894121eb2427d7d2aade8e1"
+  },
+  "runner_up_selected": false,
+  "semantic_timetable_count_a": 6000,
+  "semantic_timetable_count_b": 6000,
+  "semantic_timetables_only_a_count": 0,
+  "semantic_timetables_only_b_count": 0,
+  "stage_e_direct_block_assignment_note": "Codex materialises recovery 5/10/15 per-trip assignments; independent implementation materialises recovery 15 only. Fleet counts 5/10/15 are compared at context/timetable level. Canonical Stage-E input must supply exact assignments for every declared recovery.",
+  "status": "PASS_PHASE2_STAGE_D_V3_CROSS_IMPLEMENTATION_EQUIVALENCE",
+  "trip_count_a": 285748,
+  "trip_count_b": 285748,
+  "weighted_composite_score": false
+}
