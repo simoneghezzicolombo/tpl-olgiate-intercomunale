@@ -8,6 +8,7 @@ from scripts.phase2_build_stage_d_input_manifest_v2 import (
     _json_sorted,
     load_s8_opportunity,
     load_scenario_mapping,
+    plan_context_id,
     stable_input_id,
 )
 
@@ -51,6 +52,14 @@ def test_stage_d_input_id_is_deterministic_and_context_sensitive():
     assert a != c
     assert a != d
     assert a.startswith("D4I2_")
+
+
+def test_budget_qualifies_passenger_plan_identity():
+    reference = {"budget_suffix": "reference", "plan_id": "PU2_same"}
+    lower = {"budget_suffix": "m10pct", "plan_id": "PU2_same"}
+    assert plan_context_id(reference) == "reference|PU2_same"
+    assert plan_context_id(lower) == "m10pct|PU2_same"
+    assert plan_context_id(reference) != plan_context_id(lower)
 
 
 def test_sorted_json_preserves_unique_context_members():
