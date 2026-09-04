@@ -1,0 +1,48 @@
+{
+  "contract": "PHASE2_ROBUST_PASSENGER_EQUIVALENCE_STRATA_V2",
+  "decision_stratum_family_alias_signature_counts": {
+    "blank_slate+single_compact_loop": 116,
+    "hybrid_interlined+two_radial_out_and_back_feeders": 16,
+    "interlined_figure8+two_independent_loops": 16
+  },
+  "decision_stratum_headway_counts": {
+    "15": 16,
+    "20": 33,
+    "30": 51,
+    "60": 48
+  },
+  "epistemic_note": "The practical tie-break is invoked only inside exact robust-passenger metric equivalence classes. Different passenger signatures remain unresolved trade-offs and are not ranked here.",
+  "input_operational_service_identity_count": 148,
+  "lineage": {
+    "identities_sha256": "4263c9ee54f6c6a971b5d911f64b3fcab0d73bab6ccceb996bb15f89f73247b0",
+    "identity_validation_sha256": "5aa3133165ef73f4e6bd028686fc631097f0aa64f6f15c5936707c0438dd0071",
+    "output_sha256": "b93bf3dc499493aec864c9cf662e6a81d0e7e47e6d625b855defb0fd9a7ee98b",
+    "robust_validation_sha256": "9da85c7fec9646fe0fddaf735b7fcdab0e9fd3c76d8598ee476163b6fff9ca52"
+  },
+  "non_equivalent_strata_ranked": false,
+  "passenger_equivalent_multi_service_stratum_count": 0,
+  "passenger_signature_fields": [
+    "public_population_coverage_share_5min",
+    "public_population_coverage_share_8min",
+    "public_population_coverage_share_10min",
+    "public_worst_municipality_coverage_share_5min",
+    "public_worst_municipality_coverage_share_8min",
+    "public_worst_municipality_coverage_share_10min",
+    "public_structurally_addressable_worker_od_mass_upper_bound",
+    "stress_min_connection_match_share",
+    "span_minutes",
+    "annual_service_days",
+    "uniform_headway_min",
+    "stress_max_unmatched_connection_event_count",
+    "stress_worst_route_weighted_mean_gap_min"
+  ],
+  "practical_tiebreak_applied_only_with_exact_passenger_signature_equivalence": true,
+  "primary_selected": false,
+  "runner_up_selected": false,
+  "service_identities_removed_by_exact_passenger_equivalence_tiebreak": 0,
+  "service_policy_selected": false,
+  "status": "PASS_DECISION_STRATA_V2_BUILD",
+  "topology_ranked": false,
+  "unique_robust_passenger_metric_stratum_count": 148,
+  "weighted_composite_score_used": false
+}
