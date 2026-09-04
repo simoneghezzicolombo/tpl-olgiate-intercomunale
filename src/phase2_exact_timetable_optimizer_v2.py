@@ -149,8 +149,44 @@ def rail_event_index(events: Sequence[Mapping[str, object]]) -> dict[str, dict[s
 
 
 def _next(values: Sequence[float], at_or_after: float) -> float | None:
+    """First target at/after a threshold, retained only for diagnostics."""
     index = bisect_left(values, at_or_after)
     return None if index >= len(values) else float(values[index])
+
+
+def best_continuous_quality_target(
+    values: Sequence[float],
+    source_time: float,
+    profile: TransferProfile,
+) -> tuple[float, float] | None:
+    """Return target and quality that maximise the certified continuous score.
+
+    For the declared transfer profiles, quality is strictly increasing up to
+    ``transfer_walk + preferred_wait`` and strictly decreasing afterwards.
+    Therefore the global maximum over a sorted finite target set is one of the
+    two targets bracketing that ideal target time. This is an exact localisation
+    of the full all-target search, not pruning of the phase domain.
+    """
+    if not values:
+        return None
+    profile.validate()
+    ideal_target = float(source_time) + profile.transfer_walk_min + profile.preferred_wait_min
+    index = bisect_left(values, ideal_target)
+    candidate_indices = []
+    if index > 0:
+        candidate_indices.append(index - 1)
+    if index < len(values):
+        candidate_indices.append(index)
+    if not candidate_indices:
+        return None
+    scored = []
+    for idx in candidate_indices:
+        target = float(values[idx])
+        slack = target - float(source_time) - profile.transfer_walk_min
+        quality = transfer_quality_from_slack(slack, profile)
+        scored.append((quality, -abs(slack), -target, target))
+    quality, _, _, target = max(scored)
+    return target, quality
 
 
 def route_phase_cell_values(
@@ -175,11 +211,8 @@ def route_phase_cell_values(
                 raise ValueError(f"no in-span S8 arrivals for {direction}")
             qualities = []
             for rail_arrival in arrivals:
-                bus_departure = _next(departures, rail_arrival)
-                if bus_departure is None:
-                    qualities.append(0.0)
-                else:
-                    qualities.append(transfer_quality_from_slack(bus_departure - rail_arrival - profile.transfer_walk_min, profile))
+                matched = best_continuous_quality_target(departures, rail_arrival, profile)
+                qualities.append(0.0 if matched is None else matched[1])
             cells.append(math.fsum(qualities) / len(qualities))
 
             if route.bus_to_rail_passenger_event_supported:
@@ -187,11 +220,8 @@ def route_phase_cell_values(
                 qualities = []
                 rail_departures = rail_index[direction]["departures"]
                 for bus_arrival in public_returns:
-                    rail_departure = _next(rail_departures, bus_arrival)
-                    if rail_departure is None:
-                        qualities.append(0.0)
-                    else:
-                        qualities.append(transfer_quality_from_slack(rail_departure - bus_arrival - profile.transfer_walk_min, profile))
+                    matched = best_continuous_quality_target(rail_departures, bus_arrival, profile)
+                    qualities.append(0.0 if matched is None else matched[1])
                 cells.append(math.fsum(qualities) / len(qualities))
     return tuple(cells)
 
@@ -319,10 +349,12 @@ def bus_to_rail_miss_share_by_stress(
     rail_index: Mapping[str, Mapping[str, Sequence[float]]],
     profiles: Sequence[TransferProfile],
 ) -> dict[str, float | None]:
-    """Transparent deterministic runtime-delay stress, not an empirical probability.
+    """Legacy diagnostic retained for comparability, not certified robustness.
 
-    Stress magnitudes reuse the declared 0/5/10/15-minute operational sensitivity
-    scale. They are reported only and never enter phase selection.
+    This diagnostic rebinds each delayed bus arrival to the first rail departure
+    at/after the delayed event. It therefore does not preserve planned connection
+    identity and MUST NOT be interpreted as a monotone delay-robustness measure.
+    It is reported only and never enters phase selection.
     """
     result: dict[str, float | None] = {}
     for stress in RUNTIME_STRESS_MIN:
