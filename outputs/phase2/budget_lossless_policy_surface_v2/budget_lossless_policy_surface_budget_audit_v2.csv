@@ -1,0 +1,7 @@
+budget_suffix,budget_change_fraction,budget_cap_annual_bus_km,retained_context_count,recovered_from_continuous_hard_filter_count
+m20pct,-0.2,89135.20000000001,67407,342
+m10pct,-0.1,100277.1,73512,378
+reference,0.0,111419.0,79434,390
+p10pct,0.1,122560.90000000001,85494,450
+p20pct,0.2,133702.8,91221,345
+p30pct,0.3,144844.7,96144,345
