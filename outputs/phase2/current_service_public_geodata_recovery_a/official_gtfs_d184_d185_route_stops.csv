@@ -1,0 +1,73 @@
+route_id_gtfs,route_short_name,stop_id,stop_name,stop_lat,stop_lon,trip_stop_time_row_count,min_stop_sequence,max_stop_sequence
+D184,D184,300808,Colle Brianza - nava (monumento),45.763200,9.362617,5,7,12
+D184,D184,L00808,Colle Brianza - nava (monumento),45.763100,9.362467,5,2,2
+D184,D184,300807,Colle Brianza - piecastello,45.759617,9.361850,5,6,11
+D184,D184,L00807,Colle Brianza - piecastello,45.759400,9.361683,5,3,3
+D184,D184,300873,Hoe',45.748667,9.367717,5,5,10
+D184,D184,L00873,Hoe',45.748600,9.368017,5,4,4
+D184,D184,L00407,Olgiate Molgora (stazione f.s.),45.729170,9.404410,2,8,10
+D184,D184,300803,Olgiate Molgora - monticello scarpone,45.731330,9.390270,6,2,2
+D184,D184,L00803,Olgiate Molgora - monticello scarpone,45.731300,9.390150,7,7,12
+D184,D184,300407,Olgiate Molgora - stazione f.s.,45.733710,9.405760,13,1,13
+D184,D184,300872,Perego - s.s. 342/via s.caterina,45.738567,9.362733,6,6,6
+D184,D184,L00872,Perego - s.s. 342/via s.caterina,45.738483,9.362667,7,3,8
+D184,D184,300194,Ravellino,45.772420,9.368830,6,1,8
+D184,D184,300969,Ravellino - via san rocco,45.770180,9.367440,4,13,13
+D184,D184,300804,Rovagnate - la pesa,45.737250,9.374517,6,4,4
+D184,D184,L00804,Rovagnate - la pesa,45.737217,9.374867,7,5,10
+D184,D184,300878,Rovagnate - semaforo,45.737167,9.369383,6,5,5
+D184,D184,L00878,Rovagnate - semaforo,45.737133,9.370467,7,4,9
+D184,D184,300879,Rovagnate - vinicola ghezzi,45.739700,9.364717,6,7,7
+D184,D184,L00879,Rovagnate - vinicola ghezzi,45.739800,9.364650,7,2,7
+D184,D184,300782,S.Maria Hoe',45.744283,9.373817,5,4,9
+D184,D184,L00782,S.Maria Hoe',45.744333,9.373583,5,5,5
+D184,D184,300871,S.Maria Hoe' - alduno,45.735000,9.382200,6,3,3
+D184,D184,L00871,S.Maria Hoe' - alduno,45.734700,9.382517,7,6,11
+D184,D184,300902,S.Maria Hoe' - alpino,45.743617,9.374617,5,8,8
+D184,D184,L00902,S.Maria Hoe' - alpino,45.743567,9.374367,7,1,6
+D184,D184,300805,S.Maria Hoe' - tremonte,45.742800,9.378370,1,3,3
+D184,D184,L00904,S.Maria Hoe' - tremonte/ via trento,45.742600,9.378400,1,2,2
+D184,D184,300903,S.Maria Hoe' - tremonte/via leopardi,45.741180,9.380960,3,1,2
+D185,D185,300086,Brivio - beverate (cariplo),45.740400,9.423083,11,4,4
+D185,D185,L00086,Brivio - beverate (cariplo),45.740517,9.423083,10,9,13
+D185,D185,300398,Brivio - beverate (paese),45.737350,9.427967,11,5,5
+D185,D185,L00398,Brivio - beverate (paese),45.737317,9.428150,10,8,12
+D185,D185,L00487,Brivio - beverate (quattro strade),45.734767,9.426933,10,7,11
+D185,D185,300487,Brivio - beverate (tre strade),45.734650,9.426850,11,6,6
+D185,D185,300063,Brivio - capolinea,45.741333,9.445700,11,9,9
+D185,D185,L00063,Brivio - capolinea,45.742450,9.445850,10,4,8
+D185,D185,300087,Brivio - vaccarezza,45.736850,9.436083,11,7,7
+D185,D185,L00087,Brivio - vaccarezza,45.737017,9.436200,10,6,10
+D185,D185,300406,Brivio - via como (pizzeria),45.742417,9.439367,11,8,8
+D185,D185,L00406,Brivio - via como (pizzeria),45.742267,9.439133,10,5,9
+D185,D185,300634,Calco - via Nazionale,45.729600,9.417783,10,11,15
+D185,D185,300956,"Calco - via nazionale, 85",45.736600,9.419670,10,10,14
+D185,D185,300397,Calco - via virgilio,45.724950,9.414950,10,12,16
+D185,D185,L00397,Calco - via virgilio,45.724950,9.414367,11,3,3
+D185,D185,300729,Calco - via virgilio (pensilina asf),45.725017,9.409950,10,13,17
+D185,D185,L00729,Calco - via virgilio (pensilina asf),45.724950,9.410183,11,2,2
+D185,D185,300483,Caprino - bosco,45.741283,9.483367,10,2,8
+D185,D185,L00483,Caprino - bosco,45.741250,9.483483,11,3,15
+D185,D185,300403,Caprino - cava,45.738867,9.484067,10,3,9
+D185,D185,300402,Caprino - piazza marconi,45.744850,9.482017,11,1,7
+D185,D185,L00402,Caprino - piazza marconi,45.744783,9.482233,12,1,16
+D185,D185,300482,Caprino - roccolino,45.747950,9.485900,3,2,6
+D185,D185,L00482,Caprino - roccolino,45.747517,9.485933,3,2,6
+D185,D185,L00941,Caprino - via agricoltura/via foppa,45.752760,9.501280,2,4,8
+D185,D185,300401,Celana,45.750067,9.492217,3,1,6
+D185,D185,L00401,Celana,45.750220,9.492070,2,3,9
+D185,D185,300062,Cisano - bivio brivio,45.740850,9.470500,10,2,6
+D185,D185,L00062,Cisano - bivio brivio,45.740633,9.471733,11,12,12
+D185,D185,300404,Cisano - corso mazzini,45.740283,9.474517,11,1,7
+D185,D185,L00404,Cisano - corso mazzini,45.740117,9.475100,12,2,13
+D185,D185,300484,Cisano - municipio,45.739683,9.478567,10,4,10
+D185,D185,L00484,Cisano - municipio,45.739667,9.478250,11,2,14
+D185,D185,300405,Cisano - sosta,45.739883,9.451267,10,3,7
+D185,D185,L00405,Cisano - sosta,45.739967,9.451383,11,10,10
+D185,D185,L00485,Cisano - stazione f.s,45.739740,9.474640,1,1,1
+D185,D185,300485,Cisano - stazione f.s.,45.739900,9.474483,5,1,14
+D185,D185,L00486,Cisano - via torchio,45.741183,9.461650,11,11,11
+D185,D185,L00407,Olgiate Molgora (stazione f.s.),45.729170,9.404410,9,1,1
+D185,D185,300407,Olgiate Molgora - stazione f.s.,45.733710,9.405760,12,1,18
+D185,D185,300399,Sant'Antonio d'Adda,45.755150,9.483880,1,7,7
+D185,D185,L00399,Sant'Antonio d'Adda,45.754750,9.483683,1,5,5

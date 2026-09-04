@@ -1,0 +1,1 @@
+f890c393b909a40ae9500ab5acba71166cdfc5af3d42be92f55a92d92927553b  .tmp/official_gtfs.zip

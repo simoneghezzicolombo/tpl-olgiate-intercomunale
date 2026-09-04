@@ -1,0 +1,16 @@
+{
+  "status": "PASS_PUBLIC_SOURCE_DISCOVERY",
+  "source": "Agenzia TPL Como-Lecco-Varese official GTFS winter 2025-2026, Arriva Italia e Addabus",
+  "source_url": "https://halleyweb.com/atpcolc/images/File%20GTFS%20inv.%202025-2026/GTFS%20invernale%202025-2026%20-%20Arriva%20Italia%20e%20Addabus.zip",
+  "route_ids_gtfs": [
+    "D184",
+    "D185"
+  ],
+  "official_route_specific_stop_record_count": 72,
+  "unresolved_pdf_row_count_input": 31,
+  "unresolved_candidate_rows_materialized": 139,
+  "rows_with_exactly_one_score_ge_0_82_candidate": 0,
+  "rows_with_exactly_one_score_ge_0_70_candidate": 0,
+  "distinct_route_trip_patterns": 18,
+  "warning": "Candidate scores are discovery evidence only. Promotion to certified identity requires a deterministic route/sequence/coordinate rule and review."
+}
