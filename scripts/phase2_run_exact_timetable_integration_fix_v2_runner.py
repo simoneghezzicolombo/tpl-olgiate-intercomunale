@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-"""Lineage-key compatibility adapter for the corrected Stage-D integration.
+"""Compatibility and contract adapter for corrected Stage-D integration.
 
-This adapter normalises two certified upstream field names in memory only:
-- Passenger Utility V2 stores its output hash as ``frontier_output_sha256``;
-- Stage-D Input Manifest V2 stores the represented context count as
-  ``passenger_plan_context_count_represented``.
-
+This adapter normalises two certified upstream field names in memory only and
+injects the contract-correct S8 cell constructor that excludes BUS_TO_RAIL
+public returns outside the declared start-inclusive/end-exclusive span.
 No upstream evidence is modified and no equality check is relaxed.
 """
 from __future__ import annotations
@@ -13,6 +11,7 @@ from __future__ import annotations
 import copy
 
 import scripts.phase2_run_exact_timetable_integration_fix_v2 as target
+from src.phase2_exact_timetable_contract_v2 import precompute_route_phase_cells_contract
 
 _original_read_json = target.read_json
 
@@ -36,6 +35,7 @@ def _read_json_with_certified_aliases(path):
 
 
 target.read_json = _read_json_with_certified_aliases
+target.precompute_route_phase_cells = precompute_route_phase_cells_contract
 
 if __name__ == "__main__":
     raise SystemExit(target.main())
