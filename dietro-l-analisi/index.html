@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07131f">
+  <title>Dietro l'analisi · Tra Paesi</title>
+  <meta name="description" content="Un viaggio interattivo dentro i dati, i controlli e le scelte che hanno costruito l'analisi della rete locale attorno a Olgiate-Calco-Brivio FS.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@6.7.0/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="journey.css">
+</head>
+<body>
+  <div id="loader" class="loader" aria-live="polite">
+    <div class="loader__mark"></div>
+    <p>Sto ricostruendo il modello territoriale…</p>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="../index.html" aria-label="Torna a Tra Paesi">
+      <span class="brand__main">Tra Paesi</span>
+      <span class="brand__sub">Dietro l’analisi</span>
+    </a>
+    <div class="topbar__meta">
+      <span class="live-dot"></span>
+      <span>evidence-driven journey</span>
+    </div>
+    <a class="topbar__cta" href="../index.html">Vai al sito principale <span>↗</span></a>
+  </header>
+
+  <div class="progress" aria-hidden="true"><div id="progressFill" class="progress__fill"></div></div>
+  <nav id="chapterRail" class="chapter-rail" aria-label="Capitoli"></nav>
+
+  <main>
+    <div id="map" class="map" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <section class="chapter hero is-active" data-scene="intro" data-label="Domanda">
+      <div class="copy copy--hero">
+        <p class="eyebrow">01 · Il punto di partenza</p>
+        <h1>Una domanda semplice.<br><em>Un problema molto meno semplice.</em></h1>
+        <p class="lede">Come si ridisegna una rete locale attorno a Olgiate-Calco-Brivio FS senza limitarsi a tracciare linee su una mappa?</p>
+        <div class="hero-stats">
+          <div><strong>5</strong><span>comuni core</span></div>
+          <div><strong>22.914</strong><span>residenti</span></div>
+          <div><strong>1</strong><span>nodo ferroviario</span></div>
+        </div>
+        <p class="scroll-cue"><span></span> scorri dentro l’analisi</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-scene="grid" data-label="Griglia">
+      <div class="copy">
+        <p class="eyebrow">02 · Prima rappresentazione</p>
+        <h2>All’inizio la popolazione era una <em>griglia di 100 metri.</em></h2>
+        <p>WorldPop ci dava una superficie continua e reale, calibrata sui totali ISTAT 2025. Era utile, ma non abbastanza precisa per capire cosa succede tra una casa, una strada e una fermata.</p>
+        <div class="fact"><strong id="worldpopCount">4.283</strong><span>celle WorldPop nel core</span></div>
+        <p class="source-note">V1 · WorldPop 100 m + POSAS ISTAT 2025</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-scene="sections" data-label="Sezioni">
+      <div class="copy copy--right">
+        <p class="eyebrow">03 · Più struttura territoriale</p>
+        <h2>La griglia incontra le <em>sezioni di censimento.</em></h2>
+        <p>I conteggi ISTAT per sezione ci permettono di rispettare la geografia interna dei comuni. Ogni sezione viene poi riallineata ai totali comunali POSAS 2025, senza inventare una nuova distribuzione.</p>
+        <div class="mini-rule"><span></span><p>dato ufficiale → trasformazione dichiarata → controllo di quadratura</p></div>
+      </div>
+    </section>
+
+    <section class="chapter" data-scene="buildings" data-label="Edifici">
+      <div class="copy">
+        <p class="eyebrow">04 · La svolta dasimetrica</p>
+        <h2>La popolazione prende finalmente la forma <em>degli edifici reali.</em></h2>
+        <p>Le sagome DBGT vengono classificate, incrociate con le sezioni e pesate con area o volume quando disponibile. Gli edifici esplicitamente non residenziali non ricevono residenti.</p>
+        <div class="split-stats">
+          <div><strong id="buildingCount">4.226</strong><span>edifici con popolazione nel core</span></div>
+          <div><strong>4.348</strong><span>unità edificio × sezione</span></div>
+        </div>
+        <div class="residual"><span class="residual__bar"><i></i></span><p><strong>22.820,84</strong> residenti localizzati. <strong>93,16</strong> restano esplicitamente non localizzati, invece di essere forzati nel modello.</p></div>
+        <p class="source-note">V2 · DBGT Lombardia + ISTAT sezioni + POSAS 2025</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-scene="walk" data-label="Cammino">
+      <div class="copy copy--right">
+        <p class="eyebrow">05 · Accessibilità reale</p>
+        <h2>“Vicino alla fermata” non significa <em>dentro un cerchio.</em></h2>
+        <p>Ogni unità di popolazione viene collegata al grafo pedonale. Il tempo segue la rete reale, con connettori, direzione e pendenza. Mentre scorri, il colore mostra quanto è lontana la fermata esistente più vicina.</p>
+        <div class="thresholds">
+          <span data-min="5">5 min <b>46,98%</b></span>
+          <span data-min="8">8 min <b>68,47%</b></span>
+          <span data-min="10">10 min <b>77,56%</b></span>
+          <span data-min="12">12 min <b>84,87%</b></span>
+        </div>
+        <p class="source-note">Il colore è calcolato sulle 4.348 unità del modello, non su buffer euclidei.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-scene="roads" data-label="Strade">
+      <div class="copy">
+        <p class="eyebrow">06 · Lo spazio delle possibilità</p>
+        <h2>Prima di cercare una rete, abbiamo costruito <em>lo spazio in cui poteva esistere.</em></h2>
+        <p>Sensi unici, accessi bus e PSV, rotatorie, restrizioni di svolta, incertezze. Il grafo è congelato a una precisa epoca OSM, così ogni scenario viene confrontato sullo stesso mondo.</p>
+        <div class="metric-cascade">
+          <div><span>OSM highway ways</span><strong>24.384</strong></div>
+          <div><span>bus-eligible</span><strong>15.872</strong></div>
+          <div><span>nodi del grafo</span><strong>104.071</strong></div>
+          <div><span>archi diretti</span><strong>199.217</strong></div>
+        </div>
+        <p class="source-note">Gate D · epoch congelata, nessuna query OSM live nel loop di ottimizzazione</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-scene="baseline" data-label="Baseline">
+      <div class="copy copy--right">
+        <p class="eyebrow">07 · Prima di proporre</p>
+        <h2>Abbiamo ricostruito ciò che <em>esiste già.</em></h2>
+        <p>D184 e D185 sono la baseline, non una quinta candidata. Fermate e identità vengono da fonti ufficiali. Per D185 la struttura ordinaria storica resta separata dalla deviazione temporanea del Ponte di Brivio.</p>
+        <div class="legend-inline"><span class="blue"></span>D184 <span class="orange"></span>D185 <span class="white"></span>stazione</div>
+        <p class="source-note">Current Service Baseline V4 · PASS</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-scene="candidates" data-label="Ricerca">
+      <div class="copy">
+        <p class="eyebrow">08 · Non abbiamo scelto una linea</p>
+        <h2>Abbiamo fatto emergere <em>possibilità</em>, poi le abbiamo eliminate.</h2>
+        <p>Le lacune di accessibilità generano punti di ricerca solo su strade strutturalmente bus-eligible. Poi arrivano thinning, ridondanza di catchment e filtri di utilità.</p>
+        <div class="funnel" aria-label="Riduzione candidate">
+          <div style="--w:100%"><span>campioni stradali con accesso pedonale</span><b>3.858</b></div>
+          <div style="--w:74%"><span>seed su gap a 8 minuti</span><b>1.686</b></div>
+          <div style="--w:55%"><span>seed prima del thinning</span><b>1.074</b></div>
+          <div style="--w:34%"><span>candidate prima del pruning finale</span><b>292</b></div>
+          <div class="accent" style="--w:20%"><span>candidate finali</span><b>155</b></div>
+        </div>
+        <p class="source-note">Ogni punto resta FIELD_CHECK_PENDING. Ipotesi, non raccomandazione.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-scene="finalists" data-label="Finaliste">
+      <div class="copy copy--wide">
+        <p class="eyebrow">09 · Dopo lo screening</p>
+        <h2>Alla fine restano quattro lineage. Ma il passeggero vede soprattutto <em>due assetti di servizio.</em></h2>
+        <div class="finalist-grid">
+          <article><span>16 h</span><strong>FIG</strong><small>06:00–22:00 · H60</small></article>
+          <article><span>16 h</span><strong>TWO</strong><small>06:00–22:00 · H60</small></article>
+          <article><span>18,5 h</span><strong>FIG</strong><small>05:30–00:00 · H60</small></article>
+          <article><span>18,5 h</span><strong>TWO</strong><small>05:30–00:00 · H60</small></article>
+        </div>
+        <p class="insight">Dentro ciascuno span, FIG e TWO hanno oggi le stesse route pubbliche, la stessa sequenza di fermate e gli stessi exact departures. Il diagnostic lo mostra invece di nasconderlo.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-scene="time" data-label="Tempo">
+      <div class="copy copy--right">
+        <p class="eyebrow">10 · La rete è anche tempo</p>
+        <h2>Le differenze decisive non stanno solo <em>sulla mappa.</em></h2>
+        <p>Il pacchetto 16 h concentra le due partenze al minuto :39. Il pacchetto 18,5 h usa :03 e :07. Le sensitivity Stage F mostrano come cambiano le connessioni quando cresce l’attrito di interscambio.</p>
+        <div class="clock-compare">
+          <div><span>16 h</span><strong>:39</strong><strong>:39</strong><small>LOW / MID retention 100%</small></div>
+          <div><span>18,5 h</span><strong>:03</strong><strong>:07</strong><small>worst bidirectional 48,57%</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter finale" data-scene="end" data-label="Scelta">
+      <div class="copy copy--final">
+        <p class="eyebrow">11 · Il punto in cui l’analisi si ferma</p>
+        <h2>Tre giorni di lavoro non producono una risposta automatica.</h2>
+        <p class="final-line">Producono una scelta <em>molto più informata.</em></p>
+        <p>Il modello riduce l’incertezza, mette in luce i trade-off e rende visibile ciò che sappiamo e ciò che resta da verificare. La decisione politica resta umana.</p>
+        <a class="decision-cta" href="../index.html">Apri il confronto delle alternative <span>→</span></a>
+        <button id="restartBtn" class="restart" type="button">↺ rivedi il journey</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="sceneHud" class="scene-hud" aria-hidden="true">
+    <span id="sceneIndex">01</span><i></i><span id="sceneName">Domanda</span>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@6.7.0/dist/maplibre-gl.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
+  <script src="../geo-data.js"></script>
+  <script src="journey-data.js"></script>
+  <script src="journey.js"></script>
+</body>
+</html>
