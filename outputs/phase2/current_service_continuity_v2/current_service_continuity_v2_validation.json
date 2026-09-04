@@ -1,0 +1,143 @@
+{
+  "status": "PASS_PHASE2_CURRENT_SERVICE_CONTINUITY_LOWER_BOUND_V2",
+  "contract": "PHASE2_CERTIFIED_LOCALIZABLE_CURRENT_SERVICE_CONTINUITY_LOWER_BOUND_V2",
+  "baseline_role": "CERTIFIED_LOCALIZABLE_LOWER_BOUND_ONLY",
+  "current_localizable_row_count": 12,
+  "current_unresolved_or_unlocalized_row_count": 39,
+  "current_localizable_cluster_count": 7,
+  "current_localizable_clusters": [
+    "EX_002",
+    "EX_009",
+    "EX_011",
+    "EX_023",
+    "EX_026",
+    "EX_036",
+    "EX_041"
+  ],
+  "current_cluster_to_routing_anchor": {
+    "EX_002": "existing:EX_002",
+    "EX_009": "existing:EX_009",
+    "EX_011": "existing:EX_011",
+    "EX_023": "existing:EX_023",
+    "EX_026": "existing:EX_026",
+    "EX_036": "existing:EX_036",
+    "EX_041": "existing:EX_041"
+  },
+  "current_route_localizable_clusters": {
+    "D184": [
+      "EX_011",
+      "EX_023",
+      "EX_026",
+      "EX_041"
+    ],
+    "D185": [
+      "EX_002",
+      "EX_009",
+      "EX_011",
+      "EX_036"
+    ]
+  },
+  "current_localizable_directed_adjacent_pairs": [
+    [
+      "EX_002",
+      "EX_009"
+    ],
+    [
+      "EX_009",
+      "EX_036"
+    ],
+    [
+      "EX_011",
+      "EX_023"
+    ],
+    [
+      "EX_023",
+      "EX_011"
+    ],
+    [
+      "EX_023",
+      "EX_026"
+    ],
+    [
+      "EX_041",
+      "EX_023"
+    ]
+  ],
+  "current_localizable_undirected_adjacent_pairs": [
+    [
+      "EX_002",
+      "EX_009"
+    ],
+    [
+      "EX_009",
+      "EX_036"
+    ],
+    [
+      "EX_011",
+      "EX_023"
+    ],
+    [
+      "EX_023",
+      "EX_026"
+    ],
+    [
+      "EX_023",
+      "EX_041"
+    ]
+  ],
+  "scenario_count": 100000,
+  "passenger_utility_plan_count": 16883,
+  "passenger_utility_unique_scenario_count": 2056,
+  "passenger_plan_budget_counts": {
+    "m10pct": 2578,
+    "m20pct": 2233,
+    "p10pct": 2913,
+    "p20pct": 3160,
+    "p30pct": 3296,
+    "reference": 2703
+  },
+  "passenger_plan_retained_cluster_count_distribution": {
+    "0": 12800,
+    "1": 3815,
+    "2": 248,
+    "3": 20
+  },
+  "scenario_retained_current_cluster_count_min": 0,
+  "scenario_retained_current_cluster_count_max": 3,
+  "scenario_retained_current_directed_pair_count_min": 0,
+  "scenario_retained_current_directed_pair_count_max": 1,
+  "continuity_is_complete_current_service_measure": false,
+  "unresolved_current_rows_inferred": false,
+  "proximity_used_as_stop_retention": false,
+  "historical_station_EX_011_kept_separate_from_project_bridge_EX_039": true,
+  "project_station_bridge_counts_as_current_stop_retention": false,
+  "continuity_used_to_eliminate_candidate": false,
+  "continuity_used_to_select_primary": false,
+  "continuity_used_to_select_runner_up": false,
+  "weighted_composite_score": false,
+  "epistemic_note": "Continuity is measured only against current D184/D185 stop identities that the certified lower-bound baseline can localise exactly into Stop Universe V2. Stop retention requires exact routing-anchor identity; nearby proposed stops do not count. Corridor continuity uses only immediately consecutive current PDF rows whose two endpoints are both exactly localised; no pair is inferred across an unresolved row. Therefore all reported continuity metrics are conservative lower-bound descriptors suitable for a downstream practical tie-break, not a complete reconstruction of current service continuity.",
+  "lineage": {
+    "current_localized": "outputs/phase2/current_service_access_baseline_v2/current_service_localized_rows_v2.csv",
+    "current_localized_sha256": "d511ccb4362c60caa0bb9add0ff007e358e68d1c6912a8dae13fed84d68b628d",
+    "current_validation": "outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json",
+    "current_validation_sha256": "31e5bfbd18dfaad298331c7e56a08ffe7439c4d829030ca2ffcece978dd7305b",
+    "routing_anchors": "outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv",
+    "routing_anchors_sha256": "123a5e25a25207ec3d38a6ffa80fc9ea70b6da4793581b19f1d55dad3ae24cf7",
+    "matrix_validation": "outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json",
+    "matrix_validation_sha256": "ca4faa25a72ac0f0b07f4a4099c660945c8c824db1cd5baf641b26eae89fc79d",
+    "route_universe": "outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv",
+    "route_universe_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
+    "scenario_mapping": "outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz",
+    "scenario_mapping_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
+    "s8_validation": "outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json",
+    "s8_validation_sha256": "b79e4dcbe1978e04c76ac7324c8c2e982185291529a8dc0c2b4a6a835360e490",
+    "passenger_frontier": "outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz",
+    "passenger_frontier_sha256": "67fce03634f599834a7532260e88ae4c2e3323f7d0809ad7675a37bdd0b4e182",
+    "passenger_validation": "outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2_validation.json",
+    "passenger_validation_sha256": "115d5fb06f877a886343d30cebad1538d1dc3e972d64094e66a82f2644312ff0",
+    "scenario_output": "outputs/phase2/current_service_continuity_v2/scenario_current_service_continuity_lower_bound_v2.csv.gz",
+    "scenario_output_sha256": "0bf66d92b4f6b2e50b45445b6be11c18e3e05242fb10bd99c5f673c634ef17cb",
+    "plan_output": "outputs/phase2/current_service_continuity_v2/passenger_plans_current_service_continuity_lower_bound_v2.csv.gz",
+    "plan_output_sha256": "acf7c55993f8f15fecc4c4fe32d78ba78cdba285eccfc12d73ab6ff5bc067c1d"
+  }
+}
