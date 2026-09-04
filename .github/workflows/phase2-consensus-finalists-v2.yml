@@ -1,0 +1,78 @@
+name: Phase 2 Consensus Finalists V2
+
+on:
+  push:
+    branches: [phase2-passenger-gjt-v2]
+    paths:
+      - 'scripts/phase2_build_consensus_finalists_v2.py'
+      - '.github/workflows/phase2-consensus-finalists-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile scripts/phase2_build_consensus_finalists_v2.py
+      - name: Build consensus finalists
+        run: >-
+          python scripts/phase2_build_consensus_finalists_v2.py
+          --utility outputs/phase2/robustness_v2/accessibility_utility_v2.csv
+          --utility-validation outputs/phase2/robustness_v2/accessibility_utility_frontier_v2_validation.json
+          --output outputs/phase2/robustness_v2/consensus_finalists_v2.csv
+          --validation outputs/phase2/robustness_v2/consensus_finalists_v2_validation.json
+      - name: Validate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('outputs/phase2/robustness_v2/consensus_finalists_v2_validation.json').read_text())
+          assert v['status']=='PASS_CONSENSUS_FINALISTS_V2_BUILD'
+          assert v['input_accessibility_utility_count']==148
+          assert v['territorial_utility_frontier_count'] > 0
+          assert v['decision_rule_count']==5
+          assert v['decision_rule_winner_union_count'] > 0
+          assert v['s8_nondominated_within_winner_union_count'] > 0
+          assert v['single_decision_rule_privileged'] is False
+          assert v['s8_used_inside_territorial_compromise_score'] is False
+          assert v['weighted_composite_score_used_for_final_selection'] is False
+          for k in ('topology_ranked','service_policy_selected','primary_selected','runner_up_selected'): assert v[k] is False
+          print(json.dumps(v,indent=2))
+          PY
+      - name: Deterministic rebuild
+        run: |
+          mkdir -p /tmp/p2consensus
+          python scripts/phase2_build_consensus_finalists_v2.py \
+            --utility outputs/phase2/robustness_v2/accessibility_utility_v2.csv \
+            --utility-validation outputs/phase2/robustness_v2/accessibility_utility_frontier_v2_validation.json \
+            --output /tmp/p2consensus/finalists.csv --validation /tmp/p2consensus/validation.json >/dev/null
+          cmp outputs/phase2/robustness_v2/consensus_finalists_v2.csv /tmp/p2consensus/finalists.csv
+          cmp outputs/phase2/robustness_v2/consensus_finalists_v2_validation.json /tmp/p2consensus/validation.json
+      - name: Persist
+        run: |
+          git config user.name "phase2-consensus-finalists-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/robustness_v2/consensus_finalists_v2.csv outputs/phase2/robustness_v2/consensus_finalists_v2_validation.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist decision-rule consensus finalists V2 [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-consensus-finalists-v2-${{ github.sha }}
+          retention-days: 90
+          path: |
+            outputs/phase2/robustness_v2/consensus_finalists_v2.csv
+            outputs/phase2/robustness_v2/consensus_finalists_v2_validation.json
