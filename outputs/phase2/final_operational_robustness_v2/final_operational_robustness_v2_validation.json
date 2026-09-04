@@ -1,0 +1,91 @@
+{
+  "block_sensitivity_row_count": 64140,
+  "block_sensitivity_semantics": "ADD_RUNTIME_STRESS_TO_EXACT_VEHICLE_RETURN_THEN_TEST_NOMINAL_BLOCKS_AND_RECOMPUTE_MINIMUM_FLEET",
+  "budget_selected": false,
+  "bus_runtime_delay_minutes": [
+    0.0,
+    5.0,
+    10.0,
+    15.0
+  ],
+  "bus_runtime_delay_semantics": "DETERMINISTIC_ENGINEERING_SENSITIVITY_NOT_EMPIRICAL_PROBABILITY",
+  "bus_to_rail_and_rail_to_bus_separate": true,
+  "calendar_selected": false,
+  "cases_requiring_additional_vehicle_count": 17451,
+  "connection_candidate_row_count": 2963094,
+  "contract": "PHASE2_PLANNED_CONNECTION_PRESERVING_OPERATIONAL_ROBUSTNESS_V2",
+  "delay_sensitivity_is_empirical_probability": false,
+  "deterministic_rebuild": true,
+  "exact_public_trip_count": 262149,
+  "exact_timetable_input_required": true,
+  "final_selection_authorized": false,
+  "fixed_target_runtime_retention_monotonic_sanity": true,
+  "limitations": [
+    "Current Stage-D input is a development/regression fixture unless stage_d_fixture_is_final_selection_lineage=true.",
+    "No certified non-zero rail-delay sensitivity was found in the current lineage; current RAIL_TO_BUS perturbation therefore remains nominal rail arrival only.",
+    "Runtime and recovery cases are deterministic engineering sensitivities, not observed probability distributions.",
+    "Current-service non-regression remains a comparison to a certified localizable lower bound, not proof of non-regression against complete real current service.",
+    "Stage E produces reliability evidence only and does not rank or select networks."
+  ],
+  "lineage": {
+    "block_sensitivity_sha256": "55ba92b7bbf9915c6c8f8434f5fb48b3f5efe382dedbd26081bca9b375c95d0a",
+    "connection_audit_sha256": "6a495c442f4489b0da5a4cdca7d29a2d7f8afbc996254cbd8271a73224599e24",
+    "robustness_surface_sha256": "ad0697738230d9d45d447d5c87d8aef560c37e637a6c47ce2f2cf62fb30ea6c8",
+    "s8_events_sha256": "00b9994c1331ab5caa09a6092815bc5554f07baddbde8a651857a470d0fdb71b",
+    "s8_sensitivity_sha256": "4c93b08620037988aab486e24b276f4c143043ed7e79b51035cf9e1dddc17b57",
+    "stage_d_route_input_sha256": "7688cf62275d57242b614cbcdf56237f142fd34f3e69995671303af84f64a4b7",
+    "stage_d_summary_sha256": "b80ede01ba304c2ff2873a9eb12e91c5903a82601097f24e1cf23b6801e4ebde",
+    "stage_d_trips_sha256": "14b5ff475c0af67212e9e3e1156ce3d353e82e270f18ed1efb83a24a35b1b515",
+    "stage_d_validation_sha256": "1140fa8212c215d23b44ae9faa4e04f8234e5d9e00d881d8eedd711d820371d7",
+    "stage_e_sensitivity_sha256": "1f2d8c606d377f4005ce2a41202657dc6fb16b0192644c638b28e905def47409",
+    "summary_sha256": "e499522fb2a1ec5147fa1f54a7b100c05c4e08f310023256d1892f2c7b901f43"
+  },
+  "municipal_od_downscaled": false,
+  "next_alternative_connection_reported_separately": true,
+  "next_train_rebinding_used_as_success": false,
+  "nominal_block_assignment_infeasible_case_count": 17671,
+  "nonzero_rail_delay_sensitivity_authorized": false,
+  "passenger_weighting_applied": false,
+  "planned_bus_to_rail_misses_by_runtime_delay": {
+    "0.000000000": 0,
+    "10.000000000": 534376,
+    "15.000000000": 823898,
+    "5.000000000": 248232
+  },
+  "planned_connection_count_across_profiles_and_directions": 2930045,
+  "planned_connection_identity_preserved": true,
+  "primary_selected": false,
+  "rail_arrival_delay_minutes": [
+    0.0
+  ],
+  "rail_delay_semantics": "NOMINAL_ONLY_NO_CERTIFIED_NONZERO_RAIL_DELAY_SENSITIVITY_FOUND_IN_CURRENT_LINEAGE",
+  "random_search": false,
+  "recovery_minutes": [
+    5,
+    10,
+    15
+  ],
+  "recovery_values_selected": false,
+  "ridership_forecast": false,
+  "robustness_surface_row_count": 142254,
+  "rt003_status": "FORMALISED_LIMITATION_CURRENT_BASELINE_IS_CERTIFIED_LOCALIZABLE_LOWER_BOUND_ONLY",
+  "rt004_status": "GOVERNANCE_STATUS_REFRESHED_ON_STAGE_E_BRANCH_AGENT_PROTOCOL_NOT_HISTORICALLY_PRESENT",
+  "runner_up_selected": false,
+  "stage_d_fixture_contract": "PHASE2_EXHAUSTIVE_EXACT_TIMETABLE_S8_AND_VEHICLE_BLOCKS_V2",
+  "stage_d_fixture_is_final_selection_lineage": false,
+  "stage_d_fixture_status": "PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_V2",
+  "stage_d_lineage_role": "CURRENT_STAGE_D_USED_AS_ENGINE_VALIDATION_FIXTURE_NOT_FINAL_SELECTION_LINEAGE",
+  "status": "PASS_PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_V2",
+  "summary_row_count": 16035,
+  "technical_return_connection_count": 0,
+  "technical_return_used_as_passenger_service": false,
+  "timetable_count": 5345,
+  "transfer_profile_count": 3,
+  "transfer_profile_ids": [
+    "LOW_TRANSFER_FRICTION",
+    "MID_TRANSFER_FRICTION",
+    "HIGH_TRANSFER_FRICTION"
+  ],
+  "unmatched_connection_candidate_count": 33049,
+  "weighted_composite_score": false
+}
