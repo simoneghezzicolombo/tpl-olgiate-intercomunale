@@ -166,3 +166,18 @@ window.TRA_PAESI_DATA = Object.freeze({
     fig185:   { alias: "TT-FIG-18.5", topology: "interlined_figure8", topologyLabel: "Figure-8 interlineato", packageKey: "18.5", timetable: "D4RT001V3_c7318c775dcc1931" }
   }
 });
+
+(() => {
+  const css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = "geo-map.css";
+  document.head.appendChild(css);
+  const dataScript = document.createElement("script");
+  dataScript.src = "geo-data.js";
+  dataScript.onload = () => {
+    const mapScript = document.createElement("script");
+    mapScript.src = "geo-map.js";
+    document.head.appendChild(mapScript);
+  };
+  document.head.appendChild(dataScript);
+})();
