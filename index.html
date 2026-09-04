@@ -1,397 +1,263 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Linea 8 Olgiate Molgora | Rete TPL Circolare a Doppio Verso</title>
-  <meta name="description" content="Studio trasportistico, simulazione chilometrica ed esercizio della Linea 8 di Olgiate Molgora: doppio anello circolare bidirezionale integrato con il nodo ferroviario S8.">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f3ed">
+  <meta name="description" content="Tra Paesi rende leggibile la scelta fra quattro configurazioni di rete locale per Olgiate Molgora, Calco, Brivio, Santa Maria Hoè e La Valletta Brianza.">
+  <title>Tra Paesi · Esploratore della rete locale</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="theme-dark">
-  <!-- Top Navigation Header -->
-  <header class="app-header" id="mainHeader">
-    <div class="header-container">
-      <div class="brand-group">
-        <div class="brand-badge">
-          <span class="badge-number">8</span>
-          <span class="pulse-ring"></span>
-        </div>
-        <div class="brand-titles">
-          <h1 class="brand-name">LINEA 8 <span class="highlight">OLGIATE</span></h1>
-          <p class="brand-sub">Sistema Circolare Intercomunale a Doppio Verso (Modello Merate)</p>
-        </div>
-      </div>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
 
-      <div class="header-actions">
-        <div class="status-chip" id="networkStatusChip">
-          <span class="dot active"></span>
-          <span id="chipText">Ciclo Orario: 55–60 min</span>
-        </div>
-        <button class="btn btn-secondary" id="btnThemeToggle" title="Cambia tema">
-          <span class="theme-icon">🌙</span>
-        </button>
-      </div>
-    </div>
+  <header class="site-header">
+    <a class="wordmark" href="#top" aria-label="Tra Paesi, torna all'inizio">
+      <span class="wordmark-dot" aria-hidden="true"></span>
+      <span>Tra Paesi</span>
+    </a>
+    <nav class="topnav" aria-label="Navigazione principale">
+      <a href="#oggi">Oggi</a>
+      <a href="#scelta">La scelta</a>
+      <a href="#confronta">Confronta</a>
+      <a href="#metodo">Metodo</a>
+    </nav>
+    <span class="status-pill"><span></span> Decisione aperta</span>
   </header>
 
-  <!-- Key Metrics Ticker Banner -->
-  <section class="metrics-ribbon" id="metricsRibbon">
-    <div class="metric-card">
-      <span class="metric-label">Bacino Core (5 Comuni)</span>
-      <div class="metric-value-row">
-        <span class="metric-val" id="metricPop">22.914</span>
-        <span class="metric-unit">residenti</span>
-      </div>
-      <span class="metric-foot">ISTAT 2025 (La Valletta, S.Maria, Olgiate, Calco, Brivio)</span>
-    </div>
-
-    <div class="metric-card">
-      <span class="metric-label">Hub Ferroviario Olgiate FS</span>
-      <div class="metric-value-row">
-        <span class="metric-val text-success">2.400</span>
-        <span class="metric-unit">saliti/giorno</span>
-      </div>
-      <span class="metric-foot"><strong>+69,0%</strong> rispetto al 2019 (1.420 saliti)</span>
-    </div>
-
-    <div class="metric-card">
-      <span class="metric-label">Risorse TPL Attuali (PdB)</span>
-      <div class="metric-value-row">
-        <span class="metric-val text-accent">111.419</span>
-        <span class="metric-unit">km/anno</span>
-      </div>
-      <span class="metric-foot">D184 + D185 (<strong>+23,3%</strong> rispetto a Merate D201+D202)</span>
-    </div>
-
-    <div class="metric-card">
-      <span class="metric-label">Incremento Corse Core</span>
-      <div class="metric-value-row">
-        <span class="metric-val text-highlight">+117%</span>
-        <span class="metric-unit">da 6 a 13 coppie</span>
-      </div>
-      <span class="metric-foot">Con 1 solo autobus su ciclo di 60'</span>
-    </div>
-  </section>
-
-  <!-- Main Workspace Layout -->
-  <main class="dashboard-grid">
-    <!-- Left Column: Interactive Schematic of the "8" & Controls -->
-    <section class="panel schematic-panel" id="panelSchematic">
-      <div class="panel-header">
-        <div class="panel-title-wrap">
-          <span class="panel-icon">🔄</span>
-          <h2>Schema di Rete: Il Doppio Anello a "8"</h2>
-        </div>
-        <div class="view-controls">
-          <button class="btn btn-sm active" id="btnViewBoth" data-dir="both">Entrambi i Versi</button>
-          <button class="btn btn-sm" id="btnViewCW" data-dir="cw">Senso Orario (CW)</button>
-          <button class="btn btn-sm" id="btnViewCCW" data-dir="ccw">Senso Antiorario (CCW)</button>
+  <main id="contenuto">
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow">Esploratore di rete · Phase 2</p>
+        <h1>Una rete locale.<br><em>Quattro modi</em> di farla funzionare.</h1>
+        <p class="hero-lede">Cinque comuni condividono gli stessi spostamenti, ma non partono dallo stesso livello di accesso al trasporto pubblico. Qui la scelta complessa viene scomposta in due domande semplici.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#scelta">Capisci la scelta</a>
+          <a class="text-link" href="#oggi">Prima: da dove partiamo <span aria-hidden="true">↓</span></a>
         </div>
       </div>
 
-      <!-- Interactive SVG Schematic Map -->
-      <div class="schematic-canvas-wrap">
-        <div class="canvas-legend">
-          <span class="legend-item"><span class="badge-dot dot-west"></span> Anello Ovest (~25 min)</span>
-          <span class="legend-item"><span class="badge-dot dot-hub"></span> Hub Olgiate FS (.00 / .30)</span>
-          <span class="legend-item"><span class="badge-dot dot-east"></span> Anello Est (~30 min)</span>
+      <div class="hero-visual" aria-label="Le due dimensioni che generano le quattro alternative">
+        <div class="decision-axis decision-axis-horizontal">
+          <span>Come funziona</span>
+          <strong>Due anelli</strong>
+          <i aria-hidden="true"></i>
+          <strong>Figure-8 interconnesso</strong>
         </div>
+        <div class="decision-cross" aria-hidden="true">
+          <div class="cross-line cross-line-h"></div>
+          <div class="cross-line cross-line-v"></div>
+          <span class="cross-node n1">16h</span>
+          <span class="cross-node n2">16h</span>
+          <span class="cross-node n3">18h30</span>
+          <span class="cross-node n4">18h30</span>
+          <span class="cross-center">4</span>
+        </div>
+        <div class="decision-axis decision-axis-vertical">
+          <span>Quanto a lungo</span>
+          <strong>16 ore</strong>
+          <i aria-hidden="true"></i>
+          <strong>18 ore 30</strong>
+        </div>
+        <p class="visual-caption">Le alternative finali sono l'incrocio di queste due scelte. Nessun punteggio nascosto.</p>
+      </div>
+    </section>
 
-        <svg viewBox="0 0 960 480" class="schematic-svg" id="schematicSvg">
-          <defs>
-            <linearGradient id="gradWest" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#38bdf8"/>
-              <stop offset="100%" stop-color="#0284c7"/>
-            </linearGradient>
-            <linearGradient id="gradEast" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#10b981"/>
-              <stop offset="100%" stop-color="#059669"/>
-            </linearGradient>
-            <linearGradient id="gradHub" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#f59e0b"/>
-              <stop offset="100%" stop-color="#d97706"/>
-            </linearGradient>
-            <!-- Marker Arrows -->
-            <marker id="arrowCW" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
-            </marker>
-            <marker id="arrowEastCW" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
-            </marker>
-          </defs>
+    <section class="context-strip" aria-label="Stato del processo">
+      <div><b>2.633</b><span>configurazioni nel perimetro di budget</span></div>
+      <span class="strip-arrow" aria-hidden="true">→</span>
+      <div><b>776</b><span>robuste</span></div>
+      <span class="strip-arrow" aria-hidden="true">→</span>
+      <div><b>10</b><span>orarie territorialmente giustificate</span></div>
+      <span class="strip-arrow" aria-hidden="true">→</span>
+      <div class="strip-current"><b>4</b><span>finaliste</span></div>
+    </section>
 
-          <!-- Background Guides -->
-          <rect x="20" y="20" width="440" height="440" rx="20" class="sub-district west-bg" />
-          <text x="40" y="55" class="sector-label">SETTORE OVEST (6.765 residenti - 29,5%)</text>
-          
-          <rect x="500" y="20" width="440" height="440" rx="20" class="sub-district east-bg" />
-          <text x="520" y="55" class="sector-label">SETTORE EST (9.817 residenti - 42,8%)</text>
-
-          <!-- Connecting Loops (The 8 Path) -->
-          <!-- WEST LOOP (Orario: FS -> Rovagnate -> Perego -> S.Maria -> Mondonico -> FS) -->
-          <path id="pathWestLoop" d="M 480 240 C 420 120, 240 100, 160 140 C 80 180, 80 300, 160 340 C 260 390, 420 360, 480 240" 
-                class="loop-track loop-west" fill="none" stroke="url(#gradWest)" stroke-width="8" stroke-linecap="round"/>
-          
-          <!-- EAST LOOP (Orario: FS -> Calco -> Beverate -> Brivio -> Arlate -> FS) -->
-          <path id="pathEastLoop" d="M 480 240 C 540 120, 720 100, 800 140 C 880 180, 880 300, 800 340 C 700 390, 540 360, 480 240" 
-                class="loop-track loop-east" fill="none" stroke="url(#gradEast)" stroke-width="8" stroke-linecap="round"/>
-
-          <!-- Directional Animation Pulses -->
-          <circle id="busPulseWest" r="8" fill="#38bdf8" class="bus-anim-marker">
-            <animateMotion repeatCount="indefinite" dur="10s" path="M 480 240 C 420 120, 240 100, 160 140 C 80 180, 80 300, 160 340 C 260 390, 420 360, 480 240"/>
-          </circle>
-
-          <circle id="busPulseEast" r="8" fill="#10b981" class="bus-anim-marker">
-            <animateMotion repeatCount="indefinite" dur="12s" path="M 480 240 C 540 120, 720 100, 800 140 C 880 180, 880 300, 800 340 C 700 390, 540 360, 480 240"/>
-          </circle>
-
-          <!-- WEST STOPS -->
-          <!-- Rovagnate -->
-          <g class="stop-node" transform="translate(330, 115)" data-stop="Rovagnate">
-            <circle r="9" class="stop-outer"/>
-            <circle r="5" class="stop-inner stop-inner-west"/>
-            <text x="-10" y="-15" class="stop-text">Rovagnate</text>
-            <text x="-10" y="-3" class="stop-sub">SP342 dir</text>
-          </g>
-
-          <!-- Perego -->
-          <g class="stop-node" transform="translate(160, 140)" data-stop="Perego">
-            <circle r="9" class="stop-outer"/>
-            <circle r="5" class="stop-inner stop-inner-west"/>
-            <text x="-65" y="-15" class="stop-text highlight-stop">Perego Centro</text>
-            <text x="-65" y="-3" class="stop-sub">1.850 ab. (Core)</text>
-          </g>
-
-          <!-- Santa Maria Hoè -->
-          <g class="stop-node" transform="translate(100, 240)" data-stop="Santa Maria Hoè">
-            <circle r="11" class="stop-outer hub-ring"/>
-            <circle r="6" class="stop-inner stop-inner-west"/>
-            <text x="-90" y="5" class="stop-text highlight-stop">S. Maria Hoè</text>
-            <text x="-90" y="17" class="stop-sub">Capolinea Ovest (13')</text>
-          </g>
-
-          <!-- Mondonico / Monticello (Variante Anello) -->
-          <g class="stop-node" transform="translate(220, 365)" data-stop="Mondonico">
-            <circle r="9" class="stop-outer ring-variant"/>
-            <circle r="5" class="stop-inner stop-inner-west"/>
-            <text x="-10" y="24" class="stop-text">Mondonico / Monticello</text>
-            <text x="-10" y="36" class="stop-sub text-success">Variante Chiusura Anello (+368 ab./min)</text>
-          </g>
-
-          <!-- EAST STOPS -->
-          <!-- Calco Centro -->
-          <g class="stop-node" transform="translate(630, 115)" data-stop="Calco">
-            <circle r="9" class="stop-outer"/>
-            <circle r="5" class="stop-inner stop-inner-east"/>
-            <text x="-10" y="-15" class="stop-text">Calco Centro</text>
-            <text x="-10" y="-3" class="stop-sub">SP342 / Scuole</text>
-          </g>
-
-          <!-- Beverate -->
-          <g class="stop-node" transform="translate(800, 140)" data-stop="Beverate">
-            <circle r="9" class="stop-outer"/>
-            <circle r="5" class="stop-inner stop-inner-east"/>
-            <text x="15" y="-12" class="stop-text highlight-stop">Beverate</text>
-            <text x="15" y="0" class="stop-sub">1.600 ab. (Core)</text>
-          </g>
-
-          <!-- Brivio Centro / Adda -->
-          <g class="stop-node" transform="translate(860, 240)" data-stop="Brivio">
-            <circle r="11" class="stop-outer hub-ring"/>
-            <circle r="6" class="stop-inner stop-inner-east"/>
-            <text x="18" y="5" class="stop-text highlight-stop">Brivio Porto Adda</text>
-            <text x="18" y="17" class="stop-sub">Capolinea Est (15')</text>
-          </g>
-
-          <!-- Arlate (Variante Anello) -->
-          <g class="stop-node" transform="translate(740, 365)" data-stop="Arlate">
-            <circle r="9" class="stop-outer ring-variant"/>
-            <circle r="5" class="stop-inner stop-inner-east"/>
-            <text x="-50" y="24" class="stop-text">Arlate / S. Colombano</text>
-            <text x="-50" y="36" class="stop-sub text-success">Variante Chiusura Anello (+328 ab./min)</text>
-          </g>
-
-          <!-- CENTRAL HUB: OLGIATE FS -->
-          <g class="hub-center-node" transform="translate(480, 240)" id="nodeOlgiateFS">
-            <circle r="26" class="hub-radar-ring"/>
-            <circle r="16" class="hub-circle-bg"/>
-            <circle r="8" class="hub-circle-core"/>
-            <text x="0" y="-32" class="hub-title" text-anchor="middle">STAZIONE OLGIATE FS</text>
-            <text x="0" y="-20" class="hub-subtitle" text-anchor="middle">Nodo Interscambio Treno S8 (.00 / .30)</text>
-            <text x="0" y="38" class="hub-stats" text-anchor="middle">2.400 saliti/giorno (+69%)</text>
-          </g>
-        </svg>
+    <section class="section section-baseline" id="oggi">
+      <div class="section-intro">
+        <p class="eyebrow">01 · Da dove partiamo</p>
+        <h2>Oggi non partiamo tutti dallo stesso punto.</h2>
+        <p>La rete ordinaria D184 + D185 ha una copertura geografica già alta in alcuni comuni e molto più debole in altri. La baseline V4 ricostruisce l'universo fisico delle fermate ufficiali, non soltanto quelle localizzabili nel vecchio PDF.</p>
       </div>
 
-      <!-- Direction & Hamlet Explainer Banner -->
-      <div class="schematic-info-bar">
-        <div class="info-bubble">
-          <span class="bubble-icon">💡</span>
-          <div class="bubble-content">
-            <strong>Doppio Verso Stile Merate (D201 / D202):</strong>
-            <span id="explainerText">L'anello percorso in entrambi i versi permette a ogni cittadino (Mondonico, Perego, Brivio, Arlate) di salire sempre verso la stazione in tempo minimo e scendere subito al ritorno, senza fare il giro largo!</span>
+      <div class="baseline-layout">
+        <article class="baseline-main">
+          <div class="baseline-head">
+            <div>
+              <span class="micro-label">Popolazione entro una fermata</span>
+              <strong id="globalCoverage">68,7%</strong>
+              <p id="globalCoverageLabel">entro 10 minuti a piedi</p>
+            </div>
+            <div class="threshold-switch" role="group" aria-label="Soglia pedonale">
+              <button data-threshold="5">5 min</button>
+              <button data-threshold="8">8 min</button>
+              <button class="active" data-threshold="10">10 min</button>
+              <button data-threshold="12">12 min</button>
+            </div>
           </div>
+
+          <div class="municipality-bars" id="municipalityBars" aria-live="polite"></div>
+          <p class="chart-note">Quote sulla popolazione localizzata del modello. La soglia selezionata cambia il tempo massimo a piedi verso una fermata D184/D185 con catchment certificato.</p>
+        </article>
+
+        <aside class="baseline-story">
+          <p class="micro-label">Il punto non è la media</p>
+          <h3>La distanza tra territori è il problema da vedere.</h3>
+          <p>A 10 minuti, Brivio e Santa Maria Hoè superano il 94% di copertura, mentre Calco è al 52,5% e Olgiate al 59,9%.</p>
+          <div class="range-visual" aria-hidden="true">
+            <span class="range-min">52,5</span>
+            <div class="range-line"><i></i></div>
+            <span class="range-max">95,2</span>
+          </div>
+          <p class="small-copy">Questo non decide da solo la nuova rete. Dice però dove l'accessibilità attuale lascia più spazio a un ridisegno.</p>
+        </aside>
+      </div>
+
+      <div class="baseline-trust">
+        <span class="trust-mark">44</span>
+        <p><strong>cluster fisici ufficiali ricostruiti.</strong> Tutti hanno identità e coordinate. I 16 senza catchment pedonale certificato sono fuori dai cinque comuni di studio, quindi non vengono usati per inventare copertura.</p>
+      </div>
+    </section>
+
+    <section class="section section-choice" id="scelta">
+      <div class="section-intro compact">
+        <p class="eyebrow">02 · La scelta</p>
+        <h2>Non scegliere fra quattro scatole.<br>Scegli su <em>due assi</em>.</h2>
+        <p>Le quattro finaliste combinano una forma di esercizio e un'estensione oraria. Separarle rende visibile il vero compromesso.</p>
+      </div>
+
+      <div class="choice-questions">
+        <article class="choice-question">
+          <div class="question-number">A</div>
+          <p class="micro-label">Forma di esercizio</p>
+          <h3>Come deve funzionare la rete?</h3>
+          <div class="topology-pair">
+            <div class="topology-option">
+              <svg viewBox="0 0 240 120" role="img" aria-label="Schema concettuale di due anelli indipendenti">
+                <path d="M116 60 C92 16 30 22 30 60s62 44 86 0"/>
+                <path d="M124 60 C148 16 210 22 210 60s-62 44-86 0"/>
+                <circle cx="120" cy="60" r="6"/>
+              </svg>
+              <strong>Due anelli</strong>
+              <p>Due servizi distinti condividono il nodo centrale.</p>
+            </div>
+            <div class="topology-option">
+              <svg viewBox="0 0 240 120" role="img" aria-label="Schema concettuale di un percorso a otto interconnesso">
+                <path d="M120 60 C92 10 30 22 30 60s62 50 90 0 90-38 90 0-62 50-90 0Z"/>
+                <circle cx="120" cy="60" r="6"/>
+              </svg>
+              <strong>Figure-8 interconnesso</strong>
+              <p>I due rami fanno parte di una struttura operativa interconnessa.</p>
+            </div>
+          </div>
+          <p class="evidence-note"><span></span> Le differenze di sequenza, ritorno pubblico, chiusura tecnica e regolarità saranno mostrate solo dopo il diagnostic certificato di A.</p>
+        </article>
+
+        <article class="choice-question choice-time">
+          <div class="question-number">B</div>
+          <p class="micro-label">Estensione del servizio</p>
+          <h3>Quanto a lungo deve funzionare?</h3>
+          <div class="time-pair">
+            <button class="time-option active" data-span="16" type="button">
+              <span class="time-clock">16h</span>
+              <span class="time-name">Più compatta</span>
+              <small>102.916 km/anno</small>
+            </button>
+            <button class="time-option" data-span="18.5" type="button">
+              <span class="time-clock">18h30</span>
+              <span class="time-name">Più estesa</span>
+              <small>108.661 km/anno</small>
+            </button>
+          </div>
+          <div class="span-explainer" id="spanExplainer" aria-live="polite"></div>
+        </article>
+      </div>
+
+      <div class="matrix-wrap">
+        <div class="matrix-title">
+          <p class="micro-label">Le quattro combinazioni</p>
+          <h3>È tutto qui.</h3>
+        </div>
+        <div class="candidate-matrix" id="candidateMatrix">
+          <div class="matrix-corner"></div>
+          <div class="matrix-col-label">Due anelli</div>
+          <div class="matrix-col-label">Figure-8</div>
+          <div class="matrix-row-label"><b>16h</b><span>più compatta</span></div>
+          <button class="candidate-card" data-candidate="loops16" type="button"><span>Due anelli</span><b>16h</b><small>Seleziona per confrontare</small></button>
+          <button class="candidate-card" data-candidate="fig16" type="button"><span>Figure-8</span><b>16h</b><small>Seleziona per confrontare</small></button>
+          <div class="matrix-row-label"><b>18h30</b><span>più estesa</span></div>
+          <button class="candidate-card" data-candidate="loops185" type="button"><span>Due anelli</span><b>18h30</b><small>Seleziona per confrontare</small></button>
+          <button class="candidate-card" data-candidate="fig185" type="button"><span>Figure-8</span><b>18h30</b><small>Seleziona per confrontare</small></button>
         </div>
       </div>
     </section>
 
-    <!-- Right Column: Interactive Simulator & Traffic Light -->
-    <section class="panel simulator-panel" id="panelSimulator">
-      <div class="panel-header">
-        <div class="panel-title-wrap">
-          <span class="panel-icon">🎛️</span>
-          <h2>Simulatore Esercizio & Semaforo Economico</h2>
+    <section class="section section-compare" id="confronta">
+      <div class="compare-heading">
+        <div>
+          <p class="eyebrow">03 · Cosa cambia davvero?</p>
+          <h2>Confronta due alternative.<br><em>Il resto scompare.</em></h2>
         </div>
+        <p>Seleziona due finaliste nella matrice. Il confronto mostra soltanto le dimensioni che differiscono, senza trasformarle in un punteggio unico.</p>
       </div>
 
-      <!-- Scenario Selector Tabs -->
-      <div class="scenario-tabs" id="scenarioTabs">
-        <button class="scenario-tab" data-scenario="scen0">
-          <span class="tab-title">Scenario 0 (Baseline)</span>
-          <span class="tab-badge">1 Bus Spola A/R</span>
-        </button>
-        <button class="scenario-tab" data-scenario="scen1">
-          <span class="tab-title">Scenario 1 (Anello)</span>
-          <span class="tab-badge">1 Bus Mondonico+Arlate</span>
-        </button>
-        <button class="scenario-tab active" data-scenario="scenC">
-          <span class="tab-title">Scenario C (Ibrido)</span>
-          <span class="tab-badge badge-recommended">★ Raccomandato (Saldo Zero)</span>
-        </button>
-        <button class="scenario-tab" data-scenario="scen2">
-          <span class="tab-title">Scenario 2 (Full Merate)</span>
-          <span class="tab-badge">2 Bus Continuo Bidirezionale</span>
-        </button>
-      </div>
-
-      <!-- Live Simulator Sliders & Controls -->
-      <div class="sim-controls-card">
-        <div class="control-row">
-          <div class="control-label-row">
-            <label for="sliderKm">Lunghezza Anello Completo (km per ciclo 8):</label>
-            <span class="control-value"><strong id="valKm">19.5</strong> km</span>
-          </div>
-          <input type="range" id="sliderKm" min="16.0" max="32.0" step="0.1" value="19.5" class="range-slider">
-          <div class="slider-marks">
-            <span>16.0 km</span>
-            <span class="mark-thresh">19.6 km (Soglia Verde)</span>
-            <span class="mark-thresh">28.3 km (Soglia Gialla)</span>
-            <span>32.0 km</span>
-          </div>
+      <div class="compare-shell">
+        <div class="compare-selection">
+          <div class="compare-slot" id="slotA"><span>A</span><p>Scegli una finalista</p></div>
+          <button class="swap-button" id="swapComparison" type="button" aria-label="Scambia alternative">↔</button>
+          <div class="compare-slot" id="slotB"><span>B</span><p>Scegli una seconda finalista</p></div>
+          <button class="clear-button" id="clearComparison" type="button">Azzera</button>
         </div>
-
-        <div class="control-row">
-          <div class="control-label-row">
-            <label for="sliderCicli">Cicli di Esercizio Giornalieri:</label>
-            <span class="control-value"><strong id="valCicli">19</strong> cicli/giorno</span>
-          </div>
-          <input type="range" id="sliderCicli" min="10" max="28" step="1" value="19" class="range-slider">
-          <div class="slider-hint" id="cicliHint">6 ore di punta a 2 bus (12 cicli) + 7 ore di morbida a 1 bus (7 cicli) = 19 cicli</div>
+        <div class="comparison-result empty" id="comparisonResult">
+          <p>Seleziona due alternative sopra. Ti mostrerò solo ciò che cambia fra loro.</p>
         </div>
       </div>
+    </section>
 
-      <!-- Traffic Light & Results Card -->
-      <div class="traffic-light-card" id="trafficLightCard">
-        <div class="semaforo-header">
-          <div class="traffic-lights-vertical">
-            <div class="light-orb light-red" id="lightRed" title="Rosso: Richiede risorse aggiuntive"></div>
-            <div class="light-orb light-yellow" id="lightYellow" title="Giallo: Sostenibile a saldo zero"></div>
-            <div class="light-orb light-green active" id="lightGreen" title="Verde: Coperto al 100% da sola morbida"></div>
-          </div>
-
-          <div class="semaforo-summary">
-            <div class="status-badge status-green" id="semaforoBadge">SEMAFORO VERDE / SALDO ZERO</div>
-            <h3 class="prod-headline" id="headlineProd">112.261 km/anno</h3>
-            <p class="prod-detail" id="prodDetail">A fronte di 111.419 km/anno di D184+D185: scostamento di appena +842 km (+0,8%). Piena sostenibilità economica!</p>
-          </div>
-        </div>
-
-        <div class="breakdown-grid">
-          <div class="breakdown-item">
-            <span class="b-label">Cicli Annui (303 gg feriali)</span>
-            <span class="b-val" id="bCicliAnno">5.757 cicli</span>
-          </div>
-          <div class="breakdown-item">
-            <span class="b-label">Budget PdB Disponibile</span>
-            <span class="b-val text-accent">111.419 km</span>
-          </div>
-          <div class="breakdown-item">
-            <span class="b-label">Confronto Circolari Merate</span>
-            <span class="b-val text-highlight">+21.889 km (+24%)</span>
-          </div>
-          <div class="breakdown-item">
-            <span class="b-label">Autobus Impegnati</span>
-            <span class="b-val" id="bAutobus">2 in Punta / 1 Morbida</span>
-          </div>
-        </div>
+    <section class="section section-principles">
+      <div class="section-intro compact">
+        <p class="eyebrow">04 · Come si legge la decisione</p>
+        <h2>Nessun voto finale nascosto.</h2>
+        <p>Accessibilità, durata, connessioni ferroviarie, robustezza, semplicità e chilometri non vengono mescolati in un indice arbitrario. Hanno ruoli diversi.</p>
       </div>
+      <div class="principle-grid">
+        <article><span>01</span><h3>Accesso</h3><p>È l'obiettivo centrale: quante persone possono raggiungere utilmente la rete.</p></article>
+        <article><span>02</span><h3>Equità</h3><p>È una salvaguardia: una rete buona non può lasciare un comune sistematicamente indietro.</p></article>
+        <article><span>03</span><h3>Robustezza</h3><p>È un filtro forte: una soluzione fragile non viene salvata da un buon numero altrove.</p></article>
+        <article><span>04</span><h3>Semplicità</h3><p>Conta davvero: regolarità e leggibilità devono emergere dalla struttura reale dell'orario.</p></article>
+      </div>
+    </section>
 
-      <!-- Detour / Frazioni Evaluator Mini-Tool -->
-      <div class="frazioni-eval-card">
-        <div class="card-subtitle">
-          <span>🎯 Valutatore Frazioni: Rendimento = ΔPopolazione (WorldPop) / ΔMinuti</span>
+    <section class="section section-method" id="metodo">
+      <div class="method-card">
+        <div>
+          <p class="eyebrow">Evidenza</p>
+          <h2>Il sito semplifica la lettura.<br>Non semplifica i dati.</h2>
         </div>
-        <div class="frazioni-chips" id="frazioniChips">
-          <!-- Dynamically populated via JS -->
-        </div>
-        <div class="frazione-detail-box" id="frazioneDetailBox">
-          Seleziona una frazione per visualizzare l'impatto sul ciclo e la raccomandazione trasportistica.
+        <div class="method-copy">
+          <p>La baseline corrente è la V4 certificata. Le quattro finaliste derivano dal Final Policy Dry Run V3. La visualizzazione non inventa geometrie di percorso né probabilità non osservate.</p>
+          <details>
+            <summary>Stato e provenienza</summary>
+            <dl>
+              <div><dt>Baseline corrente</dt><dd>V4 · PASS</dd></div>
+              <div><dt>Finaliste</dt><dd>4 · decisione non ancora presa</dd></div>
+              <div><dt>Diagnostic strutturale</dt><dd>Workstream A · in certificazione</dd></div>
+              <div><dt>Selezione</dt><dd>PRIMARY / RUNNER-UP non ancora assegnati</dd></div>
+            </dl>
+          </details>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Bottom Section: Timetable Matrix & Rail Intermodal Sync -->
-  <section class="timetable-section" id="sectionTimetable">
-    <div class="panel-header">
-      <div class="panel-title-wrap">
-        <span class="panel-icon">⏱️</span>
-        <h2>Quadro Orario Integrato & Coincidenze Ferroviarie S8 a Olgiate FS</h2>
-      </div>
-      <div class="table-filter-group">
-        <label for="selectBusFilter">Filtro Corse:</label>
-        <select id="selectBusFilter" class="form-select">
-          <option value="all">Tutte le corse (Punta + Morbida)</option>
-          <option value="peak">Solo ore di punta (2 Bus contemporanei)</option>
-          <option value="offpeak">Solo morbida diurna</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Interactive Timetable Grid -->
-    <div class="table-responsive">
-      <table class="timetable-table" id="timetableGrid">
-        <thead>
-          <tr>
-            <th>Slot Orario</th>
-            <th>Mezzo / Verso</th>
-            <th>Partenza Olgiate FS</th>
-            <th>Anello Ovest (Perego / S.Maria / Mondonico)</th>
-            <th>Transito Olgiate FS</th>
-            <th>Anello Est (Calco / Beverate / Brivio / Arlate)</th>
-            <th>Arrivo Olgiate FS</th>
-            <th>Coincidenza Treno S8 (Milano)</th>
-            <th>Coincidenza Treno S8 (Lecco)</th>
-          </tr>
-        </thead>
-        <tbody id="timetableBody">
-          <!-- Injected dynamically via app.js -->
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="app-footer">
-    <div class="footer-content">
-      <p>Progetto <strong>Linea 8 Olgiate Molgora</strong> | Modello Circolare a Doppio Verso integrato con SFR Lombardia S8</p>
-      <p class="footer-sub">Dati ISTAT 2025, Programma di Bacino Agenzia TPL Como-Lecco-Varese, Griglia WorldPop ~100m, OpenStreetMap</p>
-    </div>
+  <footer>
+    <div><strong>Tra Paesi</strong><span>Uno strumento per rendere leggibile una decisione di rete.</span></div>
+    <p>Dati e metodi tracciati nel repository Phase 2. Ultimo aggiornamento: 4 settembre 2026.</p>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="app.js" defer></script>
 </body>
 </html>
