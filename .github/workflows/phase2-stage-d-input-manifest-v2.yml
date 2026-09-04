@@ -1,0 +1,160 @@
+name: Phase 2 Stage D Input Manifest V2
+
+on:
+  push:
+    branches:
+      - phase2-stage-d-input-manifest-v2
+    paths:
+      - 'scripts/phase2_build_stage_d_input_manifest_v2.py'
+      - 'tests/test_phase2_stage_d_input_manifest_v2.py'
+      - '.github/workflows/phase2-stage-d-input-manifest-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/stage_d_input_manifest_v2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile
+        run: python -m py_compile scripts/phase2_build_stage_d_input_manifest_v2.py
+
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<9'
+
+      - name: Unit tests
+        run: python -m pytest -q tests/test_phase2_stage_d_input_manifest_v2.py
+
+      - name: Build Stage-D input manifest
+        run: |
+          python scripts/phase2_build_stage_d_input_manifest_v2.py \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2_validation.json \
+            --s8-opportunity outputs/phase2/s8_robust_opportunity_v2/passenger_plans_s8_opportunity_v2.csv.gz \
+            --s8-opportunity-validation outputs/phase2/s8_robust_opportunity_v2/s8_robust_opportunity_v2_validation.json \
+            --continuity-scenarios outputs/phase2/current_service_continuity_v2/scenario_current_service_continuity_lower_bound_v2.csv.gz \
+            --continuity-validation outputs/phase2/current_service_continuity_v2/current_service_continuity_v2_validation.json \
+            --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --timing-output "$OUTDIR/stage_d_daily_timing_inputs_v2.csv.gz" \
+            --route-output "$OUTDIR/stage_d_public_route_inputs_v2.csv" \
+            --validation "$OUTDIR/stage_d_input_manifest_v2_validation.json"
+
+      - name: Validate Stage-D packaging contract
+        run: |
+          python - <<'PY'
+          import csv, gzip, json
+          from pathlib import Path
+
+          outdir=Path('outputs/phase2/stage_d_input_manifest_v2')
+          v=json.loads((outdir/'stage_d_input_manifest_v2_validation.json').read_text())
+          assert v['status'] == 'PASS_PHASE2_STAGE_D_INPUT_MANIFEST_V2'
+          assert v['contract'] == 'PHASE2_LOSSLESS_DAILY_TIMING_INPUT_MANIFEST_V2'
+          assert v['passenger_plan_count_represented'] == 16883
+          assert v['stage_d_daily_timing_input_count'] == 5345
+          assert v['unique_stage_d_scenario_count'] == 2056
+          assert v['recovery_values_retained_not_selected'] == [5,10,15]
+          assert sum(v['route_count_distribution'].values()) == 5345
+          assert sum(v['headway_distribution'].values()) == 5345
+          assert v['naive_joint_phase_vector_count_min'] > 0
+          assert v['naive_joint_phase_vector_count_max'] >= v['naive_joint_phase_vector_count_min']
+          assert v['daily_timing_context_deduplicated_losslessly'] is True
+          assert v['cross_scenario_or_route_set_equivalence_assumed'] is False
+          assert v['route_set_signature_used_to_remove_inputs'] is False
+          assert v['naive_complexity_used_to_remove_inputs'] is False
+          for k in ('phase_selected','exact_timetable_constructed','joint_vehicle_block_feasibility_evaluated','candidate_eliminated','decision_budget_selected','calendar_selected','recovery_selected','primary_selected','runner_up_selected','worker_reference_assigned_to_routes','municipal_od_downscaled','ridership_forecast','weighted_composite_score'):
+              assert v[k] is False, k
+
+          plan_ids=[]
+          with gzip.open(outdir/'stage_d_daily_timing_inputs_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==5345
+          for r in rows:
+              assert r['daily_timing_context_deduplicated_losslessly']=='true'
+              assert r['cross_scenario_equivalence_assumed']=='false'
+              assert r['phase_selected']=='false'
+              assert r['exact_timetable_constructed']=='false'
+              assert r['candidate_eliminated']=='false'
+              ids=json.loads(r['represented_plan_ids_json'])
+              assert len(ids)==int(r['represented_plan_count'])
+              plan_ids.extend(ids)
+          assert len(plan_ids)==16883
+          assert len(set(plan_ids))==16883
+
+          with (outdir/'stage_d_public_route_inputs_v2.csv').open(encoding='utf-8',newline='') as f:
+              routes=list(csv.DictReader(f))
+          assert len(routes)==v['used_public_route_count']
+          assert all(int(r['stage_d_timing_input_occurrence_count'])>0 for r in routes)
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/stage-d-input-v2 && mkdir -p /tmp/stage-d-input-v2
+          python scripts/phase2_build_stage_d_input_manifest_v2.py \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2_validation.json \
+            --s8-opportunity outputs/phase2/s8_robust_opportunity_v2/passenger_plans_s8_opportunity_v2.csv.gz \
+            --s8-opportunity-validation outputs/phase2/s8_robust_opportunity_v2/s8_robust_opportunity_v2_validation.json \
+            --continuity-scenarios outputs/phase2/current_service_continuity_v2/scenario_current_service_continuity_lower_bound_v2.csv.gz \
+            --continuity-validation outputs/phase2/current_service_continuity_v2/current_service_continuity_v2_validation.json \
+            --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --timing-output /tmp/stage-d-input-v2/timing.csv.gz \
+            --route-output /tmp/stage-d-input-v2/routes.csv \
+            --validation /tmp/stage-d-input-v2/validation.json
+          cmp "$OUTDIR/stage_d_daily_timing_inputs_v2.csv.gz" /tmp/stage-d-input-v2/timing.csv.gz
+          cmp "$OUTDIR/stage_d_public_route_inputs_v2.csv" /tmp/stage-d-input-v2/routes.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/stage_d_input_manifest_v2/stage_d_input_manifest_v2_validation.json').read_text())
+          b=json.loads(Path('/tmp/stage-d-input-v2/validation.json').read_text())
+          for x in (a,b):
+              x['lineage'].pop('timing_output',None)
+              x['lineage'].pop('route_output',None)
+          assert a==b
+          PY
+
+      - name: Guard no hidden pruning or synthetic search
+        run: |
+          ! grep -REn 'np\.random|random\.' scripts/phase2_build_stage_d_input_manifest_v2.py tests/test_phase2_stage_d_input_manifest_v2.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('outputs/phase2/stage_d_input_manifest_v2/stage_d_input_manifest_v2_validation.json').read_text())
+          forbidden=['phase_selected','candidate_eliminated','primary_selected','runner_up_selected','weighted_composite_score','worker_reference_assigned_to_routes','municipal_od_downscaled','ridership_forecast']
+          assert all(v[k] is False for k in forbidden)
+          PY
+
+      - name: Persist evidence
+        run: |
+          git config user.name 'phase2-stage-d-input-v2-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$OUTDIR"
+          if git diff --cached --quiet; then
+            echo 'No evidence changes to persist'
+          else
+            git commit -m 'data(phase2): persist Stage-D input manifest v2 [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-stage-d-input-manifest-v2
+          path: outputs/phase2/stage_d_input_manifest_v2
+          if-no-files-found: error
