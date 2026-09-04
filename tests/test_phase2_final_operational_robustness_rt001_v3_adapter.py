@@ -1,18 +1,23 @@
 import csv
 import gzip
-import json
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
 from scripts.phase2_run_final_operational_robustness_rt001_v3 import (
+    FINAL_FILES,
     materialise_compatibility_inputs,
     parse_vehicle_id,
+    rewrite_engine_outputs,
+)
+from scripts.phase2_run_final_operational_robustness_rt001_v3_stream import (
+    rewrite_engine_outputs_streaming,
 )
 
 
 def _write_csv(path: Path, fields, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
         w.writeheader()
@@ -20,6 +25,7 @@ def _write_csv(path: Path, fields, rows):
 
 
 def _write_gz(path: Path, fields, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
     with gzip.open(path, "wt", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
         w.writeheader()
@@ -103,3 +109,26 @@ def test_adapter_uses_selected_timetable_as_exact_unit_and_never_leaks_open_rout
     for recovery in (5, 10, 15):
         assert normalized["Rclosed"][f"vehicle_block_recovery{recovery}"] == "1"
         assert normalized["Ropen"][f"vehicle_block_recovery{recovery}"] == "1"
+
+
+def test_streaming_relabel_is_byte_equivalent_to_reference_adapter(tmp_path):
+    source = tmp_path / "engine"
+    fields = ["stage_d_input_id", "scenario_id", "value"]
+    rows = [
+        {"stage_d_input_id": "T1", "scenario_id": "S1", "value": "a"},
+        {"stage_d_input_id": "T2", "scenario_id": "S2", "value": "b"},
+    ]
+    for source_name in FINAL_FILES:
+        _write_gz(source / source_name, fields, rows)
+
+    reference_dir = tmp_path / "reference"
+    streaming_dir = tmp_path / "streaming"
+    reference = rewrite_engine_outputs(source, reference_dir)
+    streaming = rewrite_engine_outputs_streaming(source, streaming_dir)
+    assert reference == streaming
+    for final_name in FINAL_FILES.values():
+        assert (reference_dir / final_name).read_bytes() == (streaming_dir / final_name).read_bytes()
+        with gzip.open(streaming_dir / final_name, "rt", encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)
+            assert "selected_timetable_id" in (reader.fieldnames or [])
+            assert "stage_d_input_id" not in (reader.fieldnames or [])
