@@ -41,13 +41,13 @@ def test_common_hub_blocking_requires_two_when_cycles_overlap():
 
 
 def test_independent_route_phases_can_reduce_peak_fleet():
-    a = materialise_route_trips(route('A', '25'), phase_min=0, headway_min=30, span_start_min=360, span_end_min=450)
-    b_same = materialise_route_trips(route('B', '25'), phase_min=0, headway_min=30, span_start_min=360, span_end_min=450)
-    b_offset = materialise_route_trips(route('B', '25'), phase_min=15, headway_min=30, span_start_min=360, span_end_min=450)
+    a = materialise_route_trips(route('A', '10'), phase_min=0, headway_min=30, span_start_min=360, span_end_min=450)
+    b_same = materialise_route_trips(route('B', '10'), phase_min=0, headway_min=30, span_start_min=360, span_end_min=450)
+    b_offset = materialise_route_trips(route('B', '10'), phase_min=15, headway_min=30, span_start_min=360, span_end_min=450)
     fleet_same, _ = minimum_common_hub_blocks((*a, *b_same), recovery_min=5)
     fleet_offset, _ = minimum_common_hub_blocks((*a, *b_offset), recovery_min=5)
     assert fleet_same == 2
-    assert fleet_offset == 2  # each 30-min cycle still needs two vehicles network-wide
+    assert fleet_offset == 1
 
 
 def test_minimum_margin_skips_too_close_target():
