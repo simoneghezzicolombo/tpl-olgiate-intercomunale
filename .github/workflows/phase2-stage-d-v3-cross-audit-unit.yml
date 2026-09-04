@@ -1,0 +1,37 @@
+name: Phase 2 Stage D V3 Cross Audit Unit
+
+on:
+  push:
+    branches: [phase2-stage-d-v3-cross-implementation-audit]
+    paths:
+      - 'src/phase2_stage_d_v3_cross_audit.py'
+      - 'scripts/phase2_compare_stage_d_v3_implementations.py'
+      - 'tests/test_phase2_stage_d_v3_cross_audit.py'
+      - '.github/workflows/phase2-stage-d-v3-cross-audit-unit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile comparator
+        run: |
+          python -m py_compile src/phase2_stage_d_v3_cross_audit.py
+          python -m py_compile scripts/phase2_compare_stage_d_v3_implementations.py
+      - name: Install pytest
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<10'
+      - name: Comparator regression tests
+        run: python -m pytest -q tests/test_phase2_stage_d_v3_cross_audit.py
+      - name: Guard non-decisional comparator
+        run: |
+          FILES='src/phase2_stage_d_v3_cross_audit.py scripts/phase2_compare_stage_d_v3_implementations.py'
+          ! grep -En 'np\.random|numpy\.random|(^|[[:space:]])import random|from random' $FILES
+          ! grep -En 'primary_selected[^\n]{0,40}(True|"true")|runner_up_selected[^\n]{0,40}(True|"true")|weighted_composite_score[^\n]{0,40}(True|"true")' $FILES
+          git diff --check
