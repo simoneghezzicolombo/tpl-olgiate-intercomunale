@@ -23,6 +23,27 @@ def validation(**overrides):
     return payload
 
 
+def codex_v3_validation(**overrides):
+    payload = {
+        "status": "PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_RT001_V3",
+        "contract": "PHASE2_BUDGET_LOSSLESS_EXHAUSTIVE_EXACT_CLOCKFACE_TIMETABLE_RT001_V3",
+        "unique_selected_exact_timetable_count": 2,
+        "exact_selected_annual_bus_km_derived_from_materialised_phase_vector": True,
+        "vehicle_block_assignments_materialised_for_recovery_values": [5, 10, 15],
+        "recovery_values_evaluated_not_selected": [5, 10, 15],
+        "stage_c_plan_context_count": 2,
+        "technical_vehicle_closure_used_as_passenger_return": False,
+        "decision_budget_selected": False,
+        "calendar_selected": False,
+        "recovery_selected": False,
+        "primary_selected": False,
+        "runner_up_selected": False,
+        "weighted_composite_score": False,
+    }
+    payload.update(overrides)
+    return payload
+
+
 def legacy_summary():
     return [{
         "stage_d_input_id": "D1",
@@ -70,6 +91,66 @@ def test_context_dependent_split_uses_explicit_exact_timetable_id():
     assert out["identity_field"] == "exact_timetable_id"
     assert out["stage_d_inputs_with_context_dependent_exact_split"] == 1
     assert out["represented_plan_context_count_observed"] == 2
+
+
+def test_codex_v3_selected_timetable_id_plus_context_table_is_consumable():
+    summary = [
+        {"selected_timetable_id": "T1", "stage_d_input_id": "D1", "scenario_id": "S1", "selected_phase_vector_json": "[0]"},
+        {"selected_timetable_id": "T2", "stage_d_input_id": "D1", "scenario_id": "S1", "selected_phase_vector_json": "[1]"},
+    ]
+    trips = [
+        {"selected_timetable_id": "T1", "stage_d_input_id": "D1", "route_id": "R1", "trip_ordinal": "0"},
+        {"selected_timetable_id": "T2", "stage_d_input_id": "D1", "route_id": "R1", "trip_ordinal": "0"},
+    ]
+    contexts = [
+        {"plan_context_id": "m20|P1", "selected_timetable_id": "T1", "stage_d_input_id": "D1", "selected_phase_vector_json": "[0]", "exact_budget_hard_eligible": "true"},
+        {"plan_context_id": "reference|P1", "selected_timetable_id": "T2", "stage_d_input_id": "D1", "selected_phase_vector_json": "[1]", "exact_budget_hard_eligible": "true"},
+    ]
+    out = validate_exact_interface(
+        codex_v3_validation(), summary, trips,
+        summary_fields=summary[0].keys(), trip_fields=trips[0].keys(),
+        context_rows=contexts, context_fields=contexts[0].keys(),
+    )
+    assert out["identity_field"] == "selected_timetable_id"
+    assert out["context_mapping_mode"] == "SEPARATE_CONTEXT_TABLE"
+    assert out["stage_d_inputs_with_context_dependent_exact_split"] == 1
+    assert out["represented_plan_context_count_observed"] == 2
+
+
+def test_separate_context_mapping_phase_mismatch_fails_closed():
+    summary = [{"selected_timetable_id": "T1", "stage_d_input_id": "D1", "selected_phase_vector_json": "[0]"}]
+    trips = [{"selected_timetable_id": "T1", "stage_d_input_id": "D1", "route_id": "R1", "trip_ordinal": "0"}]
+    contexts = [{"plan_context_id": "x|P1", "selected_timetable_id": "T1", "stage_d_input_id": "D1", "selected_phase_vector_json": "[1]", "exact_budget_hard_eligible": "true"}]
+    with pytest.raises(ValueError, match="phase disagrees"):
+        validate_exact_interface(
+            codex_v3_validation(stage_c_plan_context_count=1, unique_selected_exact_timetable_count=1),
+            summary, trips, summary_fields=summary[0].keys(), trip_fields=trips[0].keys(),
+            context_rows=contexts, context_fields=contexts[0].keys(),
+        )
+
+
+def test_separate_context_mapping_unknown_timetable_fails_closed():
+    summary = [{"selected_timetable_id": "T1", "stage_d_input_id": "D1"}]
+    trips = [{"selected_timetable_id": "T1", "route_id": "R1", "trip_ordinal": "0"}]
+    contexts = [{"plan_context_id": "x|P1", "selected_timetable_id": "T2", "exact_budget_hard_eligible": "true"}]
+    with pytest.raises(ValueError, match="unknown exact timetable"):
+        validate_exact_interface(
+            codex_v3_validation(stage_c_plan_context_count=1, unique_selected_exact_timetable_count=1),
+            summary, trips, summary_fields=summary[0].keys(), trip_fields=trips[0].keys(),
+            context_rows=contexts, context_fields=contexts[0].keys(),
+        )
+
+
+def test_ineligible_context_is_rejected_from_stage_e_mapping():
+    summary = [{"selected_timetable_id": "T1", "stage_d_input_id": "D1"}]
+    trips = [{"selected_timetable_id": "T1", "route_id": "R1", "trip_ordinal": "0"}]
+    contexts = [{"plan_context_id": "x|P1", "selected_timetable_id": "T1", "exact_budget_hard_eligible": "false"}]
+    with pytest.raises(ValueError, match="ineligible plan context"):
+        validate_exact_interface(
+            codex_v3_validation(stage_c_plan_context_count=1, unique_selected_exact_timetable_count=1),
+            summary, trips, summary_fields=summary[0].keys(), trip_fields=trips[0].keys(),
+            context_rows=contexts, context_fields=contexts[0].keys(),
+        )
 
 
 def test_overlapping_context_mapping_fails_closed():
