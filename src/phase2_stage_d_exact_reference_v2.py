@@ -1,17 +1,19 @@
 """Exact Stage-D clockface/timetable reference primitives.
 
-This module is intentionally small and exhaustive. It is the independent
-brute-force oracle for the Stage-D optimiser workstream. It does not rank
-network plans, choose a budget or infer passenger demand.
+This module is intentionally exhaustive over the certified integer-minute phase
+space. The only inner-loop acceleration localises the best transfer target using
+the proven unimodality of the current transfer-quality profiles; a fail-closed
+fallback keeps arbitrary future profiles exact as well.
 """
 from __future__ import annotations
 
+from bisect import bisect_left
 from dataclasses import dataclass
 from decimal import Decimal
 import heapq
 import math
 from statistics import mean
-from typing import Iterable, Mapping, Sequence
+from typing import Iterable, Sequence
 
 from src.phase2_s8_interchange import TransferQualityProfile, transfer_quality_from_slack
 
@@ -163,11 +165,51 @@ def minimum_common_hub_blocks(trips: Iterable[ExactTrip], *, recovery_min: int) 
     return next_vehicle, tuple(blocked)
 
 
-def _best_quality_and_slack(slacks: Sequence[float], profile: TransferQualityProfile) -> tuple[float, float]:
+def _best_quality_and_slack_exhaustive(slacks: Sequence[float], profile: TransferQualityProfile) -> tuple[float, float]:
     if not slacks:
         raise ValueError("connection has no target events")
     scored = [(transfer_quality_from_slack(slack, profile), slack) for slack in slacks]
     return max(scored, key=lambda item: (item[0], -abs(item[1])))
+
+
+def _quality_peak_is_preferred_wait(profile: TransferQualityProfile) -> bool:
+    """Prove the current quality curve peaks at preferred_wait_min.
+
+    For negative slack and for 0..preferred_wait both multiplicative factors are
+    strictly increasing. For slack above preferred_wait, d(log q)/ds equals
+    (1-logistic(s/scale))/scale - 1/decay and decreases with s. It is therefore
+    enough to verify that this derivative is non-positive immediately to the
+    right of preferred_wait.
+    """
+    profile.validate()
+    p = profile.preferred_wait_min
+    scale = profile.miss_transition_scale_min
+    decay = profile.wait_decay_min
+    logistic = 1.0 / (1.0 + math.exp(-p / scale))
+    right_derivative = (1.0 - logistic) / scale - 1.0 / decay
+    return right_derivative <= 1e-15
+
+
+def _best_target_quality_and_slack(
+    source_min: Decimal,
+    target_times_min: Sequence[Decimal],
+    profile: TransferQualityProfile,
+) -> tuple[float, float]:
+    if not target_times_min:
+        raise ValueError("connection has no target events")
+    targets = tuple(sorted(float(x) for x in target_times_min))
+    if not _quality_peak_is_preferred_wait(profile):
+        slacks = [target - float(source_min) - profile.transfer_walk_min for target in targets]
+        return _best_quality_and_slack_exhaustive(slacks, profile)
+
+    ideal_target = float(source_min) + profile.transfer_walk_min + profile.preferred_wait_min
+    idx = bisect_left(targets, ideal_target)
+    candidate_indexes = {max(0, min(len(targets) - 1, idx - 1)), max(0, min(len(targets) - 1, idx))}
+    candidates = []
+    for i in sorted(candidate_indexes):
+        slack = targets[i] - float(source_min) - profile.transfer_walk_min
+        candidates.append((transfer_quality_from_slack(slack, profile), slack))
+    return max(candidates, key=lambda item: (item[0], -abs(item[1])))
 
 
 def source_centric_cell(
@@ -177,32 +219,17 @@ def source_centric_cell(
     connection_type: str,
     profile: TransferQualityProfile,
 ) -> tuple[float, float]:
-    """Mean continuous quality and hard-miss share, one best target per source.
-
-    BUS_TO_RAIL sources are public bus arrivals and targets are rail departures.
-    RAIL_TO_BUS sources are rail arrivals and targets are public bus departures.
-    The selected target maximises the already-certified continuous transfer
-    quality. A negative post-walk slack is additionally reported as a physical
-    hard miss, but hard misses are not a separate phase-selection threshold.
-    """
+    """Mean continuous quality and hard-miss share, one best target per source."""
+    if connection_type not in {"BUS_TO_RAIL", "RAIL_TO_BUS"}:
+        raise ValueError(f"unsupported connection type {connection_type}")
     if not source_times_min or not target_times_min:
         raise ValueError("source-centric transfer cell must contain source and target events")
     qualities: list[float] = []
     misses = 0
-    if connection_type == "BUS_TO_RAIL":
-        for source in source_times_min:
-            slacks = [float(target - source) - profile.transfer_walk_min for target in target_times_min]
-            quality, slack = _best_quality_and_slack(slacks, profile)
-            qualities.append(quality)
-            misses += slack < 0
-    elif connection_type == "RAIL_TO_BUS":
-        for source in source_times_min:
-            slacks = [float(target - source) - profile.transfer_walk_min for target in target_times_min]
-            quality, slack = _best_quality_and_slack(slacks, profile)
-            qualities.append(quality)
-            misses += slack < 0
-    else:
-        raise ValueError(f"unsupported connection type {connection_type}")
+    for source in source_times_min:
+        quality, slack = _best_target_quality_and_slack(source, target_times_min, profile)
+        qualities.append(quality)
+        misses += slack < 0
     return mean(qualities), misses / len(qualities)
 
 
@@ -285,14 +312,7 @@ def route_phase_evidence(
 
 
 def phase_vector_objective(rows: Sequence[RoutePhaseEvidence]) -> tuple[float, float]:
-    """Current normative robust phase objective, extended route-unweighted.
-
-    The config maximises the minimum cell quality, then the unweighted mean,
-    with no passenger or topology weighting. For route-specific Stage-D phases,
-    every supported route/profile/connection/direction cell therefore enters
-    once. This function returns the two maximisation terms; deterministic phase
-    offsets are handled separately by the exhaustive caller.
-    """
+    """Current normative robust phase objective, extended route-unweighted."""
     if not rows:
         raise ValueError("phase vector is empty")
     values = [value for row in rows for value in row.cell_mean_quality]
