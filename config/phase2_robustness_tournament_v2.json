@@ -1,0 +1,23 @@
+{
+  "contract": "PHASE2_ROBUSTNESS_TOURNAMENT_V2",
+  "status": "ASSUMPTION_SENSITIVITY_GRID_NOT_EMPIRICAL_INTERVAL",
+  "runtime_multiplier": [0.9, 1.0, 1.1],
+  "runtime_multiplier_semantics": "SYMMETRIC_AGGREGATE_RUNNING_TIME_STRESS_AROUND_FROZEN_GATE_D_MODEL_OUTPUT; NOT_AN_EMPIRICAL_CONFIDENCE_INTERVAL",
+  "dwell_per_nonhub_public_stop_occurrence_min": [0.0, 0.5, 1.0],
+  "dwell_semantics": "STOP_DWELL_STRESS_NOT_CALIBRATED_OBSERVED_DWELL; APPLIED_PER NON-HUB PUBLIC STOP OCCURRENCE",
+  "rail_event_clock_shift_min": [-5, 0, 5],
+  "rail_shift_semantics": "SYMMETRIC_CLOCK_SHIFT_STRESS_ON_FROZEN_S8_EVENTS; NOT_AN_EMPIRICAL_DELAY_DISTRIBUTION",
+  "transfer_profile_source": "config/phase2_s8_phasing_sensitivity_v2.json",
+  "transfer_profile_semantics": "USE_DECLARED_LOW_MID_HIGH_TRANSFER_FRICTION_PROFILES; ONLY TRANSFER_WALK_MIN IS USED AS A HARD MINIMUM CONNECTION MARGIN IN THIS ROBUSTNESS GATE",
+  "recovery_source": "config/phase2_service_policy_design_space_v2.json",
+  "recovery_values_min": [5, 10, 15],
+  "expected_stress_case_count_per_plan": 81,
+  "stress_factorial": "3_RUNTIME_MULTIPLIERS_X_3_DWELL_VALUES_X_3_RAIL_SHIFTS_X_3_TRANSFER_PROFILES",
+  "full_gjt_calculated": false,
+  "missed_connection_probability_inferred": false,
+  "passenger_route_weights_inferred": false,
+  "topology_weighting": false,
+  "hidden_composite_score": false,
+  "selection_in_this_gate": false,
+  "note": "This grid exists to test whether exact candidate timetables remain operationally and interchange-robust when model/runtime and transfer assumptions are perturbed. It does not claim that any perturbation value is an observed probability interval and it does not select PRIMARY or RUNNER-UP."
+}
