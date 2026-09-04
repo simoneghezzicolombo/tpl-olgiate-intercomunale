@@ -79,3 +79,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+# CI trigger after introducing the paired S8/continuity rejoin workflow.
