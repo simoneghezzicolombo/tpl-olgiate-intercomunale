@@ -1,0 +1,90 @@
+{
+  "budget_opportunity_class_counts": {
+    "m10pct": {
+      "ALL_PUBLIC_ROUTES_HAVE_SOME_COMPLETE_MATCH_PHASE": 1944,
+      "NO_PUBLIC_ROUTE_HAS_COMPLETE_MATCH_PHASE": 534
+    },
+    "m20pct": {
+      "ALL_PUBLIC_ROUTES_HAVE_SOME_COMPLETE_MATCH_PHASE": 1770,
+      "NO_PUBLIC_ROUTE_HAS_COMPLETE_MATCH_PHASE": 411
+    },
+    "p10pct": {
+      "ALL_PUBLIC_ROUTES_HAVE_SOME_COMPLETE_MATCH_PHASE": 2344,
+      "NO_PUBLIC_ROUTE_HAS_COMPLETE_MATCH_PHASE": 512
+    },
+    "p20pct": {
+      "ALL_PUBLIC_ROUTES_HAVE_SOME_COMPLETE_MATCH_PHASE": 2530,
+      "NO_PUBLIC_ROUTE_HAS_COMPLETE_MATCH_PHASE": 582
+    },
+    "p30pct": {
+      "ALL_PUBLIC_ROUTES_HAVE_SOME_COMPLETE_MATCH_PHASE": 2583,
+      "NO_PUBLIC_ROUTE_HAS_COMPLETE_MATCH_PHASE": 652
+    },
+    "reference": {
+      "ALL_PUBLIC_ROUTES_HAVE_SOME_COMPLETE_MATCH_PHASE": 2211,
+      "NO_PUBLIC_ROUTE_HAS_COMPLETE_MATCH_PHASE": 422
+    }
+  },
+  "candidate_count_is_dynamic_from_repaired_stage_c": true,
+  "candidate_eliminated_by_s8_opportunity_class": false,
+  "contract": "PHASE2_LINEAGE_PINNED_PRE_TIMETABLE_S8_OPPORTUNITY_RT001_V3",
+  "cross_route_phase_selected": false,
+  "decision_budget_selected": false,
+  "exact_timetable_constructed": false,
+  "final_reliability_proven": false,
+  "hard_s8_threshold_applied": false,
+  "historical_ranking_or_finalists_imported": false,
+  "joint_vehicle_block_timetable_feasibility_evaluated": false,
+  "limitations": [
+    "This remains pre-timetable S8 phase-opportunity evidence, not final reliability.",
+    "The scenario/timing S8 evidence is unchanged; only the repaired Stage-C plan membership is rejoined.",
+    "A route having some complete-match phase does not prove a joint cross-route phase vector is feasible.",
+    "Exact phase selection, explicit trips, exact budget production and vehicle blocks remain rebuilt Stage D tasks."
+  ],
+  "lineage_compatibility": {
+    "current_policy_grid_sha256": "35c4890c0d97ab8f7af43ed71c3628767f5c177f9a9387c4db6a1c02bcc188ff",
+    "current_route_universe_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
+    "current_s8_events_sha256": "00b9994c1331ab5caa09a6092815bc5554f07baddbde8a651857a470d0fdb71b",
+    "current_s8_validation_sha256": "b79e4dcbe1978e04c76ac7324c8c2e982185291529a8dc0c2b4a6a835360e490",
+    "current_scenario_mapping_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
+    "legacy_envelope_sha256": "d41baccffcbc573b984cd5ecadb0c5eeda6cffa69b7e44717d77d5b34c2df3d3",
+    "legacy_envelope_validation_sha256": "904d4db2e8a139c4bf9a636e251f614addf247dd7c45a0430f0c3f004122880b",
+    "legacy_support_validation_sha256": "d7d76b2325d8488b59fae91f18e4f1d6aed4fcdea712cf834b260f4dedc52dea",
+    "legacy_transfer_validation_sha256": "c351980abc3a2670fb70f864d926717f071a4a0652a194e47e668352bed91775",
+    "legacy_work_direction_summary_sha256": "ba6115ddeed3021d3ecc732be000c15d8df7fa365e3e70b4cdfce25e50d44a81",
+    "legacy_work_weights_validation_sha256": "42defc8e6f727bb4a27e90c39d4d8409d7e3ef423aa3d74d2d68f3df8ec75b3e",
+    "output_sha256": "02faa8a1b370fbd4f4bd51e05f57c6040992c2ff82d51bb19ff3dcef3974254c",
+    "passenger_frontier_sha256": "f119d4b7acbfcea3280250fbd0a2ff06e2871f8c8465b9daace70664de7424c1"
+  },
+  "missed_connection_probability_calculated": false,
+  "outbound_direction_weight": {
+    "LECCO": 697.0,
+    "MILANO": 1185.0
+  },
+  "passenger_utility_plan_count": 16495,
+  "passenger_utility_upstream_contract": "PHASE2_NO_WEIGHT_PASSENGER_UTILITY_EXACT_EXISTENTIAL_BUDGET_V3",
+  "pinned_source_commit": "8d79cbd74c3ec99ec3eff5fca7a799975210356b",
+  "primary_selected": false,
+  "return_direction_weight": {
+    "LECCO": 1185.0,
+    "MILANO": 697.0
+  },
+  "route_weighting_applied": false,
+  "rt001_repair": true,
+  "runner_up_selected": false,
+  "s8_opportunity_class_counts": {
+    "ALL_PUBLIC_ROUTES_HAVE_SOME_COMPLETE_MATCH_PHASE": 13382,
+    "NO_PUBLIC_ROUTE_HAS_COMPLETE_MATCH_PHASE": 3113
+  },
+  "service_policy_selected": false,
+  "status": "PASS_PHASE2_S8_ROBUST_OPPORTUNITY_RT001_V3",
+  "unique_stage_c_scenario_timing_key_count": 5325,
+  "upstream_statuses": {
+    "current_s8": "PASS_S8_PHASE_OPPORTUNITY_V2_BUILD",
+    "passenger_utility": "PASS_PHASE2_PASSENGER_UTILITY_FRONTIER_RT001_V3",
+    "pinned_s8_scenario_envelope": "PASS_S8_SCENARIO_FEEDER_ENVELOPE_V2_BUILD",
+    "pinned_transfer_gap": "PASS_S8_TRANSFER_GAP_ENVELOPE_V2_BUILD"
+  },
+  "worker_direction_weight_reference": 1882.0,
+  "worker_reference_assigned_to_routes": false
+}

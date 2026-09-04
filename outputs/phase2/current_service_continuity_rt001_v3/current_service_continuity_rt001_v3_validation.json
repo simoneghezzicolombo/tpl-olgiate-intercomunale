@@ -1,0 +1,147 @@
+{
+  "baseline_role": "CERTIFIED_LOCALIZABLE_LOWER_BOUND_ONLY",
+  "continuity_is_complete_current_service_measure": false,
+  "continuity_is_true_current_service_nonregression_proof": false,
+  "continuity_used_to_eliminate_candidate": false,
+  "continuity_used_to_select_primary": false,
+  "continuity_used_to_select_runner_up": false,
+  "contract": "PHASE2_CERTIFIED_LOCALIZABLE_CURRENT_SERVICE_CONTINUITY_LOWER_BOUND_RT001_V3",
+  "current_cluster_to_routing_anchor": {
+    "EX_002": "existing:EX_002",
+    "EX_009": "existing:EX_009",
+    "EX_011": "existing:EX_011",
+    "EX_023": "existing:EX_023",
+    "EX_026": "existing:EX_026",
+    "EX_036": "existing:EX_036",
+    "EX_041": "existing:EX_041"
+  },
+  "current_localizable_cluster_count": 7,
+  "current_localizable_clusters": [
+    "EX_002",
+    "EX_009",
+    "EX_011",
+    "EX_023",
+    "EX_026",
+    "EX_036",
+    "EX_041"
+  ],
+  "current_localizable_directed_adjacent_pairs": [
+    [
+      "EX_002",
+      "EX_009"
+    ],
+    [
+      "EX_009",
+      "EX_036"
+    ],
+    [
+      "EX_011",
+      "EX_023"
+    ],
+    [
+      "EX_023",
+      "EX_011"
+    ],
+    [
+      "EX_023",
+      "EX_026"
+    ],
+    [
+      "EX_041",
+      "EX_023"
+    ]
+  ],
+  "current_localizable_row_count": 12,
+  "current_localizable_undirected_adjacent_pairs": [
+    [
+      "EX_002",
+      "EX_009"
+    ],
+    [
+      "EX_009",
+      "EX_036"
+    ],
+    [
+      "EX_011",
+      "EX_023"
+    ],
+    [
+      "EX_023",
+      "EX_026"
+    ],
+    [
+      "EX_023",
+      "EX_041"
+    ]
+  ],
+  "current_route_localizable_clusters": {
+    "D184": [
+      "EX_011",
+      "EX_023",
+      "EX_026",
+      "EX_041"
+    ],
+    "D185": [
+      "EX_002",
+      "EX_009",
+      "EX_011",
+      "EX_036"
+    ]
+  },
+  "current_unresolved_or_unlocalized_row_count": 39,
+  "epistemic_note": "Continuity is measured only against current D184/D185 stop identities that the certified lower-bound baseline can localise exactly into Stop Universe V2. Stop retention requires exact routing-anchor identity; nearby proposed stops do not count. Corridor continuity uses only immediately consecutive current PDF rows whose two endpoints are both exactly localised; no pair is inferred across an unresolved row. Therefore all reported continuity metrics are conservative lower-bound descriptors suitable for a downstream practical tie-break, not a complete reconstruction of current service continuity. Repaired Stage-C membership changes only which plans receive this same scenario-level lower-bound evidence.",
+  "historical_station_EX_011_kept_separate_from_project_bridge_EX_039": true,
+  "lineage": {
+    "current_localized": "outputs/phase2/current_service_access_baseline_v2/current_service_localized_rows_v2.csv",
+    "current_localized_sha256": "d511ccb4362c60caa0bb9add0ff007e358e68d1c6912a8dae13fed84d68b628d",
+    "current_validation": "outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json",
+    "current_validation_sha256": "31e5bfbd18dfaad298331c7e56a08ffe7439c4d829030ca2ffcece978dd7305b",
+    "matrix_validation": "outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json",
+    "matrix_validation_sha256": "ca4faa25a72ac0f0b07f4a4099c660945c8c824db1cd5baf641b26eae89fc79d",
+    "passenger_frontier": "outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3.csv.gz",
+    "passenger_frontier_sha256": "f119d4b7acbfcea3280250fbd0a2ff06e2871f8c8465b9daace70664de7424c1",
+    "passenger_validation": "outputs/phase2/passenger_utility_frontier_rt001_v3/passenger_utility_frontier_rt001_v3_validation.json",
+    "passenger_validation_sha256": "a3fd3e0525b29eed01d86446262500dbc5afb172f81ff6c78347d5919e6b5cd6",
+    "plan_output": "outputs/phase2/current_service_continuity_rt001_v3/passenger_plans_current_service_continuity_rt001_v3.csv.gz",
+    "plan_output_sha256": "bdb08fdd6f58a085509edfa9cef27069fcec5d55ee6c8449e183935710730522",
+    "route_universe": "outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv",
+    "route_universe_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
+    "routing_anchors": "outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv",
+    "routing_anchors_sha256": "123a5e25a25207ec3d38a6ffa80fc9ea70b6da4793581b19f1d55dad3ae24cf7",
+    "s8_validation": "outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json",
+    "s8_validation_sha256": "b79e4dcbe1978e04c76ac7324c8c2e982185291529a8dc0c2b4a6a835360e490",
+    "scenario_mapping": "outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz",
+    "scenario_mapping_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
+    "scenario_output": "outputs/phase2/current_service_continuity_rt001_v3/scenario_current_service_continuity_rt001_v3.csv.gz",
+    "scenario_output_sha256": "0bf66d92b4f6b2e50b45445b6be11c18e3e05242fb10bd99c5f673c634ef17cb"
+  },
+  "passenger_plan_budget_counts": {
+    "m10pct": 2478,
+    "m20pct": 2181,
+    "p10pct": 2856,
+    "p20pct": 3112,
+    "p30pct": 3235,
+    "reference": 2633
+  },
+  "passenger_plan_retained_cluster_count_distribution": {
+    "0": 12509,
+    "1": 3726,
+    "2": 242,
+    "3": 18
+  },
+  "passenger_utility_plan_count": 16495,
+  "passenger_utility_unique_scenario_count": 2050,
+  "passenger_utility_upstream_contract": "PHASE2_NO_WEIGHT_PASSENGER_UTILITY_EXACT_EXISTENTIAL_BUDGET_V3",
+  "passenger_utility_upstream_status": "PASS_PHASE2_PASSENGER_UTILITY_FRONTIER_RT001_V3",
+  "project_station_bridge_counts_as_current_stop_retention": false,
+  "proximity_used_as_stop_retention": false,
+  "rt001_repair": true,
+  "scenario_count": 100000,
+  "scenario_retained_current_cluster_count_max": 3,
+  "scenario_retained_current_cluster_count_min": 0,
+  "scenario_retained_current_directed_pair_count_max": 1,
+  "scenario_retained_current_directed_pair_count_min": 0,
+  "status": "PASS_PHASE2_CURRENT_SERVICE_CONTINUITY_RT001_V3",
+  "unresolved_current_rows_inferred": false,
+  "weighted_composite_score": false
+}
