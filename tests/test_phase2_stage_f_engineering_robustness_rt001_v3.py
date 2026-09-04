@@ -1,3 +1,5 @@
+import math
+
 from src.phase2_final_operational_robustness_v2 import ConnectionCandidate, ExactTrip
 from src.phase2_stage_f_engineering_robustness_rt001_v3 import (
     RouteStressMeta,
@@ -61,8 +63,8 @@ def test_sorted_slack_count_is_exact_at_boundary():
 
 def test_dwell_is_applied_per_nonhub_public_stop_occurrence():
     m=meta(public=20.0,cycle=25.0,stops=4)
-    assert m.public_runtime_stressed(1.0,0.5)==22.0
-    assert m.cycle_runtime_stressed(1.1,1.0)==31.5
+    assert math.isclose(m.public_runtime_stressed(1.0,0.5),22.0,rel_tol=0.0,abs_tol=1e-12)
+    assert math.isclose(m.cycle_runtime_stressed(1.1,1.0),31.5,rel_tol=0.0,abs_tol=1e-12)
 
 
 def test_block_stress_can_require_extra_vehicle_without_changing_nominal_assignment():
