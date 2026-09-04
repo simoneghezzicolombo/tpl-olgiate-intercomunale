@@ -17,6 +17,11 @@ def rel(origin: str, destination: str, workers: int, category: str = "OTHER_CORE
     )
 
 
+def test_canonical_place_repairs_reversible_utf8_mojibake_only():
+    assert canonical_place("Santa Maria HoÃ¨") == canonical_place("Santa Maria Hoè")
+    assert canonical_place("Città") == "città"
+
+
 def test_repeated_anchor_is_valid_and_direction_is_respected():
     anchors = {
         "H": frozenset({canonical_place("Olgiate Molgora")}),
