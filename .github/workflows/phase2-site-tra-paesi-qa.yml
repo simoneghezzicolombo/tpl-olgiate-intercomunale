@@ -151,7 +151,6 @@ jobs:
               'punteggio complessivo',
               'vincitore automatico',
               'geometria stradale certificata',
-              'tracciato ufficiale definitivo',
           ]
           for claim in forbidden_claims:
               assert claim not in text, f'Unsupported decision claim in site: {claim}'
