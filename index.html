@@ -4,7 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f3ed">
+  <meta name="color-scheme" content="light">
   <meta name="description" content="Tra Paesi rende leggibile la scelta fra quattro configurazioni di rete locale per Olgiate Molgora, Calco, Brivio, Santa Maria Hoè e La Valletta Brianza.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
   <title>Tra Paesi · Esploratore della rete locale</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,11 +14,12 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="reading-progress" aria-hidden="true"><i id="readingProgress"></i></div>
   <a class="skip-link" href="#contenuto">Vai al contenuto</a>
 
-  <header class="site-header">
+  <header class="site-header" id="siteHeader">
     <a class="wordmark" href="#top" aria-label="Tra Paesi, torna all'inizio">
-      <span class="wordmark-dot" aria-hidden="true"></span>
+      <span class="wordmark-symbol" aria-hidden="true"><i></i></span>
       <span>Tra Paesi</span>
     </a>
     <nav class="topnav" aria-label="Navigazione principale">
@@ -25,12 +28,12 @@
       <a href="#confronta">Confronta</a>
       <a href="#metodo">Metodo</a>
     </nav>
-    <span class="status-pill"><span></span> Decisione aperta</span>
+    <span class="status-pill"><span></span> Dati verificati · scelta aperta</span>
   </header>
 
   <main id="contenuto">
-    <section class="hero" id="top">
-      <div class="hero-copy">
+    <section class="hero" id="top" data-section="top">
+      <div class="hero-copy reveal">
         <p class="eyebrow">Esploratore di rete · Phase 2</p>
         <h1>Una rete locale.<br><em>Quattro modi</em> di farla funzionare.</h1>
         <p class="hero-lede">Cinque comuni condividono gli stessi spostamenti, ma non partono dallo stesso livello di accesso al trasporto pubblico. Qui la scelta complessa viene scomposta in due domande semplici.</p>
@@ -40,21 +43,22 @@
         </div>
       </div>
 
-      <div class="hero-visual" aria-label="Le due dimensioni che generano le quattro alternative">
+      <div class="hero-visual reveal reveal-delay" id="heroVisual" aria-label="Le due dimensioni che generano le quattro alternative">
+        <div class="hero-visual-sheen" aria-hidden="true"></div>
         <div class="decision-axis decision-axis-horizontal">
           <span>Come funziona</span>
           <strong>Due anelli</strong>
           <i aria-hidden="true"></i>
-          <strong>Figure-8 interconnesso</strong>
+          <strong>Figure-8</strong>
         </div>
         <div class="decision-cross" aria-hidden="true">
           <div class="cross-line cross-line-h"></div>
           <div class="cross-line cross-line-v"></div>
-          <span class="cross-node n1">16h</span>
-          <span class="cross-node n2">16h</span>
-          <span class="cross-node n3">18h30</span>
-          <span class="cross-node n4">18h30</span>
-          <span class="cross-center">4</span>
+          <span class="cross-node n1"><b>16h</b><small>anelli</small></span>
+          <span class="cross-node n2"><b>16h</b><small>figure-8</small></span>
+          <span class="cross-node n3"><b>18h30</b><small>anelli</small></span>
+          <span class="cross-node n4"><b>18h30</b><small>figure-8</small></span>
+          <span class="cross-center"><b>4</b><small>finaliste</small></span>
         </div>
         <div class="decision-axis decision-axis-vertical">
           <span>Quanto a lungo</span>
@@ -66,7 +70,7 @@
       </div>
     </section>
 
-    <section class="context-strip" aria-label="Stato del processo">
+    <section class="context-strip reveal" aria-label="Stato del processo">
       <div><b>2.633</b><span>configurazioni nel perimetro di budget</span></div>
       <span class="strip-arrow" aria-hidden="true">→</span>
       <div><b>776</b><span>robuste</span></div>
@@ -76,15 +80,15 @@
       <div class="strip-current"><b>4</b><span>finaliste</span></div>
     </section>
 
-    <section class="section section-baseline" id="oggi">
-      <div class="section-intro">
+    <section class="section section-baseline" id="oggi" data-section="oggi">
+      <div class="section-intro reveal">
         <p class="eyebrow">01 · Da dove partiamo</p>
         <h2>Oggi non partiamo tutti dallo stesso punto.</h2>
         <p>La rete ordinaria D184 + D185 ha una copertura geografica già alta in alcuni comuni e molto più debole in altri. La baseline V4 ricostruisce l'universo fisico delle fermate ufficiali, non soltanto quelle localizzabili nel vecchio PDF.</p>
       </div>
 
       <div class="baseline-layout">
-        <article class="baseline-main">
+        <article class="baseline-main reveal">
           <div class="baseline-head">
             <div>
               <span class="micro-label">Popolazione entro una fermata</span>
@@ -92,10 +96,10 @@
               <p id="globalCoverageLabel">entro 10 minuti a piedi</p>
             </div>
             <div class="threshold-switch" role="group" aria-label="Soglia pedonale">
-              <button data-threshold="5">5 min</button>
-              <button data-threshold="8">8 min</button>
-              <button class="active" data-threshold="10">10 min</button>
-              <button data-threshold="12">12 min</button>
+              <button data-threshold="5" type="button">5 min</button>
+              <button data-threshold="8" type="button">8 min</button>
+              <button class="active" data-threshold="10" type="button">10 min</button>
+              <button data-threshold="12" type="button">12 min</button>
             </div>
           </div>
 
@@ -103,33 +107,34 @@
           <p class="chart-note">Quote sulla popolazione localizzata del modello. La soglia selezionata cambia il tempo massimo a piedi verso una fermata D184/D185 con catchment certificato.</p>
         </article>
 
-        <aside class="baseline-story">
+        <aside class="baseline-story reveal reveal-delay">
           <p class="micro-label">Il punto non è la media</p>
-          <h3>La distanza tra territori è il problema da vedere.</h3>
-          <p>A 10 minuti, Brivio e Santa Maria Hoè superano il 94% di copertura, mentre Calco è al 52,5% e Olgiate al 59,9%.</p>
-          <div class="range-visual" aria-hidden="true">
-            <span class="range-min">52,5</span>
-            <div class="range-line"><i></i></div>
-            <span class="range-max">95,2</span>
+          <h3 id="rangeStoryTitle">La distanza tra territori è il problema da vedere.</h3>
+          <p id="rangeStoryBody">A 10 minuti, Brivio e Santa Maria Hoè superano il 94% di copertura, mentre Calco è al 52,5% e Olgiate al 59,9%.</p>
+          <div class="range-visual" aria-label="Intervallo tra il comune meno coperto e quello più coperto">
+            <span class="range-min" id="rangeMin">52,5</span>
+            <div class="range-line"><i id="rangeLine"></i></div>
+            <span class="range-max" id="rangeMax">95,2</span>
           </div>
+          <div class="range-gap"><strong id="rangeGap">42,7</strong><span>punti percentuali di distanza</span></div>
           <p class="small-copy">Questo non decide da solo la nuova rete. Dice però dove l'accessibilità attuale lascia più spazio a un ridisegno.</p>
         </aside>
       </div>
 
-      <div class="baseline-trust">
+      <div class="baseline-trust reveal">
         <span class="trust-mark">44</span>
         <p><strong>cluster fisici ufficiali ricostruiti.</strong> Tutti hanno identità e coordinate. I 16 senza catchment pedonale certificato sono fuori dai cinque comuni di studio, quindi non vengono usati per inventare copertura.</p>
       </div>
     </section>
 
-    <section class="section section-choice" id="scelta">
-      <div class="section-intro compact">
+    <section class="section section-choice" id="scelta" data-section="scelta">
+      <div class="section-intro compact reveal">
         <p class="eyebrow">02 · La scelta</p>
         <h2>Non scegliere fra quattro scatole.<br>Scegli su <em>due assi</em>.</h2>
         <p>Le quattro finaliste combinano una forma di esercizio e un'estensione oraria. Separarle rende visibile il vero compromesso.</p>
       </div>
 
-      <div class="choice-questions">
+      <div class="choice-questions reveal">
         <article class="choice-question">
           <div class="question-number">A</div>
           <p class="micro-label">Forma di esercizio</p>
@@ -176,54 +181,62 @@
         </article>
       </div>
 
-      <div class="matrix-wrap">
+      <div class="matrix-wrap reveal">
         <div class="matrix-title">
-          <p class="micro-label">Le quattro combinazioni</p>
-          <h3>È tutto qui.</h3>
+          <div><p class="micro-label">Le quattro combinazioni</p><h3>È tutto qui.</h3></div>
+          <p class="matrix-instruction" id="selectionHint">Scegline due per vedere soltanto ciò che cambia.</p>
         </div>
-        <div class="candidate-matrix" id="candidateMatrix">
+        <div class="candidate-matrix" id="candidateMatrix" aria-describedby="selectionHint">
           <div class="matrix-corner"></div>
-          <div class="matrix-col-label">Due anelli</div>
-          <div class="matrix-col-label">Figure-8</div>
-          <div class="matrix-row-label"><b>16h</b><span>più compatta</span></div>
-          <button class="candidate-card" data-candidate="loops16" type="button"><span>Due anelli</span><b>16h</b><small>Seleziona per confrontare</small></button>
-          <button class="candidate-card" data-candidate="fig16" type="button"><span>Figure-8</span><b>16h</b><small>Seleziona per confrontare</small></button>
-          <div class="matrix-row-label"><b>18h30</b><span>più estesa</span></div>
-          <button class="candidate-card" data-candidate="loops185" type="button"><span>Due anelli</span><b>18h30</b><small>Seleziona per confrontare</small></button>
-          <button class="candidate-card" data-candidate="fig185" type="button"><span>Figure-8</span><b>18h30</b><small>Seleziona per confrontare</small></button>
+          <div class="matrix-col-label" data-col="loops">Due anelli</div>
+          <div class="matrix-col-label" data-col="fig">Figure-8</div>
+          <div class="matrix-row-label" data-row="16"><b>16h</b><span>più compatta</span></div>
+          <button class="candidate-card" data-candidate="loops16" data-topology="loops" data-span-row="16" aria-pressed="false" type="button"><span>Due anelli</span><b>16h</b><small>Seleziona per confrontare</small></button>
+          <button class="candidate-card" data-candidate="fig16" data-topology="fig" data-span-row="16" aria-pressed="false" type="button"><span>Figure-8</span><b>16h</b><small>Seleziona per confrontare</small></button>
+          <div class="matrix-row-label" data-row="18.5"><b>18h30</b><span>più estesa</span></div>
+          <button class="candidate-card" data-candidate="loops185" data-topology="loops" data-span-row="18.5" aria-pressed="false" type="button"><span>Due anelli</span><b>18h30</b><small>Seleziona per confrontare</small></button>
+          <button class="candidate-card" data-candidate="fig185" data-topology="fig" data-span-row="18.5" aria-pressed="false" type="button"><span>Figure-8</span><b>18h30</b><small>Seleziona per confrontare</small></button>
         </div>
       </div>
     </section>
 
-    <section class="section section-compare" id="confronta">
-      <div class="compare-heading">
+    <section class="section section-compare" id="confronta" data-section="confronta">
+      <div class="compare-heading reveal">
         <div>
           <p class="eyebrow">03 · Cosa cambia davvero?</p>
           <h2>Confronta due alternative.<br><em>Il resto scompare.</em></h2>
         </div>
-        <p>Seleziona due finaliste nella matrice. Il confronto mostra soltanto le dimensioni che differiscono, senza trasformarle in un punteggio unico.</p>
+        <p>Puoi scegliere due finaliste nella matrice oppure usare una domanda pronta. Il confronto mostra soltanto le dimensioni che differiscono, senza trasformarle in un punteggio unico.</p>
       </div>
 
-      <div class="compare-shell">
+      <div class="preset-bar reveal" aria-label="Confronti rapidi">
+        <span>Confronta subito</span>
+        <button type="button" data-preset="loops16,fig16">Forma · 16h</button>
+        <button type="button" data-preset="loops185,fig185">Forma · 18h30</button>
+        <button type="button" data-preset="loops16,loops185">Durata · due anelli</button>
+        <button type="button" data-preset="fig16,fig185">Durata · figure-8</button>
+      </div>
+
+      <div class="compare-shell reveal">
         <div class="compare-selection">
           <div class="compare-slot" id="slotA"><span>A</span><p>Scegli una finalista</p></div>
           <button class="swap-button" id="swapComparison" type="button" aria-label="Scambia alternative">↔</button>
           <div class="compare-slot" id="slotB"><span>B</span><p>Scegli una seconda finalista</p></div>
           <button class="clear-button" id="clearComparison" type="button">Azzera</button>
         </div>
-        <div class="comparison-result empty" id="comparisonResult">
+        <div class="comparison-result empty" id="comparisonResult" aria-live="polite">
           <p>Seleziona due alternative sopra. Ti mostrerò solo ciò che cambia fra loro.</p>
         </div>
       </div>
     </section>
 
-    <section class="section section-principles">
-      <div class="section-intro compact">
+    <section class="section section-principles" data-section="principi">
+      <div class="section-intro compact reveal">
         <p class="eyebrow">04 · Come si legge la decisione</p>
         <h2>Nessun voto finale nascosto.</h2>
         <p>Accessibilità, durata, connessioni ferroviarie, robustezza, semplicità e chilometri non vengono mescolati in un indice arbitrario. Hanno ruoli diversi.</p>
       </div>
-      <div class="principle-grid">
+      <div class="principle-grid reveal">
         <article><span>01</span><h3>Accesso</h3><p>È l'obiettivo centrale: quante persone possono raggiungere utilmente la rete.</p></article>
         <article><span>02</span><h3>Equità</h3><p>È una salvaguardia: una rete buona non può lasciare un comune sistematicamente indietro.</p></article>
         <article><span>03</span><h3>Robustezza</h3><p>È un filtro forte: una soluzione fragile non viene salvata da un buon numero altrove.</p></article>
@@ -231,8 +244,8 @@
       </div>
     </section>
 
-    <section class="section section-method" id="metodo">
-      <div class="method-card">
+    <section class="section section-method" id="metodo" data-section="metodo">
+      <div class="method-card reveal">
         <div>
           <p class="eyebrow">Evidenza</p>
           <h2>Il sito semplifica la lettura.<br>Non semplifica i dati.</h2>
