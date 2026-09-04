@@ -1,0 +1,67 @@
+{
+  "alpha_documentation_head": "9c574ddbebf07707372e8b2747eaec32ea63effa",
+  "alpha_evidence_commit": "c90232d13fa9e4acde6f3e9732b9a0ec62a89aef",
+  "certification_pass": true,
+  "contract": "PHASE2_GJT_BOUNDS_TARGETED_REVIEW_A_V3",
+  "decision_boundary": "PASS_AS_SET_IDENTIFICATION_EVIDENCE_ENRICHMENT_ONLY__NOT_FULL_GJT__NOT_A_RANKING__NOT_PRIMARY_OR_RUNNER_UP",
+  "findings": {
+    "blocking_issue_count": 0,
+    "hidden_demand_or_worker_weighting_detected": false,
+    "historical_half_headway_wait_reused": false,
+    "interval_dominance_can_discriminate_with_current_full_envelope": false,
+    "municipal_od_downscaled": false,
+    "next_train_rebinding_detected": false,
+    "out_of_span_public_return_leak_detected": false,
+    "technical_return_used_as_passenger_service": false
+  },
+  "fixed_event_semantics": {
+    "fixed_event_infeasible": true,
+    "later_event_feasible_when_explicitly_evaluated": true,
+    "next_train_rebinding_observed": false
+  },
+  "non_blocking_note": "Alpha CI run 33892440844 persisted evidence to GitHub, but its artifact-upload step used literal $OUTDIR and uploaded no artifact. Repository evidence remains intact and hash-verified.",
+  "optimizer_oracle": {
+    "fixed_event_optimizer_equals_all_opportunity_oracle": true,
+    "reduced_case_count_checked": 6
+  },
+  "persisted_evidence": {
+    "decision_use_boundary_preserved": true,
+    "finite_upper_bound_row_count": 0,
+    "lower_witness_partition_consistent": true,
+    "output_row_count": 60000,
+    "output_sha256_verified": "409379d3aae7d60a5ae7a60ee28f5cd29a77e5767ca1fb131feb1a0a68eafe4a",
+    "row_with_no_finite_lower_bound_count": 16990,
+    "total_origin_event_stationwalk_state_count": 5791536000,
+    "unbounded_upper_bound_row_count": 60000,
+    "unreachable_origin_event_stationwalk_state_count": 4479523293,
+    "unreachable_share": 0.7734603208889662
+  },
+  "population_semantics": {
+    "population_value_uses_in_catchment_loader": 2,
+    "population_values_used_for_row_integrity_equality_only": true,
+    "population_weighted_cost_aggregation_detected": false
+  },
+  "review_scope": "LIGHTWEIGHT_TARGETED_RED_TEAM_ONLY_NO_NEW_PHASE2_WORKSTREAM",
+  "sensitivity_reduction": {
+    "full_factorial_case_count_checked": 243,
+    "full_max_equals_reduced_high_corner_max": true,
+    "full_min_equals_reduced_low_corner_min": true,
+    "itinerary_switching_exercised": true,
+    "reduced_case_count_checked": 6,
+    "station_transfer_walk_values_exhaustively_enumerated": [
+      1.5,
+      2.0,
+      3.0
+    ]
+  },
+  "span_semantics": {
+    "in_span_positive_control_hub_return_min": 50.0,
+    "out_of_span_opportunity_count": 0,
+    "out_of_span_public_return_leak_detected": false,
+    "physical_public_hub_return_min": 70.0,
+    "pre_fix_failure_fixture_replayed": true,
+    "span_end_min": 60.0,
+    "trip_departure_min": 50.0
+  },
+  "status": "PASS_PHASE2_GJT_BOUNDS_TARGETED_REVIEW_A_V3"
+}
