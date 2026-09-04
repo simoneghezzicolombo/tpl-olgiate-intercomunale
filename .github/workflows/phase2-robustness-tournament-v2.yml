@@ -1,0 +1,143 @@
+name: Phase 2 Robustness Tournament V2
+
+on:
+  push:
+    branches:
+      - phase2-passenger-gjt-v2
+    paths:
+      - 'config/phase2_robustness_tournament_v2.json'
+      - 'src/phase2_robustness_tournament_v2.py'
+      - 'scripts/phase2_build_robustness_tournament_v2.py'
+      - 'tests/test_phase2_robustness_tournament_v2.py'
+      - '.github/workflows/phase2-robustness-tournament-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-robustness-tournament-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile and test robustness engine
+        run: |
+          python -m py_compile src/phase2_robustness_tournament_v2.py
+          python -m py_compile scripts/phase2_build_robustness_tournament_v2.py
+          python -m pytest -q tests/test_phase2_robustness_tournament_v2.py tests/test_phase2_exact_timetable_v2.py
+
+      - name: Materialise exact robustness tournament
+        run: >-
+          python scripts/phase2_build_robustness_tournament_v2.py
+          --exact-plans outputs/phase2/base_exact_timetables_v2/base_exact_timetable_candidates_v2.csv
+          --exact-validation outputs/phase2/base_exact_timetables_v2/base_exact_timetables_v2_validation.json
+          --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz
+          --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+          --current-baseline outputs/phase2/current_access_baseline_v2/current_access_lower_bound_v2_validation.json
+          --robustness-config config/phase2_robustness_tournament_v2.json
+          --transfer-config config/phase2_s8_phasing_sensitivity_v2.json
+          --service-config config/phase2_service_policy_design_space_v2.json
+          --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz
+          --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv
+          --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv
+          --s8-events outputs/phase2/s8_events.csv
+          --work-direction-summary outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv
+          --summary-output outputs/phase2/robustness_v2/robustness_plan_summary_v2.csv
+          --stress-output outputs/phase2/robustness_v2/robustness_stress_cells_v2.csv.gz
+          --frontier-output outputs/phase2/robustness_v2/robustness_frontier_v2.csv
+          --validation outputs/phase2/robustness_v2/robustness_tournament_v2_validation.json
+
+      - name: Validate robustness semantics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('outputs/phase2/robustness_v2/robustness_tournament_v2_validation.json').read_text())
+          assert v['status']=='PASS_ROBUSTNESS_TOURNAMENT_V2_BUILD'
+          assert v['contract']=='PHASE2_ROBUSTNESS_TOURNAMENT_V2'
+          assert v['exact_input_plan_count']==354
+          assert v['stress_case_count_per_plan']==81
+          assert v['stress_row_count']==354*81
+          assert v['eligible_hard_nonregression_plan_count'] > 0
+          assert v['robust_passenger_unrestricted_frontier_count'] > 0
+          assert v['robust_passenger_frequent30_frontier_count'] > 0
+          assert v['weighted_composite_score_used'] is False
+          assert v['full_gjt_calculated'] is False
+          assert v['missed_connection_probability_inferred'] is False
+          assert v['passenger_route_weights_inferred'] is False
+          for key in ('topology_ranked','service_policy_selected','primary_selected','runner_up_selected'):
+              assert v[key] is False, key
+          print(json.dumps({
+            'plans':v['exact_input_plan_count'],
+            'stress_rows':v['stress_row_count'],
+            'frontier':v['robust_passenger_unrestricted_frontier_count'],
+            'frequent_frontier':v['robust_passenger_frequent30_frontier_count'],
+            'families':v['robust_frontier_family_counts'],
+            'headways':v['robust_frontier_headway_counts'],
+          },indent=2))
+          PY
+
+      - name: Deterministic byte-for-byte rebuild
+        run: |
+          rm -rf /tmp/phase2-robustness-v2 && mkdir -p /tmp/phase2-robustness-v2
+          python scripts/phase2_build_robustness_tournament_v2.py \
+            --exact-plans outputs/phase2/base_exact_timetables_v2/base_exact_timetable_candidates_v2.csv \
+            --exact-validation outputs/phase2/base_exact_timetables_v2/base_exact_timetables_v2_validation.json \
+            --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz \
+            --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json \
+            --current-baseline outputs/phase2/current_access_baseline_v2/current_access_lower_bound_v2_validation.json \
+            --robustness-config config/phase2_robustness_tournament_v2.json \
+            --transfer-config config/phase2_s8_phasing_sensitivity_v2.json \
+            --service-config config/phase2_service_policy_design_space_v2.json \
+            --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --s8-events outputs/phase2/s8_events.csv \
+            --work-direction-summary outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv \
+            --summary-output /tmp/phase2-robustness-v2/summary.csv \
+            --stress-output /tmp/phase2-robustness-v2/stress.csv.gz \
+            --frontier-output /tmp/phase2-robustness-v2/frontier.csv \
+            --validation /tmp/phase2-robustness-v2/validation.json >/dev/null
+          cmp outputs/phase2/robustness_v2/robustness_plan_summary_v2.csv /tmp/phase2-robustness-v2/summary.csv
+          cmp outputs/phase2/robustness_v2/robustness_stress_cells_v2.csv.gz /tmp/phase2-robustness-v2/stress.csv.gz
+          cmp outputs/phase2/robustness_v2/robustness_frontier_v2.csv /tmp/phase2-robustness-v2/frontier.csv
+          cmp outputs/phase2/robustness_v2/robustness_tournament_v2_validation.json /tmp/phase2-robustness-v2/validation.json
+
+      - name: Guard evidence semantics
+        run: |
+          FILES="config/phase2_robustness_tournament_v2.json src/phase2_robustness_tournament_v2.py scripts/phase2_build_robustness_tournament_v2.py"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -n -E 'primary_selected *[:=] *True|runner_up_selected *[:=] *True|service_policy_selected *[:=] *True|topology_ranked *[:=] *True' $FILES
+          git diff --check
+
+      - name: Persist validated robustness tournament V2
+        run: |
+          git config user.name "phase2-robustness-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/robustness_v2
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist exact robustness tournament V2 [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+
+      - name: Upload robustness evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-robustness-tournament-v2-${{ github.sha }}
+          retention-days: 90
+          path: outputs/phase2/robustness_v2
