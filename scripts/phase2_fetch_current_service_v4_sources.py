@@ -7,6 +7,8 @@ import csv
 from datetime import datetime, timezone
 import hashlib
 from pathlib import Path
+import shutil
+import subprocess
 import time
 from urllib.request import Request, urlopen
 
@@ -71,27 +73,76 @@ def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def fetch(url: str) -> bytes:
-    last = None
-    for attempt in range(3):
+def _fetch_urllib(url: str) -> bytes:
+    req = Request(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0 Phase2CurrentServiceBaselineV4/1.0",
+            "Accept": "*/*",
+            "Connection": "close",
+        },
+    )
+    with urlopen(req, timeout=120) as response:
+        data = response.read()
+    if not data:
+        raise ValueError("empty response")
+    return data
+
+
+def _fetch_curl(url: str) -> bytes:
+    curl = shutil.which("curl")
+    if not curl:
+        raise RuntimeError("curl unavailable")
+    proc = subprocess.run(
+        [
+            curl,
+            "--fail",
+            "--location",
+            "--silent",
+            "--show-error",
+            "--retry", "5",
+            "--retry-delay", "2",
+            "--retry-max-time", "180",
+            "--retry-all-errors",
+            "--connect-timeout", "30",
+            "--max-time", "180",
+            "--header", "User-Agent: Mozilla/5.0 Phase2CurrentServiceBaselineV4/1.0",
+            "--header", "Accept: */*",
+            url,
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+        timeout=210,
+    )
+    if proc.returncode != 0:
+        err = proc.stderr.decode("utf-8", errors="replace").strip()
+        raise RuntimeError(f"curl exit {proc.returncode}: {err}")
+    if not proc.stdout:
+        raise ValueError("curl returned empty response")
+    return proc.stdout
+
+
+def fetch(url: str) -> tuple[bytes, str]:
+    """Fetch only the declared URL, with transport retries and a curl fallback.
+
+    No mirrors, caches or alternate data providers are allowed. The fallback
+    changes only the HTTP client used to retrieve the exact same official URL.
+    """
+    errors: list[str] = []
+    for attempt in range(4):
         try:
-            req = Request(
-                url,
-                headers={
-                    "User-Agent": "Mozilla/5.0 Phase2CurrentServiceBaselineV4/1.0",
-                    "Accept": "*/*",
-                },
-            )
-            with urlopen(req, timeout=90) as response:
-                data = response.read()
-            if not data:
-                raise ValueError("empty response")
-            return data
+            return _fetch_urllib(url), f"urllib_attempt_{attempt + 1}"
         except Exception as exc:
-            last = exc
-            if attempt < 2:
-                time.sleep(2 ** attempt)
-    raise RuntimeError(f"download failed: {last}")
+            errors.append(f"urllib[{attempt + 1}]={exc}")
+            if attempt < 3:
+                time.sleep(min(8, 2 ** attempt))
+
+    try:
+        return _fetch_curl(url), "curl_official_url_retry"
+    except Exception as exc:
+        errors.append(f"curl={exc}")
+    raise RuntimeError("download failed on exact official URL; " + " | ".join(errors))
 
 
 def main():
@@ -111,11 +162,12 @@ def main():
         digest = ""
         notes = ""
         try:
-            payload = fetch(source["url"])
+            payload, method = fetch(source["url"])
             target = args.source_dir / source["filename"]
             target.write_bytes(payload)
             digest = sha256_bytes(payload)
             available = True
+            notes = f"download_method={method}; exact_official_url=true"
         except Exception as exc:
             notes = str(exc)
             if source["required"]:
