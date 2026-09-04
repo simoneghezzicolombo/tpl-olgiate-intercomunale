@@ -26,6 +26,7 @@
   "empirical_missed_connection_probability_available": false,
   "engineering_retention_reinterpreted_as_probability": false,
   "municipal_od_spatially_downscaled": false,
+  "weighted_composite_score": false,
   "decision_budget_selected": false,
   "uncertainty_band_selected": false,
   "primary_selection_authorised": false,

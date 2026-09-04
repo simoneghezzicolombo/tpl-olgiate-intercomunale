@@ -196,6 +196,7 @@ def build(args: argparse.Namespace) -> dict[str, object]:
         "empirical_missed_connection_probability_available": False,
         "engineering_retention_reinterpreted_as_probability": False,
         "municipal_od_spatially_downscaled": False,
+        "weighted_composite_score": False,
         "decision_budget_selected": False,
         "uncertainty_band_selected": False,
         "primary_selection_authorised": False,

@@ -510,7 +510,7 @@
   "decision_boundary": "Frontier membership reports non-dominance only within each budget and evidence-completeness partition. It is not a rank, utility score, finalist list or recommendation.",
   "lineage": {
     "frontier_contract_sha256": "1de688257f2d23cc85a22ded883ddabc1359eec630747f9de634052eee3c1e3d",
-    "contract_audit_sha256": "2cbae1558f119fae2f8b32fae5abe9b994b9a94ff7f1d74e17db823363d28e2e",
+    "contract_audit_sha256": "7c69a2b40194362305b0d04ea8f75c66fb571f23e8a88804146b38e5e3d3b188",
     "context_readiness_sha256": "edd6f9e313fa9896158e75cb1edf2748cfbb7983e8f5ae0df62d882860fe1be4",
     "readiness_validation_sha256": "02625b749e26d115873f2251c6b3ec56ddeabe69b636f29fc2e2f40ee4e07b19",
     "budget_envelopes_sha256": "ba6e46e1505cdceabe39b62d1c0a3345d99434f3ab7c9115fa974db1f0928c92",
