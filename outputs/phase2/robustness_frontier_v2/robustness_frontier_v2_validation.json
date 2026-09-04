@@ -1,0 +1,222 @@
+{
+  "candidate_scenario_count": 100000,
+  "contract": "PHASE2_NO_WEIGHT_NON_REGRESSION_SCENARIO_TIMING_PARETO_V2",
+  "current_baseline_worst_municipality_coverage_share": {
+    "10": 0.0,
+    "5": 0.0,
+    "8": 0.0
+  },
+  "current_lower_bound_non_regression_fail_scenario_count": 0,
+  "current_lower_bound_non_regression_pass_scenario_count": 100000,
+  "full_gjt_calculated": false,
+  "limitations": [
+    "The current-service comparison is intentionally only a certified localizable lower bound; unresolved D184/D185 stop rows are not spatially imputed.",
+    "The non-regression safeguard is currently non-binding because the certified localizable current worst-municipality lower bound is zero at 5, 8 and 10 minutes; this does not establish that true current-service worst-municipality access is zero.",
+    "This frontier compares scenario\u00d7timing evidence, not exact vehicle blocks or a final service plan.",
+    "S8 complete-match opportunity is route-level phase support, not full generalized journey time.",
+    "The 1,882-worker S8 reference weights rail directions upstream and is not assigned to bus routes.",
+    "Positive scheduled-extension shares are excluded from the main frontier and must remain a separate upper-bound sensitivity."
+  ],
+  "lineage": {
+    "access": "outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz",
+    "access_sha256": "50875f138246e31340f516aee1d31df932afb4b76471aac24d9555f99eb2c675",
+    "access_validation": "outputs/phase2/access_equity_v2/access_equity_v2_validation.json",
+    "access_validation_sha256": "4bf586984172aede3b467762b864e21692bf4e5e47d69214ddd556e3d1ca11fd",
+    "audit_output": "outputs/phase2/robustness_frontier_v2/scenario_timing_frontier_audit_v2.csv",
+    "audit_output_sha256": "1b33dad4a89a9ae2761e5fc99221608ead055041dd6cf3c316bb6e2372449498",
+    "current_baseline_validation": "outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json",
+    "current_baseline_validation_sha256": "31e5bfbd18dfaad298331c7e56a08ffe7439c4d829030ca2ffcece978dd7305b",
+    "frontier_output": "outputs/phase2/robustness_frontier_v2/scenario_timing_frontier_v2.csv",
+    "frontier_output_sha256": "1280d4d84917eba0348a37968eb9d6324384cfc2cfd7dabe4a46cb9edb949b83",
+    "pre_gjt": "outputs/phase2/pre_gjt_screening_v2/pre_gjt_scenario_timing_screening_v2.csv.gz",
+    "pre_gjt_sha256": "e0cf3e49f31d971538ed46de3bcd81e7073b7729aa3b07224faac0ee46340c88",
+    "pre_gjt_validation": "outputs/phase2/pre_gjt_screening_v2/pre_gjt_screening_v2_validation.json",
+    "pre_gjt_validation_sha256": "3e9b192706385762eb5512943b5f6715cd56f83ba770b9dae85553ddd577a599"
+  },
+  "non_regression_currently_binding": false,
+  "non_regression_scope": "WORST_MUNICIPALITY_ACCESS_AT_5_8_10_MINUTES_VS_CERTIFIED_LOCALIZABLE_CURRENT_LOWER_BOUND",
+  "pareto_maximise_axes": [
+    "public_population_coverage_share_5min",
+    "public_population_coverage_share_8min",
+    "public_population_coverage_share_10min",
+    "public_worst_municipality_coverage_share_5min",
+    "public_worst_municipality_coverage_share_8min",
+    "public_worst_municipality_coverage_share_10min",
+    "s8_complete_supported_route_count"
+  ],
+  "pareto_minimise_axes": [
+    "s8_incomplete_supported_route_count",
+    "public_operational_unknown_distance_share_lower_bound",
+    "public_explicit_field_check_pending_count",
+    "public_distance_km",
+    "public_runtime_min",
+    "public_route_count"
+  ],
+  "passenger_demand_assigned_to_routes": false,
+  "positive_extensions_in_main_frontier": false,
+  "reference_budget_annual_bus_km": 111419.0,
+  "s8_worker_reference_semantics": "DIRECTION_WEIGHT_ONLY_NOT_ROUTE_DEMAND_NOT_MODAL_SHARE",
+  "status": "PASS_PHASE2_ROBUSTNESS_FRONTIER_V2",
+  "timing_frontiers": {
+    "H15_CORE_0600_2200": {
+      "eligible": 6302,
+      "eligible_unique_metric_profile_count": 878,
+      "frontier_family_counts": {
+        "blank_slate": 20,
+        "hybrid_interlined": 21,
+        "multiple_short_radials": 9,
+        "scheduled_extensions": 472,
+        "short_turn_overlay": 6,
+        "single_compact_loop": 20,
+        "trunk_plus_branches": 6,
+        "two_radial_out_and_back_feeders": 21
+      },
+      "frontier_metric_profile_count": 56,
+      "frontier_scenario_count": 575,
+      "no_extension_feasible": 6302,
+      "non_regression_pass": 100000,
+      "rows": 100000
+    },
+    "H15_S8_EXTENDED_0530_2400": {
+      "eligible": 4463,
+      "eligible_unique_metric_profile_count": 516,
+      "frontier_family_counts": {
+        "blank_slate": 17,
+        "hybrid_interlined": 9,
+        "multiple_short_radials": 8,
+        "scheduled_extensions": 420,
+        "short_turn_overlay": 4,
+        "single_compact_loop": 17,
+        "trunk_plus_branches": 4,
+        "two_radial_out_and_back_feeders": 9
+      },
+      "frontier_metric_profile_count": 38,
+      "frontier_scenario_count": 488,
+      "no_extension_feasible": 4463,
+      "non_regression_pass": 100000,
+      "rows": 100000
+    },
+    "H20_CORE_0600_2200": {
+      "eligible": 11648,
+      "eligible_unique_metric_profile_count": 2392,
+      "frontier_family_counts": {
+        "blank_slate": 36,
+        "hybrid_interlined": 39,
+        "multiple_short_radials": 9,
+        "scheduled_extensions": 472,
+        "short_turn_overlay": 9,
+        "single_compact_loop": 36,
+        "trunk_plus_branches": 9,
+        "two_radial_out_and_back_feeders": 39
+      },
+      "frontier_metric_profile_count": 93,
+      "frontier_scenario_count": 649,
+      "no_extension_feasible": 11648,
+      "non_regression_pass": 100000,
+      "rows": 100000
+    },
+    "H20_S8_EXTENDED_0530_2400": {
+      "eligible": 8356,
+      "eligible_unique_metric_profile_count": 1478,
+      "frontier_family_counts": {
+        "blank_slate": 27,
+        "hybrid_interlined": 9,
+        "multiple_short_radials": 9,
+        "scheduled_extensions": 472,
+        "short_turn_overlay": 9,
+        "single_compact_loop": 27,
+        "trunk_plus_branches": 9,
+        "two_radial_out_and_back_feeders": 9
+      },
+      "frontier_metric_profile_count": 54,
+      "frontier_scenario_count": 571,
+      "no_extension_feasible": 8356,
+      "non_regression_pass": 100000,
+      "rows": 100000
+    },
+    "H30_CORE_0600_2200": {
+      "eligible": 26533,
+      "eligible_unique_metric_profile_count": 8711,
+      "frontier_family_counts": {
+        "blank_slate": 88,
+        "hybrid_interlined": 34,
+        "interlined_figure8": 1,
+        "multiple_short_radials": 9,
+        "scheduled_extensions": 472,
+        "short_turn_overlay": 25,
+        "single_compact_loop": 88,
+        "trunk_plus_branches": 25,
+        "two_independent_loops": 1,
+        "two_radial_out_and_back_feeders": 34
+      },
+      "frontier_metric_profile_count": 157,
+      "frontier_scenario_count": 777,
+      "no_extension_feasible": 26533,
+      "non_regression_pass": 100000,
+      "rows": 100000
+    },
+    "H30_S8_EXTENDED_0530_2400": {
+      "eligible": 20290,
+      "eligible_unique_metric_profile_count": 5719,
+      "frontier_family_counts": {
+        "blank_slate": 70,
+        "hybrid_interlined": 23,
+        "multiple_short_radials": 9,
+        "scheduled_extensions": 472,
+        "short_turn_overlay": 24,
+        "single_compact_loop": 70,
+        "trunk_plus_branches": 24,
+        "two_radial_out_and_back_feeders": 23
+      },
+      "frontier_metric_profile_count": 126,
+      "frontier_scenario_count": 715,
+      "no_extension_feasible": 20290,
+      "non_regression_pass": 100000,
+      "rows": 100000
+    },
+    "H60_CORE_0600_2200": {
+      "eligible": 69186,
+      "eligible_unique_metric_profile_count": 31328,
+      "frontier_family_counts": {
+        "blank_slate": 130,
+        "hybrid_interlined": 22,
+        "interlined_figure8": 29,
+        "multiple_short_radials": 9,
+        "scheduled_extensions": 472,
+        "short_turn_overlay": 80,
+        "single_compact_loop": 130,
+        "trunk_plus_branches": 80,
+        "two_independent_loops": 29,
+        "two_radial_out_and_back_feeders": 22
+      },
+      "frontier_metric_profile_count": 270,
+      "frontier_scenario_count": 1003,
+      "no_extension_feasible": 69186,
+      "non_regression_pass": 100000,
+      "rows": 100000
+    },
+    "H60_S8_EXTENDED_0530_2400": {
+      "eligible": 59879,
+      "eligible_unique_metric_profile_count": 26171,
+      "frontier_family_counts": {
+        "blank_slate": 130,
+        "hybrid_interlined": 24,
+        "interlined_figure8": 19,
+        "multiple_short_radials": 9,
+        "scheduled_extensions": 472,
+        "short_turn_overlay": 73,
+        "single_compact_loop": 130,
+        "trunk_plus_branches": 73,
+        "two_independent_loops": 19,
+        "two_radial_out_and_back_feeders": 24
+      },
+      "frontier_metric_profile_count": 255,
+      "frontier_scenario_count": 973,
+      "no_extension_feasible": 59879,
+      "non_regression_pass": 100000,
+      "rows": 100000
+    }
+  },
+  "unresolved_current_stops_used": false,
+  "weighted_composite_score": false
+}
