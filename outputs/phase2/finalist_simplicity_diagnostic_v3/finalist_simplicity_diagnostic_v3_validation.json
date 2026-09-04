@@ -1,0 +1,154 @@
+{
+  "actual_routed_geometry_exported": false,
+  "contract": "PHASE2_NONDECISIONAL_FINALIST_SIMPLICITY_CLOCKFACE_V3",
+  "diagnostic_role": "NON_DECISIONAL_DESCRIPTIVE_STRUCTURE_ONLY",
+  "dry_run_finalist_count": 4,
+  "dry_run_to_stage_d_structural_join_pass": true,
+  "exact_public_trip_count": 136,
+  "finalist_aliases": [
+    "TT-FIG-16",
+    "TT-FIG-18.5",
+    "TT-TWO-16",
+    "TT-TWO-18.5"
+  ],
+  "lineage_mappings": [
+    {
+      "derived_timetable_id": "D4RT001V3_a83abc3b41a4ee68",
+      "derived_timetable_id_verified": true,
+      "finalist_alias": "TT-FIG-16",
+      "plan_context_id": "reference|PU2_f89795e69c1c0b1e",
+      "public_route_count": 2,
+      "public_route_ids": [
+        "R2_23d58cd05658247380d7",
+        "R2_65db885119e69d50c7d4"
+      ],
+      "scenario_id": "P2_c34348780d529323",
+      "selected_phase_vector_min": [
+        39,
+        39
+      ],
+      "selected_timetable_id": "D4RT001V3_a83abc3b41a4ee68",
+      "service_span_min": 960,
+      "stage_d_input_id": "D4I2_10abafdda73f942f",
+      "topology_family": "interlined_figure8",
+      "uniform_headway_min": 60
+    },
+    {
+      "derived_timetable_id": "D4RT001V3_c7318c775dcc1931",
+      "derived_timetable_id_verified": true,
+      "finalist_alias": "TT-FIG-18.5",
+      "plan_context_id": "reference|PU2_d5db4a5f48c4461c",
+      "public_route_count": 2,
+      "public_route_ids": [
+        "R2_b2032eeb31cba06561f0",
+        "R2_2ffb6743b10bb3f0a97d"
+      ],
+      "scenario_id": "P2_017387704e90dfa7",
+      "selected_phase_vector_min": [
+        7,
+        3
+      ],
+      "selected_timetable_id": "D4RT001V3_c7318c775dcc1931",
+      "service_span_min": 1110,
+      "stage_d_input_id": "D4I2_8b5ad6e76f4416ca",
+      "topology_family": "interlined_figure8",
+      "uniform_headway_min": 60
+    },
+    {
+      "derived_timetable_id": "D4RT001V3_a81a3718416f5cb2",
+      "derived_timetable_id_verified": true,
+      "finalist_alias": "TT-TWO-16",
+      "plan_context_id": "reference|PU2_d25e8a3bcacdf255",
+      "public_route_count": 2,
+      "public_route_ids": [
+        "R2_23d58cd05658247380d7",
+        "R2_65db885119e69d50c7d4"
+      ],
+      "scenario_id": "P2_5a8753d7bdcc6a3f",
+      "selected_phase_vector_min": [
+        39,
+        39
+      ],
+      "selected_timetable_id": "D4RT001V3_a81a3718416f5cb2",
+      "service_span_min": 960,
+      "stage_d_input_id": "D4I2_9812d5133d81f989",
+      "topology_family": "two_independent_loops",
+      "uniform_headway_min": 60
+    },
+    {
+      "derived_timetable_id": "D4RT001V3_a87577dd79b3cb3e",
+      "derived_timetable_id_verified": true,
+      "finalist_alias": "TT-TWO-18.5",
+      "plan_context_id": "reference|PU2_75f7b6bbd1563d0a",
+      "public_route_count": 2,
+      "public_route_ids": [
+        "R2_b2032eeb31cba06561f0",
+        "R2_2ffb6743b10bb3f0a97d"
+      ],
+      "scenario_id": "P2_3952117a13ec7506",
+      "selected_phase_vector_min": [
+        7,
+        3
+      ],
+      "selected_timetable_id": "D4RT001V3_a87577dd79b3cb3e",
+      "service_span_min": 1110,
+      "stage_d_input_id": "D4I2_efb523eb056c774f",
+      "topology_family": "two_independent_loops",
+      "uniform_headway_min": 60
+    }
+  ],
+  "lineage_sha256": {
+    "existing_stops": "8a1879ca5cd2fa23072e9f4b1b284c6b1be455847cb70b6d5399b2db35d05a55",
+    "finalists": "4f3a3c33cb5ee6638ea5b8ea4cd97c7517b6e49ae1e20b4db35cf28ba5f1e8c5",
+    "proposed_stops": "bf3f5c648803fb0ba03b2f9af2bd4fa02924cb387bb0a752fc3a7a8ee1f14bc0",
+    "settlement_anchors": "6ce1073dc7c30ca51a7ed584f6655ad525d99ca0c68dd2dabe2ea30304d7d3c4",
+    "stage_d_routes": "12772a5f7df8fb2379da827286544c7d4840ac2c365143841b05ea41b3446386",
+    "stage_d_timetables": "b2d511c811fae6641584fddb846d78dee459f03eba95e2029ca8b9566d1e57bb",
+    "stage_d_trips": "69e9ca7e362a23e3cea080030532d131d0ac6296045ab1d3d5d025242a4fa284",
+    "stage_f_summary": "9ae333285d068533fd931f78a420d423926c964535a7da813acc7163c96051f8"
+  },
+  "observable_simplicity_dimensions": [
+    "route_anchor_sequences",
+    "route_anchor_overlap_descriptive_only",
+    "public_return_semantics",
+    "technical_closure_semantics",
+    "route_phase_relationship",
+    "combined_station_departure_spacing",
+    "exact_route_clockface_regularity",
+    "stage_f_engineering_profiles"
+  ],
+  "primary_selected": false,
+  "public_route_count_used_as_complexity_score": false,
+  "route_geometry_semantics": "ORDERED_CERTIFIED_ANCHOR_SEQUENCE_ONLY_NO_ROAD_GEOMETRY",
+  "route_structure_row_count": 8,
+  "runner_up_selected": false,
+  "selected_timetable_count": 4,
+  "service_span_minutes": [
+    960,
+    1110
+  ],
+  "simplicity_rank_materialized": false,
+  "source_commits": {
+    "stage_d": "d41bb678382d018929c1c6b46542f12549f20d4f",
+    "stage_f": "746a17c796f8e5fc24a636e47d304cd9293f2a43"
+  },
+  "stage_d_deterministic_id_rebuild_pass": true,
+  "stage_f_profile_count_per_finalist": 3,
+  "stage_f_profile_ids": [
+    "HIGH_TRANSFER_FRICTION",
+    "LOW_TRANSFER_FRICTION",
+    "MID_TRANSFER_FRICTION"
+  ],
+  "stage_f_summary_row_count": 12,
+  "status": "PASS_PHASE2_FINALIST_SIMPLICITY_DIAGNOSTIC_V3",
+  "synthetic_complexity_score": false,
+  "technical_closure_kept_distinct_from_passenger_service": true,
+  "topology_families": [
+    "interlined_figure8",
+    "two_independent_loops"
+  ],
+  "topology_family_used_as_automatic_simplicity_rank": false,
+  "uniform_headway_min": 60,
+  "weighted_complexity_score": false,
+  "winner_implied": false
+}
