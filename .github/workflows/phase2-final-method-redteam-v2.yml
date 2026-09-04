@@ -55,6 +55,13 @@ jobs:
           tests/test_phase2_passenger_utility_all_thresholds_v2.py
           tests/test_phase2_s8_robust_opportunity_surface_v2.py
 
+      - name: Materialise pinned narrow S8 evidence for independent class recomputation
+        run: |
+          git cat-file -e 8d79cbd74c3ec99ec3eff5fca7a799975210356b^{commit}
+          mkdir -p outputs/phase2/passenger_gjt_v2
+          git show 8d79cbd74c3ec99ec3eff5fca7a799975210356b:outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2.csv.gz > outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2.csv.gz
+          test "$(sha256sum outputs/phase2/passenger_gjt_v2/s8_scenario_feeder_envelope_v2.csv.gz | cut -d' ' -f1)" = "d41baccffcbc573b984cd5ecadb0c5eeda6cffa69b7e44717d77d5b34c2df3d3"
+
       - name: Run full frozen-lineage red-team
         run: python scripts/phase2_run_final_method_redteam_v2.py
 
