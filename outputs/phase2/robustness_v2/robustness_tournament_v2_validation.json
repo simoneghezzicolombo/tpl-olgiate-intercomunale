@@ -1,0 +1,99 @@
+{
+  "contract": "PHASE2_ROBUSTNESS_TOURNAMENT_V2",
+  "current_nonregression_semantics": "ONE_SIDED_FAIL_ONLY: CANDIDATE_BELOW_LOWER_BOUND_IS_DEMONSTRATED_REGRESSION; CANDIDATE_AT_OR_ABOVE_LOWER_BOUND_REMAINS_UNKNOWN_VS_FULL_CURRENT_SERVICE",
+  "dominance_axes": {
+    "maximize": [
+      "public_population_coverage_share_5min",
+      "public_population_coverage_share_8min",
+      "public_population_coverage_share_10min",
+      "public_worst_municipality_coverage_share_5min",
+      "public_worst_municipality_coverage_share_8min",
+      "public_worst_municipality_coverage_share_10min",
+      "public_structurally_addressable_worker_od_mass_upper_bound",
+      "stress_min_connection_match_share",
+      "span_minutes",
+      "annual_service_days"
+    ],
+    "minimize": [
+      "uniform_headway_min",
+      "stress_max_unmatched_connection_event_count",
+      "stress_worst_route_weighted_mean_gap_min"
+    ]
+  },
+  "dwell_per_stop_sensitivities_min": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "eligible_hard_nonregression_plan_count": 354,
+  "epistemic_note": "The robustness tournament uses a deterministic assumption grid, not an empirical probability distribution. It stress-tests the exact timetable phases against aggregate runtime scaling, per-stop dwell, S8 clock shifts, declared transfer-walk profiles and recovery. Scheduled-event match shares are not probabilities. Current-service access remains only a one-sided lower bound. No worker is allocated to a bus route and no full GJT is calculated.",
+  "exact_input_plan_count": 354,
+  "full_current_service_baseline_complete": false,
+  "full_gjt_calculated": false,
+  "lineage": {
+    "access_sha256": "7ae326fedde6379c66c7d60613e15cd18eb4256278123b83869a0792cc2f05e3",
+    "access_validation_sha256": "7a36db5a6b07bcbb84c5fc22291d39381bbf7e07d41ec131124048a354a3e4ab",
+    "current_baseline_sha256": "443a08652eb7447a01df93fca9dbbe70bed2a0a6504e082169e41131473a5974",
+    "exact_plans_sha256": "bc575546d34a260dc4f8061cde7059a78a7b1dbb74af1b398ae710c7dd84785d",
+    "exact_validation_sha256": "a6f3ef5fc1cc85e6b02416dfce5a48eee34b8f1f5ec4a64ecaa49db57990bead",
+    "frontier_output_sha256": "4ed14ef2689559051033c509d4bccc006487efdddd4e9182c2bfbc7cda4af62d",
+    "path_matrix_sha256": "f43a7c3cad200d50f7041f9d535b729f6c93d9456597520852a1a64424bce500",
+    "robustness_config_sha256": "6b210b6c80036261f3487ba361be89c30b68c4f8bf8150778519be1c65849092",
+    "route_universe_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
+    "s8_events_sha256": "00b9994c1331ab5caa09a6092815bc5554f07baddbde8a651857a470d0fdb71b",
+    "scenario_mapping_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
+    "service_config_sha256": "3f5667ec09e70b530e3adff7240c8445027fb62073b25e4b0617652f43a1a468",
+    "stress_output_sha256": "312f6ccb300e8ee04a3b3733bd2185b9ca9b68f5b2934227d88e23ed8a99a6f9",
+    "summary_output_sha256": "b475161a802a1db010376d91debeacd397cdd283fb0b0f34881fc7bb2d17e91c",
+    "transfer_config_sha256": "4c93b08620037988aab486e24b276f4c143043ed7e79b51035cf9e1dddc17b57",
+    "work_direction_summary_sha256": "ba6115ddeed3021d3ecc732be000c15d8df7fa365e3e70b4cdfce25e50d44a81"
+  },
+  "missed_connection_probability_inferred": false,
+  "passenger_route_weights_inferred": false,
+  "primary_selected": false,
+  "rail_clock_shift_sensitivities_min": [
+    -5.0,
+    0.0,
+    5.0
+  ],
+  "recovery_sensitivities_min": [
+    5,
+    10,
+    15
+  ],
+  "robust_frontier_family_counts": {
+    "blank_slate": 116,
+    "hybrid_interlined": 16,
+    "interlined_figure8": 16,
+    "single_compact_loop": 116,
+    "two_independent_loops": 16,
+    "two_radial_out_and_back_feeders": 16
+  },
+  "robust_frontier_headway_counts": {
+    "15": 32,
+    "20": 66,
+    "30": 102,
+    "60": 96
+  },
+  "robust_frontier_union_count": 296,
+  "robust_frontier_unique_scenario_count": 174,
+  "robust_passenger_frequent30_frontier_count": 200,
+  "robust_passenger_unrestricted_frontier_count": 296,
+  "runner_up_selected": false,
+  "runtime_multiplier_sensitivities": [
+    0.9,
+    1.0,
+    1.1
+  ],
+  "service_policy_selected": false,
+  "status": "PASS_ROBUSTNESS_TOURNAMENT_V2_BUILD",
+  "stress_case_count_per_plan": 81,
+  "stress_row_count": 28674,
+  "topology_ranked": false,
+  "transfer_profiles": [
+    "LOW_TRANSFER_FRICTION",
+    "MID_TRANSFER_FRICTION",
+    "HIGH_TRANSFER_FRICTION"
+  ],
+  "weighted_composite_score_used": false
+}
