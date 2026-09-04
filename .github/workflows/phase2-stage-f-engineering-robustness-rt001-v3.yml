@@ -44,6 +44,8 @@ jobs:
           git worktree add --detach /tmp/stage-f-source "$SOURCE_SENSITIVITY_COMMIT"
           test -f /tmp/stage-d-v3/outputs/phase2/stage_d_exact_rt001_v3/stage_d_exact_rt001_v3_validation.json
           test -f /tmp/stage-f-source/config/phase2_robustness_tournament_v2.json
+          echo 'Pinned source sensitivity SHA256:'
+          sha256sum /tmp/stage-f-source/config/phase2_robustness_tournament_v2.json
 
       - name: Compile Stage F kernel and builder
         run: |
