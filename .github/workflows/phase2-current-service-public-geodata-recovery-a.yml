@@ -1,0 +1,169 @@
+name: Phase 2 Current Service Public Geodata Recovery A
+
+on:
+  push:
+    branches:
+      - phase2-current-service-public-geodata-recovery-a
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download official ATP GTFS
+        run: |
+          mkdir -p .tmp outputs/phase2/current_service_public_geodata_recovery_a
+          URL='https://halleyweb.com/atpcolc/images/File%20GTFS%20inv.%202025-2026/GTFS%20invernale%202025-2026%20-%20Arriva%20Italia%20e%20Addabus.zip'
+          curl -L --fail --retry 3 --connect-timeout 20 "$URL" -o .tmp/official_gtfs.zip
+          sha256sum .tmp/official_gtfs.zip | tee outputs/phase2/current_service_public_geodata_recovery_a/source_sha256.txt
+          unzip -l .tmp/official_gtfs.zip | head -40
+      - name: Extract D184 D185 route-specific stops and unresolved candidates
+        run: |
+          python - <<'PY'
+          import csv, io, json, math, re, unicodedata, zipfile
+          from pathlib import Path
+          from difflib import SequenceMatcher
+
+          zpath=Path('.tmp/official_gtfs.zip')
+          outdir=Path('outputs/phase2/current_service_public_geodata_recovery_a')
+          outdir.mkdir(parents=True, exist_ok=True)
+
+          def norm(s):
+              s=unicodedata.normalize('NFKD', s or '').encode('ascii','ignore').decode().upper()
+              s=s.replace("'",' ').replace('.', ' ').replace('/', ' ')
+              toks=re.findall(r'[A-Z0-9]+', s)
+              drop={'VIA','INCROCIO','STATALE','SS342','SR','342','F','S'}
+              return ' '.join(t for t in toks if t not in drop)
+
+          def read_csv(z, name):
+              raw=z.read(name).decode('utf-8-sig')
+              return list(csv.DictReader(io.StringIO(raw)))
+
+          with zipfile.ZipFile(zpath) as z:
+              names={Path(n).name.lower(): n for n in z.namelist()}
+              def pick(base):
+                  if base not in names: raise RuntimeError(f'missing {base}: {sorted(names)[:20]}')
+                  return names[base]
+              routes=read_csv(z,pick('routes.txt'))
+              trips=read_csv(z,pick('trips.txt'))
+              stop_times=read_csv(z,pick('stop_times.txt'))
+              stops=read_csv(z,pick('stops.txt'))
+
+          route_ids={r['route_id']:r for r in routes if (r.get('route_short_name') or '').strip() in {'D184','D185'}}
+          if not route_ids:
+              # fallback for feeds encoding line in long name or route_id
+              for r in routes:
+                  blob=' '.join([r.get('route_id',''),r.get('route_short_name',''),r.get('route_long_name','')])
+                  if re.search(r'\bD18[45]\b', blob): route_ids[r['route_id']]=r
+          trip_route={t['trip_id']:t['route_id'] for t in trips if t.get('route_id') in route_ids}
+          stop_by_id={s['stop_id']:s for s in stops}
+          used={rid:{} for rid in route_ids}
+          trip_sequences={}
+          for st in stop_times:
+              tid=st.get('trip_id')
+              if tid not in trip_route: continue
+              rid=trip_route[tid]; sid=st.get('stop_id')
+              if sid not in stop_by_id: continue
+              seq=int(float(st.get('stop_sequence') or 0))
+              trip_sequences.setdefault(tid,[]).append((seq,sid))
+              u=used[rid].setdefault(sid, {'trip_count':0,'seqs':[]})
+              u['trip_count']+=1; u['seqs'].append(seq)
+
+          route_rows=[]
+          route_short_by_id={rid:(route_ids[rid].get('route_short_name') or rid) for rid in route_ids}
+          for rid, m in used.items():
+              for sid,u in m.items():
+                  s=stop_by_id[sid]
+                  route_rows.append({
+                    'route_id_gtfs':rid,'route_short_name':route_short_by_id[rid], 'stop_id':sid,
+                    'stop_name':s.get('stop_name',''),'stop_lat':s.get('stop_lat',''),'stop_lon':s.get('stop_lon',''),
+                    'trip_stop_time_row_count':u['trip_count'],'min_stop_sequence':min(u['seqs']),'max_stop_sequence':max(u['seqs'])
+                  })
+          with (outdir/'official_gtfs_d184_d185_route_stops.csv').open('w',newline='',encoding='utf-8') as f:
+              w=csv.DictWriter(f, fieldnames=list(route_rows[0])); w.writeheader(); w.writerows(sorted(route_rows,key=lambda r:(r['route_short_name'],r['stop_name'],r['stop_id'])))
+
+          ident_path=Path('outputs/phase2/current_service_stop_identity_2026-09-03.csv')
+          ident=list(csv.DictReader(ident_path.open(encoding='utf-8-sig',newline='')))
+          unresolved=[r for r in ident if r.get('route_id') in {'D184','D185'} and r.get('identity_epistemic_status')=='UNRESOLVED_IDENTITY']
+
+          by_short={k:[] for k in ('D184','D185')}
+          for rr in route_rows: by_short.setdefault(rr['route_short_name'],[]).append(rr)
+
+          cand_rows=[]; unique_strict=0; unique_high=0
+          for r in unresolved:
+              label=r['stop_label_pdf']; nl=norm(label); lt=set(nl.split())
+              cands=[]
+              for s in by_short.get(r['route_id'],[]):
+                  ns=norm(s['stop_name']); st=set(ns.split())
+                  inter=len(lt&st); union=max(1,len(lt|st))
+                  jac=inter/union
+                  ratio=SequenceMatcher(None,nl,ns).ratio()
+                  containment=(bool(lt) and (lt<=st or st<=lt))
+                  score=max(ratio,jac + (0.25 if containment else 0))
+                  if score>=0.45:
+                      cands.append((score, s))
+              cands.sort(key=lambda x:(-x[0],x[1]['stop_id']))
+              top=cands[:5]
+              strict=[x for x in cands if x[0]>=0.82]
+              high=[x for x in cands if x[0]>=0.70]
+              if len(strict)==1: unique_strict+=1
+              if len(high)==1: unique_high+=1
+              for rank,(score,s) in enumerate(top,1):
+                  cand_rows.append({
+                    'route_id':r['route_id'],'source_page':r['source_page'],'stop_sequence_on_page':r['stop_sequence_on_page'],
+                    'stop_label_pdf':label,'identity_status_prior':r['identity_status'],'candidate_rank':rank,
+                    'candidate_score':round(score,6),'gtfs_stop_id':s['stop_id'],'gtfs_stop_name':s['stop_name'],
+                    'gtfs_stop_lat':s['stop_lat'],'gtfs_stop_lon':s['stop_lon']
+                  })
+          with (outdir/'unresolved_pdf_rows_route_specific_gtfs_candidates.csv').open('w',newline='',encoding='utf-8') as f:
+              fields=['route_id','source_page','stop_sequence_on_page','stop_label_pdf','identity_status_prior','candidate_rank','candidate_score','gtfs_stop_id','gtfs_stop_name','gtfs_stop_lat','gtfs_stop_lon']
+              w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(cand_rows)
+
+          # Count representative trip patterns to show whether route-specific sequence evidence exists.
+          pats={}
+          for tid, seq in trip_sequences.items():
+              rid=trip_route[tid]; key=(route_short_by_id[rid], tuple(sid for _,sid in sorted(seq)))
+              pats[key]=pats.get(key,0)+1
+          pattern_rows=[]
+          for (short,seq),n in sorted(pats.items()):
+              pattern_rows.append({'route_short_name':short,'trip_count':n,'stop_count':len(seq),'stop_ids':'|'.join(seq),'stop_names':'|'.join(stop_by_id[s].get('stop_name','') for s in seq)})
+          with (outdir/'official_gtfs_d184_d185_trip_patterns.csv').open('w',newline='',encoding='utf-8') as f:
+              w=csv.DictWriter(f,fieldnames=['route_short_name','trip_count','stop_count','stop_ids','stop_names']);w.writeheader();w.writerows(pattern_rows)
+
+          summary={
+            'status':'PASS_PUBLIC_SOURCE_DISCOVERY' if route_rows else 'FAIL_NO_ROUTE_STOPS',
+            'source':'Agenzia TPL Como-Lecco-Varese official GTFS winter 2025-2026, Arriva Italia e Addabus',
+            'source_url':'https://halleyweb.com/atpcolc/images/File%20GTFS%20inv.%202025-2026/GTFS%20invernale%202025-2026%20-%20Arriva%20Italia%20e%20Addabus.zip',
+            'route_ids_gtfs':sorted(route_ids),
+            'official_route_specific_stop_record_count':len(route_rows),
+            'unresolved_pdf_row_count_input':len(unresolved),
+            'unresolved_candidate_rows_materialized':len(cand_rows),
+            'rows_with_exactly_one_score_ge_0_82_candidate':unique_strict,
+            'rows_with_exactly_one_score_ge_0_70_candidate':unique_high,
+            'distinct_route_trip_patterns':len(pattern_rows),
+            'warning':'Candidate scores are discovery evidence only. Promotion to certified identity requires a deterministic route/sequence/coordinate rule and review.'
+          }
+          (outdir/'summary.json').write_text(json.dumps(summary,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          print(json.dumps(summary,indent=2,ensure_ascii=False))
+          PY
+      - name: Persist recovery evidence
+        run: |
+          git config user.name "phase2-public-geodata-recovery-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/current_service_public_geodata_recovery_a
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist public D184 D185 geodata recovery [skip ci]"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-current-service-public-geodata-recovery-a-${{ github.sha }}
+          path: outputs/phase2/current_service_public_geodata_recovery_a
+          retention-days: 90
