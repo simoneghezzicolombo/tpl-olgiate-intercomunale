@@ -51,6 +51,7 @@ jobs:
           from pathlib import Path
           p = json.loads(Path('outputs/phase2/final_policy_dry_run_v3/final_policy_dry_run_v3_validation.json').read_text())
           assert p['status'] == 'PASS_PHASE2_FINAL_POLICY_DRY_RUN_V3'
+          assert p['policy_contract_version'] == 2
           assert p['dry_run_only'] is True
           assert p['decision_pathway'] == 'V3_CERTIFIED_METRICS_DETERMINISTIC_ROBUSTNESS'
           assert p['budget_suffix'] == 'reference'
@@ -58,6 +59,11 @@ jobs:
           assert p['reference_context_count'] == 2633
           assert p['reference_bidirectional_context_count'] == 2259
           assert p['operational_gate_survivor_count'] > 0
+          assert p['robust_frequent_context_count'] > 0
+          assert p['robust_hourly_context_count'] > 0
+          assert p['robust_frequent_context_count'] + p['robust_hourly_context_count'] == p['operational_gate_survivor_count']
+          assert p['headway_class_diagnostic_choice'] in {'FREQUENT_H_LE_30', 'HOURLY_H60'}
+          assert p['headway_class_selection_authorized'] is False
           assert p['global_scalar_uncertainty_band_used'] is False
           assert p['weighted_composite_score'] is False
           assert p['continuity_used_for_selection'] is False
@@ -76,8 +82,9 @@ jobs:
           python scripts/phase2_dry_run_final_policy_v3.py --output-dir "$ROOT"
           for file in \
             final_policy_dry_run_v3_validation.json \
-            policy_layer_trace_v3.csv \
+            headway_class_policy_trace_v3.csv \
             headway_tradeoff_reference_v3.csv \
+            h60_exception_test_v3.csv \
             final_layer_topology_diagnostic_v3.csv \
             strict_lexicographic_brittleness_trace_v3.csv \
             final_layer_survivors_diagnostic_v3.csv; do
@@ -99,6 +106,8 @@ jobs:
           assert config['human_policy_decisions']['olgiate_frazione_diagnostic_decision_role'] == 'REPORTING_ONLY'
           assert config['diagnostic_boundaries']['public_route_count_is_certified_complexity_score'] is False
           assert config['diagnostic_boundaries']['legacy_continuity_may_select_candidate'] is False
+          assert config['diagnostic_boundaries']['later_efficiency_or_fleet_metrics_may_override_headway_class_policy'] is False
+          assert config['headway_class_policy']['default_class_when_robust_frequent_exists'] == 'FREQUENT_H_LE_30'
           assert config['selection_boundary']['current_service_v4_required_before_final_selection'] is True
           assert config['selection_boundary']['weighted_composite_score'] is False
           assert config['selection_boundary']['primary_selection_authorised'] is False
