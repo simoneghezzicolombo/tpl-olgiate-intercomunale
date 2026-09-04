@@ -1,0 +1,75 @@
+name: Phase 2 Decision Strata V2
+
+on:
+  push:
+    branches: [phase2-passenger-gjt-v2]
+    paths:
+      - 'scripts/phase2_build_decision_strata_v2.py'
+      - '.github/workflows/phase2-decision-strata-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile scripts/phase2_build_decision_strata_v2.py
+      - name: Build decision strata
+        run: >-
+          python scripts/phase2_build_decision_strata_v2.py
+          --identities outputs/phase2/robustness_v2/robust_service_identity_groups_v2.csv
+          --identity-validation outputs/phase2/robustness_v2/robust_service_identity_v2_validation.json
+          --robust-validation outputs/phase2/robustness_v2/robustness_tournament_v2_validation.json
+          --output outputs/phase2/robustness_v2/decision_strata_v2.csv
+          --validation outputs/phase2/robustness_v2/decision_strata_v2_validation.json
+      - name: Validate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('outputs/phase2/robustness_v2/decision_strata_v2_validation.json').read_text())
+          assert v['status']=='PASS_DECISION_STRATA_V2_BUILD'
+          assert v['input_operational_service_identity_count']==148
+          assert 0 < v['unique_robust_passenger_metric_stratum_count'] <= 148
+          assert v['practical_tiebreak_applied_only_with_exact_passenger_signature_equivalence'] is True
+          assert v['weighted_composite_score_used'] is False
+          assert v['non_equivalent_strata_ranked'] is False
+          for k in ('topology_ranked','service_policy_selected','primary_selected','runner_up_selected'): assert v[k] is False
+          print(json.dumps(v,indent=2))
+          PY
+      - name: Deterministic rebuild
+        run: |
+          mkdir -p /tmp/p2strata
+          python scripts/phase2_build_decision_strata_v2.py \
+            --identities outputs/phase2/robustness_v2/robust_service_identity_groups_v2.csv \
+            --identity-validation outputs/phase2/robustness_v2/robust_service_identity_v2_validation.json \
+            --robust-validation outputs/phase2/robustness_v2/robustness_tournament_v2_validation.json \
+            --output /tmp/p2strata/strata.csv --validation /tmp/p2strata/validation.json >/dev/null
+          cmp outputs/phase2/robustness_v2/decision_strata_v2.csv /tmp/p2strata/strata.csv
+          cmp outputs/phase2/robustness_v2/decision_strata_v2_validation.json /tmp/p2strata/validation.json
+      - name: Persist
+        run: |
+          git config user.name "phase2-decision-strata-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/robustness_v2/decision_strata_v2.csv outputs/phase2/robustness_v2/decision_strata_v2_validation.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist robust passenger decision strata V2 [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-decision-strata-v2-${{ github.sha }}
+          retention-days: 90
+          path: |
+            outputs/phase2/robustness_v2/decision_strata_v2.csv
+            outputs/phase2/robustness_v2/decision_strata_v2_validation.json
