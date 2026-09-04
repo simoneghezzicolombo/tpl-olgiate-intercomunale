@@ -1,7 +1,8 @@
 {
   "all_exact_timetables_have_trips": true,
   "calendar_selected": false,
-  "context_dependent_split_requires_exact_timetable_id": true,
+  "context_dependent_split_requires_dedicated_exact_timetable_id": true,
+  "context_mapping_mode": "SUMMARY_EMBEDDED",
   "contract": "PHASE2_STAGE_E_EXACT_TIMETABLE_INTERFACE_NO_CONTEXT_COLLAPSE_V3",
   "decision_budget_selected": false,
   "exact_timetable_count": 5345,
