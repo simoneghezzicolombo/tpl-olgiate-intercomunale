@@ -1,0 +1,184 @@
+name: Phase 2 Stage D Exact Brute Force V2
+
+on:
+  push:
+    branches:
+      - phase2-stage-d-exact-bruteforce-v2
+    paths:
+      - 'src/phase2_stage_d_exact_reference_v2.py'
+      - 'scripts/phase2_build_stage_d_exact_bruteforce_v2.py'
+      - 'scripts/phase2_build_stage_d_exact_bruteforce_v2_runner.py'
+      - 'tests/test_phase2_stage_d_exact_reference_v2.py'
+      - '.github/workflows/phase2-stage-d-exact-bruteforce-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/stage_d_exact_bruteforce_v2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile
+        run: |
+          python -m py_compile \
+            src/phase2_stage_d_exact_reference_v2.py \
+            scripts/phase2_build_stage_d_exact_bruteforce_v2.py \
+            scripts/phase2_build_stage_d_exact_bruteforce_v2_runner.py
+
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<9'
+
+      - name: Unit tests
+        run: python -m pytest -q tests/test_phase2_stage_d_exact_reference_v2.py
+
+      - name: Build exhaustive exact reference
+        run: |
+          python scripts/phase2_build_stage_d_exact_bruteforce_v2_runner.py \
+            --timing-inputs outputs/phase2/stage_d_input_manifest_v2/stage_d_daily_timing_inputs_v2.csv.gz \
+            --route-inputs outputs/phase2/stage_d_input_manifest_v2/stage_d_public_route_inputs_v2.csv \
+            --manifest-validation outputs/phase2/stage_d_input_manifest_v2/stage_d_input_manifest_v2_validation.json \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2_validation.json \
+            --budget-validation outputs/phase2/budget_policy_frontiers_v2/budget_policy_frontiers_v2_validation.json \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --s8-events outputs/phase2/s8_events.csv \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --s8-contract outputs/phase2/s8_interchange_contract.json \
+            --s8-sensitivity-config config/phase2_s8_phasing_sensitivity_v2.json \
+            --context-output "$OUTDIR/exact_plan_context_results_v2.csv.gz" \
+            --timetable-output "$OUTDIR/exact_selected_timetables_v2.csv" \
+            --trip-output "$OUTDIR/exact_selected_trips_v2.csv.gz" \
+            --validation "$OUTDIR/stage_d_exact_bruteforce_v2_validation.json"
+
+      - name: Validate exact-reference contract
+        run: |
+          python - <<'PY'
+          import csv, gzip, json
+          from pathlib import Path
+          out=Path('outputs/phase2/stage_d_exact_bruteforce_v2')
+          v=json.loads((out/'stage_d_exact_bruteforce_v2_validation.json').read_text())
+          assert v['status']=='PASS_PHASE2_STAGE_D_EXACT_BRUTEFORCE_REFERENCE_V2'
+          assert v['contract']=='PHASE2_EXHAUSTIVE_ROUTE_SPECIFIC_EXACT_TIMETABLE_REFERENCE_V2'
+          assert v['exhaustive_phase_enumeration'] is True
+          assert v['approximate_or_heuristic_phase_search'] is False
+          assert v['stage_d_daily_timing_input_count']==5345
+          assert v['stage_c_plan_context_count']==16883
+          assert v['phase_vectors_evaluated']==6755285
+          assert v['certified_phase_vectors_expected']==6755285
+          assert v['max_public_route_count']==2
+          assert v['max_phase_vectors_per_timing_input']==3600
+          assert v['transfer_profile_ids']==['LOW_TRANSFER_FRICTION','MID_TRANSFER_FRICTION','HIGH_TRANSFER_FRICTION']
+          assert v['route_specific_phase_reconsideration_permitted_by_config'] is True
+          assert v['passenger_weighting_applied'] is False
+          assert v['topology_weighting_applied'] is False
+          assert v['worker_reference_used_for_phase_selection'] is False
+          assert v['worker_reference_assigned_to_routes'] is False
+          assert v['hard_s8_quality_threshold_applied'] is False
+          assert v['nominal_hard_miss_is_reported_not_phase_threshold'] is True
+          assert v['joint_vehicle_block_timetable_feasibility_evaluated'] is True
+          assert v['exact_timetable_constructed'] is True
+          assert v['delay_robustness_evaluated'] is False
+          for k in ('municipal_od_downscaled','ridership_forecast','decision_budget_selected','calendar_selected','recovery_selected','service_policy_selected','topology_ranked','primary_selected','runner_up_selected','weighted_composite_score'):
+              assert v[k] is False, k
+          assert v['exact_budget_hard_eligible_context_count'] + v['exact_budget_hard_ineligible_context_count'] == 16883
+          assert sum(v['eligible_context_count_by_budget'].values()) == v['exact_budget_hard_eligible_context_count']
+          assert sum(v['ineligible_context_count_by_budget'].values()) == v['exact_budget_hard_ineligible_context_count']
+
+          with gzip.open(out/'exact_plan_context_results_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              contexts=list(csv.DictReader(f))
+          assert len(contexts)==16883
+          assert len({r['plan_context_id'] for r in contexts})==16883
+          assert all(r['worker_reference_used_for_phase_selection']=='false' for r in contexts)
+          assert all(r['primary_selected']=='false' and r['runner_up_selected']=='false' for r in contexts)
+          for r in contexts:
+              if r['exact_budget_hard_eligible']=='true':
+                  assert float(r['exact_annual_bus_km']) <= float(r['budget_cap_annual_bus_km']) + 1e-6
+                  assert r['selected_timetable_id']
+              else:
+                  assert not r['selected_timetable_id']
+
+          with (out/'exact_selected_timetables_v2.csv').open(encoding='utf-8',newline='') as f:
+              tables=list(csv.DictReader(f))
+          assert len(tables)==v['unique_selected_exact_timetable_count']
+          assert all(r['route_specific_phase_selection']=='true' for r in tables)
+          assert all(r['passenger_weighting_applied']=='false' for r in tables)
+          assert all(r['hard_s8_quality_threshold_applied']=='false' for r in tables)
+          assert all(int(r['exact_fleet_recovery5'])>0 and int(r['exact_fleet_recovery10'])>0 and int(r['exact_fleet_recovery15'])>0 for r in tables)
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/stage-d-exact-v2 && mkdir -p /tmp/stage-d-exact-v2
+          python scripts/phase2_build_stage_d_exact_bruteforce_v2_runner.py \
+            --timing-inputs outputs/phase2/stage_d_input_manifest_v2/stage_d_daily_timing_inputs_v2.csv.gz \
+            --route-inputs outputs/phase2/stage_d_input_manifest_v2/stage_d_public_route_inputs_v2.csv \
+            --manifest-validation outputs/phase2/stage_d_input_manifest_v2/stage_d_input_manifest_v2_validation.json \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2_validation.json \
+            --budget-validation outputs/phase2/budget_policy_frontiers_v2/budget_policy_frontiers_v2_validation.json \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --s8-events outputs/phase2/s8_events.csv \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --s8-contract outputs/phase2/s8_interchange_contract.json \
+            --s8-sensitivity-config config/phase2_s8_phasing_sensitivity_v2.json \
+            --context-output /tmp/stage-d-exact-v2/contexts.csv.gz \
+            --timetable-output /tmp/stage-d-exact-v2/timetables.csv \
+            --trip-output /tmp/stage-d-exact-v2/trips.csv.gz \
+            --validation /tmp/stage-d-exact-v2/validation.json
+          cmp "$OUTDIR/exact_plan_context_results_v2.csv.gz" /tmp/stage-d-exact-v2/contexts.csv.gz
+          cmp "$OUTDIR/exact_selected_timetables_v2.csv" /tmp/stage-d-exact-v2/timetables.csv
+          cmp "$OUTDIR/exact_selected_trips_v2.csv.gz" /tmp/stage-d-exact-v2/trips.csv.gz
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/stage_d_exact_bruteforce_v2/stage_d_exact_bruteforce_v2_validation.json').read_text())
+          b=json.loads(Path('/tmp/stage-d-exact-v2/validation.json').read_text())
+          for x in (a,b):
+              for k in ('context_output','timetable_output','trip_output'):
+                  x['lineage'].pop(k,None)
+          assert a==b
+          PY
+
+      - name: Guard epistemic boundary
+        run: |
+          ! grep -REn 'np\.random|random\.' src/phase2_stage_d_exact_reference_v2.py scripts/phase2_build_stage_d_exact_bruteforce_v2.py scripts/phase2_build_stage_d_exact_bruteforce_v2_runner.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('outputs/phase2/stage_d_exact_bruteforce_v2/stage_d_exact_bruteforce_v2_validation.json').read_text())
+          forbidden=['passenger_weighting_applied','topology_weighting_applied','worker_reference_used_for_phase_selection','worker_reference_assigned_to_routes','hard_s8_quality_threshold_applied','municipal_od_downscaled','ridership_forecast','decision_budget_selected','calendar_selected','recovery_selected','service_policy_selected','topology_ranked','primary_selected','runner_up_selected','weighted_composite_score']
+          assert all(v[k] is False for k in forbidden)
+          PY
+
+      - name: Persist evidence
+        run: |
+          git config user.name 'phase2-stage-d-exact-v2-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$OUTDIR"
+          if git diff --cached --quiet; then
+            echo 'No evidence changes to persist'
+          else
+            git commit -m 'data(phase2): persist exhaustive Stage-D exact reference v2 [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-stage-d-exact-bruteforce-v2
+          path: outputs/phase2/stage_d_exact_bruteforce_v2
+          if-no-files-found: error
