@@ -11,6 +11,11 @@ from scripts.phase2_build_passenger_utility_frontier_v2 import (
 
 def row(plan_id="P", *, max_value=0.5, min_value=30.0, days=260, span=960):
     out = {field: max_value for field in PASSENGER_MAX_AXES}
+    # The all-thresholds adapter extends the base module at runtime. Keep these
+    # certified intermediate-threshold fields present so the same fixture remains
+    # valid if that adapter has already been imported during pytest collection.
+    out["public_population_coverage_share_8min"] = max_value
+    out["public_worst_municipality_coverage_share_8min"] = max_value
     out.update({field: min_value for field in PASSENGER_MIN_AXES})
     out.update({"annual_service_days": days, "span_minutes": span, "plan_id": plan_id})
     return out
