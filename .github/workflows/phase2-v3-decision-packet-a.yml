@@ -24,10 +24,27 @@ jobs:
       - name: Compile validator
         run: python -m py_compile scripts/phase2_validate_v3_decision_packet_a.py
 
+      - name: Materialize frozen certified sources
+        run: |
+          set -euo pipefail
+          mkdir -p .decision_packet_sources
+          git show d41bb678382d018929c1c6b46542f12549f20d4f:outputs/phase2/stage_d_exact_rt001_v3/stage_d_exact_rt001_v3_validation.json \
+            > .decision_packet_sources/stage_d_validation.json
+          git show d41bb678382d018929c1c6b46542f12549f20d4f:outputs/phase2/budget_envelopes.csv \
+            > .decision_packet_sources/budget_envelopes.csv
+          git show 8d858793200b3ab644d2612a272ad0ac614d6c34:config/phase2_nondeci_tournament_frontier_rt001_v3.json \
+            > .decision_packet_sources/frontier_config.json
+          git show 8d858793200b3ab644d2612a272ad0ac614d6c34:outputs/phase2/non_decisional_tournament_frontier_rt001_v3/non_decisional_pareto_frontier_rt001_v3_validation.json \
+            > .decision_packet_sources/frontier_validation.json
+
       - name: Materialize packet validation
         run: |
           mkdir -p outputs/phase2/v3_decision_packet_a
           python scripts/phase2_validate_v3_decision_packet_a.py \
+            --frontier-config .decision_packet_sources/frontier_config.json \
+            --stage-d .decision_packet_sources/stage_d_validation.json \
+            --frontier-validation .decision_packet_sources/frontier_validation.json \
+            --budget .decision_packet_sources/budget_envelopes.csv \
             --validation outputs/phase2/v3_decision_packet_a/validation.json
 
       - name: Validate fail-closed human boundary
