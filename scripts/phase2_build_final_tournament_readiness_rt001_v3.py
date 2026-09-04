@@ -84,6 +84,11 @@ CONTEXT_FIELDS = [
 
 def sha256_path(path: Path) -> str:
     digest = hashlib.sha256()
+    if path.suffix.lower() in {".csv", ".json"}:
+        # Git checkouts may materialise LF or CRLF.  Lineage hashes for textual
+        # evidence use the repository-canonical LF representation.
+        digest.update(path.read_bytes().replace(b"\r\n", b"\n"))
+        return digest.hexdigest()
     with path.open("rb") as handle:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
@@ -500,6 +505,7 @@ def build(args: argparse.Namespace) -> dict[str, object]:
         "full_demand_weighted_gjt_available": False,
         "empirical_missed_connection_probability_available": False,
         "stage_e_engineering_retention_is_probability": False,
+        "text_lineage_hash_newline_normalization": "CRLF_TO_LF",
         "current_service_continuity_is_complete": False,
         "represented_plan_context_count": len(joined),
         "distinct_selected_timetable_count": len(stage_e),
