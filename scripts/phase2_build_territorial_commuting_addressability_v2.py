@@ -40,6 +40,7 @@ OD_REQUIRED_FIELDS = frozenset({
     "procom_res", "origin_name", "procom_lav", "destination_name",
     "workers", "category",
 })
+ROUTE_REQUIRED_FIELDS = frozenset({"route_id", "anchors_json"})
 
 OUTPUT_FIELDS = [
     "scenario_id", "topology_family", "public_route_count",
@@ -128,10 +129,6 @@ def load_od_relations(path: Path, validation: dict, represented: set[str]):
     missing = OD_REQUIRED_FIELDS - header
     if missing:
         raise ValueError(f"OD artifact schema mismatch, missing fields: {sorted(missing)}")
-    # These names are the certified output schema of phase2_build_demand_profile.py.
-    # We intentionally bind to that schema rather than accepting guessed aliases.
-    origin_code_field = "procom_res"
-    destination_code_field = "procom_lav"
 
     all_rows: list[ODRelation] = []
     seen_pairs: set[tuple[str, str]] = set()
@@ -147,7 +144,7 @@ def load_od_relations(path: Path, validation: dict, represented: set[str]):
             raise ValueError("OD relation has non-positive worker count")
         if origin_key not in CORE_NAMES:
             raise ValueError(f"Unexpected OD origin outside core: {origin_name}")
-        pair = (str(row[origin_code_field]).strip(), str(row[destination_code_field]).strip())
+        pair = (str(row["procom_res"]).strip(), str(row["procom_lav"]).strip())
         if not all(pair):
             raise ValueError("OD relation has blank certified municipality code")
         if pair in seen_pairs:
@@ -187,14 +184,23 @@ def load_od_relations(path: Path, validation: dict, represented: set[str]):
 
 
 def load_routes(path: Path, known_anchors: set[str]) -> dict[str, tuple[str, ...]]:
+    header = frozenset(csv_header(path))
+    missing = ROUTE_REQUIRED_FIELDS - header
+    if missing:
+        raise ValueError(f"Unique-route artifact schema mismatch, missing fields: {sorted(missing)}")
     routes: dict[str, tuple[str, ...]] = {}
     for row in read_csv(path):
-        route_id = str(row.get("scenario_route_id", "")).strip()
+        route_id = str(row["route_id"]).strip()
         if not route_id or route_id in routes:
-            raise ValueError("unique-route universe has blank or duplicate scenario_route_id")
-        anchors = tuple(v for v in str(row.get("public_anchor_ids", "")).split("|") if v)
-        if not anchors:
-            raise ValueError(f"{route_id}: no public anchors")
+            raise ValueError("unique-route universe has blank or duplicate route_id")
+        raw_anchors = json.loads(str(row["anchors_json"]))
+        if (
+            not isinstance(raw_anchors, list)
+            or len(raw_anchors) < 2
+            or any(not isinstance(v, str) or not v for v in raw_anchors)
+        ):
+            raise ValueError(f"{route_id}: invalid public anchors_json")
+        anchors = tuple(raw_anchors)
         unknown = set(anchors) - known_anchors
         if unknown:
             raise ValueError(f"{route_id}: unknown public anchors {sorted(unknown)[:5]}")
