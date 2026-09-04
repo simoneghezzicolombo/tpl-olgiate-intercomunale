@@ -11,6 +11,10 @@ from scripts.phase2_build_budget_policy_frontiers_v2 import (
     dominates,
     pareto,
 )
+from scripts.phase2_run_budget_policy_frontiers_v2 import (
+    certified_budget_subset_frontier,
+    validate_monotonic_frontier_contract,
+)
 
 
 def row(scenario_id: str) -> dict[str, object]:
@@ -25,6 +29,17 @@ def row(scenario_id: str) -> dict[str, object]:
 def test_operational_resource_axes_are_explicit_minimisation_axes():
     assert ANNUAL_KM_AXIS in MIN_AXES
     assert FLEET_AXIS in MIN_AXES
+
+
+def test_monotonic_frontier_contract_matches_current_axis_definitions():
+    validate_monotonic_frontier_contract()
+
+
+def test_certified_budget_subset_frontier_is_deterministic_identity():
+    rows = [{"scenario_id": "b"}, {"scenario_id": "a"}]
+    result = certified_budget_subset_frontier(rows)
+    assert [r["scenario_id"] for r in result] == ["a", "b"]
+    assert {id(r) for r in result} == {id(r) for r in rows}
 
 
 def test_componentwise_better_candidate_dominates_within_fixed_policy_context():
