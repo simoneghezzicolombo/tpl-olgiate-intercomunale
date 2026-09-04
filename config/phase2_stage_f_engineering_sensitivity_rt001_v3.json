@@ -2,7 +2,7 @@
   "contract": "PHASE2_STAGE_F_ENGINEERING_SENSITIVITY_RT001_V3",
   "status": "ASSUMPTION_SENSITIVITY_GRID_NOT_EMPIRICAL_INTERVAL",
   "source_contract": "PHASE2_ROBUSTNESS_TOURNAMENT_V2",
-  "source_grid_sha256": "858b0b8a3343dafc49ed5cd0aa68c510096a46dd1ad1175ae0dd12293bdcbf4e",
+  "source_grid_sha256": "6b210b6c80036261f3487ba361be89c30b68c4f8bf8150778519be1c65849092",
   "source_grid_repository_path": "config/phase2_robustness_tournament_v2.json",
   "runtime_multiplier": [0.9, 1.0, 1.1],
   "runtime_multiplier_semantics": "SYMMETRIC_AGGREGATE_RUNNING_TIME_STRESS_AROUND_FROZEN_GATE_D_MODEL_OUTPUT_NOT_EMPIRICAL_CONFIDENCE_INTERVAL",
