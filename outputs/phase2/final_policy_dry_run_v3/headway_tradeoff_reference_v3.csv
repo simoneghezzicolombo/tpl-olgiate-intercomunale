@@ -1,3 +1,3 @@
-uniform_headway_min,context_count,max_total_coverage_10m,max_total_coverage_8m,max_total_coverage_5m,max_worst_municipality_coverage_10m,max_bidirectional_reachable_share,max_bidirectional_worst_retention,min_exact_annual_bus_km
-30,44,0.322751199496,0.231426482147,0.114293557299,0.013951238382,0.304205019397,0E-9,93991.142061000
-60,732,0.387838225005,0.292789745182,0.134132860655,0.22184050544,0.352565354618,1.000000000,28074.395561000
+uniform_headway_min,context_count,max_total_coverage_10m,max_total_coverage_8m,max_total_coverage_5m,max_worst_municipality_coverage_10m,max_worst_municipality_coverage_8m,max_worst_municipality_coverage_5m,max_bidirectional_reachable_share,max_bidirectional_worst_retention,min_exact_annual_bus_km
+30,44,0.322751199496,0.231426482147,0.114293557299,0.013951238382,0.000465712767,0.0,0.304205019397,0E-9,93991.142061000
+60,732,0.387838225005,0.292789745182,0.134132860655,0.22184050544,0.170853502565,0.066479875394,0.352565354618,1.000000000,28074.395561000

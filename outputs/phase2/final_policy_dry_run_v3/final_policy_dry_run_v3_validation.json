@@ -6,7 +6,7 @@
   "current_service_v4_consumed": false,
   "current_service_v4_required_before_final_selection": true,
   "decision_pathway": "V3_CERTIFIED_METRICS_DETERMINISTIC_ROBUSTNESS",
-  "diagnostic_interpretation": "The layered Pareto cascade is a policy-shape diagnostic, not a final shortlist or recommendation. The strict lexicographic trace exists only to expose exact-zero-tolerance brittleness. Current-Service Baseline V4 must be reviewed before the finalizer may run.",
+  "diagnostic_interpretation": "The headway-class choice is a dry-run policy diagnostic, not PRIMARY/RUNNER-UP selection. H60 cannot be rescued by later cost/fleet criteria after failing the explicit territorial exception. Current-Service Baseline V4 must be reviewed before the finalizer may run.",
   "dry_run_only": true,
   "final_layer_headway_values": [
     60.0
@@ -14,49 +14,26 @@
   "final_layer_survivor_count": 2,
   "final_layer_unique_scenario_count": 2,
   "final_selection_authorized": false,
+  "frequent_territorial_frontier_count": 14,
   "global_scalar_uncertainty_band_used": false,
-  "layer_trace": [
-    {
-      "input_count": 2633,
-      "method": "FILTER",
-      "stage": "REFERENCE_BIDIRECTIONAL_INPUT",
-      "survivor_count": 2259
-    },
-    {
-      "input_count": 2259,
-      "method": "HARD_GATE",
-      "stage": "OPERATIONAL_ROBUSTNESS_GATE",
-      "survivor_count": 776
-    },
-    {
-      "input_count": 776,
-      "method": "PARETO_NONDOMINANCE",
-      "stage": "L1_USEFUL_TERRITORIAL_SERVICE",
-      "survivor_count": 78
-    },
-    {
-      "input_count": 78,
-      "method": "PARETO_NONDOMINANCE",
-      "stage": "L2_INTERCHANGE_AND_ENGINEERING_ROBUSTNESS",
-      "survivor_count": 18
-    },
-    {
-      "input_count": 18,
-      "method": "PARETO_NONDOMINANCE",
-      "stage": "L3_IMPLEMENTABILITY_AND_EFFICIENCY",
-      "survivor_count": 2
-    }
-  ],
+  "h60_exception_qualifying_context_count": 10,
+  "headway_class_diagnostic_choice": "HOURLY_H60",
+  "headway_class_diagnostic_reason": "H60_EXCEPTION_TERRITORIALLY_JUSTIFIED",
+  "headway_class_selection_authorized": false,
+  "hourly_territorial_frontier_count": 64,
   "lineage": {
     "context_readiness_sha256": "edd6f9e313fa9896158e75cb1edf2748cfbb7983e8f5ae0df62d882860fe1be4",
-    "policy_sha256": "0f3df38a30691c3d4fe305aa634551d096d093e652bf53ee3cde46892d5428ef",
+    "policy_sha256": "28909df6b9cdcf49608d4e7456f819959d35d1bf2c41dd1800d026bb06d963e0",
     "readiness_validation_sha256": "02625b749e26d115873f2251c6b3ec56ddeabe69b636f29fc2e2f40ee4e07b19"
   },
   "olgiate_frazione_diagnostic_used_for_selection": false,
   "operational_gate_survivor_count": 776,
+  "policy_contract_version": 2,
   "primary_selected": false,
   "reference_bidirectional_context_count": 2259,
   "reference_context_count": 2633,
+  "robust_frequent_context_count": 44,
+  "robust_hourly_context_count": 732,
   "runner_up_selected": false,
   "status": "PASS_PHASE2_FINAL_POLICY_DRY_RUN_V3",
   "strict_lexicographic_diagnostic": {
