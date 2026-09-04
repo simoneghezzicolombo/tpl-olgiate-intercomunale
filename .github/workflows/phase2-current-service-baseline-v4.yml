@@ -13,6 +13,7 @@ env:
   PYTHONPATH: .
   OUTDIR: outputs/phase2/current_service_access_baseline_v4
   SOURCEDIR: /tmp/phase2_current_service_v4_sources
+  RECOVERY_COMMIT: 4ab527827456eb40572a72b4c7b87f8fe5f4dcac
 
 jobs:
   build:
@@ -32,59 +33,57 @@ jobs:
       - name: Compile
         run: |
           python -m py_compile src/phase2_current_service_baseline_v4.py
-          python -m py_compile scripts/phase2_fetch_current_service_v4_sources.py
           python -m py_compile scripts/phase2_build_current_service_access_baseline_v4.py
+          python -m py_compile scripts/phase2_build_current_service_access_baseline_v4_source_closed.py
 
       - name: Regression tests
         run: pytest -q tests/test_phase2_current_service_baseline_v4.py
 
-      - name: Materialise official public sources and checksums
-        run: |
-          rm -rf "$SOURCEDIR"
-          mkdir -p "$SOURCEDIR" "$OUTDIR"
-          python scripts/phase2_fetch_current_service_v4_sources.py \
-            --source-dir "$SOURCEDIR" \
-            --manifest-output "$SOURCEDIR/source_provenance.csv"
-          cat "$SOURCEDIR/source_provenance.csv"
-          python - <<'PY'
-          import csv
-          from pathlib import Path
-          p = Path('/tmp/phase2_current_service_v4_sources/source_provenance.csv')
-          rows = list(csv.DictReader(p.open(encoding='utf-8')))
-          required = [r for r in rows if r['required'] == 'true']
-          assert required
-          assert all(r['available'] == 'true' and len(r['sha256']) == 64 for r in required)
-          print({'required_sources': len(required), 'optional_available': sum(r['available']=='true' for r in rows if r['required']=='false')})
-          PY
-
-      - name: Validate source semantics
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          base = Path('/tmp/phase2_current_service_v4_sources')
-          current = (base/'arriva_orari_current_2026_09_04.html').read_text(encoding='utf-8', errors='replace').lower()
-          bridge = (base/'atp_brivio_temporary_disruption_2026.html').read_text(encoding='utf-8', errors='replace').lower()
-          assert 'd184' in current and 'd185' in current
-          assert '13 settembre 2026' in current
-          assert 'd185' in bridge and '4 maggio' in bridge
-          # Future 2026/27 material is optional corroboration only and cannot block V4.
-          # The builder labels it as corroboration only if its expected validity text is present.
-          PY
-
-      - name: Full V4 current-service structural baseline build
+      - name: Materialise frozen official public-source evidence
         shell: bash
         run: |
           set -euo pipefail
-          FUTURE_ARG=()
-          if [ -f "$SOURCEDIR/arriva_future_2026_09_14.html" ]; then
-            FUTURE_ARG=(--future-arriva-page "$SOURCEDIR/arriva_future_2026_09_14.html")
-          fi
-          python scripts/phase2_build_current_service_access_baseline_v4.py \
-            --gtfs-zip "$SOURCEDIR/official_gtfs_arriva_addabus_2025_2026.zip" \
-            --source-provenance "$SOURCEDIR/source_provenance.csv" \
-            --current-arriva-page "$SOURCEDIR/arriva_orari_current_2026_09_04.html" \
-            --bridge-notice "$SOURCEDIR/atp_brivio_temporary_disruption_2026.html" \
-            "${FUTURE_ARG[@]}" \
+          rm -rf "$SOURCEDIR"
+          mkdir -p "$SOURCEDIR" "$OUTDIR"
+          git cat-file -e "${RECOVERY_COMMIT}^{commit}"
+          git show "${RECOVERY_COMMIT}:outputs/phase2/current_service_public_geodata_recovery_a/official_gtfs_d184_d185_route_stops.csv" > "$SOURCEDIR/official_gtfs_d184_d185_route_stops.csv"
+          git show "${RECOVERY_COMMIT}:outputs/phase2/current_service_public_geodata_recovery_a/official_gtfs_d184_d185_trip_patterns.csv" > "$SOURCEDIR/official_gtfs_d184_d185_trip_patterns.csv"
+          git show "${RECOVERY_COMMIT}:outputs/phase2/current_service_public_geodata_recovery_a/summary.json" > "$SOURCEDIR/gtfs_recovery_summary.json"
+          git show "${RECOVERY_COMMIT}:outputs/phase2/current_service_public_geodata_recovery_a/source_sha256.txt" > "$SOURCEDIR/gtfs_source_sha256.txt"
+          git show "${RECOVERY_COMMIT}:outputs/phase2/current_service_reference_2026-09-03.csv" > "$SOURCEDIR/current_service_reference_2026-09-03.csv"
+          git show "${RECOVERY_COMMIT}:outputs/phase2/current_service_temporary_conditions_2026-09-03.csv" > "$SOURCEDIR/current_service_temporary_conditions_2026-09-03.csv"
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          base = Path('/tmp/phase2_current_service_v4_sources')
+          summary = json.loads((base/'gtfs_recovery_summary.json').read_text())
+          assert summary['status'] == 'PASS_PUBLIC_SOURCE_DISCOVERY'
+          assert summary['route_ids_gtfs'] == ['D184', 'D185']
+          assert summary['official_route_specific_stop_record_count'] == 72
+          assert summary['distinct_route_trip_patterns'] == 18
+          source_hash = (base/'gtfs_source_sha256.txt').read_text().split()[0]
+          assert source_hash == 'f890c393b909a40ae9500ab5acba71166cdfc5af3d42be92f55a92d92927553b'
+          refs = {r['route_id']: r for r in csv.DictReader((base/'current_service_reference_2026-09-03.csv').open())}
+          assert {'D184','D185'} <= set(refs)
+          assert refs['D184']['valid_to'] == '2026-09-13'
+          assert refs['D185']['valid_to'] == '2026-09-13'
+          temporary = list(csv.DictReader((base/'current_service_temporary_conditions_2026-09-03.csv').open()))
+          assert len(temporary) == 1
+          assert temporary[0]['route_id'] == 'D185'
+          assert temporary[0]['ordinary_network_baseline_replaced'] == 'False'
+          print({'source_closed': True, 'gtfs_sha256': source_hash, 'route_stop_records': 72, 'patterns': 18})
+          PY
+
+      - name: Full V4 current-service structural baseline build
+        run: |
+          python scripts/phase2_build_current_service_access_baseline_v4_source_closed.py \
+            --gtfs-route-stops "$SOURCEDIR/official_gtfs_d184_d185_route_stops.csv" \
+            --gtfs-patterns "$SOURCEDIR/official_gtfs_d184_d185_trip_patterns.csv" \
+            --gtfs-recovery-summary "$SOURCEDIR/gtfs_recovery_summary.json" \
+            --gtfs-source-sha256 "$SOURCEDIR/gtfs_source_sha256.txt" \
+            --current-service-reference "$SOURCEDIR/current_service_reference_2026-09-03.csv" \
+            --temporary-conditions "$SOURCEDIR/current_service_temporary_conditions_2026-09-03.csv" \
+            --archived-kml-provenance data/external/current_service_v4/archived_kml_provenance.csv \
             --frozen-official-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv \
             --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv \
             --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
@@ -103,6 +102,13 @@ jobs:
           assert v['contract'] == 'PHASE2_CURRENT_SERVICE_STRUCTURAL_PHYSICAL_STOP_BASELINE_V4'
           assert v['reference_date'] == '2026-09-04'
           assert v['gtfs_source_official'] is True
+          assert v['gtfs_source_closed_extract'] is True
+          assert v['gtfs_live_download_required'] is False
+          assert v['gtfs_recovery_frozen_commit'] == '4ab527827456eb40572a72b4c7b87f8fe5f4dcac'
+          assert v['gtfs_upstream_binary_sha256'] == 'f890c393b909a40ae9500ab5acba71166cdfc5af3d42be92f55a92d92927553b'
+          assert v['archived_kml_corroboration_available'] is True
+          assert v['archived_kml_used_in_numeric_coverage'] is False
+          assert v['archived_kml_legacy_to_current_mapping'] == {'D84':'D184','E03':'D185'}
           assert v['future_2026_09_14_used_as_current'] is False
           assert v['pdf_timing_rows_treated_as_complete_stop_universe'] is False
           assert v['physical_stop_clustering_deterministic'] is True
@@ -113,8 +119,12 @@ jobs:
           assert v['population_units_changed'] is False
           assert v['current_service_baseline_complete'] is False
           assert v['temporary_brivio_bridge_disruption_excluded_from_structural_baseline'] is True
+          assert v['temporary_condition_ordinary_network_baseline_replaced'] is False
           assert v['historical_gtfs_identity_implies_current_trip_activation'] is False
+          assert v['current_route_level_activation_certified_for_reference_date'] is True
           assert v['current_service_evidence_relabelled_as_ridership'] is False
+          assert v['route_specific_stop_record_count'] == 72
+          assert v['pattern_count'] == 18
           assert v['olgiate_diagnostic_available'] is True
           assert v['olgiate_diagnostic_used_in_candidate_optimisation'] is False
           assert v['decision_gate_reopen_required'] is False
@@ -129,34 +139,30 @@ jobs:
           assert [r['area'] for r in diag] == ['Centro/Stazione','Mondonico','San Zeno','Monticello']
           assert all(r['used_in_candidate_optimisation'] == 'false' for r in diag)
           print(json.dumps({
-              'directional_stop_records': v['directional_stop_record_count'],
+              'route_specific_stop_records': v['route_specific_stop_record_count'],
               'unique_stop_ids': v['official_gtfs_unique_stop_id_count'],
               'physical_clusters': v['official_physical_stop_cluster_count'],
               'catchment_clusters': v['physical_clusters_with_certified_phase2_catchment_count'],
               'coverage_5m': v['coverage_5m'],
               'coverage_8m': v['coverage_8m'],
               'coverage_10m': v['coverage_10m'],
-              'kml_source_official': v['kml_source_official'],
+              'archived_kml_corroboration': v['archived_kml_corroboration_available'],
           }, indent=2))
           PY
 
       - name: Deterministic byte-for-byte rebuild
-        shell: bash
         run: |
-          set -euo pipefail
           REBUILD=/tmp/current_service_baseline_v4_rebuild
           rm -rf "$REBUILD"
           mkdir -p "$REBUILD"
-          FUTURE_ARG=()
-          if [ -f "$SOURCEDIR/arriva_future_2026_09_14.html" ]; then
-            FUTURE_ARG=(--future-arriva-page "$SOURCEDIR/arriva_future_2026_09_14.html")
-          fi
-          python scripts/phase2_build_current_service_access_baseline_v4.py \
-            --gtfs-zip "$SOURCEDIR/official_gtfs_arriva_addabus_2025_2026.zip" \
-            --source-provenance "$SOURCEDIR/source_provenance.csv" \
-            --current-arriva-page "$SOURCEDIR/arriva_orari_current_2026_09_04.html" \
-            --bridge-notice "$SOURCEDIR/atp_brivio_temporary_disruption_2026.html" \
-            "${FUTURE_ARG[@]}" \
+          python scripts/phase2_build_current_service_access_baseline_v4_source_closed.py \
+            --gtfs-route-stops "$SOURCEDIR/official_gtfs_d184_d185_route_stops.csv" \
+            --gtfs-patterns "$SOURCEDIR/official_gtfs_d184_d185_trip_patterns.csv" \
+            --gtfs-recovery-summary "$SOURCEDIR/gtfs_recovery_summary.json" \
+            --gtfs-source-sha256 "$SOURCEDIR/gtfs_source_sha256.txt" \
+            --current-service-reference "$SOURCEDIR/current_service_reference_2026-09-03.csv" \
+            --temporary-conditions "$SOURCEDIR/current_service_temporary_conditions_2026-09-03.csv" \
+            --archived-kml-provenance data/external/current_service_v4/archived_kml_provenance.csv \
             --frozen-official-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv \
             --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv \
             --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
@@ -165,22 +171,23 @@ jobs:
             --outdir "$REBUILD"
           diff -qr "$OUTDIR" "$REBUILD"
 
-      - name: Anti-fuzzy anti-invention guard
+      - name: Anti-fuzzy anti-invention anti-network guard
         run: |
           python - <<'PY'
           from pathlib import Path
           files = [
               Path('src/phase2_current_service_baseline_v4.py'),
-              Path('scripts/phase2_build_current_service_access_baseline_v4.py'),
+              Path('scripts/phase2_build_current_service_access_baseline_v4_source_closed.py'),
           ]
           text = '\n'.join(p.read_text(encoding='utf-8') for p in files)
-          forbidden = ['np.random', 'random.', 'rapidfuzz', 'fuzzywuzzy', 'SequenceMatcher', 'Nominatim', 'geopy.geocoders']
+          forbidden = ['np.random', 'random.', 'rapidfuzz', 'fuzzywuzzy', 'SequenceMatcher', 'Nominatim', 'geopy.geocoders', 'urlopen(', 'requests.get(', 'curl ']
           for token in forbidden:
               assert token not in text, token
           assert 'StopForClustering("' not in text
           v = Path('outputs/phase2/current_service_access_baseline_v4/current_service_access_baseline_v4_validation.json').read_text()
           assert '"invented_stop_coordinates": false' in v
           assert '"fuzzy_matching_used": false' in v
+          assert '"gtfs_live_download_required": false' in v
           PY
 
       - name: Persist evidence
