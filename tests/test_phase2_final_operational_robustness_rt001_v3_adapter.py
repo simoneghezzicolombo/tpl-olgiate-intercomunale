@@ -7,11 +7,11 @@ import pytest
 
 from scripts.phase2_run_final_operational_robustness_rt001_v3 import (
     FINAL_FILES,
-    materialise_compatibility_inputs,
     parse_vehicle_id,
     rewrite_engine_outputs,
 )
 from scripts.phase2_run_final_operational_robustness_rt001_v3_stream import (
+    materialise_compatibility_inputs_in_span,
     rewrite_engine_outputs_streaming,
 )
 
@@ -40,7 +40,7 @@ def test_vehicle_id_parser_is_label_invariant():
         parse_vehicle_id("bus-A", field="x")
 
 
-def test_adapter_uses_selected_timetable_as_exact_unit_and_never_leaks_open_route_endpoint(tmp_path):
+def test_adapter_uses_selected_timetable_and_enforces_public_return_contract(tmp_path):
     tables = tmp_path / "tables.csv"
     contexts = tmp_path / "contexts.csv.gz"
     trips = tmp_path / "trips.csv.gz"
@@ -49,7 +49,7 @@ def test_adapter_uses_selected_timetable_as_exact_unit_and_never_leaks_open_rout
     table_rows = [{
         "selected_timetable_id": "T1", "stage_d_input_id": "D1", "scenario_id": "S1",
         "topology_family": "CORE", "span_start_min": "330", "span_end_min": "900",
-        "public_route_ids_json": '["Rclosed","Ropen"]', "explicit_public_trip_count": "2",
+        "public_route_ids_json": '["Rclosed","Ropen"]', "explicit_public_trip_count": "3",
         "exact_fleet_recovery5": "1", "exact_fleet_recovery10": "1", "exact_fleet_recovery15": "1",
     }]
     _write_csv(tables, list(table_rows[0]), table_rows)
@@ -63,6 +63,11 @@ def test_adapter_uses_selected_timetable_as_exact_unit_and_never_leaks_open_rout
         {
             "selected_timetable_id": "T1", "route_id": "Rclosed", "trip_ordinal": "0",
             "departure_min": "400", "public_service_end_min": "430", "vehicle_return_hub_min": "430",
+            "vehicle_id_recovery5": "V1", "vehicle_id_recovery10": "V1", "vehicle_id_recovery15": "V1",
+        },
+        {
+            "selected_timetable_id": "T1", "route_id": "Rclosed", "trip_ordinal": "1",
+            "departure_min": "880", "public_service_end_min": "910", "vehicle_return_hub_min": "910",
             "vehicle_id_recovery5": "V1", "vehicle_id_recovery10": "V1", "vehicle_id_recovery15": "V1",
         },
         {
@@ -88,9 +93,9 @@ def test_adapter_uses_selected_timetable_as_exact_unit_and_never_leaks_open_rout
     validation = {
         "unique_selected_exact_timetable_count": 1,
         "stage_c_plan_context_count": 1,
-        "selected_exact_trip_row_count": 2,
+        "selected_exact_trip_row_count": 3,
     }
-    summary_path, trip_path, table_index, context_count = materialise_compatibility_inputs(
+    summary_path, trip_path, table_index, context_count = materialise_compatibility_inputs_in_span(
         args, tmp_path / "normalized", validation
     )
     assert set(table_index) == {"T1"}
@@ -101,14 +106,15 @@ def test_adapter_uses_selected_timetable_as_exact_unit_and_never_leaks_open_rout
     assert summary[0]["stage_d_input_id"] == "T1"
 
     with gzip.open(trip_path, "rt", encoding="utf-8", newline="") as f:
-        normalized = {r["route_id"]: r for r in csv.DictReader(f)}
-    assert normalized["Rclosed"]["stage_d_input_id"] == "T1"
-    assert normalized["Rclosed"]["public_hub_return_min"] == "430"
-    assert normalized["Ropen"]["public_hub_return_min"] == ""
-    assert normalized["Ropen"]["vehicle_hub_return_min"] == "450"
+        normalized = {(r["route_id"], r["trip_ordinal"]): r for r in csv.DictReader(f)}
+    assert normalized[("Rclosed", "0")]["stage_d_input_id"] == "T1"
+    assert normalized[("Rclosed", "0")]["public_hub_return_min"] == "430"
+    assert normalized[("Rclosed", "1")]["public_hub_return_min"] == ""
+    assert normalized[("Ropen", "0")]["public_hub_return_min"] == ""
+    assert normalized[("Ropen", "0")]["vehicle_hub_return_min"] == "450"
     for recovery in (5, 10, 15):
-        assert normalized["Rclosed"][f"vehicle_block_recovery{recovery}"] == "1"
-        assert normalized["Ropen"][f"vehicle_block_recovery{recovery}"] == "1"
+        assert normalized[("Rclosed", "0")][f"vehicle_block_recovery{recovery}"] == "1"
+        assert normalized[("Ropen", "0")][f"vehicle_block_recovery{recovery}"] == "1"
 
 
 def test_streaming_relabel_is_byte_equivalent_to_reference_adapter(tmp_path):
