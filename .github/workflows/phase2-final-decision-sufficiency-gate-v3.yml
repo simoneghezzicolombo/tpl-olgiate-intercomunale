@@ -1,0 +1,137 @@
+name: Phase 2 Final Decision Sufficiency Gate V3
+
+on:
+  push:
+    branches:
+      - phase2-final-decision-sufficiency-gate-a
+    paths:
+      - 'config/phase2_final_decision_sufficiency_gate_v3.json'
+      - 'scripts/phase2_build_final_decision_sufficiency_gate_v3.py'
+      - 'tests/test_phase2_final_decision_sufficiency_gate_v3.py'
+      - 'docs/PHASE2_FINAL_DECISION_SUFFICIENCY_GATE_V3.md'
+      - '.github/workflows/phase2-final-decision-sufficiency-gate-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: phase2-final-decision-sufficiency-gate-v3-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Materialize pinned certified external evidence
+        run: |
+          python - <<'PY'
+          import json
+          import pathlib
+          import subprocess
+
+          cfg = json.loads(pathlib.Path('config/phase2_final_decision_sufficiency_gate_v3.json').read_text())
+          for name, source in cfg['external_sources'].items():
+              subprocess.run(['git', 'fetch', '--no-tags', 'origin', source['branch']], check=True)
+              commit = source['commit']
+              subprocess.run(['git', 'cat-file', '-e', f'{commit}^{{commit}}'], check=True)
+              subprocess.run(['git', 'merge-base', '--is-ancestor', commit, 'FETCH_HEAD'], check=True)
+              data = subprocess.check_output(['git', 'show', f"{commit}:{source['path']}"])
+              target = pathlib.Path(source['materialized_path'])
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_bytes(data)
+              print(name, commit, target)
+          PY
+
+      - name: Compile
+        run: python -m py_compile scripts/phase2_build_final_decision_sufficiency_gate_v3.py
+
+      - name: Install test dependency
+        run: python -m pip install pytest
+
+      - name: Test closure gate
+        run: python -m pytest -q tests/test_phase2_final_decision_sufficiency_gate_v3.py
+
+      - name: Build closure-gate evidence
+        run: python scripts/phase2_build_final_decision_sufficiency_gate_v3.py
+
+      - name: Validate finite fail-closed verdict
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          root = Path('outputs/phase2/final_decision_sufficiency_gate_v3')
+          v = json.loads((root / 'final_decision_sufficiency_gate_v3_validation.json').read_text())
+          assert v['status'] == 'PASS_PHASE2_FINAL_DECISION_SUFFICIENCY_GATE_V3'
+          assert v['audit_pass'] is True
+          assert v['blocker_universe_closed'] is True
+          assert v['new_blocker_creation_authorized'] is False
+          assert v['preserve_all_plan_contexts'] is True
+          assert v['preserved_plan_context_count'] == 16495
+          assert v['legacy_v2_technical_open_data_requirement_count'] == 4
+          assert v['v3_deterministic_technical_open_data_requirement_count'] == 0
+          assert v['can_materialize_final_decision_now'] is False
+          for key in ('final_selection_authorized', 'primary_selection_authorised', 'runner_up_selection_authorised', 'decision_budget_selected', 'uncertainty_band_selected', 'normative_v3_decision_rule_selected', 'weighted_composite_score'):
+              assert v[key] is False
+          for key in ('manufactured_demand_weighted_gjt', 'manufactured_missed_connection_probability', 'stage_e_or_f_engineering_stress_is_probability', 'municipal_od_spatially_downscaled', 'current_service_lower_bound_relabelled_as_complete', 'v3_descriptive_frontier_may_prune'):
+              assert v[key] is False
+          assert v['stage_f_engineering_sensitivity_closed'] is True
+          assert v['current_service_baseline_state'] == 'CLOSED_WITH_CERTIFIED_BOUND'
+          assert v['current_service_localized_rows'] == 15
+          assert v['current_service_unresolved_rows'] == 36
+          assert v['finite_next_step_tree']['no_other_engineering_task_authorized_by_this_gate'] is True
+
+          with (root / 'final_decision_blocker_matrix_v3.csv').open(encoding='utf-8', newline='') as handle:
+              matrix = list(csv.DictReader(handle))
+          assert len(matrix) == 16
+          assert {row['engineering_work_authorized_now'] for row in matrix} == {'false'}
+          with (root / 'final_decision_pathway_summary_v3.csv').open(encoding='utf-8', newline='') as handle:
+              pathways = {row['pathway_id']: row for row in csv.DictReader(handle)}
+          assert pathways['V3_CERTIFIED_METRICS_DETERMINISTIC_ROBUSTNESS']['technical_open_data_requirement_count'] == '0'
+          assert pathways['V3_CERTIFIED_METRICS_DETERMINISTIC_ROBUSTNESS']['pathway_selected'] == 'false'
+          PY
+
+      - name: Deterministic byte-for-byte rebuild
+        run: |
+          LEFT="$(mktemp -d)"
+          RIGHT="$(mktemp -d)"
+          python scripts/phase2_build_final_decision_sufficiency_gate_v3.py --output-dir "$LEFT" >/dev/null
+          python scripts/phase2_build_final_decision_sufficiency_gate_v3.py --output-dir "$RIGHT" >/dev/null
+          for f in final_decision_blocker_matrix_v3.csv final_decision_pathway_summary_v3.csv final_decision_sufficiency_gate_v3_validation.json; do
+            cmp "$LEFT/$f" "$RIGHT/$f"
+            cmp "$LEFT/$f" "outputs/phase2/final_decision_sufficiency_gate_v3/$f"
+          done
+
+      - name: Epistemic and non-decisional guard
+        run: |
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random' scripts/phase2_build_final_decision_sufficiency_gate_v3.py
+          ! grep -n -E 'primary_selection_authorised["'"']?:[[:space:]]*true|runner_up_selection_authorised["'"']?:[[:space:]]*true|weighted_composite_score["'"']?:[[:space:]]*true' scripts/phase2_build_final_decision_sufficiency_gate_v3.py config/phase2_final_decision_sufficiency_gate_v3.json
+          ! grep -n -E 'missed_connection_probability[[:space:]]*=|demand_weighted_gjt_improvement_min[[:space:]]*=' scripts/phase2_build_final_decision_sufficiency_gate_v3.py
+          ! grep -n -E 'select_candidates\(|finalise\(' scripts/phase2_build_final_decision_sufficiency_gate_v3.py
+          git diff --check
+
+      - name: Persist closure-gate evidence
+        run: |
+          git config user.name 'phase2-decision-sufficiency-gate-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add outputs/phase2/final_decision_sufficiency_gate_v3
+          if ! git diff --cached --quiet; then
+            git commit -m 'data(phase2): persist final decision sufficiency gate V3 [skip ci]'
+            git push origin HEAD:phase2-final-decision-sufficiency-gate-a
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-final-decision-sufficiency-gate-v3-${{ github.sha }}
+          path: outputs/phase2/final_decision_sufficiency_gate_v3
+          if-no-files-found: error
