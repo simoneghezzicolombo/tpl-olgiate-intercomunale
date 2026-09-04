@@ -1,0 +1,84 @@
+{
+  "status": "PASS_PHASE2_FINAL_TOURNAMENT_READINESS_AUDIT_RT001_V3",
+  "contract": "PHASE2_FAIL_CLOSED_FINAL_TOURNAMENT_INPUT_READINESS_RT001_V3",
+  "readiness_audit_pass": true,
+  "final_tournament_execution_ready": false,
+  "finalizer_invoked": false,
+  "candidate_evaluation_rows_materialized": false,
+  "recommendation_materialized": false,
+  "decision_budget_selected": false,
+  "uncertainty_band_selected": false,
+  "calendar_selected": false,
+  "recovery_selected": false,
+  "primary_selected": false,
+  "runner_up_selected": false,
+  "weighted_composite_score": false,
+  "full_demand_weighted_gjt_available": false,
+  "empirical_missed_connection_probability_available": false,
+  "stage_e_engineering_retention_is_probability": false,
+  "current_service_continuity_is_complete": false,
+  "represented_plan_context_count": 16495,
+  "distinct_selected_timetable_count": 6000,
+  "selected_timetable_without_bus_to_rail_summary_metric_count": 918,
+  "transfer_profile_count_per_timetable": [
+    3
+  ],
+  "budget_envelope_count": 6,
+  "budget_envelopes_annual_bus_km": [
+    89135.2,
+    100277.1,
+    111419.0,
+    122560.9,
+    133702.8,
+    144844.7
+  ],
+  "rt001_recovered_context_count": 646,
+  "blocker_count": 6,
+  "blockers": [
+    {
+      "blocker_id": "FT-001",
+      "condition": "FULL_DEMAND_WEIGHTED_GJT_UNAVAILABLE",
+      "evidence": "Passenger journey universe has municipal-OD resolution and full_gjt_ready=false; no spatial allocation to candidate routes is authorised."
+    },
+    {
+      "blocker_id": "FT-002",
+      "condition": "EMPIRICAL_MISSED_CONNECTION_PROBABILITY_UNAVAILABLE",
+      "evidence": "Stage E is deterministic engineering stress and explicitly is not an empirical delay-probability model."
+    },
+    {
+      "blocker_id": "FT-003",
+      "condition": "REQUIRED_STAGE_F_SENSITIVITIES_INCOMPLETE",
+      "evidence": "Dwell variation, bus-runtime decrease, non-zero rail delay and route-level demand-weight perturbation are not certified in the current lineage."
+    },
+    {
+      "blocker_id": "FT-004",
+      "condition": "CURRENT_SERVICE_REFERENCE_IS_LOWER_BOUND_ONLY",
+      "evidence": "Only 12 of 51 current D184/D185 rows are localised; continuity is not a complete current-service non-regression proof."
+    },
+    {
+      "blocker_id": "FT-005",
+      "condition": "DECISION_BUDGET_NOT_SELECTED",
+      "evidence": "The Decision Contract requires an explicit caller-selected budget matching one materialised envelope."
+    },
+    {
+      "blocker_id": "FT-006",
+      "condition": "UNCERTAINTY_BAND_NOT_SELECTED",
+      "evidence": "The Decision Contract requires an explicit finite, non-negative uncertainty band in minutes."
+    }
+  ],
+  "decision_boundary": "This audit makes the certified evidence joinable and identifies missing final-tournament inputs. It does not rank contexts, calculate a composite score, select a budget/calendar/recovery, or materialise PRIMARY/RUNNER_UP.",
+  "lineage": {
+    "passenger_frontier_sha256": "f119d4b7acbfcea3280250fbd0a2ff06e2871f8c8465b9daace70664de7424c1",
+    "passenger_validation_sha256": "06f13c061a05ca5e92cc62f762349f0b259cb553de3f5d8d1f2874af3dacead9",
+    "continuity_sha256": "bdb08fdd6f58a085509edfa9cef27069fcec5d55ee6c8449e183935710730522",
+    "continuity_validation_sha256": "f64648b8759573de3d37386aa19f871ecebade86ccfb6e19ac44234e0f3eff99",
+    "stage_e_context_map_sha256": "e5f44353776448deedff50cab7e0a6fc594d59510c5f49f84a3bc1cc05581e2e",
+    "stage_e_summary_sha256": "3007dddab5030bbd4660b22fa6c6a4a2e638e6d2f5b24bb1243eed30591e9155",
+    "stage_e_validation_sha256": "36e855ce21cc63f80592740b75dd0fd344a78dd9f230f328e905f83de80b7ecd",
+    "journey_validation_sha256": "ad6c845e2541e64fba7580a5254c478d93a1aba480b7022e1d31e25cebd31a27",
+    "behavioral_grid_sha256": "fa0b0464baa0d0b89c3a6ab0620db8f1ad5f0ea9f7ca31b9f3f50645b411e722",
+    "context_readiness_output_sha256": "6c35b114f6215c095d350b85ac06c8ac2e5b35c288c324569d3d222022faac4b",
+    "budget_envelopes_output_sha256": "ba6e46e1505cdceabe39b62d1c0a3345d99434f3ab7c9115fa974db1f0928c92",
+    "sensitivity_readiness_output_sha256": "1ad82b303708d972da9b403a74af85c0f6c711c9eafc34ee7fa845e964bf3663"
+  }
+}

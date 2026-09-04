@@ -1,0 +1,74 @@
+name: Phase 2 final tournament readiness RT001 V3
+
+on:
+  push:
+    branches:
+      - codex/phase2-final-tournament-rt001-v3
+    paths:
+      - 'scripts/phase2_build_final_tournament_readiness_rt001_v3.py'
+      - 'tests/test_phase2_final_tournament_readiness_rt001_v3.py'
+      - 'docs/PHASE2_FINAL_TOURNAMENT_READINESS_RT001_V3.md'
+      - 'outputs/phase2/final_tournament_readiness_rt001_v3/**'
+      - '.github/workflows/phase2-final-tournament-readiness-rt001-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase2-final-tournament-readiness-rt001-v3-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile
+        run: python -m py_compile scripts/phase2_build_final_tournament_readiness_rt001_v3.py
+
+      - name: Test
+        run: python -m pytest -q tests/test_phase2_final_tournament_readiness_rt001_v3.py
+
+      - name: Rebuild and verify committed evidence
+        run: |
+          OUT="$(mktemp -d)"
+          python scripts/phase2_build_final_tournament_readiness_rt001_v3.py --output-dir "$OUT"
+          cmp "$OUT/final_tournament_context_readiness_rt001_v3.csv.gz" outputs/phase2/final_tournament_readiness_rt001_v3/final_tournament_context_readiness_rt001_v3.csv.gz
+          cmp "$OUT/final_tournament_budget_envelopes_rt001_v3.csv" outputs/phase2/final_tournament_readiness_rt001_v3/final_tournament_budget_envelopes_rt001_v3.csv
+          cmp "$OUT/final_tournament_sensitivity_readiness_rt001_v3.csv" outputs/phase2/final_tournament_readiness_rt001_v3/final_tournament_sensitivity_readiness_rt001_v3.csv
+          cmp "$OUT/final_tournament_readiness_rt001_v3_validation.json" outputs/phase2/final_tournament_readiness_rt001_v3/final_tournament_readiness_rt001_v3_validation.json
+
+      - name: Enforce fail-closed decision boundary
+        shell: bash
+        run: |
+          python - <<'PY'
+          import gzip, csv, json
+          from pathlib import Path
+          root = Path('outputs/phase2/final_tournament_readiness_rt001_v3')
+          validation = json.loads((root / 'final_tournament_readiness_rt001_v3_validation.json').read_text())
+          assert validation['status'] == 'PASS_PHASE2_FINAL_TOURNAMENT_READINESS_AUDIT_RT001_V3'
+          assert validation['final_tournament_execution_ready'] is False
+          assert validation['candidate_evaluation_rows_materialized'] is False
+          assert validation['recommendation_materialized'] is False
+          assert validation['blocker_count'] == 6
+          for key in ('decision_budget_selected', 'uncertainty_band_selected', 'primary_selected', 'runner_up_selected', 'weighted_composite_score'):
+              assert validation[key] is False
+          with gzip.open(root / 'final_tournament_context_readiness_rt001_v3.csv.gz', 'rt', encoding='utf-8', newline='') as handle:
+              rows = list(csv.DictReader(handle))
+          assert len(rows) == 16495
+          assert all(row['final_candidate_evaluation_ready'] == 'false' for row in rows)
+          PY
+          ! grep -n -E 'from scripts\.phase2_finalize_tournament|from src\.phase2_candidate_tournament|import scripts\.phase2_finalize_tournament' scripts/phase2_build_final_tournament_readiness_rt001_v3.py
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|weighted_composite_score.*true|primary_selected.*true|runner_up_selected.*true' scripts/phase2_build_final_tournament_readiness_rt001_v3.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-final-tournament-readiness-rt001-v3
+          path: outputs/phase2/final_tournament_readiness_rt001_v3
+          if-no-files-found: error
