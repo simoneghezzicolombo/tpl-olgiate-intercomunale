@@ -1,0 +1,56 @@
+name: Phase 2 Alpha GJT Bounds Targeted Red-Team A Final
+
+on:
+  push:
+    branches:
+      - phase2-gjt-bounds-targeted-redteam-a-final
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  redteam:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile
+        run: |
+          python -m py_compile \
+            scripts/phase2_redteam_alpha_gjt_bounds_exact_a.py \
+            scripts/phase2_build_gjt_set_bounds_exact_v3.py \
+            src/phase2_gjt_set_bounds_exact_v3.py \
+            tests/test_phase2_redteam_alpha_gjt_bounds_exact_a.py
+
+      - name: Install pytest
+        run: python -m pip install pytest
+
+      - name: Run targeted regression fixture
+        run: pytest -q tests/test_phase2_redteam_alpha_gjt_bounds_exact_a.py
+
+      - name: Materialize red-team verdict
+        run: |
+          mkdir -p outputs/phase2/gjt_bounds_targeted_redteam_a_final
+          python scripts/phase2_redteam_alpha_gjt_bounds_exact_a.py \
+            --validation outputs/phase2/gjt_bounds_targeted_redteam_a_final/validation.json
+
+      - name: Validate expected frozen-commit FAIL verdict
+        run: |
+          python - <<'PY'
+          import json
+          p = json.load(open('outputs/phase2/gjt_bounds_targeted_redteam_a_final/validation.json', encoding='utf-8'))
+          assert p['status'] == 'FAIL_PHASE2_GJT_BOUNDS_TARGETED_REVIEW_A'
+          assert p['certification_pass'] is False
+          assert p['out_of_span_public_return_leak_detected'] is True
+          assert p['frozen_alpha_commit'] == '0916cc2c1ecc00f0919d33809e9e8d4473e2f8cc'
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-gjt-bounds-targeted-redteam-a-final-${{ github.sha }}
+          path: outputs/phase2/gjt_bounds_targeted_redteam_a_final/validation.json
