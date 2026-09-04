@@ -1,0 +1,430 @@
+{
+  "budget_semantics": "EXPLICIT_HARD_CAP_EVALUATED_INDEPENDENTLY_NOT_A_SCORE_WEIGHT",
+  "budget_summary": {
+    "m10pct": {
+      "cap_annual_bus_km": 100277.1,
+      "change_fraction": -0.1,
+      "frontier_row_count": 73134,
+      "nonempty_policy_context_count": 72,
+      "unique_scenario_count": 2211,
+      "unique_scenario_count_headway_30_or_better": 1276
+    },
+    "m20pct": {
+      "cap_annual_bus_km": 89135.20000000001,
+      "change_fraction": -0.2,
+      "frontier_row_count": 67065,
+      "nonempty_policy_context_count": 72,
+      "unique_scenario_count": 2034,
+      "unique_scenario_count_headway_30_or_better": 1127
+    },
+    "p10pct": {
+      "cap_annual_bus_km": 122560.90000000001,
+      "change_fraction": 0.1,
+      "frontier_row_count": 85044,
+      "nonempty_policy_context_count": 72,
+      "unique_scenario_count": 2471,
+      "unique_scenario_count_headway_30_or_better": 1521
+    },
+    "p20pct": {
+      "cap_annual_bus_km": 133702.8,
+      "change_fraction": 0.2,
+      "frontier_row_count": 90876,
+      "nonempty_policy_context_count": 72,
+      "unique_scenario_count": 2585,
+      "unique_scenario_count_headway_30_or_better": 1635
+    },
+    "p30pct": {
+      "cap_annual_bus_km": 144844.7,
+      "change_fraction": 0.3,
+      "frontier_row_count": 95799,
+      "nonempty_policy_context_count": 72,
+      "unique_scenario_count": 2679,
+      "unique_scenario_count_headway_30_or_better": 1727
+    },
+    "reference": {
+      "cap_annual_bus_km": 111419.0,
+      "change_fraction": 0.0,
+      "frontier_row_count": 79044,
+      "nonempty_policy_context_count": 72,
+      "unique_scenario_count": 2351,
+      "unique_scenario_count_headway_30_or_better": 1414
+    }
+  },
+  "budget_timing_robust_presence_summary": {
+    "m10pct__H15_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 580,
+      "frontier_scenario_union_count": 658,
+      "nonempty_policy_context_count": 9
+    },
+    "m10pct__H15_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 499,
+      "frontier_scenario_union_count": 588,
+      "nonempty_policy_context_count": 9
+    },
+    "m10pct__H20_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 642,
+      "frontier_scenario_union_count": 858,
+      "nonempty_policy_context_count": 9
+    },
+    "m10pct__H20_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 586,
+      "frontier_scenario_union_count": 725,
+      "nonempty_policy_context_count": 9
+    },
+    "m10pct__H30_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 904,
+      "frontier_scenario_union_count": 1266,
+      "nonempty_policy_context_count": 9
+    },
+    "m10pct__H30_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 749,
+      "frontier_scenario_union_count": 953,
+      "nonempty_policy_context_count": 9
+    },
+    "m10pct__H60_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1676,
+      "frontier_scenario_union_count": 2201,
+      "nonempty_policy_context_count": 9
+    },
+    "m10pct__H60_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1509,
+      "frontier_scenario_union_count": 1982,
+      "nonempty_policy_context_count": 9
+    },
+    "m20pct__H15_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 515,
+      "frontier_scenario_union_count": 618,
+      "nonempty_policy_context_count": 9
+    },
+    "m20pct__H15_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 497,
+      "frontier_scenario_union_count": 578,
+      "nonempty_policy_context_count": 9
+    },
+    "m20pct__H20_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 610,
+      "frontier_scenario_union_count": 805,
+      "nonempty_policy_context_count": 9
+    },
+    "m20pct__H20_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 564,
+      "frontier_scenario_union_count": 620,
+      "nonempty_policy_context_count": 9
+    },
+    "m20pct__H30_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 833,
+      "frontier_scenario_union_count": 1117,
+      "nonempty_policy_context_count": 9
+    },
+    "m20pct__H30_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 695,
+      "frontier_scenario_union_count": 855,
+      "nonempty_policy_context_count": 9
+    },
+    "m20pct__H60_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1555,
+      "frontier_scenario_union_count": 2024,
+      "nonempty_policy_context_count": 9
+    },
+    "m20pct__H60_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1374,
+      "frontier_scenario_union_count": 1793,
+      "nonempty_policy_context_count": 9
+    },
+    "p10pct__H15_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 612,
+      "frontier_scenario_union_count": 819,
+      "nonempty_policy_context_count": 9
+    },
+    "p10pct__H15_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 574,
+      "frontier_scenario_union_count": 685,
+      "nonempty_policy_context_count": 9
+    },
+    "p10pct__H20_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 785,
+      "frontier_scenario_union_count": 1014,
+      "nonempty_policy_context_count": 9
+    },
+    "p10pct__H20_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 616,
+      "frontier_scenario_union_count": 799,
+      "nonempty_policy_context_count": 9
+    },
+    "p10pct__H30_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1091,
+      "frontier_scenario_union_count": 1499,
+      "nonempty_policy_context_count": 9
+    },
+    "p10pct__H30_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 837,
+      "frontier_scenario_union_count": 1173,
+      "nonempty_policy_context_count": 9
+    },
+    "p10pct__H60_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1996,
+      "frontier_scenario_union_count": 2449,
+      "nonempty_policy_context_count": 9
+    },
+    "p10pct__H60_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1753,
+      "frontier_scenario_union_count": 2286,
+      "nonempty_policy_context_count": 9
+    },
+    "p20pct__H15_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 642,
+      "frontier_scenario_union_count": 858,
+      "nonempty_policy_context_count": 9
+    },
+    "p20pct__H15_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 586,
+      "frontier_scenario_union_count": 725,
+      "nonempty_policy_context_count": 9
+    },
+    "p20pct__H20_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 833,
+      "frontier_scenario_union_count": 1117,
+      "nonempty_policy_context_count": 9
+    },
+    "p20pct__H20_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 695,
+      "frontier_scenario_union_count": 855,
+      "nonempty_policy_context_count": 9
+    },
+    "p20pct__H30_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1202,
+      "frontier_scenario_union_count": 1601,
+      "nonempty_policy_context_count": 9
+    },
+    "p20pct__H30_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 911,
+      "frontier_scenario_union_count": 1269,
+      "nonempty_policy_context_count": 9
+    },
+    "p20pct__H60_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 2137,
+      "frontier_scenario_union_count": 2551,
+      "nonempty_policy_context_count": 9
+    },
+    "p20pct__H60_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1898,
+      "frontier_scenario_union_count": 2388,
+      "nonempty_policy_context_count": 9
+    },
+    "p30pct__H15_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 666,
+      "frontier_scenario_union_count": 910,
+      "nonempty_policy_context_count": 9
+    },
+    "p30pct__H15_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 592,
+      "frontier_scenario_union_count": 751,
+      "nonempty_policy_context_count": 9
+    },
+    "p30pct__H20_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 870,
+      "frontier_scenario_union_count": 1216,
+      "nonempty_policy_context_count": 9
+    },
+    "p30pct__H20_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 743,
+      "frontier_scenario_union_count": 921,
+      "nonempty_policy_context_count": 9
+    },
+    "p30pct__H30_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1298,
+      "frontier_scenario_union_count": 1687,
+      "nonempty_policy_context_count": 9
+    },
+    "p30pct__H30_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 985,
+      "frontier_scenario_union_count": 1373,
+      "nonempty_policy_context_count": 9
+    },
+    "p30pct__H60_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 2248,
+      "frontier_scenario_union_count": 2639,
+      "nonempty_policy_context_count": 9
+    },
+    "p30pct__H60_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 2024,
+      "frontier_scenario_union_count": 2466,
+      "nonempty_policy_context_count": 9
+    },
+    "reference__H15_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 602,
+      "frontier_scenario_union_count": 757,
+      "nonempty_policy_context_count": 9
+    },
+    "reference__H15_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 507,
+      "frontier_scenario_union_count": 612,
+      "nonempty_policy_context_count": 9
+    },
+    "reference__H20_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 678,
+      "frontier_scenario_union_count": 928,
+      "nonempty_policy_context_count": 9
+    },
+    "reference__H20_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 596,
+      "frontier_scenario_union_count": 759,
+      "nonempty_policy_context_count": 9
+    },
+    "reference__H30_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 992,
+      "frontier_scenario_union_count": 1404,
+      "nonempty_policy_context_count": 9
+    },
+    "reference__H30_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 781,
+      "frontier_scenario_union_count": 1069,
+      "nonempty_policy_context_count": 9
+    },
+    "reference__H60_CORE_0600_2200": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1830,
+      "frontier_scenario_union_count": 2341,
+      "nonempty_policy_context_count": 9
+    },
+    "reference__H60_S8_EXTENDED_0530_2400": {
+      "declared_policy_context_count": 9,
+      "frontier_scenario_intersection_all_9_contexts_count": 1626,
+      "frontier_scenario_union_count": 2154,
+      "nonempty_policy_context_count": 9
+    }
+  },
+  "calendar_selected": false,
+  "contract": "PHASE2_EXPLICIT_POLICY_CONTEXT_BUDGET_PARETO_V2",
+  "decision_budget_selected": false,
+  "declared_budget_envelope_count": 6,
+  "declared_no_extension_policy_context_count": 72,
+  "exact_timetable_constructed": false,
+  "exact_vehicle_blocks_constructed": false,
+  "fleet_semantics": "AGGREGATE_INTERLINABLE_LOWER_BOUND_NOT_EXACT_VEHICLE_BLOCK_PLAN",
+  "frontier_row_count": 490962,
+  "full_gjt_calculated": false,
+  "limitations": [
+    "Each frontier is conditional on an explicit policy context; no calendar or recovery level is declared best here.",
+    "Annual bus-km uses the certified continuous-clockface production approximation, not an exact trip table.",
+    "Fleet is a lower bound under aggregate interlining and is not an exact block schedule.",
+    "S8 phase and missed-connection reliability are not yet constructed at this stage.",
+    "Positive scheduled-extension shares are excluded from the main surface and require separate comparison.",
+    "Final PRIMARY/RUNNER-UP remains blocked by the explicit decision-budget and uncertainty-band contract."
+  ],
+  "lineage": {
+    "budget_envelopes": "outputs/phase2/budget_envelopes.csv",
+    "budget_envelopes_sha256": "8cd69d32f62a9a5e55fd03d7fa8c0bf731ab6173d5b02bfacdf3aa2ce2b90226",
+    "budget_validation": "outputs/phase2/budget_envelopes_validation.json",
+    "budget_validation_sha256": "4ea3f5cab20169a4a99b080bae75fe9fcd73cb757ef7ebcef79aa8b1e9eabda8",
+    "context_audit_output": "outputs/phase2/budget_policy_frontiers_v2/budget_policy_context_audit_v2.csv",
+    "context_audit_output_sha256": "71966d810f0eae07e27978c15dc77a14e948944f515ab9593f05bab4b7c2da96",
+    "frontier_output": "outputs/phase2/budget_policy_frontiers_v2/scenario_budget_policy_frontier_v2.csv.gz",
+    "frontier_output_sha256": "185a013a553a0b331d3f97477678eca55c62348a2d7a4739f70510b323cbb429",
+    "operational": "outputs/phase2/operational_screening_v2/operational_screening_v2.csv",
+    "operational_sha256": "360769388efad25d64f0f6510d78509e0b78ac579ab80d3007b03df337013ddd",
+    "operational_validation": "outputs/phase2/operational_screening_v2/operational_screening_v2_validation.json",
+    "operational_validation_sha256": "e4b7b0dd933ea883751f7bf48fb61e4ebd6d1b18ad058508f624ab91c2937aae",
+    "policy_config": "config/phase2_service_policy_design_space_v2.json",
+    "policy_config_sha256": "3f5667ec09e70b530e3adff7240c8445027fb62073b25e4b0617652f43a1a468",
+    "policy_feasibility": "outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz",
+    "policy_feasibility_sha256": "ee15939cefd4ec2a67381bf3aeb7dc7936d74041bf0cab33998dd1bf2296c8e6",
+    "policy_grid": "outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv",
+    "policy_grid_sha256": "35c4890c0d97ab8f7af43ed71c3628767f5c177f9a9387c4db6a1c02bcc188ff",
+    "policy_validation": "outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json",
+    "policy_validation_sha256": "134a71198053369ff53c669d609f49b07eb1f580a3c3b328f50989bb64a990ed",
+    "presence_output": "outputs/phase2/budget_policy_frontiers_v2/scenario_budget_timing_policy_presence_v2.csv",
+    "presence_output_sha256": "c84124cccb158aa29215fd27189898d25ab6c4f2279422f02759f7edc2a84117",
+    "service_ready_frontier": "outputs/phase2/service_ready_frontier_v2/scenario_timing_service_ready_frontier_v2.csv",
+    "service_ready_frontier_sha256": "87dd75bae8d14a629a84cdb8e9893308aeb01ee298b0ea8eec3208f492c8eead",
+    "service_ready_validation": "outputs/phase2/service_ready_frontier_v2/service_ready_frontier_v2_validation.json",
+    "service_ready_validation_sha256": "12f541c8eba7139568fcc314c57b4ee71530c93485ca5ea3eaedd0e960437a92"
+  },
+  "mode_choice_inferred": false,
+  "nonempty_policy_budget_context_count": 432,
+  "pareto_maximise_axes": [
+    "public_population_coverage_share_5min",
+    "public_population_coverage_share_8min",
+    "public_population_coverage_share_10min",
+    "public_worst_municipality_coverage_share_5min",
+    "public_worst_municipality_coverage_share_8min",
+    "public_worst_municipality_coverage_share_10min",
+    "s8_complete_supported_route_count",
+    "territorial_other_core_worker_mass_upper_bound",
+    "territorial_other_external_worker_mass_upper_bound"
+  ],
+  "pareto_minimise_axes": [
+    "s8_incomplete_supported_route_count",
+    "public_operational_unknown_distance_share_lower_bound",
+    "public_explicit_field_check_pending_count",
+    "public_distance_km",
+    "public_runtime_min",
+    "public_route_count",
+    "public_equal_pattern_set_cycle_runtime_min_lower_bound",
+    "annual_bus_km",
+    "aggregate_interlinable_fleet_lower_bound"
+  ],
+  "passenger_demand_assigned_to_routes": false,
+  "policy_budget_context_count": 432,
+  "policy_context_semantics": "HEADWAY_SPAN_CALENDAR_RECOVERY_FIXED_BEFORE_WITHIN_CONTEXT_PARETO",
+  "positive_extension_share_in_main_surface": false,
+  "recovery_selected": false,
+  "ridership_forecast": false,
+  "s8_phase_selected": false,
+  "service_policy_selected": false,
+  "service_ready_frontier_row_count": 21237,
+  "service_ready_unique_scenario_count": 2883,
+  "status": "PASS_PHASE2_BUDGET_POLICY_FRONTIERS_V2",
+  "upstream_statuses": {
+    "budget_envelopes": "PASS",
+    "service_policy": "PASS_SERVICE_POLICY_SEARCH_V2_BUILD",
+    "service_ready": "PASS_PHASE2_SERVICE_READY_FRONTIER_V2"
+  },
+  "weighted_composite_score": false
+}
