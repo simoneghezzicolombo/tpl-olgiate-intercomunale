@@ -1,5 +1,50 @@
 # AGENT_STATUS
 
+## CODEX checkpoint — Stage D Exact Timetable RT-001 V3
+
+**Timestamp:** 2026-09-04T12:49Z
+
+**Author:** CODEX
+
+**Branch:** `codex/phase2-stage-d-exact-rt001-v3`
+
+**Computational commit:** `3d19e0a0b996428b15826d0b477d9681d3bcdf94`
+
+**Persisted evidence commit:** `d41bb678382d018929c1c6b46542f12549f20d4f`
+
+**Workflow:** `33872934005` — SUCCESS
+
+**Artifact:** `9937340770`, SHA256 `4f9913f6d56242a9052a562919fb2881d8711bc5692e00feda0de79b883b9d99`
+
+Status: **PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_RT001_V3** under contract
+`PHASE2_BUDGET_LOSSLESS_EXHAUSTIVE_EXACT_CLOCKFACE_TIMETABLE_RT001_V3`.
+
+- 5,325 daily exact problems, cardinality read from the certified manifest;
+- 16,495 budget/calendar plan contexts, all exact-hard-cap eligible;
+- 6,772,755 integer route-specific phase vectors exhaustively evaluated;
+- 6,000 distinct selected exact timetables and 285,748 explicit public trips;
+- 1,292 upstream `SOME_PHASES_BUDGET_FEASIBLE` Stage-C contexts retained;
+- all 646 Stage-C contexts recovered by RT-001 remain exact feasible;
+- exact annual bus-km derived from the materialised phase vector and reapplied
+  against each context's own hard cap;
+- in-span passenger-return semantics and technical-closure exclusion retained;
+- deterministic vehicle-block assignments materialised separately for recovery
+  5, 10, and 15 minutes; no recovery selected;
+- deterministic byte-for-byte rebuild, anti-random and anti-cardinality-hardcode
+  guards PASS;
+- no budget, calendar, topology, PRIMARY, or RUNNER-UP selected.
+
+A separately authored implementation is concurrently running on
+`phase2-stage-d-exact-rt001-v3`, and a semantic cross-implementation audit is
+being prepared on `phase2-stage-d-v3-cross-implementation-audit`.  This CODEX
+checkpoint is therefore ready as an independent comparison target; no branch is
+declared authoritative until that audit is complete.
+
+Next dependency: complete the independent cross-implementation audit, then feed
+the certified lossless Stage-D lineage to the unchanged Stage-E robustness
+engine. Final selection still requires explicit `decision_budget_km` and
+`uncertainty_band_min`.
+
 Snapshot strutturata corrente del coordinamento. La cronologia completa resta nella Git history e nella GitHub Issue #1 `Agent Coordination Bus`.
 
 ## Stato corrente
