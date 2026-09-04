@@ -1,0 +1,168 @@
+{
+  "access_lower_bound_by_threshold": {
+    "10": {
+      "coverage_share_lower_bound": 0.19239981461768968,
+      "covered_population_lower_bound": 4390.725373382349,
+      "municipality_coverage_share_lower_bound": {
+        "097010": {
+          "name": "Brivio",
+          "share": 0.48027947649407815
+        },
+        "097012": {
+          "name": "Calco",
+          "share": 0.0
+        },
+        "097058": {
+          "name": "Olgiate Molgora",
+          "share": 0.27804314304234057
+        },
+        "097074": {
+          "name": "Santa Maria Hoè",
+          "share": 0.08749653370570745
+        },
+        "097092": {
+          "name": "La Valletta Brianza",
+          "share": 0.08337887727498923
+        }
+      },
+      "worst_municipality_coverage_share_lower_bound": 0.0,
+      "worst_municipality_lower_bound": "Calco"
+    },
+    "12": {
+      "coverage_share_lower_bound": 0.24565081375211442,
+      "covered_population_lower_bound": 5605.957901137514,
+      "municipality_coverage_share_lower_bound": {
+        "097010": {
+          "name": "Brivio",
+          "share": 0.5296440459372369
+        },
+        "097012": {
+          "name": "Calco",
+          "share": 0.004557753071432057
+        },
+        "097058": {
+          "name": "Olgiate Molgora",
+          "share": 0.3819082718326854
+        },
+        "097074": {
+          "name": "Santa Maria Hoè",
+          "share": 0.10227820397747049
+        },
+        "097092": {
+          "name": "La Valletta Brianza",
+          "share": 0.1460130952791996
+        }
+      },
+      "worst_municipality_coverage_share_lower_bound": 0.004557753071432057,
+      "worst_municipality_lower_bound": "Calco"
+    },
+    "5": {
+      "coverage_share_lower_bound": 0.07688841086357093,
+      "covered_population_lower_bound": 1754.658117361245,
+      "municipality_coverage_share_lower_bound": {
+        "097010": {
+          "name": "Brivio",
+          "share": 0.24917596926824406
+        },
+        "097012": {
+          "name": "Calco",
+          "share": 0.0
+        },
+        "097058": {
+          "name": "Olgiate Molgora",
+          "share": 0.0659598732953283
+        },
+        "097074": {
+          "name": "Santa Maria Hoè",
+          "share": 0.05311808090763882
+        },
+        "097092": {
+          "name": "La Valletta Brianza",
+          "share": 0.03369485138799902
+        }
+      },
+      "worst_municipality_coverage_share_lower_bound": 0.0,
+      "worst_municipality_lower_bound": "Calco"
+    },
+    "8": {
+      "coverage_share_lower_bound": 0.15028179465397837,
+      "covered_population_lower_bound": 3429.5567813088264,
+      "municipality_coverage_share_lower_bound": {
+        "097010": {
+          "name": "Brivio",
+          "share": 0.42451374493572425
+        },
+        "097012": {
+          "name": "Calco",
+          "share": 0.0
+        },
+        "097058": {
+          "name": "Olgiate Molgora",
+          "share": 0.17835979542502833
+        },
+        "097074": {
+          "name": "Santa Maria Hoè",
+          "share": 0.07563655632719717
+        },
+        "097092": {
+          "name": "La Valletta Brianza",
+          "share": 0.069079637296811
+        }
+      },
+      "worst_municipality_coverage_share_lower_bound": 0.0,
+      "worst_municipality_lower_bound": "Calco"
+    }
+  },
+  "contract": "PHASE2_CURRENT_D184_D185_ACCESS_LOWER_BOUND_V2",
+  "current_pdf_stop_row_count": 51,
+  "epistemic_note": "Current primary PDFs determine current D184/D185 row activation on 2026-09-03. Historical official GTFS is used only for the already-certified identity crosscheck. Only resolved identities that join exactly to Stop Universe V2 physical clusters contribute to this access result. Because unresolved current rows are omitted, every reported access value is a lower bound, not a complete current-service baseline.",
+  "full_current_service_spatial_baseline_complete": false,
+  "historical_gtfs_used_to_assert_current_activation": false,
+  "lineage": {
+    "access_scenario_output_sha256": "4cb53431c40a19b39c0357f5358400a7fadc6364c53f7545787d852bb87e8eca",
+    "access_validation_sha256": "b9e1f26506bda9ad2976b0bb4925388117ef69f9ec3dc22b4a4a70f12a53d00a",
+    "existing_catchments_sha256": "3128cb1f894d001226795434cd75d007d4e7796522935515c514981de89fe49e",
+    "identity_sha256": "55b390d567191a6bdcc517362099813cb86b0fea52d3b8e20cf33c1982d72733",
+    "identity_validation_sha256": "170943a94b5f1689ef17a32e926b3e2ed2c7000f92d91e24f35a6937cb1feabd",
+    "mapping_output_sha256": "dfe829889124cecb76edf0705f96468e0bd0e717519e6e136c2ec5fd1ae143c8",
+    "population_units_sha256": "a4fa70338225ef7b0c2213a569f866fe91acf9e5ae357c5b49e448b463b511a9",
+    "stop_universe_population_model_status": "MODEL_OUTPUT_DASYMETRIC_BUILDING_POPULATION",
+    "stop_validation_sha256": "8c938317e043eac225f7138db25a1058930a371c15d8c5e8136b1bb9de5c9e67",
+    "v2_existing_stops_sha256": "8a1879ca5cd2fa23072e9f4b1b284c6b1be455847cb70b6d5399b2db35d05a55"
+  },
+  "located_population": 22820.83993743439,
+  "non_regression_use": "ONE_SIDED_FAIL_ONLY: CANDIDATE_BELOW_LOWER_BOUND_IS_DEMONSTRATED_REGRESSION; CANDIDATE_AT_OR_ABOVE_LOWER_BOUND_REMAINS_UNKNOWN_VS_FULL_CURRENT_SERVICE",
+  "passenger_demand_inferred": false,
+  "population_unit_count": 4348,
+  "primary_selected": false,
+  "reference_date": "2026-09-03",
+  "resolved_historical_gtfs_identity_row_count": 20,
+  "resolved_identity_not_in_v2_core_stop_universe_row_count": 8,
+  "routes": [
+    "D184",
+    "D185"
+  ],
+  "runner_up_selected": false,
+  "service_policy_selected": false,
+  "spatially_unresolved_current_pdf_row_count": 31,
+  "status": "PASS_CURRENT_ACCESS_LOWER_BOUND_V2_BUILD",
+  "thresholds_min": [
+    5,
+    8,
+    10,
+    12
+  ],
+  "topology_ranked": false,
+  "unique_v2_physical_cluster_lower_bound_count": 7,
+  "unresolved_rows_used_as_spatial_facts": false,
+  "v2_exactly_mapped_current_row_count": 12,
+  "v2_physical_clusters_lower_bound": [
+    "EX_002",
+    "EX_009",
+    "EX_011",
+    "EX_023",
+    "EX_026",
+    "EX_036",
+    "EX_041"
+  ]
+}
