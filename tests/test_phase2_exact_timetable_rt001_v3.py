@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import math
+import pytest
 
 from scripts.phase2_run_exact_timetable_rt001_v3 import (
     VectorEvidence,
@@ -84,7 +84,6 @@ def test_budget_filter_returns_none_if_no_exact_phase_is_feasible() -> None:
 
 
 def test_clockface_departure_count_is_integral_and_phase_dependent() -> None:
-    # 05:30-24:00 = 1110 minutes. H60 has an 18/19-departure phase domain.
     counts = {len(clockface_times(p, 60, 330, 1440)) for p in range(60)}
     assert counts == {18, 19}
 
@@ -92,23 +91,22 @@ def test_clockface_departure_count_is_integral_and_phase_dependent() -> None:
 def test_out_of_span_public_return_is_not_scored_bus_to_rail() -> None:
     route = closed_route(public_runtime=20.0, cycle_runtime=20.0)
     rail = {
-        "MILANO": {"arrivals": (130.0,), "departures": (130.0,)},
-        "LECCO": {"arrivals": (130.0,), "departures": (130.0,)},
+        "MILANO": {"arrivals": (110.0,), "departures": (125.0,)},
+        "LECCO": {"arrivals": (110.0,), "departures": (125.0,)},
     }
-    # Span 100-130, phase 20 at H30 gives one departure at 110 and public return 130,
-    # exactly at end, so START_INCLUSIVE_END_EXCLUSIVE excludes the BUS_TO_RAIL event.
-    cells = route_phase_cell_values_contract(
-        route,
-        phase=20,
-        headway=30,
-        span_start=100,
-        span_end=130,
-        rail_index=rail,
-        profiles=(profile_mid(),),
-    )
-    # The contract correctly rejects a closed route with no in-span public return.
-    # If this line is reached, BUS_TO_RAIL was incorrectly materialised.
-    assert False, cells
+    # Span 100-130, phase 20 at H30 gives one departure at 110 and public return 130.
+    # End is exclusive, so a closed route has no valid in-span BUS_TO_RAIL return and
+    # the contract fails closed rather than scoring the out-of-span event.
+    with pytest.raises(ValueError, match="no in-span public return events"):
+        route_phase_cell_values_contract(
+            route,
+            phase=20,
+            headway=30,
+            span_start=100,
+            span_end=130,
+            rail_index=rail,
+            profiles=(profile_mid(),),
+        )
 
 
 def test_technical_return_never_creates_bus_to_rail_cells() -> None:
@@ -126,7 +124,6 @@ def test_technical_return_never_creates_bus_to_rail_cells() -> None:
         rail_index=rail,
         profiles=(profile_mid(),),
     )
-    # One RAIL_TO_BUS cell per rail direction, no BUS_TO_RAIL cells.
     assert len(cells) == 2
 
 
