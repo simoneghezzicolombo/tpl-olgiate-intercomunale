@@ -105,6 +105,7 @@ def validate_source_contracts(args) -> tuple[dict, dict, dict, dict]:
 
     lineage = stage_d.get("lineage", {})
     source_checks = (
+        ("context_output_sha256", args.stage_d_contexts),
         ("timetable_output_sha256", args.stage_d_timetables),
         ("trip_output_sha256", args.stage_d_trips),
         ("route_inputs_sha256", args.route_input),
@@ -135,6 +136,10 @@ def validate_source_contracts(args) -> tuple[dict, dict, dict, dict]:
 
     if config.get("contract") != "PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_SENSITIVITY_V2":
         raise ValueError("Stage-E sensitivity contract changed")
+    if config.get("bus_runtime_delay_source") != "STAGE_D_VALIDATION_RUNTIME_STRESS_MINUTES_REPORTED_NOT_SELECTED":
+        raise ValueError("Stage-E runtime sensitivity provenance contract changed")
+    if config.get("recovery_source") != "STAGE_D_VALIDATION_RECOVERY_VALUES_EVALUATED_NOT_SELECTED":
+        raise ValueError("Stage-E recovery provenance contract changed")
     if config.get("planned_connection_identity") != "FIX_NOMINAL_TARGET_EVENT_THEN_TEST_RETENTION_UNDER_PERTURBATION":
         raise ValueError("planned-connection identity changed")
     if config.get("next_alternative_connection_semantics") != "REPORT_SEPARATELY_NEVER_REBIND_AS_PLANNED_SUCCESS":
