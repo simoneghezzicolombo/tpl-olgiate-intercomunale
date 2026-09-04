@@ -62,3 +62,5 @@ def test_invalid_budget_values_fail_closed():
         pass
     else:
         raise AssertionError("non-finite budget input must fail closed")
+
+# This file is also the CI trigger for the certified RT-001 regression suite.
