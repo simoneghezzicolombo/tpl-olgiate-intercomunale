@@ -1,0 +1,139 @@
+name: Phase 2 Exact Timetable Integration Fix V2
+
+on:
+  push:
+    branches: [phase2-exact-timetable-integration-fix-v2]
+    paths:
+      - 'src/phase2_exact_timetable_optimizer_v2.py'
+      - 'scripts/phase2_run_exact_timetable_integration_fix_v2.py'
+      - 'scripts/phase2_run_exact_timetable_integration_fix_v2_runner.py'
+      - 'tests/test_phase2_exact_timetable_optimizer_v2.py'
+      - '.github/workflows/phase2-exact-timetable-integration-fix-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/exact_timetable_integration_fix_v2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: |
+          python -m py_compile src/phase2_exact_timetable_optimizer_v2.py scripts/phase2_run_exact_timetable_integration_fix_v2.py scripts/phase2_run_exact_timetable_integration_fix_v2_runner.py
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<9'
+      - name: Unit tests
+        run: python -m pytest -q tests/test_phase2_exact_timetable_optimizer_v2.py
+      - name: Build corrected exact integration
+        run: |
+          mkdir -p "$OUTDIR"
+          python scripts/phase2_run_exact_timetable_integration_fix_v2_runner.py \
+            --timing-inputs outputs/phase2/stage_d_input_manifest_v2/stage_d_daily_timing_inputs_v2.csv.gz \
+            --route-inputs outputs/phase2/stage_d_input_manifest_v2/stage_d_public_route_inputs_v2.csv \
+            --manifest-validation outputs/phase2/stage_d_input_manifest_v2/stage_d_input_manifest_v2_validation.json \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2_validation.json \
+            --budget-validation outputs/phase2/budget_policy_frontiers_v2/budget_policy_frontiers_v2_validation.json \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --s8-events outputs/phase2/s8_events.csv \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --s8-sensitivity-config config/phase2_s8_phasing_sensitivity_v2.json \
+            --context-output "$OUTDIR/exact_plan_context_results_v2.csv.gz" \
+            --timetable-output "$OUTDIR/exact_selected_timetables_v2.csv" \
+            --trip-output "$OUTDIR/exact_selected_trips_v2.csv.gz" \
+            --validation "$OUTDIR/exact_timetable_integration_fix_v2_validation.json"
+      - name: Validate corrected contract
+        run: |
+          python - <<'PY'
+          import csv,gzip,json
+          from pathlib import Path
+          out=Path('outputs/phase2/exact_timetable_integration_fix_v2')
+          v=json.loads((out/'exact_timetable_integration_fix_v2_validation.json').read_text())
+          assert v['status']=='PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_INTEGRATION_FIX_V2'
+          assert v['contract']=='PHASE2_BUDGET_QUALIFIED_EXACT_CLOCKFACE_TIMETABLE_V2'
+          assert v['stage_d_daily_timing_input_count']==5345
+          assert v['stage_c_plan_context_count']==16883
+          assert v['phase_vectors_evaluated_once']==6758835
+          assert v['exhaustive_route_specific_phase_domain'] is True
+          assert v['approximate_or_heuristic_phase_search'] is False
+          assert v['exact_budget_hard_cap_reapplied_after_materialisation'] is True
+          assert v['budget_calendar_identity_preserved'] is True
+          assert v['s8_target_selection_semantics']=='MAX_CONTINUOUS_TRANSFER_QUALITY_OVER_FINITE_EXPLICIT_TARGET_EVENTS'
+          assert v['s8_target_localisation_is_exact_not_heuristic'] is True
+          assert v['exact_budget_hard_eligible_context_count']+v['exact_budget_hard_ineligible_context_count']==16883
+          for key in ('passenger_weighting_applied','topology_weighting_applied','worker_reference_used_for_phase_selection','decision_budget_selected','calendar_selected','recovery_selected','topology_ranked','primary_selected','runner_up_selected','weighted_composite_score','delay_stress_certified_as_robustness'):
+              assert v[key] is False, key
+          with gzip.open(out/'exact_plan_context_results_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==16883
+          assert len({r['plan_context_id'] for r in rows})==16883
+          for r in rows:
+              if r['exact_budget_hard_eligible']=='true':
+                  assert float(r['exact_annual_bus_km']) <= float(r['budget_cap_annual_bus_km']) + 1e-6
+                  assert r['selected_timetable_id']
+              else:
+                  assert not r['selected_timetable_id']
+          PY
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/exact-fix-v2 && mkdir -p /tmp/exact-fix-v2
+          python scripts/phase2_run_exact_timetable_integration_fix_v2_runner.py \
+            --timing-inputs outputs/phase2/stage_d_input_manifest_v2/stage_d_daily_timing_inputs_v2.csv.gz \
+            --route-inputs outputs/phase2/stage_d_input_manifest_v2/stage_d_public_route_inputs_v2.csv \
+            --manifest-validation outputs/phase2/stage_d_input_manifest_v2/stage_d_input_manifest_v2_validation.json \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2_validation.json \
+            --budget-validation outputs/phase2/budget_policy_frontiers_v2/budget_policy_frontiers_v2_validation.json \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --s8-events outputs/phase2/s8_events.csv \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --s8-sensitivity-config config/phase2_s8_phasing_sensitivity_v2.json \
+            --context-output /tmp/exact-fix-v2/contexts.csv.gz \
+            --timetable-output /tmp/exact-fix-v2/timetables.csv \
+            --trip-output /tmp/exact-fix-v2/trips.csv.gz \
+            --validation /tmp/exact-fix-v2/validation.json
+          cmp "$OUTDIR/exact_plan_context_results_v2.csv.gz" /tmp/exact-fix-v2/contexts.csv.gz
+          cmp "$OUTDIR/exact_selected_timetables_v2.csv" /tmp/exact-fix-v2/timetables.csv
+          cmp "$OUTDIR/exact_selected_trips_v2.csv.gz" /tmp/exact-fix-v2/trips.csv.gz
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/exact_timetable_integration_fix_v2/exact_timetable_integration_fix_v2_validation.json').read_text())
+          b=json.loads(Path('/tmp/exact-fix-v2/validation.json').read_text())
+          for x in (a,b):
+              for k in ('context_output_sha256','timetable_output_sha256','trip_output_sha256'):
+                  x['lineage'].pop(k,None)
+          assert a==b
+          PY
+      - name: Guard epistemic boundary
+        run: |
+          ! grep -REn 'np\.random|random\.' src/phase2_exact_timetable_optimizer_v2.py scripts/phase2_run_exact_timetable_integration_fix_v2.py scripts/phase2_run_exact_timetable_integration_fix_v2_runner.py
+      - name: Persist evidence
+        run: |
+          git config user.name 'phase2-exact-integration-fix-v2-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$OUTDIR"
+          if git diff --cached --quiet; then
+            echo 'No evidence changes to persist'
+          else
+            git commit -m 'data(phase2): persist corrected Stage-D exact timetable v2 [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-exact-timetable-integration-fix-v2
+          path: outputs/phase2/exact_timetable_integration_fix_v2
+          if-no-files-found: error
