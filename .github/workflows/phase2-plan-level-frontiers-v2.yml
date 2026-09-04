@@ -1,0 +1,105 @@
+name: Phase 2 Plan Level Frontiers V2
+
+on:
+  push:
+    branches:
+      - phase2-passenger-gjt-v2
+    paths:
+      - 'scripts/phase2_build_plan_level_frontiers_v2.py'
+      - 'docs/PHASE2_DECISION_CONTRACT_V2.md'
+      - '.github/workflows/phase2-plan-level-frontiers-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-plan-level-frontiers-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/plan_level_frontiers_v2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile frontier builder
+        run: python -m py_compile scripts/phase2_build_plan_level_frontiers_v2.py
+      - name: Materialise plan-level frontiers
+        run: >-
+          python scripts/phase2_build_plan_level_frontiers_v2.py
+          --shortlist outputs/phase2/reference_service_plan_shortlist_v2/reference_service_plan_shortlist_v2.csv
+          --shortlist-validation outputs/phase2/reference_service_plan_shortlist_v2/reference_service_plan_shortlist_v2_validation.json
+          --output $OUTDIR/plan_level_frontier_union_v2.csv
+          --validation $OUTDIR/plan_level_frontiers_v2_validation.json
+      - name: Validate frontier semantics
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path('outputs/phase2/plan_level_frontiers_v2')
+          v=json.loads((root/'plan_level_frontiers_v2_validation.json').read_text())
+          assert v['status']=='PASS_PLAN_LEVEL_FRONTIERS_V2_BUILD'
+          assert v['contract']=='PHASE2_PLAN_LEVEL_FRONTIERS_V2'
+          assert v['shortlist_input_count']==6730
+          assert v['base_plan_input_count']>0 and v['positive_extension_plan_input_count']>0
+          assert 0 < v['frontier_union_plan_count'] <= v['shortlist_input_count']
+          assert 0 < v['frontier_class_plan_counts']['BASE_FREQUENT_30'] <= v['frontier_class_plan_counts']['BASE_UNRESTRICTED'] + v['frontier_class_plan_counts']['BASE_FREQUENT_30']
+          for key in ('weighted_composite_score_used','worker_reference_assigned_to_routes','s8_phase_selected','exact_timetable_constructed','topology_ranked','service_policy_selected','primary_selected','runner_up_selected'):
+              assert v[key] is False,key
+          with (root/'plan_level_frontier_union_v2.csv').open(encoding='utf-8',newline='') as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==v['frontier_union_plan_count']
+          assert len({r['plan_id'] for r in rows})==len(rows)
+          assert all(r['plan_level_ranked']=='false' and r['exact_timetable_required_next']=='true' for r in rows)
+          assert all(r['primary_selected']=='false' and r['runner_up_selected']=='false' for r in rows)
+          print(json.dumps({
+            'input':v['shortlist_input_count'],
+            'base_input':v['base_plan_input_count'],
+            'extension_input':v['positive_extension_plan_input_count'],
+            'union':v['frontier_union_plan_count'],
+            'unique_scenarios':v['frontier_union_unique_scenario_count'],
+            'classes':v['frontier_class_plan_counts'],
+            'families':v['frontier_union_family_counts'],
+            'headways':v['frontier_union_headway_counts'],
+          },indent=2))
+          PY
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/plan-frontier-v2 && mkdir -p /tmp/plan-frontier-v2
+          python scripts/phase2_build_plan_level_frontiers_v2.py \
+            --shortlist outputs/phase2/reference_service_plan_shortlist_v2/reference_service_plan_shortlist_v2.csv \
+            --shortlist-validation outputs/phase2/reference_service_plan_shortlist_v2/reference_service_plan_shortlist_v2_validation.json \
+            --output /tmp/plan-frontier-v2/frontier.csv \
+            --validation /tmp/plan-frontier-v2/validation.json >/dev/null
+          cmp $OUTDIR/plan_level_frontier_union_v2.csv /tmp/plan-frontier-v2/frontier.csv
+          cmp $OUTDIR/plan_level_frontiers_v2_validation.json /tmp/plan-frontier-v2/validation.json
+      - name: Guard against hidden score/selection
+        run: |
+          FILES="scripts/phase2_build_plan_level_frontiers_v2.py docs/PHASE2_DECISION_CONTRACT_V2.md"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -n -E 'weighted_score|primary_selected.: true|runner_up_selected.: true|service_policy_selected.: true|topology_selected.: true|s8_phase_selected.: true' $FILES
+          git diff --check
+      - name: Persist validated frontiers V2
+        run: |
+          git config user.name "phase2-plan-frontiers-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add $OUTDIR
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist plan-level frontiers V2 [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-plan-level-frontiers-v2-${{ github.sha }}
+          retention-days: 90
+          path: ${{ env.OUTDIR }}
