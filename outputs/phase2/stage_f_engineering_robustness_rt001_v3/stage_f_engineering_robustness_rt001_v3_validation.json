@@ -1,0 +1,83 @@
+{
+  "block_surface_row_count": 162000,
+  "calendar_selected": false,
+  "cases_requiring_additional_vehicle_count": 7032,
+  "connection_candidate_count_nominal": 3296316,
+  "connection_surface_row_count": 486000,
+  "contract": "PHASE2_STAGE_F_CERTIFIED_ENGINEERING_SENSITIVITY_RT001_V3",
+  "decision_budget_selected": false,
+  "dwell_is_empirical_distribution": false,
+  "dwell_per_nonhub_public_stop_occurrence_min": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "exact_public_trip_count": 285748,
+  "final_selection_authorized": false,
+  "full_gjt_calculated": false,
+  "lineage": {
+    "block_surface_sha256": "27235634a3928847b1e6c4ce15b34f4c7834a059def68f3c3e4a6f6aec78f771",
+    "connection_surface_sha256": "d3e78099aa6ac7a24f45f87327df535720944f4228cef47ac6eceaa03104f0db",
+    "route_input_sha256": "12772a5f7df8fb2379da827286544c7d4840ac2c365143841b05ea41b3446386",
+    "s8_events_sha256": "00b9994c1331ab5caa09a6092815bc5554f07baddbde8a651857a470d0fdb71b",
+    "s8_sensitivity_sha256": "4c93b08620037988aab486e24b276f4c143043ed7e79b51035cf9e1dddc17b57",
+    "source_sensitivity_grid_sha256": "6b210b6c80036261f3487ba361be89c30b68c4f8bf8150778519be1c65849092",
+    "stage_d_timetables_sha256": "b2d511c811fae6641584fddb846d78dee459f03eba95e2029ca8b9566d1e57bb",
+    "stage_d_trips_sha256": "69e9ca7e362a23e3cea080030532d131d0ac6296045ab1d3d5d025242a4fa284",
+    "stage_d_validation_sha256": "1150e8449282096de71c1db2db4a10d78298f7ed67dd4c43e640ad7ebfb39381",
+    "stage_e_validation_sha256": "ab4eb719ed3ef5cffbc1f114c29db05626c6d38a76f15e80c58036e0c26b8a95",
+    "stage_f_sensitivity_sha256": "8d200b4fb95f339388d645ea89d8faaa51c2cb35fffdd9e960280c354806b81d",
+    "summary_sha256": "9ae333285d068533fd931f78a420d423926c964535a7da813acc7163c96051f8"
+  },
+  "missed_connection_probability_inferred": false,
+  "municipal_od_downscaled": false,
+  "next_target_rebinding_used_as_success": false,
+  "nominal_block_assignment_infeasible_case_count": 7700,
+  "passenger_route_weights_inferred": false,
+  "planned_connection_count_nominal": 3260753,
+  "planned_connection_identity_preserved": true,
+  "primary_selected": false,
+  "rail_event_clock_shift_min": [
+    -5.0,
+    0.0,
+    5.0
+  ],
+  "rail_shift_is_empirical_delay_distribution": false,
+  "random_search": false,
+  "recovery_minutes": [
+    5,
+    10,
+    15
+  ],
+  "recovery_selected": false,
+  "remaining_stage_f_limitations": [
+    "NO_EMPIRICAL_DELAY_PROBABILITY_DISTRIBUTION",
+    "NO_ROUTE_LEVEL_DEMAND_WEIGHT_PERTURBATION_WITHOUT_AUTHORISED_SPATIAL_ALLOCATION",
+    "NO_FULL_DEMAND_WEIGHTED_GJT",
+    "CURRENT_SERVICE_BASELINE_REMAINS_CERTIFIED_LOCALIZABLE_LOWER_BOUND"
+  ],
+  "represented_plan_context_count": 16495,
+  "ridership_forecast": false,
+  "runner_up_selected": false,
+  "runtime_multiplier": [
+    0.9,
+    1.0,
+    1.1
+  ],
+  "runtime_multiplier_is_empirical_interval": false,
+  "selected_exact_timetable_count": 6000,
+  "sensitivity_is_empirical_probability": false,
+  "stage_d_status": "PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_RT001_V3",
+  "stage_e_status": "PASS_PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_RT001_V3",
+  "status": "PASS_PHASE2_STAGE_F_ENGINEERING_SENSITIVITY_RT001_V3",
+  "stress_case_count_per_timetable": 81,
+  "summary_row_count": 18000,
+  "technical_return_connection_count": 0,
+  "technical_return_used_as_passenger_service": false,
+  "transfer_profile_ids": [
+    "LOW_TRANSFER_FRICTION",
+    "MID_TRANSFER_FRICTION",
+    "HIGH_TRANSFER_FRICTION"
+  ],
+  "weighted_composite_score": false
+}
