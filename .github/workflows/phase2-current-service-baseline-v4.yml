@@ -1,0 +1,205 @@
+name: Phase 2 Current Service Baseline V4
+
+on:
+  push:
+    branches:
+      - phase2-current-service-baseline-v4
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: .
+  OUTDIR: outputs/phase2/current_service_access_baseline_v4
+  SOURCEDIR: /tmp/phase2_current_service_v4_sources
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install pytest
+
+      - name: Compile
+        run: |
+          python -m py_compile src/phase2_current_service_baseline_v4.py
+          python -m py_compile scripts/phase2_fetch_current_service_v4_sources.py
+          python -m py_compile scripts/phase2_build_current_service_access_baseline_v4.py
+
+      - name: Regression tests
+        run: pytest -q tests/test_phase2_current_service_baseline_v4.py
+
+      - name: Materialise official public sources and checksums
+        run: |
+          rm -rf "$SOURCEDIR"
+          mkdir -p "$SOURCEDIR" "$OUTDIR"
+          python scripts/phase2_fetch_current_service_v4_sources.py \
+            --source-dir "$SOURCEDIR" \
+            --manifest-output "$SOURCEDIR/source_provenance.csv"
+          cat "$SOURCEDIR/source_provenance.csv"
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          p = Path('/tmp/phase2_current_service_v4_sources/source_provenance.csv')
+          rows = list(csv.DictReader(p.open(encoding='utf-8')))
+          required = [r for r in rows if r['required'] == 'true']
+          assert required
+          assert all(r['available'] == 'true' and len(r['sha256']) == 64 for r in required)
+          print({'required_sources': len(required), 'optional_available': sum(r['available']=='true' for r in rows if r['required']=='false')})
+          PY
+
+      - name: Validate source semantics
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          base = Path('/tmp/phase2_current_service_v4_sources')
+          current = (base/'arriva_orari_current_2026_09_04.html').read_text(encoding='utf-8', errors='replace').lower()
+          bridge = (base/'atp_brivio_temporary_disruption_2026.html').read_text(encoding='utf-8', errors='replace').lower()
+          assert 'd184' in current and 'd185' in current
+          assert '13 settembre 2026' in current
+          assert 'd185' in bridge and '4 maggio' in bridge
+          future = base/'arriva_future_2026_09_14.html'
+          if future.exists():
+              text = future.read_text(encoding='utf-8', errors='replace').lower()
+              assert '14 settembre 2026' in text
+          PY
+
+      - name: Full V4 current-service structural baseline build
+        shell: bash
+        run: |
+          set -euo pipefail
+          FUTURE_ARG=()
+          if [ -f "$SOURCEDIR/arriva_future_2026_09_14.html" ]; then
+            FUTURE_ARG=(--future-arriva-page "$SOURCEDIR/arriva_future_2026_09_14.html")
+          fi
+          python scripts/phase2_build_current_service_access_baseline_v4.py \
+            --gtfs-zip "$SOURCEDIR/official_gtfs_arriva_addabus_2025_2026.zip" \
+            --source-provenance "$SOURCEDIR/source_provenance.csv" \
+            --current-arriva-page "$SOURCEDIR/arriva_orari_current_2026_09_04.html" \
+            --bridge-notice "$SOURCEDIR/atp_brivio_temporary_disruption_2026.html" \
+            "${FUTURE_ARG[@]}" \
+            --frozen-official-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv \
+            --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
+            --settlement-anchors outputs/phase2/stop_universe_v2/settlement_destination_anchors.csv \
+            --v3-validation outputs/phase2/current_service_access_baseline_v3/current_service_access_baseline_v3_validation.json \
+            --outdir "$OUTDIR"
+
+      - name: Validate V4 epistemic contract
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          out = Path('outputs/phase2/current_service_access_baseline_v4')
+          v = json.loads((out/'current_service_access_baseline_v4_validation.json').read_text())
+          assert v['status'] == 'PASS_PHASE2_CURRENT_SERVICE_ACCESS_BASELINE_V4'
+          assert v['contract'] == 'PHASE2_CURRENT_SERVICE_STRUCTURAL_PHYSICAL_STOP_BASELINE_V4'
+          assert v['reference_date'] == '2026-09-04'
+          assert v['gtfs_source_official'] is True
+          assert v['future_2026_09_14_used_as_current'] is False
+          assert v['pdf_timing_rows_treated_as_complete_stop_universe'] is False
+          assert v['physical_stop_clustering_deterministic'] is True
+          assert v['fuzzy_matching_used'] is False
+          assert v['nearest_neighbour_matching_used'] is False
+          assert v['invented_stop_coordinates'] is False
+          assert v['walking_graph_epoch_changed'] is False
+          assert v['population_units_changed'] is False
+          assert v['current_service_baseline_complete'] is False
+          assert v['temporary_brivio_bridge_disruption_excluded_from_structural_baseline'] is True
+          assert v['historical_gtfs_identity_implies_current_trip_activation'] is False
+          assert v['current_service_evidence_relabelled_as_ridership'] is False
+          assert v['olgiate_diagnostic_available'] is True
+          assert v['olgiate_diagnostic_used_in_candidate_optimisation'] is False
+          assert v['decision_gate_reopen_required'] is False
+          assert v['primary_selected'] is False
+          assert v['runner_up_selected'] is False
+          assert v['unresolved_stop_coordinate_count'] == 0
+          assert v['official_gtfs_unique_stop_id_count'] > 15
+          assert v['official_physical_stop_cluster_count'] >= v['physical_clusters_with_certified_phase2_catchment_count']
+          for t in ('5','8','10'):
+              assert v[f'coverage_{t}m'] + 1e-12 >= v['v3_comparison'][f'v3_coverage_{t}m']
+          diag = list(csv.DictReader((out/'current_service_olgiate_diagnostic_v4.csv').open(encoding='utf-8')))
+          assert [r['area'] for r in diag] == ['Centro/Stazione','Mondonico','San Zeno','Monticello']
+          assert all(r['used_in_candidate_optimisation'] == 'false' for r in diag)
+          print(json.dumps({
+              'directional_stop_records': v['directional_stop_record_count'],
+              'unique_stop_ids': v['official_gtfs_unique_stop_id_count'],
+              'physical_clusters': v['official_physical_stop_cluster_count'],
+              'catchment_clusters': v['physical_clusters_with_certified_phase2_catchment_count'],
+              'coverage_5m': v['coverage_5m'],
+              'coverage_8m': v['coverage_8m'],
+              'coverage_10m': v['coverage_10m'],
+              'kml_source_official': v['kml_source_official'],
+          }, indent=2))
+          PY
+
+      - name: Deterministic byte-for-byte rebuild
+        shell: bash
+        run: |
+          set -euo pipefail
+          REBUILD=/tmp/current_service_baseline_v4_rebuild
+          rm -rf "$REBUILD"
+          mkdir -p "$REBUILD"
+          FUTURE_ARG=()
+          if [ -f "$SOURCEDIR/arriva_future_2026_09_14.html" ]; then
+            FUTURE_ARG=(--future-arriva-page "$SOURCEDIR/arriva_future_2026_09_14.html")
+          fi
+          python scripts/phase2_build_current_service_access_baseline_v4.py \
+            --gtfs-zip "$SOURCEDIR/official_gtfs_arriva_addabus_2025_2026.zip" \
+            --source-provenance "$SOURCEDIR/source_provenance.csv" \
+            --current-arriva-page "$SOURCEDIR/arriva_orari_current_2026_09_04.html" \
+            --bridge-notice "$SOURCEDIR/atp_brivio_temporary_disruption_2026.html" \
+            "${FUTURE_ARG[@]}" \
+            --frozen-official-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv \
+            --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
+            --settlement-anchors outputs/phase2/stop_universe_v2/settlement_destination_anchors.csv \
+            --v3-validation outputs/phase2/current_service_access_baseline_v3/current_service_access_baseline_v3_validation.json \
+            --outdir "$REBUILD"
+          diff -qr "$OUTDIR" "$REBUILD"
+
+      - name: Anti-fuzzy anti-invention guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = [
+              Path('src/phase2_current_service_baseline_v4.py'),
+              Path('scripts/phase2_build_current_service_access_baseline_v4.py'),
+          ]
+          text = '\n'.join(p.read_text(encoding='utf-8') for p in files)
+          forbidden = ['np.random', 'random.', 'rapidfuzz', 'fuzzywuzzy', 'SequenceMatcher', 'Nominatim', 'geopy.geocoders']
+          for token in forbidden:
+              assert token not in text, token
+          assert 'StopForClustering("' not in text
+          v = Path('outputs/phase2/current_service_access_baseline_v4/current_service_access_baseline_v4_validation.json').read_text()
+          assert '"invented_stop_coordinates": false' in v
+          assert '"fuzzy_matching_used": false' in v
+          PY
+
+      - name: Persist evidence
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$OUTDIR"
+          if git diff --cached --quiet -- "$OUTDIR"; then
+            echo 'No output changes to persist.'
+            exit 0
+          fi
+          git commit -m 'evidence(phase2): persist current-service baseline V4 [skip ci]'
+          git push origin HEAD:phase2-current-service-baseline-v4
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-current-service-baseline-v4
+          path: outputs/phase2/current_service_access_baseline_v4/
+          if-no-files-found: error
