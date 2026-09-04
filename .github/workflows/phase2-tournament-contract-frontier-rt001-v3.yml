@@ -1,0 +1,109 @@
+name: Phase 2 tournament contract and frontier RT001 V3
+
+on:
+  push:
+    branches:
+      - codex/phase2-final-tournament-rt001-v3
+    paths:
+      - 'config/phase2_nondeci_tournament_frontier_rt001_v3.json'
+      - 'scripts/phase2_audit_tournament_contract_rt001_v3.py'
+      - 'scripts/phase2_build_nondeci_tournament_frontier_rt001_v3.py'
+      - 'scripts/phase2_build_final_tournament_readiness_rt001_v3.py'
+      - 'tests/test_phase2_tournament_contract_and_frontier_rt001_v3.py'
+      - 'docs/PHASE2_TOURNAMENT_CONTRACT_AUDIT_AND_NONDECISIONAL_FRONTIER_RT001_V3.md'
+      - 'outputs/phase2/final_tournament_readiness_rt001_v3/**'
+      - 'outputs/phase2/tournament_contract_audit_rt001_v3/**'
+      - 'outputs/phase2/non_decisional_tournament_frontier_rt001_v3/**'
+      - '.github/workflows/phase2-tournament-contract-frontier-rt001-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase2-tournament-contract-frontier-rt001-v3-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install pytest
+
+      - name: Compile
+        run: |
+          python -m py_compile scripts/phase2_build_final_tournament_readiness_rt001_v3.py
+          python -m py_compile scripts/phase2_audit_tournament_contract_rt001_v3.py
+          python -m py_compile scripts/phase2_build_nondeci_tournament_frontier_rt001_v3.py
+
+      - name: Test
+        run: |
+          python -m pytest -q \
+            tests/test_phase2_final_tournament_readiness_rt001_v3.py \
+            tests/test_phase2_tournament_contract_and_frontier_rt001_v3.py \
+            tests/test_phase2_candidate_tournament.py \
+            tests/test_phase2_finalize_tournament.py
+
+      - name: Rebuild complete audit chain
+        run: |
+          ROOT="$(mktemp -d)"
+          READY="$ROOT/readiness"
+          AUDIT="$ROOT/audit"
+          FRONTIER="$ROOT/frontier"
+          python scripts/phase2_build_final_tournament_readiness_rt001_v3.py --output-dir "$READY"
+          python scripts/phase2_audit_tournament_contract_rt001_v3.py \
+            --context-readiness "$READY/final_tournament_context_readiness_rt001_v3.csv.gz" \
+            --readiness-validation "$READY/final_tournament_readiness_rt001_v3_validation.json" \
+            --budget-envelopes "$READY/final_tournament_budget_envelopes_rt001_v3.csv" \
+            --output-dir "$AUDIT"
+          python scripts/phase2_build_nondeci_tournament_frontier_rt001_v3.py \
+            --contract-audit "$AUDIT/legacy_v2_tournament_contract_audit_rt001_v3.json" \
+            --context-readiness "$READY/final_tournament_context_readiness_rt001_v3.csv.gz" \
+            --readiness-validation "$READY/final_tournament_readiness_rt001_v3_validation.json" \
+            --budget-envelopes "$READY/final_tournament_budget_envelopes_rt001_v3.csv" \
+            --output-dir "$FRONTIER"
+          for file in final_tournament_context_readiness_rt001_v3.csv.gz final_tournament_budget_envelopes_rt001_v3.csv final_tournament_sensitivity_readiness_rt001_v3.csv final_tournament_readiness_rt001_v3_validation.json; do
+            cmp "$READY/$file" "outputs/phase2/final_tournament_readiness_rt001_v3/$file"
+          done
+          for file in legacy_v2_tournament_input_compatibility_rt001_v3.csv legacy_v2_tournament_contract_audit_rt001_v3.json; do
+            cmp "$AUDIT/$file" "outputs/phase2/tournament_contract_audit_rt001_v3/$file"
+          done
+          for file in non_decisional_pareto_frontier_rt001_v3.csv.gz non_decisional_pareto_membership_rt001_v3.csv.gz non_decisional_pareto_frontier_rt001_v3_validation.json; do
+            cmp "$FRONTIER/$file" "outputs/phase2/non_decisional_tournament_frontier_rt001_v3/$file"
+          done
+
+      - name: Enforce non-decisional boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          audit = json.loads(Path('outputs/phase2/tournament_contract_audit_rt001_v3/legacy_v2_tournament_contract_audit_rt001_v3.json').read_text())
+          frontier = json.loads(Path('outputs/phase2/non_decisional_tournament_frontier_rt001_v3/non_decisional_pareto_frontier_rt001_v3_validation.json').read_text())
+          assert audit['legacy_v2_tournament_schema_compatible'] is False
+          assert audit['legacy_v2_finalizer_run_authorized'] is False
+          assert audit['rows_collapsed_by_legacy_identity'] == 6961
+          assert frontier['legacy_v2_finalizer_invoked'] is False
+          assert frontier['candidate_evaluation_rows_materialized'] is False
+          assert frontier['recommendation_materialized'] is False
+          for key in ('weighted_composite_score', 'decision_budget_selected', 'uncertainty_band_selected', 'primary_selection_authorised', 'runner_up_selection_authorised'):
+              assert audit[key] is False
+              assert frontier[key] is False
+          PY
+          ! grep -n -E 'finalise\(|select_candidates\(|demand_weighted_gjt_improvement_min.*=' scripts/phase2_audit_tournament_contract_rt001_v3.py scripts/phase2_build_nondeci_tournament_frontier_rt001_v3.py
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|weighted_composite_score.*true|primary_selection_authorised.*true|runner_up_selection_authorised.*true' scripts/phase2_audit_tournament_contract_rt001_v3.py scripts/phase2_build_nondeci_tournament_frontier_rt001_v3.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-tournament-contract-frontier-rt001-v3
+          path: |
+            outputs/phase2/final_tournament_readiness_rt001_v3
+            outputs/phase2/tournament_contract_audit_rt001_v3
+            outputs/phase2/non_decisional_tournament_frontier_rt001_v3
+          if-no-files-found: error
