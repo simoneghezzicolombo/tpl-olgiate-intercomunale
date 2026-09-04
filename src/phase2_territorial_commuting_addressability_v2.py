@@ -16,9 +16,25 @@ EVALUATED_CATEGORIES = frozenset({"OTHER_CORE", "OTHER_EXTERNAL"})
 EXCLUDED_CATEGORIES = frozenset({"SELF", "S8_DIRECT"})
 
 
+def _repair_reversible_utf8_mojibake(value: str) -> str:
+    """Repair only the common UTF-8-as-Latin-1 corruption when reversible.
+
+    This is an encoding repair, not a geographic alias table. Correct Unicode
+    strings such as ``Santa Maria Hoè`` cannot be decoded as UTF-8 after a
+    Latin-1 encode and are therefore left unchanged, while ``HoÃ¨`` round-trips
+    deterministically to ``Hoè``.
+    """
+    try:
+        candidate = value.encode("latin-1").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return value
+    return candidate if candidate.encode("utf-8").decode("latin-1") == value else value
+
+
 def canonical_place(value: str) -> str:
     """Canonical comparison key without inventing geographic equivalences."""
-    return " ".join(unicodedata.normalize("NFKC", value).strip().casefold().split())
+    repaired = _repair_reversible_utf8_mojibake(value)
+    return " ".join(unicodedata.normalize("NFKC", repaired).strip().casefold().split())
 
 
 @dataclass(frozen=True)
