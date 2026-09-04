@@ -1,0 +1,178 @@
+name: Phase 2 Exact Timetable Optimizer V2
+
+on:
+  push:
+    branches:
+      - phase2-exact-timetable-optimizer-v2
+    paths:
+      - 'src/phase2_exact_timetable_optimizer_v2.py'
+      - 'scripts/phase2_run_exact_timetable_optimizer_v2.py'
+      - 'tests/test_phase2_exact_timetable_optimizer_v2.py'
+      - 'docs/PHASE2_STAGE_D_EXACT_TIMETABLE_V2.md'
+      - '.github/workflows/phase2-exact-timetable-optimizer-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-exact-timetable-optimizer-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  exact-stage-d:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/exact_timetable_optimizer_v2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<10'
+
+      - name: Compile exact Stage-D engine
+        run: |
+          python -m py_compile src/phase2_exact_timetable_optimizer_v2.py
+          python -m py_compile scripts/phase2_run_exact_timetable_optimizer_v2.py
+
+      - name: Unit and exact-oracle tests
+        run: python -m pytest -q tests/test_phase2_exact_timetable_optimizer_v2.py
+
+      - name: Build all 5,345 exact daily timetable problems with benchmark
+        run: |
+          rm -rf "$OUTDIR"
+          mkdir -p "$OUTDIR"
+          /usr/bin/time -v python scripts/phase2_run_exact_timetable_optimizer_v2.py \
+            --timing-input outputs/phase2/stage_d_input_manifest_v2/stage_d_daily_timing_inputs_v2.csv.gz \
+            --route-input outputs/phase2/stage_d_input_manifest_v2/stage_d_public_route_inputs_v2.csv \
+            --input-validation outputs/phase2/stage_d_input_manifest_v2/stage_d_input_manifest_v2_validation.json \
+            --s8-events outputs/phase2/s8_events.csv \
+            --s8-sensitivity config/phase2_s8_phasing_sensitivity_v2.json \
+            --summary-output "$OUTDIR/stage_d_exact_timing_summary_v2.csv.gz" \
+            --trips-output "$OUTDIR/stage_d_exact_public_trips_v2.csv.gz" \
+            --validation-output "$OUTDIR/stage_d_exact_timetable_v2_validation.json"
+
+      - name: Validate Stage-D PASS contract
+        run: |
+          python - <<'PY'
+          import csv, gzip, json
+          from pathlib import Path
+          root=Path('outputs/phase2/exact_timetable_optimizer_v2')
+          v=json.loads((root/'stage_d_exact_timetable_v2_validation.json').read_text())
+          assert v['status']=='PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_V2'
+          assert v['contract']=='PHASE2_EXHAUSTIVE_EXACT_TIMETABLE_S8_AND_VEHICLE_BLOCKS_V2'
+          assert v['stage_d_daily_timing_input_count']==5345
+          assert v['represented_stage_c_plan_context_count']==16883
+          assert v['one_route_problem_count']==2572
+          assert v['two_route_problem_count']==2773
+          assert v['maximum_joint_phase_vector_count']==3600
+          assert v['total_joint_phase_vectors_evaluated']==6758835
+          assert v['oracle_equivalence_checked_problem_count']==5345
+          assert v['oracle_equivalence_complete'] is True
+          assert v['all_integer_phase_vectors_evaluated'] is True
+          assert v['phase_pruning_used'] is False
+          assert v['cross_scenario_equivalence_used'] is False
+          assert v['route_phase_cache_is_memoization_not_pruning'] is True
+          assert v['s8_event_count']==74
+          assert v['s8_direction_counts']=={'LECCO':37,'MILANO':37}
+          assert v['transfer_profile_count']==3
+          assert v['phase_selected'] is True
+          assert v['exact_timetable_constructed'] is True
+          assert v['joint_vehicle_blocks_evaluated'] is True
+          assert v['recovery_values_evaluated_not_selected']==[5,10,15]
+          assert v['recovery_selected'] is False
+          assert v['decision_budget_selected'] is False
+          assert v['calendar_selected'] is False
+          assert v['candidate_eliminated'] is False
+          assert v['primary_selected'] is False and v['runner_up_selected'] is False
+          assert v['passenger_demand_weights_applied_to_phase'] is False
+          assert v['weighted_composite_score'] is False
+          assert v['continuity_used_in_phase_objective'] is False
+          assert v['continuity_retained_for_final_lexicographic_tiebreak'] is True
+          contexts=set(); summaries=0
+          with gzip.open(root/'stage_d_exact_timing_summary_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              for r in csv.DictReader(f):
+                  summaries += 1
+                  assert r['phase_selected']=='true'
+                  assert r['exact_timetable_constructed']=='true'
+                  assert r['recovery_selected']=='false'
+                  assert int(r['phase_vectors_evaluated'])==int(r['oracle_phase_vectors_evaluated'])
+                  contexts.update(json.loads(r['represented_plan_context_ids_json']))
+          assert summaries==5345
+          assert len(contexts)==16883
+          trips=0
+          with gzip.open(root/'stage_d_exact_public_trips_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              for _ in csv.DictReader(f): trips += 1
+          assert trips==v['explicit_timetable_trip_count'] and trips>0
+          print(json.dumps({
+              'status':v['status'],
+              'problems':v['stage_d_daily_timing_input_count'],
+              'phase_vectors':v['total_joint_phase_vectors_evaluated'],
+              'oracle_checked':v['oracle_equivalence_checked_problem_count'],
+              'route_phase_cache_keys':v['exact_route_phase_cache_key_count'],
+              'trips':v['explicit_timetable_trip_count'],
+              'fleet_ranges':v['fleet_range_by_recovery'],
+              'quality_range':v['selected_robust_min_transfer_quality_range'],
+          }, indent=2))
+          PY
+
+      - name: Deterministic byte-for-byte rebuild
+        run: |
+          rm -rf /tmp/phase2-stage-d-exact-v2 && mkdir -p /tmp/phase2-stage-d-exact-v2
+          python scripts/phase2_run_exact_timetable_optimizer_v2.py \
+            --timing-input outputs/phase2/stage_d_input_manifest_v2/stage_d_daily_timing_inputs_v2.csv.gz \
+            --route-input outputs/phase2/stage_d_input_manifest_v2/stage_d_public_route_inputs_v2.csv \
+            --input-validation outputs/phase2/stage_d_input_manifest_v2/stage_d_input_manifest_v2_validation.json \
+            --s8-events outputs/phase2/s8_events.csv \
+            --s8-sensitivity config/phase2_s8_phasing_sensitivity_v2.json \
+            --summary-output /tmp/phase2-stage-d-exact-v2/summary.csv.gz \
+            --trips-output /tmp/phase2-stage-d-exact-v2/trips.csv.gz \
+            --validation-output /tmp/phase2-stage-d-exact-v2/validation.json >/dev/null
+          cmp "$OUTDIR/stage_d_exact_timing_summary_v2.csv.gz" /tmp/phase2-stage-d-exact-v2/summary.csv.gz
+          cmp "$OUTDIR/stage_d_exact_public_trips_v2.csv.gz" /tmp/phase2-stage-d-exact-v2/trips.csv.gz
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_timetable_v2_validation.json').read_text())
+          b=json.loads(Path('/tmp/phase2-stage-d-exact-v2/validation.json').read_text())
+          for x in (a,b):
+              x['lineage'].pop('summary_output_sha256',None)
+              x['lineage'].pop('trips_output_sha256',None)
+          assert a==b
+          PY
+
+      - name: Guard exact and epistemic semantics
+        run: |
+          FILES="src/phase2_exact_timetable_optimizer_v2.py scripts/phase2_run_exact_timetable_optimizer_v2.py tests/test_phase2_exact_timetable_optimizer_v2.py"
+          ! grep -REn 'np\.random|numpy\.random|import random|from random|random\.' $FILES
+          ! grep -REn 'requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -REn 'weighted_score|composite_score[[:space:]]*=' $FILES
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check
+
+      - name: Persist Stage-D exact evidence
+        run: |
+          git config user.name 'phase2-exact-timetable-v2-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$OUTDIR"
+          if git diff --cached --quiet; then
+            echo 'No evidence changes to persist'
+          else
+            git commit -m 'data(phase2): persist Stage-D exact timetable V2 [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-exact-timetable-optimizer-v2-${{ github.sha }}
+          path: outputs/phase2/exact_timetable_optimizer_v2
+          if-no-files-found: error
+          retention-days: 90
