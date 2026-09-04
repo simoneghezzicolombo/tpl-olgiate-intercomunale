@@ -1,0 +1,141 @@
+name: Phase 2 Territorial Commuting Addressability V2
+
+on:
+  push:
+    branches:
+      - phase2-robustness-final-v2
+    paths:
+      - 'src/phase2_territorial_commuting_addressability_v2.py'
+      - 'scripts/phase2_build_territorial_commuting_addressability_v2.py'
+      - 'tests/test_phase2_territorial_commuting_addressability_v2.py'
+      - '.github/workflows/phase2-territorial-commuting-addressability-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-territorial-commuting-addressability-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile
+        run: >-
+          python -m py_compile
+          src/phase2_territorial_commuting_addressability_v2.py
+          scripts/phase2_build_territorial_commuting_addressability_v2.py
+
+      - name: Unit tests
+        run: python -m pytest -q tests/test_phase2_territorial_commuting_addressability_v2.py
+
+      - name: Build full scenario layer
+        run: >-
+          python scripts/phase2_build_territorial_commuting_addressability_v2.py
+          --od outputs/phase2/od_2021_destinations_by_origin.csv
+          --od-validation outputs/phase2/od_2021_demand_profile_validation.json
+          --routing-anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv
+          --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv
+          --scenario-route-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz
+          --phasing-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json
+          --output outputs/phase2/territorial_commuting_addressability_v2/scenario_territorial_commuting_addressability_v2.csv.gz
+          --validation-output outputs/phase2/territorial_commuting_addressability_v2/territorial_commuting_addressability_v2_validation.json
+
+      - name: Validate epistemic contract
+        run: |
+          python - <<'PY'
+          import gzip, csv, json
+          from pathlib import Path
+          root=Path('outputs/phase2/territorial_commuting_addressability_v2')
+          v=json.loads((root/'territorial_commuting_addressability_v2_validation.json').read_text(encoding='utf-8'))
+          assert v['status']=='PASS_TERRITORIAL_COMMUTING_ADDRESSABILITY_V2_BUILD'
+          assert v['contract']=='PHASE2_STRUCTURALLY_ADDRESSABLE_MUNICIPAL_OD_WORKER_MASS_UPPER_BOUND_V2'
+          assert v['scenario_count']==100000
+          assert v['resident_workers_source_total']==8754
+          assert v['self_workers_excluded_submunicipal_geography_unavailable']==1315
+          assert v['s8_direct_workers_excluded_to_avoid_feeder_double_count']==1882
+          assert v['directional_public_graph'] is True
+          assert v['same_anchor_transfers_allowed'] is True
+          assert v['technical_return_edges_used'] is False
+          assert v['self_od_auto_addressable'] is False
+          assert v['s8_direct_in_primary_territorial_metric'] is False
+          assert v['passenger_assignment_inferred'] is False
+          assert v['mode_choice_inferred'] is False
+          assert v['ridership_forecast'] is False
+          assert v['walking_access_to_exact_home_or_workplace_inferred'] is False
+          assert v['evaluated_od_worker_mass'] > 1055
+          assert v['evaluated_od_worker_mass'] <= 5557
+          assert v['maximum_structurally_addressable_worker_mass'] <= v['evaluated_od_worker_mass']
+          with gzip.open(root/'scenario_territorial_commuting_addressability_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==100000
+          assert all(r['passenger_assignment_inferred']=='false' for r in rows)
+          print(json.dumps({
+              'evaluated_worker_mass': v['evaluated_od_worker_mass'],
+              'unrepresented_worker_mass': v['otherwise_territorial_but_destination_not_in_routing_anchor_universe_worker_mass'],
+              'min_addressable': v['minimum_structurally_addressable_worker_mass'],
+              'max_addressable': v['maximum_structurally_addressable_worker_mass'],
+              'represented_municipalities': v['routing_anchor_represented_municipality_count'],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/phase2-territorial-v2
+          mkdir -p /tmp/phase2-territorial-v2
+          python scripts/phase2_build_territorial_commuting_addressability_v2.py \
+            --od outputs/phase2/od_2021_destinations_by_origin.csv \
+            --od-validation outputs/phase2/od_2021_demand_profile_validation.json \
+            --routing-anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --scenario-route-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --phasing-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --output /tmp/phase2-territorial-v2/output.csv.gz \
+            --validation-output /tmp/phase2-territorial-v2/validation.json >/dev/null
+          cmp outputs/phase2/territorial_commuting_addressability_v2/scenario_territorial_commuting_addressability_v2.csv.gz /tmp/phase2-territorial-v2/output.csv.gz
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          left=json.loads(Path('outputs/phase2/territorial_commuting_addressability_v2/territorial_commuting_addressability_v2_validation.json').read_text())
+          right=json.loads(Path('/tmp/phase2-territorial-v2/validation.json').read_text())
+          for p in (left,right):
+              p['lineage'].pop('output_sha256',None)
+          assert left==right
+          PY
+
+      - name: Guard no synthetic inference
+        run: |
+          FILES='src/phase2_territorial_commuting_addressability_v2.py scripts/phase2_build_territorial_commuting_addressability_v2.py'
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -n -E 'ridership.*= *[Tt]rue|passenger_assignment.*= *[Tt]rue|mode_choice.*= *[Tt]rue' $FILES
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-pre-gjt-screening-v2...HEAD
+
+      - name: Persist evidence
+        run: |
+          git config user.name "phase2-territorial-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/territorial_commuting_addressability_v2
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist territorial commuting addressability v2 [skip ci]"
+            git push origin HEAD:phase2-robustness-final-v2
+          fi
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-territorial-commuting-addressability-v2-${{ github.sha }}
+          retention-days: 90
+          path: outputs/phase2/territorial_commuting_addressability_v2
