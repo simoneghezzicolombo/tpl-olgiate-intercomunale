@@ -7,12 +7,16 @@ headway/span timing archetype.
 
 Hard safeguards:
 - reference-budget timing has at least one NO-EXTENSION feasible policy;
-- candidate public walking access does not regress below the *proven,
-  localizable* current D184+D185 lower bound for any of the five municipalities
-  at 5, 8 or 10 minutes.
+- candidate public walking access does not make the *worst municipality* worse
+  than the proven, localizable current D184+D185 lower bound at 5, 8 or 10 min.
 
-The lower-bound safeguard is asymmetric by design. Unresolved current stops are
-never imputed and therefore cannot promote or reject a candidate.
+This follows docs/PHASE2_SERVICE_DESIGN_SPEC.md. It does not introduce separate
+municipality-by-municipality floors. The lower-bound safeguard is asymmetric by
+design: unresolved current stops are never imputed and therefore cannot promote
+or reject a candidate. With the currently certified localizable baseline, the
+worst-municipality lower bound is zero at all three thresholds, so the safeguard
+is expected to be non-binding. That does not establish that true current-service
+worst-municipality access is zero.
 
 No weighted score is constructed. OD workers are not assigned to routes. S8
 enters only through the already-certified route-level complete-match opportunity
@@ -81,12 +85,13 @@ def load_access_non_regression(
     access_path: Path,
     baseline: dict,
 ) -> tuple[dict[str, bool], dict[str, float], dict[str, str]]:
-    municipality_codes = sorted(baseline["coverage_lower_bound"]["10"]["municipality_coverage"])
-    if len(municipality_codes) != 5:
-        raise ValueError(f"Expected five target municipalities, got {municipality_codes}")
+    """Apply only the specification's worst-municipality safeguard."""
+    baseline_worst = {
+        threshold: float(baseline["coverage_lower_bound"][str(threshold)]["worst_municipality_coverage_share"])
+        for threshold in THRESHOLDS
+    }
     required_fields = {
-        f"public_municipality_{code}_coverage_share_{threshold}min"
-        for code in municipality_codes
+        f"public_worst_municipality_coverage_share_{threshold}min"
         for threshold in THRESHOLDS
     }
     result: dict[str, bool] = {}
@@ -98,18 +103,16 @@ def load_access_non_regression(
             raise ValueError(f"Duplicate access scenario {scenario_id}")
         missing = required_fields - set(row)
         if missing:
-            raise ValueError(f"Access output lacks municipality fields: {sorted(missing)[:3]}")
+            raise ValueError(f"Access output lacks worst-municipality fields: {sorted(missing)}")
         margins: list[float] = []
         reasons: list[str] = []
         for threshold in THRESHOLDS:
-            current_by_muni = baseline["coverage_lower_bound"][str(threshold)]["municipality_coverage"]
-            for code in municipality_codes:
-                candidate = float(row[f"public_municipality_{code}_coverage_share_{threshold}min"])
-                current_lb = float(current_by_muni[code]["coverage_share"])
-                margin = candidate - current_lb
-                margins.append(margin)
-                if margin < -EPS:
-                    reasons.append(f"{code}@{threshold}min:{candidate:.12f}<{current_lb:.12f}")
+            candidate = float(row[f"public_worst_municipality_coverage_share_{threshold}min"])
+            current_lb = baseline_worst[threshold]
+            margin = candidate - current_lb
+            margins.append(margin)
+            if margin < -EPS:
+                reasons.append(f"worst@{threshold}min:{candidate:.12f}<{current_lb:.12f}")
         result[scenario_id] = not reasons
         min_margin[scenario_id] = min(margins)
         fail_reason[scenario_id] = "|".join(reasons)
@@ -270,13 +273,12 @@ def main() -> None:
             "span_end_min": int(raw["span_end_min"]),
             "reference_budget_feasible_no_extension_policy_count": int(raw["reference_budget_feasible_no_extension_policy_count"]),
             "current_lower_bound_non_regression_pass": True,
-            "minimum_municipality_threshold_margin_vs_current_lower_bound": nr_margin[scenario_id],
+            "minimum_worst_municipality_threshold_margin_vs_current_lower_bound": nr_margin[scenario_id],
             "s8_complete_supported_route_count": complete,
             "s8_incomplete_supported_route_count": incomplete,
         }
         for field in (*MAX_AXES[:-1], *MIN_AXES[1:]):
             row[field] = _f(raw, field)
-        # explicit counts are integer-valued even though dominance code accepts float
         row["public_explicit_field_check_pending_count"] = int(float(raw["public_explicit_field_check_pending_count"]))
         row["public_route_count"] = int(raw["public_route_count"])
         timing_rows.setdefault(key, []).append(row)
@@ -295,7 +297,8 @@ def main() -> None:
         expanded: list[dict[str, object]] = []
         for rep in profile_frontier:
             ids = str(rep["equivalent_metric_scenario_ids"]).split("|")
-            by_id = {str(r["scenario_id"]): r for r in eligible if str(r["scenario_id"]) in set(ids)}
+            id_set = set(ids)
+            by_id = {str(r["scenario_id"]): r for r in eligible if str(r["scenario_id"]) in id_set}
             for scenario_id in ids:
                 out = dict(by_id[scenario_id])
                 out["equivalent_metric_scenario_count"] = int(rep["equivalent_metric_scenario_count"])
@@ -331,6 +334,10 @@ def main() -> None:
     write_csv(args.audit_output, audit_rows)
 
     nr_pass_count = sum(nr_pass.values())
+    baseline_worst = {
+        str(threshold): float(baseline["coverage_lower_bound"][str(threshold)]["worst_municipality_coverage_share"])
+        for threshold in THRESHOLDS
+    }
     payload = {
         "status": STATUS,
         "contract": CONTRACT,
@@ -338,7 +345,9 @@ def main() -> None:
         "candidate_scenario_count": 100000,
         "current_lower_bound_non_regression_pass_scenario_count": nr_pass_count,
         "current_lower_bound_non_regression_fail_scenario_count": 100000 - nr_pass_count,
-        "non_regression_scope": "PER_MUNICIPALITY_AT_5_8_10_MINUTES_AGAINST_CERTIFIED_LOCALIZABLE_CURRENT_LOWER_BOUND_ONLY",
+        "current_baseline_worst_municipality_coverage_share": baseline_worst,
+        "non_regression_scope": "WORST_MUNICIPALITY_ACCESS_AT_5_8_10_MINUTES_VS_CERTIFIED_LOCALIZABLE_CURRENT_LOWER_BOUND",
+        "non_regression_currently_binding": any(value > EPS for value in baseline_worst.values()),
         "unresolved_current_stops_used": False,
         "positive_extensions_in_main_frontier": False,
         "weighted_composite_score": False,
@@ -359,6 +368,7 @@ def main() -> None:
         },
         "limitations": [
             "The current-service comparison is intentionally only a certified localizable lower bound; unresolved D184/D185 stop rows are not spatially imputed.",
+            "The non-regression safeguard is currently non-binding because the certified localizable current worst-municipality lower bound is zero at 5, 8 and 10 minutes; this does not establish that true current-service worst-municipality access is zero.",
             "This frontier compares scenario×timing evidence, not exact vehicle blocks or a final service plan.",
             "S8 complete-match opportunity is route-level phase support, not full generalized journey time.",
             "The 1,882-worker S8 reference weights rail directions upstream and is not assigned to bus routes.",
@@ -370,6 +380,7 @@ def main() -> None:
     print(json.dumps({
         "status": STATUS,
         "non_regression_pass_scenarios": nr_pass_count,
+        "current_baseline_worst_municipality_coverage_share": baseline_worst,
         "timing_frontiers": frontier_summary,
     }, indent=2, sort_keys=True))
 
