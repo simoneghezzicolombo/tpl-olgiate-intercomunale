@@ -1,0 +1,539 @@
+{
+  "status": "BLOCKED",
+  "contract": "PHASE2_FINAL_METHOD_REDTEAM_V2",
+  "audit_target_sha": "864c83accb81c615f9778396408b21e31ca72983",
+  "audit_complete": true,
+  "blocking_issue_count": 2,
+  "major_issue_count": 3,
+  "minor_issue_count": 1,
+  "weighted_score_detected": false,
+  "municipal_od_downscaling_detected": false,
+  "ridership_inference_detected": false,
+  "synthetic_data_detected": false,
+  "nondeterminism_detected": false,
+  "lineage_mismatch_detected": false,
+  "lineage_hash_edge_count_checked": 33,
+  "lineage_hash_mismatch_count": 0,
+  "current_service_baseline_semantics_preserved": true,
+  "station_bridge_semantics_preserved": true,
+  "passenger_utility_contract_valid": true,
+  "s8_opportunity_contract_valid": true,
+  "structural_reference_counts_verified": true,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false,
+  "final_selection_blocked": true,
+  "budget_exactness_audit": {
+    "budget_policy_frontier": {
+      "noninteger_departure_count_rows": 142290,
+      "budget_boundary_ambiguous_rows": 2328,
+      "examples": [
+        {
+          "budget_suffix": "m20pct",
+          "scenario_id": "P2_3058c75ede542cb2",
+          "uniform_headway_min": 20,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 88817.10669506999,
+          "budget_cap_annual_bus_km": 89135.20000000001,
+          "exact_count_lower_bound_bus_km": 88016.9525807,
+          "exact_count_upper_bound_bus_km": 89617.26080943999
+        },
+        {
+          "budget_suffix": "m20pct",
+          "scenario_id": "P2_46d3fc0e6b13df71",
+          "uniform_headway_min": 20,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 88817.10669506999,
+          "budget_cap_annual_bus_km": 89135.20000000001,
+          "exact_count_lower_bound_bus_km": 88016.9525807,
+          "exact_count_upper_bound_bus_km": 89617.26080943999
+        },
+        {
+          "budget_suffix": "m10pct",
+          "scenario_id": "P2_22bb42ed0ff7cc88",
+          "uniform_headway_min": 20,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 99747.55196951999,
+          "budget_cap_annual_bus_km": 100277.1,
+          "exact_count_lower_bound_bus_km": 98848.92537520001,
+          "exact_count_upper_bound_bus_km": 100646.17856384
+        },
+        {
+          "budget_suffix": "m10pct",
+          "scenario_id": "P2_2e7219146e5e5065",
+          "uniform_headway_min": 20,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 99958.21460157,
+          "budget_cap_annual_bus_km": 100277.1,
+          "exact_count_lower_bound_bus_km": 99057.69014569999,
+          "exact_count_upper_bound_bus_km": 100858.73905743999
+        },
+        {
+          "budget_suffix": "m10pct",
+          "scenario_id": "P2_5f94f9086cc43e3c",
+          "uniform_headway_min": 20,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 99795.95708706,
+          "budget_cap_annual_bus_km": 100277.1,
+          "exact_count_lower_bound_bus_km": 98896.89441060001,
+          "exact_count_upper_bound_bus_km": 100695.01976352002
+        },
+        {
+          "budget_suffix": "m10pct",
+          "scenario_id": "P2_914e10b118acfdbf",
+          "uniform_headway_min": 20,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 99795.95708706,
+          "budget_cap_annual_bus_km": 100277.1,
+          "exact_count_lower_bound_bus_km": 98896.89441060001,
+          "exact_count_upper_bound_bus_km": 100695.01976352002
+        },
+        {
+          "budget_suffix": "m10pct",
+          "scenario_id": "P2_be8b2b3f4c630f6d",
+          "uniform_headway_min": 20,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 99958.21460157,
+          "budget_cap_annual_bus_km": 100277.1,
+          "exact_count_lower_bound_bus_km": 99057.69014569999,
+          "exact_count_upper_bound_bus_km": 100858.73905743999
+        },
+        {
+          "budget_suffix": "m10pct",
+          "scenario_id": "P2_f310802c44431269",
+          "uniform_headway_min": 20,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 99747.55196951999,
+          "budget_cap_annual_bus_km": 100277.1,
+          "exact_count_lower_bound_bus_km": 98848.92537520001,
+          "exact_count_upper_bound_bus_km": 100646.17856384
+        }
+      ]
+    },
+    "passenger_utility_frontier": {
+      "noninteger_departure_count_rows": 6479,
+      "budget_boundary_ambiguous_rows": 666,
+      "examples": [
+        {
+          "budget_suffix": "m20pct",
+          "scenario_id": "P2_3058c75ede542cb2",
+          "uniform_headway_min": 20,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 88817.10669506999,
+          "budget_cap_annual_bus_km": 89135.20000000001,
+          "exact_count_lower_bound_bus_km": 88016.9525807,
+          "exact_count_upper_bound_bus_km": 89617.26080943999
+        },
+        {
+          "budget_suffix": "m20pct",
+          "scenario_id": "P2_46d3fc0e6b13df71",
+          "uniform_headway_min": 20,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 88817.10669506999,
+          "budget_cap_annual_bus_km": 89135.20000000001,
+          "exact_count_lower_bound_bus_km": 88016.9525807,
+          "exact_count_upper_bound_bus_km": 89617.26080943999
+        },
+        {
+          "budget_suffix": "m20pct",
+          "scenario_id": "P2_697e52069eb8f42a",
+          "uniform_headway_min": 60,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 88495.68713674,
+          "budget_cap_annual_bus_km": 89135.20000000001,
+          "exact_count_lower_bound_bus_km": 86103.91180872,
+          "exact_count_upper_bound_bus_km": 90887.46246476
+        },
+        {
+          "budget_suffix": "m20pct",
+          "scenario_id": "P2_abdc13d62a6b0560",
+          "uniform_headway_min": 60,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 87341.55836302,
+          "budget_cap_annual_bus_km": 89135.20000000001,
+          "exact_count_lower_bound_bus_km": 84980.97570455998,
+          "exact_count_upper_bound_bus_km": 89702.14102148
+        },
+        {
+          "budget_suffix": "m20pct",
+          "scenario_id": "P2_969726b78be981e8",
+          "uniform_headway_min": 60,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 87447.42831487,
+          "budget_cap_annual_bus_km": 89135.20000000001,
+          "exact_count_lower_bound_bus_km": 85083.98430636,
+          "exact_count_upper_bound_bus_km": 89810.87232338
+        },
+        {
+          "budget_suffix": "m20pct",
+          "scenario_id": "P2_e2edc885b2792a44",
+          "uniform_headway_min": 60,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 88025.08831921998,
+          "budget_cap_annual_bus_km": 89135.20000000001,
+          "exact_count_lower_bound_bus_km": 85646.03187815999,
+          "exact_count_upper_bound_bus_km": 90404.14476028
+        },
+        {
+          "budget_suffix": "m20pct",
+          "scenario_id": "P2_69babc98d6073897",
+          "uniform_headway_min": 60,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 87931.34203009,
+          "budget_cap_annual_bus_km": 89135.20000000001,
+          "exact_count_lower_bound_bus_km": 85554.81927251999,
+          "exact_count_upper_bound_bus_km": 90307.86478766002
+        },
+        {
+          "budget_suffix": "m20pct",
+          "scenario_id": "P2_16f95dc62055c90f",
+          "uniform_headway_min": 60,
+          "span_id": "S8_EXTENDED_0530_2400",
+          "annual_service_days": 260,
+          "approx_annual_bus_km": 87447.42831487,
+          "budget_cap_annual_bus_km": 89135.20000000001,
+          "exact_count_lower_bound_bus_km": 85083.98430636,
+          "exact_count_upper_bound_bus_km": 89810.87232338
+        }
+      ]
+    }
+  },
+  "s8_class_audit": {
+    "all_800k_scenario_timing_rows": {
+      "ALL": 557161,
+      "SOME": 1567,
+      "NONE": 241272
+    },
+    "stage_c_unique_scenario_timing_keys": {
+      "ALL": 4275,
+      "SOME": 0,
+      "NONE": 1070
+    },
+    "stage_c_plan_rows_surface": {
+      "ALL": 13794,
+      "SOME": 0,
+      "NONE": 3089
+    },
+    "surface_vs_direct_class_disagreement_count": 0
+  },
+  "lineage_checks": [
+    {
+      "label": "passenger/budget_policy_frontier",
+      "path": "outputs/phase2/budget_policy_frontiers_v2/scenario_budget_policy_frontier_v2.csv.gz",
+      "expected_sha256": "185a013a553a0b331d3f97477678eca55c62348a2d7a4739f70510b323cbb429",
+      "actual_sha256": "185a013a553a0b331d3f97477678eca55c62348a2d7a4739f70510b323cbb429",
+      "match": true
+    },
+    {
+      "label": "passenger/budget_policy_validation",
+      "path": "outputs/phase2/budget_policy_frontiers_v2/budget_policy_frontiers_v2_validation.json",
+      "expected_sha256": "1f31073a42205f544822c4365e72e07d4f0208bebf82f2d4b619f96ded9a1f7c",
+      "actual_sha256": "1f31073a42205f544822c4365e72e07d4f0208bebf82f2d4b619f96ded9a1f7c",
+      "match": true
+    },
+    {
+      "label": "passenger/feeder_timing",
+      "path": "outputs/phase2/feeder_generalized_access_v2/scenario_timing_feeder_generalized_access_v2.csv.gz",
+      "expected_sha256": "fc655c5e48eb752b5d7587399322f79e5ca16dec13f6ff09dd21d9f65712aef7",
+      "actual_sha256": "fc655c5e48eb752b5d7587399322f79e5ca16dec13f6ff09dd21d9f65712aef7",
+      "match": true
+    },
+    {
+      "label": "passenger/feeder_validation",
+      "path": "outputs/phase2/feeder_generalized_access_v2/feeder_generalized_access_v2_validation.json",
+      "expected_sha256": "73a82e929f1fec6cd34aef174e10d7f2c729aa8bd22967398d9b75e55e3c9a38",
+      "actual_sha256": "73a82e929f1fec6cd34aef174e10d7f2c729aa8bd22967398d9b75e55e3c9a38",
+      "match": true
+    },
+    {
+      "label": "passenger/frontier",
+      "path": "outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz",
+      "expected_sha256": "67fce03634f599834a7532260e88ae4c2e3323f7d0809ad7675a37bdd0b4e182",
+      "actual_sha256": "67fce03634f599834a7532260e88ae4c2e3323f7d0809ad7675a37bdd0b4e182",
+      "match": true
+    },
+    {
+      "label": "passenger/context_audit",
+      "path": "outputs/phase2/passenger_utility_frontier_v2/passenger_utility_context_audit_v2.csv",
+      "expected_sha256": "3d02e1cc39334dee06c9602fd7ae89df6b6607f7096ec696d3c2ec68234f82b1",
+      "actual_sha256": "3d02e1cc39334dee06c9602fd7ae89df6b6607f7096ec696d3c2ec68234f82b1",
+      "match": true
+    },
+    {
+      "label": "s8/current_policy_grid",
+      "path": "outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv",
+      "expected_sha256": "35c4890c0d97ab8f7af43ed71c3628767f5c177f9a9387c4db6a1c02bcc188ff",
+      "actual_sha256": "35c4890c0d97ab8f7af43ed71c3628767f5c177f9a9387c4db6a1c02bcc188ff",
+      "match": true
+    },
+    {
+      "label": "s8/current_route_universe",
+      "path": "outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv",
+      "expected_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
+      "actual_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
+      "match": true
+    },
+    {
+      "label": "s8/current_events",
+      "path": "outputs/phase2/s8_events.csv",
+      "expected_sha256": "00b9994c1331ab5caa09a6092815bc5554f07baddbde8a651857a470d0fdb71b",
+      "actual_sha256": "00b9994c1331ab5caa09a6092815bc5554f07baddbde8a651857a470d0fdb71b",
+      "match": true
+    },
+    {
+      "label": "s8/current_validation",
+      "path": "outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json",
+      "expected_sha256": "b79e4dcbe1978e04c76ac7324c8c2e982185291529a8dc0c2b4a6a835360e490",
+      "actual_sha256": "b79e4dcbe1978e04c76ac7324c8c2e982185291529a8dc0c2b4a6a835360e490",
+      "match": true
+    },
+    {
+      "label": "s8/current_scenario_mapping",
+      "path": "outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz",
+      "expected_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
+      "actual_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
+      "match": true
+    },
+    {
+      "label": "s8/passenger_frontier",
+      "path": "outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz",
+      "expected_sha256": "67fce03634f599834a7532260e88ae4c2e3323f7d0809ad7675a37bdd0b4e182",
+      "actual_sha256": "67fce03634f599834a7532260e88ae4c2e3323f7d0809ad7675a37bdd0b4e182",
+      "match": true
+    },
+    {
+      "label": "s8/output",
+      "path": "outputs/phase2/s8_robust_opportunity_v2/passenger_plans_s8_opportunity_v2.csv.gz",
+      "expected_sha256": "fd656b3f66af9a658777486909c83dc170ecdc8066a7d2b68ef65b2c73cacbe8",
+      "actual_sha256": "fd656b3f66af9a658777486909c83dc170ecdc8066a7d2b68ef65b2c73cacbe8",
+      "match": true
+    },
+    {
+      "label": "continuity/current_localized",
+      "path": "outputs/phase2/current_service_access_baseline_v2/current_service_localized_rows_v2.csv",
+      "expected_sha256": "d511ccb4362c60caa0bb9add0ff007e358e68d1c6912a8dae13fed84d68b628d",
+      "actual_sha256": "d511ccb4362c60caa0bb9add0ff007e358e68d1c6912a8dae13fed84d68b628d",
+      "match": true
+    },
+    {
+      "label": "continuity/current_validation",
+      "path": "outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json",
+      "expected_sha256": "31e5bfbd18dfaad298331c7e56a08ffe7439c4d829030ca2ffcece978dd7305b",
+      "actual_sha256": "31e5bfbd18dfaad298331c7e56a08ffe7439c4d829030ca2ffcece978dd7305b",
+      "match": true
+    },
+    {
+      "label": "continuity/routing_anchors",
+      "path": "outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv",
+      "expected_sha256": "123a5e25a25207ec3d38a6ffa80fc9ea70b6da4793581b19f1d55dad3ae24cf7",
+      "actual_sha256": "123a5e25a25207ec3d38a6ffa80fc9ea70b6da4793581b19f1d55dad3ae24cf7",
+      "match": true
+    },
+    {
+      "label": "continuity/matrix_validation",
+      "path": "outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json",
+      "expected_sha256": "ca4faa25a72ac0f0b07f4a4099c660945c8c824db1cd5baf641b26eae89fc79d",
+      "actual_sha256": "ca4faa25a72ac0f0b07f4a4099c660945c8c824db1cd5baf641b26eae89fc79d",
+      "match": true
+    },
+    {
+      "label": "continuity/route_universe",
+      "path": "outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv",
+      "expected_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
+      "actual_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
+      "match": true
+    },
+    {
+      "label": "continuity/scenario_mapping",
+      "path": "outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz",
+      "expected_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
+      "actual_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
+      "match": true
+    },
+    {
+      "label": "continuity/s8_validation",
+      "path": "outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json",
+      "expected_sha256": "b79e4dcbe1978e04c76ac7324c8c2e982185291529a8dc0c2b4a6a835360e490",
+      "actual_sha256": "b79e4dcbe1978e04c76ac7324c8c2e982185291529a8dc0c2b4a6a835360e490",
+      "match": true
+    },
+    {
+      "label": "continuity/passenger_frontier",
+      "path": "outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz",
+      "expected_sha256": "67fce03634f599834a7532260e88ae4c2e3323f7d0809ad7675a37bdd0b4e182",
+      "actual_sha256": "67fce03634f599834a7532260e88ae4c2e3323f7d0809ad7675a37bdd0b4e182",
+      "match": true
+    },
+    {
+      "label": "continuity/passenger_validation",
+      "path": "outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2_validation.json",
+      "expected_sha256": "115d5fb06f877a886343d30cebad1538d1dc3e972d64094e66a82f2644312ff0",
+      "actual_sha256": "115d5fb06f877a886343d30cebad1538d1dc3e972d64094e66a82f2644312ff0",
+      "match": true
+    },
+    {
+      "label": "continuity/scenario_output",
+      "path": "outputs/phase2/current_service_continuity_v2/scenario_current_service_continuity_lower_bound_v2.csv.gz",
+      "expected_sha256": "0bf66d92b4f6b2e50b45445b6be11c18e3e05242fb10bd99c5f673c634ef17cb",
+      "actual_sha256": "0bf66d92b4f6b2e50b45445b6be11c18e3e05242fb10bd99c5f673c634ef17cb",
+      "match": true
+    },
+    {
+      "label": "continuity/plan_output",
+      "path": "outputs/phase2/current_service_continuity_v2/passenger_plans_current_service_continuity_lower_bound_v2.csv.gz",
+      "expected_sha256": "acf7c55993f8f15fecc4c4fe32d78ba78cdba285eccfc12d73ab6ff5bc067c1d",
+      "actual_sha256": "acf7c55993f8f15fecc4c4fe32d78ba78cdba285eccfc12d73ab6ff5bc067c1d",
+      "match": true
+    },
+    {
+      "label": "stage_d_manifest/passenger_frontier",
+      "path": "outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz",
+      "expected_sha256": "67fce03634f599834a7532260e88ae4c2e3323f7d0809ad7675a37bdd0b4e182",
+      "actual_sha256": "67fce03634f599834a7532260e88ae4c2e3323f7d0809ad7675a37bdd0b4e182",
+      "match": true
+    },
+    {
+      "label": "stage_d_manifest/passenger_validation",
+      "path": "outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2_validation.json",
+      "expected_sha256": "115d5fb06f877a886343d30cebad1538d1dc3e972d64094e66a82f2644312ff0",
+      "actual_sha256": "115d5fb06f877a886343d30cebad1538d1dc3e972d64094e66a82f2644312ff0",
+      "match": true
+    },
+    {
+      "label": "stage_d_manifest/s8_opportunity",
+      "path": "outputs/phase2/s8_robust_opportunity_v2/passenger_plans_s8_opportunity_v2.csv.gz",
+      "expected_sha256": "fd656b3f66af9a658777486909c83dc170ecdc8066a7d2b68ef65b2c73cacbe8",
+      "actual_sha256": "fd656b3f66af9a658777486909c83dc170ecdc8066a7d2b68ef65b2c73cacbe8",
+      "match": true
+    },
+    {
+      "label": "stage_d_manifest/s8_opportunity_validation",
+      "path": "outputs/phase2/s8_robust_opportunity_v2/s8_robust_opportunity_v2_validation.json",
+      "expected_sha256": "e04750fca8bd5c28805194e8079b8aeed36ebcae452fdc6ced5ff5d7ab10d643",
+      "actual_sha256": "e04750fca8bd5c28805194e8079b8aeed36ebcae452fdc6ced5ff5d7ab10d643",
+      "match": true
+    },
+    {
+      "label": "stage_d_manifest/continuity_scenarios",
+      "path": "outputs/phase2/current_service_continuity_v2/scenario_current_service_continuity_lower_bound_v2.csv.gz",
+      "expected_sha256": "0bf66d92b4f6b2e50b45445b6be11c18e3e05242fb10bd99c5f673c634ef17cb",
+      "actual_sha256": "0bf66d92b4f6b2e50b45445b6be11c18e3e05242fb10bd99c5f673c634ef17cb",
+      "match": true
+    },
+    {
+      "label": "stage_d_manifest/continuity_validation",
+      "path": "outputs/phase2/current_service_continuity_v2/current_service_continuity_v2_validation.json",
+      "expected_sha256": "8dc23d1bbf664e079e11ff101398c92c5ae813cf59d817ccabc53d903cf628d3",
+      "actual_sha256": "8dc23d1bbf664e079e11ff101398c92c5ae813cf59d817ccabc53d903cf628d3",
+      "match": true
+    },
+    {
+      "label": "stage_d_manifest/scenario_mapping",
+      "path": "outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz",
+      "expected_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
+      "actual_sha256": "9d557513c111b990e451aa8ab6a8503b650c1ac0d4850f02e825d0ca45624253",
+      "match": true
+    },
+    {
+      "label": "stage_d_manifest/route_universe",
+      "path": "outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv",
+      "expected_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
+      "actual_sha256": "7bd892ae5608775e07a509a1d5670d403cfb717b78c186a8209c6a2efd307ab1",
+      "match": true
+    },
+    {
+      "label": "stage_d_manifest/s8_validation",
+      "path": "outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json",
+      "expected_sha256": "b79e4dcbe1978e04c76ac7324c8c2e982185291529a8dc0c2b4a6a835360e490",
+      "actual_sha256": "b79e4dcbe1978e04c76ac7324c8c2e982185291529a8dc0c2b4a6a835360e490",
+      "match": true
+    }
+  ],
+  "source_scan": {
+    "random": [],
+    "network": [
+      "scripts/phase2_analysis_envelope.py",
+      "scripts/phase2_build_budget_envelopes.py",
+      "scripts/phase2_build_current_service_reference.py",
+      "scripts/phase2_build_demand_profile.py",
+      "scripts/phase2_fetch_istat_od_2021.py",
+      "src/phase2_current_service_stop_timetable.py"
+    ],
+    "weighted_true": [],
+    "od_downscale_true": [],
+    "ridership_true": [],
+    "hardcoded_cardinality_hits": [
+      {
+        "file": "scripts/phase2_build_current_service_continuity_v2.py",
+        "value": 100000
+      },
+      {
+        "file": "scripts/phase2_build_current_service_continuity_v2.py",
+        "value": 16883
+      },
+      {
+        "file": "scripts/phase2_build_feeder_generalized_access_v2.py",
+        "value": 21237
+      },
+      {
+        "file": "scripts/phase2_build_multiblock_frontier_v2.py",
+        "value": 100000
+      },
+      {
+        "file": "scripts/phase2_build_passenger_utility_frontier_v2.py",
+        "value": 490962
+      },
+      {
+        "file": "scripts/phase2_build_passenger_utility_frontier_v2.py",
+        "value": 21237
+      },
+      {
+        "file": "scripts/phase2_build_pre_gjt_screening_v2.py",
+        "value": 100000
+      },
+      {
+        "file": "scripts/phase2_build_service_ready_frontier_v2.py",
+        "value": 100000
+      },
+      {
+        "file": "scripts/phase2_build_stage_d_input_manifest_v2.py",
+        "value": 100000
+      },
+      {
+        "file": "scripts/phase2_build_stage_d_input_manifest_v2.py",
+        "value": 16883
+      },
+      {
+        "file": "scripts/phase2_build_territorial_commuting_addressability_v2.py",
+        "value": 100000
+      },
+      {
+        "file": "scripts/phase2_build_territorial_commuting_addressability_v2.py",
+        "value": 50115
+      },
+      {
+        "file": "scripts/phase2_run_access_equity_v2.py",
+        "value": 100000
+      },
+      {
+        "file": "scripts/phase2_run_s8_phasing_v2.py",
+        "value": 100000
+      }
+    ]
+  },
+  "findings_sha256": "0f2f35da6310f20212c935f0e5ed4aa82e6f4d986a1db0054d20735e7f6a5fed"
+}

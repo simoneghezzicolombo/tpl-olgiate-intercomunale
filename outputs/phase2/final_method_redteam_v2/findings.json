@@ -1,0 +1,484 @@
+{
+  "audit_target_sha": "864c83accb81c615f9778396408b21e31ca72983",
+  "findings": [
+    {
+      "id": "RT-001",
+      "classification": "METHODOLOGICAL BLOCKER",
+      "severity": "BLOCKING",
+      "affected_stage": "Service Policy / Budget → Stage C",
+      "title": "Continuous production approximation is used before exact hard-budget eligibility",
+      "evidence": {
+        "passenger_frontier_budget_boundary_ambiguous_rows": 666,
+        "budget_policy_frontier_budget_boundary_ambiguous_rows": 2328,
+        "examples": [
+          {
+            "budget_suffix": "m20pct",
+            "scenario_id": "P2_3058c75ede542cb2",
+            "uniform_headway_min": 20,
+            "span_id": "S8_EXTENDED_0530_2400",
+            "annual_service_days": 260,
+            "approx_annual_bus_km": 88817.10669506999,
+            "budget_cap_annual_bus_km": 89135.20000000001,
+            "exact_count_lower_bound_bus_km": 88016.9525807,
+            "exact_count_upper_bound_bus_km": 89617.26080943999
+          },
+          {
+            "budget_suffix": "m20pct",
+            "scenario_id": "P2_46d3fc0e6b13df71",
+            "uniform_headway_min": 20,
+            "span_id": "S8_EXTENDED_0530_2400",
+            "annual_service_days": 260,
+            "approx_annual_bus_km": 88817.10669506999,
+            "budget_cap_annual_bus_km": 89135.20000000001,
+            "exact_count_lower_bound_bus_km": 88016.9525807,
+            "exact_count_upper_bound_bus_km": 89617.26080943999
+          },
+          {
+            "budget_suffix": "m20pct",
+            "scenario_id": "P2_697e52069eb8f42a",
+            "uniform_headway_min": 60,
+            "span_id": "S8_EXTENDED_0530_2400",
+            "annual_service_days": 260,
+            "approx_annual_bus_km": 88495.68713674,
+            "budget_cap_annual_bus_km": 89135.20000000001,
+            "exact_count_lower_bound_bus_km": 86103.91180872,
+            "exact_count_upper_bound_bus_km": 90887.46246476
+          },
+          {
+            "budget_suffix": "m20pct",
+            "scenario_id": "P2_abdc13d62a6b0560",
+            "uniform_headway_min": 60,
+            "span_id": "S8_EXTENDED_0530_2400",
+            "annual_service_days": 260,
+            "approx_annual_bus_km": 87341.55836302,
+            "budget_cap_annual_bus_km": 89135.20000000001,
+            "exact_count_lower_bound_bus_km": 84980.97570455998,
+            "exact_count_upper_bound_bus_km": 89702.14102148
+          },
+          {
+            "budget_suffix": "m20pct",
+            "scenario_id": "P2_969726b78be981e8",
+            "uniform_headway_min": 60,
+            "span_id": "S8_EXTENDED_0530_2400",
+            "annual_service_days": 260,
+            "approx_annual_bus_km": 87447.42831487,
+            "budget_cap_annual_bus_km": 89135.20000000001,
+            "exact_count_lower_bound_bus_km": 85083.98430636,
+            "exact_count_upper_bound_bus_km": 89810.87232338
+          },
+          {
+            "budget_suffix": "m20pct",
+            "scenario_id": "P2_e2edc885b2792a44",
+            "uniform_headway_min": 60,
+            "span_id": "S8_EXTENDED_0530_2400",
+            "annual_service_days": 260,
+            "approx_annual_bus_km": 88025.08831921998,
+            "budget_cap_annual_bus_km": 89135.20000000001,
+            "exact_count_lower_bound_bus_km": 85646.03187815999,
+            "exact_count_upper_bound_bus_km": 90404.14476028
+          },
+          {
+            "budget_suffix": "m20pct",
+            "scenario_id": "P2_69babc98d6073897",
+            "uniform_headway_min": 60,
+            "span_id": "S8_EXTENDED_0530_2400",
+            "annual_service_days": 260,
+            "approx_annual_bus_km": 87931.34203009,
+            "budget_cap_annual_bus_km": 89135.20000000001,
+            "exact_count_lower_bound_bus_km": 85554.81927251999,
+            "exact_count_upper_bound_bus_km": 90307.86478766002
+          },
+          {
+            "budget_suffix": "m20pct",
+            "scenario_id": "P2_16f95dc62055c90f",
+            "uniform_headway_min": 60,
+            "span_id": "S8_EXTENDED_0530_2400",
+            "annual_service_days": 260,
+            "approx_annual_bus_km": 87447.42831487,
+            "budget_cap_annual_bus_km": 89135.20000000001,
+            "exact_count_lower_bound_bus_km": 85083.98430636,
+            "exact_count_upper_bound_bus_km": 89810.87232338
+          }
+        ]
+      },
+      "reproducibility": "Recompute floor/ceil explicit daily pattern counts from persisted span, headway, cycle distance and annual-day fields; compare both exact-count bounds with each row's budget cap.",
+      "consequence": "Some Stage-C plans classified as budget-feasible are not guaranteed to remain under the same hard cap after route-specific exact phase selection. The same approximation can also prune boundary cases before Stage D, so search completeness is not guaranteed near the cap.",
+      "recommended_fix": "Before any budget-based candidate elimination on non-integral span/headway combinations, retain the full exact-count feasibility envelope or enumerate exact route-specific departure counts. Rebuild the budget-policy and Passenger Utility frontiers from that safe surface."
+    },
+    {
+      "id": "RT-002",
+      "classification": "METHODOLOGICAL BLOCKER",
+      "severity": "BLOCKING",
+      "affected_stage": "Stage D / final decision",
+      "title": "Frozen integrated lineage is not yet final-decision complete",
+      "evidence": {
+        "exact_stage_d_solver_integrated": false,
+        "exact_stage_d_validation_integrated": false,
+        "passenger_exact_timetable_constructed": false,
+        "s8_exact_timetable_constructed": false,
+        "zero_band_final_reliability_proven": false,
+        "primary_selected": false,
+        "runner_up_selected": false
+      },
+      "reproducibility": "Check the frozen target tree and the current Stage-C/S8/zero-band validation contracts.",
+      "consequence": "The normative constraint + robust utility + lexicographic decision rule cannot yet be executed on this integrated HEAD. Reliability/missed connections, exact budget after phasing, explicit vehicle blocks and a substantive uncertainty band are not available here.",
+      "recommended_fix": "Integrate independently audited exact-timetable evidence, then run the declared robustness sensitivity set and explicitly materialise decision budget plus uncertainty-band policy before authorising PRIMARY/RUNNER-UP."
+    },
+    {
+      "id": "RT-003",
+      "classification": "IMPORTANT LIMITATION",
+      "severity": "MAJOR",
+      "affected_stage": "Current-service baseline / non-regression",
+      "title": "Current lower-bound baseline makes the worst-municipality safeguard non-binding",
+      "evidence": {
+        "baseline_complete": false,
+        "localized_rows": 12,
+        "unresolved_or_unlocalized_rows": 39,
+        "worst_municipality_5": "Calco",
+        "worst_share_5": 0.0,
+        "worst_share_8": 0.0,
+        "worst_share_10": 0.0
+      },
+      "reproducibility": "Read the certified current-service access validation and compare candidate lower bounds against zero.",
+      "consequence": "Passing the safeguard cannot be interpreted as evidence that no municipality is worse than the true current service. It proves only non-regression below the proven localisable lower bound.",
+      "recommended_fix": "Keep the current fail-closed lower-bound rule, but propagate an explicit FINAL_DECISION_CAVEAT flag and prohibit language claiming real current-service non-regression until unresolved current stops are spatially resolved. Do not invent municipality floors."
+    },
+    {
+      "id": "RT-004",
+      "classification": "IMPORTANT LIMITATION",
+      "severity": "MAJOR",
+      "affected_stage": "Governance / lineage",
+      "title": "Audit brief and repository governance state are stale relative to frozen artifacts",
+      "evidence": {
+        "agent_protocol_exists": false,
+        "collaboration_protocol_exists": true,
+        "baseline_current": {
+          "localized_rows": 12,
+          "unresolved": 39,
+          "coverage_5": 0.07688841086357093,
+          "coverage_8": 0.15028179465397837,
+          "coverage_10": 0.19239981461768968
+        },
+        "current_clusters": [
+          "EX_002",
+          "EX_009",
+          "EX_011",
+          "EX_023",
+          "EX_026",
+          "EX_036",
+          "EX_041"
+        ]
+      },
+      "reproducibility": "Inspect frozen HEAD files and baseline validation.",
+      "consequence": "A reviewer using narrative/status counts instead of content-addressed artifacts can audit or tie-break against the wrong current-service snapshot.",
+      "recommended_fix": "Refresh AGENT_STATUS/governance pointers and make downstream reports cite content SHA plus validation contract, not copied counts."
+    },
+    {
+      "id": "RT-006",
+      "classification": "IMPORTANT LIMITATION",
+      "severity": "MAJOR",
+      "affected_stage": "Passenger Utility Frontier",
+      "title": "Stage-C skyline is an accessibility screening frontier, not the normative robust passenger-utility ranking",
+      "evidence": {
+        "full_gjt_calculated": false,
+        "municipal_work_od_downscaled": false,
+        "availability_axes": [
+          "annual_service_days",
+          "span_minutes"
+        ],
+        "worker_upper_bound_axes": [
+          "territorial_other_core_worker_mass_upper_bound",
+          "territorial_other_external_worker_mass_upper_bound"
+        ],
+        "calendar_selected": false
+      },
+      "reproducibility": "Compare PHASE2_SERVICE_DESIGN_SPEC §9/§11 with the persisted Passenger Utility axes and flags.",
+      "consequence": "Correlated accessibility and municipal structural upper-bound axes can preserve a broad Pareto set, but they do not implement expected/median demand-weighted GJT across the declared sensitivity set. The 260/312/365 availability assumptions also have no observed day-type demand weights yet.",
+      "recommended_fix": "Treat Stage C strictly as screening. Final ranking must use the declared behavioural/runtime sensitivity set at supported demand resolution, with annual-day assumptions explicitly retained as scenarios rather than empirical facts."
+    },
+    {
+      "id": "RT-011",
+      "classification": "IMPORTANT LIMITATION",
+      "severity": "MINOR",
+      "affected_stage": "Technical auditability",
+      "title": "Production builders contain hard-coded expected artifact cardinalities",
+      "evidence": {
+        "hit_count": 14,
+        "examples": [
+          {
+            "file": "scripts/phase2_build_current_service_continuity_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_current_service_continuity_v2.py",
+            "value": 16883
+          },
+          {
+            "file": "scripts/phase2_build_feeder_generalized_access_v2.py",
+            "value": 21237
+          },
+          {
+            "file": "scripts/phase2_build_multiblock_frontier_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_passenger_utility_frontier_v2.py",
+            "value": 490962
+          },
+          {
+            "file": "scripts/phase2_build_passenger_utility_frontier_v2.py",
+            "value": 21237
+          },
+          {
+            "file": "scripts/phase2_build_pre_gjt_screening_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_service_ready_frontier_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_stage_d_input_manifest_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_stage_d_input_manifest_v2.py",
+            "value": 16883
+          },
+          {
+            "file": "scripts/phase2_build_territorial_commuting_addressability_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_territorial_commuting_addressability_v2.py",
+            "value": 50115
+          },
+          {
+            "file": "scripts/phase2_run_access_equity_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_run_s8_phasing_v2.py",
+            "value": 100000
+          }
+        ]
+      },
+      "reproducibility": "Static scan for equality/inequality checks against current artifact cardinalities.",
+      "consequence": "These checks fail closed and do not bias rankings, but they conflate lineage epoch locks with mathematical invariants and make legitimate refreshed epochs fail until code is edited.",
+      "recommended_fix": "Move epoch-specific cardinalities into versioned validation contracts/manifests while retaining hash and schema checks in code."
+    },
+    {
+      "id": "RT-005",
+      "classification": "NON-ISSUE",
+      "severity": "INFO",
+      "affected_stage": "Cross-stage lineage",
+      "title": "Audited current-file lineage hashes are internally consistent",
+      "evidence": {
+        "checked_hash_edges": 33
+      },
+      "reproducibility": "SHA256 declared dependencies.",
+      "consequence": "No byte-level drift detected in the audited lineage edges.",
+      "recommended_fix": "Keep the fail-closed hash checks."
+    },
+    {
+      "id": "RT-007",
+      "classification": "NON-ISSUE",
+      "severity": "INFO",
+      "affected_stage": "S8 Robust Opportunity",
+      "title": "Absence of the intermediate SOME class on Stage C is a subset property",
+      "evidence": {
+        "all_800k_scenario_timing_rows": {
+          "ALL": 557161,
+          "SOME": 1567,
+          "NONE": 241272
+        },
+        "stage_c_unique_scenario_timing_keys": {
+          "ALL": 4275,
+          "SOME": 0,
+          "NONE": 1070
+        },
+        "stage_c_plan_rows_surface": {
+          "ALL": 13794,
+          "SOME": 0,
+          "NONE": 3089
+        },
+        "surface_vs_direct_class_disagreement_count": 0
+      },
+      "reproducibility": "Recompute ALL/SOME/NONE directly from public_all/public_any booleans on the 800k feeder envelope and on the Stage-C scenario×timing key subset; compare with the promoted surface.",
+      "consequence": "The global universe contains intermediate cases, but the Stage-C subset does not; this falsifies the hypothesis that the class was accidentally impossible in code.",
+      "recommended_fix": "No fix; keep explicit warning that route-level some-phase opportunity is not joint timetable feasibility."
+    },
+    {
+      "id": "RT-008",
+      "classification": "NON-ISSUE",
+      "severity": "INFO",
+      "affected_stage": "Station accessibility bridge",
+      "title": "Station bridge preserves pedestrian-only scope and separate historical identity",
+      "evidence": {
+        "bus_km_changed": false,
+        "od_evidence_changed": false,
+        "official_bus_stop_id": "L00407",
+        "official_routes_reference_gtfs": "D184|D185",
+        "official_stop_name": "Olgiate Molgora (stazione f.s.)",
+        "operational_network_changed": false,
+        "physical_cluster_id": "EX_039",
+        "rail_anchor_id": "rail:S01514",
+        "route_geometry_changed": false,
+        "runtime_changed": false,
+        "s8_evidence_changed": false,
+        "scope": "PEDESTRIAN_ACCESS_ONLY",
+        "service_policy_changed": false,
+        "station_stop_evidence_path": "outputs/phase2/stop_universe_v2/existing_official_stops.csv",
+        "status": "VERIFIED_APPLIED"
+      },
+      "reproducibility": "Inspect wrapper contract and access validation; core catchment summarisation uses per-unit minimum walk over a set of anchors, preventing duplicate population count.",
+      "consequence": "No route/runtime/km/OD/S8/service-policy mutation detected.",
+      "recommended_fix": "Keep fail-closed bridge tests and historical 300407/EX_011 separation."
+    },
+    {
+      "id": "RT-009",
+      "classification": "NON-ISSUE",
+      "severity": "INFO",
+      "affected_stage": "Passenger Utility Pareto",
+      "title": "5/8/10 axes and two-stage skyline contract are preserved",
+      "evidence": {
+        "axes": [
+          "public_population_coverage_share_5min",
+          "public_population_coverage_share_8min",
+          "public_population_coverage_share_10min",
+          "public_worst_municipality_coverage_share_5min",
+          "public_worst_municipality_coverage_share_8min",
+          "public_worst_municipality_coverage_share_10min",
+          "territorial_other_core_worker_mass_upper_bound",
+          "territorial_other_external_worker_mass_upper_bound",
+          "to_rail_reachable_share",
+          "to_rail_worst_municipality_reachable_share",
+          "from_rail_reachable_share",
+          "from_rail_worst_municipality_reachable_share",
+          "bidirectional_reachable_share",
+          "bidirectional_worst_municipality_reachable_share",
+          "s8_complete_supported_route_share"
+        ],
+        "two_stage": "EXACT_BECAUSE_STAGE1_DOMINANCE_OCCURS_WITHIN_IDENTICAL_HEADWAY_SPAN_CALENDAR_AND_BUDGET_CONTEXT",
+        "frontier_rows": 16883
+      },
+      "reproducibility": "Inspect certified wrapper/workflow and compare stage-1 context dominance with final availability-aware Pareto theorem.",
+      "consequence": "No missing 8-minute axis or invalid two-stage decomposition detected.",
+      "recommended_fix": "Keep wrapper as the certified entry point and add direct-global skyline regression samples."
+    },
+    {
+      "id": "RT-010",
+      "classification": "NON-ISSUE",
+      "severity": "INFO",
+      "affected_stage": "Zero-band tie-break",
+      "title": "Zero-band result is genuinely non-eliminating",
+      "evidence": {
+        "input": 16883,
+        "survivors": 16883,
+        "multi_plan_groups": 8092,
+        "reduced_groups": 0,
+        "uncertainty_band": 0.0
+      },
+      "reproducibility": "Rebuild equivalence keys at the Stage-C certified 1e-9 profile precision and run supported lexicographic fields.",
+      "consequence": "No candidate was silently removed by the provisional tie-break.",
+      "recommended_fix": "Do not reuse the pre-timetable reliability proxy as final reliability; continuity is now materialised and must enter only at the final declared tie-break stage."
+    },
+    {
+      "id": "RT-012",
+      "classification": "NON-ISSUE",
+      "severity": "INFO",
+      "affected_stage": "OD / demand / technical leakage",
+      "title": "No hidden weighted score, OD downscaling, ridership inference or random search detected",
+      "evidence": {
+        "random": [],
+        "network": [
+          "scripts/phase2_analysis_envelope.py",
+          "scripts/phase2_build_budget_envelopes.py",
+          "scripts/phase2_build_current_service_reference.py",
+          "scripts/phase2_build_demand_profile.py",
+          "scripts/phase2_fetch_istat_od_2021.py",
+          "src/phase2_current_service_stop_timetable.py"
+        ],
+        "weighted_true": [],
+        "od_downscale_true": [],
+        "ridership_true": [],
+        "hardcoded_cardinality_hits": [
+          {
+            "file": "scripts/phase2_build_current_service_continuity_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_current_service_continuity_v2.py",
+            "value": 16883
+          },
+          {
+            "file": "scripts/phase2_build_feeder_generalized_access_v2.py",
+            "value": 21237
+          },
+          {
+            "file": "scripts/phase2_build_multiblock_frontier_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_passenger_utility_frontier_v2.py",
+            "value": 490962
+          },
+          {
+            "file": "scripts/phase2_build_passenger_utility_frontier_v2.py",
+            "value": 21237
+          },
+          {
+            "file": "scripts/phase2_build_pre_gjt_screening_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_service_ready_frontier_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_stage_d_input_manifest_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_stage_d_input_manifest_v2.py",
+            "value": 16883
+          },
+          {
+            "file": "scripts/phase2_build_territorial_commuting_addressability_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_build_territorial_commuting_addressability_v2.py",
+            "value": 50115
+          },
+          {
+            "file": "scripts/phase2_run_access_equity_v2.py",
+            "value": 100000
+          },
+          {
+            "file": "scripts/phase2_run_s8_phasing_v2.py",
+            "value": 100000
+          }
+        ]
+      },
+      "reproducibility": "Static scan of Phase-2 production Python sources, plus contract checks in OD/S8 builders.",
+      "consequence": "Municipal work evidence remains structural; S8 worker counts weight rail direction only; residential population remains accessibility weight.",
+      "recommended_fix": "Keep explicit false flags and fail-closed source checks."
+    },
+    {
+      "id": "RT-013",
+      "classification": "ACCEPTABLE ASSUMPTION",
+      "severity": "INFO",
+      "affected_stage": "Service policy",
+      "title": "Calendars, recovery and extension shares are explicitly assumptions rather than observed service facts",
+      "evidence": {
+        "production_semantics": "MODEL_OUTPUT_CONTINUOUS_CLOCKFACE_PRODUCTION_APPROXIMATION",
+        "current_annual_service_days_inferred": false,
+        "continuity_complete": false
+      },
+      "reproducibility": "Inspect versioned design-space config and service-policy validation.",
+      "consequence": "The grid is legitimate for sensitivity exploration, but calendar values cannot be described as observed current-service calendars.",
+      "recommended_fix": "Preserve assumption labels through final reporting and test explicit day-type utility before choosing a calendar."
+    }
+  ]
+}
