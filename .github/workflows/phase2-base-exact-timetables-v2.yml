@@ -1,0 +1,169 @@
+name: Phase 2 Base Exact Timetables V2
+
+on:
+  push:
+    branches:
+      - phase2-passenger-gjt-v2
+    paths:
+      - 'src/phase2_exact_timetable_v2.py'
+      - 'scripts/phase2_build_base_exact_timetables_v2.py'
+      - 'tests/test_phase2_exact_timetable_v2.py'
+      - 'docs/PHASE2_DECISION_CONTRACT_V2.md'
+      - '.github/workflows/phase2-base-exact-timetables-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-base-exact-timetables-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/base_exact_timetables_v2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile exact-timetable engine
+        run: |
+          python -m py_compile src/phase2_exact_timetable_v2.py
+          python -m py_compile scripts/phase2_build_base_exact_timetables_v2.py
+
+      - name: Run exact-timetable tests
+        run: python -m pytest -q tests/test_phase2_exact_timetable_v2.py
+
+      - name: Materialise base exact timetables
+        run: >-
+          python scripts/phase2_build_base_exact_timetables_v2.py
+          --frontier outputs/phase2/plan_level_frontiers_v2/plan_level_frontier_union_v2.csv
+          --frontier-validation outputs/phase2/plan_level_frontiers_v2/plan_level_frontiers_v2_validation.json
+          --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz
+          --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv
+          --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json
+          --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv
+          --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json
+          --s8-events outputs/phase2/s8_events.csv
+          --work-direction-summary outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv
+          --work-weights-validation outputs/phase2/passenger_gjt_v2/s8_work_direction_weights_v2_validation.json
+          --plan-output $OUTDIR/base_exact_timetable_candidates_v2.csv
+          --trip-output $OUTDIR/base_exact_timetable_trips_v2.csv.gz
+          --validation $OUTDIR/base_exact_timetables_v2_validation.json
+
+      - name: Validate exact timetable semantics
+        run: |
+          python - <<'PY'
+          import csv,gzip,json
+          from pathlib import Path
+          root=Path('outputs/phase2/base_exact_timetables_v2')
+          v=json.loads((root/'base_exact_timetables_v2_validation.json').read_text())
+          assert v['status']=='PASS_BASE_EXACT_TIMETABLES_V2_BUILD'
+          assert v['contract']=='PHASE2_BASE_EXACT_TIMETABLES_V2'
+          assert v['input_base_frontier_plan_count']==394
+          assert 0 < v['exact_timetable_plan_count'] <= 394
+          assert v['max_public_route_count'] <= 4
+          assert v['route_weighting_applied'] is False
+          assert v['worker_reference_assigned_to_routes'] is False
+          assert v['joint_vehicle_block_timetable_feasibility_evaluated'] is True
+          assert v['candidate_s8_phases_materialised'] is True
+          assert v['exact_timetable_constructed'] is True
+          assert v['final_service_policy_selected'] is False
+          assert v['final_topology_selected'] is False
+          assert v['topology_ranked'] is False
+          assert v['primary_selected'] is False and v['runner_up_selected'] is False
+          assert v['connection_margin_sensitivities_min']==[0,2,5]
+          rows=[]
+          with (root/'base_exact_timetable_candidates_v2.csv').open(encoding='utf-8',newline='') as f:
+              for r in csv.DictReader(f):
+                  rows.append(r)
+                  assert float(r['exact_annual_bus_km']) <= 111419.000001
+                  assert r['candidate_s8_phases_materialised']=='true'
+                  assert r['joint_vehicle_block_timetable_feasibility_evaluated']=='true'
+                  assert r['exact_timetable_constructed']=='true'
+                  assert r['s8_phase_selected']=='true'
+                  assert r['final_service_policy_selected']=='false'
+                  assert r['final_topology_selected']=='false'
+                  assert r['topology_ranked']=='false'
+                  assert r['primary_selected']=='false' and r['runner_up_selected']=='false'
+                  assert int(r['exact_fleet_recovery15']) >= int(r['fleet_lower_bound_recovery15'])
+                  phases=json.loads(r['candidate_route_phases_json'])
+                  assert len(phases)==int(r['s8_public_route_count'])
+          assert len(rows)==v['exact_timetable_plan_count']
+          assert len({r['plan_id'] for r in rows})==len(rows)
+          trip_count=0
+          with gzip.open(root/'base_exact_timetable_trips_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              for r in csv.DictReader(f):
+                  trip_count+=1
+                  assert r['candidate_timetable_not_final_recommendation']=='true'
+                  assert r['vehicle_id_recovery15'].startswith('V')
+          assert trip_count==v['trip_row_count_recovery15_blocks']
+          print(json.dumps({
+            'exact_plans':v['exact_timetable_plan_count'],
+            'budget_failed':v['exact_budget_infeasible_plan_count'],
+            'frequent_plans':v['frequent_30min_or_better_exact_plan_count'],
+            'route_count_distribution':v['route_count_distribution_by_unique_scenario'],
+            'phase_vectors':v['phase_vectors_evaluated'],
+            'budget_feasible_vectors':v['budget_feasible_phase_vectors'],
+            'fleet_above_lower_bound':v['exact_fleet_exceeds_aggregate_lower_bound_recovery15_plan_count'],
+            'trips':v['trip_row_count_recovery15_blocks'],
+          },indent=2))
+          PY
+
+      - name: Deterministic byte-for-byte rebuild
+        run: |
+          rm -rf /tmp/base-exact-timetables-v2
+          mkdir -p /tmp/base-exact-timetables-v2
+          python scripts/phase2_build_base_exact_timetables_v2.py \
+            --frontier outputs/phase2/plan_level_frontiers_v2/plan_level_frontier_union_v2.csv \
+            --frontier-validation outputs/phase2/plan_level_frontiers_v2/plan_level_frontiers_v2_validation.json \
+            --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --path-matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --s8-events outputs/phase2/s8_events.csv \
+            --work-direction-summary outputs/phase2/passenger_gjt_v2/s8_work_direction_summary_v2.csv \
+            --work-weights-validation outputs/phase2/passenger_gjt_v2/s8_work_direction_weights_v2_validation.json \
+            --plan-output /tmp/base-exact-timetables-v2/plans.csv \
+            --trip-output /tmp/base-exact-timetables-v2/trips.csv.gz \
+            --validation /tmp/base-exact-timetables-v2/validation.json >/dev/null
+          cmp $OUTDIR/base_exact_timetable_candidates_v2.csv /tmp/base-exact-timetables-v2/plans.csv
+          cmp $OUTDIR/base_exact_timetable_trips_v2.csv.gz /tmp/base-exact-timetables-v2/trips.csv.gz
+          cmp $OUTDIR/base_exact_timetables_v2_validation.json /tmp/base-exact-timetables-v2/validation.json
+
+      - name: Guard evidence semantics
+        run: |
+          FILES="src/phase2_exact_timetable_v2.py scripts/phase2_build_base_exact_timetables_v2.py docs/PHASE2_DECISION_CONTRACT_V2.md"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -n -E 'weighted_score|primary_selected.: true|runner_up_selected.: true|final_service_policy_selected.: true|final_topology_selected.: true' $FILES
+          git diff --check
+
+      - name: Persist validated exact timetables V2
+        run: |
+          git config user.name "phase2-base-exact-timetables-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add $OUTDIR
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist base exact timetables V2 [skip ci]"
+            git push origin HEAD:phase2-passenger-gjt-v2
+          fi
+
+      - name: Upload exact timetable evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-base-exact-timetables-v2-${{ github.sha }}
+          retention-days: 90
+          path: ${{ env.OUTDIR }}
