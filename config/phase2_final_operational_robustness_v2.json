@@ -1,0 +1,22 @@
+{
+  "contract": "PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_SENSITIVITY_V2",
+  "status": "SOURCE_CLOSED_ENGINEERING_SENSITIVITY_NOT_EMPIRICAL_PROBABILITY",
+  "planned_connection_identity": "FIX_NOMINAL_TARGET_EVENT_THEN_TEST_RETENTION_UNDER_PERTURBATION",
+  "next_alternative_connection_semantics": "REPORT_SEPARATELY_NEVER_REBIND_AS_PLANNED_SUCCESS",
+  "bus_runtime_delay_source": "STAGE_D_VALIDATION_RUNTIME_STRESS_MINUTES_REPORTED_NOT_SELECTED",
+  "recovery_source": "STAGE_D_VALIDATION_RECOVERY_VALUES_EVALUATED_NOT_SELECTED",
+  "transfer_profile_source": "config/phase2_s8_phasing_sensitivity_v2.json",
+  "rail_arrival_delay_minutes": [0],
+  "nonzero_rail_delay_sensitivity_authorized": false,
+  "rail_delay_semantics": "NOMINAL_ONLY_NO_CERTIFIED_NONZERO_RAIL_DELAY_SENSITIVITY_FOUND_IN_CURRENT_LINEAGE",
+  "runtime_stress_vehicle_block_semantics": "ADD_DECLARED_RUNTIME_STRESS_TO_EXACT_VEHICLE_RETURN_THEN_TEST_NOMINAL_BLOCKS_AND_RECOMPUTE_MINIMUM_FLEET",
+  "technical_vehicle_return_is_passenger_service": false,
+  "passenger_weighting": false,
+  "budget_selected": false,
+  "calendar_selected": false,
+  "recovery_selected": false,
+  "primary_selected": false,
+  "runner_up_selected": false,
+  "weighted_composite_score": false,
+  "note": "Non-zero rail-delay cases may be added only by replacing this sensitivity contract with an independently authorised source-backed contract. The current Stage-D fixture exposes deterministic bus runtime stress and recovery sensitivities but no empirical delay probability distribution."
+}
