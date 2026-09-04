@@ -22,6 +22,11 @@ def test_cycle_primitives_are_explicit_minimisation_axes():
     assert CYCLE_RUNTIME_AXIS in MIN_AXES
 
 
+def test_policy_outputs_do_not_enter_budget_neutral_frontier_axes():
+    assert "annual_bus_km" not in MIN_AXES
+    assert "aggregate_interlinable_fleet_lower_bound" not in MIN_AXES
+
+
 def test_shorter_closed_cycle_can_prevent_wrong_prepolicy_dominance():
     public_shorter = row("public_shorter")
     cycle_shorter = row("cycle_shorter")
