@@ -1,0 +1,167 @@
+name: Phase 2 Finalist Simplicity Diagnostic A
+
+on:
+  push:
+    branches:
+      - phase2-finalist-simplicity-diagnostic-a
+    paths:
+      - 'scripts/phase2_run_finalist_simplicity_diagnostic_a.py'
+      - 'scripts/phase2_export_finalist_site_data_a.py'
+      - '.github/workflows/phase2-finalist-simplicity-diagnostic-a.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: phase2-finalist-simplicity-diagnostic-a-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DIAGDIR: outputs/phase2/finalist_simplicity_diagnostic_a
+  SITEDIR: outputs/phase2/finalist_site_data_a
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install pytest
+
+      - name: Compile and inherited unit tests
+        run: |
+          python -m py_compile scripts/phase2_build_finalist_simplicity_diagnostic_v3.py
+          python -m py_compile scripts/phase2_run_finalist_simplicity_diagnostic_a.py
+          python -m py_compile scripts/phase2_export_finalist_site_data_a.py
+          python -m pytest -q tests/test_phase2_finalist_simplicity_diagnostic_v3.py
+
+      - name: Materialise pinned Stage D and Stage F sources
+        run: |
+          set -euo pipefail
+          rm -rf .finalist_sources
+          mkdir -p .finalist_sources
+          STAGE_D=d41bb678382d018929c1c6b46542f12549f20d4f
+          STAGE_F=746a17c796f8e5fc24a636e47d304cd9293f2a43
+          git show "$STAGE_D:outputs/phase2/stage_d_exact_rt001_v3/exact_selected_timetables_rt001_v3.csv" > .finalist_sources/exact_selected_timetables_rt001_v3.csv
+          git show "$STAGE_D:outputs/phase2/stage_d_exact_rt001_v3/exact_selected_trips_rt001_v3.csv.gz" > .finalist_sources/exact_selected_trips_rt001_v3.csv.gz
+          git show "$STAGE_D:outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv" > .finalist_sources/stage_d_public_route_inputs_rt001_v3.csv
+          git show "$STAGE_D:outputs/phase2/stop_universe_v2/existing_official_stops.csv" > .finalist_sources/existing_official_stops.csv
+          git show "$STAGE_D:outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv" > .finalist_sources/proposed_stop_candidates.csv
+          git show "$STAGE_D:outputs/phase2/stop_universe_v2/settlement_destination_anchors.csv" > .finalist_sources/settlement_destination_anchors.csv
+          git show "$STAGE_F:outputs/phase2/stage_f_engineering_robustness_rt001_v3/stage_f_engineering_timetable_summary_rt001_v3.csv.gz" > .finalist_sources/stage_f_engineering_timetable_summary_rt001_v3.csv.gz
+
+      - name: Build current four-finalist simplicity diagnostic
+        run: |
+          rm -rf "$DIAGDIR" "$SITEDIR"
+          python scripts/phase2_run_finalist_simplicity_diagnostic_a.py --output-dir "$DIAGDIR"
+
+      - name: Export source-closed site data package
+        run: |
+          python scripts/phase2_export_finalist_site_data_a.py --diagnostic-dir "$DIAGDIR" --output-dir "$SITEDIR"
+
+      - name: Validate diagnostic and site-data contracts
+        run: |
+          python - <<'PY'
+          import csv, json
+          from collections import Counter
+          from pathlib import Path
+
+          diag = Path('outputs/phase2/finalist_simplicity_diagnostic_a')
+          site = Path('outputs/phase2/finalist_site_data_a')
+          v = json.loads((diag/'finalist_simplicity_diagnostic_v3_validation.json').read_text())
+          assert v['status'] == 'PASS_PHASE2_FINALIST_SIMPLICITY_DIAGNOSTIC_V3'
+          assert v['dry_run_finalist_count'] == 4
+          assert v['selected_timetable_count'] == 4
+          assert v['route_structure_row_count'] == 8
+          assert v['stage_f_summary_row_count'] == 4
+          assert v['weighted_complexity_score'] is False
+          assert v['topology_family_used_as_automatic_simplicity_rank'] is False
+          assert v['primary_selected'] is False and v['runner_up_selected'] is False
+
+          rows = list(csv.DictReader((diag/'finalist_timetable_structure_v3.csv').open(encoding='utf-8')))
+          assert len(rows) == 4
+          assert Counter(r['topology_family'] for r in rows) == Counter({'two_independent_loops': 2, 'interlined_figure8': 2})
+          assert Counter(r['span_minutes'] for r in rows) == Counter({'1110': 2, '960': 2})
+          assert {r['uniform_headway_min'] for r in rows} == {'60'}
+
+          m = json.loads((site/'finalist_site_data_manifest_a.json').read_text())
+          assert m['status'] == 'PASS_PHASE2_FINALIST_SITE_DATA_EXPORT_A'
+          assert m['finalist_count'] == 4
+          assert m['route_count'] == 8
+          assert m['topology_families'] == ['interlined_figure8', 'two_independent_loops']
+          assert m['span_minutes'] == [960, 1110]
+          assert m['actual_routed_geometry_exported'] is False
+          assert m['schematic_connection_between_ordered_points_permitted'] is True
+          assert m['schematic_connection_must_be_labelled_as_schematic'] is True
+          assert m['geocoding_used'] is False
+          assert m['nearest_neighbour_matching_used'] is False
+          assert m['fuzzy_matching_used'] is False
+          assert m['invented_coordinates_used'] is False
+          assert m['weighted_score_used'] is False
+          assert m['primary_selected'] is False and m['runner_up_selected'] is False
+          assert m['unresolved_nonrail_anchor_ids'] == []
+
+          seq = list(csv.DictReader((site/'finalist_route_stop_sequence_site_a.csv').open(encoding='utf-8')))
+          assert seq
+          assert {r['selected_timetable_id'] for r in seq} == set(m['selected_timetable_ids'])
+          assert all(r['geometry_semantics'] == 'ORDERED_CERTIFIED_ANCHOR_POINTS_ONLY_NO_ROUTED_POLYLINE' for r in seq)
+          assert all((r['lat'] and r['lon']) or r['anchor_id'] == 'rail:S01514' for r in seq)
+          print(json.dumps({'timetables': len(rows), 'sequence_points': len(seq), 'coordinate_status_counts': m['coordinate_status_counts']}, indent=2))
+          PY
+
+      - name: Deterministic byte-for-byte rebuild
+        run: |
+          set -euo pipefail
+          ROOT="$(mktemp -d)"
+          D2="$ROOT/diagnostic"
+          S2="$ROOT/site"
+          python scripts/phase2_run_finalist_simplicity_diagnostic_a.py --output-dir "$D2"
+          python scripts/phase2_export_finalist_site_data_a.py --diagnostic-dir "$D2" --output-dir "$S2"
+          diff -qr "$DIAGDIR" "$D2"
+          diff -qr "$SITEDIR" "$S2"
+
+      - name: Epistemic anti-invention guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = [
+              Path('scripts/phase2_build_finalist_simplicity_diagnostic_v3.py'),
+              Path('scripts/phase2_run_finalist_simplicity_diagnostic_a.py'),
+              Path('scripts/phase2_export_finalist_site_data_a.py'),
+          ]
+          text = '\n'.join(p.read_text(encoding='utf-8') for p in files)
+          for banned in ('np.random', 'numpy.random', 'import random', 'from random', 'rapidfuzz', 'fuzzywuzzy', 'SequenceMatcher', 'Nominatim', 'geopy.geocoders', 'requests.get'):
+              assert banned not in text, banned
+          manifest = (Path('outputs/phase2/finalist_site_data_a')/'finalist_site_data_manifest_a.json').read_text()
+          assert '"actual_routed_geometry_exported": false' in manifest
+          assert '"invented_coordinates_used": false' in manifest
+          PY
+
+      - name: Persist evidence
+        run: |
+          git config user.name 'phase2-finalist-simplicity-diagnostic-a-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$DIAGDIR" "$SITEDIR"
+          if git diff --cached --quiet; then
+            echo 'No output changes to persist.'
+            exit 0
+          fi
+          git commit -m 'evidence(phase2): persist finalist diagnostic A [skip ci]'
+          git push origin HEAD:phase2-finalist-simplicity-diagnostic-a
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-finalist-simplicity-diagnostic-a-${{ github.sha }}
+          path: |
+            outputs/phase2/finalist_simplicity_diagnostic_a
+            outputs/phase2/finalist_site_data_a
+          if-no-files-found: error
+          retention-days: 90
