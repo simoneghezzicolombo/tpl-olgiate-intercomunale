@@ -1,0 +1,212 @@
+name: Phase 2 Stage E Final Operational Robustness RT001 V3
+
+on:
+  push:
+    branches: [phase2-stage-e-final-rt001-v3]
+    paths:
+      - 'src/phase2_final_operational_robustness_v2.py'
+      - 'scripts/phase2_build_final_operational_robustness_v2.py'
+      - 'src/phase2_stage_e_stage_d_interface_v3.py'
+      - 'scripts/phase2_check_stage_e_stage_d_interface_v3.py'
+      - 'scripts/phase2_run_final_operational_robustness_rt001_v3.py'
+      - 'scripts/phase2_run_final_operational_robustness_rt001_v3_streaming.py'
+      - 'scripts/phase2_finalize_stage_e_rt001_v3_validation.py'
+      - 'config/phase2_final_operational_robustness_rt001_v3.json'
+      - 'tests/test_phase2_final_operational_robustness_v2.py'
+      - 'tests/test_phase2_stage_e_stage_d_interface_v3.py'
+      - 'tests/test_phase2_stage_e_rt001_v3_adapter.py'
+      - '.github/workflows/phase2-stage-e-final-rt001-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/final_operational_robustness_rt001_v3
+      STAGED: outputs/phase2/stage_d_exact_rt001_v3
+      ROUTES: outputs/phase2/stage_d_input_manifest_rt001_v3/stage_d_public_route_inputs_rt001_v3.csv
+      S8EVENTS: outputs/phase2/s8_events.csv
+      S8SENS: config/phase2_s8_phasing_sensitivity_v2.json
+      ESENS: config/phase2_final_operational_robustness_rt001_v3.json
+      STRESS_SOURCE: outputs/phase2/exact_timetable_optimizer_v2/stage_d_exact_timetable_v2_validation.json
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify certified Stage E engine blobs
+        run: |
+          test "$(git hash-object src/phase2_final_operational_robustness_v2.py)" = "f9f191a646047c956ef61101abc227ef62da8249"
+          test "$(git hash-object scripts/phase2_build_final_operational_robustness_v2.py)" = "d6829e80d1bea5b8628f9c9d002be80998581781"
+      - name: Compile
+        run: |
+          python -m py_compile \
+            src/phase2_final_operational_robustness_v2.py \
+            scripts/phase2_build_final_operational_robustness_v2.py \
+            src/phase2_stage_e_stage_d_interface_v3.py \
+            scripts/phase2_check_stage_e_stage_d_interface_v3.py \
+            scripts/phase2_run_final_operational_robustness_rt001_v3.py \
+            scripts/phase2_run_final_operational_robustness_rt001_v3_streaming.py \
+            scripts/phase2_finalize_stage_e_rt001_v3_validation.py
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<9'
+      - name: Regression and adapter tests
+        run: |
+          python -m pytest -q \
+            tests/test_phase2_final_operational_robustness_v2.py \
+            tests/test_phase2_stage_e_stage_d_interface_v3.py \
+            tests/test_phase2_stage_e_rt001_v3_adapter.py
+      - name: Validate Stage D to Stage E lossless interface
+        run: |
+          mkdir -p "$OUTDIR"
+          python scripts/phase2_check_stage_e_stage_d_interface_v3.py \
+            --validation "$STAGED/stage_d_exact_rt001_v3_validation.json" \
+            --summary "$STAGED/exact_selected_timetables_rt001_v3.csv" \
+            --trips "$STAGED/exact_selected_trips_rt001_v3.csv.gz" \
+            --contexts "$STAGED/exact_plan_context_results_rt001_v3.csv.gz" \
+            --output "$OUTDIR/stage_e_stage_d_interface_rt001_v3_validation.json" \
+            --input-role LOSSLESS_STAGE_D_FINAL_SELECTION_LINEAGE
+      - name: Build final operational robustness RT001 V3
+        run: |
+          python scripts/phase2_run_final_operational_robustness_rt001_v3_streaming.py \
+            --stage-d-validation "$STAGED/stage_d_exact_rt001_v3_validation.json" \
+            --stage-d-contexts "$STAGED/exact_plan_context_results_rt001_v3.csv.gz" \
+            --stage-d-timetables "$STAGED/exact_selected_timetables_rt001_v3.csv" \
+            --stage-d-trips "$STAGED/exact_selected_trips_rt001_v3.csv.gz" \
+            --route-input "$ROUTES" \
+            --s8-events "$S8EVENTS" \
+            --s8-sensitivity "$S8SENS" \
+            --stage-e-sensitivity "$ESENS" \
+            --output-dir "$OUTDIR"
+          python scripts/phase2_finalize_stage_e_rt001_v3_validation.py \
+            --validation "$OUTDIR/final_operational_robustness_rt001_v3_validation.json" \
+            --source-validation "$STRESS_SOURCE"
+      - name: Validate final Stage E contract
+        run: |
+          python - <<'PY'
+          import csv,gzip,json
+          from pathlib import Path
+          out=Path('outputs/phase2/final_operational_robustness_rt001_v3')
+          v=json.loads((out/'final_operational_robustness_rt001_v3_validation.json').read_text())
+          i=json.loads((out/'stage_e_stage_d_interface_rt001_v3_validation.json').read_text())
+          assert v['status']=='PASS_PHASE2_FINAL_OPERATIONAL_ROBUSTNESS_RT001_V3'
+          assert v['contract']=='PHASE2_PLANNED_CONNECTION_PRESERVING_OPERATIONAL_ROBUSTNESS_RT001_V3'
+          assert v['stage_e_algorithm_changed'] is False
+          assert v['stage_e_adapter_only'] is True
+          assert v['stage_e_engine_builder_git_blob_sha']=='d6829e80d1bea5b8628f9c9d002be80998581781'
+          assert v['stage_e_engine_kernel_git_blob_sha']=='f9f191a646047c956ef61101abc227ef62da8249'
+          assert v['stage_d_status']=='PASS_PHASE2_STAGE_D_EXACT_TIMETABLE_RT001_V3'
+          assert v['stage_d_daily_timing_input_count']==5325
+          assert v['selected_timetable_count']==6000
+          assert v['stage_c_plan_context_count']==16495
+          assert v['represented_plan_context_count']==16495
+          assert v['stage_d_inputs_with_context_dependent_exact_split']==634
+          assert v['stage_e_consumption_identity']=='selected_timetable_id'
+          assert v['stage_d_parent_identity_preserved'] is True
+          assert v['stage_e_can_consume_without_context_collapse'] is True
+          assert v['exact_public_trip_count']==285748
+          assert v['bus_runtime_delay_minutes']==[0.0,5.0,10.0,15.0]
+          assert v['bus_runtime_delay_source_grid_verified']==[0,5,10,15]
+          assert v['bus_runtime_delay_source_is_empirical_probability'] is False
+          assert v['rail_arrival_delay_minutes']==[0.0]
+          assert v['nonzero_rail_delay_sensitivity_authorized'] is False
+          assert v['recovery_minutes']==[5,10,15]
+          assert v['technical_return_connection_count']==0
+          assert v['technical_return_used_as_passenger_service'] is False
+          assert v['next_train_rebinding_used_as_success'] is False
+          assert v['fixed_target_runtime_retention_monotonic_sanity'] is True
+          assert v['stage_d_fixture_is_final_selection_lineage'] is True
+          assert v['stage_d_lineage_role']=='LOSSLESS_STAGE_D_FINAL_SELECTION_LINEAGE'
+          assert v['block_sensitivity_row_count']==6000*3*4
+          assert v['summary_row_count']==6000*3
+          for key in ('decision_budget_selected','calendar_selected','recovery_selected','primary_selected','runner_up_selected','weighted_composite_score','final_selection_authorized','ridership_forecast','municipal_od_downscaled','random_search','passenger_weighting_applied'):
+              assert v[key] is False,key
+          assert i['status']=='PASS_PHASE2_STAGE_E_STAGE_D_INTERFACE_V3_READINESS'
+          assert i['identity_field']=='selected_timetable_id'
+          assert i['exact_timetable_count']==6000
+          assert i['represented_plan_context_count_observed']==16495
+          assert i['stage_e_can_consume_without_context_collapse'] is True
+          for name in (
+              'final_operational_connection_audit_rt001_v3.csv.gz',
+              'final_operational_robustness_surface_rt001_v3.csv.gz',
+              'final_operational_block_sensitivity_rt001_v3.csv.gz',
+              'final_operational_robustness_summary_rt001_v3.csv.gz',
+          ):
+              with gzip.open(out/name,'rt',encoding='utf-8',newline='') as f:
+                  fields=next(csv.reader(f))
+              assert fields[:2]==['selected_timetable_id','stage_d_input_id'],(name,fields[:2])
+          print(json.dumps({k:v[k] for k in ('selected_timetable_count','represented_plan_context_count','exact_public_trip_count','connection_candidate_row_count','planned_connection_count_across_profiles_and_directions','robustness_surface_row_count','block_sensitivity_row_count','nominal_block_assignment_infeasible_case_count','cases_requiring_additional_vehicle_count','planned_bus_to_rail_misses_by_runtime_delay')},indent=2,sort_keys=True))
+          PY
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/stage-e-rt001-v3 && mkdir -p /tmp/stage-e-rt001-v3
+          python scripts/phase2_run_final_operational_robustness_rt001_v3_streaming.py \
+            --stage-d-validation "$STAGED/stage_d_exact_rt001_v3_validation.json" \
+            --stage-d-contexts "$STAGED/exact_plan_context_results_rt001_v3.csv.gz" \
+            --stage-d-timetables "$STAGED/exact_selected_timetables_rt001_v3.csv" \
+            --stage-d-trips "$STAGED/exact_selected_trips_rt001_v3.csv.gz" \
+            --route-input "$ROUTES" \
+            --s8-events "$S8EVENTS" \
+            --s8-sensitivity "$S8SENS" \
+            --stage-e-sensitivity "$ESENS" \
+            --output-dir /tmp/stage-e-rt001-v3
+          python scripts/phase2_finalize_stage_e_rt001_v3_validation.py \
+            --validation /tmp/stage-e-rt001-v3/final_operational_robustness_rt001_v3_validation.json \
+            --source-validation "$STRESS_SOURCE"
+          for f in \
+            final_operational_connection_audit_rt001_v3.csv.gz \
+            final_operational_robustness_surface_rt001_v3.csv.gz \
+            final_operational_block_sensitivity_rt001_v3.csv.gz \
+            final_operational_robustness_summary_rt001_v3.csv.gz \
+            final_operational_robustness_rt001_v3_validation.json; do
+            cmp "$OUTDIR/$f" "/tmp/stage-e-rt001-v3/$f"
+          done
+      - name: Guard epistemic boundary
+        run: |
+          ! grep -REn 'np\.random|random\.' \
+            src/phase2_final_operational_robustness_v2.py \
+            scripts/phase2_build_final_operational_robustness_v2.py \
+            scripts/phase2_run_final_operational_robustness_rt001_v3.py \
+            scripts/phase2_run_final_operational_robustness_rt001_v3_streaming.py \
+            scripts/phase2_finalize_stage_e_rt001_v3_validation.py
+          python - <<'PY'
+          import json,re
+          from pathlib import Path
+          cfg=json.loads(Path('config/phase2_final_operational_robustness_rt001_v3.json').read_text())
+          assert cfg['rail_arrival_delay_minutes']==[0]
+          assert cfg['nonzero_rail_delay_sensitivity_authorized'] is False
+          assert cfg['bus_runtime_delay_minutes']==[0,5,10,15]
+          paths=[
+              Path('scripts/phase2_run_final_operational_robustness_rt001_v3.py'),
+              Path('scripts/phase2_run_final_operational_robustness_rt001_v3_streaming.py'),
+          ]
+          forbidden=re.compile(r'''(?:primary_selected|runner_up_selected)["']?\s*[:=]\s*(?:True|true)''')
+          for path in paths:
+              match=forbidden.search(path.read_text(encoding='utf-8'))
+              if match:
+                  raise SystemExit(f'forbidden final-selection flag in {path}: {match.group(0)}')
+          PY
+      - name: Persist evidence
+        run: |
+          git config user.name 'phase2-stage-e-rt001-v3-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$OUTDIR"
+          if git diff --cached --quiet; then
+            echo 'No evidence changes to persist'
+          else
+            git commit -m 'data(phase2): persist final Stage-E RT001 V3 robustness [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-stage-e-final-rt001-v3-${{ github.sha }}
+          path: "$OUTDIR"
+          if-no-files-found: error
