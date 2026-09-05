@@ -6,6 +6,8 @@ on:
     paths:
       - .github/workflows/journey-official-kml-baseline.yml
       - dietro-l-analisi/build_official_kml_baseline.py
+      - data/external/current_service_v4/archived_kml/D84.kml
+      - data/external/current_service_v4/archived_kml/E03.kml
   workflow_dispatch:
 
 permissions:
@@ -22,16 +24,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Recover user-archived official ATP KML snapshots
+      - name: Verify source-closed archived official KML
         shell: bash
-        env:
-          D84_SNAPSHOT: 'https://sdmntprnortheu.oaiusercontent.com/files/00000000-7b3c-81f4-bed3-bf15340a8a70/raw?se=2026-09-05T15%3A19%3A10Z&sp=r&sv=2026-02-06&sr=b&scid=17f7956c-89a1-5f4e-b969-70e30b486233&skoid=e5e3659d-4463-4dbf-b2ce-ee32bc0a0a8d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-05T04%3A07%3A36Z&ske=2026-09-06T04%3A07%3A36Z&sks=b&skv=2026-02-06&sig=iaMabBDMUC/XIwcCMvODf36LoGF92nvNtmiC7qwiBEQ%3D'
-          E03_SNAPSHOT: 'https://sdmntprdenmarkeast.oaiusercontent.com/files/00000000-5330-8210-872a-e25b2eeedfe3/raw?se=2026-09-05T15%3A19%3A15Z&sp=r&sv=2026-02-06&sr=b&scid=b5ab0fc2-aaf6-5164-82d9-cb784ad0055c&skoid=e5e3659d-4463-4dbf-b2ce-ee32bc0a0a8d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-05T05%3A13%3A57Z&ske=2026-09-06T05%3A13%3A57Z&sks=b&skv=2026-02-06&sig=9sFp%2BlGegj66Po7EgK9vr%2B3SXcNnMY14M41fcRL1FyU%3D'
         run: |
           set -euo pipefail
-          mkdir -p data/external/current_service_v4/archived_kml
-          curl --fail --location --retry 2 "$D84_SNAPSHOT" -o data/external/current_service_v4/archived_kml/D84.kml
-          curl --fail --location --retry 2 "$E03_SNAPSHOT" -o data/external/current_service_v4/archived_kml/E03.kml
           echo '6cf715a83c1e85e7ebfeecd82b666eee623119e7b37e35875ed0be419fa5523a  data/external/current_service_v4/archived_kml/D84.kml' | sha256sum -c -
           echo '10239544443134a10992b938a878ff62a906618f8f7f6babe2a339647f41bfa5  data/external/current_service_v4/archived_kml/E03.kml' | sha256sum -c -
       - name: Convert archived official KML to browser geometry
@@ -39,17 +35,42 @@ jobs:
           python dietro-l-analisi/build_official_kml_baseline.py \
             --d184 data/external/current_service_v4/archived_kml/D84.kml \
             --d185 data/external/current_service_v4/archived_kml/E03.kml
-      - name: Validate geometry
+      - name: Validate KML geometry contract
         shell: bash
         run: |
           set -euo pipefail
-          python -c "import base64,gzip,json,pathlib; root=pathlib.Path('dietro-l-analisi'); m=json.loads((root/'current-routes-kml-source.json').read_text()); names=[c['file'] for c in m['geojson']['gzip_base64_chunks']]; data=json.loads(gzip.decompress(base64.b64decode(''.join((root/n).read_text().strip() for n in names)))); assert {f['properties']['route'] for f in data['features']}=={'D184','D185'}; assert sum(len(f['geometry']['coordinates']) for f in data['features']) > 5000; print('KML geometry PASS', len(data['features']))"
-      - name: Persist archive and browser assets
+          python - <<'PY'
+          import base64, gzip, json
+          from pathlib import Path
+          root = Path('dietro-l-analisi')
+          m = json.loads((root/'current-routes-kml-source.json').read_text())
+          assert m['contract'] == 'CURRENT_ROUTE_BASELINE_ARCHIVED_OFFICIAL_ATP_KML_V1'
+          assert m['decision_output'] is False
+          assert m['current_codes'] == {'D184':'D84','D185':'E03'}
+          assert m['routes']['D184']['sha256'] == '6cf715a83c1e85e7ebfeecd82b666eee623119e7b37e35875ed0be419fa5523a'
+          assert m['routes']['D185']['sha256'] == '10239544443134a10992b938a878ff62a906618f8f7f6babe2a339647f41bfa5'
+          assert m['routes']['D184']['line_components'] == 7
+          assert m['routes']['D184']['coordinates'] == 2268
+          assert m['routes']['D185']['line_components'] == 11
+          assert m['routes']['D185']['coordinates'] == 3618
+          names = [c['file'] for c in m['geojson']['gzip_base64_chunks']
+          data = json.loads(gzip.decompress(base64.b64decode(''.join((root/n).read_text().strip() for n in names))))
+          assert len(data['features']) == 18
+          assert {f['properties']['route'] for f in data['features']} == {'D184','D185'}
+          assert all(f['properties']['source'] == 'OFFICIAL_ATP_ARCHIVED_KML' for f in data['features'])
+          assert sum(len(f['geometry']['coordinates']) for f in data['features']) == 5886
+          print('source-closed archived official KML geometry PASS')
+          PY
+      - name: Persist deterministic browser assets
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "chatgpt-codex-connector"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/external/current_service_v4/archived_kml/D84.kml data/external/current_service_v4/archived_kml/E03.kml dietro-l-analisi/current-routes-kml.geojson.gz.b64.* dietro-l-analisi/current-routes-kml-source.json
-          git commit -m "data(journey): recover archived official D84 E03 KML geometry"
-          git push origin HEAD:phase2-analysis-journey-a
+          git add dietro-l-analisi/current-routes-kml.geojson.gz.b64.* dietro-l-analisi/current-routes-kml-source.json
+          if git diff --cached --quiet; then
+            echo 'KML browser assets already deterministic and current.'
+          else
+            git commit -m "data(journey): refresh certified archived KML browser geometry"
+            git push origin HEAD:phase2-analysis-journey-a
+          fi
