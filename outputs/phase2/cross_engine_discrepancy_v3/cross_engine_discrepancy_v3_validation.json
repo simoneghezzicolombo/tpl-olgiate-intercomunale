@@ -1,0 +1,19 @@
+{
+  "automatic_equivalence_claim": false,
+  "engine_average_constructed": false,
+  "fixture_semantics": "CONTROLLED_ABSTRACT_OD_FIXTURE_NOT_TERRITORIAL_DATA",
+  "large_disagreement_absolute_min": 20.0,
+  "large_disagreement_signed_min": 20.0,
+  "max_absolute_difference_min": 20.0,
+  "mean_absolute_difference_min": 4.8,
+  "mean_signed_difference_min": 4.4,
+  "network_recommendation_claim": false,
+  "od_alignment_fail_closed": true,
+  "od_count": 5,
+  "p95_absolute_difference_min": 20.0,
+  "reporting_bands_are_diagnostic_only": true,
+  "status": "PASS_RT013_CROSS_ENGINE_DISCREPANCY_CONTRACT_V3",
+  "territorial_candidate_claim": false,
+  "weighted_composite_score": false,
+  "zero_denominator_relative_is_undefined": true
+}
