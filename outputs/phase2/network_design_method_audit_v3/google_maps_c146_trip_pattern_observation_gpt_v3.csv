@@ -1,0 +1,29 @@
+sequence,stop_name,municipality_or_context,google_maps_trip_time,google_maps_line,google_maps_operator,notes
+1,Perego Statale Incrocio Via S.Caterina SR 342,La Valletta Brianza,16:49,C146,ASF Autolinee,Google Maps trip origin; shows Stop ID PERE_A01
+2,Rovagnate - Via Statale,La Valletta Brianza,16:50,C146,ASF Autolinee,Current trip pattern observation
+3,Rovagnate - Statale,La Valletta Brianza,16:51,C146,ASF Autolinee,Current trip pattern observation
+4,Rovagnate - Frazione Alduno,La Valletta/Santa Maria Hoè boundary context,16:53,C146,ASF Autolinee,Current trip pattern observation
+5,Olgiate Molgora Scarpone,Olgiate Molgora,16:55,C146,ASF Autolinee,Current trip pattern observation
+6,Via Statale,Olgiate Molgora,16:56,C146,ASF Autolinee,Current trip pattern observation
+7,Calco - Via Virgilio,Calco,16:58,C146,ASF Autolinee,Not present in previously captured routes/2:C_46/stops list
+8,Calco - Via Nazionale (edicola),Calco,17:00,C146,ASF Autolinee,Not present in previously captured routes/2:C_46/stops list
+9,Calco - Via Statale - Ang. Via Scagnello,Calco,17:01,C146,ASF Autolinee,Not present in previously captured routes/2:C_46/stops list
+10,Merate-Cicognola-Arred. Caspani,external,17:02,C146,ASF Autolinee,External context
+11,Merate - via statale bivio pagnano,external,17:03,C146,ASF Autolinee,External context
+12,Merate - Via Statale - Distributore,external,17:05,C146,ASF Autolinee,External context
+13,Merate - Viale Giuseppe Verdi,external,17:08,C146,ASF Autolinee,External context
+14,Merate Via de Gasperi,external,17:10,C146,ASF Autolinee,External context
+15,Merate - via De Gasperi,external,17:12,C146,ASF Autolinee,External context
+16,Via de Gasperi,external,17:14,C146,ASF Autolinee,External context
+17,Robbiate - Via Piave,external,17:17,C146,ASF Autolinee,External context
+18,Imbersago - Alla Selva,external,17:19,C146,ASF Autolinee,External context
+19,"Imbersago, P.Za Garibaldi",external,17:21,C146,ASF Autolinee,External context
+20,Imbersago - madonna bosco,external,17:22,C146,ASF Autolinee,External context
+21,Imbersago - Località Gazzulino,external/border,17:22,C146,ASF Autolinee,Current trip pattern observation
+22,Arlate - Bivio per il Paese,Calco,17:23,C146,ASF Autolinee,Current trip pattern observation
+23,Arlate - Cantina Pirovano,Calco,17:24,C146,ASF Autolinee,Current trip pattern observation
+24,Arlate - B.vio Brivio - Madonnina,Calco,17:25,C146,ASF Autolinee,Current trip pattern observation
+25,Beverate - cartello paese,Brivio,17:28,C146,ASF Autolinee,Current trip pattern observation
+26,Brivio Via Como (Vaccarezza),Brivio,17:30,C146,ASF Autolinee,Current trip pattern observation
+27,Brivio - via Como (pizzeria),Brivio,17:31,C146,ASF Autolinee,Not present by this name in previously captured routes/2:C_46/stops list
+28,Brivio,Brivio,17:32,C146,ASF Autolinee,Current trip pattern observation
