@@ -1,68 +1,56 @@
 (() => {
   'use strict';
+  const maplibre=window.maplibregl;
+  if(!maplibre||!maplibre.Map) return;
 
-  const maplibre = window.maplibregl;
-  if (!maplibre || !maplibre.Map) return;
-
-  // Replace the legacy CARTO raster endpoint before the single persistent map
-  // is constructed. OSM is deliberately only contextual here: the analytical
-  // layers remain pinned evidence. Browser CI intercepts these tile requests
-  // with a local transparent tile, so automated QA does not consume OSM tiles.
-  const CapturedMap = maplibre.Map;
-  maplibre.Map = new Proxy(CapturedMap, {
-    construct(Target, args) {
-      const options = args[0] || {};
-      const style = options.style;
-      if (style && style.sources && style.sources.carto) {
-        style.sources.carto.tiles = ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'];
-        style.sources.carto.attribution = '© OpenStreetMap contributors';
-        style.sources.carto.maxzoom = 19;
+  const CapturedMap=maplibre.Map;
+  maplibre.Map=new Proxy(CapturedMap,{
+    construct(Target,args){
+      const options=args[0]||{};
+      const style=options.style;
+      if(style?.sources?.carto){
+        style.sources.carto.tiles=['https://tile.openstreetmap.org/{z}/{x}/{y}.png'];
+        style.sources.carto.attribution='© OpenStreetMap contributors';
+        style.sources.carto.maxzoom=19;
       }
-      const rasterLayer = style && style.layers && style.layers.find(layer => layer.id === 'carto');
-      if (rasterLayer && rasterLayer.paint) {
-        rasterLayer.paint['raster-saturation'] = -1;
-        rasterLayer.paint['raster-contrast'] = 0.18;
-        rasterLayer.paint['raster-brightness-min'] = 0;
-        rasterLayer.paint['raster-brightness-max'] = 0.24;
-        rasterLayer.paint['raster-opacity'] = 0.24;
+      const raster=style?.layers?.find(x=>x.id==='carto');
+      if(raster?.paint){
+        raster.paint['raster-saturation']=-1;
+        raster.paint['raster-contrast']=.18;
+        raster.paint['raster-brightness-min']=0;
+        raster.paint['raster-brightness-max']=.24;
+        raster.paint['raster-opacity']=.24;
       }
-      return Reflect.construct(Target, args);
+      const map=Reflect.construct(Target,args);
+      map.scrollZoom?.disable();map.dragPan?.disable();map.dragRotate?.disable();map.touchZoomRotate?.disable();map.doubleClickZoom?.disable();map.boxZoom?.disable();map.keyboard?.disable();
+      const canvas=map.getCanvas?.();if(canvas)canvas.style.touchAction='pan-y';
+      return map;
     }
   });
 
-  function safePaint(map, id, prop, value) {
-    if (!map || !map.getLayer(id)) return;
-    try { map.setPaintProperty(id, prop, value); } catch (_) {}
+  const css=document.createElement('style');css.textContent='.maplibregl-canvas{touch-action:pan-y!important}.vignette{background:linear-gradient(90deg,rgba(3,10,17,.42) 0%,rgba(3,10,17,.12) 35%,transparent 62%,rgba(3,10,17,.08) 100%)!important}.hub-marker{filter:none!important}.hub-marker span{display:none!important}.service-clock,.lineage-collapse{display:none!important}';document.head.appendChild(css);
+
+  function paint(map,id,prop,value){
+    if(!map?.getLayer(id)) return;
+    try{map.setPaintProperty(id,prop,value);}catch(_){ }
   }
-
-  function applySceneHygiene() {
-    const map = window.__analysisJourneyMap;
-    if (!map) return;
-    const scene = document.body.dataset.scene || 'intro';
-
-    // MapLibre circle fill opacity does not suppress its stroke. Explicitly
-    // gate strokes so analytical points cannot leak as ghost rings into later
-    // chapters after their fill has been faded out by the main controller.
-    safePaint(map, 'piece-halo', 'circle-stroke-opacity', scene === 'walk' ? 0.72 : 0);
-    safePaint(map, 'existing-stops', 'circle-stroke-opacity',
-      scene === 'walk' || scene === 'baseline' ? 0.9 : scene === 'candidates' ? 0.32 : 0);
-    safePaint(map, 'candidates', 'circle-stroke-opacity',
-      scene === 'candidates' ? 0.8 : scene === 'finalists' ? 0.08 : 0);
-    safePaint(map, 'hub', 'circle-stroke-opacity', 1);
-
-    // The dasymetric spark layer is intentionally transient during the
-    // sections→buildings reveal. It must never persist into network chapters.
-    if (scene !== 'buildings') safePaint(map, 'dasymetric-sparks', 'circle-opacity', 0);
+  function hygiene(){
+    const map=window.__analysisJourneyMap;
+    if(!map) return;
+    const scene=document.body.dataset.scene||'intro';
+    paint(map,'piece-halo','circle-stroke-opacity',scene==='walk'?.72:0);
+    paint(map,'existing-stops','circle-stroke-opacity',scene==='walk'?.9:scene==='candidates'?.32:0);
+    paint(map,'candidates','circle-stroke-opacity',scene==='candidates'?.8:0);
+    paint(map,'current-gtfs-stops','circle-stroke-opacity',scene==='baseline'?.95:0);
+    paint(map,'final-anchors','circle-stroke-opacity',['finalists','time','end'].includes(scene)?.95:0);
+    paint(map,'hub','circle-stroke-opacity',1);
+    paint(map,'hub-glow','circle-opacity',0);
+    paint(map,'hub-glow','circle-radius',0);
+    paint(map,'service-movers','circle-opacity',0);paint(map,'service-movers-glow','circle-opacity',0);
+    ['departure-cyan-a','departure-cyan-b','departure-orange'].forEach(id=>paint(map,id,'circle-stroke-opacity',0));
+    if(scene!=='buildings') paint(map,'dasymetric-sparks','circle-opacity',0);
   }
-
-  const observer = new MutationObserver(applySceneHygiene);
-  observer.observe(document.body, {attributes:true, attributeFilter:['data-scene']});
-
-  const timer = setInterval(() => {
-    const map = window.__analysisJourneyMap;
-    if (!map) return;
-    applySceneHygiene();
-    if (map.getLayer('dasymetric-sparks')) clearInterval(timer);
-  }, 120);
-  setTimeout(() => clearInterval(timer), 120000);
+  new MutationObserver(hygiene).observe(document.body,{attributes:true,attributeFilter:['data-scene']});
+  const timer=setInterval(()=>{if(window.__analysisJourneyMap){hygiene();if(window.__analysisJourneyMap.getLayer('final-routes'))clearInterval(timer);}},120);
+  setTimeout(()=>clearInterval(timer),120000);
 })();
