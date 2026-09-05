@@ -39,6 +39,10 @@ with sync_playwright() as p:
             "window.__analysisJourneyMap && window.__analysisJourneyMap.getLayer('buildings-extrude')",
             timeout=30000,
         )
+        page.wait_for_function(
+            "document.querySelector('.departure-strip') && window.__analysisJourneyMap.getLayer('service-movers') && window.__analysisJourneyMap.getLayer('dasymetric-sparks')",
+            timeout=120000,
+        )
     except Exception as exc:
         state = page.evaluate(
             """() => ({
@@ -53,6 +57,9 @@ with sync_playwright() as p:
               hasGeoData: !!window.TRA_PAESI_GEO,
               hasMap: !!window.__analysisJourneyMap,
               styleLoaded: !!window.__analysisJourneyMap?.isStyleLoaded?.(),
+              hasDirectorStrip: !!document.querySelector('.departure-strip'),
+              hasServiceMovers: !!window.__analysisJourneyMap?.getLayer?.('service-movers'),
+              hasDasymetricSparks: !!window.__analysisJourneyMap?.getLayer?.('dasymetric-sparks'),
               mapLayers: window.__analysisJourneyMap?.getStyle?.()?.layers?.map(x => x.id) || [],
               scripts: [...document.scripts].map(s => ({src:s.src, loaded:!!s.src}))
             })"""
@@ -80,9 +87,9 @@ with sync_playwright() as p:
         raise
 
     layers = page.evaluate(
-        """() => ['worldpop-columns','sections-fill','buildings-extrude','piece-halo','candidates','final16','final185'].every(id => !!window.__analysisJourneyMap.getLayer(id))"""
+        """() => ['worldpop-columns','sections-fill','buildings-extrude','piece-halo','candidates','final16','final185','service-movers','dasymetric-sparks'].every(id => !!window.__analysisJourneyMap.getLayer(id))"""
     )
-    assert layers, 'core MapLibre layers missing'
+    assert layers, 'core or cinematic MapLibre layers missing'
 
     def scene(name, frac=.5):
         page.evaluate(
