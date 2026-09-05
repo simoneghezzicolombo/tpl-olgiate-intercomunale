@@ -9,6 +9,8 @@ on:
       - dietro-l-analisi/journey.js
       - dietro-l-analisi/journey-effects.js
       - dietro-l-analisi/journey-director.js
+      - dietro-l-analisi/journey-lens.js
+      - dietro-l-analisi/journey-lineage.js
       - dietro-l-analisi/journey-runtime-policy.js
       - dietro-l-analisi/journey-experience-policy.js
       - dietro-l-analisi/journey-bootstrap.mjs
@@ -138,6 +140,8 @@ jobs:
           node --check dietro-l-analisi/journey.js
           node --check dietro-l-analisi/journey-effects.js
           node --check dietro-l-analisi/journey-director.js
+          node --check dietro-l-analisi/journey-lens.js
+          node --check dietro-l-analisi/journey-lineage.js
           node --check dietro-l-analisi/journey-runtime-policy.js
           node --check dietro-l-analisi/journey-experience-policy.js
           node --check dietro-l-analisi/journey-bootstrap.mjs
@@ -172,7 +176,7 @@ jobs:
           assert m['local_asset_chunks']['boundaries']
           assert m['local_asset_chunks']['roads']
 
-          required=['index.html','journey.css','journey.js','journey-effects.js','journey-director.js','journey-runtime-policy.js','journey-experience-policy.js','journey-bootstrap.mjs','journey-browser-smoke.py','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64','vendor/maplibre/maplibre-gl.mjs','vendor/maplibre/maplibre-gl-shared.mjs','vendor/maplibre/maplibre-gl-worker.mjs','vendor/maplibre/maplibre-gl.css','vendor/maplibre/SHA256SUMS','vendor/gsap/gsap.min.js','vendor/gsap/ScrollTrigger.min.js','vendor/gsap/SHA256SUMS','vendor/pako/pako.min.js','vendor/pako/SHA256SUMS']
+          required=['index.html','journey.css','journey.js','journey-effects.js','journey-director.js','journey-lens.js','journey-lineage.js','journey-runtime-policy.js','journey-experience-policy.js','journey-bootstrap.mjs','journey-browser-smoke.py','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64','vendor/maplibre/maplibre-gl.mjs','vendor/maplibre/maplibre-gl-shared.mjs','vendor/maplibre/maplibre-gl-worker.mjs','vendor/maplibre/maplibre-gl.css','vendor/maplibre/SHA256SUMS','vendor/gsap/gsap.min.js','vendor/gsap/ScrollTrigger.min.js','vendor/gsap/SHA256SUMS','vendor/pako/pako.min.js','vendor/pako/SHA256SUMS']
           required += m['local_asset_chunks']['boundaries'] + m['local_asset_chunks']['roads']
           for f in required:
               assert (root/f).is_file(), f
@@ -193,6 +197,8 @@ jobs:
           bootstrap=(root/'journey-bootstrap.mjs').read_text()
           assert "await import('./journey-runtime-policy.js')" in bootstrap
           assert "await import('./journey-experience-policy.js')" in bootstrap
+          assert "await import('./journey-lens.js')" in bootstrap
+          assert "await import('./journey-lineage.js')" in bootstrap
           experience=(root/'journey-experience-policy.js').read_text()
           assert "prefers-reduced-motion: reduce" in experience
           assert "duration:0" in experience and "essential:false" in experience
@@ -200,7 +206,7 @@ jobs:
           assert 'raw.githubusercontent.com' not in journey
           assert 'localAssets.boundaries' in journey and 'localAssets.roads' in journey
           assert 'BOUNDARIES_URL' not in journey and 'ROAD_GZ_URL' not in journey
-          print('journey source-closed evidence + lean local JS runtime + experience contract PASS')
+          print('journey source-closed evidence + visual modules + lean local JS runtime + experience contract PASS')
           PY
           ! grep -R --line-number -E 'np\.random|numpy\.random|import random|from random' dietro-l-analisi
       - name: Browser smoke and visual QA
