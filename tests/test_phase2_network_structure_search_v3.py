@@ -75,7 +75,7 @@ def test_figure_eight_is_post_generation_shape_flag():
     assert result.shape_flags == ("FIGURE_EIGHT_LIKE",)
 
 
-def test_same_generator_emits_multiple_topology_families():
+def test_same_generator_emits_complete_mixed_topology_pool():
     result = enumerate_connected_structures(
         k5_links(),
         max_edges=6,
@@ -83,6 +83,8 @@ def test_same_generator_emits_multiple_topology_families():
         max_structures=2_000,
     )
     assert result["complete"] is True
+    assert result["subsets_scanned"] == 847
+    assert result["structure_count"] == 792
     classes = {item.topology_class for item in result["structures"]}
     assert {
         "PATH",
@@ -126,6 +128,8 @@ def test_required_hub_and_five_groups_do_not_force_one_topology():
         max_structures=2_000,
     )
     assert result["complete"] is True
+    assert result["subsets_scanned"] == 847
+    assert result["structure_count"] == 552
     classes = {item.topology_class for item in result["structures"]}
     assert {
         "PATH",
