@@ -9,6 +9,7 @@ on:
       - dietro-l-analisi/journey.js
       - dietro-l-analisi/journey-effects.js
       - dietro-l-analisi/journey-director.js
+      - dietro-l-analisi/journey-bootstrap.mjs
       - dietro-l-analisi/journey-browser-smoke.py
       - dietro-l-analisi/build_journey_assets.py
       - .github/workflows/phase2-analysis-journey-assets.yml
@@ -33,6 +34,25 @@ jobs:
         run: |
           python -m pip install --upgrade pandas geopandas pyogrio shapely playwright
           python -m playwright install --with-deps chromium
+      - name: Vendor pinned MapLibre GL JS runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/journey-maplibre dietro-l-analisi/vendor/maplibre
+          mkdir -p /tmp/journey-maplibre dietro-l-analisi/vendor/maplibre
+          cd /tmp/journey-maplibre
+          npm pack maplibre-gl@6.7.0 --silent > pack-name.txt
+          PKG="$(tail -n 1 pack-name.txt)"
+          test -n "${PKG}"
+          tar -xzf "${PKG}"
+          cp package/dist/maplibre-gl.css "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/maplibre/"
+          cp package/dist/*.mjs "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/maplibre/"
+          cd "${GITHUB_WORKSPACE}"
+          test -f dietro-l-analisi/vendor/maplibre/maplibre-gl.mjs
+          test -f dietro-l-analisi/vendor/maplibre/maplibre-gl-shared.mjs
+          test -f dietro-l-analisi/vendor/maplibre/maplibre-gl-worker.mjs
+          test -f dietro-l-analisi/vendor/maplibre/maplibre-gl.css
+          sha256sum dietro-l-analisi/vendor/maplibre/* | sort > dietro-l-analisi/vendor/maplibre/SHA256SUMS
       - name: Download pinned evidence bundles
         env:
           GH_TOKEN: ${{ github.token }}
@@ -54,6 +74,7 @@ jobs:
           node --check dietro-l-analisi/journey.js
           node --check dietro-l-analisi/journey-effects.js
           node --check dietro-l-analisi/journey-director.js
+          node --check dietro-l-analisi/journey-bootstrap.mjs
           python -m py_compile dietro-l-analisi/journey-browser-smoke.py
           python - <<'PY'
           import json
@@ -69,10 +90,12 @@ jobs:
             'proposed_candidates_v2':155,
             'official_stop_records_v2':67,
           }
-          for f in ['index.html','journey.css','journey.js','journey-effects.js','journey-director.js','journey-browser-smoke.py','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64']:
+          for f in ['index.html','journey.css','journey.js','journey-effects.js','journey-director.js','journey-bootstrap.mjs','journey-browser-smoke.py','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64','vendor/maplibre/maplibre-gl.mjs','vendor/maplibre/maplibre-gl-shared.mjs','vendor/maplibre/maplibre-gl-worker.mjs','vendor/maplibre/maplibre-gl.css','vendor/maplibre/SHA256SUMS']:
               assert Path('dietro-l-analisi',f).is_file(), f
           html=Path('dietro-l-analisi/index.html').read_text()
-          assert '<script src="journey-director.js"></script>' in html
+          assert '<script type="module" src="journey-bootstrap.mjs"></script>' in html
+          assert 'maplibre-gl@6.7.0/dist/maplibre-gl.js' not in html
+          assert 'vendor/maplibre/maplibre-gl.css' in html
           print('journey static data contract PASS')
           PY
           ! grep -R --line-number -E 'np\.random|numpy\.random|import random|from random' dietro-l-analisi
@@ -88,17 +111,17 @@ jobs:
             sleep 1
           done
           python dietro-l-analisi/journey-browser-smoke.py
-      - name: Persist generated journey assets
+      - name: Persist generated journey assets and runtime
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "chatgpt-codex-connector"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dietro-l-analisi/journey-data.js dietro-l-analisi/data-manifest.json dietro-l-analisi/*.b64
+          git add dietro-l-analisi/journey-data.js dietro-l-analisi/data-manifest.json dietro-l-analisi/*.b64 dietro-l-analisi/vendor/maplibre
           if git diff --cached --quiet; then
-            echo "Journey assets already current"
+            echo "Journey assets and runtime already current"
           else
-            git commit -m "data(journey): materialize certified visual layers"
+            git commit -m "data(journey): materialize certified visual layers and pinned runtime"
             git push origin HEAD:phase2-analysis-journey-a
           fi
       - name: Upload journey build and visual evidence
@@ -110,6 +133,7 @@ jobs:
             dietro-l-analisi/data-manifest.json
             dietro-l-analisi/journey-data.js
             dietro-l-analisi/*.b64
+            dietro-l-analisi/vendor/maplibre/SHA256SUMS
             dietro-l-analisi/qa/*
           if-no-files-found: error
           retention-days: 90
