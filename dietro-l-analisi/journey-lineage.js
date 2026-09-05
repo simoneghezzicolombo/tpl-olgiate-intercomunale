@@ -50,11 +50,20 @@
     c.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{currentSelection=btn.dataset.r;c.querySelectorAll('button').forEach(x=>x.classList.toggle('is-active',x===btn));applyCurrent();});
     f.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{finalSelection=btn.dataset.f;f.querySelectorAll('button').forEach(x=>x.classList.toggle('is-active',x===btn));applyFinal();});
   }
+  function applyCurrentStopColors(){
+    const hasD184=['>=',['index-of','D184',['get','routes']],0];
+    const hasD185=['>=',['index-of','D185',['get','routes']],0];
+    const outer=currentSelection==='D184'?COLORS.D184:currentSelection==='D185'?COLORS.D185:['case',hasD184,COLORS.D184,hasD185,COLORS.D185,'#fff'];
+    const inner=currentSelection==='D184'?COLORS.D184:currentSelection==='D185'?COLORS.D185:['case',hasD185,COLORS.D185,hasD184,COLORS.D184,'#fff'];
+    if(map.getLayer('current-gtfs-stops-halo'))map.setPaintProperty('current-gtfs-stops-halo','circle-color',outer);
+    if(map.getLayer('current-gtfs-stops'))map.setPaintProperty('current-gtfs-stops','circle-color',inner);
+  }
   function applyCurrent(){
     const filter=currentSelection==='ALL'?null:['==',['get','route'],currentSelection];
     ['current-routes','current-route-glow'].forEach(id=>{if(map.getLayer(id))map.setFilter(id,filter);});
     const sf=currentSelection==='ALL'?null:['>=',['index-of',currentSelection,['get','routes']],0];
     ['current-gtfs-stops','current-gtfs-stops-halo'].forEach(id=>{if(map.getLayer(id))map.setFilter(id,sf);});
+    applyCurrentStopColors();
   }
   function applyFinal(){
     const filter=finalSelection==='ALL'?null:['==',['get','route_id'],finalSelection];
@@ -64,7 +73,7 @@
   function scene(){
     const s=document.body.dataset.scene;
     const baseline=s==='baseline', finals=['finalists','time','end'].includes(s);
-    opacity('current-routes',baseline?.92:0);opacity('current-route-glow',baseline?.22:0);opacity('current-gtfs-stops',baseline?.98:0);opacity('current-gtfs-stops-halo',baseline?.08:0);
+    opacity('current-routes',baseline?.92:0);opacity('current-route-glow',baseline?.22:0);opacity('current-gtfs-stops',baseline?.98:0);opacity('current-gtfs-stops-halo',baseline?.82:0);
     opacity('final16',0);opacity('final16-glow',0);opacity('final185',0);opacity('final185-glow',0);
     opacity('final-routes-exact',finals?(s==='finalists'?.96:.62):0);opacity('final-routes-exact-glow',finals?(s==='finalists'?.20:.10):0);opacity('final-anchors-exact',finals?(s==='finalists'?.96:.60):0);
     if(baseline) map.fitBounds(bounds(currentData),{padding:innerWidth<800?35:70,maxZoom:12,duration:window.__analysisJourneyReduceMotion?0:850,pitch:40,bearing:-8});
@@ -74,8 +83,8 @@
     [currentData,stopData,finalData,anchorData]=await Promise.all([load(FILES.currentRoutes),load(FILES.currentStops),load(FILES.finalRoutes),load(FILES.finalAnchors)]);
     map.getSource('current-routes')?.setData(currentData);
     if(!map.getSource('current-gtfs-stops'))map.addSource('current-gtfs-stops',{type:'geojson',data:stopData});
-    if(!map.getLayer('current-gtfs-stops-halo'))map.addLayer({id:'current-gtfs-stops-halo',type:'circle',source:'current-gtfs-stops',paint:{'circle-radius':8,'circle-color':'#fff','circle-opacity':0,'circle-blur':.8}});
-    if(!map.getLayer('current-gtfs-stops'))map.addLayer({id:'current-gtfs-stops',type:'circle',source:'current-gtfs-stops',paint:{'circle-radius':['interpolate',['linear'],['zoom'],9,2.4,12,3.8,15,5.2],'circle-color':['case',['==',['get','routes'],'D184'],'#4ca5ff',['==',['get','routes'],'D185'],'#ff9b61','#fff'],'circle-opacity':0,'circle-stroke-width':1.2,'circle-stroke-color':'#07131f','circle-stroke-opacity':0}});
+    if(!map.getLayer('current-gtfs-stops-halo'))map.addLayer({id:'current-gtfs-stops-halo',type:'circle',source:'current-gtfs-stops',paint:{'circle-radius':['interpolate',['linear'],['zoom'],9,4.2,12,6.2,15,8],'circle-color':'#fff','circle-opacity':0,'circle-blur':.08}});
+    if(!map.getLayer('current-gtfs-stops'))map.addLayer({id:'current-gtfs-stops',type:'circle',source:'current-gtfs-stops',paint:{'circle-radius':['interpolate',['linear'],['zoom'],9,2.4,12,3.8,15,5.2],'circle-color':'#fff','circle-opacity':0,'circle-stroke-width':1.2,'circle-stroke-color':'#07131f','circle-stroke-opacity':.7}});
     if(!map.getSource('final-routes-exact'))map.addSource('final-routes-exact',{type:'geojson',data:finalData});
     const color=['match',['get','route_id'],'R2_23d58cd05658247380d7',COLORS.R2_23d58cd05658247380d7,'R2_65db885119e69d50c7d4',COLORS.R2_65db885119e69d50c7d4,'R2_b2032eeb31cba06561f0',COLORS.R2_b2032eeb31cba06561f0,'R2_2ffb6743b10bb3f0a97d',COLORS.R2_2ffb6743b10bb3f0a97d,'#fff'];
     map.addLayer({id:'final-routes-exact-glow',type:'line',source:'final-routes-exact',paint:{'line-color':color,'line-width':11,'line-blur':8,'line-opacity':0}});
