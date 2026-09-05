@@ -37,7 +37,7 @@
 
   function applySceneHygiene() {
     const map = window.__analysisJourneyMap;
-    if (!map || !map.isStyleLoaded()) return;
+    if (!map) return;
     const scene = document.body.dataset.scene || 'intro';
 
     // MapLibre circle fill opacity does not suppress its stroke. Explicitly
@@ -60,9 +60,9 @@
 
   const timer = setInterval(() => {
     const map = window.__analysisJourneyMap;
-    if (!map || !map.isStyleLoaded()) return;
+    if (!map) return;
     applySceneHygiene();
     if (map.getLayer('dasymetric-sparks')) clearInterval(timer);
   }, 120);
-  setTimeout(() => clearInterval(timer), 20000);
+  setTimeout(() => clearInterval(timer), 120000);
 })();
