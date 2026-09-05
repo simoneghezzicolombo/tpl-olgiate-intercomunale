@@ -1,0 +1,74 @@
+name: Phase 2 r5py Cross-check V3
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - phase2-r5py-crosscheck-v3
+    paths:
+      - scripts/phase2_audit_r5py_crosscheck_v3.py
+      - docs/PHASE2_R5PY_CROSSCHECK_V3.md
+      - .github/workflows/phase2-r5py-crosscheck-v3.yml
+
+permissions:
+  contents: read
+
+jobs:
+  r5py-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-r5py-crosscheck-v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install pinned r5py environment
+        run: |
+          python -m pip install --disable-pip-version-check \
+            r5py==1.1.7 \
+            r5py.sampledata.helsinki==1.1.1
+      - name: Record package pin
+        run: |
+          python - <<'PY'
+          import r5py
+          assert r5py.__version__ == '1.1.7', r5py.__version__
+          PY
+      - name: Compile smoke audit
+        run: python -m py_compile scripts/phase2_audit_r5py_crosscheck_v3.py
+      - name: Run independent R5 smoke
+        run: python scripts/phase2_audit_r5py_crosscheck_v3.py
+      - name: Validate RT-012 evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('outputs/phase2/r5py_crosscheck_v3/r5py_crosscheck_v3_validation.json')
+          d = json.loads(p.read_text())
+          assert d['status'] == 'PASS_RT012_R5PY_CROSSCHECK_SMOKE_V3'
+          assert d['fixture_semantics'] == 'PINNED_UPSTREAM_SAMPLE_FIXTURE_NOT_TERRITORIAL_DATA'
+          assert d['r5py_version'] == '1.1.7'
+          assert d['transport_network_built'] is True
+          assert d['walk_matrix_rows'] > 0
+          assert d['transit_matrix_rows'] > 0
+          assert d['walk_repeat_deterministic'] is True
+          assert d['territorial_candidate_claim'] is False
+          assert d['network_recommendation_claim'] is False
+          assert d['internal_engine_replaced'] is False
+          PY
+      - name: Guard against territorial and decision leakage
+        run: |
+          ! grep -niE 'Arlate|Beverate|Perego|Mondonico|Calco|Brivio|Olgiate|Santa Maria|C146|ASF|PRIMARY|RUNNER-UP|recommended route' scripts/phase2_audit_r5py_crosscheck_v3.py
+      - name: Whitespace check
+        run: git diff --check
+      - name: Upload RT-012 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-r5py-crosscheck-v3
+          path: outputs/phase2/r5py_crosscheck_v3/r5py_crosscheck_v3_validation.json
+          if-no-files-found: error
