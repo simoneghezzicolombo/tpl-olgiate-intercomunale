@@ -1,0 +1,197 @@
+name: RT-021 frozen territorial corridor corpus V3
+
+on:
+  push:
+    branches: [rt021-frozen-territorial-corridor-corpus-v3]
+    paths:
+      - src/phase2_rt021_territorial_corridor_corpus_v3.py
+      - src/phase2_final_stop_materialization_v3.py
+      - scripts/phase2_rt021_frozen_territorial_corridor_corpus_v3.py
+      - tests/test_phase2_rt021_territorial_corridor_corpus_v3.py
+      - .github/workflows/phase2-rt021-frozen-territorial-corridor-corpus-v3.yml
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: rt021-frozen-territorial-corridor-corpus-v3
+  cancel-in-progress: true
+
+jobs:
+  validate-rt021:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install routing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pandas geopandas shapely networkx scipy pyproj requests pytest
+
+      - name: Compile RT-021 and inherited modules
+        run: |
+          python -m py_compile src/phase2_rt021_territorial_corridor_corpus_v3.py
+          python -m py_compile src/phase2_final_stop_materialization_v3.py
+          python -m py_compile src/phase2_complete_directed_pairs_v3.py
+          python -m py_compile src/phase2_restriction_aware_ksp.py
+          python -m py_compile src/phase2_frozen_graph.py
+          python -m py_compile scripts/phase2_rt021_frozen_territorial_corridor_corpus_v3.py
+
+      - name: Verify certified code and frozen stop dependencies
+        run: |
+          test "$(git hash-object src/phase2_final_stop_materialization_v3.py)" = "6249ca6df9e1bdc6916825135669e7724457e5b2"
+          STOP=outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/existing_stop_places_operational_gpt_v5.csv
+          test "$(git hash-object "$STOP")" = "8d3a4368a6f62bbdf8fe18ee99482aff18e38fe5"
+          test "$(($(wc -l < "$STOP") - 1))" -eq 36
+
+      - name: Reject synthetic or geographic routing bias
+        run: |
+          if grep -n -E 'np\.random|random\.|allowed_municip|denied_municip|whitelist.*municip|blacklist.*municip|Circolare Meratese|Cassina' \
+            src/phase2_rt021_territorial_corridor_corpus_v3.py \
+            scripts/phase2_rt021_frozen_territorial_corridor_corpus_v3.py; then
+            echo 'Forbidden RT-021 synthetic or geographic routing semantic found'
+            exit 1
+          fi
+
+      - name: Run RT-010 RT-018 KSP and RT-021 tests
+        run: |
+          python -m pytest -q \
+            tests/test_phase2_complete_directed_pairs_v3.py \
+            tests/test_phase2_restriction_aware_ksp_v3.py \
+            tests/test_phase2_rt021_territorial_corridor_corpus_v3.py
+
+      - name: Download pinned certified RT-017 graph artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf /tmp/rt017_source
+          mkdir -p /tmp/rt017_source
+          curl -fsSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9972204236" \
+            -o /tmp/rt017_artifact_metadata.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          meta=json.loads(Path('/tmp/rt017_artifact_metadata.json').read_text())
+          assert meta['id']==9972204236, meta
+          assert meta['digest']=='sha256:e0b71f6fd673345c3bc0bf8e32ecf66b7f620e27802f1eb5b24690a8295c8225', meta['digest']
+          assert meta['workflow_run']['id']==33975545284, meta['workflow_run']
+          assert meta['workflow_run']['head_sha']=='512a055f415c7e34c3a5c40c8463f6a6bf51148d', meta['workflow_run']
+          print(json.dumps({'artifact_id':meta['id'],'digest':meta['digest'],'run':meta['workflow_run']['id'],'head':meta['workflow_run']['head_sha']}, indent=2))
+          PY
+          curl -fsSL -L \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9972204236/zip" \
+            -o /tmp/rt017_source.zip
+          unzip -q /tmp/rt017_source.zip -d /tmp/rt017_source
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('/tmp/rt017_source')
+          hits=list(root.rglob('frozen_routing_envelope_metadata_v3.json'))
+          assert len(hits)==1, hits
+          parent=hits[0].parent
+          required=[
+              'frozen_graph_nodes.csv.gz',
+              'frozen_graph_edges.csv.gz',
+              'frozen_turn_rules.csv.gz',
+              'frozen_pair_results_v3.csv',
+          ]
+          for name in required:
+              assert (parent/name).is_file(), parent/name
+          Path('/tmp/rt017_dir').write_text(str(parent))
+          print('RT017_DIR=', parent)
+          PY
+          echo "RT017_DIR=$(cat /tmp/rt017_dir)" >> "$GITHUB_ENV"
+
+      - name: Build complete real territorial corridor corpus
+        env:
+          PYTHONPATH: .
+        run: |
+          rm -rf outputs/phase2/rt021 outputs/phase2/rt021_repeat
+          python scripts/phase2_rt021_frozen_territorial_corridor_corpus_v3.py \
+            --rt017-dir "$RT017_DIR" \
+            --output-dir outputs/phase2/rt021 \
+            --k 3 \
+            --max-raw-state-paths 20000
+
+      - name: Repeat complete corpus build independently
+        env:
+          PYTHONPATH: .
+        run: |
+          python scripts/phase2_rt021_frozen_territorial_corridor_corpus_v3.py \
+            --rt017-dir "$RT017_DIR" \
+            --output-dir outputs/phase2/rt021_repeat \
+            --k 3 \
+            --max-raw-state-paths 20000
+
+      - name: Assert deterministic corpus and acceptance contract
+        run: |
+          diff -qr outputs/phase2/rt021 outputs/phase2/rt021_repeat
+          python - <<'PY'
+          import gzip
+          import json
+          from pathlib import Path
+          import pandas as pd
+          out=Path('outputs/phase2/rt021')
+          v=json.loads((out/'rt021_validation_v3.json').read_text())
+          assert v['status']=='PASS_RT021_FROZEN_TERRITORIAL_CORRIDOR_CORPUS_V3', v
+          assert v['stop_layer']['stop_place_count']==36
+          assert v['stop_layer']['conventional_tpl_count']==35
+          assert v['stop_layer']['special_service_count']==1
+          assert v['stop_layer']['all_conventional_route_ready_le_75m'] is True
+          assert v['pair_universe']['directed_pair_count']==1190
+          assert v['pair_universe']['unordered_pair_count']==595
+          assert v['pair_universe']['complete_execution_count']==1190
+          assert all(v['checks'].values()), v['checks']
+          status=pd.read_csv(out/'rt021_pair_execution_status_v3.csv')
+          assert len(status)==1190
+          assert status['pair_id'].nunique()==1190
+          assert status['corridor_count'].min()>=1
+          with gzip.open(out/'rt021_corridor_corpus_v3.csv.gz','rt',encoding='utf-8') as f:
+              corpus=pd.read_csv(f)
+          assert len(corpus)>=1190
+          assert corpus['pair_id'].nunique()==1190
+          assert set(corpus['physical_loopless'].astype(str).str.lower())=={'true'}
+          print(json.dumps(v, indent=2))
+          PY
+
+      - name: Upload RT-021 full handoff artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rt021-frozen-territorial-corridor-corpus-v3
+          path: outputs/phase2/rt021/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Persist certified RT-021 corpus and audit evidence
+        if: success() && github.ref == 'refs/heads/rt021-frozen-territorial-corridor-corpus-v3'
+        run: |
+          rm -rf outputs/phase2/rt021_frozen_evidence
+          mkdir -p outputs/phase2/rt021_frozen_evidence
+          cp outputs/phase2/rt021/rt021_validation_v3.json outputs/phase2/rt021_frozen_evidence/
+          cp outputs/phase2/rt021/rt021_stop_attachments_v3.csv outputs/phase2/rt021_frozen_evidence/
+          cp outputs/phase2/rt021/rt021_complete_directed_pair_manifest_v3.csv outputs/phase2/rt021_frozen_evidence/
+          cp outputs/phase2/rt021/rt021_pair_execution_status_v3.csv outputs/phase2/rt021_frozen_evidence/
+          cp outputs/phase2/rt021/rt021_corridor_corpus_v3.csv.gz outputs/phase2/rt021_frozen_evidence/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add outputs/phase2/rt021_frozen_evidence
+          if ! git diff --cached --quiet; then
+            git commit -m 'data(rt021): persist certified territorial corridor corpus'
+            git push
+          fi
