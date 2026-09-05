@@ -1,5 +1,6 @@
 from base64 import b64decode
 from pathlib import Path
+from urllib.parse import urlparse
 from playwright.sync_api import sync_playwright
 
 BASE = 'http://127.0.0.1:8765/dietro-l-analisi/'
@@ -8,6 +9,11 @@ OUT.mkdir(parents=True, exist_ok=True)
 TRANSPARENT_PNG = b64decode(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
 )
+ALLOWED_EXTERNAL_HOSTS = {
+    'tile.openstreetmap.org',
+    'fonts.googleapis.com',
+    'fonts.gstatic.com',
+}
 
 
 def prepare_page(page, page_errors, console_log, failed_requests, requested_urls):
@@ -91,9 +97,19 @@ def scene(page, name, frac=.5, prefix=''):
     page.screenshot(path=str(OUT / f'{prefix}{name}.png'), full_page=False)
 
 
-def assert_no_functional_cdn(urls, label):
+def assert_runtime_network_contract(urls, label):
     assert not any('raw.githubusercontent.com' in url for url in urls), f'runtime GitHub Raw request detected in {label}'
     assert not any('cdn.jsdelivr.net' in url for url in urls), f'runtime jsDelivr request detected in {label}'
+    unexpected = set()
+    for url in urls:
+        parsed = urlparse(url)
+        if parsed.scheme not in {'http', 'https'}:
+            continue
+        host = parsed.hostname
+        if host in {'127.0.0.1', 'localhost'} or host in ALLOWED_EXTERNAL_HOSTS:
+            continue
+        unexpected.add(host or url)
+    assert not unexpected, f'unexpected external runtime hosts in {label}: {sorted(unexpected)}'
 
 
 with sync_playwright() as p:
@@ -126,7 +142,7 @@ with sync_playwright() as p:
     assert page.locator('.evidence-stack').count() == 1
     assert page.evaluate("document.documentElement.dataset.journeyMotion") == 'full'
     assert not any('basemaps.cartocdn.com' in url for url in requested_urls), 'legacy CARTO basemap request detected'
-    assert_no_functional_cdn(requested_urls, 'desktop pass')
+    assert_runtime_network_contract(requested_urls, 'desktop pass')
     assert not page_errors, 'desktop page errors: ' + ' | '.join(page_errors)
     page.close()
 
@@ -143,7 +159,7 @@ with sync_playwright() as p:
     assert mobile.locator('.chapter-rail').count() == 1
     assert not mobile_errors, 'mobile page errors: ' + ' | '.join(mobile_errors)
     assert not any('basemaps.cartocdn.com' in url for url in mobile_urls), 'legacy CARTO basemap request detected on mobile'
-    assert_no_functional_cdn(mobile_urls, 'mobile pass')
+    assert_runtime_network_contract(mobile_urls, 'mobile pass')
     mobile.close()
 
     # Reduced-motion pass: certify behaviour, not a cosmetic label. The clock
@@ -173,10 +189,10 @@ with sync_playwright() as p:
         "window.__analysisJourneyMap.queryRenderedFeatures({layers:['service-movers']}).length"
     )
     assert rendered_movers == 0, f'reduced-motion service movers still rendered: {rendered_movers}'
-    assert_no_functional_cdn(reduced_urls, 'reduced-motion pass')
+    assert_runtime_network_contract(reduced_urls, 'reduced-motion pass')
     assert not reduced_errors, 'reduced-motion page errors: ' + ' | '.join(reduced_errors)
     reduced_context.close()
 
     browser.close()
 
-print('journey local-runtime desktop + mobile + reduced-motion browser smoke PASS')
+print('journey allowlisted-runtime desktop + mobile + reduced-motion browser smoke PASS')
