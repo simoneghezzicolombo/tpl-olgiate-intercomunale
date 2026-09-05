@@ -1,0 +1,57 @@
+{
+  "manifest_status": "SOURCE_PRESERVING_MASTER_INPUTS_FROZEN_FOR_AUDIT",
+  "created_date": "2026-09-05",
+  "workstream": "A_STOP_MASTER_INVENTORY",
+  "alpha_boundary": "UPSTREAM_NEUTRAL_EVIDENCE_ONLY_NOT_ROUTING_TERMINALS",
+  "expected_source_record_counts": {
+    "FROZEN_GTFS_REFERENCE": 71,
+    "ASF_OPERATOR_OTP": 39,
+    "SPECIAL_SERVICE_EVIDENCE": 1,
+    "TOTAL": 111
+  },
+  "inputs": [
+    {
+      "path": "outputs/phase2/existing_official_stops.csv",
+      "branch_or_lineage": "phase2-network-design-method-audit-v3",
+      "blob_sha": "b84550f489c85664bc186bbde2bb5cacb124d17f",
+      "role": "FROZEN_ARRIVA_LINEELECCO_REFERENCE_ROUTING_CONTEXT_UNIVERSE",
+      "epistemic_note": "Reference-period source rows, not complete current-service truth. PRO_COM_T is analysis context, not strict physical municipality."
+    },
+    {
+      "path": "outputs/phase2/network_design_method_audit_v3/asf_c146_directional_stops_subagent_v3.csv",
+      "branch_or_lineage": "gpt-stop-source-completeness-v3",
+      "blob_sha": "795a684cc5b336e0440c5063b7b9bd08761ff3cb",
+      "role": "CURRENT_ASF_C146_DIRECTIONAL_OPERATOR_STOP_EVIDENCE",
+      "epistemic_note": "39 operator-coded directional source records. A/R records remain distinct boarding-point candidates."
+    },
+    {
+      "path": "outputs/phase2/network_design_method_audit_v3/special_service_stop_evidence_gpt_v3.csv",
+      "branch_or_lineage": "gpt-stop-source-completeness-v3",
+      "blob_sha": "227a37d4b54446592a11442a950596ee12410c76",
+      "role": "SPECIAL_SERVICE_BOARDING_POINT_EVIDENCE",
+      "epistemic_note": "Kept separate from conventional TPL stop counts and routing-terminal selection."
+    },
+    {
+      "path": "outputs/phase2/network_design_method_audit_v3/manual_google_maps_asf_verifications_gpt_v3.csv",
+      "branch_or_lineage": "gpt-stop-source-completeness-v3",
+      "blob_sha": "38cc32a019fdc71a86e8cd6addc7523562e8f694",
+      "role": "MANUAL_IDENTITY_REVIEW_ONLY",
+      "epistemic_note": "Manual Maps/user evidence can corroborate or raise conflicts but cannot override official operator naming or prove boarding-point identity by proximity."
+    }
+  ],
+  "official_agency_lineage": {
+    "certified_commit": "4ab527827456eb40572a72b4c7b87f8fe5f4dcac",
+    "agency_permalink": "https://www.tplcomoleccovarese.it/dati/aperto",
+    "raw_feed_url_at_recovery": "https://tplcomoleccovarese.it/assets/agency-network/current/extraurbano-Lecco-Monza-Arriva-Oggiono.zip",
+    "raw_feed_sha256": "f890c393dd4fcc1bc61fa257a9b112b6029facc3f5bb3c7c0b9430902bf03d8",
+    "frozen_derived_extract": "outputs/phase2/current_service_public_geodata_recovery_a/official_gtfs_d184_d185_route_stops.csv",
+    "note": "The recovered agency bundle certifies current official D184/D185 geodata provenance. It does not replace the broader 71-row historical/reference baseline."
+  },
+  "identity_rules": {
+    "distance_threshold_proves_boarding_identity": false,
+    "legacy_40m_cluster_is_boarding_identity": false,
+    "source_rows_are_deleted_during_build": false,
+    "routing_terminals_selected_during_build": false,
+    "default_routing_terminal_eligibility_status": "NOT_EVALUATED"
+  }
+}
