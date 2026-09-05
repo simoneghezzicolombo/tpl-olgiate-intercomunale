@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import hashlib
 from pathlib import Path
 
@@ -24,6 +25,15 @@ EXPECTED_STOP_BLOB_SHA1 = "8d3a4368a6f62bbdf8fe18ee99482aff18e38fe5"
 def git_blob_sha1(path: Path) -> str:
     data = path.read_bytes()
     return hashlib.sha1(f"blob {len(data)}\0".encode() + data).hexdigest()
+
+
+def string_literals(path: Path) -> list[str]:
+    tree = ast.parse(path.read_text(encoding="utf-8"))
+    return [
+        node.value.casefold().strip()
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Constant) and isinstance(node.value, str)
+    ]
 
 
 def edge(edge_id, u, v, minutes, length, way):
@@ -59,11 +69,21 @@ def test_expansion_schedule_is_deterministic_and_has_no_municipality_semantics()
     b = derive_levels(list(reversed(points)), max_levels=5)
     assert a == b
     assert [level.margin_m for level in a] == [500.0, 1000.0, 2000.0, 4000.0, 8000.0]
-    source = (ROOT / "src/phase2_adaptive_routing_envelope_v3.py").read_text(encoding="utf-8").casefold()
-    runner = (ROOT / "scripts/phase2_rt017_adaptive_border_neutral_routing_envelope_v3.py").read_text(encoding="utf-8").casefold()
-    for forbidden_name in ["olgiate molgora", "calco", "brivio", "santa maria hoè", "la valletta brianza", "merate", "airuno", "imbersago", "olginate"]:
-        assert forbidden_name not in source
-        assert forbidden_name not in runner
+    literals = string_literals(ROOT / "src/phase2_adaptive_routing_envelope_v3.py")
+    literals += string_literals(ROOT / "scripts/phase2_rt017_adaptive_border_neutral_routing_envelope_v3.py")
+    forbidden_names = {
+        "olgiate molgora",
+        "calco",
+        "brivio",
+        "santa maria hoè",
+        "la valletta brianza",
+        "merate",
+        "airuno",
+        "imbersago",
+        "olginate",
+    }
+    for forbidden_name in forbidden_names:
+        assert forbidden_name not in literals
 
 
 def test_better_route_that_temporarily_leaves_core_is_found_after_expansion():
