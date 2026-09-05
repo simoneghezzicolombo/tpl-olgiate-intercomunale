@@ -1,0 +1,49 @@
+{
+  "contract": "EXISTING_STOP_FIRST_CROSS_SOURCE_AUDIT_NOT_ROUTE_SELECTION",
+  "counts": {
+    "frozen_osm_bus_stop_elements": 37,
+    "gtfs_clusters_with_confirmed_osm_evidence": 13,
+    "gtfs_clusters_without_confirmed_osm_evidence": 30,
+    "match_status_counts": {
+      "CONFIRMED_EXACT_NAME_DISTANCE": 12,
+      "CONFIRMED_EXACT_REF": 1,
+      "OSM_ONLY_UNMATCHED_REFERENCE_GTFS": 14,
+      "PROBABLE_DISTANCE_ONLY_REVIEW": 8,
+      "PROBABLE_TOKEN_NAME_DISTANCE_REVIEW": 2
+    },
+    "osm_confirmed_elements": 13,
+    "osm_review_elements": 10,
+    "osm_unmatched_elements": 14,
+    "reference_gtfs_physical_clusters": 43,
+    "reference_gtfs_records": 67
+  },
+  "guards": {
+    "corridor_selected": false,
+    "osm_is_treated_as_official_gtfs_truth": false,
+    "passenger_stop_pattern_selected": false,
+    "proposed_stops_generated": false,
+    "winner_selected": false
+  },
+  "inputs": {
+    "gtfs_existing_stops": "outputs/phase2/stop_universe_v2/existing_official_stops.csv",
+    "gtfs_sha256": "8a1879ca5cd2fa23072e9f4b1b284c6b1be455847cb70b6d5399b2db35d05a55",
+    "osm_bus_stops": "data/raw/osm/osm_bus_stops_core.json",
+    "osm_sha256": "d850724214ca95d92f5bfcf4f644df636eb1a5b7b9b90acef6ef924b131d84ac"
+  },
+  "matching_contract": {
+    "distance_only_can_confirm": false,
+    "distance_review_max_m": 45.0,
+    "distance_unique_margin_m": 15.0,
+    "exact_name_max_m": 300.0,
+    "osm_only_promoted_to_official": false,
+    "token_jaccard_min": 0.6,
+    "token_name_max_m": 150.0
+  },
+  "outputs": {
+    "cluster_audit": "outputs/phase2/network_design_method_audit_v3/existing_stop_master_clusters_audit_v3.csv",
+    "cluster_audit_sha256": "ff2db52698de3d6f29db7a8afe34ffd5e89bb3288c0b18f4f852d7658ebc77d7",
+    "matches": "outputs/phase2/network_design_method_audit_v3/existing_stop_gtfs_osm_matches_v3.csv",
+    "matches_sha256": "317b942dcab2d5df1215bccc45487e5b4803ee8918b1509c958ba67be90e832a"
+  },
+  "status": "PASS_EXISTING_STOP_CONFLATION_AUDIT_V3"
+}
