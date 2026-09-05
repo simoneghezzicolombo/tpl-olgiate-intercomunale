@@ -58,10 +58,11 @@ def test_master_builder_preserves_sources_and_selects_no_terminals(tmp_path: Pat
         )
     )
 
-    assert len(master) == 111
+    # Counts are frozen against the actual GitHub inputs, not a remembered V3 summary.
+    assert len(master) == 105
     assert master["master_source_record_id"].is_unique
     assert master["source_family"].value_counts().to_dict() == {
-        "FROZEN_GTFS_REFERENCE": 71,
+        "FROZEN_GTFS_REFERENCE": 65,
         "ASF_OPERATOR_OTP": 39,
         "SPECIAL_SERVICE_EVIDENCE": 1,
     }
