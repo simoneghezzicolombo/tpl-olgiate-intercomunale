@@ -14,6 +14,10 @@ FINAL_IDS = {
     'R2_b2032eeb31cba06561f0',
     'R2_2ffb6743b10bb3f0a97d',
 }
+EXPLORE_LAYERS = {
+    'worldpop', 'sections', 'buildings', 'walk', 'roads',
+    'candidates', 'current', 'proposals', 'stops',
+}
 
 
 def prepare(page, errors, console):
@@ -38,6 +42,10 @@ def wait_ready(page):
     page.wait_for_function(
         "window.__analysisJourneyLineage?.installed === true && window.__analysisJourneyLineage?.exactRoutes === true",
         timeout=120000,
+    )
+    page.wait_for_function(
+        "window.__analysisJourneyCurrentKmlExact?.installed === true",
+        timeout=30000,
     )
     page.wait_for_function(
         "window.__analysisJourneyExplore?.installed === true",
@@ -72,9 +80,15 @@ with sync_playwright() as p:
     contract = page.evaluate(
         """() => {
           const L = window.__analysisJourneyLineage;
+          const K = window.__analysisJourneyCurrentKmlExact;
           return {
             currentCount: L.currentData.features.length,
             currentRoutes: [...new Set(L.currentData.features.map(f => f.properties.route))].sort(),
+            currentSource: L.currentSource,
+            kmlContract: K.contract,
+            kmlVariants: K.variants,
+            kmlCoordinateCounts: K.coordinateCounts,
+            graphReconstruction: K.graphReconstruction,
             stops: L.stopData.features.length,
             finalCount: L.finalData.features.length,
             finalIds: L.finalData.features.map(f => f.properties.route_id).sort(),
@@ -92,6 +106,11 @@ with sync_playwright() as p:
     )
     assert contract['currentCount'] == 18, contract
     assert contract['currentRoutes'] == ['D184', 'D185'], contract
+    assert contract['currentSource'] == 'USER_SUPPLIED_OFFICIAL_AGENCY_KML_EXACT', contract
+    assert contract['kmlContract'] == 'CURRENT_SERVICE_KML_GEOMETRY_V1', contract
+    assert contract['kmlVariants'] == {'D184': 7, 'D185': 11}, contract
+    assert contract['kmlCoordinateCounts'] == {'D184': 2268, 'D185': 3618}, contract
+    assert contract['graphReconstruction'] is False, contract
     assert contract['stops'] == 44, contract
     assert contract['finalCount'] == 4, contract
     assert set(contract['finalIds']) == FINAL_IDS, contract
@@ -135,21 +154,54 @@ with sync_playwright() as p:
     page.locator('.route-controls.final button[data-f="ALL"]').click()
     page.screenshot(path=str(OUT / 'exact-finalists.png'), full_page=False)
 
+    # The last chapter is first a cinematic preview. The free map is entered
+    # explicitly, so scroll narrative and direct map interaction never fight.
     activate_scene(page, 'explore', 0.52)
+    assert page.locator('[data-explore-enter]').count() == 1
     assert page.locator('.explore-controls').count() == 1
-    explore_state = page.evaluate("window.__analysisJourneyExplore.state")
-    assert explore_state == {'proposals': True, 'current': False, 'stops': True}, explore_state
+    compatibility_state = page.evaluate("window.__analysisJourneyExplore.state")
+    assert compatibility_state == {'proposals': True, 'current': False, 'stops': True}, compatibility_state
+    full_state = page.evaluate("window.__analysisJourneyExplore.layers")
+    assert set(full_state) == EXPLORE_LAYERS, full_state
+    assert full_state['proposals'] is True and full_state['stops'] is True and full_state['current'] is False, full_state
+    assert page.evaluate("window.__analysisJourneyExplore.isActive()") is False
+
     final_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-final-routes','line-opacity')")
     current_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-current-routes','line-opacity')")
     anchor_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-final-anchors','circle-opacity')")
     assert float(final_opacity) > 0.9 and float(anchor_opacity) > 0.9, (final_opacity, anchor_opacity)
     assert float(current_opacity) == 0, current_opacity
 
+    page.locator('[data-explore-enter]').click()
+    page.wait_for_function("window.__analysisJourneyExplore.isActive() === true", timeout=5000)
+    page.wait_for_function("document.body.classList.contains('is-map-exploring')", timeout=5000)
+    assert page.evaluate("document.documentElement.classList.contains('is-map-exploring')") is True
+
+    # Current KML lines and GTFS stops are independently toggleable in free mode.
     page.locator('.explore-controls button[data-layer="current"]').click()
-    page.wait_for_timeout(120)
+    page.wait_for_timeout(160)
     current_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-current-routes','line-opacity')")
     current_stop_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-current-stops','circle-opacity')")
     assert float(current_opacity) > 0.5 and float(current_stop_opacity) > 0.9, (current_opacity, current_stop_opacity)
+
+    # Every analytical representation shown in the scroll is available here.
+    for key, layer_id, paint in [
+        ('worldpop', 'worldpop-columns', 'fill-extrusion-opacity'),
+        ('sections', 'sections-fill', 'fill-extrusion-opacity'),
+        ('buildings', 'buildings-extrude', 'fill-extrusion-opacity'),
+        ('walk', 'piece-halo', 'circle-opacity'),
+        ('candidates', 'candidates', 'circle-opacity'),
+    ]:
+        page.locator(f'.explore-controls button[data-layer="{key}"]').click()
+        page.wait_for_timeout(90)
+        value = page.evaluate("([layer, paint]) => window.__analysisJourneyMap.getPaintProperty(layer, paint)", [layer_id, paint])
+        assert float(value) > 0, (key, layer_id, value)
+
+    page.locator('.explore-controls button[data-layer="roads"]').click()
+    page.wait_for_function("!!window.__analysisJourneyMap.getLayer('road-network')", timeout=30000)
+    page.wait_for_timeout(100)
+    road_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('road-network','line-opacity')")
+    assert float(road_opacity) > 0.5, road_opacity
 
     assert page.evaluate("window.__analysisJourneyExplore.showAnchor('P2V2S_0089')") is True
     page.wait_for_timeout(120)
@@ -158,6 +210,10 @@ with sync_playwright() as p:
     popup_upper = popup_text.upper()
     assert 'NUOVA FERMATA CANDIDATA' in popup_upper and 'FIELD CHECK PENDING' in popup_upper, popup_text
     page.screenshot(path=str(OUT / 'exact-explore.png'), full_page=False)
+
+    page.locator('.explore-controls [data-action="exit"]').click()
+    page.wait_for_function("window.__analysisJourneyExplore.isActive() === false", timeout=5000)
+    assert page.evaluate("document.body.classList.contains('is-map-exploring')") is False
 
     assert not errors, 'page errors: ' + ' | '.join(errors) + '\nconsole:\n' + '\n'.join(console)
     page.close()
@@ -175,11 +231,19 @@ with sync_playwright() as p:
     assert mobile.locator('.route-controls.final').count() == 1
     activate_scene(mobile, 'explore', 0.52)
     overflow = mobile.evaluate('document.documentElement.scrollWidth - window.innerWidth')
-    assert overflow <= 2, f'mobile overflow explore: {overflow}px'
+    assert overflow <= 2, f'mobile overflow explore preview: {overflow}px'
+    assert mobile.locator('[data-explore-enter]').count() == 1
+    mobile.locator('[data-explore-enter]').click()
+    mobile.wait_for_function("window.__analysisJourneyExplore.isActive() === true", timeout=5000)
+    mobile.wait_for_timeout(180)
+    overflow = mobile.evaluate('document.documentElement.scrollWidth - window.innerWidth')
+    assert overflow <= 2, f'mobile overflow explore active: {overflow}px'
     assert mobile.locator('.explore-controls').count() == 1
+    mobile.locator('.explore-controls [data-action="exit"]').click()
+    mobile.wait_for_function("window.__analysisJourneyExplore.isActive() === false", timeout=5000)
     assert not mobile_errors, 'mobile page errors: ' + ' | '.join(mobile_errors) + '\nconsole:\n' + '\n'.join(mobile_console)
     mobile.close()
 
     browser.close()
 
-print('journey exact route lineage + exploration browser smoke PASS')
+print('journey exact KML + full click-to-explore browser smoke PASS')
