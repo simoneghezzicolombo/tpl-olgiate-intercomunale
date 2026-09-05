@@ -7,10 +7,6 @@
     return;
   }
 
-  const BUILDING_SHA = J.meta.lineage.building;
-  const RAW_BASE = `https://raw.githubusercontent.com/simoneghezzicolombo/tpl-olgiate-intercomunale/${BUILDING_SHA}`;
-  const BOUNDARIES_URL = `${RAW_BASE}/data/raw/boundaries/comuni_core_istat_2026.geojson`;
-  const ROAD_GZ_URL = `${RAW_BASE}/data/phase2/frozen_gate_d/source/osm_gate_d_structural.geojson.gz`;
   const style = {
     version: 8,
     sources: {
@@ -108,7 +104,7 @@
   }
 
   async function prepareLayers(){
-    const boundaries = await fetch(BOUNDARIES_URL).then(r=>{if(!r.ok) throw new Error('boundaries'); return r.json();});
+    const boundaries = await loadBase64GzipJson(J.meta.localAssets.boundaries);
     addSource('municipalities',boundaries);
     addLayer({id:'municipality-fill',type:'fill',source:'municipalities',paint:{'fill-color':'#143348','fill-opacity':0.08}});
     addLayer({id:'municipality-outline',type:'line',source:'municipalities',paint:{'line-color':'#c6f7ff','line-width':1.1,'line-opacity':0.55,'line-dasharray':[2,2]}});
@@ -244,13 +240,7 @@
     if(roadLoaded || roadLoading) return;
     roadLoading = true;
     try{
-      const r = await fetch(ROAD_GZ_URL); if(!r.ok) throw new Error(`road ${r.status}`);
-      const bytes = new Uint8Array(await r.arrayBuffer());
-      const text = window.pako ? pako.inflate(bytes,{to:'string'}) : new TextDecoder().decode(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
-      const geo = JSON.parse(text);
-      const box=[9.32,45.695,9.47,45.765];
-      const inside=(coords)=>{if(typeof coords[0]==='number') return coords[0]>=box[0]&&coords[0]<=box[2]&&coords[1]>=box[1]&&coords[1]<=box[3]; return coords.some(inside);};
-      geo.features = geo.features.filter(f=>f.geometry&&inside(f.geometry.coordinates));
+      const geo = await loadBase64GzipJson(J.meta.localAssets.roads);
       addSource('road-graph',geo);
       addLayer({id:'road-shadow',type:'line',source:'road-graph',paint:{'line-color':'#06101a','line-width':4.2,'line-opacity':0}});
       addLayer({id:'road-network',type:'line',source:'road-graph',paint:{'line-color':['case',['boolean',['get','uncertain'],false],'#ff9b61','#57d7e8'],'line-width':['interpolate',['linear'],['zoom'],10,.3,13,1.15,16,2.4],'line-opacity':0}});
