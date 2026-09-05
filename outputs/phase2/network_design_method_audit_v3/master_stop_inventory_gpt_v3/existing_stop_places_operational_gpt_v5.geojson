@@ -1,0 +1,797 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.42653,
+          45.73399
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 1,
+        "stop_place_id": "ASF::BEVERATE_CARTELLO_PAESE",
+        "stop_name": "Beverate - Cartello Paese",
+        "municipality": "Brivio",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "BRIVIA05|BRIVIR05",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.436045,
+          45.736865
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 2,
+        "stop_place_id": "ASF::VACCAREZZA_CARTELLO_PAESE",
+        "stop_name": "Brivio - Vaccarezza",
+        "municipality": "Brivio",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "BRIVIA04|BRIVIR04",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.4457,
+          45.741333
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 3,
+        "stop_place_id": "FROZEN::300063",
+        "stop_name": "Brivio - Via Bergamo (Scuola Materna)",
+        "municipality": "Brivio",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300063",
+        "known_routes": "D150|D185",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.439315,
+          45.742315
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 4,
+        "stop_place_id": "ASF::BRIVIO_BAR_CRISTALLO",
+        "stop_name": "Brivio - Via Como (pizzeria / Bar Cristallo)",
+        "municipality": "Brivio",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "BRIVIA03|BRIVIR03",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.4233915,
+          45.741383
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 5,
+        "stop_place_id": "FROZEN::300527",
+        "stop_name": "Brivio - Via Provinciale Beverate (Elettroadda)",
+        "municipality": "Brivio",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300527|L00527",
+        "known_routes": "D148|D150",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.423083,
+          45.7404585
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 6,
+        "stop_place_id": "FROZEN::300086",
+        "stop_name": "Brivio - beverate (cariplo)",
+        "municipality": "Brivio",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300086|L00086",
+        "known_routes": "D150|D185",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.4280585,
+          45.7373335
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 7,
+        "stop_place_id": "FROZEN::300398",
+        "stop_name": "Brivio - beverate (paese)",
+        "municipality": "Brivio",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300398|L00398",
+        "known_routes": "D150|D185",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.4268915,
+          45.7347085
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 8,
+        "stop_place_id": "FROZEN::300487",
+        "stop_name": "Brivio - beverate (quattro strade)",
+        "municipality": "Brivio",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300487|L00487",
+        "known_routes": "D150|D185",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.42271,
+          45.73464
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 9,
+        "stop_place_id": "FROZEN::100005",
+        "stop_name": "Brivio - s.s. briantea",
+        "municipality": "Brivio",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "100005",
+        "known_routes": "D148",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.44591,
+          45.7424
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 10,
+        "stop_place_id": "ASF::BRIVIO_VIA_COMO_PENSILINA",
+        "stop_name": "Brivio / Via V. Emanuele (Capolinea)",
+        "municipality": "Brivio",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "BRIVIR06",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.42205,
+          45.73265
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 11,
+        "stop_place_id": "ASF::ARLATE_B_VIO_BRIVIO_MADONNINA",
+        "stop_name": "Arlate - B.vio Brivio - Madonnina",
+        "municipality": "Calco",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "CALCOA09",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.44397,
+          45.723445
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 12,
+        "stop_place_id": "ASF::ARLATE_BIVIO_PER_IL_PAESE",
+        "stop_name": "Arlate - Bivio per il Paese",
+        "municipality": "Calco",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "CALCOA07|CALCOR07",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.4369,
+          45.727265
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 13,
+        "stop_place_id": "ASF::ARLATE_CANTINA_PIROVANO",
+        "stop_name": "Arlate - Cantina Pirovano",
+        "municipality": "Calco",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "CALCOA08|CALCOR08",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.41522,
+          45.723905
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 14,
+        "stop_place_id": "ASF::CALCO_LARGO_POMEA",
+        "stop_name": "Calco - Via Nazionale (edicola)",
+        "municipality": "Calco",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "CALCOA06|CALCOR06",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.4081664,
+          45.7168683
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 15,
+        "stop_place_id": "MANUAL::CALCO_SCAGNELLO",
+        "stop_name": "Calco - Via Statale / Via Scagnello (Esselunga)",
+        "municipality": "Calco",
+        "source_families": "GOOGLE_MAPS_MANUAL|ASF_C146_OBSERVED",
+        "source_native_ids": "CALCOA04|CALCOR04",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_MANUAL_CURRENT",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "One location; travel directions intentionally ignored."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.410035,
+          45.725005
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 16,
+        "stop_place_id": "ASF::CALCO_VIA_GARIBALDI",
+        "stop_name": "Calco - Via Virgilio",
+        "municipality": "Calco",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "CALCOA05|CALCOR05",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.44097,
+          45.72377
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 17,
+        "stop_place_id": "FROZEN::300743",
+        "stop_name": "Calco - arlate (cimitero)",
+        "municipality": "Calco",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300743",
+        "known_routes": "D170",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.417783,
+          45.7296
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 18,
+        "stop_place_id": "FROZEN::300634",
+        "stop_name": "Calco - via Nazionale",
+        "municipality": "Calco",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300634",
+        "known_routes": "D185",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.44475,
+          45.71871
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 19,
+        "stop_place_id": "ASF::IMBERSAGO_LOCALITA_CAZZULINO",
+        "stop_name": "Imbersago - Località Cazzulino / Arlate Fiorista",
+        "municipality": "Calco",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "IMBERA07|IMBERR07",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.362575,
+          45.738585
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 20,
+        "stop_place_id": "ASF::PEREGO_VIA_STATALE_79",
+        "stop_name": "Perego - Statale / Via S. Caterina",
+        "municipality": "La Valletta Brianza",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "PERE_A01|PERE_R01",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.37441,
+          45.73721
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 21,
+        "stop_place_id": "ASF::ROVAGNATE_STRADA_STATALE_AGIP",
+        "stop_name": "Rovagnate - Statale / AGIP",
+        "municipality": "La Valletta Brianza",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "ROVAGA03|ROVAGR03",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.36985,
+          45.737175
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 22,
+        "stop_place_id": "ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA",
+        "stop_name": "Rovagnate - Statale / Via Lombardia",
+        "municipality": "La Valletta Brianza",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "ROVAGA01|ROVAGR01",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.3646835,
+          45.73975
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 23,
+        "stop_place_id": "FROZEN::300879",
+        "stop_name": "Rovagnate - vinicola ghezzi",
+        "municipality": "La Valletta Brianza",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300879|L00879",
+        "known_routes": "D160|D184",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.41949,
+          45.73635
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 24,
+        "stop_place_id": "FROZEN::300956",
+        "stop_name": "Calco - via nazionale (peugeot)",
+        "municipality": "Olgiate Molgora",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300956|L00956",
+        "known_routes": "D148|D150|D185",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.3979736,
+          45.7221313
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 25,
+        "stop_place_id": "SPECIAL::CASA_DI_COMUNITA_OLGIATE",
+        "stop_name": "Casa di Comunità Olgiate Molgora",
+        "municipality": "Olgiate Molgora",
+        "source_families": "SPECIAL_SERVICE_EVIDENCE",
+        "source_native_ids": "NAVETTA_MANDIC_MANZONI::001",
+        "known_routes": "NAVETTA_MANDIC_MANZONI",
+        "existence_confidence": "HIGH_CURRENT_SPECIAL_SERVICE",
+        "service_class": "SPECIAL_SERVICE",
+        "notes": "Kept separate from ordinary TPL stops."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.390005,
+          45.731355
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 26,
+        "stop_place_id": "ASF::OLGIATE_MOLGORA_SCARPONE",
+        "stop_name": "Olgiate Molgora - Scarpone",
+        "municipality": "Olgiate Molgora",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "OLGMOA05|OLGMOR05",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.390855,
+          45.731735
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 27,
+        "stop_place_id": "ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE",
+        "stop_name": "Olgiate Molgora - Via Della Salute",
+        "municipality": "Olgiate Molgora",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "OLGMOA06|OLGMOR06",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.400495,
+          45.728675
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 28,
+        "stop_place_id": "ASF::OLGIATE_MOLGORA_VIA_STATALE",
+        "stop_name": "Olgiate Molgora - Via Statale",
+        "municipality": "Olgiate Molgora",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "OLGMOA04|OLGMOR04",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.40441,
+          45.72917
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 29,
+        "stop_place_id": "FROZEN::L00407",
+        "stop_name": "Olgiate-Calco-Brivio FS",
+        "municipality": "Olgiate Molgora",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "L00407",
+        "known_routes": "D184|D185",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.367867,
+          45.7486335
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 30,
+        "stop_place_id": "FROZEN::300873",
+        "stop_name": "Hoe'",
+        "municipality": "Santa Maria Hoè",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300873|L00873",
+        "known_routes": "D184",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.38793,
+          45.738165
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 31,
+        "stop_place_id": "ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO",
+        "stop_name": "S. Maria Hoè - S.P. 58 ang. Via Cenisio",
+        "municipality": "Santa Maria Hoè",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "SAMAHA03|SAMAHR03",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.3737,
+          45.744308
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 32,
+        "stop_place_id": "FROZEN::300782",
+        "stop_name": "S.Maria Hoe'",
+        "municipality": "Santa Maria Hoè",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300782|L00782",
+        "known_routes": "D184",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.38243,
+          45.73485
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 33,
+        "stop_place_id": "ASF::ROVAGNATE_FRAZIONE_ALDUNO",
+        "stop_name": "Santa Maria Hoè - Alduno",
+        "municipality": "Santa Maria Hoè",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "ROVAGA04|ROVAGAR4",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.378385,
+          45.7427
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 34,
+        "stop_place_id": "FROZEN::300805",
+        "stop_name": "Santa Maria Hoè - Tremonte / Via Trento",
+        "municipality": "Santa Maria Hoè",
+        "source_families": "FROZEN_GTFS_REFERENCE",
+        "source_native_ids": "300805|L00904",
+        "known_routes": "D184",
+        "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Existing stop location retained from official reference; direction ignored and current service may differ."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.37463,
+          45.74366
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 35,
+        "stop_place_id": "ASF::SANTA_MARIA_HOE_VIA_COMO",
+        "stop_name": "Santa Maria Hoè - Via Como / Alpino",
+        "municipality": "Santa Maria Hoè",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "SAMAHA01|SAMAHR01",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.380605,
+          45.74118
+        ]
+      },
+      "properties": {
+        "operational_stop_no": 36,
+        "stop_place_id": "ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII",
+        "stop_name": "Santa Maria Hoè - Via Giovanni XXIII / Tremonte-Via Leopardi",
+        "municipality": "Santa Maria Hoè",
+        "source_families": "ASF_OPERATOR_OTP",
+        "source_native_ids": "SAMAHA04|SAMAHR04",
+        "known_routes": "C146",
+        "existence_confidence": "HIGH_CURRENT_OPERATOR",
+        "service_class": "CONVENTIONAL_TPL",
+        "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions."
+      }
+    }
+  ]
+}
