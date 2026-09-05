@@ -1,0 +1,99 @@
+name: Phase 2 Alpha Stop Inventory Bridge V3
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - phase2-network-design-method-audit-v3
+    paths:
+      - src/phase2_alpha_stop_inventory.py
+      - scripts/phase2_build_alpha_stop_inventory_bridge_v3.py
+      - tests/test_phase2_alpha_stop_inventory_v3.py
+      - .github/workflows/phase2-alpha-stop-inventory-bridge-v3.yml
+      - outputs/phase2/stop_pattern_redesign_v3/passenger_stop_foundation_v3.csv
+      - outputs/phase2/reduced_path_matrix_v2/routing_anchor_membership.csv
+
+permissions:
+  contents: write
+
+jobs:
+  bridge:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: .
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          ref: phase2-network-design-method-audit-v3
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned dependencies
+        run: python -m pip install --disable-pip-version-check pandas==2.2.3 pytest==8.3.5
+
+      - name: Compile bridge
+        run: |
+          python -m py_compile src/phase2_alpha_stop_inventory.py
+          python -m py_compile scripts/phase2_build_alpha_stop_inventory_bridge_v3.py
+
+      - name: Run focused tests
+        run: pytest -q tests/test_phase2_alpha_stop_inventory_v3.py
+
+      - name: Build real evidence bridge
+        run: python scripts/phase2_build_alpha_stop_inventory_bridge_v3.py
+
+      - name: Validate epistemic guards
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('outputs/phase2/network_design_method_audit_v3/alpha_stop_inventory_bridge_v3/alpha_stop_inventory_bridge_v3_validation.json')
+          v = json.loads(p.read_text(encoding='utf-8'))
+          assert v['status'] == 'PASS_ALPHA_STOP_INVENTORY_BRIDGE_V3', v
+          assert all(v['checks'].values()), v['checks']
+          assert v['guards']['candidate_network_generated'] is False
+          assert v['guards']['passenger_stop_pattern_selected'] is False
+          assert v['guards']['proposed_stop_promoted'] is False
+          assert v['guards']['named_service_area_forced'] is False
+          assert v['guards']['winner_selected'] is False
+          print(json.dumps(v, indent=2, sort_keys=True))
+          PY
+
+      - name: Deterministic rebuild check
+        run: |
+          cp outputs/phase2/network_design_method_audit_v3/alpha_stop_inventory_bridge_v3/alpha_stop_inventory_bridge_v3.csv /tmp/alpha-stops.csv
+          cp outputs/phase2/network_design_method_audit_v3/alpha_stop_inventory_bridge_v3/alpha_stop_inventory_bridge_v3_validation.json /tmp/alpha-validation.json
+          rm -rf outputs/phase2/network_design_method_audit_v3/alpha_stop_inventory_bridge_v3
+          python scripts/phase2_build_alpha_stop_inventory_bridge_v3.py > /tmp/alpha-bridge-second.log
+          cmp /tmp/alpha-stops.csv outputs/phase2/network_design_method_audit_v3/alpha_stop_inventory_bridge_v3/alpha_stop_inventory_bridge_v3.csv
+          cmp /tmp/alpha-validation.json outputs/phase2/network_design_method_audit_v3/alpha_stop_inventory_bridge_v3/alpha_stop_inventory_bridge_v3_validation.json
+
+      - name: Anti-random and source-closure guard
+        run: |
+          ! grep -nE 'np\.random|numpy\.random|random\.' src/phase2_alpha_stop_inventory.py scripts/phase2_build_alpha_stop_inventory_bridge_v3.py
+          ! grep -niE 'requests|overpass-api|urllib|httpx' src/phase2_alpha_stop_inventory.py scripts/phase2_build_alpha_stop_inventory_bridge_v3.py
+
+      - name: Upload bridge artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-alpha-stop-inventory-bridge-v3
+          path: outputs/phase2/network_design_method_audit_v3/alpha_stop_inventory_bridge_v3/
+          if-no-files-found: error
+
+      - name: Persist bridge evidence
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add outputs/phase2/network_design_method_audit_v3/alpha_stop_inventory_bridge_v3/
+          if git diff --cached --quiet; then
+            echo 'No Alpha bridge evidence changes to persist.'
+          else
+            git commit -m 'audit: persist Alpha stop-inventory bridge V3 evidence'
+            git push origin HEAD:phase2-network-design-method-audit-v3
+          fi
