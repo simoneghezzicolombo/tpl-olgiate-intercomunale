@@ -55,7 +55,7 @@ jobs:
           test -f dietro-l-analisi/vendor/maplibre/maplibre-gl-worker.mjs
           test -f dietro-l-analisi/vendor/maplibre/maplibre-gl.css
           sha256sum dietro-l-analisi/vendor/maplibre/* | sort > dietro-l-analisi/vendor/maplibre/SHA256SUMS
-      - name: Download pinned evidence bundles
+      - name: Download pinned evidence bundles and frozen runtime sources
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -67,6 +67,18 @@ jobs:
           curl --fail --location --retry 3 -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
             "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9911651930/zip" -o /tmp/journey-stop-universe-v2.zip
           echo "25d3dbf52cb428d54a46569b7dbbf9e78dcee6fcf5ee69b9c6e928a367e0a2f9  /tmp/journey-stop-universe-v2.zip" | sha256sum -c -
+
+          FROZEN="29203ad64c3e32e6164ef6997933eb5c5ff2d5b1"
+          RAW="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${FROZEN}"
+          curl --fail --location --retry 3 "${RAW}/data/raw/boundaries/comuni_core_istat_2026.geojson" -o /tmp/journey-boundaries.geojson
+          test "$(wc -c < /tmp/journey-boundaries.geojson)" -eq 79275
+          test "$(git hash-object /tmp/journey-boundaries.geojson)" = "1d5dcb825b21631f824f53aa5a76cfaf669ce744"
+          sha256sum /tmp/journey-boundaries.geojson
+
+          curl --fail --location --retry 3 "${RAW}/data/phase2/frozen_gate_d/source/osm_gate_d_structural.geojson.gz" -o /tmp/journey-road-structural.geojson.gz
+          test "$(wc -c < /tmp/journey-road-structural.geojson.gz)" -eq 2270082
+          test "$(git hash-object /tmp/journey-road-structural.geojson.gz)" = "54594215060b6cbe1cb15cf2d45f994ec85439ab"
+          echo "001ca3fd752a8fb378d1769e6ec6d9cb49203ee38dbe812106d7cc8aca752620  /tmp/journey-road-structural.geojson.gz" | sha256sum -c -
       - name: Build source-closed web assets
         run: python dietro-l-analisi/build_journey_assets.py
       - name: Static contract checks
@@ -81,32 +93,59 @@ jobs:
           node --check dietro-l-analisi/journey-bootstrap.mjs
           python -m py_compile dietro-l-analisi/journey-browser-smoke.py
           python - <<'PY'
+          import hashlib
           import json
           from pathlib import Path
-          m=json.loads(Path('dietro-l-analisi/data-manifest.json').read_text())
-          assert m['contract']=='PHASE2_ANALYSIS_JOURNEY_VISUAL_ASSETS_V1'
+
+          root=Path('dietro-l-analisi')
+          m=json.loads((root/'data-manifest.json').read_text())
+          assert m['contract']=='PHASE2_ANALYSIS_JOURNEY_VISUAL_ASSETS_V2_SOURCE_CLOSED_RUNTIME'
           assert m['decision_output'] is False
-          assert m['counts']=={
-            'worldpop_cells':4283,
-            'sections':229,
-            'dbgt_buildings_with_core_population':4226,
-            'building_section_pieces':4348,
-            'proposed_candidates_v2':155,
-            'official_stop_records_v2':67,
-          }
-          for f in ['index.html','journey.css','journey.js','journey-effects.js','journey-director.js','journey-runtime-policy.js','journey-experience-policy.js','journey-bootstrap.mjs','journey-browser-smoke.py','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64','vendor/maplibre/maplibre-gl.mjs','vendor/maplibre/maplibre-gl-shared.mjs','vendor/maplibre/maplibre-gl-worker.mjs','vendor/maplibre/maplibre-gl.css','vendor/maplibre/SHA256SUMS']:
-              assert Path('dietro-l-analisi',f).is_file(), f
-          html=Path('dietro-l-analisi/index.html').read_text()
+          assert m['runtime_external_evidence_fetches'] == 0
+          assert m['frozen_runtime_source_commit']=='29203ad64c3e32e6164ef6997933eb5c5ff2d5b1'
+          assert m['counts']['worldpop_cells']==4283
+          assert m['counts']['sections']==229
+          assert m['counts']['dbgt_buildings_with_core_population']==4226
+          assert m['counts']['building_section_pieces']==4348
+          assert m['counts']['proposed_candidates_v2']==155
+          assert m['counts']['official_stop_records_v2']==67
+          assert m['counts']['municipality_boundaries']==5
+          assert m['counts']['gate_d_structural_source_features']==24384
+          assert m['counts']['gate_d_visual_features'] > 0
+          roads=m['frozen_runtime_sources']['gate_d_structural_roads']
+          assert roads['git_blob_sha1']=='54594215060b6cbe1cb15cf2d45f994ec85439ab'
+          assert roads['gzip_sha256']=='001ca3fd752a8fb378d1769e6ec6d9cb49203ee38dbe812106d7cc8aca752620'
+          assert roads['geojson_sha256']=='9032fa1fa2f8a22fd5cfcf81ad7366269d062cb7c27ffbfd57bfba754a1b51ce'
+          boundaries=m['frozen_runtime_sources']['boundaries']
+          assert boundaries['git_blob_sha1']=='1d5dcb825b21631f824f53aa5a76cfaf669ce744'
+          assert boundaries['size_bytes']==79275
+          assert m['local_asset_chunks']['boundaries']
+          assert m['local_asset_chunks']['roads']
+
+          required=['index.html','journey.css','journey.js','journey-effects.js','journey-director.js','journey-runtime-policy.js','journey-experience-policy.js','journey-bootstrap.mjs','journey-browser-smoke.py','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64','vendor/maplibre/maplibre-gl.mjs','vendor/maplibre/maplibre-gl-shared.mjs','vendor/maplibre/maplibre-gl-worker.mjs','vendor/maplibre/maplibre-gl.css','vendor/maplibre/SHA256SUMS']
+          required += m['local_asset_chunks']['boundaries'] + m['local_asset_chunks']['roads']
+          for f in required:
+              assert (root/f).is_file(), f
+          for name,digest in m['files'].items():
+              p=root/name
+              assert p.is_file(), name
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==digest, name
+
+          html=(root/'index.html').read_text()
           assert '<script type="module" src="journey-bootstrap.mjs"></script>' in html
           assert 'maplibre-gl@6.7.0/dist/maplibre-gl.js' not in html
           assert 'vendor/maplibre/maplibre-gl.css' in html
-          bootstrap=Path('dietro-l-analisi/journey-bootstrap.mjs').read_text()
+          bootstrap=(root/'journey-bootstrap.mjs').read_text()
           assert "await import('./journey-runtime-policy.js')" in bootstrap
           assert "await import('./journey-experience-policy.js')" in bootstrap
-          experience=Path('dietro-l-analisi/journey-experience-policy.js').read_text()
+          experience=(root/'journey-experience-policy.js').read_text()
           assert "prefers-reduced-motion: reduce" in experience
           assert "duration:0" in experience and "essential:false" in experience
-          print('journey static data + experience contract PASS')
+          journey=(root/'journey.js').read_text()
+          assert 'raw.githubusercontent.com' not in journey
+          assert 'localAssets.boundaries' in journey and 'localAssets.roads' in journey
+          assert 'BOUNDARIES_URL' not in journey and 'ROAD_GZ_URL' not in journey
+          print('journey source-closed runtime + experience contract PASS')
           PY
           ! grep -R --line-number -E 'np\.random|numpy\.random|import random|from random' dietro-l-analisi
       - name: Browser smoke and visual QA
@@ -127,11 +166,12 @@ jobs:
           set -euo pipefail
           git config user.name "chatgpt-codex-connector"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dietro-l-analisi/journey-data.js dietro-l-analisi/data-manifest.json dietro-l-analisi/*.b64 dietro-l-analisi/vendor/maplibre
+          git add dietro-l-analisi/journey-data.js dietro-l-analisi/data-manifest.json dietro-l-analisi/vendor/maplibre
+          git add -A -- 'dietro-l-analisi/*.b64'
           if git diff --cached --quiet; then
             echo "Journey assets and runtime already current"
           else
-            git commit -m "data(journey): materialize certified visual layers and pinned runtime"
+            git commit -m "data(journey): materialize source-closed visual runtime"
             git push origin HEAD:phase2-analysis-journey-a
           fi
       - name: Upload journey build and visual evidence
