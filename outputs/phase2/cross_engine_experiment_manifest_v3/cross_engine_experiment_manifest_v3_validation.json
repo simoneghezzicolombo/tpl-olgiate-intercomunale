@@ -1,0 +1,15 @@
+{
+  "canonicalization_deterministic": true,
+  "exactly_two_distinct_engines_required": true,
+  "fixture_semantics": "CONTROLLED_ABSTRACT_EXPERIMENT_FIXTURE_NOT_TERRITORIAL_DATA",
+  "input_order_invariant": true,
+  "manifest_mismatch_fails_closed": true,
+  "manifest_sha256": "57edd49f936763fcf99b884b663844c667bfdec72e05e400c876f4247ce6a268",
+  "mode_count": 2,
+  "network_recommendation_claim": false,
+  "od_count": 3,
+  "routing_disagreement_not_interpreted_before_identity_check": true,
+  "status": "PASS_RT015_FROZEN_CROSS_ENGINE_EXPERIMENT_MANIFEST_V3",
+  "territorial_candidate_claim": false,
+  "weighted_composite_score": false
+}
