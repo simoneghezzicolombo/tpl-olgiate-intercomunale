@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate:
@@ -99,3 +99,15 @@ jobs:
           name: phase2-final-stop-materialization-v3
           path: outputs/phase2/final_stop_materialization_v3/
           if-no-files-found: error
+
+      - name: Persist validated evidence
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add outputs/phase2/final_stop_materialization_v3/
+          if git diff --cached --quiet; then
+            echo 'No RT-018 evidence changes to persist.'
+          else
+            git commit -m 'audit: persist RT-018 final stop materialization evidence'
+            git push origin HEAD:phase2-final-stop-materialization-v3
+          fi
