@@ -213,7 +213,8 @@ def test_materialization_overlap_and_loop_helpers_are_explicit():
     assert runtime == 3.0
     assert distance == 300.0
     assert has_physical_node_loop(("A", "B", "A")) is True
-    assert shared_runtime_fraction(["ab", "bc"], ["ab", "bd"], lookup) == 0.25
+    # Shared runtime is 1 min, normalized by the shorter route (3 min).
+    assert shared_runtime_fraction(["ab", "bc"], ["ab", "bd"], lookup) == 1.0 / 3.0
 
 
 def test_generation_is_deterministic():
