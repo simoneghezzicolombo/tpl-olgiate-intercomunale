@@ -1,0 +1,26 @@
+{
+  "dominated_candidate_removed": true,
+  "far_weighted_mean_walk_min": 12.5,
+  "far_weighted_p90_walk_min": 14,
+  "fixture_semantics": "CONTROLLED_ABSTRACT_FIXTURE_NOT_TERRITORIAL_DATA",
+  "marginal_service_fields_are_diagnostic_only": true,
+  "missing_policy_groups": [
+    "G2"
+  ],
+  "near_weighted_mean_walk_min": 4.25,
+  "near_weighted_p90_walk_min": 5,
+  "network_recommendation_claim": false,
+  "pareto_frontier_ids": [
+    "ACCESS",
+    "SHORT"
+  ],
+  "policy_guard_passes": false,
+  "random_search": false,
+  "same_share_le_15_min": true,
+  "status": "PASS_RT011_EVALUATION_CONTRACT_V3",
+  "territorial_candidate_claim": false,
+  "threshold_only_accessibility": false,
+  "tradeoff_candidates_both_preserved": true,
+  "unserved_area_preserved_as_diagnostic": true,
+  "weighted_composite_score": false
+}
