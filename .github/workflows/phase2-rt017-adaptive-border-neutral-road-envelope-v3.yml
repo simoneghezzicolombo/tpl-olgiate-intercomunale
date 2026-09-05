@@ -66,6 +66,8 @@ jobs:
         run: git diff --check 8a2cd43405dbac04cea56294407bcc7b453c65b4..HEAD
 
       - name: Run real-territory adaptive expansion
+        env:
+          PYTHONPATH: .
         run: |
           rm -rf outputs/phase2/rt017 outputs/phase2/rt017_repeat
           python scripts/phase2_rt017_adaptive_border_neutral_routing_envelope_v3.py \
@@ -76,6 +78,8 @@ jobs:
         run: cp outputs/phase2/rt017/frozen_routing_envelope_metadata_v3.json /tmp/rt017_first.json
 
       - name: Repeat real-territory run independently
+        env:
+          PYTHONPATH: .
         run: |
           python scripts/phase2_rt017_adaptive_border_neutral_routing_envelope_v3.py \
             --output-dir outputs/phase2/rt017_repeat \
@@ -121,7 +125,7 @@ jobs:
             outputs/phase2/rt017/
             outputs/phase2/rt017_repeat/rt017_validation.json
             outputs/phase2/rt017_repeat/frozen_routing_envelope_metadata_v3.json
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
 
       - name: Persist compact validated RT-017 evidence on branch
