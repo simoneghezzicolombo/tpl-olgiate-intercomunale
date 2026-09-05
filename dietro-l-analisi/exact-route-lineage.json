@@ -1,0 +1,89 @@
+{
+  "contract": "PHASE2_JOURNEY_EXACT_ROUTE_LINEAGE_V1",
+  "current_service": {
+    "coordinate_counts": {
+      "D184": 3075,
+      "D185": 3800
+    },
+    "physical_stop_clusters": 44,
+    "shape_features": {
+      "D184": 8,
+      "D185": 10
+    }
+  },
+  "decision_output": false,
+  "files_sha256": {
+    "current-routes-gtfs.geojson.gz.b64.0": "33deebd7b84ee47af9cd78c835bc42d9837f44eefb9c4e6bb54a33be123666cf",
+    "current-routes-gtfs.geojson.gz.b64.1": "d6edbb71b9a428ff2501f8ccb418dfc8f70e205233720df9c7e6c9ef237c03ee",
+    "current-stops-gtfs.geojson.gz.b64.0": "832f9a6aa50a10e3436b32203a8dac544ce9063c4d86c518bb106cc6453d6f97",
+    "finalist-route-anchors.geojson.gz.b64.0": "2ef66dbcec44cf8baf09832996e5a52fef0d04a9cd4b4c411f665f9f21919f0c",
+    "finalist-routes-gated.geojson.gz.b64.0": "e5516b412e47f99dd37f29a1e8e6a0c5702247613e5bed74c7d3049381437b7a",
+    "finalist-routes-gated.geojson.gz.b64.1": "34dca481eaf840f48ff35c524e73490bd2b22c418cba1baec5bcb97cad804ef0",
+    "finalist-routes-gated.geojson.gz.b64.2": "0cbdb9a00469c38a304b43d644d11e337508f8678f55b26596e28ae8985dd9f1"
+  },
+  "finalists": {
+    "R2_23d58cd05658247380d7": {
+      "coordinates": 686,
+      "distance_km": 13.216402,
+      "edge_count": 685,
+      "runtime_min": 24.099655
+    },
+    "R2_2ffb6743b10bb3f0a97d": {
+      "coordinates": 650,
+      "distance_km": 12.028477,
+      "edge_count": 649,
+      "runtime_min": 22.401247
+    },
+    "R2_65db885119e69d50c7d4": {
+      "coordinates": 652,
+      "distance_km": 11.52298,
+      "edge_count": 651,
+      "runtime_min": 24.018973
+    },
+    "R2_b2032eeb31cba06561f0": {
+      "coordinates": 454,
+      "distance_km": 7.320014,
+      "edge_count": 453,
+      "runtime_min": 13.999008
+    }
+  },
+  "generated_files": [
+    "current-routes-gtfs.geojson.gz.b64.0",
+    "current-routes-gtfs.geojson.gz.b64.1",
+    "current-stops-gtfs.geojson.gz.b64.0",
+    "finalist-route-anchors.geojson.gz.b64.0",
+    "finalist-routes-gated.geojson.gz.b64.0",
+    "finalist-routes-gated.geojson.gz.b64.1",
+    "finalist-routes-gated.geojson.gz.b64.2"
+  ],
+  "graph": {
+    "bus_eligible_ways": 15872,
+    "directed_edges": 199217,
+    "nodes": 104071,
+    "turn_rule_keys_in_graph": 535
+  },
+  "semantics": {
+    "current_routes": "OFFICIAL_FROZEN_GTFS_SHAPES",
+    "finalist_routes": "RESTRICTION_AWARE_GATE_D_ROUTES_VALIDATED_AGAINST_REDUCED_PATH_MATRIX_V2",
+    "screen_space_offsets": false,
+    "winner_selected": false
+  },
+  "sources": {
+    "current_service_v4": {
+      "artifact_id": 9947554863,
+      "sha256": "b9bfe98c0418f30b79772c524f8525001a5eac91d9f2f9dacd78c510e5aef16a"
+    },
+    "finalist_simplicity_v3": {
+      "artifact_id": 9950786078,
+      "sha256": "3d1be56ff2f42a2915724ca730d20a58389d1191cbae4aa7af3e76e1b7b46070"
+    },
+    "gate_d": {
+      "artifact_id": 9891607118,
+      "sha256": "6fbc06d74d5ba970bc980e4cde6234245e0753c22386f703ea313c6a4de9206a"
+    },
+    "reduced_path_matrix_v2": {
+      "artifact_id": 9912145623,
+      "sha256": "a12cbc5dd63d3ae97d79c040b71fde9da198a7459a0a378e8813c3e8f026bdb5"
+    }
+  }
+}
