@@ -29,8 +29,12 @@ def _text(value) -> str:
 
 def _norm_name(value: str) -> str:
     text = unicodedata.normalize("NFKD", _text(value)).encode("ascii", "ignore").decode("ascii")
-    text = text.upper().replace("S.S.", "SS").replace("S.P.", "SP")
+    text = text.upper()
     text = re.sub(r"[^A-Z0-9]+", " ", text)
+    # Operator labels vary between S.S., S.S-, SS, S.P. and SP. Normalize the
+    # administrative road abbreviations only after punctuation has been stripped.
+    text = re.sub(r"\bS\s+S\b", "SS", text)
+    text = re.sub(r"\bS\s+P\b", "SP", text)
     return re.sub(r"\s+", " ", text).strip()
 
 
