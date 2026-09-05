@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Convert the ATP Como-Lecco-Varese official D184/D185 KML files to deterministic GeoJSON.
+"""Materialise the current-route map layer from the user's archived official ATP KMLs.
 
-The browser must render the authority-published route geometry itself, not a stop-to-stop
-polyline and not a GTFS reconstruction. The two KML inputs are downloaded by CI from the
-ATP open-data page and are kept outside the repository; this script records their hashes
-and materializes a compact, deterministic browser asset plus a provenance manifest.
+The ATP files were archived on 2025-01-20 under the former line codes D84 and E03.
+The official 2025 renumbering maps them to D184 and D185. They are used here only for
+ordinary route-line geometry. Current stop/service evidence continues to come from the
+frozen official GTFS baseline. No stop-to-stop polyline is reconstructed.
 """
 from __future__ import annotations
 
@@ -19,9 +19,21 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parent
 OUT_PREFIX = "current-routes-kml.geojson.gz.b64."
-SOURCE_URLS = {
-    "D184": "https://www.tplcomoleccovarese.it/atpcolc/images/Fil%20KML%202025/Urbano%20e%20interurbano%20Lecco/D184.kml",
-    "D185": "https://www.tplcomoleccovarese.it/atpcolc/images/Fil%20KML%202025/Urbano%20e%20interurbano%20Lecco/D185.kml",
+OPEN_DATA_PAGE = "https://www.tplcomoleccovarese.it/atpcolc/zf/index.php/servizi-aggiuntivi/index/index/idtesto/134"
+RENUMBERING_SOURCE = "https://www.tplcomoleccovarese.it/atpcolc/po/attachment_news.php?id=947"
+ARCHIVE = {
+    "D184": {
+        "legacy_route": "D84",
+        "expected_filename": "D84.kml",
+        "sha256": "6cf715a83c1e85e7ebfeecd82b666eee623119e7b37e35875ed0be419fa5523a",
+        "archived_at_utc": "2025-01-20T16:13:40Z",
+    },
+    "D185": {
+        "legacy_route": "E03",
+        "expected_filename": "E03.kml",
+        "sha256": "10239544443134a10992b938a878ff62a906618f8f7f6babe2a339647f41bfa5",
+        "archived_at_utc": "2025-01-20T16:13:44Z",
+    },
 }
 
 
@@ -83,15 +95,18 @@ def placemark_name(parent_map: dict[ET.Element, ET.Element], elem: ET.Element) -
 
 
 def extract_lines(path: Path, route: str) -> tuple[list[dict], dict]:
+    meta = ARCHIVE[route]
     raw = path.read_bytes()
+    actual_hash = sha256_bytes(raw)
+    if actual_hash != meta["sha256"]:
+        raise RuntimeError(f"{route}: archived KML hash mismatch: {actual_hash}")
+
     root = ET.fromstring(raw)
     parent_map = {child: parent for parent in root.iter() for child in parent}
     lines: list[tuple[list[list[float]], str | None, str]] = []
-
     for elem in root.iter():
         kind = local_name(elem.tag)
         coords: list[list[float]] = []
-        source_geom = kind
         if kind == "LineString":
             for child in elem.iter():
                 if local_name(child.tag) == "coordinates":
@@ -103,38 +118,37 @@ def extract_lines(path: Path, route: str) -> tuple[list[dict], dict]:
         else:
             continue
         if len(coords) >= 2:
-            lines.append((coords, placemark_name(parent_map, elem), source_geom))
+            lines.append((coords, placemark_name(parent_map, elem), kind))
 
     if not lines:
-        raise RuntimeError(f"{route}: no LineString/gx:Track geometry found in {path}")
+        raise RuntimeError(f"{route}: no KML route geometry found")
 
     features = []
     for index, (coords, name, source_geom) in enumerate(lines, start=1):
-        # Catch accidental HTML/error pages parsed as XML and wildly unrelated geometry.
         for lon, lat in coords:
             if not (7.0 <= lon <= 11.0 and 44.0 <= lat <= 47.0):
-                raise RuntimeError(f"{route}: coordinate outside northern-Italy sanity bounds: {(lon, lat)}")
-        features.append(
-            {
-                "type": "Feature",
-                "properties": {
-                    "route": route,
-                    "source": "OFFICIAL_ATP_KML_2025",
-                    "source_file": path.name,
-                    "component": index,
-                    "placemark": name,
-                    "source_geometry": source_geom,
-                    "coordinate_count": len(coords),
-                },
-                "geometry": {"type": "LineString", "coordinates": coords},
-            }
-        )
+                raise RuntimeError(f"{route}: coordinate outside northern-Italy bounds: {(lon, lat)}")
+        features.append({
+            "type": "Feature",
+            "properties": {
+                "route": route,
+                "legacy_route": meta["legacy_route"],
+                "source": "OFFICIAL_ATP_ARCHIVED_KML",
+                "source_file": meta["expected_filename"],
+                "component": index,
+                "placemark": name,
+                "source_geometry": source_geom,
+                "coordinate_count": len(coords),
+            },
+            "geometry": {"type": "LineString", "coordinates": coords},
+        })
 
     stats = {
-        "source_file": path.name,
-        "source_url": SOURCE_URLS[route],
+        "legacy_route": meta["legacy_route"],
+        "source_file": meta["expected_filename"],
+        "archived_at_utc": meta["archived_at_utc"],
         "bytes": len(raw),
-        "sha256": sha256_bytes(raw),
+        "sha256": actual_hash,
         "line_components": len(features),
         "coordinates": sum(f["properties"]["coordinate_count"] for f in features),
     }
@@ -161,7 +175,7 @@ def main() -> None:
 
     geojson = {
         "type": "FeatureCollection",
-        "name": "D184_D185_official_ATP_KML_2025",
+        "name": "D184_D185_from_archived_official_ATP_KML",
         "features": all_features,
     }
     geojson_bytes = json.dumps(geojson, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
@@ -174,20 +188,26 @@ def main() -> None:
         name = f"{OUT_PREFIX}{index}"
         payload = encoded[start : start + args.chunk_chars]
         (ROOT / name).write_text(payload, encoding="ascii")
-        chunks.append(
-            {
-                "file": name,
-                "chars": len(payload),
-                "sha256": sha256_bytes(payload.encode("ascii")),
-            }
-        )
+        chunks.append({
+            "file": name,
+            "chars": len(payload),
+            "sha256": sha256_bytes(payload.encode("ascii")),
+        })
 
     manifest = {
-        "contract": "CURRENT_ROUTE_BASELINE_OFFICIAL_ATP_KML_V1",
+        "contract": "CURRENT_ROUTE_BASELINE_ARCHIVED_OFFICIAL_ATP_KML_V1",
         "decision_output": False,
         "authority": "Agenzia per il Trasporto Pubblico Locale del bacino di Como, Lecco e Varese",
-        "open_data_page": "https://www.tplcomoleccovarese.it/atpcolc/zf/index.php/servizi-aggiuntivi/index/index/idtesto/134",
-        "semantics": "Official authority-published KML route geometry. No stop-to-stop reconstruction and no screen-space offsets.",
+        "open_data_page": OPEN_DATA_PAGE,
+        "renumbering_source_url": RENUMBERING_SOURCE,
+        "current_codes": {"D184": "D84", "D185": "E03"},
+        "semantics": (
+            "Historical official ATP KML route geometry archived by the user before the "
+            "D84→D184 and E03→D185 renumbering. Used only as route-line geometry for the "
+            "ordinary structural baseline; frozen official GTFS remains the source for "
+            "current stops and service activation. No stop-to-stop reconstruction and no "
+            "screen-space offsets."
+        ),
         "routes": sources,
         "geojson": {
             "feature_count": len(all_features),
@@ -200,9 +220,10 @@ def main() -> None:
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
 
-    for route in ("D184", "D185"):
-        if sources[route]["coordinates"] < 20:
-            raise RuntimeError(f"{route}: suspiciously sparse official KML ({sources[route]['coordinates']} coordinates)")
+    assert sources["D184"]["line_components"] == 7
+    assert sources["D184"]["coordinates"] == 2268
+    assert sources["D185"]["line_components"] == 11
+    assert sources["D185"]["coordinates"] == 3618
     print(json.dumps(manifest, ensure_ascii=False, indent=2))
 
 
