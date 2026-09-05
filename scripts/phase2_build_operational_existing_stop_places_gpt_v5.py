@@ -23,18 +23,15 @@ from pathlib import Path
 import pandas as pd
 
 CORE = {"Brivio", "Calco", "La Valletta Brianza", "Olgiate Molgora", "Santa Maria Hoè"}
-
-# Frozen records already known to represent an obsolete/misleading location for the
-# practical current-stop layer. Provenance remains in the detailed master.
 EXCLUDE_FROZEN = {"300397", "L00397", "300407"}
 
-# Frozen -> current ASF stop-place mapping supported by operator/manual evidence.
 FROZEN_TO_ASF = {
     "300803": "OLGIATE MOLGORA SCARPONE", "L00803": "OLGIATE MOLGORA SCARPONE",
     "300728": "OLGIATE MOLGORA VIA STATALE", "L00728": "OLGIATE MOLGORA VIA STATALE",
     "300729": "CALCO VIA GARIBALDI", "L00729": "CALCO VIA GARIBALDI",
     "300089": "CALCO LARGO POMEA", "L00089": "CALCO LARGO POMEA",
     "300528": "ARLATE BIVIO PER IL PAESE", "L00528": "ARLATE BIVIO PER IL PAESE",
+    "300886": "IMBERSAGO LOCALITA CAZZULINO", "L00886": "IMBERSAGO LOCALITA CAZZULINO",
     "300406": "BRIVIO BAR CRISTALLO", "L00406": "BRIVIO BAR CRISTALLO",
     "300087": "VACCAREZZA CARTELLO PAESE", "L00087": "VACCAREZZA CARTELLO PAESE",
     "L00063": "BRIVIO VIA COMO PENSILINA",
@@ -53,6 +50,7 @@ DISPLAY = {
     "CALCO VIA GARIBALDI": "Calco - Via Virgilio",
     "CALCO LARGO POMEA": "Calco - Via Nazionale (edicola)",
     "ARLATE BIVIO PER IL PAESE": "Arlate - Bivio per il Paese",
+    "IMBERSAGO LOCALITA CAZZULINO": "Imbersago - Località Cazzulino / Arlate Fiorista",
     "BRIVIO BAR CRISTALLO": "Brivio - Via Como (pizzeria / Bar Cristallo)",
     "VACCAREZZA CARTELLO PAESE": "Brivio - Vaccarezza",
     "BRIVIO VIA COMO PENSILINA": "Brivio / Via V. Emanuele (Capolinea)",
@@ -103,16 +101,11 @@ def build(args):
     frozen = core[core.source_family.eq("FROZEN_GTFS_REFERENCE")].copy()
     special = core[core.source_family.eq("SPECIAL_SERVICE_EVIDENCE")].copy()
 
-    # 1. Current ASF: one stop place, not one direction.
     asf["place_key"] = asf.source_stop_name.map(norm)
-    # Canonicalize the only punctuation variant that historically split one ASF place.
-    asf["place_key"] = asf.place_key.str.replace("ROVAGNATE S S ANG V LOMBARDIA", "ROVAGNATE SS ANG V LOMBARDIA", regex=False)
     places = []
-    asf_keys = set()
     for key, g in asf.groupby("place_key", sort=True):
         rows = g.to_dict("records")
         lat, lon = centroid(rows)
-        asf_keys.add(key)
         places.append({
             "stop_place_id": f"ASF::{key.replace(' ', '_')}",
             "stop_name": DISPLAY.get(key, text(g.iloc[0].source_stop_name)),
@@ -123,10 +116,9 @@ def build(args):
             "known_routes": "C146",
             "existence_confidence": "HIGH_CURRENT_OPERATOR",
             "service_class": "CONVENTIONAL_TPL",
-            "notes": "Directional records collapsed intentionally; coordinate is mean of available ASF directions.",
+            "notes": "Directions collapsed intentionally; representative coordinate is the mean of available ASF positions.",
         })
 
-    # 2. Manually confirmed current Scagnello, absent from the received 38-row extract.
     scag_lat = (45.71691647047958 + 45.71682017362495) / 2
     scag_lon = (9.40827705210095 + 9.408055828737293) / 2
     places.append({
@@ -139,19 +131,14 @@ def build(args):
         "known_routes": "C146",
         "existence_confidence": "HIGH_MANUAL_CURRENT",
         "service_class": "CONVENTIONAL_TPL",
-        "notes": "One stop place; opposite directions intentionally collapsed.",
+        "notes": "One location; travel directions intentionally ignored.",
     })
 
-    # Frozen records already represented by current ASF are not emitted again.
     mapped = set(FROZEN_TO_ASF)
     work = frozen[~frozen.source_record_native_id.isin(EXCLUDE_FROZEN | mapped)].copy()
-
-    # Rename the two resolved legacy naming collisions before grouping.
     work.loc[work.source_record_native_id.eq("300063"), "source_stop_name"] = "Brivio - Via Bergamo (Scuola Materna)"
     work.loc[work.source_record_native_id.isin(["300527", "L00527"]), "source_stop_name"] = "Brivio - Via Provinciale Beverate (Elettroadda)"
 
-    # Union frozen records only to collapse obvious source/direction duplicates. This is
-    # stop-place grouping, not boarding-point identity.
     recs = work.to_dict("records")
     parent = list(range(len(recs)))
     def find(i):
@@ -169,7 +156,10 @@ def build(args):
             d=hav(float(a["lat"]),float(a["lon"]),float(b["lat"]),float(b["lon"]))
             same_suffix = suffix(a["source_record_native_id"]) and suffix(a["source_record_native_id"]) == suffix(b["source_record_native_id"])
             same_name = norm(a["source_stop_name"]) == norm(b["source_stop_name"])
-            if (same_suffix and d <= 100) or (same_name and d <= 100): union(i,j)
+            # At stop-place resolution, very close frozen points are treated as one useful
+            # location even if operator labels differ. This deliberately ignores A/R detail.
+            if (same_suffix and d <= 100) or (same_name and d <= 100) or d <= 30:
+                union(i,j)
 
     groups=defaultdict(list)
     for i,r in enumerate(recs): groups[find(i)].append(r)
@@ -178,6 +168,10 @@ def build(args):
         names=[text(r["source_stop_name"]) for r in rows]
         ids=sorted(text(r["source_record_native_id"]) for r in rows)
         place_name=max(set(names), key=names.count)
+        if set(ids) == {"300805", "L00904"}:
+            place_name = "Santa Maria Hoè - Tremonte / Via Trento"
+        if ids == ["L00407"]:
+            place_name = "Olgiate-Calco-Brivio FS"
         muni=text(rows[0]["physical_municipality_exact"])
         places.append({
             "stop_place_id": f"FROZEN::{ids[0]}",
@@ -189,10 +183,9 @@ def build(args):
             "known_routes": "|".join(sorted({x for r in rows for x in text(r.get("route_id","")).split("|") if x})),
             "existence_confidence": "MEDIUM_OFFICIAL_REFERENCE",
             "service_class": "CONVENTIONAL_TPL",
-            "notes": "Physical stop/place retained from official 2025/26 reference; current service may differ.",
+            "notes": "Existing stop location retained from official reference; direction ignored and current service may differ.",
         })
 
-    # 3. Special service stays visible but separately classified.
     for r in special.to_dict("records"):
         places.append({
             "stop_place_id": "SPECIAL::CASA_DI_COMUNITA_OLGIATE",
