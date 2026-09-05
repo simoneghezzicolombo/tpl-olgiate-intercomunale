@@ -54,7 +54,7 @@ def activate_scene(page, name, frac=0.55):
         }""",
         [name, frac],
     )
-    page.wait_for_function("name => document.body.dataset.scene === name", name, timeout=15000)
+    page.wait_for_function("name => document.body.dataset.scene === name", arg=name, timeout=15000)
     page.wait_for_timeout(900)
 
 
