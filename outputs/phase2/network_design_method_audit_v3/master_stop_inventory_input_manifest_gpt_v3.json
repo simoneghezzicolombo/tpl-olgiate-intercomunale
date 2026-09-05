@@ -4,18 +4,19 @@
   "workstream": "A_STOP_MASTER_INVENTORY",
   "alpha_boundary": "UPSTREAM_NEUTRAL_EVIDENCE_ONLY_NOT_ROUTING_TERMINALS",
   "expected_source_record_counts": {
-    "FROZEN_GTFS_REFERENCE": 71,
+    "FROZEN_GTFS_REFERENCE": 65,
     "ASF_OPERATOR_OTP": 39,
     "SPECIAL_SERVICE_EVIDENCE": 1,
-    "TOTAL": 111
+    "TOTAL": 105
   },
+  "count_correction_note": "An earlier narrative summary said 71 frozen source records. CI materialization against the actual GitHub blob b84550f489c85664bc186bbde2bb5cacb124d17f established 65 data rows. The master contract is frozen to the file, not the stale summary.",
   "inputs": [
     {
       "path": "outputs/phase2/existing_official_stops.csv",
       "branch_or_lineage": "phase2-network-design-method-audit-v3",
       "blob_sha": "b84550f489c85664bc186bbde2bb5cacb124d17f",
       "role": "FROZEN_ARRIVA_LINEELECCO_REFERENCE_ROUTING_CONTEXT_UNIVERSE",
-      "epistemic_note": "Reference-period source rows, not complete current-service truth. PRO_COM_T is analysis context, not strict physical municipality."
+      "epistemic_note": "65 reference-period source rows, not complete current-service truth. PRO_COM_T is analysis context, not strict physical municipality."
     },
     {
       "path": "outputs/phase2/network_design_method_audit_v3/asf_c146_directional_stops_subagent_v3.csv",
@@ -45,7 +46,7 @@
     "raw_feed_url_at_recovery": "https://tplcomoleccovarese.it/assets/agency-network/current/extraurbano-Lecco-Monza-Arriva-Oggiono.zip",
     "raw_feed_sha256": "f890c393dd4fcc1bc61fa257a9b112b6029facc3f5bb3c7c0b9430902bf03d8",
     "frozen_derived_extract": "outputs/phase2/current_service_public_geodata_recovery_a/official_gtfs_d184_d185_route_stops.csv",
-    "note": "The recovered agency bundle certifies current official D184/D185 geodata provenance. It does not replace the broader 71-row historical/reference baseline."
+    "note": "The recovered agency bundle certifies current official D184/D185 geodata provenance. It does not replace the broader 65-row historical/reference baseline."
   },
   "identity_rules": {
     "distance_threshold_proves_boarding_identity": false,
