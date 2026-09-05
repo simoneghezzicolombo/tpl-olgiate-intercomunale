@@ -130,8 +130,8 @@ with sync_playwright() as p:
     assert not any('basemaps.cartocdn.com' in url for url in mobile_urls), 'legacy CARTO basemap request detected on mobile'
     mobile.close()
 
-    # Reduced-motion pass: preserve information and camera targets but remove
-    # autonomous bus motion and long camera easing.
+    # Reduced-motion pass: certify behaviour, not a cosmetic label. The clock
+    # must be stationary, the map must not ease and no service mover may render.
     reduced_context = browser.new_context(
         viewport={'width': 1280, 'height': 900},
         reduced_motion='reduce',
@@ -142,8 +142,12 @@ with sync_playwright() as p:
     prepare_page(reduced, reduced_errors, reduced_console, reduced_failed, reduced_urls)
     wait_ready(reduced, reduced_errors, reduced_console, reduced_failed)
     assert reduced.evaluate("document.documentElement.dataset.journeyMotion") == 'reduced'
-    assert 'movimento ridotto' in reduced.locator('.service-clock__kicker').inner_text()
+    assert reduced.evaluate("window.__analysisJourneyReduceMotion === true")
     scene(reduced, 'time', .58, prefix='reduced-')
+    clock_before = reduced.locator('.service-clock__minute b').inner_text()
+    reduced.wait_for_timeout(700)
+    clock_after = reduced.locator('.service-clock__minute b').inner_text()
+    assert clock_before == clock_after, f'reduced-motion service clock advanced: {clock_before} -> {clock_after}'
     reduced.evaluate(
         "window.__analysisJourneyMap.easeTo({center:[9.41,45.73],zoom:12,duration:5000,essential:true})"
     )
