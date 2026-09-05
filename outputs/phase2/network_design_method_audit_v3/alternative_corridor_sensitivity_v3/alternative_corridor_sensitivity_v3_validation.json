@@ -1,0 +1,65 @@
+{
+  "all_configurations_pass": true,
+  "appearance_frequency_contract": "DESCRIPTIVE_SEARCH_STABILITY_ONLY_NOT_QUALITY_SCORE_NOT_PROBABILITY",
+  "base_generator_status": "PASS_ALTERNATIVE_CORRIDOR_GENERATOR_V3",
+  "baseline_exact_across_grid": true,
+  "complete_k_shortest_claim_authorized": false,
+  "fixture_count": 5,
+  "inputs": {
+    "base_fixture_audit": {
+      "path": "outputs/phase2/network_design_method_audit_v3/alternative_corridor_generator_v3/real_graph_fixture_audit_v3.csv",
+      "sha256": "8203526c5bd9cbacdf1ce656842c00a1adea0d66350060152f4bbf6d2b8c93f9"
+    },
+    "base_generation_audit": {
+      "path": "outputs/phase2/network_design_method_audit_v3/alternative_corridor_generator_v3/real_graph_generation_audit_v3.csv",
+      "sha256": "35b2eadb2da57648f79ba30e4f69e64a083c5bb6f03cdbf985e972b55044c205"
+    },
+    "base_validation": {
+      "path": "outputs/phase2/network_design_method_audit_v3/alternative_corridor_generator_v3/alternative_corridor_generator_v3_validation.json",
+      "sha256": "ef1858d7b81d6448137b063090b0058b6d309e700bc4b9a3b0fc3b280a37a9d5"
+    },
+    "graph_edges": {
+      "path": "outputs/phase2/frozen_gate_d/graph_edges.csv.gz",
+      "sha256": "33c26371590a359b8673d4d0d56c1abfe7da32fdf8f6e8b98b4825628b5e86a8"
+    },
+    "turn_rules": {
+      "path": "outputs/phase2/frozen_gate_d/turn_rules.csv.gz",
+      "sha256": "cfe1be59d009c0091bb820493d2f43e70fc1f5175945f33795a0524cd9f53f8c"
+    }
+  },
+  "issue": 22,
+  "outputs": {
+    "fixture_sensitivity_summary_sha256": "e6a0e7d023eab803230efa15af573eeb02d5f5717c631cec934e0274f099d359",
+    "parameter_grid_summary_sha256": "f0053b056097289c2e811cdbdf4d4b921fd502f51f9b6bf5955e0d403aaf0789",
+    "parameter_grid_union_sha256": "d8d154ee9f82bb20bb20f6774f00d1eb3ddba3fb7d9b02052061a053b7a84230",
+    "path_appearances_sha256": "499cae3e0818d5ce1b186f0c1ff1c6c03a6d485baa85deaf8c02c18ebd8be831"
+  },
+  "parameter_configurations": 12,
+  "parameter_grid": {
+    "max_alternatives": 3,
+    "max_generation_rounds": 10,
+    "max_overlaps": [
+      0.75,
+      0.9
+    ],
+    "max_runtime_factors": [
+      1.25,
+      1.5
+    ],
+    "penalty_increments": [
+      0.1,
+      0.2,
+      0.35
+    ],
+    "semantics": "TECHNICAL_EXPLORATION_GRID_NOT_POLICY_WEIGHTS_OR_RECOMMENDATION"
+  },
+  "parameter_selection_authorized": false,
+  "recommended_corridor_authorized": false,
+  "scope": "TECHNICAL_PARAMETER_SENSITIVITY_NOT_NETWORK_SELECTION",
+  "status": "PASS_ALTERNATIVE_CORRIDOR_SENSITIVITY_V3",
+  "stop_inventory_dependency": "NONE_FOR_THIS_SENSITIVITY_AUDIT",
+  "total_parameter_grid_seconds": 97.50019141499999,
+  "union_contract": "UNION_ACROSS_TECHNICAL_EXPLORATION_SETTINGS_NOT_FREQUENCY_WEIGHTED_NOT_RANKED",
+  "unique_admitted_fixture_paths_in_union": 25,
+  "unique_nonbaseline_fixture_paths_in_union": 21
+}
