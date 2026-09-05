@@ -1,0 +1,92 @@
+{
+  "status": "PASS_PASSENGER_STOP_FOUNDATION_V3",
+  "contract": "PHASE2_CORRIDOR_AND_PASSENGER_STOP_PATTERN_V3_FOUNDATION",
+  "route_generation_performed": false,
+  "topology_ranked": false,
+  "primary_selected": false,
+  "runner_up_selected": false,
+  "structural_waypoints_equated_to_passenger_stops": false,
+  "study_municipalities": [
+    "Brivio",
+    "Calco",
+    "La Valletta Brianza",
+    "Olgiate Molgora",
+    "Santa Maria Hoè"
+  ],
+  "territorial_contract_record_count": 17,
+  "territorial_contract_unresolved_evidence_rows": [],
+  "intentionally_documented_missing_certified_anchor_areas": [
+    "AREA_SAN_ZENO"
+  ],
+  "existing_foundation_stop_count": 43,
+  "proposed_hypothesis_count": 136,
+  "proposed_field_check_pending_count": 136,
+  "proposed_finalist_ready_now_count": 0,
+  "proposed_candidates_are_automatically_finalist_ready": false,
+  "municipality_counts": {
+    "Brivio": {
+      "current_d184_d185_reuse_ready": 8,
+      "reference_existing_total": 14,
+      "proposed_hypothesis_total": 21,
+      "proposed_human_identity_ready": 1,
+      "proposed_finalist_ready_now": 0
+    },
+    "Calco": {
+      "current_d184_d185_reuse_ready": 4,
+      "reference_existing_total": 9,
+      "proposed_hypothesis_total": 19,
+      "proposed_human_identity_ready": 5,
+      "proposed_finalist_ready_now": 0
+    },
+    "La Valletta Brianza": {
+      "current_d184_d185_reuse_ready": 5,
+      "reference_existing_total": 5,
+      "proposed_hypothesis_total": 49,
+      "proposed_human_identity_ready": 38,
+      "proposed_finalist_ready_now": 0
+    },
+    "Olgiate Molgora": {
+      "current_d184_d185_reuse_ready": 4,
+      "reference_existing_total": 6,
+      "proposed_hypothesis_total": 40,
+      "proposed_human_identity_ready": 24,
+      "proposed_finalist_ready_now": 0
+    },
+    "Santa Maria Hoè": {
+      "current_d184_d185_reuse_ready": 7,
+      "reference_existing_total": 9,
+      "proposed_hypothesis_total": 7,
+      "proposed_human_identity_ready": 3,
+      "proposed_finalist_ready_now": 0
+    }
+  },
+  "policy_guards": {
+    "every_study_municipality_requires_explicit_passenger_stop_or_human_exception": true,
+    "service_area_audit_requires_explicit_service_or_exclusion_reason": true,
+    "bare_technical_candidate_id_is_not_human_identity": true,
+    "field_check_pending_candidate_cannot_silently_be_finalist_ready": true,
+    "current_official_stop_reuse_is_tested_before_new_stop": true
+  },
+  "lineage": {
+    "existing_stops": {
+      "path": "outputs/phase2/stop_universe_v2/existing_official_stops.csv",
+      "sha256": "8a1879ca5cd2fa23072e9f4b1b284c6b1be455847cb70b6d5399b2db35d05a55"
+    },
+    "proposed_stops": {
+      "path": "outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv",
+      "sha256": "bf3f5c648803fb0ba03b2f9af2bd4fa02924cb387bb0a752fc3a7a8ee1f14bc0"
+    },
+    "settlements": {
+      "path": "outputs/phase2/stop_universe_v2/settlement_destination_anchors.csv",
+      "sha256": "6ce1073dc7c30ca51a7ed584f6655ad525d99ca0c68dd2dabe2ea30304d7d3c4"
+    },
+    "current_v4_clusters": {
+      "path": "/tmp/current-v4/current_service_physical_stop_clusters_v4.csv",
+      "sha256": "b9690e2814d93c62f26b104cd5713cb097ac64898b8d0c53bfbf64afff0404c9"
+    },
+    "territorial_contract": {
+      "path": "config/phase2_territorial_service_contract_v3.csv",
+      "sha256": "82c3757ebcf4a087cbb0ce7aa2238bdf73ddd4e24146b17c868041a6685d2f1d"
+    }
+  }
+}
