@@ -1,0 +1,92 @@
+name: Journey current route continuity
+
+on:
+  push:
+    branches: [phase2-analysis-journey-a]
+    paths:
+      - .github/workflows/journey-current-route-continuity.yml
+      - dietro-l-analisi/current-route-continuity-patches.js
+      - dietro-l-analisi/current-route-continuity.json
+      - dietro-l-analisi/journey-current-continuity.js
+      - dietro-l-analisi/journey-bootstrap.mjs
+      - dietro-l-analisi/current-routes-gtfs.geojson.gz.b64.*
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-current-route-continuity:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate scripts and continuity contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check dietro-l-analisi/current-route-continuity-patches.js
+          node --check dietro-l-analisi/journey-current-continuity.js
+          python - <<'PY'
+          import base64, gzip, json, math
+          from pathlib import Path
+
+          root = Path('dietro-l-analisi')
+          contract = json.loads((root / 'current-route-continuity.json').read_text())
+          assert contract['contract'] == 'JOURNEY_CURRENT_ROUTE_CONTINUITY_REPAIR_V1'
+          assert contract['decision_output'] is False
+          assert contract['source'] == 'OFFICIAL_FROZEN_GTFS_SHAPES'
+          assert contract['threshold_m'] == 60
+          assert contract['features_affected'] == 7
+          assert len(contract['shape_ids']) == 7
+
+          raw = ''.join((root / n).read_text().strip() for n in [
+              'current-routes-gtfs.geojson.gz.b64.0',
+              'current-routes-gtfs.geojson.gz.b64.1',
+          ])
+          data = json.loads(gzip.decompress(base64.b64decode(raw)))
+          assert len(data['features']) == 18
+          assert sum(f['properties']['route'] == 'D184' for f in data['features']) == 8
+          assert sum(f['properties']['route'] == 'D185' for f in data['features']) == 10
+
+          js = (root / 'current-route-continuity-patches.js').read_text().strip()
+          prefix = 'window.CURRENT_ROUTE_CONTINUITY_PATCHES='
+          assert js.startswith(prefix) and js.endswith(';')
+          patches = json.loads(js[len(prefix):-1])
+          assert set(patches) == set(contract['shape_ids'])
+
+          def metres(a, b):
+              lon1, lat1, lon2, lat2 = map(math.radians, [a[0], a[1], b[0], b[1]])
+              dlon, dlat = lon2-lon1, lat2-lat1
+              h = math.sin(dlat/2)**2 + math.cos(lat1)*math.cos(lat2)*math.sin(dlon/2)**2
+              return 6371000 * 2 * math.asin(min(1, math.sqrt(h)))
+
+          def max_jump(features):
+              best = 0.0
+              for f in features:
+                  c = f['geometry']['coordinates']
+                  best = max(best, max((metres(a,b) for a,b in zip(c,c[1:])), default=0))
+              return best
+
+          raw_max = max_jump(data['features'])
+          assert raw_max > 500, raw_max
+
+          applied = 0
+          for f in data['features']:
+              sid = f['properties']['shape_id']
+              if sid not in patches:
+                  continue
+              coords = f['geometry']['coordinates']
+              patch = patches[sid]
+              assert patch[0] == coords[0], sid
+              assert patch[-1] == coords[1], sid
+              f['geometry']['coordinates'] = patch + coords[2:]
+              applied += 1
+          assert applied == 7
+
+          repaired_max = max_jump(data['features'])
+          assert repaired_max < 150, repaired_max
+          print(f'current route continuity PASS: raw max {raw_max:.1f} m -> repaired max {repaired_max:.1f} m')
+          PY
