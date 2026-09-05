@@ -10,6 +10,7 @@ on:
       - scripts/phase2_build_stop_identity_candidates_gpt_v3.py
       - scripts/phase2_materialize_stop_identity_evidence_gpt_v3.py
       - scripts/phase2_validate_arriva_service_stop_crosswalk_gpt_v4.py
+      - scripts/phase2_build_operational_existing_stop_places_gpt_v5.py
       - tests/test_master_stop_inventory_gpt_v3.py
       - tests/test_stop_identity_evidence_gpt_v3.py
       - tests/test_arriva_service_stop_crosswalk_gpt_v4.py
@@ -54,6 +55,7 @@ jobs:
           python -m py_compile scripts/phase2_build_stop_identity_candidates_gpt_v3.py
           python -m py_compile scripts/phase2_materialize_stop_identity_evidence_gpt_v3.py
           python -m py_compile scripts/phase2_validate_arriva_service_stop_crosswalk_gpt_v4.py
+          python -m py_compile scripts/phase2_build_operational_existing_stop_places_gpt_v5.py
 
       - name: Build neutral master inventory
         run: python scripts/phase2_build_master_stop_inventory_gpt_v3.py
@@ -69,6 +71,9 @@ jobs:
 
       - name: Validate Arriva service stop-place crosswalk
         run: python scripts/phase2_validate_arriva_service_stop_crosswalk_gpt_v4.py
+
+      - name: Build simplified operational existing-stop layer
+        run: python scripts/phase2_build_operational_existing_stop_places_gpt_v5.py
 
       - name: Run stop-inventory contracts
         run: pytest -q tests/test_master_stop_inventory_gpt_v3.py tests/test_stop_identity_evidence_gpt_v3.py tests/test_arriva_service_stop_crosswalk_gpt_v4.py
@@ -88,6 +93,9 @@ jobs:
       - name: Show Arriva service-stop validation
         run: cat outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/arriva_service_stop_crosswalk_validation_gpt_v4.json
 
+      - name: Show operational stop-place validation
+        run: cat outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/existing_stop_places_operational_validation_gpt_v5.json
+
       - name: Upload master inventory artifact
         uses: actions/upload-artifact@v4
         with:
@@ -103,6 +111,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "Validated master outputs already match repository materialization."
           else
-            git commit -m "data: materialize CI-validated stop and service evidence"
+            git commit -m "data: materialize operational existing-stop layer"
             git push origin HEAD:gpt-stop-source-completeness-v3
           fi
