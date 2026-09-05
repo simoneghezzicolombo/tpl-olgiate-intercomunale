@@ -38,15 +38,7 @@ jobs:
                 --user-agent 'Mozilla/5.0 (compatible; tpl-olgiate-intercomunale/1.0; official open-data retrieval)' \
                 --header 'Accept: application/vnd.google-earth.kml+xml, application/xml, text/xml, */*' \
                 "${url}" -o "${out}.tmp"; then
-                if python - "${out}.tmp" <<'PY'
-import sys, xml.etree.ElementTree as ET
-p=sys.argv[1]
-root=ET.parse(p).getroot()
-name=root.tag.rsplit('}',1)[-1].lower()
-if name != 'kml':
-    raise SystemExit(f'not a KML root: {root.tag}')
-PY
-                then
+                if python -c "import sys,xml.etree.ElementTree as ET; r=ET.parse(sys.argv[1]).getroot(); assert r.tag.rsplit('}',1)[-1].lower()=='kml', r.tag" "${out}.tmp"; then
                   mv "${out}.tmp" "${out}"
                   ok=1
                   break
@@ -72,32 +64,7 @@ PY
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
-          import base64, gzip, json
-          from pathlib import Path
-          root=Path('dietro-l-analisi')
-          m=json.loads((root/'current-routes-kml-source.json').read_text())
-          assert m['contract']=='CURRENT_ROUTE_BASELINE_OFFICIAL_ATP_KML_V1'
-          assert m['decision_output'] is False
-          assert 'No stop-to-stop reconstruction' in m['semantics']
-          for route in ('D184','D185'):
-              r=m['routes'][route]
-              assert r['source_url'].endswith(f'/{route}.kml')
-              assert r['bytes'] > 100
-              assert len(r['sha256']) == 64
-              assert r['line_components'] >= 1
-              assert r['coordinates'] >= 20
-          names=[c['file'] for c in m['geojson']['gzip_base64_chunks']]
-          payload=''.join((root/n).read_text().strip() for n in names)
-          data=json.loads(gzip.decompress(base64.b64decode(payload)))
-          assert data['type']=='FeatureCollection'
-          assert {f['properties']['route'] for f in data['features']} == {'D184','D185'}
-          for f in data['features']:
-              assert f['geometry']['type']=='LineString'
-              assert len(f['geometry']['coordinates']) >= 2
-              assert f['properties']['source']=='OFFICIAL_ATP_KML_2025'
-          print('official D184/D185 KML baseline PASS')
-          PY
+          python -c "import base64,gzip,json,pathlib; root=pathlib.Path('dietro-l-analisi'); m=json.loads((root/'current-routes-kml-source.json').read_text()); assert m['contract']=='CURRENT_ROUTE_BASELINE_OFFICIAL_ATP_KML_V1'; assert m['decision_output'] is False; assert 'No stop-to-stop reconstruction' in m['semantics']; [(_ for _ in ()).throw(AssertionError(route)) if not (m['routes'][route]['source_url'].endswith('/'+route+'.kml') and m['routes'][route]['bytes']>100 and len(m['routes'][route]['sha256'])==64 and m['routes'][route]['line_components']>=1 and m['routes'][route]['coordinates']>=20) else None for route in ('D184','D185')]; names=[c['file'] for c in m['geojson']['gzip_base64_chunks']]; data=json.loads(gzip.decompress(base64.b64decode(''.join((root/n).read_text().strip() for n in names)))); assert data['type']=='FeatureCollection'; assert {f['properties']['route'] for f in data['features']}=={'D184','D185'}; assert all(f['geometry']['type']=='LineString' and len(f['geometry']['coordinates'])>=2 and f['properties']['source']=='OFFICIAL_ATP_KML_2025' for f in data['features']); print('official D184/D185 KML baseline PASS')"
       - name: Persist official KML browser asset
         shell: bash
         run: |
