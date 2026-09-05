@@ -1,0 +1,33 @@
+{
+  "cap_fail_closed": true,
+  "contract": "ABSTRACT_NETWORK_STRUCTURES_NOT_TERRITORIAL_RECOMMENDATIONS",
+  "figure_eight_like_count": 15,
+  "fixture_semantics": "CONTROLLED_ABSTRACT_FIXTURE_NOT_TERRITORIAL_DATA",
+  "issue": "RT-007",
+  "network_winner_claim": false,
+  "passenger_stop_pattern_claim": false,
+  "random_search": false,
+  "required_classes_present": [
+    "BICYCLIC_ARTICULATED",
+    "BICYCLIC_NONARTICULATED",
+    "CYCLE",
+    "PATH",
+    "TREE_BRANCHING",
+    "UNICYCLIC_BRANCHING"
+  ],
+  "status": "PASS_RT007_ABSTRACT_NETWORK_STRUCTURE_SEARCH_V3",
+  "structure_count": 792,
+  "subsets_scanned": 847,
+  "territorial_candidate_claim": false,
+  "topology_class_counts": {
+    "BICYCLIC_ARTICULATED": 135,
+    "BICYCLIC_NONARTICULATED": 100,
+    "CYCLE": 37,
+    "MULTICYCLIC": 5,
+    "PATH": 160,
+    "TREE_BRANCHING": 85,
+    "UNICYCLIC_BRANCHING": 270
+  },
+  "topology_semantics": "DESCRIPTIVE_POST_GENERATION_CLASSIFICATION",
+  "weighted_composite_score": false
+}
