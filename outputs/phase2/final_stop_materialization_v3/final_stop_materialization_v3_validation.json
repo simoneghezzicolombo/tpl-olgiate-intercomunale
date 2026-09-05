@@ -1,0 +1,58 @@
+{
+  "checks": {
+    "all_36_identities_have_explicit_attachment_status": true,
+    "all_conventional_stop_places_route_ready_on_current_graph": true,
+    "exactly_36_stop_places_preserved": true,
+    "municipality_counts_match_final_handoff": true,
+    "no_unresolved_conventional_attachment_on_current_graph": true,
+    "source_stop_layer_pass": true,
+    "special_service_not_automatically_promoted": true,
+    "stable_stop_place_ids_unique": true
+  },
+  "contract": "FINAL_36_STOP_PLACES_IDENTITY_FROZEN_GRAPH_ATTACHMENT_RERUNNABLE_CORRIDOR_MATERIALIZATION_READY",
+  "counts": {
+    "automatic_materialization_eligible": 35,
+    "by_municipality": {
+      "Brivio": 10,
+      "Calco": 9,
+      "La Valletta Brianza": 4,
+      "Olgiate Molgora": 6,
+      "Santa Maria Hoè": 7
+    },
+    "conventional_tpl": 35,
+    "outside_250m": 0,
+    "review_75_250m": 0,
+    "route_ready_le_75m": 36,
+    "special_or_other_service": 1,
+    "stop_places_total": 36
+  },
+  "current_graph_role": "COMPATIBILITY_SMOKE_PRE_RT017_NOT_FINAL_TERRITORIAL_BINDING",
+  "downstream_rule": "Re-run this attachment stage on the frozen RT-017 graph, then materialize exact stop occurrences only from ordered corridor path nodes. RT-014 receives explicit resulting stop IDs/coordinates; it must not infer stops.",
+  "guards": {
+    "candidate_network_generated": false,
+    "directional_boarding_point_identity_restored": false,
+    "interchange_logic_added": false,
+    "new_stop_created": false,
+    "obsolete_43_stop_bridge_active": false,
+    "primary_or_runner_up_selected": false,
+    "route_topology_selected": false,
+    "rt017_graph_rebind_required_before_final_territorial_search": true,
+    "special_service_auto_promoted": false,
+    "structural_anchor_promoted_to_passenger_stop": false
+  },
+  "inputs": {
+    "graph_epoch_id": "gate-d-2026-09-03-834d5caa0bfd",
+    "graph_nodes": "outputs/phase2/frozen_gate_d/graph_nodes.csv.gz",
+    "graph_nodes_sha256": "d202eb930005bd71aa4c684f09041e34560484ebb4de711bcad45d95c23741c0",
+    "stop_places": "outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/existing_stop_places_operational_gpt_v5.csv",
+    "stop_places_sha256": "53af82ccfc398719781faf526d482431d2258bd637a74349222e0c4967642076",
+    "stop_validation": "outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/existing_stop_places_operational_validation_gpt_v5.json",
+    "stop_validation_sha256": "4588e6e54532a921ddfc28ffadd66e43a623cc37027aed51eb0b2c2596196d1a"
+  },
+  "output": {
+    "attachments": "outputs/phase2/final_stop_materialization_v3/stop_graph_attachments_v3.csv",
+    "attachments_sha256": "133cee75e1a72d2610f88107f6c8e5899a1d704c1b92f0c1bbcb80aaf4744cbc"
+  },
+  "source_handoff_commit": "ea30fbd18421164abaf2125033292cbe827e024d",
+  "status": "PASS_FINAL_STOP_MATERIALIZATION_V3"
+}
