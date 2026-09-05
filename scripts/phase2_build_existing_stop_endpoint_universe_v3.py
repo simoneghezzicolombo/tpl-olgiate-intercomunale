@@ -1,23 +1,21 @@
 #!/usr/bin/env python3
-"""Build a spatially verified existing-stop endpoint evidence universe for Phase 2 V3.
+"""Build the Phase-2 V3 existing-stop endpoint evidence universe.
 
-RT-006 contract
----------------
-This builder does *not* choose route endpoints, corridors, passenger stop
-patterns, topologies, headways or winners.  It creates an exhaustive inventory
-of already-existing, bus-graph-route-ready physical stop clusters whose actual
-coordinates fall inside one of the five policy municipalities.
+This is an exhaustive evidence inventory, not endpoint selection.  It admits
+only already-existing official physical stop clusters that are route-ready on
+the frozen Gate-D bus graph and whose coordinates lie inside exactly one of the
+five policy municipalities.
 
-The source GTFS municipality label is preserved only as evidence.  Geographic
-membership is reassigned from the frozen official municipal polygons because
-reference GTFS records can carry administrative labels that disagree with the
-stop coordinate.  Such disagreement is reported, never silently repaired in
-upstream data.
-
-Existing official stops remain the primary physical evidence.  Frozen OSM
-conflation is a cross-check: lack of an OSM match does not invalidate an
-official GTFS stop, while an explicit GTFS<->OSM identity/distance conflict is
-held for review and not admitted to automatic corridor generation.
+Important epistemic rules:
+- municipality membership is recomputed from frozen official polygons rather
+  than trusted from the GTFS administrative label;
+- official/reference-period GTFS remains the primary evidence that a physical
+  stop exists;
+- frozen OSM is a cross-check.  An OSM conflict raises a review flag but does
+  not erase or automatically disqualify an official GTFS stop;
+- population catchments are attached as evidence dimensions only.  They do not
+  rank or prune stops in this builder;
+- no proposed stop, corridor, topology, headway or winner is created.
 """
 from __future__ import annotations
 
@@ -26,7 +24,6 @@ import gzip
 import hashlib
 import json
 from pathlib import Path
-from typing import Iterable
 
 import geopandas as gpd
 import pandas as pd
@@ -40,13 +37,14 @@ CORE = {
     "097074": "Santa Maria Hoè",
     "097092": "La Valletta Brianza",
 }
+THRESHOLDS = (5, 8, 10, 12)
+
 DEFAULT_ROUTING = ROOT / "outputs/phase2/reduced_path_matrix_v2/routing_anchor_membership.csv"
 DEFAULT_EXISTING = ROOT / "outputs/phase2/stop_universe_v2/existing_official_stops.csv"
 DEFAULT_CATCHMENT = ROOT / "outputs/phase2/stop_universe_v2/existing_stop_catchment_summary.csv"
-DEFAULT_CONFLATION = ROOT / "outputs/phase2/network_design_method_audit_v3/existing_stop_master_clusters_audit_v3.csv"
+DEFAULT_MATCHES = ROOT / "outputs/phase2/network_design_method_audit_v3/existing_stop_gtfs_osm_matches_v3.csv"
 DEFAULT_MUNICIPALITIES = ROOT / "data/phase2/analysis_envelope/source/municipalities_context.geojson.gz"
 DEFAULT_OUT = ROOT / "outputs/phase2/network_design_method_audit_v3/existing_stop_endpoint_universe_v3"
-THRESHOLDS = (5, 8, 10, 12)
 
 
 def sha256(path: Path) -> str:
@@ -61,23 +59,14 @@ def truthy(value: object) -> bool:
     return str(value).strip().lower() in {"true", "1", "yes"}
 
 
-def _code_col(frame: gpd.GeoDataFrame) -> str:
-    for col in ("procom", "PRO_COM_T", "PRO_COM", "PRO_COMUNE", "municipality_code"):
-        if col in frame.columns:
-            return col
+def municipality_code_column(frame: gpd.GeoDataFrame) -> str:
+    for column in ("procom", "PRO_COM_T", "PRO_COM", "PRO_COMUNE", "municipality_code"):
+        if column in frame.columns:
+            return column
     raise ValueError(f"Cannot identify municipality code column: {list(frame.columns)}")
 
 
-def _name_col(frame: gpd.GeoDataFrame) -> str | None:
-    for col in ("municipality_name", "COMUNE", "COMUNE_A", "DEN_COM", "comune"):
-        if col in frame.columns:
-            return col
-    return None
-
-
 def load_municipalities(path: Path) -> gpd.GeoDataFrame:
-    if not path.exists():
-        raise FileNotFoundError(path)
     if path.suffix == ".gz":
         with gzip.open(path, "rt", encoding="utf-8") as handle:
             payload = json.load(handle)
@@ -87,37 +76,46 @@ def load_municipalities(path: Path) -> gpd.GeoDataFrame:
         if frame.crs is None:
             frame = frame.set_crs(4326)
         frame = frame.to_crs(4326)
-    code_col = _code_col(frame)
-    name_col = _name_col(frame)
-    frame = frame.copy()
-    frame["_core_code"] = frame[code_col].astype(str).str.replace(".0", "", regex=False).str.zfill(6)
-    frame = frame[frame["_core_code"].isin(CORE)].copy()
-    if set(frame["_core_code"]) != set(CORE):
+
+    source_code = municipality_code_column(frame)
+    out = frame.copy()
+    out["core_code"] = (
+        out[source_code]
+        .astype(str)
+        .str.replace(".0", "", regex=False)
+        .str.zfill(6)
+    )
+    out = out[out["core_code"].isin(CORE)].copy()
+    if set(out["core_code"]) != set(CORE):
         raise ValueError(
-            f"Frozen municipality source does not contain exactly all five core municipalities: "
-            f"{sorted(set(frame['_core_code']))}"
+            "Frozen municipality evidence does not contain all five policy municipalities: "
+            f"{sorted(set(out['core_code']))}"
         )
-    frame["_core_name"] = frame["_core_code"].map(CORE)
-    if name_col:
-        frame["_source_name"] = frame[name_col].astype(str)
-    else:
-        frame["_source_name"] = frame["_core_name"]
-    return frame[["_core_code", "_core_name", "_source_name", "geometry"]].sort_values(
-        "_core_code", kind="mergesort"
+    out["core_name"] = out["core_code"].map(CORE)
+    return out[["core_code", "core_name", "geometry"]].sort_values(
+        "core_code", kind="mergesort"
     ).reset_index(drop=True)
 
 
-def spatial_assignment(lon: float, lat: float, municipalities: gpd.GeoDataFrame) -> tuple[str, str, str]:
+def assign_municipality(
+    lon: float,
+    lat: float,
+    municipalities: gpd.GeoDataFrame,
+) -> tuple[str, str, str]:
     point = Point(float(lon), float(lat))
     hits: list[tuple[str, str]] = []
-    for row in municipalities.itertuples(index=False):
+    for _, row in municipalities.iterrows():
         if row.geometry.covers(point):
-            hits.append((str(row._core_code), str(row._core_name)))
+            hits.append((str(row["core_code"]), str(row["core_name"])))
     if len(hits) == 1:
         return hits[0][0], hits[0][1], "UNIQUE_OFFICIAL_POLYGON_COVERS_POINT"
     if not hits:
         return "", "", "OUTSIDE_FIVE_POLICY_MUNICIPALITIES"
-    return "|".join(code for code, _ in hits), "|".join(name for _, name in hits), "AMBIGUOUS_MULTIPLE_POLYGONS"
+    return (
+        "|".join(code for code, _ in hits),
+        "|".join(name for _, name in hits),
+        "AMBIGUOUS_MULTIPLE_OFFICIAL_POLYGONS",
+    )
 
 
 def aggregate_existing(existing: pd.DataFrame) -> pd.DataFrame:
@@ -131,24 +129,25 @@ def aggregate_existing(existing: pd.DataFrame) -> pd.DataFrame:
     }
     missing = required - set(existing.columns)
     if missing:
-        raise ValueError(f"Existing official stop input missing columns: {sorted(missing)}")
-    rows = []
+        raise ValueError(f"Existing-stop evidence missing columns: {sorted(missing)}")
+
+    rows: list[dict] = []
     for cluster_id, group in existing.groupby("physical_cluster_id", sort=True):
         routes: set[str] = set()
-        scopes: set[str] = set()
-        statuses: set[str] = set()
         for value in group["official_routes_reference_gtfs"].fillna("").astype(str):
             routes.update(part for part in value.split("|") if part)
-        scopes.update(v for v in group["source_scope"].fillna("").astype(str) if v)
-        statuses.update(v for v in group["epistemic_status"].fillna("").astype(str) if v)
         rows.append(
             {
                 "physical_cluster_id": str(cluster_id),
                 "gtfs_stop_ids": "|".join(sorted(set(group["stop_id"].astype(str)))),
                 "gtfs_stop_names": "|".join(sorted(set(group["stop_name"].astype(str)))),
                 "reference_routes": "|".join(sorted(routes)),
-                "source_scopes": "|".join(sorted(scopes)),
-                "source_epistemic_statuses": "|".join(sorted(statuses)),
+                "source_scopes": "|".join(
+                    sorted(v for v in set(group["source_scope"].astype(str)) if v)
+                ),
+                "source_epistemic_statuses": "|".join(
+                    sorted(v for v in set(group["epistemic_status"].astype(str)) if v)
+                ),
                 "gtfs_record_count": int(len(group)),
             }
         )
@@ -165,104 +164,70 @@ def pivot_catchments(catchment: pd.DataFrame) -> pd.DataFrame:
     }
     missing = required - set(catchment.columns)
     if missing:
-        raise ValueError(f"Existing stop catchment input missing columns: {sorted(missing)}")
+        raise ValueError(f"Existing-stop catchment evidence missing columns: {sorted(missing)}")
+
     frame = catchment.copy()
     frame["threshold_min"] = pd.to_numeric(frame["threshold_min"], errors="raise").astype(int)
-    if not set(THRESHOLDS).issubset(set(frame["threshold_min"])):
-        raise ValueError("Existing stop catchment evidence is missing one or more 5/8/10/12 minute thresholds")
-    duplicate = frame.duplicated(["physical_cluster_id", "threshold_min"])
-    if duplicate.any():
-        raise ValueError("Existing stop catchment summary is not unique by cluster and threshold")
-    rows = []
+    if frame.duplicated(["physical_cluster_id", "threshold_min"]).any():
+        raise ValueError("Catchment evidence is not unique by physical cluster and threshold")
+
+    rows: list[dict] = []
     for cluster_id, group in frame.groupby("physical_cluster_id", sort=True):
-        by_t = {int(row.threshold_min): row for row in group.itertuples(index=False)}
-        row = {
+        by_threshold = {int(row.threshold_min): row for row in group.itertuples(index=False)}
+        row: dict[str, object] = {
             "physical_cluster_id": str(cluster_id),
-            "catchment_epistemic_status": "|".join(sorted(set(group["epistemic_status"].astype(str)))),
+            "catchment_epistemic_status": "|".join(
+                sorted(set(group["epistemic_status"].astype(str)))
+            ),
         }
         for threshold in THRESHOLDS:
-            item = by_t.get(threshold)
-            row[f"population_reachable_{threshold}min"] = (
-                float(item.population_reachable_building_model) if item is not None else float("nan")
-            )
-            row[f"population_unit_count_{threshold}min"] = (
-                int(item.population_unit_count) if item is not None else pd.NA
-            )
+            item = by_threshold.get(threshold)
+            if item is None:
+                row[f"population_reachable_{threshold}min"] = pd.NA
+                row[f"population_unit_count_{threshold}min"] = pd.NA
+            else:
+                row[f"population_reachable_{threshold}min"] = float(
+                    item.population_reachable_building_model
+                )
+                row[f"population_unit_count_{threshold}min"] = int(item.population_unit_count)
         rows.append(row)
     return pd.DataFrame(rows)
 
 
-def load_conflation(path: Path) -> pd.DataFrame:
-    if not path.exists():
-        raise FileNotFoundError(path)
-    frame = pd.read_csv(path, dtype=str).fillna("")
-    required = {
-        "physical_cluster_id",
-        "osm_confirmed_element_count",
-        "osm_review_element_count",
-        "cross_source_status",
-    }
-    missing = required - set(frame.columns)
+def aggregate_osm_crosscheck(matches: pd.DataFrame) -> pd.DataFrame:
+    required = {"matched_physical_cluster_id", "match_status", "osm_id"}
+    missing = required - set(matches.columns)
     if missing:
-        raise ValueError(f"Conflation audit missing columns: {sorted(missing)}")
-    if frame["physical_cluster_id"].duplicated().any():
-        raise ValueError("Conflation cluster audit is not unique by physical_cluster_id")
-    return frame[list(required)].copy()
+        raise ValueError(f"GTFS-OSM match evidence missing columns: {sorted(missing)}")
 
-
-def stable_columns() -> list[str]:
-    return [
-        "endpoint_id",
-        "physical_cluster_id",
-        "source_record_id",
-        "human_label",
-        "lon",
-        "lat",
-        "graph_node_id",
-        "bus_graph_snap_distance_m",
-        "bus_graph_snap_status",
-        "inherited_gtfs_municipality",
-        "spatial_municipality_code",
-        "spatial_municipality",
-        "municipality_assignment_status",
-        "municipality_label_agrees_with_spatial_assignment",
-        "gtfs_stop_ids",
-        "gtfs_stop_names",
-        "reference_routes",
-        "source_scopes",
-        "source_epistemic_statuses",
-        "gtfs_record_count",
-        "cross_source_status",
-        "osm_confirmed_element_count",
-        "osm_review_element_count",
-        "population_reachable_5min",
-        "population_reachable_8min",
-        "population_reachable_10min",
-        "population_reachable_12min",
-        "population_unit_count_5min",
-        "population_unit_count_8min",
-        "population_unit_count_10min",
-        "population_unit_count_12min",
-        "catchment_epistemic_status",
-        "generation_eligible_existing_stop",
-        "generation_hold_reason",
-        "proposed_stop",
-        "endpoint_universe_role",
-        "epoch_id",
-    ]
+    matched = matches[matches["matched_physical_cluster_id"].astype(str).str.len() > 0].copy()
+    rows: list[dict] = []
+    for cluster_id, group in matched.groupby("matched_physical_cluster_id", sort=True):
+        statuses = group["match_status"].astype(str)
+        rows.append(
+            {
+                "physical_cluster_id": str(cluster_id),
+                "osm_confirmed_element_count": int(statuses.str.startswith("CONFIRMED").sum()),
+                "osm_review_element_count": int(statuses.str.contains("REVIEW", regex=False).sum()),
+                "osm_conflict_element_count": int(statuses.str.startswith("CONFLICT").sum()),
+                "osm_crosscheck_statuses": "|".join(sorted(set(statuses))),
+            }
+        )
+    return pd.DataFrame(rows)
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--routing", type=Path, default=DEFAULT_ROUTING)
-    ap.add_argument("--existing", type=Path, default=DEFAULT_EXISTING)
-    ap.add_argument("--catchment", type=Path, default=DEFAULT_CATCHMENT)
-    ap.add_argument("--conflation", type=Path, default=DEFAULT_CONFLATION)
-    ap.add_argument("--municipalities", type=Path, default=DEFAULT_MUNICIPALITIES)
-    ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
-    args = ap.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--routing", type=Path, default=DEFAULT_ROUTING)
+    parser.add_argument("--existing", type=Path, default=DEFAULT_EXISTING)
+    parser.add_argument("--catchment", type=Path, default=DEFAULT_CATCHMENT)
+    parser.add_argument("--matches", type=Path, default=DEFAULT_MATCHES)
+    parser.add_argument("--municipalities", type=Path, default=DEFAULT_MUNICIPALITIES)
+    parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    args = parser.parse_args()
 
-    for path in (args.routing, args.existing, args.catchment, args.conflation, args.municipalities):
+    inputs = [args.routing, args.existing, args.catchment, args.matches, args.municipalities]
+    for path in inputs:
         if not path.exists():
             raise FileNotFoundError(path)
     args.out.mkdir(parents=True, exist_ok=True)
@@ -285,22 +250,23 @@ def main() -> None:
     missing = required_routing - set(routing.columns)
     if missing:
         raise ValueError(f"Routing membership missing columns: {sorted(missing)}")
+
     route_ready = routing[
         routing["source_kind"].eq("EXISTING_PHYSICAL_STOP_CLUSTER")
         & routing["route_ready"].map(truthy)
         & routing["snap_status"].eq("ROUTE_READY_LE_75M")
     ].copy()
-    if route_ready.empty:
-        raise ValueError("No route-ready existing physical stop clusters found")
     route_ready["physical_cluster_id"] = route_ready["source_anchor_id"].str.replace(
         "existing:", "", regex=False
     )
+    if route_ready.empty:
+        raise ValueError("No route-ready existing physical stop clusters")
     if route_ready["physical_cluster_id"].duplicated().any():
-        raise ValueError("Routing membership contains duplicate existing physical_cluster_id rows")
+        raise ValueError("Route-ready membership duplicates a physical cluster")
 
     municipalities = load_municipalities(args.municipalities)
     assignments = [
-        spatial_assignment(float(row.lon), float(row.lat), municipalities)
+        assign_municipality(float(row.lon), float(row.lat), municipalities)
         for row in route_ready.itertuples(index=False)
     ]
     route_ready["spatial_municipality_code"] = [item[0] for item in assignments]
@@ -308,104 +274,104 @@ def main() -> None:
     route_ready["municipality_assignment_status"] = [item[2] for item in assignments]
 
     existing = aggregate_existing(pd.read_csv(args.existing, dtype=str).fillna(""))
-    catchment = pivot_catchments(pd.read_csv(args.catchment, dtype=str).fillna(""))
-    conflation = load_conflation(args.conflation)
+    catchments = pivot_catchments(pd.read_csv(args.catchment, dtype=str).fillna(""))
+    osm = aggregate_osm_crosscheck(pd.read_csv(args.matches, dtype=str).fillna(""))
+
     merged = route_ready.merge(existing, on="physical_cluster_id", how="left", validate="one_to_one")
-    merged = merged.merge(catchment, on="physical_cluster_id", how="left", validate="one_to_one")
-    merged = merged.merge(conflation, on="physical_cluster_id", how="left", validate="one_to_one")
+    merged = merged.merge(catchments, on="physical_cluster_id", how="left", validate="one_to_one")
+    merged = merged.merge(osm, on="physical_cluster_id", how="left", validate="one_to_one")
+
     if merged["gtfs_stop_ids"].isna().any():
-        missing_clusters = merged.loc[merged["gtfs_stop_ids"].isna(), "physical_cluster_id"].tolist()
-        raise ValueError(f"Route-ready physical clusters missing official GTFS evidence: {missing_clusters}")
+        raise ValueError("A route-ready physical stop has no official GTFS evidence")
     if merged["population_reachable_10min"].isna().any():
         missing_clusters = merged.loc[
             merged["population_reachable_10min"].isna(), "physical_cluster_id"
         ].tolist()
-        raise ValueError(f"Route-ready physical clusters missing catchment evidence: {missing_clusters}")
+        raise ValueError(f"Route-ready existing clusters missing catchment evidence: {missing_clusters}")
 
-    merged["cross_source_status"] = merged["cross_source_status"].fillna("GTFS_ONLY_NO_CONFLATION_ROW")
-    merged["osm_confirmed_element_count"] = pd.to_numeric(
-        merged["osm_confirmed_element_count"].fillna("0"), errors="raise"
-    ).astype(int)
-    merged["osm_review_element_count"] = pd.to_numeric(
-        merged["osm_review_element_count"].fillna("0"), errors="raise"
-    ).astype(int)
-
-    def agree(row) -> bool:
-        inherited = str(row.municipality).strip().casefold()
-        spatial = str(row.spatial_municipality).strip().casefold()
-        return bool(inherited and spatial and inherited == spatial)
+    for column in (
+        "osm_confirmed_element_count",
+        "osm_review_element_count",
+        "osm_conflict_element_count",
+    ):
+        merged[column] = pd.to_numeric(merged[column].fillna(0), errors="raise").astype(int)
+    merged["osm_crosscheck_statuses"] = merged["osm_crosscheck_statuses"].fillna(
+        "NO_MATCHED_OSM_ELEMENT_IN_FROZEN_EXTRACT"
+    )
 
     merged["municipality_label_agrees_with_spatial_assignment"] = [
-        agree(row) for row in merged.itertuples(index=False)
+        str(row.municipality).strip().casefold()
+        == str(row.spatial_municipality).strip().casefold()
+        for row in merged.itertuples(index=False)
     ]
 
-    in_core = merged[merged["municipality_assignment_status"].eq("UNIQUE_OFFICIAL_POLYGON_COVERS_POINT")].copy()
-    excluded = merged[~merged["municipality_assignment_status"].eq("UNIQUE_OFFICIAL_POLYGON_COVERS_POINT")].copy()
+    in_core = merged[
+        merged["municipality_assignment_status"].eq("UNIQUE_OFFICIAL_POLYGON_COVERS_POINT")
+    ].copy()
+    excluded = merged[
+        ~merged["municipality_assignment_status"].eq("UNIQUE_OFFICIAL_POLYGON_COVERS_POINT")
+    ].copy()
     if in_core.empty:
-        raise ValueError("Spatial municipality verification excluded all existing stops")
+        raise ValueError("Spatial verification excluded every existing stop")
 
-    conflict_mask = in_core["cross_source_status"].astype(str).str.contains("CONFLICT", case=False, regex=False)
-    in_core["generation_eligible_existing_stop"] = ~conflict_mask
-    in_core["generation_hold_reason"] = conflict_mask.map(
-        lambda value: "GTFS_OSM_IDENTITY_DISTANCE_CONFLICT_REVIEW" if bool(value) else ""
-    )
+    # Official GTFS remains primary.  OSM conflict is a review flag, not a veto.
+    in_core["cross_source_review_required"] = in_core["osm_conflict_element_count"].gt(0)
+    in_core["generation_eligible_existing_stop"] = True
+    in_core["generation_hold_reason"] = ""
     in_core["endpoint_id"] = "existing:" + in_core["physical_cluster_id"].astype(str)
-    in_core["proposed_stop"] = False
     in_core["endpoint_universe_role"] = "EXHAUSTIVE_EXISTING_ROUTE_READY_CORE_STOP_NOT_SELECTED"
 
-    out = pd.DataFrame(
-        {
-            "endpoint_id": in_core["endpoint_id"],
-            "physical_cluster_id": in_core["physical_cluster_id"],
-            "source_record_id": in_core["source_record_id"],
-            "human_label": in_core["source_name"],
-            "lon": pd.to_numeric(in_core["lon"], errors="raise").map(lambda v: f"{v:.9f}"),
-            "lat": pd.to_numeric(in_core["lat"], errors="raise").map(lambda v: f"{v:.9f}"),
-            "graph_node_id": in_core["graph_node_id"],
-            "bus_graph_snap_distance_m": pd.to_numeric(in_core["snap_distance_m"], errors="raise").map(lambda v: f"{v:.9f}"),
-            "bus_graph_snap_status": in_core["snap_status"],
-            "inherited_gtfs_municipality": in_core["municipality"],
-            "spatial_municipality_code": in_core["spatial_municipality_code"],
-            "spatial_municipality": in_core["spatial_municipality"],
-            "municipality_assignment_status": in_core["municipality_assignment_status"],
-            "municipality_label_agrees_with_spatial_assignment": in_core[
-                "municipality_label_agrees_with_spatial_assignment"
-            ].map(lambda v: str(bool(v)).lower()),
-            "gtfs_stop_ids": in_core["gtfs_stop_ids"],
-            "gtfs_stop_names": in_core["gtfs_stop_names"],
-            "reference_routes": in_core["reference_routes"],
-            "source_scopes": in_core["source_scopes"],
-            "source_epistemic_statuses": in_core["source_epistemic_statuses"],
-            "gtfs_record_count": in_core["gtfs_record_count"].astype(int),
-            "cross_source_status": in_core["cross_source_status"],
-            "osm_confirmed_element_count": in_core["osm_confirmed_element_count"].astype(int),
-            "osm_review_element_count": in_core["osm_review_element_count"].astype(int),
-            **{
-                f"population_reachable_{t}min": pd.to_numeric(
-                    in_core[f"population_reachable_{t}min"], errors="raise"
-                ).map(lambda v: f"{v:.9f}")
-                for t in THRESHOLDS
-            },
-            **{
-                f"population_unit_count_{t}min": pd.to_numeric(
-                    in_core[f"population_unit_count_{t}min"], errors="raise"
-                ).astype(int)
-                for t in THRESHOLDS
-            },
-            "catchment_epistemic_status": in_core["catchment_epistemic_status"],
-            "generation_eligible_existing_stop": in_core["generation_eligible_existing_stop"].map(
-                lambda v: str(bool(v)).lower()
-            ),
-            "generation_hold_reason": in_core["generation_hold_reason"],
+    output_rows: list[dict] = []
+    for row in in_core.itertuples(index=False):
+        item = {
+            "endpoint_id": row.endpoint_id,
+            "physical_cluster_id": row.physical_cluster_id,
+            "source_record_id": row.source_record_id,
+            "human_label": row.source_name,
+            "lon": f"{float(row.lon):.9f}",
+            "lat": f"{float(row.lat):.9f}",
+            "graph_node_id": row.graph_node_id,
+            "bus_graph_snap_distance_m": f"{float(row.snap_distance_m):.9f}",
+            "bus_graph_snap_status": row.snap_status,
+            "inherited_gtfs_municipality": row.municipality,
+            "spatial_municipality_code": row.spatial_municipality_code,
+            "spatial_municipality": row.spatial_municipality,
+            "municipality_assignment_status": row.municipality_assignment_status,
+            "municipality_label_agrees_with_spatial_assignment": str(
+                bool(row.municipality_label_agrees_with_spatial_assignment)
+            ).lower(),
+            "gtfs_stop_ids": row.gtfs_stop_ids,
+            "gtfs_stop_names": row.gtfs_stop_names,
+            "reference_routes": row.reference_routes,
+            "source_scopes": row.source_scopes,
+            "source_epistemic_statuses": row.source_epistemic_statuses,
+            "gtfs_record_count": int(row.gtfs_record_count),
+            "osm_confirmed_element_count": int(row.osm_confirmed_element_count),
+            "osm_review_element_count": int(row.osm_review_element_count),
+            "osm_conflict_element_count": int(row.osm_conflict_element_count),
+            "osm_crosscheck_statuses": row.osm_crosscheck_statuses,
+            "cross_source_review_required": str(bool(row.cross_source_review_required)).lower(),
+            "catchment_epistemic_status": row.catchment_epistemic_status,
+            "generation_eligible_existing_stop": "true",
+            "generation_hold_reason": "",
             "proposed_stop": "false",
-            "endpoint_universe_role": in_core["endpoint_universe_role"],
-            "epoch_id": in_core["epoch_id"],
+            "endpoint_universe_role": row.endpoint_universe_role,
+            "epoch_id": row.epoch_id,
         }
-    )[stable_columns()].sort_values(
+        for threshold in THRESHOLDS:
+            item[f"population_reachable_{threshold}min"] = (
+                f"{float(getattr(row, f'population_reachable_{threshold}min')):.9f}"
+            )
+            item[f"population_unit_count_{threshold}min"] = int(
+                getattr(row, f"population_unit_count_{threshold}min")
+            )
+        output_rows.append(item)
+
+    endpoints = pd.DataFrame(output_rows).sort_values(
         ["spatial_municipality_code", "physical_cluster_id"], kind="mergesort"
     ).reset_index(drop=True)
 
-    excluded_out = pd.DataFrame(
+    exclusions = pd.DataFrame(
         {
             "physical_cluster_id": excluded["physical_cluster_id"],
             "source_record_id": excluded["source_record_id"],
@@ -419,10 +385,9 @@ def main() -> None:
         }
     ).sort_values("physical_cluster_id", kind="mergesort").reset_index(drop=True)
 
-    mismatches = out[
-        out["municipality_label_agrees_with_spatial_assignment"].eq("false")
-    ].copy()
-    mismatch_out = mismatches[
+    mismatches = endpoints[
+        endpoints["municipality_label_agrees_with_spatial_assignment"].eq("false")
+    ][
         [
             "endpoint_id",
             "physical_cluster_id",
@@ -432,29 +397,30 @@ def main() -> None:
             "spatial_municipality",
         ]
     ].copy()
-    mismatch_out["audit_status"] = "GTFS_LABEL_SPATIAL_POLYGON_DISAGREEMENT"
+    mismatches["audit_status"] = "GTFS_LABEL_SPATIAL_POLYGON_DISAGREEMENT"
 
     endpoint_path = args.out / "existing_stop_endpoint_universe_v3.csv"
-    excluded_path = args.out / "existing_stop_endpoint_exclusions_v3.csv"
+    exclusion_path = args.out / "existing_stop_endpoint_exclusions_v3.csv"
     mismatch_path = args.out / "existing_stop_municipality_mismatches_v3.csv"
     validation_path = args.out / "existing_stop_endpoint_universe_v3_validation.json"
-    out.to_csv(endpoint_path, index=False)
-    excluded_out.to_csv(excluded_path, index=False)
-    mismatch_out.to_csv(mismatch_path, index=False)
+    endpoints.to_csv(endpoint_path, index=False)
+    exclusions.to_csv(exclusion_path, index=False)
+    mismatches.to_csv(mismatch_path, index=False)
 
     per_municipality = {
         code: {
             "municipality": CORE[code],
-            "endpoint_count": int((out["spatial_municipality_code"] == code).sum()),
+            "endpoint_count": int((endpoints["spatial_municipality_code"] == code).sum()),
             "generation_eligible_count": int(
                 (
-                    (out["spatial_municipality_code"] == code)
-                    & out["generation_eligible_existing_stop"].eq("true")
+                    (endpoints["spatial_municipality_code"] == code)
+                    & endpoints["generation_eligible_existing_stop"].eq("true")
                 ).sum()
             ),
         }
         for code in sorted(CORE)
     }
+
     status = "PASS_EXISTING_STOP_ENDPOINT_UNIVERSE_V3"
     if any(value["generation_eligible_count"] == 0 for value in per_municipality.values()):
         status = "FAIL_EXISTING_STOP_ENDPOINT_UNIVERSE_V3"
@@ -464,7 +430,6 @@ def main() -> None:
         "contract": "EXHAUSTIVE_EXISTING_STOP_ENDPOINT_EVIDENCE_NOT_ENDPOINT_SELECTION",
         "policy_scope": {
             "municipalities": CORE,
-            "municipality_membership_source": str(args.municipalities.relative_to(ROOT)),
             "municipality_membership_semantics": "POINT_COVERED_BY_FROZEN_OFFICIAL_MUNICIPAL_POLYGON",
         },
         "inputs": {
@@ -474,27 +439,26 @@ def main() -> None:
             "existing_official_stops_sha256": sha256(args.existing),
             "existing_stop_catchment_summary": str(args.catchment.relative_to(ROOT)),
             "existing_stop_catchment_summary_sha256": sha256(args.catchment),
-            "gtfs_osm_conflation_cluster_audit": str(args.conflation.relative_to(ROOT)),
-            "gtfs_osm_conflation_cluster_audit_sha256": sha256(args.conflation),
+            "gtfs_osm_matches": str(args.matches.relative_to(ROOT)),
+            "gtfs_osm_matches_sha256": sha256(args.matches),
+            "municipalities": str(args.municipalities.relative_to(ROOT)),
             "municipalities_sha256": sha256(args.municipalities),
         },
         "counts": {
             "route_ready_existing_clusters_before_spatial_scope": int(len(route_ready)),
-            "core_existing_endpoint_clusters": int(len(out)),
-            "generation_eligible_existing_endpoint_clusters": int(
-                out["generation_eligible_existing_stop"].eq("true").sum()
+            "core_existing_endpoint_clusters": int(len(endpoints)),
+            "generation_eligible_existing_endpoint_clusters": int(len(endpoints)),
+            "cross_source_review_required_clusters": int(
+                endpoints["cross_source_review_required"].eq("true").sum()
             ),
-            "held_for_cross_source_conflict_review": int(
-                out["generation_eligible_existing_stop"].eq("false").sum()
-            ),
-            "outside_or_ambiguous_core_exclusions": int(len(excluded_out)),
-            "gtfs_municipality_label_spatial_mismatches_inside_core": int(len(mismatch_out)),
+            "outside_or_ambiguous_core_exclusions": int(len(exclusions)),
+            "gtfs_municipality_label_spatial_mismatches_inside_core": int(len(mismatches)),
         },
         "per_municipality": per_municipality,
         "evidence_semantics": {
-            "existing_gtfs_is_primary_physical_stop_evidence": True,
+            "official_gtfs_is_primary_physical_stop_evidence": True,
             "osm_match_required_for_existing_stop": False,
-            "explicit_gtfs_osm_identity_distance_conflict_requires_review": True,
+            "osm_conflict_is_review_flag_not_automatic_veto": True,
             "population_catchments_are_selection_scores": False,
             "catchment_thresholds_minutes": list(THRESHOLDS),
         },
@@ -510,8 +474,8 @@ def main() -> None:
         "outputs": {
             "endpoint_universe": str(endpoint_path.relative_to(ROOT)),
             "endpoint_universe_sha256": sha256(endpoint_path),
-            "exclusions": str(excluded_path.relative_to(ROOT)),
-            "exclusions_sha256": sha256(excluded_path),
+            "exclusions": str(exclusion_path.relative_to(ROOT)),
+            "exclusions_sha256": sha256(exclusion_path),
             "municipality_mismatches": str(mismatch_path.relative_to(ROOT)),
             "municipality_mismatches_sha256": sha256(mismatch_path),
         },
