@@ -19,13 +19,14 @@ from pathlib import Path
 import pandas as pd
 
 
-CORE_MUNICIPALITIES = {
-    "Brivio",
-    "Calco",
-    "La Valletta Brianza",
-    "Olgiate Molgora",
-    "Santa Maria Hoè",
+CORE_CODE_TO_MUNICIPALITY = {
+    "097010": "Brivio",
+    "097012": "Calco",
+    "097058": "Olgiate Molgora",
+    "097074": "Santa Maria Hoè",
+    "097092": "La Valletta Brianza",
 }
+CORE_MUNICIPALITIES = set(CORE_CODE_TO_MUNICIPALITY.values())
 OUTSIDE_CORE = "OUTSIDE_CORE"
 
 
@@ -81,19 +82,35 @@ def _geometry_contains(x: float, y: float, geometry: dict) -> bool:
     raise ValueError(f"Unsupported boundary geometry type: {gtype!r}")
 
 
+def _normalise_pro_com_t(props: dict) -> str:
+    raw = props.get("PRO_COM_T")
+    if raw is None:
+        raw = props.get("PRO_COM")
+    if raw is None:
+        return ""
+    text = str(raw).strip()
+    if text.endswith(".0"):
+        text = text[:-2]
+    return text.zfill(6)
+
+
 def _load_boundaries(path: Path) -> list[tuple[str, dict]]:
     data = json.loads(path.read_text(encoding="utf-8"))
     boundaries: list[tuple[str, dict]] = []
+    found_codes: set[str] = set()
     for feature in data.get("features", []):
         props = feature.get("properties", {})
-        municipality = str(props.get("COMUNE", "")).strip()
-        if municipality not in CORE_MUNICIPALITIES:
+        code = _normalise_pro_com_t(props)
+        municipality = CORE_CODE_TO_MUNICIPALITY.get(code)
+        if municipality is None:
             continue
+        found_codes.add(code)
         boundaries.append((municipality, feature["geometry"]))
-    found = {name for name, _ in boundaries}
-    if found != CORE_MUNICIPALITIES:
+    expected_codes = set(CORE_CODE_TO_MUNICIPALITY)
+    if found_codes != expected_codes:
         raise ValueError(
-            f"Boundary file must contain exactly the five core municipalities; found={sorted(found)}"
+            "Boundary file must contain exactly the five core municipality ISTAT codes; "
+            f"found={sorted(found_codes)} expected={sorted(expected_codes)}"
         )
     return boundaries
 
@@ -201,11 +218,13 @@ def materialize(args: argparse.Namespace) -> None:
         "asf_containment_conflict_count": int(len(asf_conflicts)),
         "assignment_method": "ISTAT_2026_EXACT_POINT_IN_POLYGON",
         "boundary_source": str(args.boundaries),
+        "boundary_identity_key": "ISTAT_PRO_COM_T",
         "routing_terminal_selected_count": int(
             (~result["routing_terminal_eligibility_status"].eq("NOT_EVALUATED")).sum()
         ),
         "epistemic_note": (
             "OUTSIDE_CORE means outside the five frozen core ISTAT polygons, not an inferred exact external municipality. "
+            "Boundary labels are canonicalized from stable ISTAT PRO_COM_T codes so text-encoding defects cannot change identity. "
             "No stop-name or nearest-place heuristic is used."
         ),
     }
