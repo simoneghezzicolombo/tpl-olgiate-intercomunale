@@ -7,11 +7,13 @@ on:
       - .github/workflows/journey-exact-route-validation.yml
       - dietro-l-analisi/journey-bootstrap.mjs
       - dietro-l-analisi/journey-lineage.js
+      - dietro-l-analisi/journey-current-kml-exact.mjs
       - dietro-l-analisi/journey-explore-prelude.js
       - dietro-l-analisi/journey-explore.js
       - dietro-l-analisi/journey-exact-browser-smoke.py
       - dietro-l-analisi/exact-route-lineage.json
-      - dietro-l-analisi/current-routes-gtfs.geojson.gz.b64.*
+      - dietro-l-analisi/current-routes-kml-exact.geojson.gz.b64.*
+      - dietro-l-analisi/current-routes-kml-exact-provenance.json
       - dietro-l-analisi/current-stops-gtfs.geojson.gz.b64.*
       - dietro-l-analisi/finalist-routes-gated.geojson.gz.b64.*
       - dietro-l-analisi/finalist-route-anchors.geojson.gz.b64.*
@@ -38,8 +40,12 @@ jobs:
         run: |
           set -euo pipefail
           node --check dietro-l-analisi/journey-lineage.js
+          node --check dietro-l-analisi/journey-current-kml-exact.mjs
           node --check dietro-l-analisi/journey-explore-prelude.js
           node --check dietro-l-analisi/journey-explore.js
+          ! grep -q "current-route-continuity-patches.js" dietro-l-analisi/journey-bootstrap.mjs
+          ! grep -q "journey-current-continuity.js" dietro-l-analisi/journey-bootstrap.mjs
+          grep -q "journey-current-kml-exact.mjs" dietro-l-analisi/journey-bootstrap.mjs
           python - <<'PY'
           import base64
           import gzip
@@ -49,7 +55,9 @@ jobs:
 
           root = Path('dietro-l-analisi')
           manifest = json.loads((root / 'exact-route-lineage.json').read_text())
-          assert manifest['contract'] == 'PHASE2_JOURNEY_EXACT_ROUTE_LINEAGE_V1'
+          provenance = json.loads((root / 'current-routes-kml-exact-provenance.json').read_text())
+
+          assert manifest['contract'] == 'PHASE2_JOURNEY_EXACT_ROUTE_LINEAGE_V2'
           assert manifest['decision_output'] is False
           assert manifest['graph'] == {
               'bus_eligible_ways': 15872,
@@ -57,10 +65,19 @@ jobs:
               'nodes': 104071,
               'turn_rule_keys_in_graph': 535,
           }
-          assert manifest['semantics']['current_routes'] == 'OFFICIAL_FROZEN_GTFS_SHAPES'
+          assert manifest['semantics']['current_route_geometry'] == 'USER_SUPPLIED_AGENCY_KML_LINESTRINGS_EXACT'
+          assert manifest['semantics']['current_route_graph_reconstruction'] is False
+          assert manifest['semantics']['current_stops_and_service'] == 'CURRENT_SERVICE_BASELINE_V4_OFFICIAL_FROZEN_GTFS'
           assert manifest['semantics']['finalist_routes'] == 'RESTRICTION_AWARE_GATE_D_ROUTES_VALIDATED_AGAINST_REDUCED_PATH_MATRIX_V2'
           assert manifest['semantics']['screen_space_offsets'] is False
           assert manifest['semantics']['winner_selected'] is False
+
+          assert provenance['contract'] == 'CURRENT_SERVICE_KML_GEOMETRY_V1'
+          assert provenance['route_mapping'] == {'D84.kml': 'D184', 'E03.kml': 'D185'}
+          assert provenance['features'] == {'D184': 7, 'D185': 11}
+          assert provenance['coordinate_counts'] == {'D184': 2268, 'D185': 3618}
+          assert provenance['source_files']['D184']['sha256'] == '6cf715a83c1e85e7ebfeecd82b666eee623119e7b37e35875ed0be419fa5523a'
+          assert provenance['source_files']['D185']['sha256'] == '10239544443134a10992b938a878ff62a906618f8f7f6babe2a339647f41bfa5'
 
           for name, expected in manifest['files_sha256'].items():
               path = root / name
@@ -69,7 +86,7 @@ jobs:
               assert actual == expected, (name, actual, expected)
 
           groups = {
-              'current': ['current-routes-gtfs.geojson.gz.b64.0', 'current-routes-gtfs.geojson.gz.b64.1'],
+              'current': ['current-routes-kml-exact.geojson.gz.b64.0', 'current-routes-kml-exact.geojson.gz.b64.1'],
               'stops': ['current-stops-gtfs.geojson.gz.b64.0'],
               'final': ['finalist-routes-gated.geojson.gz.b64.0', 'finalist-routes-gated.geojson.gz.b64.1', 'finalist-routes-gated.geojson.gz.b64.2'],
               'anchors': ['finalist-route-anchors.geojson.gz.b64.0'],
@@ -79,10 +96,16 @@ jobs:
               payload = ''.join((root / n).read_text().strip() for n in names)
               data[key] = json.loads(gzip.decompress(base64.b64decode(payload)))
 
-          assert len(data['current']['features']) == 18
-          assert {f['properties']['route'] for f in data['current']['features']} == {'D184', 'D185'}
-          assert sum(1 for f in data['current']['features'] if f['properties']['route'] == 'D184') == 8
-          assert sum(1 for f in data['current']['features'] if f['properties']['route'] == 'D185') == 10
+          current = data['current']['features']
+          assert len(current) == 18
+          assert {f['properties']['route'] for f in current} == {'D184', 'D185'}
+          d184 = [f for f in current if f['properties']['route'] == 'D184']
+          d185 = [f for f in current if f['properties']['route'] == 'D185']
+          assert len(d184) == 7 and len(d185) == 11
+          assert sum(len(f['geometry']['coordinates']) for f in d184) == 2268
+          assert sum(len(f['geometry']['coordinates']) for f in d185) == 3618
+          assert all(f['geometry']['type'] == 'LineString' for f in current)
+          assert all(f['properties']['source'] == 'OFFICIAL_AGENCY_KML_USER_SUPPLIED' for f in current)
           assert len(data['stops']['features']) == 44
 
           expected_ids = {
@@ -108,7 +131,7 @@ jobs:
           assert len(anchor_ids) == 11
           assert 'rail:S01514' in anchor_ids
           assert sum(1 for f in data['anchors']['features'] if f['properties']['kind'] == 'PROPOSED_STOP') == 4
-          print('exact route static contract PASS')
+          print('exact KML current service + finalist route static contract PASS')
           PY
       - name: Browser smoke and visual QA
         shell: bash
