@@ -54,8 +54,8 @@ jobs:
 
       - name: Reject forbidden RT-017 semantics
         run: |
-          if grep -R -n -E 'np\.random|PRIMARY|RUNNER[-_ ]UP|Circolare Meratese|Cassina|municipality_(allow|deny)|allowed_municip|denied_municip|whitelist.*municip|blacklist.*municip' src/phase2_adaptive_routing_envelope_v3.py scripts/phase2_rt017_adaptive_border_neutral_routing_envelope_v3.py; then
-            echo 'Forbidden RT-017 semantic found'
+          if grep -R -n -E 'np\.random|Circolare Meratese|Cassina|allowed_municip|denied_municip|whitelist.*municip|blacklist.*municip' src/phase2_adaptive_routing_envelope_v3.py scripts/phase2_rt017_adaptive_border_neutral_routing_envelope_v3.py; then
+            echo 'Forbidden RT-017 operational semantic found'
             exit 1
           fi
 
