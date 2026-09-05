@@ -7,6 +7,7 @@ on:
     paths:
       - scripts/phase2_build_master_stop_inventory_gpt_v3.py
       - scripts/phase2_materialize_master_stop_municipalities_gpt_v3.py
+      - scripts/phase2_build_stop_identity_candidates_gpt_v3.py
       - tests/test_master_stop_inventory_gpt_v3.py
       - docs/PHASE2_STOP_IDENTITY_CONTRACT_V3.md
       - data/raw/boundaries/comuni_core_istat_2026.geojson
@@ -43,12 +44,16 @@ jobs:
         run: |
           python -m py_compile scripts/phase2_build_master_stop_inventory_gpt_v3.py
           python -m py_compile scripts/phase2_materialize_master_stop_municipalities_gpt_v3.py
+          python -m py_compile scripts/phase2_build_stop_identity_candidates_gpt_v3.py
 
       - name: Build neutral master inventory
         run: python scripts/phase2_build_master_stop_inventory_gpt_v3.py
 
       - name: Materialize exact ISTAT municipality membership
         run: python scripts/phase2_materialize_master_stop_municipalities_gpt_v3.py
+
+      - name: Build non-decisional identity candidate edges
+        run: python scripts/phase2_build_stop_identity_candidates_gpt_v3.py
 
       - name: Run master inventory contract tests
         run: pytest -q tests/test_master_stop_inventory_gpt_v3.py
@@ -58,6 +63,9 @@ jobs:
 
       - name: Show municipality validation
         run: cat outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/master_stop_municipality_validation_gpt_v3.json
+
+      - name: Show identity-candidate validation
+        run: cat outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/stop_identity_candidate_validation_gpt_v3.json
 
       - name: Upload master inventory artifact
         uses: actions/upload-artifact@v4
@@ -74,6 +82,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "Validated master outputs already match repository materialization."
           else
-            git commit -m "data: materialize CI-validated stop municipalities"
+            git commit -m "data: materialize CI-validated stop identity candidates"
             git push origin HEAD:gpt-stop-source-completeness-v3
           fi
