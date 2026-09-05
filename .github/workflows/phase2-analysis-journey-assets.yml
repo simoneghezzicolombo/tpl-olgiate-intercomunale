@@ -51,7 +51,9 @@ jobs:
           test -n "${PKG}"
           tar -xzf "${PKG}"
           cp package/dist/maplibre-gl.css "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/maplibre/"
-          cp package/dist/*.mjs "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/maplibre/"
+          cp package/dist/maplibre-gl.mjs "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/maplibre/"
+          cp package/dist/maplibre-gl-shared.mjs "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/maplibre/"
+          cp package/dist/maplibre-gl-worker.mjs "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/maplibre/"
 
           cd /tmp/journey-gsap
           npm pack gsap@3.15.0 --silent > pack-name.txt
@@ -73,6 +75,9 @@ jobs:
           test -f dietro-l-analisi/vendor/maplibre/maplibre-gl-shared.mjs
           test -f dietro-l-analisi/vendor/maplibre/maplibre-gl-worker.mjs
           test -f dietro-l-analisi/vendor/maplibre/maplibre-gl.css
+          test ! -e dietro-l-analisi/vendor/maplibre/maplibre-gl-dev.mjs
+          test ! -e dietro-l-analisi/vendor/maplibre/maplibre-gl-shared-dev.mjs
+          test ! -e dietro-l-analisi/vendor/maplibre/maplibre-gl-worker-dev.mjs
           test -f dietro-l-analisi/vendor/gsap/gsap.min.js
           test -f dietro-l-analisi/vendor/gsap/ScrollTrigger.min.js
           test -f dietro-l-analisi/vendor/pako/pako.min.js
@@ -171,6 +176,7 @@ jobs:
           required += m['local_asset_chunks']['boundaries'] + m['local_asset_chunks']['roads']
           for f in required:
               assert (root/f).is_file(), f
+          assert not list((root/'vendor/maplibre').glob('*-dev.mjs')), 'unused MapLibre dev bundles materialized'
           for name,digest in m['files'].items():
               p=root/name
               assert p.is_file(), name
@@ -194,7 +200,7 @@ jobs:
           assert 'raw.githubusercontent.com' not in journey
           assert 'localAssets.boundaries' in journey and 'localAssets.roads' in journey
           assert 'BOUNDARIES_URL' not in journey and 'ROAD_GZ_URL' not in journey
-          print('journey source-closed evidence + local JS runtime + experience contract PASS')
+          print('journey source-closed evidence + lean local JS runtime + experience contract PASS')
           PY
           ! grep -R --line-number -E 'np\.random|numpy\.random|import random|from random' dietro-l-analisi
       - name: Browser smoke and visual QA
@@ -220,7 +226,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "Journey assets and runtime already current"
           else
-            git commit -m "data(journey): materialize self-contained browser runtime"
+            git commit -m "data(journey): materialize lean self-contained browser runtime"
             git push origin HEAD:phase2-analysis-journey-a
           fi
       - name: Upload journey build and visual evidence
