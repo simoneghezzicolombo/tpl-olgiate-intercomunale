@@ -4,7 +4,7 @@
   if(!map) return;
 
   const FILES={
-    currentRoutes:['current-routes-gtfs.geojson.gz.b64.0','current-routes-gtfs.geojson.gz.b64.1'],
+    currentRoutes:['current-routes-kml.geojson.gz.b64.0'],
     currentStops:['current-stops-gtfs.geojson.gz.b64.0'],
     finalRoutes:['finalist-routes-gated.geojson.gz.b64.0','finalist-routes-gated.geojson.gz.b64.1','finalist-routes-gated.geojson.gz.b64.2'],
     finalAnchors:['finalist-route-anchors.geojson.gz.b64.0']
@@ -45,7 +45,7 @@
       .route-controls i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:var(--c,#fff)}
       @media(max-width:800px){.route-controls{right:14px;bottom:14px;width:min(310px,calc(100vw - 28px));padding:10px}.route-controls small{display:none}}
     `;document.head.appendChild(style);
-    const c=document.createElement('div');c.className='route-controls current';c.innerHTML='<p>D184 e D185</p><div class="route-controls__row"><button data-r="ALL" class="is-active">Entrambe</button><button data-r="D184"><i style="--c:#4ca5ff"></i>D184</button><button data-r="D185"><i style="--c:#ff9b61"></i>D185</button></div><small>Tracciati e fermate dal GTFS ufficiale.</small>';document.body.appendChild(c);
+    const c=document.createElement('div');c.className='route-controls current';c.innerHTML='<p>D184 e D185</p><div class="route-controls__row"><button data-r="ALL" class="is-active">Entrambe</button><button data-r="D184"><i style="--c:#4ca5ff"></i>D184</button><button data-r="D185"><i style="--c:#ff9b61"></i>D185</button></div><small>Percorsi dai KML ufficiali archiviati, fermate e servizio dal GTFS ufficiale.</small>';document.body.appendChild(c);
     const f=document.createElement('div');f.className='route-controls final';f.innerHTML='<p>Le quattro linee finali</p><div class="route-controls__row"><button data-f="ALL" class="is-active">Tutte</button>'+Object.entries(LABELS).map(([id,l])=>`<button data-f="${id}"><i style="--c:${COLORS[id]}"></i>${l}</button>`).join('')+'</div><small>Se due linee passano sulla stessa strada, si sovrappongono davvero.</small>';document.body.appendChild(f);
     c.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{currentSelection=btn.dataset.r;c.querySelectorAll('button').forEach(x=>x.classList.toggle('is-active',x===btn));applyCurrent();});
     f.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{finalSelection=btn.dataset.f;f.querySelectorAll('button').forEach(x=>x.classList.toggle('is-active',x===btn));applyFinal();});
@@ -94,7 +94,7 @@
     addControls();applyCurrent();applyFinal();
     new MutationObserver(scene).observe(document.body,{attributes:true,attributeFilter:['data-scene']});
     scene();
-    window.__analysisJourneyLineage={installed:true,exactRoutes:true,currentData,stopData,finalData,anchorData,apply:scene};
+    window.__analysisJourneyLineage={installed:true,exactRoutes:true,currentSource:'ARCHIVED_OFFICIAL_ATP_KML',currentData,stopData,finalData,anchorData,apply:scene};
   }
   install().catch(err=>console.error('Exact route geometry failed',err));
 })();
