@@ -1,0 +1,17 @@
+{
+  "status": "PASS_IDENTITY_CANDIDATE_EDGE_BUILD",
+  "core_source_records_count": 95,
+  "asf_source_records_count": 38,
+  "frozen_core_source_records_count": 56,
+  "asf_directional_pair_rows": 17,
+  "asf_single_direction_named_place_rows": 4,
+  "asf_frozen_candidate_edges": 92,
+  "frozen_crossfeed_alias_edges": 25,
+  "strong_crossfeed_source_alias_candidates": 18,
+  "boarding_point_merges_performed": 0,
+  "stop_place_finalizations_performed": 0,
+  "routing_terminal_selected_count": 0,
+  "candidate_radius_m": 500.0,
+  "top_k_per_asf_record": 3,
+  "epistemic_note": "All outputs are candidate/review edges. Distance and name similarity nominate review only. Cross-feed aliases additionally require a shared numeric source-ID suffix, close geometry, compatible names and same exact municipality, but remain non-finalized."
+}
