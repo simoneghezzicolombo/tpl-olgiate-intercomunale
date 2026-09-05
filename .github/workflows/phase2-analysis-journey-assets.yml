@@ -7,6 +7,9 @@ on:
       - dietro-l-analisi/index.html
       - dietro-l-analisi/journey.css
       - dietro-l-analisi/journey.js
+      - dietro-l-analisi/journey-effects.js
+      - dietro-l-analisi/journey-director.js
+      - dietro-l-analisi/journey-browser-smoke.py
       - dietro-l-analisi/build_journey_assets.py
       - .github/workflows/phase2-analysis-journey-assets.yml
   workflow_dispatch:
@@ -18,7 +21,7 @@ permissions:
 jobs:
   build-journey-assets:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,8 +29,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install deterministic geospatial tooling
-        run: python -m pip install --upgrade pandas geopandas pyogrio shapely
+      - name: Install deterministic geospatial and browser tooling
+        run: |
+          python -m pip install --upgrade pandas geopandas pyogrio shapely playwright
+          python -m playwright install --with-deps chromium
       - name: Download pinned evidence bundles
         env:
           GH_TOKEN: ${{ github.token }}
@@ -47,6 +52,9 @@ jobs:
         run: |
           set -euo pipefail
           node --check dietro-l-analisi/journey.js
+          node --check dietro-l-analisi/journey-effects.js
+          node --check dietro-l-analisi/journey-director.js
+          python -m py_compile dietro-l-analisi/journey-browser-smoke.py
           python - <<'PY'
           import json
           from pathlib import Path
@@ -61,11 +69,25 @@ jobs:
             'proposed_candidates_v2':155,
             'official_stop_records_v2':67,
           }
-          for f in ['index.html','journey.css','journey.js','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64']:
+          for f in ['index.html','journey.css','journey.js','journey-effects.js','journey-director.js','journey-browser-smoke.py','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64']:
               assert Path('dietro-l-analisi',f).is_file(), f
+          html=Path('dietro-l-analisi/index.html').read_text()
+          assert '<script src="journey-director.js"></script>' in html
           print('journey static data contract PASS')
           PY
           ! grep -R --line-number -E 'np\.random|numpy\.random|import random|from random' dietro-l-analisi
+      - name: Browser smoke and visual QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m http.server 8765 >/tmp/journey-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill ${SERVER_PID} || true' EXIT
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/dietro-l-analisi/ >/dev/null; then break; fi
+            sleep 1
+          done
+          python dietro-l-analisi/journey-browser-smoke.py
       - name: Persist generated journey assets
         shell: bash
         run: |
@@ -79,7 +101,7 @@ jobs:
             git commit -m "data(journey): materialize certified visual layers"
             git push origin HEAD:phase2-analysis-journey-a
           fi
-      - name: Upload journey build evidence
+      - name: Upload journey build and visual evidence
         uses: actions/upload-artifact@v4
         with:
           name: phase2-analysis-journey-${{ github.sha }}
@@ -87,5 +109,6 @@ jobs:
             dietro-l-analisi/data-manifest.json
             dietro-l-analisi/journey-data.js
             dietro-l-analisi/*.b64
+            dietro-l-analisi/qa/*.png
           if-no-files-found: error
           retention-days: 90
