@@ -1,0 +1,20 @@
+{
+  "both_directions_admitted_required": true,
+  "directional_only_service_authorized": false,
+  "eligible_structural_links": 1,
+  "fixture_semantics": "CONTROLLED_ABSTRACT_FIXTURE_NOT_TERRITORIAL_DATA",
+  "issue": "RT-009",
+  "multiple_corridor_variants_collapse_to_one_structural_link": true,
+  "not_requested_is_unknown_not_infeasible": true,
+  "row_order_deterministic": true,
+  "status": "PASS_RT009_DIRECTIONAL_RECIPROCITY_CONTRACT_V3",
+  "status_counts": {
+    "NO_ADMITTED_CORRIDOR_IN_DIRECTION": 1,
+    "NO_GATE_D_ROUTE_IN_DIRECTION": 1,
+    "RECIPROCAL_BIDIRECTIONAL_CORRIDOR_AVAILABLE": 1,
+    "UNTESTED_DIRECTION": 1
+  },
+  "territorial_candidate_claim": false,
+  "unordered_pairs_audited": 4,
+  "weighted_composite_score": false
+}
