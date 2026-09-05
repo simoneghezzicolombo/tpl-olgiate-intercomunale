@@ -2,124 +2,122 @@
 
 ## Verdict
 
-The ASF OpenTripPlanner backend exposes a route-level stop endpoint for the current C146 route:
+The ASF OpenTripPlanner backend exposes a machine-readable current C146 stop universe at:
 
 `https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops`
 
-Parallel executors queried the endpoint and spatially filtered returned `lat`/`lon` points against `data/raw/boundaries/comuni_core_istat_2026.geojson`.
+A parallel executor subsequently enumerated all C146 patterns and trips. The route-level `/stops` response contains **167 unique stops**, and the union of the stop sequences used by all **16 operational patterns / 36 trips** also contains **167 unique stops**. The two sets are exactly equal: zero pattern stops are absent from the route-level endpoint and zero route-level stops are unused by all patterns.
 
-This materially upgrades the C146 source from timetable/schema-only evidence to a machine-readable official operator stop source with stable stop codes and coordinates.
+Therefore the earlier completeness blocker is resolved: for the observed ASF OTP snapshot, `/routes/2:C_46/stops` is the exact union of all C146 pattern stops.
 
-## Temporal snapshots
+## Five-municipality exact polygon extract versus service context
 
-Two reported extractions differ by one active route-stop record:
+The latest strict spatial extract contains **38 coded ASF C146 route-stop records inside the exact ISTAT polygons** of Olgiate Molgora, Calco, Brivio, La Valletta Brianza and Santa Maria Hoè.
 
-- earlier parallel extract: **39 coded ASF route-stop records** inside the exact ISTAT polygons;
-- latest subagent extract: **38 coded ASF route-stop records**.
+This strict count is not the same as the operationally relevant boundary inventory. In particular:
 
-The difference is `BRIVIA06`, the A-side record for `Brivio - Via Como - Pensilina`, which was present in the earlier snapshot but absent in the latest endpoint result. `BRIVIR06` remains present.
+- `CALCOA04` / `CALCOR04`, the two boarding points of `Calco - Via Statale - Ang. Scagnello` / Scagnello-Esselunga, are genuine C146 pattern stops but their coordinates fall only a few metres outside the Calco polygon on the Merate side;
+- they must therefore have `physical_municipality_exact` assigned from geometry while retaining an `analysis_context_role` linking them to the Calco boundary/service corridor.
 
-This is consistent with ASF's official Brivio bridge-closure notice effective 4 May 2026: the `Brivio - Via Como - Pensilina` stop on the chimney side is unused and all C146 services use only the Via Vittorio Emanuele side in both directions during the closure. Therefore the 39-record extract must be retained as a source snapshot, but the latest 38-record extract is the better representation of the currently exposed active route-stop set.
+This demonstrates why exact municipality containment and analysis/service context must remain separate fields.
 
-Do not rewrite the historical snapshot as if it never existed.
+## Temporal/current-service asymmetry at Brivio
 
-## Latest extract summary
+Two reported extractions differed by one route-stop record:
 
-The latest reported five-municipality extract contains:
+- an earlier snapshot contained 39 coded records inside the five polygons;
+- the latest current snapshot contains 38.
 
-- **38 coded ASF route-stop records** inside the exact ISTAT polygons;
-- 20 named stop places / stop-name groups if directional A/R records are grouped nominally;
-- two currently unpaired route-stop records in the five-municipality extract: `CALCOA09` (Arlate - B.vio Brivio - Madonnina) and `BRIVIR06` (Brivio - Via Como - Pensilina);
-- all other nominal ASF stop names in the extract have A/R-coded counterparts, but their geometries may be distinct.
+The difference is `BRIVIA06`, the A-side record formerly associated with `Brivio - Via Como - Pensilina`. `BRIVIR06` remains current. This is consistent with ASF's bridge-closure operational notice effective 4 May 2026, during which the chimney-side stop is unused and current service is channelled through the central Brivio boarding area.
 
-These counts MUST NOT be described as physical boarding-point counts. A/R code pairs may be two distinct side-specific boarding points.
+Historical snapshots must be retained as historical evidence rather than overwritten.
 
-## Pairwise geometry findings from latest extraction
+## Identity model confirmed by current evidence
 
-The latest subagent extraction compared A/R coordinates directly. Important examples:
+The evidence now strongly supports the three-level contract:
 
-- Rovagnate S.S. / Via Lombardia: ~77.7 m;
-- Santa Maria Hoè Via Giovanni XXIII: ~47.5 m;
-- Vaccarezza Cartello Paese: ~36.1 m;
+1. `source_record_id`: operator/GTFS/Maps record;
+2. `boarding_point_id`: side-specific physical pickup/alighting point;
+3. `stop_place_id`: passenger-facing stop location that may contain multiple directional boarding points.
+
+Same name, same code family or proximity does not authorise a boarding-point merge.
+
+## Key operator-name versus Google/Arriva aliases
+
+Pattern enumeration and manual Google Maps checks resolve several apparent discrepancies as naming aliases rather than missing stops:
+
+- `CALCOA05` / `CALCOR05`: ASF canonical name `Calco - Via Garibaldi`; Google Maps and Arriva commonly expose `Calco - Via Virgilio`. One passenger stop place, two directional boarding points.
+- `CALCOA06` / `CALCOR06`: ASF canonical name `Calco - Largo Pomea`; Google Maps/Arriva expose `Calco - Via Nazionale (edicola)` / `via statale (edicola)`. Same coded stop place, not an additional missing C146 stop.
+- `CALCOA04` / `CALCOR04`: ASF `Calco - Via Statale - Ang. Scagnello`; Google Maps adds the Esselunga description. Two directional boarding points of one stop place, just outside the strict Calco polygon.
+- `BRIVIA03` / `BRIVIR03`: ASF `Brivio - Bar Cristallo`; Google Maps/Arriva expose `Brivio - via Como (pizzeria)`. Same stop place under different landmarks.
+- `OLGMOA04`: `Olgiate Molgora - Via Statale`; some interfaces may label the area ambiguously, but the geometry lies in Olgiate Molgora.
+
+## Directional boarding-point geometry findings
+
+Examples from official ASF coordinates and manual corroboration show why directional records must remain separate:
+
+- Rovagnate S.S. / Via Lombardia: ASF A/R coordinates separated by ~77.7 m;
+- Santa Maria Hoè Via Giovanni XXIII: ASF A/R coordinates separated by ~47.5 m; the eastern side is also labelled Tremonte/Via Leopardi by Google/Arriva;
+- Vaccarezza: ~36.1 m;
 - Perego Via Statale 79: ~27.5 m;
 - Olgiate Scarpone: ~18.7 m;
-- Alduno: ~17.8 m;
-- Calco Via Garibaldi: ~11.7 m;
-- Calco Largo Pomea: ~9.1 m;
-- Rovagnate AGIP: ~7.8 m;
-- Brivio Bar Cristallo: ~6.9 m;
-- Via della Salute: ~3.4 m;
-- Arlate Bivio per il Paese: ~1.1 m;
-- Imbersago Cazzulino: 0.0 m in ASF geometry.
+- Calco Via Garibaldi / Via Virgilio: manual Google Maps boarding points ~27.9 m apart;
+- Scagnello-Esselunga: manual Google Maps boarding points ~20.2 m apart;
+- Alduno: one stop place with two directional boarding points; manual Maps pins are farther apart than the inward-shifted ASF coordinates but align to the respective sides;
+- Imbersago Cazzulino: ASF gives identical geometry to the two directional codes, which means the source does not spatially distinguish sides there.
 
-No proximity threshold authorises a boarding-point merge. Same-name A/R records remain separate source records, with boarding-point identity resolved independently.
+No universal distance threshold should convert source records into boarding-point identity.
 
-## Important corrections
+## Santa Maria Hoè / Tremonte resolution
 
-1. `CALCOA06` is officially `Calco - Largo Pomea`, not `Calco - Via Nazionale (edicola)`.
-2. `CALCOA05` is `Calco - Via Garibaldi`.
-3. `ROVAGA03` / `ROVAGR03` are `Rovagnate - Strada Statale - AGIP`.
-4. `ROVAGA01` / `ROVAGR01` are `Rovagnate - S.S. - Ang. V. Lombardia`.
-5. `SAMAHA04` / `SAMAHR04` are both named `Santa Maria Hoè - Via Giovanni XXIII` in ASF, but their geometries are ~47.5 m apart. Google Maps/Arriva evidence identifies the eastern geometry with `Tremonte / Via Leopardi`; therefore these cannot be collapsed into one physical boarding point solely from the ASF stop name.
-6. `ROVAGAR4` is the current returned code spelling for the R-side Alduno record; do not silently regularise it to `ROVAGR04`.
+`SAMAHA04` and `SAMAHR04` share the ASF stop-place name `Santa Maria Hoè - Via Giovanni XXIII`, but their geometries are distinct. Manual Google Maps plus Arriva evidence supports interpreting them as opposite-direction boarding points of the same passenger stop place, with the eastern side also exposed as `Tremonte / Via Leopardi`.
 
-## Boundary/name cases
+Separate nearby stop places also exist around Tremonte / Via Trento. These must not be collapsed merely because they are spatially close.
 
-Spatial polygon assignment and stop labels are separate dimensions:
+A current manual Google Maps check did not identify a transit pin named `S. Maria Hoè - Centro`. This is absence evidence only and does not invalidate historical frozen GTFS records named `S.Maria Hoe' - paese`; those records remain a temporal/identity review item.
 
-- `Imbersago - Località Cazzulino` (`IMBERA07`, `IMBERR07`) is reported inside the Calco polygon despite the Imbersago name.
-- `Rovagnate - Frazione Alduno` (`ROVAGA04`, `ROVAGAR4`) is reported inside the Santa Maria Hoè polygon despite the Rovagnate name.
+## Alduno boundary/name resolution
 
-Do not assign municipality from stop-name prefix.
+ASF uses `Rovagnate - Frazione Alduno` with codes `ROVAGA04` and `ROVAGAR4`, but geometry and local administrative reality place the stop in Santa Maria Hoè. The operator name must not drive municipality assignment.
 
-## Google Maps targeted verification
+Manual Google Maps checks confirm one Alduno passenger stop place with two directional boarding points.
 
-Browser verification adds strong boarding-point evidence:
+## Brivio stop-place collision resolved
 
-- Scagnello/Esselunga: two distinct Google Maps bus pins at approximately `45.7169153, 9.4082750` and `45.7168196, 9.4080556`;
-- Alduno: two distinct Google Maps pins aligned respectively with the two Arriva/ASF sides;
-- Santa Maria Hoè Via Giovanni XXIII and Tremonte/Via Leopardi: distinct pins ~47.5 m apart;
-- Tremonte and Tremonte/Via Trento: distinct pins ~21 m apart;
-- Arlate Bivio Brivio/Madonnina: one Google Maps pin observed, consistent with the single current ASF route-stop record `CALCOA09`;
-- no Google Maps transit pin was observed in targeted high-zoom checks of San Zeno, Mondonico borgo or Calco Alta. This is corroborating absence evidence only, not proof that no physical or informal stop exists.
+The frozen GTFS contained two distant locations carrying the same broad label `Brivio - capolinea`.
 
-## Remaining C146 completeness blocker: route-stop endpoint vs observed trip patterns
+Manual map/street evidence resolves them as distinct places:
 
-A current Google Maps C146 trip operated by ASF explicitly showed intermediate stops including:
+- the southern point around `45.741330, 9.445699` is `Brivio - Via Bergamo (Scuola Materna)` and matches frozen GTFS `300063` within about 0.3 m;
+- the northern/central point around `45.74243, 9.44582-9.44590` corresponds to the current central Brivio / Via V. Emanuele boarding area and current `BRIVIR06` geometry.
 
-- `Calco - Via Virgilio`;
-- `Calco - Via Nazionale (edicola)`;
-- `Calco - Via Statale - Ang. Via Scagnello`;
-- `Brivio - via Como (pizzeria)`.
+They must remain separate stop places. The old identical GTFS naming was a naming collision, not evidence for grouping.
 
-These labels are not represented as such in the latest `routes/2:C_46/stops` extraction. Therefore the route-level `/stops` endpoint must **not yet** be treated as a proven exhaustive union of every current C146 trip pattern.
+Current service membership of the Via Bergamo / Scuola Materna bay remains unresolved even though Street View shows bus infrastructure and ASF-related signage.
 
-Possible explanations to test, not assume:
+## No-stop locality checks
 
-1. OTP route-level `/stops` exposes only a subset/current canonical pattern;
-2. additional stop identities appear only through trip/pattern endpoints;
-3. Google consumes a different or richer transit feed/source version;
-4. some Google labels correspond to other ASF stop records under different official names, requiring code-level trip evidence.
+Targeted high-zoom Google Maps checks found no current transit pin in:
 
-The next deterministic task is to enumerate all C146 OTP patterns/trips and compare their stop sequences against the route-level `/stops` response and observed Google trip sequences.
+- San Zeno;
+- Mondonico borgo;
+- Calco Alta / Piazza San Vigilio.
 
-## Required next step
+The correct status is `NO_GOOGLE_MAPS_TRANSIT_PIN_OBSERVED`, not proof of absolute real-world absence. This can be combined with operator/GTFS evidence when evaluating current ordinary-service coverage.
 
-Persist the raw ASF endpoint payloads with retrieval timestamp and SHA256, then build a deterministic comparison table containing:
+## Provenance and next integration step
 
-- ASF code;
-- ASF name;
-- latitude / longitude;
+The parallel executor saved raw ASF route and pattern dumps locally. These should be committed or otherwise captured reproducibly with retrieval timestamp and SHA256 before final source freeze.
+
+The master current-stop inventory should now integrate:
+
+- all official Arriva/LineeLecco source records;
+- the complete ASF C146 route-level stop universe and pattern memberships;
 - exact ISTAT polygon municipality;
-- A/R counterpart code;
-- pairwise A↔R distance;
-- all C146 trip/pattern memberships;
-- nearest Arriva/LineeLecco GTFS record and distance;
-- nearest OSM boarding-point record and distance;
-- identity status at `source_record`, `boarding_point`, and `stop_place` levels.
+- separate analysis-context role;
+- directional boarding-point identity;
+- passenger stop-place identity;
+- Google Maps/manual evidence only as corroborating identity/geometry evidence;
+- temporal status for current versus historical/suspended records.
 
-No merge is authorised from proximity alone.
-
-## Provenance status
-
-The machine-readable ASF coordinates in the latest table are recorded as `SUBAGENT_REPORTED_OFFICIAL_ASF_OTP` until the raw JSON dumps and hashes are committed into the repository. Google Maps observations are separate corroborating browser evidence and do not override operator stop codes or service membership.
+The C146 route-level completeness question is **RESOLVED**. Remaining work is cross-operator conflation and temporal/current-service classification, not discovery of hidden C146 pattern stops.
