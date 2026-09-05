@@ -5,5 +5,6 @@ import * as maplibreModule from './vendor/maplibre/maplibre-gl.mjs';
 window.maplibregl = { ...maplibreModule };
 
 await import('./journey-effects.js');
+await import('./journey-runtime-policy.js');
 await import('./journey.js');
 await import('./journey-director.js');
