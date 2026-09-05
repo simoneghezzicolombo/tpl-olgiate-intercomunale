@@ -1,0 +1,96 @@
+name: Phase 2 Territorial Structural Search V3
+
+on:
+  push:
+    branches:
+      - phase2-territorial-structural-search-v3
+    paths:
+      - src/phase2_territorial_structural_search_v3.py
+      - scripts/phase2_run_territorial_structural_search_v3.py
+      - scripts/phase2_audit_rt022_prepared_v3.py
+      - tests/test_phase2_territorial_structural_search_v3.py
+      - docs/PHASE2_TERRITORIAL_STRUCTURAL_SEARCH_V3.md
+      - .github/workflows/phase2-territorial-structural-search-v3.yml
+  pull_request:
+    branches:
+      - phase2-elementary-corridor-anchors-v3
+    paths:
+      - src/phase2_territorial_structural_search_v3.py
+      - scripts/phase2_run_territorial_structural_search_v3.py
+      - scripts/phase2_audit_rt022_prepared_v3.py
+      - tests/test_phase2_territorial_structural_search_v3.py
+      - docs/PHASE2_TERRITORIAL_STRUCTURAL_SEARCH_V3.md
+      - .github/workflows/phase2-territorial-structural-search-v3.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --disable-pip-version-check \
+            pandas==2.2.3 \
+            pyproj==3.7.2 \
+            scipy==1.17.0 \
+            pytest==8.3.5
+
+      - name: Compile RT-022
+        run: |
+          python -m py_compile src/phase2_territorial_structural_search_v3.py
+          python -m py_compile scripts/phase2_run_territorial_structural_search_v3.py
+          python -m py_compile scripts/phase2_audit_rt022_prepared_v3.py
+          python -m py_compile tests/test_phase2_territorial_structural_search_v3.py
+
+      - name: Run focused tests
+        run: pytest -q tests/test_phase2_territorial_structural_search_v3.py
+
+      - name: Materialize prepared fail-closed status
+        run: python scripts/phase2_audit_rt022_prepared_v3.py
+
+      - name: Validate prepared status contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('outputs/phase2/rt022_territorial_structural_search_v3/rt022_prepared_status.json')
+          v = json.loads(p.read_text(encoding='utf-8'))
+          assert v['status'] == 'PREPARED_BLOCKED_PENDING_RT021_REAL_CORPUS', v
+          assert v['territorial_result_claimed'] is False
+          assert v['rt021_required'] is True
+          assert v['topology_prior'] is False
+          assert v['service_terminal_selection'] is False
+          assert v['primary_runner_up_selection'] is False
+          print(json.dumps(v, indent=2, sort_keys=True))
+          PY
+
+      - name: Anti-invention and topology-bias guards
+        run: |
+          ! grep -nE 'np\.random|numpy\.random|import random|from random' \
+            src/phase2_territorial_structural_search_v3.py \
+            scripts/phase2_run_territorial_structural_search_v3.py \
+            scripts/phase2_audit_rt022_prepared_v3.py
+          ! grep -nE 'Cassina|Circolare Meratese|PRIMARY|RUNNER-UP' \
+            src/phase2_territorial_structural_search_v3.py \
+            scripts/phase2_run_territorial_structural_search_v3.py \
+            scripts/phase2_audit_rt022_prepared_v3.py
+          git diff --check
+
+      - name: Upload RT-022 prepared evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-territorial-structural-search-v3-prepared
+          path: outputs/phase2/rt022_territorial_structural_search_v3/
+          if-no-files-found: error
