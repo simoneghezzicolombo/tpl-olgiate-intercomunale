@@ -12,3 +12,4 @@ await import('./journey-runtime-policy.js');
 await import('./journey-experience-policy.js');
 await import('./journey.js');
 await import('./journey-director.js');
+await import('./journey-lens.js');
