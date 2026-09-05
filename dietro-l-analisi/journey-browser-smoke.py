@@ -1,9 +1,13 @@
+from base64 import b64decode
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 BASE = 'http://127.0.0.1:8765/dietro-l-analisi/'
 OUT = Path('dietro-l-analisi/qa')
 OUT.mkdir(parents=True, exist_ok=True)
+TRANSPARENT_PNG = b64decode(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
+)
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
@@ -11,9 +15,19 @@ with sync_playwright() as p:
     page_errors = []
     console_log = []
     failed_requests = []
+    requested_urls = []
     page.on('pageerror', lambda exc: page_errors.append(str(exc)))
     page.on('console', lambda msg: console_log.append(f'{msg.type}: {msg.text}'))
+    page.on('request', lambda req: requested_urls.append(req.url))
     page.on('requestfailed', lambda req: failed_requests.append(f'{req.method} {req.url} :: {req.failure}'))
+
+    # CI must not consume community OSM raster capacity. Human visitors can use
+    # the contextual basemap normally; the visual test receives a local blank
+    # tile and therefore evaluates only the evidence-driven journey layers.
+    page.route(
+        'https://tile.openstreetmap.org/**',
+        lambda route: route.fulfill(status=200, content_type='image/png', body=TRANSPARENT_PNG),
+    )
 
     try:
         page.goto(BASE, wait_until='domcontentloaded', timeout=60000)
@@ -88,8 +102,10 @@ with sync_playwright() as p:
         ('sections', .55),
         ('buildings', .58),
         ('walk', .62),
-        ('candidates', .68),
-        ('finalists', .62),
+        ('roads', .55),
+        ('baseline', .55),
+        ('candidates', .53),
+        ('finalists', .58),
         ('time', .58),
         ('end', .58),
     ]:
@@ -100,6 +116,7 @@ with sync_playwright() as p:
     assert page.locator('.service-clock').count() == 1
     assert page.locator('.departure-strip').count() == 1
     assert page.locator('.evidence-stack').count() == 1
+    assert not any('basemaps.cartocdn.com' in url for url in requested_urls), 'legacy CARTO basemap request detected'
     assert not page_errors, 'page errors: ' + ' | '.join(page_errors)
     browser.close()
 
