@@ -18,10 +18,8 @@ await import('./journey.js');
 await import('./journey-director.js');
 await import('./journey-lens.js');
 
-// The frozen agency GTFS contains seven impossible point-to-point teleports in
-// D184/D185. Keep the raw source intact, then replace only those chords with
-// connectors on the certified Gate D bus-eligible road graph.
-await import('./current-route-continuity-patches.js');
+// Current-service geometry is taken directly from the supplied official agency
+// KML LineStrings. Do not route, snap or repair D184/D185 through Gate D.
 await import('./journey-lineage.js');
-await import('./journey-current-continuity.js');
+await import('./journey-current-kml-exact.mjs');
 await import('./journey-explore.js');
