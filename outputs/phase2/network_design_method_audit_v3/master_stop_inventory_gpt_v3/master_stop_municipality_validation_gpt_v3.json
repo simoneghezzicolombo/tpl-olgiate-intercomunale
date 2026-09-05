@@ -1,0 +1,13 @@
+{
+  "status": "PASS_EXACT_CORE_MUNICIPALITY_MATERIALIZATION",
+  "source_records_count": 105,
+  "core_polygon_assigned_count": 95,
+  "outside_core_count": 10,
+  "reported_vs_physical_nonagreement_count": 10,
+  "asf_containment_conflict_count": 0,
+  "assignment_method": "ISTAT_2026_EXACT_POINT_IN_POLYGON",
+  "boundary_source": "data/raw/boundaries/comuni_core_istat_2026.geojson",
+  "boundary_identity_key": "ISTAT_PRO_COM_T",
+  "routing_terminal_selected_count": 0,
+  "epistemic_note": "OUTSIDE_CORE means outside the five frozen core ISTAT polygons, not an inferred exact external municipality. Boundary labels are canonicalized from stable ISTAT PRO_COM_T codes so text-encoding defects cannot change identity. No stop-name or nearest-place heuristic is used."
+}
