@@ -5,7 +5,10 @@ on:
     branches: [phase2-analysis-journey-a]
     paths:
       - .github/workflows/journey-exact-route-validation.yml
+      - dietro-l-analisi/journey-bootstrap.mjs
       - dietro-l-analisi/journey-lineage.js
+      - dietro-l-analisi/journey-explore-prelude.js
+      - dietro-l-analisi/journey-explore.js
       - dietro-l-analisi/journey-exact-browser-smoke.py
       - dietro-l-analisi/exact-route-lineage.json
       - dietro-l-analisi/current-routes-gtfs.geojson.gz.b64.*
@@ -35,6 +38,8 @@ jobs:
         run: |
           set -euo pipefail
           node --check dietro-l-analisi/journey-lineage.js
+          node --check dietro-l-analisi/journey-explore-prelude.js
+          node --check dietro-l-analisi/journey-explore.js
           python - <<'PY'
           import base64
           import gzip
@@ -102,6 +107,7 @@ jobs:
           anchor_ids = {f['properties']['anchor_id'] for f in data['anchors']['features']}
           assert len(anchor_ids) == 11
           assert 'rail:S01514' in anchor_ids
+          assert sum(1 for f in data['anchors']['features'] if f['properties']['kind'] == 'PROPOSED_STOP') == 4
           print('exact route static contract PASS')
           PY
       - name: Browser smoke and visual QA
