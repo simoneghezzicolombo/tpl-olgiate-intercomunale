@@ -155,7 +155,8 @@ with sync_playwright() as p:
     page.wait_for_timeout(120)
     assert page.locator('.maplibregl-popup .map-card__eyebrow').count() == 1
     popup_text = page.locator('.maplibregl-popup').inner_text()
-    assert 'Nuova fermata candidata' in popup_text and 'FIELD CHECK PENDING' in popup_text, popup_text
+    popup_upper = popup_text.upper()
+    assert 'NUOVA FERMATA CANDIDATA' in popup_upper and 'FIELD CHECK PENDING' in popup_upper, popup_text
     page.screenshot(path=str(OUT / 'exact-explore.png'), full_page=False)
 
     assert not errors, 'page errors: ' + ' | '.join(errors) + '\nconsole:\n' + '\n'.join(console)
