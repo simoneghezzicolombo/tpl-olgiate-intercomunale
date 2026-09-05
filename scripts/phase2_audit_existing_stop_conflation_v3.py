@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
-"""Audit existing physical stop evidence by reconciling frozen GTFS and OSM.
+"""Deterministic frozen GTFS↔OSM existing-stop conflation audit.
 
-RT-006 contract:
-- existing-stop-first;
-- no proposed stop generation;
-- OSM observations are evidence, not official GTFS truth;
-- ambiguous distance-only matches remain REVIEW, never silently confirmed;
-- deterministic matching and stable output ordering.
-
-This script is deliberately conservative.  It reconciles the frozen reference-period
-GTFS stop universe with the frozen OSM bus-stop extract already present in the repo.
-It does not query the network and does not decide which stops a future route will serve.
+RT-006 epistemic contract:
+- reuse existing physical stop infrastructure first;
+- OSM is corroborating physical evidence, not official GTFS truth;
+- an identifier/name match cannot override a geographically implausible position;
+- distance-only evidence never confirms identity;
+- no proposed stop, corridor, passenger pattern or winner is produced.
 """
 from __future__ import annotations
 
@@ -31,8 +27,11 @@ DEFAULT_OSM = ROOT / "data/raw/osm/osm_bus_stops_core.json"
 DEFAULT_OUT = ROOT / "outputs/phase2/network_design_method_audit_v3"
 UTM = Transformer.from_crs(4326, 32632, always_xy=True)
 
-EXACT_NAME_MAX_M = 300.0
-TOKEN_NAME_MAX_M = 150.0
+# A strong textual/ID identity signal still needs spatial plausibility.
+REF_CONFIRM_MAX_M = 75.0
+EXACT_NAME_CONFIRM_MAX_M = 75.0
+EXACT_NAME_REVIEW_MAX_M = 300.0
+TOKEN_NAME_MAX_M = 100.0
 TOKEN_JACCARD_MIN = 0.60
 DISTANCE_REVIEW_MAX_M = 45.0
 DISTANCE_UNIQUE_MARGIN_M = 15.0
@@ -56,8 +55,8 @@ def norm_text(value: object) -> str:
 
 
 def tokens(value: object) -> set[str]:
-    stop = {"bus", "fermata", "stop", "platform", "via", "piazza"}
-    return {t for t in norm_text(value).split() if len(t) > 1 and t not in stop}
+    low_information = {"bus", "fermata", "stop", "platform", "via", "piazza"}
+    return {t for t in norm_text(value).split() if len(t) > 1 and t not in low_information}
 
 
 def jaccard(a: set[str], b: set[str]) -> float:
@@ -68,7 +67,7 @@ def jaccard(a: set[str], b: set[str]) -> float:
 
 def parse_osm(path: Path) -> pd.DataFrame:
     payload = json.loads(path.read_text(encoding="utf-8"))
-    rows: list[dict] = []
+    rows = []
     for el in payload.get("elements", []):
         tags = el.get("tags") or {}
         if "lat" not in el or "lon" not in el:
@@ -78,149 +77,142 @@ def parse_osm(path: Path) -> pd.DataFrame:
         bus = str(tags.get("bus") or "")
         if highway != "bus_stop" and pt not in {"platform", "stop_position"} and bus != "yes":
             continue
-        lon = float(el["lon"])
-        lat = float(el["lat"])
+        lon, lat = float(el["lon"]), float(el["lat"])
         x, y = UTM.transform(lon, lat)
-        rows.append(
-            {
-                "osm_type": str(el.get("type") or ""),
-                "osm_id": str(el.get("id")),
-                "osm_lon": lon,
-                "osm_lat": lat,
-                "osm_x": x,
-                "osm_y": y,
-                "osm_name": str(tags.get("name") or ""),
-                "osm_name_norm": norm_text(tags.get("name")),
-                "osm_ref": str(tags.get("ref") or "").strip(),
-                "osm_network": str(tags.get("network") or ""),
-                "osm_operator": str(tags.get("operator") or ""),
-                "osm_public_transport": pt,
-                "osm_highway": highway,
-                "osm_bus": bus,
-                "osm_shelter": str(tags.get("shelter") or ""),
-                "osm_bench": str(tags.get("bench") or ""),
-                "osm_departures_board": str(tags.get("departures_board") or ""),
-                "osm_tactile_paving": str(tags.get("tactile_paving") or ""),
-            }
-        )
+        rows.append({
+            "osm_type": str(el.get("type") or ""),
+            "osm_id": str(el.get("id")),
+            "osm_lon": lon,
+            "osm_lat": lat,
+            "osm_x": x,
+            "osm_y": y,
+            "osm_name": str(tags.get("name") or ""),
+            "osm_name_norm": norm_text(tags.get("name")),
+            "osm_ref": str(tags.get("ref") or "").strip(),
+            "osm_network": str(tags.get("network") or ""),
+            "osm_operator": str(tags.get("operator") or ""),
+            "osm_public_transport": pt,
+            "osm_highway": highway,
+            "osm_bus": bus,
+            "osm_shelter": str(tags.get("shelter") or ""),
+            "osm_bench": str(tags.get("bench") or ""),
+            "osm_departures_board": str(tags.get("departures_board") or ""),
+            "osm_tactile_paving": str(tags.get("tactile_paving") or ""),
+        })
     out = pd.DataFrame(rows)
     if out.empty:
         raise ValueError("Frozen OSM bus-stop extract contains no usable point elements")
     if out["osm_id"].duplicated().any():
         raise ValueError("OSM element IDs are not unique in frozen bus-stop extract")
-    return out.sort_values(["osm_id"]).reset_index(drop=True)
+    return out.sort_values("osm_id").reset_index(drop=True)
 
 
 def load_gtfs(path: Path) -> tuple[pd.DataFrame, dict[str, dict]]:
     gtfs = pd.read_csv(path, dtype=str).fillna("")
     required = {
-        "stop_id",
-        "stop_name",
-        "stop_lon",
-        "stop_lat",
-        "official_routes_reference_gtfs",
-        "physical_cluster_id",
-        "stop_code",
-        "COMUNE",
+        "stop_id", "stop_name", "stop_lon", "stop_lat",
+        "official_routes_reference_gtfs", "physical_cluster_id", "stop_code", "COMUNE",
     }
     missing = required - set(gtfs.columns)
     if missing:
         raise ValueError(f"Existing official stop file missing columns: {sorted(missing)}")
-
     gtfs["stop_lon"] = pd.to_numeric(gtfs["stop_lon"], errors="raise")
     gtfs["stop_lat"] = pd.to_numeric(gtfs["stop_lat"], errors="raise")
     xy = [UTM.transform(float(lon), float(lat)) for lon, lat in zip(gtfs.stop_lon, gtfs.stop_lat)]
     gtfs["gtfs_x"] = [p[0] for p in xy]
     gtfs["gtfs_y"] = [p[1] for p in xy]
-    gtfs["gtfs_name_norm"] = gtfs["stop_name"].map(norm_text)
 
     clusters: dict[str, dict] = {}
-    for cluster_id, group in gtfs.groupby("physical_cluster_id", sort=True):
+    for cid, group in gtfs.groupby("physical_cluster_id", sort=True):
         aliases = sorted({str(v) for v in group.stop_name if str(v).strip()})
-        norms = sorted({norm_text(v) for v in aliases if norm_text(v)})
-        refs = sorted(
-            {
-                str(v).strip()
-                for col in ("stop_id", "stop_code")
-                for v in group[col]
-                if str(v).strip()
-            }
-        )
+        refs = sorted({
+            str(v).strip()
+            for col in ("stop_id", "stop_code")
+            for v in group[col]
+            if str(v).strip()
+        })
         routes: set[str] = set()
         for value in group.official_routes_reference_gtfs:
             routes.update(r for r in str(value).split("|") if r)
-        municipalities = sorted({str(v) for v in group.COMUNE if str(v).strip()})
-        clusters[str(cluster_id)] = {
-            "cluster_id": str(cluster_id),
+        clusters[str(cid)] = {
             "aliases": aliases,
-            "norms": norms,
+            "norms": sorted({norm_text(v) for v in aliases if norm_text(v)}),
             "refs": refs,
             "routes": sorted(routes),
-            "municipalities": municipalities,
+            "municipalities": sorted({str(v) for v in group.COMUNE if str(v).strip()}),
             "records": group.copy(),
         }
     return gtfs, clusters
 
 
 def cluster_distance_m(osm_row: pd.Series, cluster: dict) -> float:
-    records = cluster["records"]
-    dx = records["gtfs_x"].astype(float) - float(osm_row.osm_x)
-    dy = records["gtfs_y"].astype(float) - float(osm_row.osm_y)
+    r = cluster["records"]
+    dx = r["gtfs_x"].astype(float) - float(osm_row.osm_x)
+    dy = r["gtfs_y"].astype(float) - float(osm_row.osm_y)
     return float((dx.pow(2) + dy.pow(2)).pow(0.5).min())
 
 
-def best_name_similarity(osm_name: str, cluster: dict) -> tuple[bool, float]:
-    osm_norm = norm_text(osm_name)
-    if not osm_norm:
+def name_similarity(osm_name: str, cluster: dict) -> tuple[bool, float]:
+    n = norm_text(osm_name)
+    if not n:
         return False, 0.0
-    exact = osm_norm in set(cluster["norms"])
-    jt = max((jaccard(tokens(osm_norm), tokens(name)) for name in cluster["norms"]), default=0.0)
-    return exact, float(jt)
+    exact = n in set(cluster["norms"])
+    score = max((jaccard(tokens(n), tokens(alias)) for alias in cluster["norms"]), default=0.0)
+    return exact, float(score)
 
 
 def classify_one(osm_row: pd.Series, clusters: dict[str, dict]) -> dict:
-    ranked: list[dict] = []
-    for cluster_id, cluster in clusters.items():
-        dist = cluster_distance_m(osm_row, cluster)
-        exact_name, name_j = best_name_similarity(osm_row.osm_name, cluster)
-        exact_ref = bool(osm_row.osm_ref and osm_row.osm_ref in set(cluster["refs"]))
-        ranked.append(
-            {
-                "cluster_id": cluster_id,
-                "distance_m": dist,
-                "exact_ref": exact_ref,
-                "exact_name": exact_name,
-                "token_jaccard": name_j,
-            }
-        )
+    ranked = []
+    for cid, cluster in clusters.items():
+        exact_name, token_score = name_similarity(osm_row.osm_name, cluster)
+        ranked.append({
+            "cluster_id": cid,
+            "distance_m": cluster_distance_m(osm_row, cluster),
+            "exact_ref": bool(osm_row.osm_ref and osm_row.osm_ref in set(cluster["refs"])),
+            "exact_name": exact_name,
+            "token_jaccard": token_score,
+        })
     ranked.sort(key=lambda r: (r["distance_m"], r["cluster_id"]))
     nearest = ranked[0]
     second_dist = ranked[1]["distance_m"] if len(ranked) > 1 else math.inf
 
-    exact_refs = [r for r in ranked if r["exact_ref"]]
+    exact_refs = sorted(
+        (r for r in ranked if r["exact_ref"]),
+        key=lambda r: (r["distance_m"], r["cluster_id"]),
+    )
     if exact_refs:
-        exact_refs.sort(key=lambda r: (r["distance_m"], r["cluster_id"]))
         chosen = exact_refs[0]
-        status = "CONFIRMED_EXACT_REF"
+        status = (
+            "CONFIRMED_EXACT_REF_DISTANCE"
+            if chosen["distance_m"] <= REF_CONFIRM_MAX_M
+            else "CONFLICT_EXACT_REF_DISTANCE_REVIEW"
+        )
     else:
-        exact_names = [r for r in ranked if r["exact_name"] and r["distance_m"] <= EXACT_NAME_MAX_M]
-        if exact_names:
-            exact_names.sort(key=lambda r: (r["distance_m"], r["cluster_id"]))
+        exact_names = sorted(
+            (r for r in ranked if r["exact_name"]),
+            key=lambda r: (r["distance_m"], r["cluster_id"]),
+        )
+        if exact_names and exact_names[0]["distance_m"] <= EXACT_NAME_CONFIRM_MAX_M:
             chosen = exact_names[0]
             status = "CONFIRMED_EXACT_NAME_DISTANCE"
+        elif exact_names and exact_names[0]["distance_m"] <= EXACT_NAME_REVIEW_MAX_M:
+            chosen = exact_names[0]
+            status = "PROBABLE_EXACT_NAME_DISTANCE_REVIEW"
         else:
-            token_matches = [
-                r
-                for r in ranked
-                if r["token_jaccard"] >= TOKEN_JACCARD_MIN and r["distance_m"] <= TOKEN_NAME_MAX_M
-            ]
+            token_matches = sorted(
+                (
+                    r for r in ranked
+                    if r["token_jaccard"] >= TOKEN_JACCARD_MIN
+                    and r["distance_m"] <= TOKEN_NAME_MAX_M
+                ),
+                key=lambda r: (-r["token_jaccard"], r["distance_m"], r["cluster_id"]),
+            )
             if token_matches:
-                token_matches.sort(key=lambda r: (-r["token_jaccard"], r["distance_m"], r["cluster_id"]))
                 chosen = token_matches[0]
                 status = "PROBABLE_TOKEN_NAME_DISTANCE_REVIEW"
             elif (
                 nearest["distance_m"] <= DISTANCE_REVIEW_MAX_M
-                and (second_dist - nearest["distance_m"]) >= DISTANCE_UNIQUE_MARGIN_M
+                and second_dist - nearest["distance_m"] >= DISTANCE_UNIQUE_MARGIN_M
             ):
                 chosen = nearest
                 status = "PROBABLE_DISTANCE_ONLY_REVIEW"
@@ -228,10 +220,11 @@ def classify_one(osm_row: pd.Series, clusters: dict[str, dict]) -> dict:
                 chosen = nearest
                 status = "OSM_ONLY_UNMATCHED_REFERENCE_GTFS"
 
+    matched = not status.startswith("OSM_ONLY")
     cluster = clusters[chosen["cluster_id"]]
     return {
-        **{k: osm_row[k] for k in osm_row.index if not k.startswith("osm_x") and not k.startswith("osm_y")},
-        "matched_physical_cluster_id": chosen["cluster_id"] if not status.startswith("OSM_ONLY") else "",
+        **{k: osm_row[k] for k in osm_row.index if k not in {"osm_x", "osm_y"}},
+        "matched_physical_cluster_id": chosen["cluster_id"] if matched else "",
         "match_status": status,
         "match_distance_m": round(float(chosen["distance_m"]), 3),
         "match_exact_ref": bool(chosen["exact_ref"]),
@@ -240,9 +233,9 @@ def classify_one(osm_row: pd.Series, clusters: dict[str, dict]) -> dict:
         "nearest_gtfs_cluster_id_even_if_unmatched": nearest["cluster_id"],
         "nearest_gtfs_distance_m": round(float(nearest["distance_m"]), 3),
         "second_nearest_gtfs_distance_m": round(float(second_dist), 3) if math.isfinite(second_dist) else "",
-        "gtfs_cluster_names": "|".join(cluster["aliases"]) if not status.startswith("OSM_ONLY") else "",
-        "gtfs_cluster_routes": "|".join(cluster["routes"]) if not status.startswith("OSM_ONLY") else "",
-        "gtfs_cluster_municipalities": "|".join(cluster["municipalities"]) if not status.startswith("OSM_ONLY") else "",
+        "gtfs_cluster_names": "|".join(cluster["aliases"]) if matched else "",
+        "gtfs_cluster_routes": "|".join(cluster["routes"]) if matched else "",
+        "gtfs_cluster_municipalities": "|".join(cluster["municipalities"]) if matched else "",
         "epistemic_status": (
             "CROSS_SOURCE_EXISTING_STOP_EVIDENCE"
             if status.startswith("CONFIRMED")
@@ -255,32 +248,28 @@ def classify_one(osm_row: pd.Series, clusters: dict[str, dict]) -> dict:
 
 def build_cluster_summary(gtfs: pd.DataFrame, clusters: dict[str, dict], matches: pd.DataFrame) -> pd.DataFrame:
     rows = []
-    for cluster_id, cluster in sorted(clusters.items()):
-        mm = matches[matches["matched_physical_cluster_id"].eq(cluster_id)].copy()
+    for cid, cluster in sorted(clusters.items()):
+        mm = matches[matches["matched_physical_cluster_id"].eq(cid)]
         confirmed = mm[mm["match_status"].str.startswith("CONFIRMED")]
-        reviewed = mm[mm["match_status"].str.contains("REVIEW", regex=False)]
+        review = mm[mm["match_status"].str.contains("REVIEW", regex=False)]
         records = cluster["records"]
-        rows.append(
-            {
-                "physical_cluster_id": cluster_id,
-                "gtfs_stop_ids": "|".join(sorted(set(records.stop_id.astype(str)))),
-                "gtfs_stop_names": "|".join(cluster["aliases"]),
-                "gtfs_routes_reference": "|".join(cluster["routes"]),
-                "gtfs_municipalities": "|".join(cluster["municipalities"]),
-                "gtfs_record_count": int(len(records)),
-                "osm_confirmed_element_count": int(len(confirmed)),
-                "osm_review_element_count": int(len(reviewed)),
-                "osm_confirmed_ids": "|".join(sorted(confirmed.osm_id.astype(str))) if not confirmed.empty else "",
-                "osm_review_ids": "|".join(sorted(reviewed.osm_id.astype(str))) if not reviewed.empty else "",
-                "cross_source_status": (
-                    "GTFS_PLUS_OSM_CONFIRMED"
-                    if len(confirmed)
-                    else "GTFS_PLUS_OSM_REVIEW"
-                    if len(reviewed)
-                    else "GTFS_ONLY_IN_FROZEN_OSM_EXTRACT"
-                ),
-            }
-        )
+        rows.append({
+            "physical_cluster_id": cid,
+            "gtfs_stop_ids": "|".join(sorted(set(records.stop_id.astype(str)))),
+            "gtfs_stop_names": "|".join(cluster["aliases"]),
+            "gtfs_routes_reference": "|".join(cluster["routes"]),
+            "gtfs_municipalities": "|".join(cluster["municipalities"]),
+            "gtfs_record_count": int(len(records)),
+            "osm_confirmed_element_count": int(len(confirmed)),
+            "osm_review_element_count": int(len(review)),
+            "osm_confirmed_ids": "|".join(sorted(confirmed.osm_id.astype(str))) if not confirmed.empty else "",
+            "osm_review_ids": "|".join(sorted(review.osm_id.astype(str))) if not review.empty else "",
+            "cross_source_status": (
+                "GTFS_PLUS_OSM_CONFIRMED" if len(confirmed)
+                else "GTFS_PLUS_OSM_REVIEW" if len(review)
+                else "GTFS_ONLY_IN_FROZEN_OSM_EXTRACT"
+            ),
+        })
     return pd.DataFrame(rows).sort_values("physical_cluster_id").reset_index(drop=True)
 
 
@@ -290,7 +279,6 @@ def main() -> None:
     ap.add_argument("--osm", type=Path, default=DEFAULT_OSM)
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     args = ap.parse_args()
-
     for path in (args.gtfs, args.osm):
         if not path.exists():
             raise FileNotFoundError(path)
@@ -298,8 +286,8 @@ def main() -> None:
 
     gtfs, clusters = load_gtfs(args.gtfs)
     osm = parse_osm(args.osm)
-    rows = [classify_one(row, clusters) for _, row in osm.iterrows()]
-    matches = pd.DataFrame(rows).sort_values(["match_status", "osm_id"]).reset_index(drop=True)
+    matches = pd.DataFrame([classify_one(row, clusters) for _, row in osm.iterrows()])
+    matches = matches.sort_values(["match_status", "osm_id"]).reset_index(drop=True)
     cluster_summary = build_cluster_summary(gtfs, clusters, matches)
 
     match_csv = args.out / "existing_stop_gtfs_osm_matches_v3.csv"
@@ -312,6 +300,7 @@ def main() -> None:
     confirmed_osm = int(matches["match_status"].str.startswith("CONFIRMED").sum())
     review_osm = int(matches["match_status"].str.contains("REVIEW", regex=False).sum())
     unmatched_osm = int(matches["match_status"].eq("OSM_ONLY_UNMATCHED_REFERENCE_GTFS").sum())
+    conflict_osm = int(matches["match_status"].str.startswith("CONFLICT").sum())
     gtfs_confirmed_clusters = int(cluster_summary["cross_source_status"].eq("GTFS_PLUS_OSM_CONFIRMED").sum())
 
     status = "PASS_EXISTING_STOP_CONFLATION_AUDIT_V3"
@@ -333,17 +322,21 @@ def main() -> None:
             "frozen_osm_bus_stop_elements": int(len(osm)),
             "osm_confirmed_elements": confirmed_osm,
             "osm_review_elements": review_osm,
+            "osm_conflict_elements": conflict_osm,
             "osm_unmatched_elements": unmatched_osm,
             "gtfs_clusters_with_confirmed_osm_evidence": gtfs_confirmed_clusters,
             "gtfs_clusters_without_confirmed_osm_evidence": int(len(clusters) - gtfs_confirmed_clusters),
             "match_status_counts": {str(k): int(v) for k, v in counts.items()},
         },
         "matching_contract": {
-            "exact_name_max_m": EXACT_NAME_MAX_M,
+            "ref_confirm_max_m": REF_CONFIRM_MAX_M,
+            "exact_name_confirm_max_m": EXACT_NAME_CONFIRM_MAX_M,
+            "exact_name_review_max_m": EXACT_NAME_REVIEW_MAX_M,
             "token_name_max_m": TOKEN_NAME_MAX_M,
             "token_jaccard_min": TOKEN_JACCARD_MIN,
             "distance_review_max_m": DISTANCE_REVIEW_MAX_M,
             "distance_unique_margin_m": DISTANCE_UNIQUE_MARGIN_M,
+            "identity_without_spatial_plausibility_can_confirm": False,
             "distance_only_can_confirm": False,
             "osm_only_promoted_to_official": False,
         },
