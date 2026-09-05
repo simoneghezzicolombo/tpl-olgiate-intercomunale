@@ -1,0 +1,108 @@
+name: Phase 2 Current Stop Spacing Benchmark V3
+
+on:
+  push:
+    branches:
+      - phase2-stop-pattern-redesign-v3
+    paths:
+      - scripts/phase2_build_current_stop_spacing_benchmark_v3.py
+      - .github/workflows/phase2-current-stop-spacing-benchmark-v3.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Materialise frozen official D184 D185 GTFS extracts
+        run: |
+          git fetch origin 4ab527827456eb40572a72b4c7b87f8fe5f4dcac --no-tags
+          mkdir -p /tmp/current-spacing
+          git show 4ab527827456eb40572a72b4c7b87f8fe5f4dcac:outputs/phase2/current_service_public_geodata_recovery_a/official_gtfs_d184_d185_trip_patterns.csv > /tmp/current-spacing/patterns.csv
+          git show 4ab527827456eb40572a72b4c7b87f8fe5f4dcac:outputs/phase2/current_service_public_geodata_recovery_a/official_gtfs_d184_d185_route_stops.csv > /tmp/current-spacing/route_stops.csv
+          test "$(sha256sum /tmp/current-spacing/patterns.csv | cut -d' ' -f1)" = "015299f5cbff5283e01d8a4edcc41eb42027944af6a88e3ec303bc6d8ba26316"
+          test "$(sha256sum /tmp/current-spacing/route_stops.csv | cut -d' ' -f1)" = "eff91c3b0a75c7b5b120b25018adba940499dcd8e07ff9df81b4c4d83414217e"
+
+      - name: Compile benchmark builder
+        run: python -m py_compile scripts/phase2_build_current_stop_spacing_benchmark_v3.py
+
+      - name: Build empirical spacing benchmark
+        run: |
+          python scripts/phase2_build_current_stop_spacing_benchmark_v3.py \
+            --patterns /tmp/current-spacing/patterns.csv \
+            --route-stops /tmp/current-spacing/route_stops.csv \
+            --output-dir outputs/phase2/stop_pattern_redesign_v3
+
+      - name: Validate descriptive-only contract
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root=Path('outputs/phase2/stop_pattern_redesign_v3')
+          d=json.loads((root/'current_stop_spacing_benchmark_v3_validation.json').read_text(encoding='utf-8'))
+          assert d['status']=='PASS_CURRENT_STOP_SPACING_BENCHMARK_V3'
+          assert d['contract']=='DESCRIPTIVE_EMPIRICAL_BENCHMARK_NOT_DESIGN_THRESHOLD'
+          assert d['source_pattern_count']==18
+          assert d['source_routes']==['D184','D185']
+          assert d['design_threshold_selected'] is False
+          assert d['current_network_declared_optimal'] is False
+          assert d['segment_geodesic_distance_m']['segment_observation_count_unweighted'] > 100
+          assert d['pattern_stop_count']['median_trip_weighted'] >= 8
+          assert d['segment_geodesic_distance_m']['median_trip_weighted'] > 0
+          pats=list(csv.DictReader((root/'current_stop_spacing_patterns_v3.csv').open(encoding='utf-8')))
+          segs=list(csv.DictReader((root/'current_stop_spacing_segments_v3.csv').open(encoding='utf-8')))
+          assert len(pats)==18
+          assert segs
+          assert all(r['distance_semantics']=='OFFICIAL_STOP_COORDINATE_GEODESIC_NOT_ROAD_DISTANCE' for r in segs)
+          print(json.dumps(d, indent=2, ensure_ascii=False))
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/current-spacing-rebuild
+          python scripts/phase2_build_current_stop_spacing_benchmark_v3.py \
+            --patterns /tmp/current-spacing/patterns.csv \
+            --route-stops /tmp/current-spacing/route_stops.csv \
+            --output-dir /tmp/current-spacing-rebuild >/dev/null
+          cmp outputs/phase2/stop_pattern_redesign_v3/current_stop_spacing_patterns_v3.csv /tmp/current-spacing-rebuild/current_stop_spacing_patterns_v3.csv
+          cmp outputs/phase2/stop_pattern_redesign_v3/current_stop_spacing_segments_v3.csv /tmp/current-spacing-rebuild/current_stop_spacing_segments_v3.csv
+          cmp outputs/phase2/stop_pattern_redesign_v3/current_stop_spacing_route_summary_v3.csv /tmp/current-spacing-rebuild/current_stop_spacing_route_summary_v3.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/stop_pattern_redesign_v3/current_stop_spacing_benchmark_v3_validation.json').read_text())
+          b=json.loads(Path('/tmp/current-spacing-rebuild/current_stop_spacing_benchmark_v3_validation.json').read_text())
+          for d in (a,b):
+              for v in d['lineage'].values(): v.pop('path', None)
+          assert a==b
+          PY
+
+      - name: Epistemic guard
+        run: |
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|recommended threshold|optimal spacing|winner' scripts/phase2_build_current_stop_spacing_benchmark_v3.py
+          grep -q 'design_threshold_selected' scripts/phase2_build_current_stop_spacing_benchmark_v3.py
+          git diff --check
+
+      - name: Persist empirical spacing evidence
+        run: |
+          git config user.name "phase2-current-spacing-v3-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/stop_pattern_redesign_v3/current_stop_spacing_patterns_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/current_stop_spacing_segments_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/current_stop_spacing_route_summary_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/current_stop_spacing_benchmark_v3_validation.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist empirical current stop-spacing benchmark V3 [skip ci]"
+            git push origin HEAD:phase2-stop-pattern-redesign-v3
+          fi
