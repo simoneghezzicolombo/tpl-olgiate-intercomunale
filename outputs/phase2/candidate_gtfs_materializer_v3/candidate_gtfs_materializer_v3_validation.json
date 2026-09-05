@@ -1,0 +1,27 @@
+{
+  "after_midnight_gtfs_time_preserved": true,
+  "boarding_point_count": 3,
+  "deterministic_files": true,
+  "deterministic_zip": true,
+  "fixture_semantics": "CONTROLLED_ABSTRACT_GTFS_FIXTURE_NOT_TERRITORIAL_DATA",
+  "fuzzy_matching_used": false,
+  "implicit_stop_creation": false,
+  "implicit_trip_generation": false,
+  "network_recommendation_claim": false,
+  "pattern_count": 2,
+  "required_gtfs_file_count": 6,
+  "required_gtfs_files": [
+    "agency.txt",
+    "calendar.txt",
+    "routes.txt",
+    "stop_times.txt",
+    "stops.txt",
+    "trips.txt"
+  ],
+  "status": "PASS_RT014_CANDIDATE_GTFS_MATERIALIZATION_CONTRACT_V3",
+  "territorial_candidate_claim": false,
+  "trip_count": 3,
+  "weighted_composite_score": false,
+  "zip_sha256": "852eef41ca2e3309acc37a0e85745ebdad9c12c845c880d227480038df439954",
+  "zip_sha256_recomputed": "852eef41ca2e3309acc37a0e85745ebdad9c12c845c880d227480038df439954"
+}
