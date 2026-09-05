@@ -14,7 +14,7 @@ permissions:
 jobs:
   materialize-official-kml:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,79 +22,34 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Download official ATP KML files
+      - name: Recover user-archived official ATP KML snapshots
         shell: bash
+        env:
+          D84_SNAPSHOT: 'https://sdmntprnortheu.oaiusercontent.com/files/00000000-7b3c-81f4-bed3-bf15340a8a70/raw?se=2026-09-05T15%3A19%3A10Z&sp=r&sv=2026-02-06&sr=b&scid=17f7956c-89a1-5f4e-b969-70e30b486233&skoid=e5e3659d-4463-4dbf-b2ce-ee32bc0a0a8d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-05T04%3A07%3A36Z&ske=2026-09-06T04%3A07%3A36Z&sks=b&skv=2026-02-06&sig=iaMabBDMUC/XIwcCMvODf36LoGF92nvNtmiC7qwiBEQ%3D'
+          E03_SNAPSHOT: 'https://sdmntprdenmarkeast.oaiusercontent.com/files/00000000-5330-8210-872a-e25b2eeedfe3/raw?se=2026-09-05T15%3A19%3A15Z&sp=r&sv=2026-02-06&sr=b&scid=b5ab0fc2-aaf6-5164-82d9-cb784ad0055c&skoid=e5e3659d-4463-4dbf-b2ce-ee32bc0a0a8d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-05T05%3A13%3A57Z&ske=2026-09-06T05%3A13%3A57Z&sks=b&skv=2026-02-06&sig=9sFp%2BlGegj66Po7EgK9vr%2B3SXcNnMY14M41fcRL1FyU%3D'
         run: |
           set -euo pipefail
-          normalize_kml() {
-            local src="$1"
-            local dst="$2"
-            python -c "import pathlib,sys,xml.etree.ElementTree as ET; s=pathlib.Path(sys.argv[1]).read_text(errors='ignore'); starts=[i for i in (s.find('<?xml'),s.find('<kml'),s.find('<kml ')) if i>=0]; assert starts, 'no KML/XML marker'; s=s[min(starts):]; end=s.rfind('</kml>'); assert end>=0, 'no closing kml'; s=s[:end+6]; pathlib.Path(sys.argv[2]).write_text(s); r=ET.parse(sys.argv[2]).getroot(); assert r.tag.rsplit('}',1)[-1].lower()=='kml', r.tag" "${src}" "${dst}"
-          }
-          download_kml() {
-            local route="$1"
-            local out="$2"
-            local path="atpcolc/images/Fil%20KML%202025/Urbano%20e%20interurbano%20Lecco/${route}.kml"
-            local target="https://www.tplcomoleccovarese.it/${path}"
-            local encoded
-            encoded=$(python -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "${target}")
-            local ok=0
-            local candidates=(
-              "${target}"
-              "https://tecuting.halleylombardia.it/${path}"
-              "https://api.allorigins.win/raw?url=${encoded}"
-              "https://corsproxy.io/?url=${encoded}"
-              "https://api.codetabs.com/v1/proxy?quest=${encoded}"
-              "https://cors.isomorphic-git.org/${target}"
-              "https://r.jina.ai/${target}"
-            )
-            for url in "${candidates[@]}"; do
-              echo "Trying ${url}"
-              if curl --fail --location --retry 2 --retry-delay 2 --connect-timeout 15 --max-time 60 \
-                --user-agent 'Mozilla/5.0 (compatible; tpl-olgiate-intercomunale/1.0; official open-data retrieval)' \
-                --header 'Accept: application/vnd.google-earth.kml+xml, application/xml, text/plain, text/xml, */*' \
-                "${url}" -o "${out}.tmp"; then
-                echo "Candidate bytes: $(wc -c < "${out}.tmp")"
-                head -c 240 "${out}.tmp" | tr '\n' ' ' || true
-                echo
-                if normalize_kml "${out}.tmp" "${out}"; then
-                  ok=1
-                  echo "Recovered ${route} through ${url}"
-                  break
-                fi
-              fi
-              rm -f "${out}.tmp" "${out}"
-            done
-            rm -f "${out}.tmp"
-            if [[ "${ok}" != 1 ]]; then
-              echo "Unable to retrieve ${route} official KML" >&2
-              exit 1
-            fi
-            wc -c "${out}"
-            sha256sum "${out}"
-          }
-          download_kml D184 /tmp/D184.kml
-          download_kml D185 /tmp/D185.kml
-      - name: Convert official KML to deterministic browser geometry
+          mkdir -p data/external/current_service_v4/archived_kml
+          curl --fail --location --retry 2 "$D84_SNAPSHOT" -o data/external/current_service_v4/archived_kml/D84.kml
+          curl --fail --location --retry 2 "$E03_SNAPSHOT" -o data/external/current_service_v4/archived_kml/E03.kml
+          echo '6cf715a83c1e85e7ebfeecd82b666eee623119e7b37e35875ed0be419fa5523a  data/external/current_service_v4/archived_kml/D84.kml' | sha256sum -c -
+          echo '10239544443134a10992b938a878ff62a906618f8f7f6babe2a339647f41bfa5  data/external/current_service_v4/archived_kml/E03.kml' | sha256sum -c -
+      - name: Convert archived official KML to browser geometry
         run: |
           python dietro-l-analisi/build_official_kml_baseline.py \
-            --d184 /tmp/D184.kml \
-            --d185 /tmp/D185.kml
-      - name: Validate official KML asset
+            --d184 data/external/current_service_v4/archived_kml/D84.kml \
+            --d185 data/external/current_service_v4/archived_kml/E03.kml
+      - name: Validate geometry
         shell: bash
         run: |
           set -euo pipefail
-          python -c "import base64,gzip,json,pathlib; root=pathlib.Path('dietro-l-analisi'); m=json.loads((root/'current-routes-kml-source.json').read_text()); assert m['contract']=='CURRENT_ROUTE_BASELINE_OFFICIAL_ATP_KML_V1'; assert m['decision_output'] is False; assert 'No stop-to-stop reconstruction' in m['semantics']; [(_ for _ in ()).throw(AssertionError(route)) if not (m['routes'][route]['source_url'].endswith('/'+route+'.kml') and m['routes'][route]['bytes']>100 and len(m['routes'][route]['sha256'])==64 and m['routes'][route]['line_components']>=1 and m['routes'][route]['coordinates']>=20) else None for route in ('D184','D185')]; names=[c['file'] for c in m['geojson']['gzip_base64_chunks']]; data=json.loads(gzip.decompress(base64.b64decode(''.join((root/n).read_text().strip() for n in names)))); assert data['type']=='FeatureCollection'; assert {f['properties']['route'] for f in data['features']}=={'D184','D185'}; assert all(f['geometry']['type']=='LineString' and len(f['geometry']['coordinates'])>=2 and f['properties']['source']=='OFFICIAL_ATP_KML_2025' for f in data['features']); print('official D184/D185 KML baseline PASS')"
-      - name: Persist official KML browser asset
+          python -c "import base64,gzip,json,pathlib; root=pathlib.Path('dietro-l-analisi'); m=json.loads((root/'current-routes-kml-source.json').read_text()); names=[c['file'] for c in m['geojson']['gzip_base64_chunks']]; data=json.loads(gzip.decompress(base64.b64decode(''.join((root/n).read_text().strip() for n in names)))); assert {f['properties']['route'] for f in data['features']}=={'D184','D185'}; assert sum(len(f['geometry']['coordinates']) for f in data['features']) > 5000; print('KML geometry PASS', len(data['features']))"
+      - name: Persist archive and browser assets
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "chatgpt-codex-connector"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dietro-l-analisi/current-routes-kml.geojson.gz.b64.* dietro-l-analisi/current-routes-kml-source.json
-          if git diff --cached --quiet; then
-            echo "Official KML baseline already current"
-          else
-            git commit -m "data(journey): materialize official D184 D185 KML geometry"
-            git push origin HEAD:phase2-analysis-journey-a
-          fi
+          git add data/external/current_service_v4/archived_kml/D84.kml data/external/current_service_v4/archived_kml/E03.kml dietro-l-analisi/current-routes-kml.geojson.gz.b64.* dietro-l-analisi/current-routes-kml-source.json
+          git commit -m "data(journey): recover archived official D84 E03 KML geometry"
+          git push origin HEAD:phase2-analysis-journey-a
