@@ -1,0 +1,16 @@
+{
+  "cap_fail_closed_without_partial_manifest": true,
+  "complete_execution_pass": true,
+  "directed_pair_count": 20,
+  "expected_formula": "N_TIMES_N_MINUS_1",
+  "fixture_semantics": "CONTROLLED_ABSTRACT_FIXTURE_NOT_TERRITORIAL_DATA",
+  "issue": "RT-010",
+  "missing_output_is_incomplete_not_no_route": true,
+  "pair_selection_filter": false,
+  "random_search": false,
+  "status": "PASS_RT010_COMPLETE_DIRECTED_PAIR_COVERAGE_V3",
+  "terminal_count": 5,
+  "territorial_candidate_claim": false,
+  "unordered_pair_count": 10,
+  "weighted_composite_score": false
+}
