@@ -9,6 +9,7 @@ on:
       - dietro-l-analisi/journey.js
       - dietro-l-analisi/journey-effects.js
       - dietro-l-analisi/journey-director.js
+      - dietro-l-analisi/journey-runtime-policy.js
       - dietro-l-analisi/journey-bootstrap.mjs
       - dietro-l-analisi/journey-browser-smoke.py
       - dietro-l-analisi/build_journey_assets.py
@@ -74,6 +75,7 @@ jobs:
           node --check dietro-l-analisi/journey.js
           node --check dietro-l-analisi/journey-effects.js
           node --check dietro-l-analisi/journey-director.js
+          node --check dietro-l-analisi/journey-runtime-policy.js
           node --check dietro-l-analisi/journey-bootstrap.mjs
           python -m py_compile dietro-l-analisi/journey-browser-smoke.py
           python - <<'PY'
@@ -90,12 +92,14 @@ jobs:
             'proposed_candidates_v2':155,
             'official_stop_records_v2':67,
           }
-          for f in ['index.html','journey.css','journey.js','journey-effects.js','journey-director.js','journey-bootstrap.mjs','journey-browser-smoke.py','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64','vendor/maplibre/maplibre-gl.mjs','vendor/maplibre/maplibre-gl-shared.mjs','vendor/maplibre/maplibre-gl-worker.mjs','vendor/maplibre/maplibre-gl.css','vendor/maplibre/SHA256SUMS']:
+          for f in ['index.html','journey.css','journey.js','journey-effects.js','journey-director.js','journey-runtime-policy.js','journey-bootstrap.mjs','journey-browser-smoke.py','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64','vendor/maplibre/maplibre-gl.mjs','vendor/maplibre/maplibre-gl-shared.mjs','vendor/maplibre/maplibre-gl-worker.mjs','vendor/maplibre/maplibre-gl.css','vendor/maplibre/SHA256SUMS']:
               assert Path('dietro-l-analisi',f).is_file(), f
           html=Path('dietro-l-analisi/index.html').read_text()
           assert '<script type="module" src="journey-bootstrap.mjs"></script>' in html
           assert 'maplibre-gl@6.7.0/dist/maplibre-gl.js' not in html
           assert 'vendor/maplibre/maplibre-gl.css' in html
+          bootstrap=Path('dietro-l-analisi/journey-bootstrap.mjs').read_text()
+          assert "await import('./journey-runtime-policy.js')" in bootstrap
           print('journey static data contract PASS')
           PY
           ! grep -R --line-number -E 'np\.random|numpy\.random|import random|from random' dietro-l-analisi
