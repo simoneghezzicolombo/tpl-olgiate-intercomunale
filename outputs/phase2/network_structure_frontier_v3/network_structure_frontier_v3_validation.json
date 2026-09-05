@@ -1,0 +1,19 @@
+{
+  "cap_fail_closed": true,
+  "fixture_semantics": "CONTROLLED_ABSTRACT_FIXTURES_NOT_TERRITORIAL_DATA",
+  "issue": "RT-008",
+  "k5_exact_signature_equivalence": true,
+  "k5_exhaustive_subsets_scanned": 847,
+  "k5_frontier_states_expanded": 792,
+  "k5_structure_count": 792,
+  "ladder_exact_signature_equivalence": true,
+  "ladder_exhaustive_subsets_scanned": 5811,
+  "ladder_frontier_states_expanded": 978,
+  "ladder_state_ratio_vs_exhaustive": 0.16830149716055756,
+  "ladder_structure_count": 978,
+  "random_search": false,
+  "status": "PASS_RT008_CONNECTED_ONLY_STRUCTURE_ENUMERATION_V3",
+  "territorial_candidate_claim": false,
+  "topology_generation_filter": false,
+  "weighted_composite_score": false
+}
