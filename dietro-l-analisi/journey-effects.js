@@ -109,26 +109,35 @@
     if(!map.getLayer('service-movers-glow')) map.addLayer({id:'service-movers-glow',type:'circle',source:'service-movers',paint:{'circle-radius':12,'circle-color':['match',['get','package'],'16','#57d7e8','#ff9b61'],'circle-opacity':.22,'circle-blur':.75}});
     if(!map.getLayer('service-movers')) map.addLayer({id:'service-movers',type:'circle',source:'service-movers',paint:{'circle-radius':5,'circle-color':['match',['get','package'],'16','#8defff','#ffb07f'],'circle-opacity':.98,'circle-stroke-width':1.5,'circle-stroke-color':'#07131f'}});
 
+    const reduceMotion = window.__analysisJourneyReduceMotion === true;
     const movers=[];
     ['16','18.5'].forEach(pkg => G.proposedPackages[pkg].forEach((r,i)=>movers.push({pkg,route:r,coords:routeCoords(r,G),id:`${pkg}-${i+1}`})));
-    const start=performance.now();
-    function serviceFrame(now){
-      const minute=((now-start)/330)%60; // one visible service hour every ~19.8 s
-      serviceHud.querySelector('.service-clock__minute b').textContent=String(Math.floor(minute)).padStart(2,'0');
-      const features=[];
-      if(document.body.dataset.scene==='time'){
-        movers.forEach(m=>{
-          const elapsed=(minute-m.route.phase+60)%60;
-          if(elapsed<=m.route.runtime){
-            const pt=pointAlong(m.coords,elapsed/m.route.runtime);
-            features.push({type:'Feature',properties:{package:m.pkg,route:m.id},geometry:{type:'Point',coordinates:pt}});
-          }
-        });
+
+    if (reduceMotion) {
+      serviceHud.querySelector('.service-clock__kicker').textContent = 'un’ora tipo · movimento ridotto';
+      serviceHud.querySelector('.service-clock__minute b').textContent = '00';
+      const src = map.getSource('service-movers');
+      if (src) src.setData({type:'FeatureCollection',features:[]});
+    } else {
+      const start=performance.now();
+      function serviceFrame(now){
+        const minute=((now-start)/330)%60; // one visible service hour every ~19.8 s
+        serviceHud.querySelector('.service-clock__minute b').textContent=String(Math.floor(minute)).padStart(2,'0');
+        const features=[];
+        if(document.body.dataset.scene==='time'){
+          movers.forEach(m=>{
+            const elapsed=(minute-m.route.phase+60)%60;
+            if(elapsed<=m.route.runtime){
+              const pt=pointAlong(m.coords,elapsed/m.route.runtime);
+              features.push({type:'Feature',properties:{package:m.pkg,route:m.id},geometry:{type:'Point',coordinates:pt}});
+            }
+          });
+        }
+        const src=map.getSource('service-movers'); if(src) src.setData({type:'FeatureCollection',features});
+        requestAnimationFrame(serviceFrame);
       }
-      const src=map.getSource('service-movers'); if(src) src.setData({type:'FeatureCollection',features});
       requestAnimationFrame(serviceFrame);
     }
-    requestAnimationFrame(serviceFrame);
     return true;
   }
 
