@@ -10,6 +10,7 @@ on:
       - dietro-l-analisi/journey-current-kml-exact.mjs
       - dietro-l-analisi/journey-explore-prelude.js
       - dietro-l-analisi/journey-explore.js
+      - dietro-l-analisi/journey-explore-v2.js
       - dietro-l-analisi/journey-exact-browser-smoke.py
       - dietro-l-analisi/exact-route-lineage.json
       - dietro-l-analisi/current-routes-kml-exact.geojson.gz.b64.*
@@ -42,10 +43,11 @@ jobs:
           node --check dietro-l-analisi/journey-lineage.js
           node --check dietro-l-analisi/journey-current-kml-exact.mjs
           node --check dietro-l-analisi/journey-explore-prelude.js
-          node --check dietro-l-analisi/journey-explore.js
+          node --check dietro-l-analisi/journey-explore-v2.js
           ! grep -q "current-route-continuity-patches.js" dietro-l-analisi/journey-bootstrap.mjs
           ! grep -q "journey-current-continuity.js" dietro-l-analisi/journey-bootstrap.mjs
           grep -q "journey-current-kml-exact.mjs" dietro-l-analisi/journey-bootstrap.mjs
+          grep -q "journey-explore-v2.js" dietro-l-analisi/journey-bootstrap.mjs
           python - <<'PY'
           import base64
           import gzip
