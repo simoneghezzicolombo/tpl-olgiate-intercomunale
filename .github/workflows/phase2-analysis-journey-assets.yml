@@ -102,6 +102,7 @@ jobs:
             git push origin HEAD:phase2-analysis-journey-a
           fi
       - name: Upload journey build and visual evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: phase2-analysis-journey-${{ github.sha }}
@@ -109,6 +110,6 @@ jobs:
             dietro-l-analisi/data-manifest.json
             dietro-l-analisi/journey-data.js
             dietro-l-analisi/*.b64
-            dietro-l-analisi/qa/*.png
+            dietro-l-analisi/qa/*
           if-no-files-found: error
           retention-days: 90
