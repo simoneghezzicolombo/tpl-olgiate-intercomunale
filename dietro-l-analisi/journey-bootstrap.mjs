@@ -17,5 +17,11 @@ await import('./journey-explore-prelude.js');
 await import('./journey.js');
 await import('./journey-director.js');
 await import('./journey-lens.js');
+
+// The frozen agency GTFS contains seven impossible point-to-point teleports in
+// D184/D185. Keep the raw source intact, then replace only those chords with
+// connectors on the certified Gate D bus-eligible road graph.
+await import('./current-route-continuity-patches.js');
 await import('./journey-lineage.js');
+await import('./journey-current-continuity.js');
 await import('./journey-explore.js');
