@@ -1,0 +1,105 @@
+name: Phase 2 RT-005 Stop Pattern Audit V3
+
+on:
+  push:
+    branches:
+      - phase2-stop-pattern-redesign-v3
+    paths:
+      - scripts/phase2_audit_rt005_stop_pattern_v3.py
+      - docs/PHASE2_RT005_STOP_PATTERN_FORMULATION_FAILURE.md
+      - .github/workflows/phase2-rt005-stop-pattern-audit-v3.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile RT-005 audit
+        run: python -m py_compile scripts/phase2_audit_rt005_stop_pattern_v3.py
+
+      - name: Run source-closed RT-005 audit
+        run: |
+          python scripts/phase2_audit_rt005_stop_pattern_v3.py \
+            --routes outputs/phase2/finalist_simplicity_diagnostic_v3/finalist_route_structure_v3.csv \
+            --anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --access-equity-source scripts/phase2_run_access_equity_v2.py \
+            --structural-workflow .github/workflows/phase2-real-structural-catalog.yml \
+            --output outputs/phase2/stop_pattern_redesign_v3/rt005_stop_pattern_audit_v3.json
+
+      - name: Validate blocking formulation finding
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('outputs/phase2/stop_pattern_redesign_v3/rt005_stop_pattern_audit_v3.json')
+          d = json.loads(p.read_text(encoding='utf-8'))
+          assert d['status'] == 'PASS_RT005_FORMULATION_FAILURE_CONFIRMED'
+          assert d['decision_ready_current_finalists'] is False
+          assert d['primary_selection_authorised'] is False
+          assert d['runner_up_selection_authorised'] is False
+          assert d['current_finalist_count'] == 4
+          assert d['confirmed_upstream_contracts']['structural_max_loop_intermediate_anchors'] == 4
+          assert d['confirmed_upstream_contracts']['access_equity_uses_explicit_route_anchors_as_passenger_stop_set'] is True
+          assert d['all_current_finalists_missing_calco_explicit_stop'] is True, d['finalists_missing_calco_explicit_stop']
+          assert all(not row['passes_v3_territorial_guard'] for row in d['finalist_audits'])
+          assert all(row['unique_nonhub_explicit_anchor_count'] <= 7 for row in d['finalist_audits'])
+          print(json.dumps({
+              'status': d['status'],
+              'finalists_missing_calco_explicit_stop': d['finalists_missing_calco_explicit_stop'],
+              'stop_counts': {row['finalist_alias']: row['unique_nonhub_explicit_anchor_count'] for row in d['finalist_audits']},
+              'missing_municipalities': {row['finalist_alias']: row['study_municipalities_missing_explicit_stop'] for row in d['finalist_audits']},
+          }, indent=2, ensure_ascii=False))
+          PY
+
+      - name: Deterministic audit rebuild
+        run: |
+          mkdir -p /tmp/rt005
+          python scripts/phase2_audit_rt005_stop_pattern_v3.py \
+            --routes outputs/phase2/finalist_simplicity_diagnostic_v3/finalist_route_structure_v3.csv \
+            --anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --access-equity-source scripts/phase2_run_access_equity_v2.py \
+            --structural-workflow .github/workflows/phase2-real-structural-catalog.yml \
+            --output /tmp/rt005/audit.json >/dev/null
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/stop_pattern_redesign_v3/rt005_stop_pattern_audit_v3.json').read_text(encoding='utf-8'))
+          b=json.loads(Path('/tmp/rt005/audit.json').read_text(encoding='utf-8'))
+          a['lineage'].pop('finalist_route_structure')
+          a['lineage'].pop('routing_anchor_universe')
+          a['lineage'].pop('access_equity_source')
+          a['lineage'].pop('structural_workflow')
+          b['lineage'].pop('finalist_route_structure')
+          b['lineage'].pop('routing_anchor_universe')
+          b['lineage'].pop('access_equity_source')
+          b['lineage'].pop('structural_workflow')
+          assert a == b
+          PY
+
+      - name: Epistemic guard
+        run: |
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|winner|recommended network|primary recommendation' scripts/phase2_audit_rt005_stop_pattern_v3.py
+          grep -q 'corridor waypoints and passenger stops are separate data structures' docs/PHASE2_RT005_STOP_PATTERN_FORMULATION_FAILURE.md
+          git diff --check
+
+      - name: Persist RT-005 audit evidence
+        run: |
+          git config user.name "phase2-rt005-audit-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/stop_pattern_redesign_v3/rt005_stop_pattern_audit_v3.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist RT-005 stop-pattern audit [skip ci]"
+            git push origin HEAD:phase2-stop-pattern-redesign-v3
+          fi
