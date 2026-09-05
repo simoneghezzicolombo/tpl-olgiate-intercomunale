@@ -98,19 +98,22 @@ def main() -> None:
         "anchor_manifest_has_35_conventional_rows": len(anchors) == 35,
         "special_service_excluded_from_automatic_anchor_manifest": "SPECIAL_SERVICE" not in set(anchors["service_class"]),
         "all_anchor_rows_explicitly_not_service_termini": anchors["service_terminal_status_claimed"].eq(False).all(),
-        "rt010_complete_pair_manifest": bool(manifest_result["complete"]),
+        "rt010_complete_pair_manifest": manifest_result["complete"],
         "rt010_directed_pair_count_is_1190": len(manifest) == 1190,
         "rt010_unordered_pair_count_is_595": manifest_result["unordered_pair_count"] == 595,
         "fixture_ab_reciprocal_elementary_link_exists": len(fixture["structural_links"]) == 1,
-        "fixture_ac_direction_is_decomposable": bool(
+        "fixture_ac_direction_is_decomposable": not bool(
             fixture["classification"].loc[
                 fixture["classification"]["corridor_id"] == "C_AC",
                 "elementary_for_structural_reduction",
             ].iloc[0]
-        ) is False,
-        "no_service_terminal_claim_in_reciprocity_metadata": fixture["metadata"]["service_terminal_status_claimed"] is False,
+        ),
+        "no_service_terminal_claim_in_reciprocity_metadata": not fixture["metadata"]["service_terminal_status_claimed"],
         "real_territorial_graph_blocked_pending_rt017": True,
     }
+    # pandas/numpy reductions may return numpy.bool_; normalize the audit payload
+    # to built-in bools before JSON serialization and before the fail-closed gate.
+    checks = {key: bool(value) for key, value in checks.items()}
     if not all(checks.values()):
         raise AssertionError(checks)
 
@@ -146,10 +149,11 @@ def main() -> None:
             "rt018_attachments_sha256": sha256(ATTACHMENTS),
         },
     }
+    payload = json.dumps(validation, indent=2, sort_keys=True) + "\n"
     (OUTDIR / "elementary_corridor_reduction_v3_validation.json").write_text(
-        json.dumps(validation, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        payload, encoding="utf-8"
     )
-    print(json.dumps(validation, indent=2, sort_keys=True))
+    print(payload, end="")
 
 
 if __name__ == "__main__":
