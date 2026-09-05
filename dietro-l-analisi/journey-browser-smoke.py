@@ -19,9 +19,10 @@ def prepare_page(page, page_errors, console_log, failed_requests, requested_urls
         'https://tile.openstreetmap.org/**',
         lambda route: route.fulfill(status=200, content_type='image/png', body=TRANSPARENT_PNG),
     )
-    # Evidence must be runtime-local. Any surviving GitHub Raw dependency is a
-    # contract failure, not something CI is allowed to satisfy from the network.
+    # Evidence and functional JavaScript must be runtime-local. Any surviving
+    # GitHub Raw or jsDelivr dependency is a contract failure.
     page.route('https://raw.githubusercontent.com/**', lambda route: route.abort())
+    page.route('https://cdn.jsdelivr.net/**', lambda route: route.abort())
 
 
 def wait_ready(page, page_errors, console_log, failed_requests):
@@ -90,6 +91,11 @@ def scene(page, name, frac=.5, prefix=''):
     page.screenshot(path=str(OUT / f'{prefix}{name}.png'), full_page=False)
 
 
+def assert_no_functional_cdn(urls, label):
+    assert not any('raw.githubusercontent.com' in url for url in urls), f'runtime GitHub Raw request detected in {label}'
+    assert not any('cdn.jsdelivr.net' in url for url in urls), f'runtime jsDelivr request detected in {label}'
+
+
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
 
@@ -120,7 +126,7 @@ with sync_playwright() as p:
     assert page.locator('.evidence-stack').count() == 1
     assert page.evaluate("document.documentElement.dataset.journeyMotion") == 'full'
     assert not any('basemaps.cartocdn.com' in url for url in requested_urls), 'legacy CARTO basemap request detected'
-    assert not any('raw.githubusercontent.com' in url for url in requested_urls), 'runtime GitHub Raw evidence request detected'
+    assert_no_functional_cdn(requested_urls, 'desktop pass')
     assert not page_errors, 'desktop page errors: ' + ' | '.join(page_errors)
     page.close()
 
@@ -137,7 +143,7 @@ with sync_playwright() as p:
     assert mobile.locator('.chapter-rail').count() == 1
     assert not mobile_errors, 'mobile page errors: ' + ' | '.join(mobile_errors)
     assert not any('basemaps.cartocdn.com' in url for url in mobile_urls), 'legacy CARTO basemap request detected on mobile'
-    assert not any('raw.githubusercontent.com' in url for url in mobile_urls), 'runtime GitHub Raw evidence request detected on mobile'
+    assert_no_functional_cdn(mobile_urls, 'mobile pass')
     mobile.close()
 
     # Reduced-motion pass: certify behaviour, not a cosmetic label. The clock
@@ -167,10 +173,10 @@ with sync_playwright() as p:
         "window.__analysisJourneyMap.queryRenderedFeatures({layers:['service-movers']}).length"
     )
     assert rendered_movers == 0, f'reduced-motion service movers still rendered: {rendered_movers}'
-    assert not any('raw.githubusercontent.com' in url for url in reduced_urls), 'runtime GitHub Raw evidence request detected in reduced-motion pass'
+    assert_no_functional_cdn(reduced_urls, 'reduced-motion pass')
     assert not reduced_errors, 'reduced-motion page errors: ' + ' | '.join(reduced_errors)
     reduced_context.close()
 
     browser.close()
 
-print('journey source-closed desktop + mobile + reduced-motion browser smoke PASS')
+print('journey local-runtime desktop + mobile + reduced-motion browser smoke PASS')
