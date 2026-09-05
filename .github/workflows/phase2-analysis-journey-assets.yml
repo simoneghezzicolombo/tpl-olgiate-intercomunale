@@ -36,12 +36,15 @@ jobs:
         run: |
           python -m pip install --upgrade pandas geopandas pyogrio shapely playwright
           python -m playwright install --with-deps chromium
-      - name: Vendor pinned MapLibre GL JS runtime
+      - name: Vendor pinned browser runtimes
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf /tmp/journey-maplibre dietro-l-analisi/vendor/maplibre
-          mkdir -p /tmp/journey-maplibre dietro-l-analisi/vendor/maplibre
+          rm -rf /tmp/journey-maplibre /tmp/journey-gsap /tmp/journey-pako
+          rm -rf dietro-l-analisi/vendor/maplibre dietro-l-analisi/vendor/gsap dietro-l-analisi/vendor/pako
+          mkdir -p /tmp/journey-maplibre /tmp/journey-gsap /tmp/journey-pako
+          mkdir -p dietro-l-analisi/vendor/maplibre dietro-l-analisi/vendor/gsap dietro-l-analisi/vendor/pako
+
           cd /tmp/journey-maplibre
           npm pack maplibre-gl@6.7.0 --silent > pack-name.txt
           PKG="$(tail -n 1 pack-name.txt)"
@@ -49,12 +52,54 @@ jobs:
           tar -xzf "${PKG}"
           cp package/dist/maplibre-gl.css "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/maplibre/"
           cp package/dist/*.mjs "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/maplibre/"
+
+          cd /tmp/journey-gsap
+          npm pack gsap@3.15.0 --silent > pack-name.txt
+          PKG="$(tail -n 1 pack-name.txt)"
+          test -n "${PKG}"
+          tar -xzf "${PKG}"
+          cp package/dist/gsap.min.js "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/gsap/"
+          cp package/dist/ScrollTrigger.min.js "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/gsap/"
+
+          cd /tmp/journey-pako
+          npm pack pako@2.1.0 --silent > pack-name.txt
+          PKG="$(tail -n 1 pack-name.txt)"
+          test -n "${PKG}"
+          tar -xzf "${PKG}"
+          cp package/dist/pako.min.js "${GITHUB_WORKSPACE}/dietro-l-analisi/vendor/pako/"
+
           cd "${GITHUB_WORKSPACE}"
           test -f dietro-l-analisi/vendor/maplibre/maplibre-gl.mjs
           test -f dietro-l-analisi/vendor/maplibre/maplibre-gl-shared.mjs
           test -f dietro-l-analisi/vendor/maplibre/maplibre-gl-worker.mjs
           test -f dietro-l-analisi/vendor/maplibre/maplibre-gl.css
+          test -f dietro-l-analisi/vendor/gsap/gsap.min.js
+          test -f dietro-l-analisi/vendor/gsap/ScrollTrigger.min.js
+          test -f dietro-l-analisi/vendor/pako/pako.min.js
           sha256sum dietro-l-analisi/vendor/maplibre/* | sort > dietro-l-analisi/vendor/maplibre/SHA256SUMS
+          sha256sum dietro-l-analisi/vendor/gsap/*.js | sort > dietro-l-analisi/vendor/gsap/SHA256SUMS
+          sha256sum dietro-l-analisi/vendor/pako/*.js | sort > dietro-l-analisi/vendor/pako/SHA256SUMS
+      - name: Localize runtime references
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('dietro-l-analisi/index.html')
+          s=p.read_text()
+          replacements={
+            '  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>\n':'',
+            '  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>':'  <script src="vendor/gsap/gsap.min.js"></script>',
+            '  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>':'  <script src="vendor/gsap/ScrollTrigger.min.js"></script>',
+            '  <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>':'  <script src="vendor/pako/pako.min.js"></script>',
+          }
+          for old,new in replacements.items():
+              if old in s:
+                  s=s.replace(old,new)
+              elif new and new not in s:
+                  raise RuntimeError(f'expected runtime reference missing: {old}')
+          p.write_text(s)
+          PY
       - name: Download pinned evidence bundles and frozen runtime sources
         env:
           GH_TOKEN: ${{ github.token }}
@@ -122,7 +167,7 @@ jobs:
           assert m['local_asset_chunks']['boundaries']
           assert m['local_asset_chunks']['roads']
 
-          required=['index.html','journey.css','journey.js','journey-effects.js','journey-director.js','journey-runtime-policy.js','journey-experience-policy.js','journey-bootstrap.mjs','journey-browser-smoke.py','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64','vendor/maplibre/maplibre-gl.mjs','vendor/maplibre/maplibre-gl-shared.mjs','vendor/maplibre/maplibre-gl-worker.mjs','vendor/maplibre/maplibre-gl.css','vendor/maplibre/SHA256SUMS']
+          required=['index.html','journey.css','journey.js','journey-effects.js','journey-director.js','journey-runtime-policy.js','journey-experience-policy.js','journey-bootstrap.mjs','journey-browser-smoke.py','journey-data.js','data-manifest.json','data-worldpop.geojson.gz.0.b64','data-sections.geojson.gz.0.b64','data-buildings.geojson.gz.0.b64','data-buildings.geojson.gz.1.b64','data-buildings.geojson.gz.2.b64','data-buildings.geojson.gz.3.b64','data-buildings.geojson.gz.4.b64','vendor/maplibre/maplibre-gl.mjs','vendor/maplibre/maplibre-gl-shared.mjs','vendor/maplibre/maplibre-gl-worker.mjs','vendor/maplibre/maplibre-gl.css','vendor/maplibre/SHA256SUMS','vendor/gsap/gsap.min.js','vendor/gsap/ScrollTrigger.min.js','vendor/gsap/SHA256SUMS','vendor/pako/pako.min.js','vendor/pako/SHA256SUMS']
           required += m['local_asset_chunks']['boundaries'] + m['local_asset_chunks']['roads']
           for f in required:
               assert (root/f).is_file(), f
@@ -135,6 +180,10 @@ jobs:
           assert '<script type="module" src="journey-bootstrap.mjs"></script>' in html
           assert 'maplibre-gl@6.7.0/dist/maplibre-gl.js' not in html
           assert 'vendor/maplibre/maplibre-gl.css' in html
+          assert 'vendor/gsap/gsap.min.js' in html
+          assert 'vendor/gsap/ScrollTrigger.min.js' in html
+          assert 'vendor/pako/pako.min.js' in html
+          assert 'cdn.jsdelivr.net' not in html
           bootstrap=(root/'journey-bootstrap.mjs').read_text()
           assert "await import('./journey-runtime-policy.js')" in bootstrap
           assert "await import('./journey-experience-policy.js')" in bootstrap
@@ -145,7 +194,7 @@ jobs:
           assert 'raw.githubusercontent.com' not in journey
           assert 'localAssets.boundaries' in journey and 'localAssets.roads' in journey
           assert 'BOUNDARIES_URL' not in journey and 'ROAD_GZ_URL' not in journey
-          print('journey source-closed runtime + experience contract PASS')
+          print('journey source-closed evidence + local JS runtime + experience contract PASS')
           PY
           ! grep -R --line-number -E 'np\.random|numpy\.random|import random|from random' dietro-l-analisi
       - name: Browser smoke and visual QA
@@ -166,12 +215,12 @@ jobs:
           set -euo pipefail
           git config user.name "chatgpt-codex-connector"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dietro-l-analisi/journey-data.js dietro-l-analisi/data-manifest.json dietro-l-analisi/vendor/maplibre
+          git add dietro-l-analisi/index.html dietro-l-analisi/journey-data.js dietro-l-analisi/data-manifest.json dietro-l-analisi/vendor
           git add -A -- 'dietro-l-analisi/*.b64'
           if git diff --cached --quiet; then
             echo "Journey assets and runtime already current"
           else
-            git commit -m "data(journey): materialize source-closed visual runtime"
+            git commit -m "data(journey): materialize self-contained browser runtime"
             git push origin HEAD:phase2-analysis-journey-a
           fi
       - name: Upload journey build and visual evidence
@@ -183,7 +232,7 @@ jobs:
             dietro-l-analisi/data-manifest.json
             dietro-l-analisi/journey-data.js
             dietro-l-analisi/*.b64
-            dietro-l-analisi/vendor/maplibre/SHA256SUMS
+            dietro-l-analisi/vendor/*/SHA256SUMS
             dietro-l-analisi/qa/*
           if-no-files-found: error
           retention-days: 90
