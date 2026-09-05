@@ -11,11 +11,20 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "phase2_build_master_stop_inventory_gpt_v3.py"
+MUNICIPALIZER = ROOT / "scripts" / "phase2_materialize_master_stop_municipalities_gpt_v3.py"
 FROZEN = ROOT / "outputs" / "phase2" / "existing_official_stops.csv"
 AUDIT = ROOT / "outputs" / "phase2" / "network_design_method_audit_v3"
 ASF = AUDIT / "asf_c146_directional_stops_subagent_v3.csv"
 SPECIAL = AUDIT / "special_service_stop_evidence_gpt_v3.csv"
 MANUAL = AUDIT / "manual_google_maps_asf_verifications_gpt_v3.csv"
+BOUNDARIES = ROOT / "data" / "raw" / "boundaries" / "comuni_core_istat_2026.geojson"
+CORE = {
+    "Brivio",
+    "Calco",
+    "La Valletta Brianza",
+    "Olgiate Molgora",
+    "Santa Maria Hoè",
+}
 
 
 def _haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -31,7 +40,7 @@ def _haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     return 2.0 * radius * math.atan2(math.sqrt(a), math.sqrt(1.0 - a))
 
 
-def test_master_builder_preserves_sources_and_selects_no_terminals(tmp_path: Path) -> None:
+def _build_master(output_dir: Path) -> None:
     subprocess.run(
         [
             sys.executable,
@@ -45,11 +54,15 @@ def test_master_builder_preserves_sources_and_selects_no_terminals(tmp_path: Pat
             "--manual-verifications",
             str(MANUAL),
             "--output-dir",
-            str(tmp_path),
+            str(output_dir),
         ],
         check=True,
         cwd=ROOT,
     )
+
+
+def test_master_builder_preserves_sources_and_selects_no_terminals(tmp_path: Path) -> None:
+    _build_master(tmp_path)
 
     master = pd.read_csv(tmp_path / "master_stop_source_records_gpt_v3.csv", dtype=str)
     validation = json.loads(
@@ -84,6 +97,65 @@ def test_master_builder_preserves_sources_and_selects_no_terminals(tmp_path: Pat
     assert asf["boarding_point_assignment_status"].eq(
         "DIRECTIONAL_OPERATOR_RECORD_DISTINCT_CANDIDATE"
     ).all()
+
+
+def test_exact_istat_municipality_materialization(tmp_path: Path) -> None:
+    _build_master(tmp_path)
+    subprocess.run(
+        [
+            sys.executable,
+            str(MUNICIPALIZER),
+            "--master-source-records",
+            str(tmp_path / "master_stop_source_records_gpt_v3.csv"),
+            "--boundaries",
+            str(BOUNDARIES),
+            "--output-dir",
+            str(tmp_path),
+        ],
+        check=True,
+        cwd=ROOT,
+    )
+
+    master = pd.read_csv(
+        tmp_path / "master_stop_source_records_municipalized_gpt_v3.csv", dtype=str
+    )
+    validation = json.loads(
+        (tmp_path / "master_stop_municipality_validation_gpt_v3.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    assert len(master) == 105
+    assert master["master_source_record_id"].is_unique
+    assert master["physical_municipality_exact"].notna().all()
+    assert set(master["physical_municipality_exact"]).issubset(CORE | {"OUTSIDE_CORE"})
+    assert master["municipality_assignment_method"].eq(
+        "ISTAT_2026_EXACT_POINT_IN_POLYGON"
+    ).all()
+    assert master["routing_terminal_eligibility_status"].eq("NOT_EVALUATED").all()
+    assert validation["source_records_count"] == 105
+    assert validation["routing_terminal_selected_count"] == 0
+    assert validation["asf_containment_conflict_count"] == 0
+    assert validation["core_polygon_assigned_count"] + validation["outside_core_count"] == 105
+
+    # ASF was independently polygon-filtered upstream: recomputation must agree exactly.
+    asf = master[master["source_family"].eq("ASF_OPERATOR_OTP")]
+    assert asf["municipality_comparison_status"].eq(
+        "AGREES_WITH_PHYSICAL_CONTAINMENT"
+    ).all()
+
+    # Known context-universe rows outside the five-municipality study area must not be
+    # counted as Brivio just because the legacy frozen file attached Brivio context.
+    indexed = master.set_index("master_source_record_id")
+    for stop_id in ("300501", "300863", "300908"):
+        row = indexed.loc[f"FROZEN_GTFS::{stop_id}"]
+        assert row["physical_municipality_exact"] == "OUTSIDE_CORE"
+        assert row["municipality_comparison_status"] == (
+            "REPORTED_CONTEXT_BUT_PHYSICALLY_OUTSIDE_CORE"
+        )
+
+    special = master[master["source_family"].eq("SPECIAL_SERVICE_EVIDENCE")].iloc[0]
+    assert special["physical_municipality_exact"] == "Olgiate Molgora"
 
 
 def test_calcoa06_name_conflict_is_not_auto_conflated() -> None:
