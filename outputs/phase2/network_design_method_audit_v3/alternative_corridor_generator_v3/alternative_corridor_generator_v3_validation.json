@@ -1,6 +1,6 @@
 {
   "admitted_corridors_total": 13,
-  "audit_total_seconds_excluding_repeat_check": 9.921959204000004,
+  "audit_total_seconds_excluding_repeat_check": 9.73050009100001,
   "baseline_exact_edge_sequence_all": true,
   "claims_not_authorized": [
     "COMPLETE_K_SHORTEST_ENUMERATION",
@@ -36,11 +36,11 @@
     }
   },
   "issue": 22,
-  "max_fixture_generation_seconds": 4.1869911570000085,
+  "max_fixture_generation_seconds": 4.129461555999995,
   "outputs": {
-    "corridor_pool_sha256": "e91f10c8a9aa933ae37bbcb20cd2dc20eeb2fd54dbbe54adf7e390ec5c110382",
-    "fixture_audit_sha256": "8203526c5bd9cbacdf1ce656842c00a1adea0d66350060152f4bbf6d2b8c93f9",
-    "generation_audit_sha256": "35b2eadb2da57648f79ba30e4f69e64a083c5bb6f03cdbf985e972b55044c205"
+    "corridor_pool_sha256": "a60831f8bfff8d18aaf116b39865ece5452baa5f136e3173872b1cace7ffff4e",
+    "fixture_audit_sha256": "a7b3ef648a45c3c09d8672be323062caac1007be3af26d7a282cc21812e77fce",
+    "generation_audit_sha256": "f6c4944531422d0aadc31a186f57164d9e3a36f31f499c6cae4b68c480d19b3a"
   },
   "real_graph_determinism_pass": true,
   "scope": "ALGORITHM_AND_ROUTING_AUDIT_NOT_NETWORK_RECOMMENDATION",
