@@ -1,0 +1,45 @@
+name: Phase 2 OD 2011 admin crosswalk fix
+
+on:
+  push:
+    branches: [phase2-od-2011-audit]
+    paths:
+      - .github/workflows/phase2-od-2011-admin-fix.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-crosswalk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-od-2011-audit
+      - name: Add all documented 2011 destination changes observed from core
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/phase2_audit_istat_od_2011.py')
+          s=p.read_text(encoding='utf-8')
+          old='''ADMIN_MAP = {\n    "097066": "097092",\n    "097073": "097092",\n}\n'''
+          new='''ADMIN_MAP = {\n    # Core merger\n    "097066": "097092",  # Perego -> La Valletta Brianza\n    "097073": "097092",  # Rovagnate -> La Valletta Brianza\n    # Other 2011 destinations actually observed from the five core origins.\n    # Map both predecessors of each merger when applicable, even when one has\n    # zero observed core flow, so the crosswalk itself is complete.\n    "097087": "097091",  # Verderio Inferiore -> Verderio\n    "097088": "097091",  # Verderio Superiore -> Verderio\n    "097080": "016215",  # Torre de' Busi: Lecco -> Bergamo province recode (2018)\n    "012028": "012143",  # Cadrezzate -> Cadrezzate con Osmate\n    "012111": "012143",  # Osmate -> Cadrezzate con Osmate\n    "013019": "013250",  # Bellagio (old) -> Bellagio (post-fusion)\n    "013068": "013250",  # Civenna -> Bellagio\n    "015235": "015251",  # Vermezzo -> Vermezzo con Zelo\n    "015246": "015251",  # Zelo Surrigone -> Vermezzo con Zelo\n    "016039": "016253",  # Brembilla -> Val Brembilla\n    "016112": "016253",  # Gerosa -> Val Brembilla\n}\n'''
+          if old not in s:
+              raise SystemExit('expected ADMIN_MAP block not found')
+          s=s.replace(old,new)
+          oldmeta='''        "administrative_harmonisation": {\n            "097066": "097092 Perego -> La Valletta Brianza",\n            "097073": "097092 Rovagnate -> La Valletta Brianza",\n        },\n'''
+          newmeta='''        "administrative_harmonisation": {\n            k: v for k, v in ADMIN_MAP.items()\n        },\n'''
+          if oldmeta not in s:
+              raise SystemExit('expected metadata block not found')
+          s=s.replace(oldmeta,newmeta)
+          p.write_text(s,encoding='utf-8')
+          PY
+          python -m py_compile scripts/phase2_audit_istat_od_2011.py
+      - name: Commit crosswalk correction
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/phase2_audit_istat_od_2011.py
+          git commit -m "fix(phase2): complete observed 2011 administrative crosswalk"
+          git push origin HEAD:phase2-od-2011-audit

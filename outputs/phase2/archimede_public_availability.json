@@ -1,0 +1,63 @@
+{
+  "verdict": "NOT_PUBLICLY_MATERIALISED_FOR_MUNICIPAL_OD_2020_2023",
+  "checked_on": "2026-09-03",
+  "source_page": "https://www.istat.it/microdati-integrati/popolazioni-che-usano-un-territorio-e-loro-mobilita-arch-i-m-e-de/",
+  "official_description": "The integrated base aggregates individuals by origin province/municipality, destination province/municipality, territorial-insistence type and activity type.",
+  "public_archives": {
+    "2019": {
+      "url": "https://www.istat.it/wp-content/uploads/2016/08/Popolazioni-che-usano-un-territorio-e-mobilit%C3%A0_Anno_2019.zip",
+      "bytes": 913268,
+      "sha256": "e93f5e553c8f41ef6df2121186646ee73df16015a221792684f61240b097245a",
+      "members": 15,
+      "sample_file": "MICRODATI/20349.IST273.A.2019.6.ESEMPIO_META.txt"
+    },
+    "2020": {
+      "url": "https://www.istat.it/wp-content/uploads/2022/08/Popolazioni_che_usano_un_territorio_e_loro_mobilita_ARCH_I_M_E_DE_Anno_2020.zip",
+      "bytes": 1693382,
+      "sha256": "764704f75b91e937b45795b3d8140c165e6df725198702a8cde6c23c370c34a0",
+      "members": 11,
+      "sample_file": "MICRODATI/20908.IST273.A.2020.6.ESEMPIO_META.txt"
+    },
+    "2021": {
+      "url": "https://www.istat.it/wp-content/uploads/2024/07/Popolazioni_che_usano_un_territorio_e_loro_mobilita_ARCH_I_M_E_DE_Anno_2021.zip",
+      "bytes": 1439931,
+      "sha256": "269bd0ee2324fd5ff9a3bdb82568ec93b5072b354c16a43ff699784863414a9d",
+      "members": 10,
+      "sample_file": null
+    },
+    "2022": {
+      "url": "https://www.istat.it/wp-content/uploads/2025/05/Popolazioni_che_usano_un_territorio_e_loro_mobilita_ARCH_I_M_E_DE_Anno_2022.zip",
+      "bytes": 648963,
+      "sha256": "32951ccfe861a736c9e1269eeafe01ace506be112d8cae5be0bf1ee3df501c18",
+      "members": 11,
+      "sample_file": "MICRODATI/21163.IST273.A.2022.6.ESEMPIO_META.txt"
+    },
+    "2023": {
+      "url": "https://www.istat.it/wp-content/uploads/2025/05/Popolazioni_che_usano_un_territorio_e_loro_mobilit__Anno_2023-.zip",
+      "bytes": 313256,
+      "sha256": "d1a00cbcc078284f336c7a22133b6267b201b0d2c52ef291d965a7d34c01d001",
+      "members": 15,
+      "sample_file": "MICRODATI/21301.IST273.A.2023.6.ESEMPIO_STRUTTURA_FILE.ESEMPIO_META.txt"
+    }
+  },
+  "sample_schema_observed": [
+    "N",
+    "COD_PRO_ORI",
+    "COD_COM_ORI",
+    "COD_PRO_DES",
+    "COD_COM_DES",
+    "CITY_USER",
+    "TIPO_IND"
+  ],
+  "finding": "The public METADATI archives contain record layouts, classifications, methodological notes and, in some years, a small ESEMPIO_META structural sample. They do not contain the complete national aggregate file. No target-municipality OD values can be inferred from the samples.",
+  "sdmx_municipal_mobility_crosscheck": {
+    "dataflow": "DF_DCSS_ISTR_LAV_PEN_2_TV_5",
+    "queried_period": "2018-2024",
+    "years_returned": [2018, 2019],
+    "indicator": "RP_COM_DAY",
+    "location_categories": ["ALL", "OMPUR", "SMPUR"],
+    "reason_categories": ["ALL", "STD", "WK"],
+    "post_2019_municipal_mobility_rows": 0
+  },
+  "rule": "Do not fabricate or interpolate municipal OD matrices for 2020, 2022 or 2023. Obtain the complete integrated data through an official access channel before extending the OD time series."
+}

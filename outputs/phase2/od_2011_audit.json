@@ -1,0 +1,720 @@
+{
+  "verdict": "VALIDATED_WITH_SERIES_BREAK",
+  "comparison_scope": "WORK only; domestic destinations only; residents of the five current core municipalities after explicit 2011->2021 core geography harmonisation",
+  "2011": {
+    "source_zip_sha256": "36ab2a95a23c75f48019274d06506887e996c2833c9ac5e994f6ced175ad3586",
+    "source_member": "MATRICE PENDOLARISMO 2011/matrix_pendo2011_10112014.txt",
+    "official_record_layout_member": "MATRICE PENDOLARISMO 2011/leggimi file matrix_pendo2011_10112014.doc",
+    "raw_S_records": 988625,
+    "selected_work_domestic_core_strata": 1402,
+    "selected_unique_harmonised_od_pairs": 856,
+    "excluded_study_after_core_filter": 320,
+    "excluded_abroad_after_core_work_filter": 5,
+    "excluded_noncore_origin_S_records": 986898,
+    "duplicate_exact_S_strata": 0,
+    "observed_residence_types": [
+      "1",
+      "2"
+    ],
+    "observed_sexes": [
+      "1",
+      "2"
+    ],
+    "observed_locations": [
+      "1",
+      "2",
+      "3"
+    ],
+    "counter_field": "Numero di individui (official columns 51-60)",
+    "record_type": "S only",
+    "reason_filter": "2 = work",
+    "location_filter": "1/2 = domestic, excludes 3 = abroad",
+    "administrative_harmonisation": {
+      "097066": "097092",
+      "097073": "097092",
+      "097087": "097091",
+      "097088": "097091",
+      "097080": "016215",
+      "012028": "012143",
+      "012111": "012143",
+      "013019": "013250",
+      "013068": "013250",
+      "015235": "015251",
+      "015246": "015251",
+      "016039": "016253",
+      "016112": "016253"
+    }
+  },
+  "2021": {
+    "source_zip_sha256": "78795a98d97f75d26f14c66495f798f1ff96a3555587771a52f97e7f96d7bc51",
+    "source_member": "matrix_pendoLAVORO_2021.txt",
+    "national_positive_od_rows": 523949,
+    "national_commuters_sum": 19565808,
+    "core_origin_unique_od_pairs": 898
+  },
+  "known_legacy_gate_a_errors": [
+    "Gate A uses wrong fixed-width offsets: official sex=col14, reason=col16, location=col18, destination province=20-22, municipality=24-26, Number of individuals=51-60.",
+    "Gate A legacy extraction reads line[12], line[14], line[16], destination line[18:21]/[22:25] and line[40:50], so its CSV is not a valid OD reconstruction.",
+    "Gate A maps Perego/Rovagnate as municipal progressives 067/072; official 2011 codes are 066/073."
+  ],
+  "comparability": {
+    "compatible_dimensions": [
+      "resident origin municipality",
+      "usual workplace municipality in Italy",
+      "work reason"
+    ],
+    "non_homogeneous_dimensions": [
+      "2011 is complete census count; 2021 is Permanent Census/register-based estimate",
+      "2011 daily travel-and-return definition; 2021 usual workplace attendance at least three days/week",
+      "2021 reference date 31-12-2021 falls in pandemic/smart-working period"
+    ],
+    "interpretation": "Use absolute/percentage differences as descriptive observed-series differences only. Do not interpret the full change as behavioural or causal change."
+  },
+  "resident_work_commuters_2011": {
+    "097010": 1806,
+    "097012": 2123,
+    "097058": 2285,
+    "097074": 896,
+    "097092": 1813
+  },
+  "resident_work_commuters_2021": {
+    "097010": 1662,
+    "097012": 2173,
+    "097058": 2287,
+    "097074": 836,
+    "097092": 1796
+  },
+  "top_destinations_2011": {
+    "097010": [
+      {
+        "destination": "097010",
+        "workers": 467
+      },
+      {
+        "destination": "097048",
+        "workers": 157
+      },
+      {
+        "destination": "015146",
+        "workers": 90
+      },
+      {
+        "destination": "097042",
+        "workers": 83
+      },
+      {
+        "destination": "016074",
+        "workers": 79
+      },
+      {
+        "destination": "097012",
+        "workers": 65
+      },
+      {
+        "destination": "097058",
+        "workers": 53
+      },
+      {
+        "destination": "097059",
+        "workers": 47
+      },
+      {
+        "destination": "097061",
+        "workers": 42
+      },
+      {
+        "destination": "097002",
+        "workers": 39
+      },
+      {
+        "destination": "097013",
+        "workers": 30
+      },
+      {
+        "destination": "097020",
+        "workers": 30
+      },
+      {
+        "destination": "108050",
+        "workers": 24
+      },
+      {
+        "destination": "097071",
+        "workers": 23
+      },
+      {
+        "destination": "108033",
+        "workers": 22
+      }
+    ],
+    "097012": [
+      {
+        "destination": "097012",
+        "workers": 321
+      },
+      {
+        "destination": "097048",
+        "workers": 268
+      },
+      {
+        "destination": "015146",
+        "workers": 179
+      },
+      {
+        "destination": "097010",
+        "workers": 100
+      },
+      {
+        "destination": "097058",
+        "workers": 94
+      },
+      {
+        "destination": "097042",
+        "workers": 74
+      },
+      {
+        "destination": "097061",
+        "workers": 58
+      },
+      {
+        "destination": "097020",
+        "workers": 54
+      },
+      {
+        "destination": "097071",
+        "workers": 48
+      },
+      {
+        "destination": "108050",
+        "workers": 44
+      },
+      {
+        "destination": "097092",
+        "workers": 39
+      },
+      {
+        "destination": "097044",
+        "workers": 38
+      },
+      {
+        "destination": "097074",
+        "workers": 34
+      },
+      {
+        "destination": "108033",
+        "workers": 32
+      },
+      {
+        "destination": "016074",
+        "workers": 30
+      }
+    ],
+    "097058": [
+      {
+        "destination": "097058",
+        "workers": 382
+      },
+      {
+        "destination": "097048",
+        "workers": 211
+      },
+      {
+        "destination": "015146",
+        "workers": 204
+      },
+      {
+        "destination": "097012",
+        "workers": 136
+      },
+      {
+        "destination": "097042",
+        "workers": 100
+      },
+      {
+        "destination": "097010",
+        "workers": 86
+      },
+      {
+        "destination": "097074",
+        "workers": 80
+      },
+      {
+        "destination": "097092",
+        "workers": 76
+      },
+      {
+        "destination": "097020",
+        "workers": 60
+      },
+      {
+        "destination": "108033",
+        "workers": 43
+      },
+      {
+        "destination": "097061",
+        "workers": 37
+      },
+      {
+        "destination": "108050",
+        "workers": 35
+      },
+      {
+        "destination": "097059",
+        "workers": 33
+      },
+      {
+        "destination": "097044",
+        "workers": 28
+      },
+      {
+        "destination": "097071",
+        "workers": 27
+      }
+    ],
+    "097074": [
+      {
+        "destination": "097074",
+        "workers": 169
+      },
+      {
+        "destination": "097092",
+        "workers": 87
+      },
+      {
+        "destination": "097058",
+        "workers": 64
+      },
+      {
+        "destination": "097048",
+        "workers": 58
+      },
+      {
+        "destination": "015146",
+        "workers": 41
+      },
+      {
+        "destination": "097012",
+        "workers": 33
+      },
+      {
+        "destination": "097042",
+        "workers": 31
+      },
+      {
+        "destination": "097005",
+        "workers": 21
+      },
+      {
+        "destination": "097020",
+        "workers": 16
+      },
+      {
+        "destination": "097019",
+        "workers": 15
+      },
+      {
+        "destination": "097010",
+        "workers": 14
+      },
+      {
+        "destination": "097016",
+        "workers": 14
+      },
+      {
+        "destination": "097044",
+        "workers": 12
+      },
+      {
+        "destination": "097006",
+        "workers": 11
+      },
+      {
+        "destination": "097031",
+        "workers": 11
+      }
+    ],
+    "097092": [
+      {
+        "destination": "097092",
+        "workers": 377
+      },
+      {
+        "destination": "097048",
+        "workers": 107
+      },
+      {
+        "destination": "015146",
+        "workers": 104
+      },
+      {
+        "destination": "097074",
+        "workers": 90
+      },
+      {
+        "destination": "097058",
+        "workers": 82
+      },
+      {
+        "destination": "097042",
+        "workers": 64
+      },
+      {
+        "destination": "097012",
+        "workers": 53
+      },
+      {
+        "destination": "097005",
+        "workers": 51
+      },
+      {
+        "destination": "097016",
+        "workers": 37
+      },
+      {
+        "destination": "097020",
+        "workers": 37
+      },
+      {
+        "destination": "097010",
+        "workers": 36
+      },
+      {
+        "destination": "097049",
+        "workers": 34
+      },
+      {
+        "destination": "097057",
+        "workers": 32
+      },
+      {
+        "destination": "097061",
+        "workers": 32
+      },
+      {
+        "destination": "097031",
+        "workers": 31
+      }
+    ]
+  },
+  "top_destinations_2021": {
+    "097010": [
+      {
+        "destination": "097010",
+        "workers": 323
+      },
+      {
+        "destination": "097042",
+        "workers": 113
+      },
+      {
+        "destination": "097048",
+        "workers": 105
+      },
+      {
+        "destination": "015146",
+        "workers": 80
+      },
+      {
+        "destination": "016074",
+        "workers": 71
+      },
+      {
+        "destination": "097059",
+        "workers": 67
+      },
+      {
+        "destination": "097058",
+        "workers": 64
+      },
+      {
+        "destination": "097013",
+        "workers": 45
+      },
+      {
+        "destination": "097012",
+        "workers": 41
+      },
+      {
+        "destination": "097020",
+        "workers": 38
+      },
+      {
+        "destination": "097061",
+        "workers": 29
+      },
+      {
+        "destination": "097002",
+        "workers": 27
+      },
+      {
+        "destination": "097091",
+        "workers": 26
+      },
+      {
+        "destination": "016024",
+        "workers": 22
+      },
+      {
+        "destination": "108033",
+        "workers": 21
+      }
+    ],
+    "097012": [
+      {
+        "destination": "097012",
+        "workers": 279
+      },
+      {
+        "destination": "097048",
+        "workers": 205
+      },
+      {
+        "destination": "015146",
+        "workers": 170
+      },
+      {
+        "destination": "097042",
+        "workers": 124
+      },
+      {
+        "destination": "097058",
+        "workers": 120
+      },
+      {
+        "destination": "097010",
+        "workers": 89
+      },
+      {
+        "destination": "097061",
+        "workers": 60
+      },
+      {
+        "destination": "097020",
+        "workers": 53
+      },
+      {
+        "destination": "108033",
+        "workers": 48
+      },
+      {
+        "destination": "097044",
+        "workers": 46
+      },
+      {
+        "destination": "108050",
+        "workers": 39
+      },
+      {
+        "destination": "016074",
+        "workers": 38
+      },
+      {
+        "destination": "097071",
+        "workers": 37
+      },
+      {
+        "destination": "097092",
+        "workers": 36
+      },
+      {
+        "destination": "097013",
+        "workers": 31
+      }
+    ],
+    "097058": [
+      {
+        "destination": "097058",
+        "workers": 326
+      },
+      {
+        "destination": "097048",
+        "workers": 217
+      },
+      {
+        "destination": "015146",
+        "workers": 185
+      },
+      {
+        "destination": "097042",
+        "workers": 138
+      },
+      {
+        "destination": "097012",
+        "workers": 101
+      },
+      {
+        "destination": "097010",
+        "workers": 75
+      },
+      {
+        "destination": "097092",
+        "workers": 75
+      },
+      {
+        "destination": "097061",
+        "workers": 62
+      },
+      {
+        "destination": "097020",
+        "workers": 59
+      },
+      {
+        "destination": "097074",
+        "workers": 41
+      },
+      {
+        "destination": "108050",
+        "workers": 37
+      },
+      {
+        "destination": "108033",
+        "workers": 35
+      },
+      {
+        "destination": "097044",
+        "workers": 31
+      },
+      {
+        "destination": "097059",
+        "workers": 31
+      },
+      {
+        "destination": "097071",
+        "workers": 30
+      }
+    ],
+    "097074": [
+      {
+        "destination": "097074",
+        "workers": 112
+      },
+      {
+        "destination": "097092",
+        "workers": 83
+      },
+      {
+        "destination": "097048",
+        "workers": 66
+      },
+      {
+        "destination": "097042",
+        "workers": 50
+      },
+      {
+        "destination": "097058",
+        "workers": 49
+      },
+      {
+        "destination": "015146",
+        "workers": 28
+      },
+      {
+        "destination": "097012",
+        "workers": 21
+      },
+      {
+        "destination": "097005",
+        "workers": 20
+      },
+      {
+        "destination": "097006",
+        "workers": 20
+      },
+      {
+        "destination": "097020",
+        "workers": 17
+      },
+      {
+        "destination": "097049",
+        "workers": 13
+      },
+      {
+        "destination": "097076",
+        "workers": 13
+      },
+      {
+        "destination": "097031",
+        "workers": 12
+      },
+      {
+        "destination": "097037",
+        "workers": 12
+      },
+      {
+        "destination": "097019",
+        "workers": 11
+      }
+    ],
+    "097092": [
+      {
+        "destination": "097092",
+        "workers": 275
+      },
+      {
+        "destination": "015146",
+        "workers": 108
+      },
+      {
+        "destination": "097048",
+        "workers": 87
+      },
+      {
+        "destination": "097042",
+        "workers": 86
+      },
+      {
+        "destination": "097074",
+        "workers": 68
+      },
+      {
+        "destination": "097058",
+        "workers": 59
+      },
+      {
+        "destination": "097012",
+        "workers": 56
+      },
+      {
+        "destination": "097049",
+        "workers": 54
+      },
+      {
+        "destination": "097076",
+        "workers": 43
+      },
+      {
+        "destination": "097005",
+        "workers": 41
+      },
+      {
+        "destination": "097057",
+        "workers": 38
+      },
+      {
+        "destination": "097020",
+        "workers": 35
+      },
+      {
+        "destination": "097006",
+        "workers": 31
+      },
+      {
+        "destination": "097031",
+        "workers": 29
+      },
+      {
+        "destination": "097061",
+        "workers": 26
+      }
+    ]
+  },
+  "unmapped_2011_destination_codes_not_observed_in_2021": 0,
+  "outputs": [
+    "data/raw/od/matrice_pendolarismo_istat_2011_work_core_canonical.csv",
+    "outputs/phase2/od_2011_core_summary.csv",
+    "outputs/phase2/od_trend_2011_2021.csv",
+    "outputs/phase2/od_trend_destinations_2011_2021.csv",
+    "outputs/phase2/od_trend_internal_core_2011_2021.csv",
+    "outputs/phase2/od_2011_destination_codes_not_in_2021.csv"
+  ]
+}

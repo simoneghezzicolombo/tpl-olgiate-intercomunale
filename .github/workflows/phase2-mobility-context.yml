@@ -1,0 +1,62 @@
+name: Phase 2 mobility context 2019-2024
+
+on:
+  push:
+    branches: [phase2-od-2011-audit]
+    paths:
+      - scripts/phase2_fetch_mobility_context.py
+      - .github/workflows/phase2-mobility-context.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  context:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-od-2011-audit
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install parser dependency
+        run: pip install --quiet openpyxl
+      - name: Build official context outputs
+        run: |
+          python -m py_compile scripts/phase2_fetch_mobility_context.py
+          python scripts/phase2_fetch_mobility_context.py
+      - name: Validate separation, 2019 mobility and recent employment
+        run: |
+          python - <<'PY'
+          import csv,json,pathlib
+          p=pathlib.Path('outputs/phase2')
+          a=json.loads((p/'mobility_context_audit.json').read_text(encoding='utf-8'))
+          assert a['municipal_2019_sdmx']=='IDENTIFIED_AND_VALIDATED'
+          assert 'Context only' in a['scope_note']
+          assert a['recent_population_employment']['occupied_total_identified'] is True
+          rows=list(csv.DictReader(open(p/'mobility_context_meratese_2019.csv',encoding='utf-8')))
+          assert len(rows)==15
+          for r in rows:
+              total=float(r['commuters_total']); inside=float(r['commuters_inside']); outside=float(r['commuters_outside'])
+              work=float(r['work_total']); study=float(r['study_total'])
+              assert total==inside+outside
+              assert total==work+study
+          recent=list(csv.DictReader(open(p/'mobility_context_population_employment_2019_2024.csv',encoding='utf-8')))
+          assert recent and all(r['employed_residents'] for r in recent)
+          national=list(csv.DictReader(open(p/'mobility_context_national_2019_2023.csv',encoding='utf-8')))
+          assert {int(r['year']) for r in national}=={2019,2020,2021,2022,2023}
+          print('CONTEXT VALIDATION PASS')
+          print('workbook target matches',a['public_workbook_target_match_count'])
+          print('recent population/employment rows',len(recent))
+          PY
+      - name: Commit context outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/phase2/mobility_context_*.csv outputs/phase2/mobility_context_*.json
+          git diff --cached --quiet && exit 0
+          git commit -m "data(phase2): materialise 2019-2024 mobility context [skip ci]"
+          git push origin HEAD:phase2-od-2011-audit

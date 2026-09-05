@@ -1,0 +1,218 @@
+
+DESCRIZIONE DEL TRACCIATO RECORD DEL FILE matrix_pendo2011_10112014.txt
+
+Il file matrix_pendo2011.txt è un file con tracciato  fisso,  contenente  le
+informazioni relative agli spostamenti per motivi  di  lavoro  o  di  studio
+della popolazione residente in famiglia o in convivenza,  rilevata   al  15°
+Censimento generale della popolazione (9 ottobre 2011). Il file  contiene  i
+dati relativi a 28.871.447 individui (28.852.721  residenti  in  famiglia  e
+18.726  residenti in  convivenza)   i  quali  hanno  dichiarato  di  recarsi
+giornalmente al luogo abituale di studio o di lavoro partendo  dall’alloggio
+di residenza e di rientrare giornalmente nello stesso.
+
+Il file è composto da 4.876.242 record suddivisi in Tipo record “S” o “L”  .
+ In particolare:
+
+      988.625 record (Tipo record   ‘S’)  riportano  il  totale  dei  flussi
+      pendolari negli strati  derivanti  dalle  variabili:  Tipo  residenza,
+      Provincia di residenza,  Comune  di  residenza,  Sesso,  Motivo  dello
+      spostamento, Luogo di studio o di lavoro, Provincia abituale di studio
+      o di lavoro, Comune abituale di studio o di lavoro,  Stato  estero  di
+      studio o di lavoro. Le frequenze assolute riguardanti i record di tipo
+      S sono riportate nel campo denominato “Numero di individui”.
+
+      3.887.617 record (Tipo record ‘L’) nei  quali  il  totale  dei  flussi
+      pendolari è prodotto a livello più dettagliato,  tenendo  conto  anche
+      del Mezzo, dell’Orario di uscita e del Tempo impiegato.  Le  frequenze
+      assolute riguardanti i record di  tipo  L  sono  riportate  nel  campo
+      denominato “Stima numero di individui” (per le peculiarità del tipo  L
+      in  relazione  ai  campi  “Tipo  residenza”  e  “Stima  numero   degli
+      individui” confronta le Avvertenze).
+
+
+
+La lista delle variabili è la seguente:
+
+|Descrizione  |Colonna inizio |Lunghezza campo  |Valori                            |
+|del campo    |campo          |                 |                                  |
+|             |               |                 |                                  |
+|             |               |                 |                                  |
+|Tipo record  |1              |1                |S dato riferito alle modalità     |
+|             |               |                 |assunte dalle  variabili di strato|
+|             |               |                 |: Provincia di residenza, Comune  |
+|             |               |                 |di residenza, Sesso, Motivo dello |
+|             |               |                 |spostamento, Luogo di studio o di |
+|             |               |                 |lavoro, Provincia abituale di     |
+|             |               |                 |studio o di lavoro, Comune        |
+|             |               |                 |abituale di studio o di lavoro,   |
+|             |               |                 |Stato estero di studio o di       |
+|             |               |                 |lavoro.                           |
+|             |               |                 |                                  |
+|             |               |                 |L dato riferito alle modalità     |
+|             |               |                 |assunte dalle  variabili di strato|
+|             |               |                 |: Provincia di residenza, Comune  |
+|             |               |                 |di residenza, Sesso, Motivo dello |
+|             |               |                 |spostamento, Luogo di studio o di |
+|             |               |                 |lavoro, Provincia abituale di     |
+|             |               |                 |studio o di lavoro, Comune        |
+|             |               |                 |abituale di studio o di lavoro,   |
+|             |               |                 |Stato estero di studio o di       |
+|             |               |                 |lavoro,  Mezzo,  Orario di uscita,|
+|             |               |                 |Tempo impiegato.                  |
+|             |               |                 |                                  |
+|Tipo         |3              |1                |1 in famiglia;                    |
+|residenza    |               |                 |2 in convivenza;                  |
+|             |               |                 |                                  |
+|Provincia di |5              |3                |Vedi: Elenco dei comuni italiani  |
+|residenza    |               |                 |al 01 gennaio 2011-Istat;         |
+|             |               |                 |                                  |
+|Comune di    |9              |3                |Vedi: Elenco dei comuni italiani  |
+|residenza    |               |                 |al 01 gennaio 2011-Istat;         |
+|             |               |                 |                                  |
+|Sesso        |14             |1                |1 maschio;                        |
+|             |               |                 |2 femmina;                        |
+|             |               |                 |                                  |
+|Motivo dello |16             |1                |1 si reca al luogo di studio      |
+|spostamento  |               |                 |(compresi asilo nido, scuola      |
+|             |               |                 |materna e corsi di formazione     |
+|             |               |                 |professionale);                   |
+|             |               |                 |2 si reca al luogo di lavoro;     |
+|             |               |                 |                                  |
+|Luogo di     |18             |1                |1 nello stesso comune di          |
+|studio o di  |               |                 |residenza;                        |
+|lavoro       |               |                 |2 in un altro comune italiano;    |
+|             |               |                 |3 all’estero;                     |
+|             |               |                 |                                  |
+|Provincia    |20             |3                |Vedi: Elenco dei comuni italiani  |
+|abituale di  |               |                 |al 01 gennaio 2011-Istat;         |
+|studio o di  |               |                 |                                  |
+|lavoro       |               |                 |                                  |
+|             |               |                 |                                  |
+|Comune       |24             |3                |Vedi: Elenco dei comuni italiani  |
+|abituale di  |               |                 |al 01 gennaio 2011-Istat;         |
+|studio o di  |               |                 |                                  |
+|lavoro       |               |                 |                                  |
+|             |               |                 |                                  |
+|Stato estero |28             |3                |Vedi Elenco Stati Esteri all’08   |
+|di studio o  |               |                 |ottobre 2011-Istat;               |
+|di lavoro    |               |                 |                                  |
+|             |               |                 |                                  |
+|             |               |                 |                                  |
+|Mezzo        |32             |2                |01 treno;                         |
+|             |               |                 |02 tram;                          |
+|             |               |                 |03 metropolitana;                 |
+|             |               |                 |04 autobus urbano, filobus;       |
+|             |               |                 |05 corriera, autobus extra-urbano;|
+|             |               |                 |06 autobus aziendale o scolastico;|
+|             |               |                 |07 auto privata (come conducente);|
+|             |               |                 |08 auto privata (come passeggero);|
+|             |               |                 |09                                |
+|             |               |                 |motocicletta,ciclomotore,scooter; |
+|             |               |                 |10 bicicletta;                    |
+|             |               |                 |11 altro mezzo;                   |
+|             |               |                 |12 a piedi;                       |
+|             |               |                 |                                  |
+|Orario di    |35             |1                |1 prima delle 7,15;               |
+|uscita       |               |                 |2 dalle 7,15 alle 8,14;           |
+|             |               |                 |3 dalle 8,15 alle 9,14;           |
+|             |               |                 |4 dopo le 9,14;                   |
+|             |               |                 |                                  |
+|Tempo        |37             |1                |1 fino a 15 minuti;               |
+|impiegato    |               |                 |2 da 16 a 30 minuti;              |
+|             |               |                 |3 da 31 a 60 minuti;              |
+|             |               |                 |4 oltre 60 minuti;                |
+|             |               |                 |                                  |
+|Stima numero |39             |12               |Variabile di conteggio            |
+|di individui |               |                 |                                  |
+|Numero di    |51             |10               |Variabile di conteggio            |
+|individui    |               |                 |                                  |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AVVERTENZE:
+
+La variabile di conteggio “Stima del numero di individui”  riguarda  i  soli
+individui residenti in famiglia (Tipo residenza=1). Di conseguenza:
+
+    • nel file non sono  presenti  record  di  tipo  L  associati  a  “Tipo
+      residenza”=2
+    • i record di tipo S associati a “Tipo  residenza”=2  sono  valorizzati
+      con “ND” nel campo “Stima del numero di individui”
+
+La variabile di  conteggio  “Stima  del  numero  di  individui”  è  ottenuta
+mediante tecniche di campionamento  degli  individui  quando  il  comune  di
+residenza ha almeno 20.000 abitanti in base alle risultanze  anagrafiche  al
+31 dicembre 2010. Nei comuni  di  residenza  con  popolazione  inferiore  ai
+20.000 abitanti questo valore è ottenuto mediante rilevazione esaustiva.  Di
+conseguenza per i soli comuni con almeno 20.000 abitanti:
+
+    • le frequenze prodotte  in relazione alla “Stima del numero di
+      individui” presentano solitamente  cifre decimali non nulle (Esempio
+      1)
+
+
+ESEMPIO 1:
+
+|Tipo record      |Tipo      |Provincia |
+|                 |residenza |di        |
+|                 |          |residenza |
+|2                |0000018.81|ND        |
+
+
+    • in relazione al tipo record S, le variabili di conteggio “Stima numero
+      di  individui”  e  “Numero  di  individui”  possono  non   coincidere,
+      esclusivamente nei comuni soggetti a campionamento (popolazione≥20.000
+      abitanti), per effetto della variabilità campionaria che  incide  solo
+      sulla prima delle due quantità (Esempio 2)
+
+
+
+
+ESEMPIO 2:
+
+|Tipo record      |Tipo      |Provincia |
+|                 |residenza |di        |
+|                 |          |residenza |
+|+                |0002636.77|0002677   |
+
+
+
+
+    • in relazione al tipo record S, le variabili di conteggio “Stima numero
+      di individui” può assumere valore zero anche in presenza di un  valore
+      positivo  del  “Numero  di  individui”  se  nessun  individuo  con  la
+      corrispondente combinazione di modalità delle variabili di  tipo  S  è
+      stato incluso nel campione  (Esempio 3)
+
+
+
+
+ESEMPIO 3
+
+|Tipo record      |Tipo      |Provincia |
+|                 |residenza |di        |
+|                 |          |residenza |
+|+                |0000000.00|0000001   |
+
+
+Sulla base di quanto  descritto  sopra,  per  analisi  riguardanti  le  sole
+variabili presenti nel tipo record S è opportuno utilizzare la variabile  di
+conteggio “Numero di individui”. Viceversa, se le analisi  comportano  l’uso
+di  una  o  più  variabili  considerate  solo  nel  tipo  record  L   (mezzo
+utilizzato,  orario  di  uscita,  tempo  impiegato)   allora   è   opportuno
+utilizzare la variabile di conteggio “Stima Numero di individui”.
+
+

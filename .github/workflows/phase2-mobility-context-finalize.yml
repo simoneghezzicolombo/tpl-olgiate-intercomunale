@@ -1,0 +1,76 @@
+name: Phase 2 finalize mobility context
+
+on:
+  push:
+    branches: [phase2-od-2011-audit]
+    paths:
+      - .github/workflows/phase2-mobility-context-finalize.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-od-2011-audit
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet openpyxl
+      - name: Make national extraction unambiguous
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/phase2_fetch_mobility_context.py')
+          s=p.read_text(encoding='utf-8')
+          marker='''    (OUT / "mobility_context_workbook_scan.json").write_text(\n'''
+          insert='''    # Tavola 1 repeats the labels for counts, subgroups and percentages.\n    # Retain exactly one national count row per year/signal: the candidate with\n    # the largest inside+outside population, which is the total-population row.\n    best = {}\n    for row in national:\n        total = row.get("inside_plus_outside")\n        if total is None:\n            continue\n        key = (row["year"], row["signal"])\n        if key not in best or total > best[key]["inside_plus_outside"]:\n            best[key] = row\n    national = [best[k] for k in sorted(best)]\n\n'''
+          if insert not in s:
+              if marker not in s: raise SystemExit('national marker not found')
+              s=s.replace(marker,insert+marker)
+          p.write_text(s,encoding='utf-8')
+          PY
+          python -m py_compile scripts/phase2_fetch_mobility_context.py
+      - name: Rebuild context
+        run: python scripts/phase2_fetch_mobility_context.py
+      - name: Validate and inventory availability
+        run: |
+          python - <<'PY'
+          import csv,json,pathlib,collections
+          p=pathlib.Path('outputs/phase2')
+          audit=json.loads((p/'mobility_context_audit.json').read_text(encoding='utf-8'))
+          assert audit['municipal_2019_sdmx']=='IDENTIFIED_AND_VALIDATED'
+          assert audit['public_workbook_target_match_count']==0
+          assert audit['recent_population_employment']['occupied_total_identified'] is True
+          mob=list(csv.DictReader(open(p/'mobility_context_meratese_2019.csv',encoding='utf-8')))
+          assert len(mob)==15
+          for r in mob:
+              assert float(r['commuters_total'])==float(r['commuters_inside'])+float(r['commuters_outside'])
+              assert float(r['commuters_total'])==float(r['work_total'])+float(r['study_total'])
+          nat=list(csv.DictReader(open(p/'mobility_context_national_2019_2023.csv',encoding='utf-8')))
+          assert len(nat)==15, len(nat)
+          assert collections.Counter((r['year'],r['signal']) for r in nat).most_common(1)[0][1]==1
+          recent=list(csv.DictReader(open(p/'mobility_context_population_employment_2019_2024.csv',encoding='utf-8')))
+          assert len(recent)==90
+          emp=[r for r in recent if r['employed_residents']]
+          assert emp
+          years=sorted({int(r['year']) for r in emp})
+          print('EMPLOYMENT YEARS IDENTIFIED',years)
+          print('EMPLOYMENT ROWS',len(emp),'of',len(recent))
+          for code in ('097058','097048','097020','097061'):
+              print('SAMPLE',code,[r for r in recent if r['istat']==code])
+          print('CONTEXT FINAL VALIDATION PASS')
+          PY
+      - name: Commit final context and parser
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/phase2_fetch_mobility_context.py outputs/phase2/mobility_context_*.csv outputs/phase2/mobility_context_*.json
+          git diff --cached --quiet && exit 0
+          git commit -m "data(phase2): finalize validated mobility context [skip ci]"
+          git push origin HEAD:phase2-od-2011-audit

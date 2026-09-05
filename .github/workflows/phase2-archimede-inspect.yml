@@ -1,0 +1,71 @@
+name: Phase 2 inspect ARCHIMEDE annual mobility archives
+
+on:
+  push:
+    branches: [phase2-od-2011-audit]
+    paths:
+      - .github/workflows/phase2-archimede-inspect.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-od-2011-audit
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download and inspect official annual archives
+        run: |
+          python - <<'PY'
+          import io, os, re, zipfile, urllib.request, hashlib
+          urls={
+            2019:'https://www.istat.it/wp-content/uploads/2016/08/Popolazioni-che-usano-un-territorio-e-mobilit%C3%A0_Anno_2019.zip',
+            2020:'https://www.istat.it/wp-content/uploads/2022/08/Popolazioni_che_usano_un_territorio_e_loro_mobilita_ARCH_I_M_E_DE_Anno_2020.zip',
+            2021:'https://www.istat.it/wp-content/uploads/2024/07/Popolazioni_che_usano_un_territorio_e_loro_mobilita_ARCH_I_M_E_DE_Anno_2021.zip',
+            2022:'https://www.istat.it/wp-content/uploads/2025/05/Popolazioni_che_usano_un_territorio_e_loro_mobilita_ARCH_I_M_E_DE_Anno_2022.zip',
+            2023:'https://www.istat.it/wp-content/uploads/2025/05/Popolazioni_che_usano_un_territorio_e_loro_mobilit__Anno_2023-.zip',
+          }
+          target=('097058','097048','097010','097012','097074','097092')
+          for year,url in urls.items():
+            print('\n===== YEAR',year,'=====')
+            req=urllib.request.Request(url,headers={'User-Agent':'tpl-olgiate-phase2-archimede-audit/1.0'})
+            with urllib.request.urlopen(req,timeout=180) as r:
+              data=r.read(); print('HTTP',r.status,'bytes',len(data),'type',r.headers.get('content-type'),'sha256',hashlib.sha256(data).hexdigest())
+            if data[:2]!=b'PK':
+              print('NOT_ZIP prefix',data[:80]); continue
+            z=zipfile.ZipFile(io.BytesIO(data))
+            print('MEMBERS',len(z.infolist()))
+            for inf in z.infolist():
+              if not inf.is_dir(): print(' -',inf.filename,inf.file_size)
+            # inspect textual/tabular members and nested zips without extracting huge data
+            todo=[(inf.filename,z.read(inf)) for inf in z.infolist() if not inf.is_dir() and inf.file_size<250_000_000]
+            for name,raw in todo:
+              low=name.lower()
+              if raw[:2]==b'PK' and low.endswith('.zip'):
+                try:
+                  nz=zipfile.ZipFile(io.BytesIO(raw))
+                  print(' NESTED',name,'members',len(nz.infolist()))
+                  for ni in nz.infolist():
+                    if not ni.is_dir(): print('   -',ni.filename,ni.file_size)
+                except Exception as e: print(' nested error',e)
+                continue
+              if not low.endswith(('.csv','.txt','.tsv','.dat','.asc')):
+                continue
+              text=None
+              for enc in ('utf-8-sig','cp1252','latin-1'):
+                try: text=raw.decode(enc); break
+                except UnicodeDecodeError: pass
+              if text is None: continue
+              lines=text.splitlines()
+              print(' TEXT',name,'lines',len(lines),'header',lines[:3])
+              hits=[ln[:1000] for ln in lines if any(t in ln for t in target)]
+              print('  target hits',len(hits))
+              for h in hits[:20]: print('   HIT',h)
+          PY

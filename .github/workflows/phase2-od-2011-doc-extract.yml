@@ -1,0 +1,65 @@
+name: Phase 2 extract ISTAT 2011 record layout
+
+on:
+  push:
+    branches: [phase2-od-2011-audit]
+    paths:
+      - .github/workflows/phase2-od-2011-doc-extract.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract-layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-od-2011-audit
+      - name: Install antiword
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq antiword
+      - name: Extract official record-layout documentation and samples
+        run: |
+          python - <<'PY'
+          import io, pathlib, urllib.request, zipfile
+          url='https://www.istat.it/storage/cartografia/matrici_pendolarismo/matrici_pendolarismo_2011.zip'
+          req=urllib.request.Request(url,headers={'User-Agent':'tpl-olgiate-phase2-od-audit/1.0'})
+          with urllib.request.urlopen(req,timeout=300) as r: data=r.read()
+          z=zipfile.ZipFile(io.BytesIO(data))
+          root=pathlib.Path('/tmp/istat2011'); root.mkdir(exist_ok=True)
+          doc='MATRICE PENDOLARISMO 2011/leggimi file matrix_pendo2011_10112014.doc'
+          matrix='MATRICE PENDOLARISMO 2011/matrix_pendo2011_10112014.txt'
+          (root/'leggimi.doc').write_bytes(z.read(doc))
+          raw=z.read(matrix)
+          # Store representative fixed-width records, including both record types.
+          text=raw.decode('latin-1')
+          s=[]; l=[]
+          for line in text.splitlines():
+              if line.startswith('S') and len(s)<30: s.append(line)
+              if line.startswith('L') and len(l)<30: l.append(line)
+              if len(s)>=30 and len(l)>=30: break
+          out=pathlib.Path('outputs/phase2/istat2011_source_inspection'); out.mkdir(parents=True,exist_ok=True)
+          (out/'record_samples_S.txt').write_text('\n'.join(s)+'\n',encoding='utf-8')
+          (out/'record_samples_L.txt').write_text('\n'.join(l)+'\n',encoding='utf-8')
+          # position ruler to make fixed-width columns auditable
+          ruler1=''.join(str((i//10)%10) for i in range(1,101))
+          ruler2=''.join(str(i%10) for i in range(1,101))
+          (out/'fixed_width_ruler.txt').write_text(ruler1+'\n'+ruler2+'\n',encoding='utf-8')
+          PY
+          antiword /tmp/istat2011/leggimi.doc > outputs/phase2/istat2011_source_inspection/leggimi_official_extracted.txt
+          echo '=== OFFICIAL LEGGIMI ==='
+          cat outputs/phase2/istat2011_source_inspection/leggimi_official_extracted.txt
+          echo '=== S SAMPLE ==='
+          head -20 outputs/phase2/istat2011_source_inspection/record_samples_S.txt
+          echo '=== L SAMPLE ==='
+          head -20 outputs/phase2/istat2011_source_inspection/record_samples_L.txt
+      - name: Commit extracted layout
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/phase2/istat2011_source_inspection/leggimi_official_extracted.txt outputs/phase2/istat2011_source_inspection/record_samples_S.txt outputs/phase2/istat2011_source_inspection/record_samples_L.txt outputs/phase2/istat2011_source_inspection/fixed_width_ruler.txt
+          git diff --cached --quiet && exit 0
+          git commit -m "audit(phase2): extract official ISTAT 2011 record layout"
+          git push origin HEAD:phase2-od-2011-audit

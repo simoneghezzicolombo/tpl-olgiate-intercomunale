@@ -1,0 +1,91 @@
+name: Phase 2 inspect recent mobility context
+
+on:
+  push:
+    branches: [phase2-od-2011-audit]
+    paths:
+      - .github/workflows/phase2-mobility-context-inspect.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-od-2011-audit
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install workbook parser
+        run: pip install --quiet openpyxl requests beautifulsoup4
+      - name: Discover and inspect official ISTAT 2019-2023 work-study workbooks
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib, json, pathlib, re
+          import requests
+          from bs4 import BeautifulSoup
+          from openpyxl import load_workbook
+
+          out=pathlib.Path('outputs/phase2/mobility_context_inspection')
+          out.mkdir(parents=True,exist_ok=True)
+          pages={
+            2019:'https://www.istat.it/statistica-sperimentale/popolazione-insistente-per-studio-e-lavoro-nel-2019/',
+            2020:'https://www.istat.it/statistica-sperimentale/popolazione-insistente-per-studio-e-lavoro-aggiornamento-anno-2020/',
+            2021:'https://www.istat.it/statistica-sperimentale/popolazione-insistente-per-studio-e-lavoro-aggiornamento-triennio-2021-2023/',
+            2022:'https://www.istat.it/statistica-sperimentale/popolazione-insistente-per-studio-e-lavoro-aggiornamento-triennio-2021-2023/',
+            2023:'https://www.istat.it/statistica-sperimentale/popolazione-insistente-per-studio-e-lavoro-aggiornamento-triennio-2021-2023/',
+          }
+          known={
+            2021:'https://www.istat.it/wp-content/uploads/2026/06/Allegato-statistico-2021_20_03_2026.xlsx',
+            2022:'https://www.istat.it/wp-content/uploads/2026/06/Allegato-statistico-2022_20_03_2026.xlsx',
+            2023:'https://www.istat.it/wp-content/uploads/2026/06/Allegato-statistico-2023_20_03_2026.xlsx',
+          }
+          session=requests.Session(); session.headers['User-Agent']='tpl-olgiate-phase2-context/1.0'
+          discovered={}
+          for year,page in pages.items():
+            if year in known:
+              discovered[year]=known[year]; continue
+            html=session.get(page,timeout=60); html.raise_for_status()
+            soup=BeautifulSoup(html.text,'html.parser')
+            links=[a.get('href') for a in soup.find_all('a') if a.get('href')]
+            xlsx=[u for u in links if re.search(r'\.xlsx(?:\?.*)?$',u,re.I)]
+            print(year,'xlsx candidates',xlsx)
+            if not xlsx:
+              raise SystemExit(f'No xlsx discovered for {year}')
+            # Prefer the link whose surrounding/URL text contains the requested year.
+            candidates=[u for u in xlsx if str(year) in u] or xlsx
+            discovered[year]=candidates[0]
+
+          report={'source_pages':pages,'workbooks':{}}
+          for year,url in discovered.items():
+            r=session.get(url,timeout=180); r.raise_for_status()
+            b=r.content
+            if b[:2] != b'PK': raise SystemExit(f'{year} not xlsx/zip signature: {url}')
+            tmp=out/f'_{year}.xlsx'; tmp.write_bytes(b)
+            wb=load_workbook(tmp,read_only=True,data_only=True)
+            y={'url':url,'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b),'sheets':[]}
+            for ws in wb.worksheets:
+              preview=[]
+              for row in ws.iter_rows(min_row=1,max_row=min(ws.max_row,30),values_only=True):
+                preview.append([None if v is None else str(v)[:300] for v in row[:25]])
+              y['sheets'].append({'title':ws.title,'max_row':ws.max_row,'max_column':ws.max_column,'preview':preview})
+              print('\nYEAR',year,'SHEET',ws.title,'rows',ws.max_row,'cols',ws.max_column)
+              for row in preview[:12]: print(row)
+            report['workbooks'][str(year)]=y
+            wb.close(); tmp.unlink()
+          (out/'inspection_2019_2023.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+      - name: Commit inspection metadata
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/phase2/mobility_context_inspection/inspection_2019_2023.json
+          git diff --cached --quiet && exit 0
+          git commit -m "audit(phase2): inspect ISTAT mobility context 2019-2023 [skip ci]"
+          git push origin HEAD:phase2-od-2011-audit

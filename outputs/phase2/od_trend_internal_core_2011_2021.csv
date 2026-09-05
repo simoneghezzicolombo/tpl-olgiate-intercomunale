@@ -1,0 +1,26 @@
+origin,origin_name,destination,destination_name,workers_2011,workers_2021,change_abs,change_pct
+097010,Brivio,097010,Brivio,467,323,-144,-30.835118
+097010,Brivio,097012,Calco,65,41,-24,-36.923077
+097010,Brivio,097058,Olgiate Molgora,53,64,11,20.754717
+097010,Brivio,097074,Santa Maria Hoè,16,9,-7,-43.750000
+097010,Brivio,097092,La Valletta Brianza,21,12,-9,-42.857143
+097012,Calco,097010,Brivio,100,89,-11,-11.000000
+097012,Calco,097012,Calco,321,279,-42,-13.084112
+097012,Calco,097058,Olgiate Molgora,94,120,26,27.659574
+097012,Calco,097074,Santa Maria Hoè,34,24,-10,-29.411765
+097012,Calco,097092,La Valletta Brianza,39,36,-3,-7.692308
+097058,Olgiate Molgora,097010,Brivio,86,75,-11,-12.790698
+097058,Olgiate Molgora,097012,Calco,136,101,-35,-25.735294
+097058,Olgiate Molgora,097058,Olgiate Molgora,382,326,-56,-14.659686
+097058,Olgiate Molgora,097074,Santa Maria Hoè,80,41,-39,-48.750000
+097058,Olgiate Molgora,097092,La Valletta Brianza,76,75,-1,-1.315789
+097074,Santa Maria Hoè,097010,Brivio,14,7,-7,-50.000000
+097074,Santa Maria Hoè,097012,Calco,33,21,-12,-36.363636
+097074,Santa Maria Hoè,097058,Olgiate Molgora,64,49,-15,-23.437500
+097074,Santa Maria Hoè,097074,Santa Maria Hoè,169,112,-57,-33.727811
+097074,Santa Maria Hoè,097092,La Valletta Brianza,87,83,-4,-4.597701
+097092,La Valletta Brianza,097010,Brivio,36,25,-11,-30.555556
+097092,La Valletta Brianza,097012,Calco,53,56,3,5.660377
+097092,La Valletta Brianza,097058,Olgiate Molgora,82,59,-23,-28.048780
+097092,La Valletta Brianza,097074,Santa Maria Hoè,90,68,-22,-24.444444
+097092,La Valletta Brianza,097092,La Valletta Brianza,377,275,-102,-27.055703
