@@ -1,0 +1,71 @@
+name: Phase 2 Cross-engine Experiment Manifest V3
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - phase2-cross-engine-experiment-manifest-v3
+    paths:
+      - src/phase2_cross_engine_experiment_manifest_v3.py
+      - tests/test_phase2_cross_engine_experiment_manifest_v3.py
+      - scripts/phase2_audit_cross_engine_experiment_manifest_v3.py
+      - docs/PHASE2_CROSS_ENGINE_EXPERIMENT_MANIFEST_V3.md
+      - .github/workflows/phase2-cross-engine-experiment-manifest-v3.yml
+
+permissions:
+  contents: read
+
+jobs:
+  experiment-identity-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-cross-engine-experiment-manifest-v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pytest
+        run: python -m pip install --disable-pip-version-check pytest==8.3.5
+      - name: Compile RT-015
+        run: |
+          python -m py_compile src/phase2_cross_engine_experiment_manifest_v3.py
+          python -m py_compile scripts/phase2_audit_cross_engine_experiment_manifest_v3.py
+      - name: Run RT-015 unit tests
+        run: pytest -q tests/test_phase2_cross_engine_experiment_manifest_v3.py
+      - name: Run controlled experiment-manifest audit
+        run: python scripts/phase2_audit_cross_engine_experiment_manifest_v3.py
+      - name: Validate RT-015 evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('outputs/phase2/cross_engine_experiment_manifest_v3/cross_engine_experiment_manifest_v3_validation.json')
+          d = json.loads(p.read_text())
+          assert d['status'] == 'PASS_RT015_FROZEN_CROSS_ENGINE_EXPERIMENT_MANIFEST_V3'
+          assert d['fixture_semantics'] == 'CONTROLLED_ABSTRACT_EXPERIMENT_FIXTURE_NOT_TERRITORIAL_DATA'
+          assert d['canonicalization_deterministic'] is True
+          assert d['input_order_invariant'] is True
+          assert d['exactly_two_distinct_engines_required'] is True
+          assert d['manifest_mismatch_fails_closed'] is True
+          assert d['routing_disagreement_not_interpreted_before_identity_check'] is True
+          assert len(d['manifest_sha256']) == 64
+          assert d['weighted_composite_score'] is False
+          assert d['territorial_candidate_claim'] is False
+          assert d['network_recommendation_claim'] is False
+          PY
+      - name: Guard against geography, source and decision leakage
+        run: |
+          ! grep -niE 'Arlate|Beverate|Perego|Mondonico|Calco|Brivio|Olgiate|Santa Maria|C146|ASF|PRIMARY|RUNNER-UP|recommended route' src/phase2_cross_engine_experiment_manifest_v3.py scripts/phase2_audit_cross_engine_experiment_manifest_v3.py
+          ! grep -nE 'np\.random|numpy\.random|random\.' src/phase2_cross_engine_experiment_manifest_v3.py scripts/phase2_audit_cross_engine_experiment_manifest_v3.py
+      - name: Whitespace check
+        run: git diff --check
+      - name: Upload RT-015 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-cross-engine-experiment-manifest-v3
+          path: outputs/phase2/cross_engine_experiment_manifest_v3/cross_engine_experiment_manifest_v3_validation.json
+          if-no-files-found: error
