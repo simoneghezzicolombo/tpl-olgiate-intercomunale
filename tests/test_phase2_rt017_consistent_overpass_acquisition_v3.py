@@ -120,6 +120,31 @@ def test_locked_backend_failure_fails_closed_instead_of_switching_mid_run():
     assert calls["c"] == c_before
 
 
+def test_cross_level_object_version_change_fails_closed_on_locked_backend():
+    calls = {"a": 0}
+
+    def post(url, **kwargs):
+        calls[url] += 1
+        # Each level is internally consistent, but the same object changes
+        # between nested levels. A fixed historical epoch must reject this.
+        version = 1 if calls[url] <= 4 else 2
+        return FakeResponse({"elements": [node(version)]})
+
+    acquirer = HistoricalOverpassLevelAcquirer(
+        endpoints=("a",),
+        snapshot_timestamp="2026-09-05T13:45:50Z",
+        user_agent="test",
+        attempts_per_tile=1,
+        post=post,
+        sleep=lambda _: None,
+    )
+    acquirer.acquire_level_snapshot((45.0, 9.0, 46.0, 10.0))
+    assert acquirer.locked_endpoint == "a"
+
+    with pytest.raises(AssertionError, match="across fixed-epoch levels"):
+        acquirer.acquire_level_snapshot((44.9, 8.9, 46.1, 10.1))
+
+
 def test_merge_rejects_conflicting_object_versions_even_with_same_id():
     with pytest.raises(AssertionError, match="conflicting OSM element versions"):
         merge_consistent_tiles([
