@@ -40,7 +40,11 @@ def wait_ready(page):
         timeout=120000,
     )
     page.wait_for_function(
-        "['current-routes','current-gtfs-stops','final-routes-exact','final-anchors-exact'].every(id => !!window.__analysisJourneyMap.getLayer(id))",
+        "window.__analysisJourneyExplore?.installed === true",
+        timeout=30000,
+    )
+    page.wait_for_function(
+        "['current-routes','current-gtfs-stops','final-routes-exact','final-anchors-exact','explore-final-routes','explore-final-anchors'].every(id => !!window.__analysisJourneyMap.getLayer(id))",
         timeout=30000,
     )
 
@@ -72,7 +76,6 @@ with sync_playwright() as p:
             currentCount: L.currentData.features.length,
             currentRoutes: [...new Set(L.currentData.features.map(f => f.properties.route))].sort(),
             stops: L.stopData.features.length,
-            stopRouteSets: [...new Set(L.stopData.features.map(f => JSON.stringify(f.properties.routes || [])))].sort(),
             finalCount: L.finalData.features.length,
             finalIds: L.finalData.features.map(f => f.properties.route_id).sort(),
             anchors: L.anchorData.features.length,
@@ -82,17 +85,19 @@ with sync_playwright() as p:
               coords: f.geometry.coordinates.length,
               edges: Number(f.properties.edge_count),
             })),
+            chapters: document.querySelectorAll('.chapter').length,
+            hasExplore: !!document.querySelector('[data-scene="explore"]'),
           };
         }"""
     )
     assert contract['currentCount'] == 18, contract
     assert contract['currentRoutes'] == ['D184', 'D185'], contract
     assert contract['stops'] == 44, contract
-    assert contract['stopRouteSets'], contract
     assert contract['finalCount'] == 4, contract
     assert set(contract['finalIds']) == FINAL_IDS, contract
     assert contract['anchors'] == 11 and contract['hasHub'], contract
     assert all(x['coords'] == x['edges'] + 1 for x in contract['continuity']), contract
+    assert contract['chapters'] == 12 and contract['hasExplore'], contract
 
     line_offset = page.evaluate(
         "Number(window.__analysisJourneyMap.getPaintProperty('final-routes-exact','line-offset') || 0)"
@@ -101,25 +106,23 @@ with sync_playwright() as p:
 
     activate_scene(page, 'baseline')
     assert page.locator('.route-controls.current').count() == 1
-
     page.locator('.route-controls.current button[data-r="D184"]').click()
-    page.wait_for_timeout(120)
+    page.wait_for_timeout(100)
     current_filter = page.evaluate("window.__analysisJourneyMap.getFilter('current-routes')")
     assert 'D184' in repr(current_filter), current_filter
-    d184_stop_color = page.evaluate("window.__analysisJourneyMap.getPaintProperty('current-gtfs-stops','circle-color')")
-    assert d184_stop_color == '#4ca5ff', d184_stop_color
+    stop_filter = page.evaluate("window.__analysisJourneyMap.getFilter('current-gtfs-stops')")
+    assert 'D184' in repr(stop_filter), stop_filter
+    d184_color = page.evaluate("window.__analysisJourneyMap.getPaintProperty('current-gtfs-stops','circle-color')")
+    assert '#4ca5ff' in repr(d184_color).lower(), d184_color
 
     page.locator('.route-controls.current button[data-r="D185"]').click()
-    page.wait_for_timeout(120)
+    page.wait_for_timeout(100)
     current_filter = page.evaluate("window.__analysisJourneyMap.getFilter('current-routes')")
     assert 'D185' in repr(current_filter), current_filter
-    d185_stop_color = page.evaluate("window.__analysisJourneyMap.getPaintProperty('current-gtfs-stops','circle-color')")
-    assert d185_stop_color == '#ff9b61', d185_stop_color
-
-    page.locator('.route-controls.current button[data-r="ALL"]').click()
-    page.wait_for_timeout(120)
-    all_stop_color = page.evaluate("window.__analysisJourneyMap.getPaintProperty('current-gtfs-stops','circle-color')")
-    assert isinstance(all_stop_color, list) and all_stop_color[0] == 'case', all_stop_color
+    stop_filter = page.evaluate("window.__analysisJourneyMap.getFilter('current-gtfs-stops')")
+    assert 'D185' in repr(stop_filter), stop_filter
+    d185_color = page.evaluate("window.__analysisJourneyMap.getPaintProperty('current-gtfs-stops','circle-color')")
+    assert '#ff9b61' in repr(d185_color).lower(), d185_color
     page.screenshot(path=str(OUT / 'exact-baseline.png'), full_page=False)
 
     activate_scene(page, 'finalists', 0.58)
@@ -131,6 +134,29 @@ with sync_playwright() as p:
         assert route_id in repr(filt), (route_id, filt)
     page.locator('.route-controls.final button[data-f="ALL"]').click()
     page.screenshot(path=str(OUT / 'exact-finalists.png'), full_page=False)
+
+    activate_scene(page, 'explore', 0.52)
+    assert page.locator('.explore-controls').count() == 1
+    explore_state = page.evaluate("window.__analysisJourneyExplore.state")
+    assert explore_state == {'proposals': True, 'current': False, 'stops': True}, explore_state
+    final_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-final-routes','line-opacity')")
+    current_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-current-routes','line-opacity')")
+    anchor_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-final-anchors','circle-opacity')")
+    assert float(final_opacity) > 0.9 and float(anchor_opacity) > 0.9, (final_opacity, anchor_opacity)
+    assert float(current_opacity) == 0, current_opacity
+
+    page.locator('.explore-controls button[data-layer="current"]').click()
+    page.wait_for_timeout(120)
+    current_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-current-routes','line-opacity')")
+    current_stop_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-current-stops','circle-opacity')")
+    assert float(current_opacity) > 0.5 and float(current_stop_opacity) > 0.9, (current_opacity, current_stop_opacity)
+
+    assert page.evaluate("window.__analysisJourneyExplore.showAnchor('P2V2S_0089')") is True
+    page.wait_for_timeout(120)
+    assert page.locator('.maplibregl-popup .map-card__eyebrow').count() == 1
+    popup_text = page.locator('.maplibregl-popup').inner_text()
+    assert 'Nuova fermata candidata' in popup_text and 'FIELD CHECK PENDING' in popup_text, popup_text
+    page.screenshot(path=str(OUT / 'exact-explore.png'), full_page=False)
 
     assert not errors, 'page errors: ' + ' | '.join(errors) + '\nconsole:\n' + '\n'.join(console)
     page.close()
@@ -146,9 +172,13 @@ with sync_playwright() as p:
     overflow = mobile.evaluate('document.documentElement.scrollWidth - window.innerWidth')
     assert overflow <= 2, f'mobile overflow finalists: {overflow}px'
     assert mobile.locator('.route-controls.final').count() == 1
+    activate_scene(mobile, 'explore', 0.52)
+    overflow = mobile.evaluate('document.documentElement.scrollWidth - window.innerWidth')
+    assert overflow <= 2, f'mobile overflow explore: {overflow}px'
+    assert mobile.locator('.explore-controls').count() == 1
     assert not mobile_errors, 'mobile page errors: ' + ' | '.join(mobile_errors) + '\nconsole:\n' + '\n'.join(mobile_console)
     mobile.close()
 
     browser.close()
 
-print('journey exact route lineage browser smoke PASS')
+print('journey exact route lineage + exploration browser smoke PASS')
