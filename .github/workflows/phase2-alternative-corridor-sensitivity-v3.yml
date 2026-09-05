@@ -125,5 +125,7 @@ jobs:
             echo 'No sensitivity evidence changes to persist.'
           else
             git commit -m 'audit: persist alternative corridor sensitivity V3 evidence [skip ci]'
+            git fetch origin phase2-efficient-alternative-corridors-v3
+            git rebase origin/phase2-efficient-alternative-corridors-v3
             git push origin HEAD:phase2-efficient-alternative-corridors-v3
           fi
