@@ -1,4 +1,5 @@
 name: Phase 2 Current Stop Spacing Benchmark V3
+# Source-closed empirical benchmark, deliberately not a design threshold.
 
 on:
   push:
