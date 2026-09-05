@@ -35,17 +35,22 @@ jobs:
             local route="$1"
             local out="$2"
             local path="atpcolc/images/Fil%20KML%202025/Urbano%20e%20interurbano%20Lecco/${route}.kml"
-            local target="http://www.tplcomoleccovarese.it/${path}"
+            local target="https://www.tplcomoleccovarese.it/${path}"
+            local encoded
+            encoded=$(python -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "${target}")
             local ok=0
             local candidates=(
-              "https://r.jina.ai/${target}"
-              "https://r.jina.ai/https://www.tplcomoleccovarese.it/${path}"
-              "https://www.tplcomoleccovarese.it/${path}"
+              "${target}"
               "https://tecuting.halleylombardia.it/${path}"
+              "https://api.allorigins.win/raw?url=${encoded}"
+              "https://corsproxy.io/?url=${encoded}"
+              "https://api.codetabs.com/v1/proxy?quest=${encoded}"
+              "https://cors.isomorphic-git.org/${target}"
+              "https://r.jina.ai/${target}"
             )
             for url in "${candidates[@]}"; do
               echo "Trying ${url}"
-              if curl --fail --location --retry 2 --retry-delay 2 --connect-timeout 15 --max-time 45 \
+              if curl --fail --location --retry 2 --retry-delay 2 --connect-timeout 15 --max-time 60 \
                 --user-agent 'Mozilla/5.0 (compatible; tpl-olgiate-intercomunale/1.0; official open-data retrieval)' \
                 --header 'Accept: application/vnd.google-earth.kml+xml, application/xml, text/plain, text/xml, */*' \
                 "${url}" -o "${out}.tmp"; then
@@ -54,6 +59,7 @@ jobs:
                 echo
                 if normalize_kml "${out}.tmp" "${out}"; then
                   ok=1
+                  echo "Recovered ${route} through ${url}"
                   break
                 fi
               fi
