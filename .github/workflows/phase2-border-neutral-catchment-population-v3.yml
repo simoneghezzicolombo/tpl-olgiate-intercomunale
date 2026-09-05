@@ -14,9 +14,15 @@ on:
       - '.github/workflows/phase2-border-neutral-catchment-population-v3.yml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONPATH: .
     steps:
       - uses: actions/checkout@v4
 
@@ -25,7 +31,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install contract-test dependencies
-        run: python -m pip install --upgrade pip pytest shapely
+        run: python -m pip install --disable-pip-version-check pytest==8.3.5 shapely==2.1.2
 
       - name: Compile RT-016 sources
         run: |
@@ -38,6 +44,9 @@ jobs:
 
       - name: Run controlled RT-016 audit
         run: python scripts/phase2_audit_border_neutral_catchment_population_v3.py
+
+      - name: Whitespace check
+        run: git diff --check
 
       - name: Upload validation artifact
         uses: actions/upload-artifact@v4
