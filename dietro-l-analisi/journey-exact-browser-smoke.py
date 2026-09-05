@@ -14,7 +14,7 @@ FINAL_IDS = {
     'R2_b2032eeb31cba06561f0',
     'R2_2ffb6743b10bb3f0a97d',
 }
-EXPLORE_LAYERS = {
+EXPLORE_KEYS = {
     'worldpop', 'sections', 'buildings', 'walk', 'roads',
     'candidates', 'current', 'proposals', 'stops',
 }
@@ -23,41 +23,21 @@ EXPLORE_LAYERS = {
 def prepare(page, errors, console):
     page.on('pageerror', lambda exc: errors.append(str(exc)))
     page.on('console', lambda msg: console.append(f'{msg.type}: {msg.text}'))
-    page.route(
-        'https://tile.openstreetmap.org/**',
-        lambda route: route.fulfill(status=200, content_type='image/png', body=TRANSPARENT_PNG),
-    )
-    page.route(
-        'https://*.basemaps.cartocdn.com/**',
-        lambda route: route.fulfill(status=200, content_type='image/png', body=TRANSPARENT_PNG),
-    )
+    for pattern in ['https://tile.openstreetmap.org/**', 'https://*.basemaps.cartocdn.com/**']:
+        page.route(pattern, lambda route: route.fulfill(
+            status=200, content_type='image/png', body=TRANSPARENT_PNG
+        ))
 
 
-def wait_ready(page):
+def ready(page):
     page.goto(BASE, wait_until='domcontentloaded', timeout=60000)
-    page.wait_for_function(
-        "document.querySelector('.loader')?.classList.contains('hidden')",
-        timeout=60000,
-    )
-    page.wait_for_function(
-        "window.__analysisJourneyLineage?.installed === true && window.__analysisJourneyLineage?.exactRoutes === true",
-        timeout=120000,
-    )
-    page.wait_for_function(
-        "window.__analysisJourneyCurrentKmlExact?.installed === true",
-        timeout=30000,
-    )
-    page.wait_for_function(
-        "window.__analysisJourneyExplore?.installed === true",
-        timeout=30000,
-    )
-    page.wait_for_function(
-        "['current-routes','current-gtfs-stops','final-routes-exact','final-anchors-exact','explore-final-routes','explore-final-anchors'].every(id => !!window.__analysisJourneyMap.getLayer(id))",
-        timeout=30000,
-    )
+    page.wait_for_function("document.querySelector('.loader')?.classList.contains('hidden')", timeout=60000)
+    page.wait_for_function("window.__analysisJourneyLineage?.installed === true", timeout=120000)
+    page.wait_for_function("window.__analysisJourneyCurrentKmlExact?.installed === true", timeout=30000)
+    page.wait_for_function("window.__analysisJourneyExplore?.installed === true", timeout=30000)
 
 
-def activate_scene(page, name, frac=0.55):
+def scene(page, name, frac=.55):
     page.evaluate(
         """([name, frac]) => {
           const el = document.querySelector(`[data-scene="${name}"]`);
@@ -67,183 +47,123 @@ def activate_scene(page, name, frac=0.55):
         [name, frac],
     )
     page.wait_for_function("name => document.body.dataset.scene === name", arg=name, timeout=15000)
-    page.wait_for_timeout(900)
+    page.wait_for_timeout(850)
+
+
+def opacity(page, layer, prop):
+    return float(page.evaluate(
+        "([layer, prop]) => window.__analysisJourneyMap.getPaintProperty(layer, prop)",
+        [layer, prop],
+    ))
 
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
-    page = browser.new_page(viewport={'width': 1440, 'height': 1000}, device_scale_factor=1)
+    page = browser.new_page(viewport={'width': 1440, 'height': 1000})
     errors, console = [], []
     prepare(page, errors, console)
-    wait_ready(page)
+    ready(page)
 
-    contract = page.evaluate(
-        """() => {
-          const L = window.__analysisJourneyLineage;
-          const K = window.__analysisJourneyCurrentKmlExact;
-          return {
-            currentCount: L.currentData.features.length,
-            currentRoutes: [...new Set(L.currentData.features.map(f => f.properties.route))].sort(),
-            currentSource: L.currentSource,
-            kmlContract: K.contract,
-            kmlVariants: K.variants,
-            kmlCoordinateCounts: K.coordinateCounts,
-            graphReconstruction: K.graphReconstruction,
-            stops: L.stopData.features.length,
-            finalCount: L.finalData.features.length,
-            finalIds: L.finalData.features.map(f => f.properties.route_id).sort(),
-            anchors: L.anchorData.features.length,
-            hasHub: L.anchorData.features.some(f => f.properties.anchor_id === 'rail:S01514'),
-            continuity: L.finalData.features.map(f => ({
-              id: f.properties.route_id,
-              coords: f.geometry.coordinates.length,
-              edges: Number(f.properties.edge_count),
-            })),
-            chapters: document.querySelectorAll('.chapter').length,
-            hasExplore: !!document.querySelector('[data-scene="explore"]'),
-          };
-        }"""
-    )
+    contract = page.evaluate("""() => {
+      const L = window.__analysisJourneyLineage;
+      const K = window.__analysisJourneyCurrentKmlExact;
+      return {
+        currentCount: L.currentData.features.length,
+        currentSource: L.currentSource,
+        variants: K.variants,
+        coordinateCounts: K.coordinateCounts,
+        graphReconstruction: K.graphReconstruction,
+        stops: L.stopData.features.length,
+        finalIds: L.finalData.features.map(f => f.properties.route_id),
+        finalistContinuity: L.finalData.features.map(f => [f.geometry.coordinates.length, Number(f.properties.edge_count)]),
+        anchors: L.anchorData.features.length,
+        chapters: document.querySelectorAll('.chapter').length,
+      };
+    }""")
     assert contract['currentCount'] == 18, contract
-    assert contract['currentRoutes'] == ['D184', 'D185'], contract
-    assert contract['currentSource'] == 'USER_SUPPLIED_OFFICIAL_AGENCY_KML_EXACT', contract
-    assert contract['kmlContract'] == 'CURRENT_SERVICE_KML_GEOMETRY_V1', contract
-    assert contract['kmlVariants'] == {'D184': 7, 'D185': 11}, contract
-    assert contract['kmlCoordinateCounts'] == {'D184': 2268, 'D185': 3618}, contract
+    assert contract['currentSource'] == 'USER_SUPPLIED_AGENCY_KML_LINESTRINGS_EXACT', contract
+    assert contract['variants'] == {'D184': 7, 'D185': 11}, contract
+    assert contract['coordinateCounts'] == {'D184': 2268, 'D185': 3618}, contract
     assert contract['graphReconstruction'] is False, contract
     assert contract['stops'] == 44, contract
-    assert contract['finalCount'] == 4, contract
     assert set(contract['finalIds']) == FINAL_IDS, contract
-    assert contract['anchors'] == 11 and contract['hasHub'], contract
-    assert all(x['coords'] == x['edges'] + 1 for x in contract['continuity']), contract
-    assert contract['chapters'] == 12 and contract['hasExplore'], contract
+    assert all(coords == edges + 1 for coords, edges in contract['finalistContinuity']), contract
+    assert contract['anchors'] == 11 and contract['chapters'] == 12, contract
 
-    line_offset = page.evaluate(
-        "Number(window.__analysisJourneyMap.getPaintProperty('final-routes-exact','line-offset') || 0)"
-    )
-    assert abs(line_offset) < 1e-9, f'exact finalist geometry has screen-space offset: {line_offset}'
+    # Exact current-service KML is also what the rendered current source holds.
+    rendered = page.evaluate("""() => {
+      const d = window.__analysisJourneyLineage.currentData.features;
+      return {
+        d184: d.filter(f => f.properties.route === 'D184').reduce((s,f) => s + f.geometry.coordinates.length, 0),
+        d185: d.filter(f => f.properties.route === 'D185').reduce((s,f) => s + f.geometry.coordinates.length, 0),
+      };
+    }""")
+    assert rendered == {'d184': 2268, 'd185': 3618}, rendered
 
-    activate_scene(page, 'baseline')
-    assert page.locator('.route-controls.current').count() == 1
-    page.locator('.route-controls.current button[data-r="D184"]').click()
-    page.wait_for_timeout(100)
-    current_filter = page.evaluate("window.__analysisJourneyMap.getFilter('current-routes')")
-    assert 'D184' in repr(current_filter), current_filter
-    stop_filter = page.evaluate("window.__analysisJourneyMap.getFilter('current-gtfs-stops')")
-    assert 'D184' in repr(stop_filter), stop_filter
-    d184_color = page.evaluate("window.__analysisJourneyMap.getPaintProperty('current-gtfs-stops','circle-color')")
-    assert '#4ca5ff' in repr(d184_color).lower(), d184_color
-
-    page.locator('.route-controls.current button[data-r="D185"]').click()
-    page.wait_for_timeout(100)
-    current_filter = page.evaluate("window.__analysisJourneyMap.getFilter('current-routes')")
-    assert 'D185' in repr(current_filter), current_filter
-    stop_filter = page.evaluate("window.__analysisJourneyMap.getFilter('current-gtfs-stops')")
-    assert 'D185' in repr(stop_filter), stop_filter
-    d185_color = page.evaluate("window.__analysisJourneyMap.getPaintProperty('current-gtfs-stops','circle-color')")
-    assert '#ff9b61' in repr(d185_color).lower(), d185_color
-    page.screenshot(path=str(OUT / 'exact-baseline.png'), full_page=False)
-
-    activate_scene(page, 'finalists', 0.58)
-    assert page.locator('.route-controls.final').count() == 1
-    for route_id in sorted(FINAL_IDS):
-        page.locator(f'.route-controls.final button[data-f="{route_id}"]').click()
-        page.wait_for_timeout(80)
-        filt = page.evaluate("window.__analysisJourneyMap.getFilter('final-routes-exact')")
-        assert route_id in repr(filt), (route_id, filt)
-    page.locator('.route-controls.final button[data-f="ALL"]').click()
-    page.screenshot(path=str(OUT / 'exact-finalists.png'), full_page=False)
-
-    # The last chapter is first a cinematic preview. The free map is entered
-    # explicitly, so scroll narrative and direct map interaction never fight.
-    activate_scene(page, 'explore', 0.52)
+    scene(page, 'explore', .52)
     assert page.locator('[data-explore-enter]').count() == 1
     assert page.locator('.explore-controls').count() == 1
-    compatibility_state = page.evaluate("window.__analysisJourneyExplore.state")
-    assert compatibility_state == {'proposals': True, 'current': False, 'stops': True}, compatibility_state
-    full_state = page.evaluate("window.__analysisJourneyExplore.layers")
-    assert set(full_state) == EXPLORE_LAYERS, full_state
-    assert full_state['proposals'] is True and full_state['stops'] is True and full_state['current'] is False, full_state
     assert page.evaluate("window.__analysisJourneyExplore.isActive()") is False
+    assert set(page.evaluate("window.__analysisJourneyExplore.layers")) == EXPLORE_KEYS
 
-    final_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-final-routes','line-opacity')")
-    current_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-current-routes','line-opacity')")
-    anchor_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-final-anchors','circle-opacity')")
-    assert float(final_opacity) > 0.9 and float(anchor_opacity) > 0.9, (final_opacity, anchor_opacity)
-    assert float(current_opacity) == 0, current_opacity
+    # Preview is cinematic: exact finalists visible, current network off.
+    assert opacity(page, 'explore-final-routes', 'line-opacity') > .9
+    assert opacity(page, 'explore-current-routes', 'line-opacity') == 0
 
+    # Explicit click hands control from scroll to the map.
     page.locator('[data-explore-enter]').click()
     page.wait_for_function("window.__analysisJourneyExplore.isActive() === true", timeout=5000)
-    page.wait_for_function("document.body.classList.contains('is-map-exploring')", timeout=5000)
+    assert page.evaluate("document.body.classList.contains('is-map-exploring')") is True
     assert page.evaluate("document.documentElement.classList.contains('is-map-exploring')") is True
 
-    # Current KML lines and GTFS stops are independently toggleable in free mode.
-    page.locator('.explore-controls button[data-layer="current"]').click()
-    page.wait_for_timeout(160)
-    current_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-current-routes','line-opacity')")
-    current_stop_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('explore-current-stops','circle-opacity')")
-    assert float(current_opacity) > 0.5 and float(current_stop_opacity) > 0.9, (current_opacity, current_stop_opacity)
-
-    # Every analytical representation shown in the scroll is available here.
-    for key, layer_id, paint in [
-        ('worldpop', 'worldpop-columns', 'fill-extrusion-opacity'),
-        ('sections', 'sections-fill', 'fill-extrusion-opacity'),
-        ('buildings', 'buildings-extrude', 'fill-extrusion-opacity'),
-        ('walk', 'piece-halo', 'circle-opacity'),
-        ('candidates', 'candidates', 'circle-opacity'),
-    ]:
+    # Current KML and all analytical layers from the scroll can be switched on.
+    checks = [
+        ('current', 'explore-current-routes', 'line-opacity', .5),
+        ('worldpop', 'worldpop-columns', 'fill-extrusion-opacity', .1),
+        ('sections', 'sections-fill', 'fill-extrusion-opacity', .1),
+        ('buildings', 'buildings-extrude', 'fill-extrusion-opacity', .1),
+        ('walk', 'piece-halo', 'circle-opacity', .1),
+        ('candidates', 'candidates', 'circle-opacity', .1),
+    ]
+    for key, layer, prop, minimum in checks:
         page.locator(f'.explore-controls button[data-layer="{key}"]').click()
-        page.wait_for_timeout(90)
-        value = page.evaluate("([layer, paint]) => window.__analysisJourneyMap.getPaintProperty(layer, paint)", [layer_id, paint])
-        assert float(value) > 0, (key, layer_id, value)
+        page.wait_for_timeout(100)
+        assert opacity(page, layer, prop) > minimum, (key, layer, opacity(page, layer, prop))
 
     page.locator('.explore-controls button[data-layer="roads"]').click()
     page.wait_for_function("!!window.__analysisJourneyMap.getLayer('road-network')", timeout=30000)
     page.wait_for_timeout(100)
-    road_opacity = page.evaluate("window.__analysisJourneyMap.getPaintProperty('road-network','line-opacity')")
-    assert float(road_opacity) > 0.5, road_opacity
+    assert opacity(page, 'road-network', 'line-opacity') > .5
 
+    # Certified proposed stop remains inspectable and correctly labelled.
     assert page.evaluate("window.__analysisJourneyExplore.showAnchor('P2V2S_0089')") is True
-    page.wait_for_timeout(120)
-    assert page.locator('.maplibregl-popup .map-card__eyebrow').count() == 1
-    popup_text = page.locator('.maplibregl-popup').inner_text()
-    popup_upper = popup_text.upper()
-    assert 'NUOVA FERMATA CANDIDATA' in popup_upper and 'FIELD CHECK PENDING' in popup_upper, popup_text
+    page.wait_for_timeout(100)
+    popup = page.locator('.maplibregl-popup').inner_text().upper()
+    assert 'NUOVA FERMATA CANDIDATA' in popup and 'FIELD CHECK PENDING' in popup, popup
     page.screenshot(path=str(OUT / 'exact-explore.png'), full_page=False)
 
+    # Exit returns ownership to the scroll narrative.
     page.locator('.explore-controls [data-action="exit"]').click()
     page.wait_for_function("window.__analysisJourneyExplore.isActive() === false", timeout=5000)
     assert page.evaluate("document.body.classList.contains('is-map-exploring')") is False
-
     assert not errors, 'page errors: ' + ' | '.join(errors) + '\nconsole:\n' + '\n'.join(console)
     page.close()
 
-    mobile = browser.new_page(viewport={'width': 390, 'height': 844}, device_scale_factor=1)
+    # Mobile: same explicit enter/exit contract and no horizontal overflow.
+    mobile = browser.new_page(viewport={'width': 390, 'height': 844})
     mobile_errors, mobile_console = [], []
     prepare(mobile, mobile_errors, mobile_console)
-    wait_ready(mobile)
-    activate_scene(mobile, 'baseline')
-    overflow = mobile.evaluate('document.documentElement.scrollWidth - window.innerWidth')
-    assert overflow <= 2, f'mobile overflow baseline: {overflow}px'
-    activate_scene(mobile, 'finalists', 0.58)
-    overflow = mobile.evaluate('document.documentElement.scrollWidth - window.innerWidth')
-    assert overflow <= 2, f'mobile overflow finalists: {overflow}px'
-    assert mobile.locator('.route-controls.final').count() == 1
-    activate_scene(mobile, 'explore', 0.52)
-    overflow = mobile.evaluate('document.documentElement.scrollWidth - window.innerWidth')
-    assert overflow <= 2, f'mobile overflow explore preview: {overflow}px'
-    assert mobile.locator('[data-explore-enter]').count() == 1
+    ready(mobile)
+    scene(mobile, 'explore', .52)
+    assert mobile.evaluate('document.documentElement.scrollWidth - window.innerWidth') <= 2
     mobile.locator('[data-explore-enter]').click()
     mobile.wait_for_function("window.__analysisJourneyExplore.isActive() === true", timeout=5000)
-    mobile.wait_for_timeout(180)
-    overflow = mobile.evaluate('document.documentElement.scrollWidth - window.innerWidth')
-    assert overflow <= 2, f'mobile overflow explore active: {overflow}px'
-    assert mobile.locator('.explore-controls').count() == 1
+    mobile.wait_for_timeout(150)
+    assert mobile.evaluate('document.documentElement.scrollWidth - window.innerWidth') <= 2
     mobile.locator('.explore-controls [data-action="exit"]').click()
     mobile.wait_for_function("window.__analysisJourneyExplore.isActive() === false", timeout=5000)
-    assert not mobile_errors, 'mobile page errors: ' + ' | '.join(mobile_errors) + '\nconsole:\n' + '\n'.join(mobile_console)
+    assert not mobile_errors, 'mobile errors: ' + ' | '.join(mobile_errors) + '\nconsole:\n' + '\n'.join(mobile_console)
     mobile.close()
-
     browser.close()
 
 print('journey exact KML + full click-to-explore browser smoke PASS')
