@@ -1,0 +1,20 @@
+{
+  "fixture_semantics": "PINNED_UPSTREAM_SAMPLE_FIXTURE_NOT_TERRITORIAL_DATA",
+  "internal_engine_replaced": false,
+  "java_version_line": "openjdk version \"21.0.12.1\" 2026-08-18 LTS",
+  "network_recommendation_claim": false,
+  "python_version": "3.12.14",
+  "r5py_version": "1.1.7",
+  "service_date": "2022-02-22",
+  "status": "PASS_RT012_R5PY_CROSSCHECK_SMOKE_V3",
+  "territorial_candidate_claim": false,
+  "transit_matrix_rows": 4,
+  "transit_max_travel_time": 15.0,
+  "transit_min_travel_time": 4.0,
+  "transport_network_built": true,
+  "walk_matrix_rows": 4,
+  "walk_max_travel_time": 19.0,
+  "walk_min_travel_time": 4.0,
+  "walk_repeat_deterministic": true,
+  "weighted_composite_score": false
+}
