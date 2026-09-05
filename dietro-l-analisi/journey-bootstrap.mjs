@@ -22,4 +22,4 @@ await import('./journey-lens.js');
 // KML LineStrings. Do not route, snap or repair D184/D185 through Gate D.
 await import('./journey-lineage.js');
 await import('./journey-current-kml-exact.mjs');
-await import('./journey-explore.js');
+await import('./journey-explore-v2.js');
