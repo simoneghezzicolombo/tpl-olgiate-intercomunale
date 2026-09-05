@@ -62,8 +62,8 @@ def test_master_builder_preserves_sources_and_selects_no_terminals(tmp_path: Pat
     assert len(master) == 105
     assert master["master_source_record_id"].is_unique
     assert master["source_family"].value_counts().to_dict() == {
-        "FROZEN_GTFS_REFERENCE": 65,
-        "ASF_OPERATOR_OTP": 39,
+        "FROZEN_GTFS_REFERENCE": 66,
+        "ASF_OPERATOR_OTP": 38,
         "SPECIAL_SERVICE_EVIDENCE": 1,
     }
     assert master["routing_terminal_eligibility_status"].eq("NOT_EVALUATED").all()
