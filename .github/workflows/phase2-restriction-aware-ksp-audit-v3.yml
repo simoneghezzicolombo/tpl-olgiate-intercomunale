@@ -65,7 +65,7 @@ jobs:
             --pairs 8 \
             --max-raw-state-paths 20000
 
-      - name: Validate audit contract and epistemic guards
+      - name: Validate routing-equivalence and corridor guards
         run: |
           python - <<'PY'
           import json
@@ -73,13 +73,19 @@ jobs:
           p = Path('outputs/phase2/network_design_method_audit_v3/restriction_aware_ksp_v3/restriction_aware_ksp_v3_validation.json')
           v = json.loads(p.read_text(encoding='utf-8'))
           assert v['status'] == 'PASS_RESTRICTION_AWARE_KSP_AUDIT_V3', v
-          assert v['contract'] == 'EDGE_STATE_YEN_WITH_CERTIFIED_GATE_D_DIJKSTRA_RANK1_NOT_NETWORK_SELECTION'
-          assert v['checks']['state_vertex_count_equals_directed_edge_count'] is True
-          assert v['checks']['turn_restrictions_reject_at_least_one_transition'] is True
-          assert v['checks']['all_rank1_paths_exact_frozen_edge_sequence'] is True
-          assert v['checks']['all_rank1_runtime_deltas_le_1e_9'] is True
-          assert v['checks']['all_rank1_distance_deltas_le_1e_6'] is True
-          assert v['checks']['all_output_paths_physical_loopless'] is True
+          assert v['contract'] == 'EDGE_STATE_YEN_CERTIFIED_GATE_D_EQUIVALENCE_PLUS_LOOPLESS_CORRIDOR_FILTER_NOT_NETWORK_SELECTION'
+          checks = v['checks']
+          for key in [
+              'state_vertex_count_equals_directed_edge_count',
+              'turn_restrictions_reject_at_least_one_transition',
+              'all_certified_paths_exact_frozen_edge_sequence',
+              'all_certified_paths_state_representable',
+              'all_certified_runtime_deltas_le_1e_9',
+              'all_certified_distance_deltas_le_1e_6',
+              'all_output_corridor_paths_physical_loopless',
+              'loopless_certified_paths_remain_exact_rank1',
+          ]:
+              assert checks[key] is True, (key, checks)
           guards = v['guards']
           for key in [
               'candidate_network_generated',
