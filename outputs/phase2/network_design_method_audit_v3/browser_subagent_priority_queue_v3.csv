@@ -1,0 +1,8 @@
+priority,case_id,location,question,evidence_note
+1,TREMONT_CONFLICT,Santa Maria Hoè,"Resolve distinct Google Maps pins for Via Giovanni XXIII, Tremonte/Via Leopardi, Tremonte Centro and claimed Via Trento; do not merge by proximity.","Known Via Giovanni XXIII and Via Leopardi coordinates are ~47 m apart; prior browser report incorrectly called them coincident."
+2,SCAGNELLO_PAIR,Calco,"Return both Google Maps transit pin coordinates for Via Statale/Via Scagnello if two opposite-side pins are visible.","Prior browser report claimed two pins but supplied one coordinate."
+3,ALDUNO_PAIR,Santa Maria Hoè / La Valletta Brianza boundary,"Return both Google Maps transit pin coordinates for Alduno if two specular pins are visible; assign municipality by ISTAT polygon afterward.","Prior browser report claimed two points but supplied one coordinate."
+4,ARLATE_MADONNINA_PAIR,Calco,"Check whether ASF CALCOA09 has a visible opposite-side Google Maps boarding point and return coordinates.","User-provided ASF list had CALCOA09 with no obvious CALCOR09."
+5,NO_PIN_SAN_ZENO,Olgiate Molgora,"Record only whether a Google Maps transit pin is visible at high zoom and identify nearest visible stop.","Maps absence alone must not be promoted to proof of no ordinary TPL."
+6,NO_PIN_MONDONICO,Olgiate Molgora,"Record only whether a Google Maps transit pin is visible at high zoom and identify nearest visible stop.","Maps absence alone must not be promoted to proof of no ordinary TPL."
+7,NO_PIN_CALCO_ALTA,Calco,"Record only whether a Google Maps transit pin is visible at high zoom and identify nearest visible stop.","Maps absence alone must not be promoted to proof of no ordinary TPL."
