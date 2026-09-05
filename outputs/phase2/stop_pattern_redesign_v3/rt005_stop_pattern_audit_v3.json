@@ -1,0 +1,279 @@
+{
+  "status": "PASS_RT005_FORMULATION_FAILURE_CONFIRMED",
+  "decision_ready_current_finalists": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false,
+  "audit_scope": "CURRENT_FOUR_FINALISTS_AS_NEGATIVE_REGRESSION_FIXTURE",
+  "study_municipalities": [
+    "Olgiate Molgora",
+    "Calco",
+    "Brivio",
+    "Santa Maria Hoè",
+    "La Valletta Brianza"
+  ],
+  "confirmed_upstream_contracts": {
+    "structural_max_loop_intermediate_anchors": 4,
+    "access_equity_uses_explicit_route_anchors_as_passenger_stop_set": true
+  },
+  "current_finalist_count": 4,
+  "finalists_missing_calco_explicit_stop": [
+    "TT-FIG-16",
+    "TT-FIG-18.5",
+    "TT-TWO-16",
+    "TT-TWO-18.5"
+  ],
+  "all_current_finalists_missing_calco_explicit_stop": true,
+  "finalist_audits": [
+    {
+      "finalist_alias": "TT-FIG-16",
+      "topology_family": "interlined_figure8",
+      "service_span_min": 960,
+      "public_route_count": 2,
+      "unique_nonhub_explicit_anchor_count": 7,
+      "study_municipalities_explicitly_served": [
+        "Brivio",
+        "La Valletta Brianza",
+        "Olgiate Molgora",
+        "Santa Maria Hoè"
+      ],
+      "study_municipalities_missing_explicit_stop": [
+        "Calco"
+      ],
+      "field_check_pending_anchor_count": 3,
+      "field_check_pending_anchors": [
+        "P2V2S_0027",
+        "P2V2S_0039",
+        "P2V2S_0089"
+      ],
+      "technical_label_anchor_count": 7,
+      "technical_label_anchors": [
+        "P2V2S_0027",
+        "P2V2S_0039",
+        "P2V2S_0089",
+        "existing:EX_008",
+        "existing:EX_018",
+        "existing:EX_027",
+        "existing:EX_033"
+      ],
+      "missing_anchor_metadata": [],
+      "routes": [
+        {
+          "ordinal": 1,
+          "sequence_semantics": "ORDERED_CERTIFIED_ANCHORS_ONLY_NO_ROUTED_GEOMETRY",
+          "nonhub_explicit_anchor_count": 3,
+          "ordered_nonhub_anchors": [
+            "existing:EX_033",
+            "P2V2S_0089",
+            "existing:EX_027"
+          ]
+        },
+        {
+          "ordinal": 2,
+          "sequence_semantics": "ORDERED_CERTIFIED_ANCHORS_ONLY_NO_ROUTED_GEOMETRY",
+          "nonhub_explicit_anchor_count": 4,
+          "ordered_nonhub_anchors": [
+            "existing:EX_018",
+            "existing:EX_008",
+            "P2V2S_0039",
+            "P2V2S_0027"
+          ]
+        }
+      ],
+      "rt005_failure_reasons": [
+        "MISSING_STUDY_MUNICIPALITY_EXPLICIT_STOP",
+        "TECHNICAL_ID_SURVIVES_AS_STOP_LABEL",
+        "FIELD_CHECK_PENDING_STOP_IN_FINALIST",
+        "ANCHOR_SEQUENCE_NOT_FULL_ROUTED_STOP_PATTERN"
+      ],
+      "passes_v3_territorial_guard": false
+    },
+    {
+      "finalist_alias": "TT-FIG-18.5",
+      "topology_family": "interlined_figure8",
+      "service_span_min": 1110,
+      "public_route_count": 2,
+      "unique_nonhub_explicit_anchor_count": 5,
+      "study_municipalities_explicitly_served": [
+        "Brivio",
+        "La Valletta Brianza",
+        "Olgiate Molgora",
+        "Santa Maria Hoè"
+      ],
+      "study_municipalities_missing_explicit_stop": [
+        "Calco"
+      ],
+      "field_check_pending_anchor_count": 1,
+      "field_check_pending_anchors": [
+        "P2V2S_0103"
+      ],
+      "technical_label_anchor_count": 5,
+      "technical_label_anchors": [
+        "P2V2S_0103",
+        "existing:EX_008",
+        "existing:EX_018",
+        "existing:EX_032",
+        "existing:EX_042"
+      ],
+      "missing_anchor_metadata": [],
+      "routes": [
+        {
+          "ordinal": 1,
+          "sequence_semantics": "ORDERED_CERTIFIED_ANCHORS_ONLY_NO_ROUTED_GEOMETRY",
+          "nonhub_explicit_anchor_count": 2,
+          "ordered_nonhub_anchors": [
+            "existing:EX_018",
+            "existing:EX_008"
+          ]
+        },
+        {
+          "ordinal": 2,
+          "sequence_semantics": "ORDERED_CERTIFIED_ANCHORS_ONLY_NO_ROUTED_GEOMETRY",
+          "nonhub_explicit_anchor_count": 3,
+          "ordered_nonhub_anchors": [
+            "existing:EX_042",
+            "P2V2S_0103",
+            "existing:EX_032"
+          ]
+        }
+      ],
+      "rt005_failure_reasons": [
+        "MISSING_STUDY_MUNICIPALITY_EXPLICIT_STOP",
+        "TECHNICAL_ID_SURVIVES_AS_STOP_LABEL",
+        "FIELD_CHECK_PENDING_STOP_IN_FINALIST",
+        "ANCHOR_SEQUENCE_NOT_FULL_ROUTED_STOP_PATTERN"
+      ],
+      "passes_v3_territorial_guard": false
+    },
+    {
+      "finalist_alias": "TT-TWO-16",
+      "topology_family": "two_independent_loops",
+      "service_span_min": 960,
+      "public_route_count": 2,
+      "unique_nonhub_explicit_anchor_count": 7,
+      "study_municipalities_explicitly_served": [
+        "Brivio",
+        "La Valletta Brianza",
+        "Olgiate Molgora",
+        "Santa Maria Hoè"
+      ],
+      "study_municipalities_missing_explicit_stop": [
+        "Calco"
+      ],
+      "field_check_pending_anchor_count": 3,
+      "field_check_pending_anchors": [
+        "P2V2S_0027",
+        "P2V2S_0039",
+        "P2V2S_0089"
+      ],
+      "technical_label_anchor_count": 7,
+      "technical_label_anchors": [
+        "P2V2S_0027",
+        "P2V2S_0039",
+        "P2V2S_0089",
+        "existing:EX_008",
+        "existing:EX_018",
+        "existing:EX_027",
+        "existing:EX_033"
+      ],
+      "missing_anchor_metadata": [],
+      "routes": [
+        {
+          "ordinal": 1,
+          "sequence_semantics": "ORDERED_CERTIFIED_ANCHORS_ONLY_NO_ROUTED_GEOMETRY",
+          "nonhub_explicit_anchor_count": 3,
+          "ordered_nonhub_anchors": [
+            "existing:EX_033",
+            "P2V2S_0089",
+            "existing:EX_027"
+          ]
+        },
+        {
+          "ordinal": 2,
+          "sequence_semantics": "ORDERED_CERTIFIED_ANCHORS_ONLY_NO_ROUTED_GEOMETRY",
+          "nonhub_explicit_anchor_count": 4,
+          "ordered_nonhub_anchors": [
+            "existing:EX_018",
+            "existing:EX_008",
+            "P2V2S_0039",
+            "P2V2S_0027"
+          ]
+        }
+      ],
+      "rt005_failure_reasons": [
+        "MISSING_STUDY_MUNICIPALITY_EXPLICIT_STOP",
+        "TECHNICAL_ID_SURVIVES_AS_STOP_LABEL",
+        "FIELD_CHECK_PENDING_STOP_IN_FINALIST",
+        "ANCHOR_SEQUENCE_NOT_FULL_ROUTED_STOP_PATTERN"
+      ],
+      "passes_v3_territorial_guard": false
+    },
+    {
+      "finalist_alias": "TT-TWO-18.5",
+      "topology_family": "two_independent_loops",
+      "service_span_min": 1110,
+      "public_route_count": 2,
+      "unique_nonhub_explicit_anchor_count": 5,
+      "study_municipalities_explicitly_served": [
+        "Brivio",
+        "La Valletta Brianza",
+        "Olgiate Molgora",
+        "Santa Maria Hoè"
+      ],
+      "study_municipalities_missing_explicit_stop": [
+        "Calco"
+      ],
+      "field_check_pending_anchor_count": 1,
+      "field_check_pending_anchors": [
+        "P2V2S_0103"
+      ],
+      "technical_label_anchor_count": 5,
+      "technical_label_anchors": [
+        "P2V2S_0103",
+        "existing:EX_008",
+        "existing:EX_018",
+        "existing:EX_032",
+        "existing:EX_042"
+      ],
+      "missing_anchor_metadata": [],
+      "routes": [
+        {
+          "ordinal": 1,
+          "sequence_semantics": "ORDERED_CERTIFIED_ANCHORS_ONLY_NO_ROUTED_GEOMETRY",
+          "nonhub_explicit_anchor_count": 2,
+          "ordered_nonhub_anchors": [
+            "existing:EX_018",
+            "existing:EX_008"
+          ]
+        },
+        {
+          "ordinal": 2,
+          "sequence_semantics": "ORDERED_CERTIFIED_ANCHORS_ONLY_NO_ROUTED_GEOMETRY",
+          "nonhub_explicit_anchor_count": 3,
+          "ordered_nonhub_anchors": [
+            "existing:EX_042",
+            "P2V2S_0103",
+            "existing:EX_032"
+          ]
+        }
+      ],
+      "rt005_failure_reasons": [
+        "MISSING_STUDY_MUNICIPALITY_EXPLICIT_STOP",
+        "TECHNICAL_ID_SURVIVES_AS_STOP_LABEL",
+        "FIELD_CHECK_PENDING_STOP_IN_FINALIST",
+        "ANCHOR_SEQUENCE_NOT_FULL_ROUTED_STOP_PATTERN"
+      ],
+      "passes_v3_territorial_guard": false
+    }
+  ],
+  "required_next_lineage": "PHASE2_CORRIDOR_AND_PASSENGER_STOP_PATTERN_V3",
+  "lineage": {
+    "finalist_route_structure": "outputs/phase2/finalist_simplicity_diagnostic_v3/finalist_route_structure_v3.csv",
+    "finalist_route_structure_sha256": "63d4fc41ae3d5bb7ad9594b8853a8eee452449d7db3acef4271f641864894e3c",
+    "routing_anchor_universe": "outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv",
+    "routing_anchor_universe_sha256": "123a5e25a25207ec3d38a6ffa80fc9ea70b6da4793581b19f1d55dad3ae24cf7",
+    "access_equity_source": "scripts/phase2_run_access_equity_v2.py",
+    "access_equity_source_sha256": "25b405e029a37299207b57de4bfd785dee9474b758b289bcb169a011385739d7",
+    "structural_workflow": ".github/workflows/phase2-real-structural-catalog.yml",
+    "structural_workflow_sha256": "fe7abb57ce8750c4ac6d90a356f01f350478d4237827ce066aac32e85f720f34"
+  }
+}
