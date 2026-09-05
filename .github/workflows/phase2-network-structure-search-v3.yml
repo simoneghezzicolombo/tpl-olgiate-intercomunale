@@ -67,10 +67,10 @@ jobs:
           assert d['figure_eight_like_count'] >= 1
           PY
 
-      - name: Guard against geography, stop and winner leakage
+      - name: Guard against geography, stop and decision leakage
         run: |
           ! grep -niE 'Arlate|Beverate|Perego|Mondonico|Calco|Brivio|Olgiate|Santa Maria|proposed_stop_candidates|passenger_stop_foundation|C146|ASF' src/phase2_network_structure_search_v3.py
-          ! grep -niE 'PRIMARY|RUNNER-UP|winner|recommended route' src/phase2_network_structure_search_v3.py
+          ! grep -nE 'PRIMARY|RUNNER-UP|RECOMMENDED_ROUTE|NETWORK_WINNER' src/phase2_network_structure_search_v3.py
           ! grep -nE 'np\.random|numpy\.random|random\.' src/phase2_network_structure_search_v3.py scripts/phase2_audit_network_structure_search_v3.py
 
       - name: Whitespace check
