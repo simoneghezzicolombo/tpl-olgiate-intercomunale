@@ -73,7 +73,7 @@
   function install() {
     const map = window.__analysisJourneyMap;
     const G = window.TRA_PAESI_GEO;
-    if (!map || !G || !window.gsap || !window.ScrollTrigger || !map.isStyleLoaded() || !map.getLayer('piece-halo')) return false;
+    if (!map || !G || !window.gsap || !window.ScrollTrigger || !map.getLayer('piece-halo')) return false;
     window.clearInterval(waiter);
     gsap.registerPlugin(ScrollTrigger);
 
@@ -133,5 +133,5 @@
   }
 
   const waiter = window.setInterval(install, 120);
-  window.setTimeout(() => window.clearInterval(waiter), 15000);
+  window.setTimeout(() => window.clearInterval(waiter), 120000);
 })();
