@@ -1,20 +1,24 @@
 {
-  "contract": "PHASE2_JOURNEY_EXACT_ROUTE_LINEAGE_V1",
+  "contract": "PHASE2_JOURNEY_EXACT_ROUTE_LINEAGE_V2",
   "current_service": {
-    "coordinate_counts": {
-      "D184": 3075,
-      "D185": 3800
+    "route_geometry": {
+      "contract": "CURRENT_SERVICE_KML_GEOMETRY_V1",
+      "coordinate_counts": {
+        "D184": 2268,
+        "D185": 3618
+      },
+      "variant_features": {
+        "D184": 7,
+        "D185": 11
+      },
+      "graph_reconstruction": false
     },
-    "physical_stop_clusters": 44,
-    "shape_features": {
-      "D184": 8,
-      "D185": 10
-    }
+    "physical_stop_clusters": 44
   },
   "decision_output": false,
   "files_sha256": {
-    "current-routes-gtfs.geojson.gz.b64.0": "33deebd7b84ee47af9cd78c835bc42d9837f44eefb9c4e6bb54a33be123666cf",
-    "current-routes-gtfs.geojson.gz.b64.1": "d6edbb71b9a428ff2501f8ccb418dfc8f70e205233720df9c7e6c9ef237c03ee",
+    "current-routes-kml-exact.geojson.gz.b64.0": "d1cc2828047946132f56c2131ced4113578ac0ce8449a5bc75240c5a58be3dd4",
+    "current-routes-kml-exact.geojson.gz.b64.1": "7408c7224f66b30fc42d021918aec182c25427881030a808530c36fdfbdbba56",
     "current-stops-gtfs.geojson.gz.b64.0": "832f9a6aa50a10e3436b32203a8dac544ce9063c4d86c518bb106cc6453d6f97",
     "finalist-route-anchors.geojson.gz.b64.0": "2ef66dbcec44cf8baf09832996e5a52fef0d04a9cd4b4c411f665f9f21919f0c",
     "finalist-routes-gated.geojson.gz.b64.0": "e5516b412e47f99dd37f29a1e8e6a0c5702247613e5bed74c7d3049381437b7a",
@@ -48,8 +52,8 @@
     }
   },
   "generated_files": [
-    "current-routes-gtfs.geojson.gz.b64.0",
-    "current-routes-gtfs.geojson.gz.b64.1",
+    "current-routes-kml-exact.geojson.gz.b64.0",
+    "current-routes-kml-exact.geojson.gz.b64.1",
     "current-stops-gtfs.geojson.gz.b64.0",
     "finalist-route-anchors.geojson.gz.b64.0",
     "finalist-routes-gated.geojson.gz.b64.0",
@@ -63,13 +67,27 @@
     "turn_rule_keys_in_graph": 535
   },
   "semantics": {
-    "current_routes": "OFFICIAL_FROZEN_GTFS_SHAPES",
+    "current_route_geometry": "USER_SUPPLIED_AGENCY_KML_LINESTRINGS_EXACT",
+    "current_route_graph_reconstruction": false,
+    "current_stops_and_service": "CURRENT_SERVICE_BASELINE_V4_OFFICIAL_FROZEN_GTFS",
     "finalist_routes": "RESTRICTION_AWARE_GATE_D_ROUTES_VALIDATED_AGAINST_REDUCED_PATH_MATRIX_V2",
     "screen_space_offsets": false,
     "winner_selected": false
   },
   "sources": {
+    "current_kml_geometry": {
+      "contract": "CURRENT_SERVICE_KML_GEOMETRY_V1",
+      "D184": {
+        "uploaded_name": "D84.kml",
+        "sha256": "6cf715a83c1e85e7ebfeecd82b666eee623119e7b37e35875ed0be419fa5523a"
+      },
+      "D185": {
+        "uploaded_name": "E03.kml",
+        "sha256": "10239544443134a10992b938a878ff62a906618f8f7f6babe2a339647f41bfa5"
+      }
+    },
     "current_service_v4": {
+      "role": "stops_and_service_baseline",
       "artifact_id": 9947554863,
       "sha256": "b9bfe98c0418f30b79772c524f8525001a5eac91d9f2f9dacd78c510e5aef16a"
     },
@@ -78,6 +96,7 @@
       "sha256": "3d1be56ff2f42a2915724ca730d20a58389d1191cbae4aa7af3e76e1b7b46070"
     },
     "gate_d": {
+      "role": "finalist_routes_only",
       "artifact_id": 9891607118,
       "sha256": "6fbc06d74d5ba970bc980e4cde6234245e0753c22386f703ea313c6a4de9206a"
     },
