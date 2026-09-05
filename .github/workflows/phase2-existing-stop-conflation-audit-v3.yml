@@ -1,0 +1,99 @@
+name: Phase 2 Existing Stop Conflation Audit V3
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - phase2-network-design-method-audit-v3
+    paths:
+      - scripts/phase2_audit_existing_stop_conflation_v3.py
+      - .github/workflows/phase2-existing-stop-conflation-audit-v3.yml
+      - data/raw/osm/osm_bus_stops_core.json
+      - outputs/phase2/stop_universe_v2/existing_official_stops.csv
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          ref: phase2-network-design-method-audit-v3
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned audit dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'pandas==2.3.2' 'pyproj==3.7.2'
+
+      - name: Compile audit script
+        run: python -m py_compile scripts/phase2_audit_existing_stop_conflation_v3.py
+
+      - name: Run existing-stop conflation audit
+        run: python scripts/phase2_audit_existing_stop_conflation_v3.py
+
+      - name: Validate epistemic guards
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('outputs/phase2/network_design_method_audit_v3/existing_stop_conflation_v3_validation.json')
+          v = json.loads(p.read_text())
+          assert v['status'] == 'PASS_EXISTING_STOP_CONFLATION_AUDIT_V3', v
+          assert v['contract'] == 'EXISTING_STOP_FIRST_CROSS_SOURCE_AUDIT_NOT_ROUTE_SELECTION'
+          assert v['matching_contract']['distance_only_can_confirm'] is False
+          assert v['matching_contract']['osm_only_promoted_to_official'] is False
+          assert v['guards']['proposed_stops_generated'] is False
+          assert v['guards']['passenger_stop_pattern_selected'] is False
+          assert v['guards']['corridor_selected'] is False
+          assert v['guards']['winner_selected'] is False
+          assert v['guards']['osm_is_treated_as_official_gtfs_truth'] is False
+          assert v['counts']['reference_gtfs_physical_clusters'] > 0
+          assert v['counts']['frozen_osm_bus_stop_elements'] > 0
+          assert v['counts']['osm_confirmed_elements'] > 0
+          print(json.dumps(v, indent=2, sort_keys=True))
+          PY
+
+      - name: Deterministic rebuild check
+        run: |
+          mkdir -p /tmp/conflation-first
+          cp outputs/phase2/network_design_method_audit_v3/existing_stop_gtfs_osm_matches_v3.csv /tmp/conflation-first/
+          cp outputs/phase2/network_design_method_audit_v3/existing_stop_master_clusters_audit_v3.csv /tmp/conflation-first/
+          cp outputs/phase2/network_design_method_audit_v3/existing_stop_conflation_v3_validation.json /tmp/conflation-first/
+          rm -rf outputs/phase2/network_design_method_audit_v3
+          python scripts/phase2_audit_existing_stop_conflation_v3.py > /tmp/conflation-second.log
+          cmp /tmp/conflation-first/existing_stop_gtfs_osm_matches_v3.csv outputs/phase2/network_design_method_audit_v3/existing_stop_gtfs_osm_matches_v3.csv
+          cmp /tmp/conflation-first/existing_stop_master_clusters_audit_v3.csv outputs/phase2/network_design_method_audit_v3/existing_stop_master_clusters_audit_v3.csv
+          cmp /tmp/conflation-first/existing_stop_conflation_v3_validation.json outputs/phase2/network_design_method_audit_v3/existing_stop_conflation_v3_validation.json
+
+      - name: Anti-random and decision guard
+        run: |
+          ! grep -nE 'np\.random|numpy\.random|random\.' scripts/phase2_audit_existing_stop_conflation_v3.py
+          ! grep -niE 'primary|runner.?up|winner' outputs/phase2/network_design_method_audit_v3/existing_stop_gtfs_osm_matches_v3.csv
+
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-existing-stop-conflation-audit-v3
+          path: outputs/phase2/network_design_method_audit_v3/
+          if-no-files-found: error
+
+      - name: Persist audited evidence
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add outputs/phase2/network_design_method_audit_v3/
+          if git diff --cached --quiet; then
+            echo 'No evidence changes to persist.'
+          else
+            git commit -m 'audit: persist existing-stop conflation V3 evidence'
+            git push origin HEAD:phase2-network-design-method-audit-v3
+          fi
