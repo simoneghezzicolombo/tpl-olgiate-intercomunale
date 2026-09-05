@@ -4,6 +4,8 @@ A single Overpass backend is used for every tiled acquisition in one territorial
 run. The first backend that can return all four tiles without internal element
 conflicts is locked for the remainder of that run. Once locked, backend failure
 is fatal rather than silently mixing historical replicas across envelope levels.
+Objects observed in overlapping successive envelopes must also remain byte-identical
+at the fixed historical epoch.
 """
 from __future__ import annotations
 
@@ -85,6 +87,7 @@ class HistoricalOverpassLevelAcquirer:
     post: Callable = requests.post
     sleep: Callable[[float], None] = time.sleep
     locked_endpoint: str | None = field(default=None, init=False)
+    seen_elements: dict[tuple[str, int], bytes] = field(default_factory=dict, init=False)
 
     def _query_tile_from_endpoint(
         self,
@@ -132,6 +135,20 @@ class HistoricalOverpassLevelAcquirer:
             "elements": elements,
         }
 
+    def _assert_and_record_cross_level_consistency(self, payload: dict) -> None:
+        """Fail if an already-seen OSM object changes between nested levels."""
+        current: dict[tuple[str, int], bytes] = {}
+        for element in payload.get("elements", []):
+            key = (str(element.get("type")), int(element.get("id")))
+            encoded = canonical_json_bytes(element)
+            current[key] = encoded
+            previous = self.seen_elements.get(key)
+            if previous is not None and previous != encoded:
+                raise AssertionError(
+                    f"conflicting OSM element versions across fixed-epoch levels: {key}"
+                )
+        self.seen_elements.update(current)
+
     def acquire_level_snapshot(
         self,
         bbox: tuple[float, float, float, float],
@@ -143,9 +160,11 @@ class HistoricalOverpassLevelAcquirer:
         conflict rejects that backend as a whole. Once a backend succeeds it is
         locked. Later failure on the locked backend fails the run closed because
         switching replicas mid-convergence would contaminate level comparisons.
+        Overlap with prior levels is additionally checked object-by-object.
         """
         if self.locked_endpoint is not None:
             payload = self._acquire_all_tiles_from_endpoint(self.locked_endpoint, bbox)
+            self._assert_and_record_cross_level_consistency(payload)
             return payload, [self.locked_endpoint] * 4
 
         failures: list[str] = []
@@ -155,6 +174,7 @@ class HistoricalOverpassLevelAcquirer:
             except Exception as exc:
                 failures.append(f"{endpoint}:{type(exc).__name__}:{exc}")
                 continue
+            self._assert_and_record_cross_level_consistency(payload)
             self.locked_endpoint = endpoint
             return payload, [endpoint] * 4
 
