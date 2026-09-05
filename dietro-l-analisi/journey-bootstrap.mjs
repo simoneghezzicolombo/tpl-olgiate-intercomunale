@@ -10,7 +10,12 @@ window.maplibregl = { ...maplibreModule };
 await import('./journey-effects.js');
 await import('./journey-runtime-policy.js');
 await import('./journey-experience-policy.js');
+
+// The exploration epilogue must exist before journey.js snapshots the chapter
+// list, otherwise it would not participate in the scroll director.
+await import('./journey-explore-prelude.js');
 await import('./journey.js');
 await import('./journey-director.js');
 await import('./journey-lens.js');
 await import('./journey-lineage.js');
+await import('./journey-explore.js');
