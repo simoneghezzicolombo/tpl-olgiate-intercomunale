@@ -1,0 +1,40 @@
+{
+  "checks": {
+    "all_audit_pairs_executed_complete_single_baseline_way_set": true,
+    "all_certified_baselines_exact_reduced_matrix": true,
+    "all_emitted_replacement_runtime_penalties_nonnegative": true,
+    "all_emitted_replacements_physical_loopless": true,
+    "all_emitted_replacements_respect_excluded_baseline_ways": true,
+    "at_least_one_loopless_replacement_corridor_observed": true
+  },
+  "contract": "COMPLETE_SINGLE_BASELINE_OSM_WAY_REPLACEMENT_SET_NOT_K_SHORTEST_NOT_NETWORK_SELECTION",
+  "counts": {
+    "physically_cyclic_single_way_replacements_rejected": 67,
+    "replacement_queries_run": 316,
+    "unique_loopless_replacements": 49,
+    "unreachable_single_way_replacements": 5
+  },
+  "guards": {
+    "candidate_network_generated": false,
+    "k_shortest_exhaustiveness_claimed": false,
+    "named_service_area_forced": false,
+    "passenger_stop_pattern_selected": false,
+    "topology_selected": false,
+    "winner_selected": false
+  },
+  "inputs": {
+    "graph_edges_sha256": "33c26371590a359b8673d4d0d56c1abfe7da32fdf8f6e8b98b4825628b5e86a8",
+    "reduced_path_matrix_sha256": "f43a7c3cad200d50f7041f9d535b729f6c93d9456597520852a1a64424bce500",
+    "turn_rules_sha256": "cfe1be59d009c0091bb820493d2f43e70fc1f5175945f33795a0524cd9f53f8c"
+  },
+  "interpretation": "This primitive is a deterministic corridor-diversification tool. It exhausts one-way removals from the certified baseline only; it does not claim to enumerate general K-shortest paths and does not select a network.",
+  "outputs": {
+    "pairs_sha256": "02ed47b59f3ac8bfc52e75f26e80d4ec87c05e7960a6f9b8e9bfa280d93ab12d",
+    "paths_sha256": "00872927caae59421ef7ad389dcb855c15927c65eed1b28a1ba175e3bbf13a87"
+  },
+  "parameters": {
+    "audit_pair_count": 3,
+    "audit_pair_selection": "LONGEST_FROZEN_EXISTING_STOP_OD_RECORDS_FOR_STRESS_AUDIT_ONLY_NOT_DESIGN_PREFERENCE"
+  },
+  "status": "PASS_CORRIDOR_REPLACEMENT_AUDIT_V3"
+}

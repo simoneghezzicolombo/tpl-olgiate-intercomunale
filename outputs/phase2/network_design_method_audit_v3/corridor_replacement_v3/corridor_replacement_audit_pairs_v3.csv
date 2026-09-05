@@ -1,0 +1,4 @@
+pair_id,origin,destination,origin_graph_node_id,destination_graph_node_id,matrix_runtime_min,certified_runtime_min,runtime_delta_min,matrix_distance_m,certified_distance_m,distance_delta_m,baseline_physical_loopless,baseline_distinct_way_count,replacement_queries_run,replacement_queries_unreachable,replacement_queries_physically_cyclic,unique_loopless_replacement_corridors
+AUDIT_OD_01,existing:EX_028,existing:EX_040,n:528608.79:5066182.66,n:534661.16:5068133.30,24.990132853,24.990132853,0.000000000309,15407.034111,15407.034111,0.000000,true,105,105,1,8,16
+AUDIT_OD_02,existing:EX_040,existing:EX_028,n:534661.16:5068133.30,n:528608.79:5066182.66,24.987742151,24.987742151,-0.000000000174,15395.778644,15395.778644,0.000000,true,105,105,1,51,13
+AUDIT_OD_03,existing:EX_028,existing:EX_013,n:528608.79:5066182.66,n:534456.02:5068815.70,23.837151243,23.837151243,-0.000000000138,14717.764872,14717.764872,0.000000,true,106,106,3,8,20
