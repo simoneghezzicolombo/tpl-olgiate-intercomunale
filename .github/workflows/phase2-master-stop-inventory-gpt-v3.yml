@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate-master-stop-inventory:
@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: gpt-stop-source-completeness-v3
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -53,3 +55,15 @@ jobs:
           name: master-stop-inventory-gpt-v3
           path: outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/
           if-no-files-found: error
+
+      - name: Persist validated master outputs on audit branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/
+          if git diff --cached --quiet; then
+            echo "Validated master outputs already match repository materialization."
+          else
+            git commit -m "data: materialize CI-validated master stop inventory"
+            git push origin HEAD:gpt-stop-source-completeness-v3
+          fi
