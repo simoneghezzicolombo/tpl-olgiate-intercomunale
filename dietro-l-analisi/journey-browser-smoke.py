@@ -25,8 +25,6 @@ def prepare_page(page, page_errors, console_log, failed_requests, requested_urls
         'https://tile.openstreetmap.org/**',
         lambda route: route.fulfill(status=200, content_type='image/png', body=TRANSPARENT_PNG),
     )
-    # Evidence and functional JavaScript must be runtime-local. Any surviving
-    # GitHub Raw or jsDelivr dependency is a contract failure.
     page.route('https://raw.githubusercontent.com/**', lambda route: route.abort())
     page.route('https://cdn.jsdelivr.net/**', lambda route: route.abort())
 
@@ -50,6 +48,10 @@ def wait_ready(page, page_errors, console_log, failed_requests):
             "window.__analysisJourneyLens && document.querySelector('.analysis-lens') && document.querySelector('.depth-stack') && ['worldpop-stack','sections-stack','buildings-stack'].every(id => window.__analysisJourneyMap.getLayer(id))",
             timeout=120000,
         )
+        page.wait_for_function(
+            "window.__analysisJourneyLineage && ['lineage-16-fig','lineage-16-two','lineage-185-fig','lineage-185-two'].every(id => window.__analysisJourneyMap.getLayer(id))",
+            timeout=120000,
+        )
     except Exception as exc:
         state = page.evaluate(
             """() => ({
@@ -70,8 +72,10 @@ def wait_ready(page, page_errors, console_log, failed_requests):
               hasDasymetricSparks: !!window.__analysisJourneyMap?.getLayer?.('dasymetric-sparks'),
               hasRoadNetwork: !!window.__analysisJourneyMap?.getLayer?.('road-network'),
               hasLens: !!window.__analysisJourneyLens,
+              hasLineage: !!window.__analysisJourneyLineage,
               hasDepthStack: !!document.querySelector('.depth-stack'),
               stackLayers: ['worldpop-stack','sections-stack','buildings-stack'].map(id => [id, !!window.__analysisJourneyMap?.getLayer?.(id)]),
+              lineageLayers: ['lineage-16-fig','lineage-16-two','lineage-185-fig','lineage-185-two'].map(id => [id, !!window.__analysisJourneyMap?.getLayer?.(id)]),
               roadFallback: document.body.classList.contains('road-fallback'),
               localAssets: window.ANALYSIS_JOURNEY_DATA?.meta?.localAssets || null,
               mapLayers: window.__analysisJourneyMap?.getStyle?.()?.layers?.map(x => x.id) || []
@@ -122,16 +126,15 @@ def assert_runtime_network_contract(urls, label):
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
 
-    # Desktop evidence pass.
     page = browser.new_page(viewport={'width': 1440, 'height': 1000}, device_scale_factor=1)
     page_errors, console_log, failed_requests, requested_urls = [], [], [], []
     prepare_page(page, page_errors, console_log, failed_requests, requested_urls)
     wait_ready(page, page_errors, console_log, failed_requests)
 
     layers = page.evaluate(
-        """() => ['worldpop-columns','sections-fill','buildings-extrude','piece-halo','candidates','final16','final185','service-movers','dasymetric-sparks','worldpop-stack','sections-stack','buildings-stack'].every(id => !!window.__analysisJourneyMap.getLayer(id))"""
+        """() => ['worldpop-columns','sections-fill','buildings-extrude','piece-halo','candidates','final16','final185','service-movers','dasymetric-sparks','worldpop-stack','sections-stack','buildings-stack','lineage-16-fig','lineage-16-two','lineage-185-fig','lineage-185-two'].every(id => !!window.__analysisJourneyMap.getLayer(id))"""
     )
-    assert layers, 'core, cinematic or exploded-stack MapLibre layers missing'
+    assert layers, 'core, cinematic, exploded-stack or lineage layers missing'
 
     for name, frac in [
         ('grid', .55), ('sections', .55), ('buildings', .58), ('walk', .62),
@@ -140,8 +143,6 @@ with sync_playwright() as p:
     ]:
         scene(page, name, frac)
 
-    # Exploded stack must be a real three-layer MapLibre composition, not only
-    # an explanatory HUD. Capture it at a strong mid-section scroll position.
     scene(page, 'sections', .62, prefix='stack-')
     stack_opacity = page.evaluate(
         """() => ['worldpop-stack','sections-stack','buildings-stack'].map(id => Number(window.__analysisJourneyMap.getPaintProperty(id,'fill-extrusion-opacity') || 0))"""
@@ -149,7 +150,6 @@ with sync_playwright() as p:
     assert max(stack_opacity) > .15, f'exploded stack never became visible: {stack_opacity}'
     assert page.locator('.depth-stack').count() == 1
 
-    # Inspection lens must render values taken from the real building source.
     scene(page, 'buildings', .58, prefix='inspect-')
     building_props = page.evaluate(
         """() => window.__analysisJourneyMap.querySourceFeatures('buildings')[0]?.properties || null"""
@@ -162,6 +162,24 @@ with sync_playwright() as p:
     assert 'residenti modellati' in lens_text and 'dato anagrafico' in lens_text, lens_text
     page.screenshot(path=str(OUT / 'inspection-building.png'), full_page=False)
     page.evaluate("window.__analysisJourneyLens.hide()")
+
+    # Four lineage are intentionally offset only in screen space so identical
+    # public geometries can be seen, then collapse back to the same routes.
+    scene(page, 'finalists', .5, prefix='lineage-')
+    page.evaluate("window.__analysisJourneyLineage.apply(0)")
+    offsets_start = page.evaluate(
+        """() => ['lineage-16-fig','lineage-16-two','lineage-185-fig','lineage-185-two'].map(id => Number(window.__analysisJourneyMap.getPaintProperty(id,'line-offset') || 0))"""
+    )
+    assert min(offsets_start) <= -9 and max(offsets_start) >= 9, offsets_start
+    assert 'offset solo grafico' in page.locator('.lineage-collapse__caption').inner_text().lower()
+    page.screenshot(path=str(OUT / 'lineage-separated.png'), full_page=False)
+    page.evaluate("window.__analysisJourneyLineage.apply(1)")
+    offsets_end = page.evaluate(
+        """() => ['lineage-16-fig','lineage-16-two','lineage-185-fig','lineage-185-two'].map(id => Number(window.__analysisJourneyMap.getPaintProperty(id,'line-offset') || 0))"""
+    )
+    assert max(abs(v) for v in offsets_end) < .01, offsets_end
+    assert page.evaluate("document.body.dataset.lineageCollapse") == 'merged'
+    page.screenshot(path=str(OUT / 'lineage-collapsed.png'), full_page=False)
 
     assert page.evaluate("!!window.__analysisJourneyMap.getLayer('road-network')"), 'local Gate D road layer missing'
     assert not page.evaluate("document.body.classList.contains('road-fallback')"), 'Gate D road layer fell back'
@@ -176,7 +194,6 @@ with sync_playwright() as p:
     assert not page_errors, 'desktop page errors: ' + ' | '.join(page_errors)
     page.close()
 
-    # Mobile pass: same evidence world, no horizontal overflow, key scenes usable.
     mobile = browser.new_page(viewport={'width': 390, 'height': 844}, device_scale_factor=1)
     mobile_errors, mobile_console, mobile_failed, mobile_urls = [], [], [], []
     prepare_page(mobile, mobile_errors, mobile_console, mobile_failed, mobile_urls)
@@ -193,8 +210,6 @@ with sync_playwright() as p:
     assert_runtime_network_contract(mobile_urls, 'mobile pass')
     mobile.close()
 
-    # Reduced-motion pass: preserve information, disable autonomous movement,
-    # and do not animate the exploded evidence stack.
     reduced_context = browser.new_context(
         viewport={'width': 1280, 'height': 900},
         reduced_motion='reduce',
@@ -207,6 +222,7 @@ with sync_playwright() as p:
     assert reduced.evaluate("document.documentElement.dataset.journeyMotion") == 'reduced'
     assert reduced.evaluate("window.__analysisJourneyReduceMotion === true")
     assert reduced.evaluate("window.__analysisJourneyLens.reducedMotion === true")
+    assert reduced.evaluate("window.__analysisJourneyLineage.reducedMotion === true")
     scene(reduced, 'time', .58, prefix='reduced-')
     clock_before = reduced.locator('.service-clock__minute b').inner_text()
     reduced.wait_for_timeout(700)
@@ -231,4 +247,4 @@ with sync_playwright() as p:
 
     browser.close()
 
-print('journey allowlisted-runtime + exploded-stack + inspection-lens browser smoke PASS')
+print('journey source-closed + exploded-stack + inspection-lens + lineage-collapse browser smoke PASS')
