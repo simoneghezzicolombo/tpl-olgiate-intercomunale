@@ -1,0 +1,55 @@
+name: Phase 2 master stop inventory GPT V3
+
+on:
+  push:
+    branches:
+      - gpt-stop-source-completeness-v3
+    paths:
+      - scripts/phase2_build_master_stop_inventory_gpt_v3.py
+      - tests/test_master_stop_inventory_gpt_v3.py
+      - docs/PHASE2_STOP_IDENTITY_CONTRACT_V3.md
+      - outputs/phase2/existing_official_stops.csv
+      - outputs/phase2/network_design_method_audit_v3/asf_c146_directional_stops_subagent_v3.csv
+      - outputs/phase2/network_design_method_audit_v3/special_service_stop_evidence_gpt_v3.csv
+      - outputs/phase2/network_design_method_audit_v3/manual_google_maps_asf_verifications_gpt_v3.csv
+      - outputs/phase2/network_design_method_audit_v3/boarding_point_identity_review_gpt_v3.csv
+      - outputs/phase2/network_design_method_audit_v3/stop_place_grouping_review_gpt_v3.csv
+      - .github/workflows/phase2-master-stop-inventory-gpt-v3.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-master-stop-inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install minimal dependencies
+        run: python -m pip install --upgrade pip pandas pytest
+
+      - name: Compile builder
+        run: python -m py_compile scripts/phase2_build_master_stop_inventory_gpt_v3.py
+
+      - name: Build neutral master inventory
+        run: python scripts/phase2_build_master_stop_inventory_gpt_v3.py
+
+      - name: Run master inventory contract tests
+        run: pytest -q tests/test_master_stop_inventory_gpt_v3.py
+
+      - name: Show validation
+        run: cat outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/master_stop_inventory_validation_gpt_v3.json
+
+      - name: Upload master inventory artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: master-stop-inventory-gpt-v3
+          path: outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/
+          if-no-files-found: error
