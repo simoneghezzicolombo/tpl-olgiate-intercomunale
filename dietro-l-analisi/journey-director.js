@@ -43,7 +43,7 @@
 
   function install() {
     const map = window.__analysisJourneyMap;
-    if (!map || !window.gsap || !window.ScrollTrigger || !map.isStyleLoaded() || !map.getLayer('buildings-extrude')) return false;
+    if (!map || !window.gsap || !window.ScrollTrigger || !map.getLayer('buildings-extrude')) return false;
     clearInterval(waiter);
     gsap.registerPlugin(ScrollTrigger);
 
@@ -160,5 +160,5 @@
   }
 
   const waiter=setInterval(install,120);
-  setTimeout(()=>clearInterval(waiter),18000);
+  setTimeout(()=>clearInterval(waiter),120000);
 })();
