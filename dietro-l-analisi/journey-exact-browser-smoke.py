@@ -72,6 +72,7 @@ with sync_playwright() as p:
             currentCount: L.currentData.features.length,
             currentRoutes: [...new Set(L.currentData.features.map(f => f.properties.route))].sort(),
             stops: L.stopData.features.length,
+            stopRouteSets: [...new Set(L.stopData.features.map(f => JSON.stringify(f.properties.routes || [])))].sort(),
             finalCount: L.finalData.features.length,
             finalIds: L.finalData.features.map(f => f.properties.route_id).sort(),
             anchors: L.anchorData.features.length,
@@ -87,6 +88,7 @@ with sync_playwright() as p:
     assert contract['currentCount'] == 18, contract
     assert contract['currentRoutes'] == ['D184', 'D185'], contract
     assert contract['stops'] == 44, contract
+    assert contract['stopRouteSets'], contract
     assert contract['finalCount'] == 4, contract
     assert set(contract['finalIds']) == FINAL_IDS, contract
     assert contract['anchors'] == 11 and contract['hasHub'], contract
@@ -99,10 +101,25 @@ with sync_playwright() as p:
 
     activate_scene(page, 'baseline')
     assert page.locator('.route-controls.current').count() == 1
+
     page.locator('.route-controls.current button[data-r="D184"]').click()
-    page.wait_for_timeout(100)
+    page.wait_for_timeout(120)
     current_filter = page.evaluate("window.__analysisJourneyMap.getFilter('current-routes')")
     assert 'D184' in repr(current_filter), current_filter
+    d184_stop_color = page.evaluate("window.__analysisJourneyMap.getPaintProperty('current-gtfs-stops','circle-color')")
+    assert d184_stop_color == '#4ca5ff', d184_stop_color
+
+    page.locator('.route-controls.current button[data-r="D185"]').click()
+    page.wait_for_timeout(120)
+    current_filter = page.evaluate("window.__analysisJourneyMap.getFilter('current-routes')")
+    assert 'D185' in repr(current_filter), current_filter
+    d185_stop_color = page.evaluate("window.__analysisJourneyMap.getPaintProperty('current-gtfs-stops','circle-color')")
+    assert d185_stop_color == '#ff9b61', d185_stop_color
+
+    page.locator('.route-controls.current button[data-r="ALL"]').click()
+    page.wait_for_timeout(120)
+    all_stop_color = page.evaluate("window.__analysisJourneyMap.getPaintProperty('current-gtfs-stops','circle-color')")
+    assert isinstance(all_stop_color, list) and all_stop_color[0] == 'case', all_stop_color
     page.screenshot(path=str(OUT / 'exact-baseline.png'), full_page=False)
 
     activate_scene(page, 'finalists', 0.58)
