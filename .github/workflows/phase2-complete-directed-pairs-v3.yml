@@ -1,0 +1,89 @@
+name: Phase 2 Complete Directed Pairs V3
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - phase2-complete-directed-pairs-v3
+    paths:
+      - src/phase2_complete_directed_pairs_v3.py
+      - tests/test_phase2_complete_directed_pairs_v3.py
+      - scripts/phase2_audit_complete_directed_pairs_v3.py
+      - docs/PHASE2_COMPLETE_DIRECTED_PAIRS_V3.md
+      - .github/workflows/phase2-complete-directed-pairs-v3.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase2-complete-directed-pairs-v3-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pair-coverage-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-complete-directed-pairs-v3
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --disable-pip-version-check \
+            pandas==2.2.3 \
+            pytest==8.3.5
+
+      - name: Compile RT-010 core and audit
+        run: |
+          python -m py_compile src/phase2_complete_directed_pairs_v3.py
+          python -m py_compile scripts/phase2_audit_complete_directed_pairs_v3.py
+
+      - name: Run RT-010 unit tests
+        run: pytest -q tests/test_phase2_complete_directed_pairs_v3.py
+
+      - name: Run complete-pair coverage audit
+        run: python scripts/phase2_audit_complete_directed_pairs_v3.py
+
+      - name: Validate RT-010 evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('outputs/phase2/complete_directed_pairs_v3/complete_directed_pairs_v3_validation.json')
+          d = json.loads(p.read_text(encoding='utf-8'))
+          assert d['status'] == 'PASS_RT010_COMPLETE_DIRECTED_PAIR_COVERAGE_V3'
+          assert d['terminal_count'] == 5
+          assert d['directed_pair_count'] == 20
+          assert d['unordered_pair_count'] == 10
+          assert d['complete_execution_pass'] is True
+          assert d['missing_output_is_incomplete_not_no_route'] is True
+          assert d['cap_fail_closed_without_partial_manifest'] is True
+          assert d['pair_selection_filter'] is False
+          assert d['random_search'] is False
+          assert d['weighted_composite_score'] is False
+          assert d['territorial_candidate_claim'] is False
+          PY
+
+      - name: Guard against geography, stops, topology/winner filters and random search
+        run: |
+          ! grep -niE 'Arlate|Beverate|Perego|Mondonico|Calco|Brivio|Olgiate|Santa Maria|proposed_stop_candidates|passenger_stop_foundation|C146|ASF' src/phase2_complete_directed_pairs_v3.py
+          ! grep -nE 'PREFER_|TOPOLOGY_SCORE|PRIMARY|RUNNER-UP|RECOMMENDED_ROUTE|NETWORK_WINNER' src/phase2_complete_directed_pairs_v3.py
+          ! grep -nE 'np\.random|numpy\.random|random\.' src/phase2_complete_directed_pairs_v3.py scripts/phase2_audit_complete_directed_pairs_v3.py
+
+      - name: Whitespace check
+        run: git diff --check
+
+      - name: Upload RT-010 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-complete-directed-pairs-v3
+          path: outputs/phase2/complete_directed_pairs_v3/complete_directed_pairs_v3_validation.json
+          if-no-files-found: error
