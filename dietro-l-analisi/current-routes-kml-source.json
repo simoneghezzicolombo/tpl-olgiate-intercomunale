@@ -1,0 +1,37 @@
+{
+  "contract": "CURRENT_ROUTE_BASELINE_OFFICIAL_ATP_KML_V1",
+  "decision_output": false,
+  "authority": "Agenzia per il Trasporto Pubblico Locale del bacino di Como, Lecco e Varese",
+  "open_data_page": "https://www.tplcomoleccovarese.it/atpcolc/zf/index.php/servizi-aggiuntivi/index/index/idtesto/134",
+  "semantics": "Official authority-published KML route geometry. No stop-to-stop reconstruction and no screen-space offsets.",
+  "routes": {
+    "D184": {
+      "source_file": "D84.kml",
+      "source_url": "https://www.tplcomoleccovarese.it/atpcolc/images/Fil%20KML%202025/Urbano%20e%20interurbano%20Lecco/D184.kml",
+      "bytes": 74147,
+      "sha256": "6cf715a83c1e85e7ebfeecd82b666eee623119e7b37e35875ed0be419fa5523a",
+      "line_components": 7,
+      "coordinates": 2268
+    },
+    "D185": {
+      "source_file": "E03.kml",
+      "source_url": "https://www.tplcomoleccovarese.it/atpcolc/images/Fil%20KML%202025/Urbano%20e%20interurbano%20Lecco/D185.kml",
+      "bytes": 114472,
+      "sha256": "10239544443134a10992b938a878ff62a906618f8f7f6babe2a339647f41bfa5",
+      "line_components": 11,
+      "coordinates": 3618
+    }
+  },
+  "geojson": {
+    "feature_count": 18,
+    "coordinate_count": 5886,
+    "sha256": "b211d8f3d4013e0990bbbd430d0bef63d49f9bdaff3eebb9b338715c91a30a7b",
+    "gzip_base64_chunks": [
+      {
+        "file": "current-routes-kml.geojson.gz.b64.0",
+        "chars": 21668,
+        "sha256": "52fa0145d4d0fc7c6965ae32e304389fdd37c9b7567b8bda70d1537dc688b490"
+      }
+    ]
+  }
+}
