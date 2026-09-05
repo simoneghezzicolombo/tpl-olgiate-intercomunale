@@ -9,26 +9,19 @@ TRANSPARENT_PNG = b64decode(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
 )
 
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
-    page = browser.new_page(viewport={'width': 1440, 'height': 1000}, device_scale_factor=1)
-    page_errors = []
-    console_log = []
-    failed_requests = []
-    requested_urls = []
+
+def prepare_page(page, page_errors, console_log, failed_requests, requested_urls):
     page.on('pageerror', lambda exc: page_errors.append(str(exc)))
     page.on('console', lambda msg: console_log.append(f'{msg.type}: {msg.text}'))
     page.on('request', lambda req: requested_urls.append(req.url))
     page.on('requestfailed', lambda req: failed_requests.append(f'{req.method} {req.url} :: {req.failure}'))
-
-    # CI must not consume community OSM raster capacity. Human visitors can use
-    # the contextual basemap normally; the visual test receives a local blank
-    # tile and therefore evaluates only the evidence-driven journey layers.
     page.route(
         'https://tile.openstreetmap.org/**',
         lambda route: route.fulfill(status=200, content_type='image/png', body=TRANSPARENT_PNG),
     )
 
+
+def wait_ready(page, page_errors, console_log, failed_requests):
     try:
         page.goto(BASE, wait_until='domcontentloaded', timeout=60000)
         page.wait_for_function(
@@ -60,63 +53,56 @@ with sync_playwright() as p:
               hasDirectorStrip: !!document.querySelector('.departure-strip'),
               hasServiceMovers: !!window.__analysisJourneyMap?.getLayer?.('service-movers'),
               hasDasymetricSparks: !!window.__analysisJourneyMap?.getLayer?.('dasymetric-sparks'),
-              mapLayers: window.__analysisJourneyMap?.getStyle?.()?.layers?.map(x => x.id) || [],
-              scripts: [...document.scripts].map(s => ({src:s.src, loaded:!!s.src}))
+              mapLayers: window.__analysisJourneyMap?.getStyle?.()?.layers?.map(x => x.id) || []
             })"""
         )
         diagnostic = [
-            f'EXCEPTION: {exc}',
-            '',
-            'RUNTIME STATE:',
-            repr(state),
-            '',
-            'PAGE ERRORS:',
-            *page_errors,
-            '',
-            'FAILED REQUESTS:',
-            *failed_requests,
-            '',
-            'CONSOLE:',
-            *console_log,
+            f'EXCEPTION: {exc}', '', 'RUNTIME STATE:', repr(state), '',
+            'PAGE ERRORS:', *page_errors, '',
+            'FAILED REQUESTS:', *failed_requests, '',
+            'CONSOLE:', *console_log,
         ]
         text = '\n'.join(diagnostic)
         print(text)
         (OUT / 'runtime-diagnostic.txt').write_text(text, encoding='utf-8')
         page.screenshot(path=str(OUT / 'runtime-failure.png'), full_page=False)
-        browser.close()
         raise
+
+
+def scene(page, name, frac=.5, prefix=''):
+    page.evaluate(
+        """([name,frac]) => {
+          const el=document.querySelector(`[data-scene="${name}"]`);
+          window.scrollTo(0, el.offsetTop + el.offsetHeight*frac - innerHeight/2);
+        }""",
+        [name, frac],
+    )
+    page.wait_for_timeout(1800)
+    actual = page.evaluate("document.body.dataset.scene")
+    assert actual == name, f'scene {name} did not activate, got {actual}'
+    page.screenshot(path=str(OUT / f'{prefix}{name}.png'), full_page=False)
+
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=True)
+
+    # Desktop evidence pass.
+    page = browser.new_page(viewport={'width': 1440, 'height': 1000}, device_scale_factor=1)
+    page_errors, console_log, failed_requests, requested_urls = [], [], [], []
+    prepare_page(page, page_errors, console_log, failed_requests, requested_urls)
+    wait_ready(page, page_errors, console_log, failed_requests)
 
     layers = page.evaluate(
         """() => ['worldpop-columns','sections-fill','buildings-extrude','piece-halo','candidates','final16','final185','service-movers','dasymetric-sparks'].every(id => !!window.__analysisJourneyMap.getLayer(id))"""
     )
     assert layers, 'core or cinematic MapLibre layers missing'
 
-    def scene(name, frac=.5):
-        page.evaluate(
-            """([name,frac]) => {
-              const el=document.querySelector(`[data-scene="${name}"]`);
-              window.scrollTo(0, el.offsetTop + el.offsetHeight*frac - innerHeight/2);
-            }""",
-            [name, frac],
-        )
-        page.wait_for_timeout(1800)
-        actual = page.evaluate("document.body.dataset.scene")
-        assert actual == name, f'scene {name} did not activate, got {actual}'
-        page.screenshot(path=str(OUT / f'{name}.png'), full_page=False)
-
     for name, frac in [
-        ('grid', .55),
-        ('sections', .55),
-        ('buildings', .58),
-        ('walk', .62),
-        ('roads', .55),
-        ('baseline', .55),
-        ('candidates', .53),
-        ('finalists', .58),
-        ('time', .58),
-        ('end', .58),
+        ('grid', .55), ('sections', .55), ('buildings', .58), ('walk', .62),
+        ('roads', .55), ('baseline', .55), ('candidates', .53),
+        ('finalists', .58), ('time', .58), ('end', .58),
     ]:
-        scene(name, frac)
+        scene(page, name, frac)
 
     assert page.locator('.representation-meter').count() == 1
     assert page.locator('.search-compression').count() == 1
@@ -124,7 +110,24 @@ with sync_playwright() as p:
     assert page.locator('.departure-strip').count() == 1
     assert page.locator('.evidence-stack').count() == 1
     assert not any('basemaps.cartocdn.com' in url for url in requested_urls), 'legacy CARTO basemap request detected'
-    assert not page_errors, 'page errors: ' + ' | '.join(page_errors)
+    assert not page_errors, 'desktop page errors: ' + ' | '.join(page_errors)
+    page.close()
+
+    # Mobile pass: same evidence world, no horizontal overflow, key scenes usable.
+    mobile = browser.new_page(viewport={'width': 390, 'height': 844}, device_scale_factor=1)
+    mobile_errors, mobile_console, mobile_failed, mobile_urls = [], [], [], []
+    prepare_page(mobile, mobile_errors, mobile_console, mobile_failed, mobile_urls)
+    wait_ready(mobile, mobile_errors, mobile_console, mobile_failed)
+    for name, frac in [('grid', .55), ('walk', .62), ('candidates', .53), ('time', .58), ('end', .58)]:
+        scene(mobile, name, frac, prefix='mobile-')
+        overflow = mobile.evaluate('document.documentElement.scrollWidth - window.innerWidth')
+        assert overflow <= 2, f'mobile horizontal overflow in {name}: {overflow}px'
+    assert mobile.locator('.topbar').count() == 1
+    assert mobile.locator('.chapter-rail').count() == 1
+    assert not mobile_errors, 'mobile page errors: ' + ' | '.join(mobile_errors)
+    assert not any('basemaps.cartocdn.com' in url for url in mobile_urls), 'legacy CARTO basemap request detected on mobile'
+    mobile.close()
+
     browser.close()
 
-print('journey browser smoke PASS')
+print('journey desktop + mobile browser smoke PASS')
