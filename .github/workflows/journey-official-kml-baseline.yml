@@ -1,0 +1,113 @@
+name: Journey official KML baseline
+
+on:
+  push:
+    branches: [phase2-analysis-journey-a]
+    paths:
+      - .github/workflows/journey-official-kml-baseline.yml
+      - dietro-l-analisi/build_official_kml_baseline.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialize-official-kml:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download official ATP KML files
+        shell: bash
+        run: |
+          set -euo pipefail
+          download_kml() {
+            local route="$1"
+            local out="$2"
+            local path="atpcolc/images/Fil%20KML%202025/Urbano%20e%20interurbano%20Lecco/${route}.kml"
+            local ok=0
+            for host in "https://www.tplcomoleccovarese.it" "https://tecuting.halleylombardia.it"; do
+              url="${host}/${path}"
+              echo "Trying ${url}"
+              if curl --fail --location --retry 3 --retry-delay 2 \
+                --user-agent 'Mozilla/5.0 (compatible; tpl-olgiate-intercomunale/1.0; official open-data retrieval)' \
+                --header 'Accept: application/vnd.google-earth.kml+xml, application/xml, text/xml, */*' \
+                "${url}" -o "${out}.tmp"; then
+                if python - "${out}.tmp" <<'PY'
+import sys, xml.etree.ElementTree as ET
+p=sys.argv[1]
+root=ET.parse(p).getroot()
+name=root.tag.rsplit('}',1)[-1].lower()
+if name != 'kml':
+    raise SystemExit(f'not a KML root: {root.tag}')
+PY
+                then
+                  mv "${out}.tmp" "${out}"
+                  ok=1
+                  break
+                fi
+              fi
+              rm -f "${out}.tmp"
+            done
+            if [[ "${ok}" != 1 ]]; then
+              echo "Unable to retrieve ${route} official KML" >&2
+              exit 1
+            fi
+            wc -c "${out}"
+            sha256sum "${out}"
+          }
+          download_kml D184 /tmp/D184.kml
+          download_kml D185 /tmp/D185.kml
+      - name: Convert official KML to deterministic browser geometry
+        run: |
+          python dietro-l-analisi/build_official_kml_baseline.py \
+            --d184 /tmp/D184.kml \
+            --d185 /tmp/D185.kml
+      - name: Validate official KML asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64, gzip, json
+          from pathlib import Path
+          root=Path('dietro-l-analisi')
+          m=json.loads((root/'current-routes-kml-source.json').read_text())
+          assert m['contract']=='CURRENT_ROUTE_BASELINE_OFFICIAL_ATP_KML_V1'
+          assert m['decision_output'] is False
+          assert 'No stop-to-stop reconstruction' in m['semantics']
+          for route in ('D184','D185'):
+              r=m['routes'][route]
+              assert r['source_url'].endswith(f'/{route}.kml')
+              assert r['bytes'] > 100
+              assert len(r['sha256']) == 64
+              assert r['line_components'] >= 1
+              assert r['coordinates'] >= 20
+          names=[c['file'] for c in m['geojson']['gzip_base64_chunks']]
+          payload=''.join((root/n).read_text().strip() for n in names)
+          data=json.loads(gzip.decompress(base64.b64decode(payload)))
+          assert data['type']=='FeatureCollection'
+          assert {f['properties']['route'] for f in data['features']} == {'D184','D185'}
+          for f in data['features']:
+              assert f['geometry']['type']=='LineString'
+              assert len(f['geometry']['coordinates']) >= 2
+              assert f['properties']['source']=='OFFICIAL_ATP_KML_2025'
+          print('official D184/D185 KML baseline PASS')
+          PY
+      - name: Persist official KML browser asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "chatgpt-codex-connector"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dietro-l-analisi/current-routes-kml.geojson.gz.b64.* dietro-l-analisi/current-routes-kml-source.json
+          if git diff --cached --quiet; then
+            echo "Official KML baseline already current"
+          else
+            git commit -m "data(journey): materialize official D184 D185 KML geometry"
+            git push origin HEAD:phase2-analysis-journey-a
+          fi
