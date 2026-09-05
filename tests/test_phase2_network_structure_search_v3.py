@@ -114,6 +114,33 @@ def test_required_terminal_and_policy_groups_are_generic_hard_guards():
         assert "E" in structure.vertex_ids
 
 
+def test_required_hub_and_five_groups_do_not_force_one_topology():
+    membership = {vertex: [f"G_{vertex}"] for vertex in "ABCDE"}
+    result = enumerate_connected_structures(
+        k5_links(),
+        required_terminal_ids=["A"],
+        required_policy_groups=[f"G_{vertex}" for vertex in "ABCDE"],
+        terminal_policy_groups=membership,
+        max_edges=6,
+        max_subsets_scanned=2_000,
+        max_structures=2_000,
+    )
+    assert result["complete"] is True
+    classes = {item.topology_class for item in result["structures"]}
+    assert {
+        "PATH",
+        "CYCLE",
+        "TREE_BRANCHING",
+        "UNICYCLIC_BRANCHING",
+        "BICYCLIC_ARTICULATED",
+        "BICYCLIC_NONARTICULATED",
+    }.issubset(classes)
+    assert any(
+        "FIGURE_EIGHT_LIKE" in item.shape_flags for item in result["structures"]
+    )
+    assert all(set(item.vertex_ids) == set("ABCDE") for item in result["structures"])
+
+
 def test_missing_required_group_fails_closed():
     try:
         enumerate_connected_structures(
