@@ -7,7 +7,9 @@ on:
       - phase2-efficient-alternative-corridors-v3
     paths:
       - src/phase2_alternative_corridor_generator_v3.py
+      - src/phase2_restriction_aware_ksp.py
       - tests/test_phase2_alternative_corridor_generator_v3.py
+      - tests/test_phase2_alternative_corridor_oracle_bridge_v3.py
       - scripts/phase2_audit_alternative_corridor_generator_v3.py
       - docs/PHASE2_ALTERNATIVE_CORRIDOR_GENERATOR_V3.md
       - .github/workflows/phase2-alternative-corridor-generator-v3.yml
@@ -56,8 +58,11 @@ jobs:
           python -m py_compile src/phase2_alternative_corridor_generator_v3.py
           python -m py_compile scripts/phase2_audit_alternative_corridor_generator_v3.py
 
-      - name: Run focused alternative-router tests
-        run: pytest -q tests/test_phase2_alternative_corridor_generator_v3.py
+      - name: Run focused alternative-router and exact-oracle bridge tests
+        run: |
+          pytest -q \
+            tests/test_phase2_alternative_corridor_generator_v3.py \
+            tests/test_phase2_alternative_corridor_oracle_bridge_v3.py
 
       - name: Revalidate frozen Gate-D routing contract
         run: pytest -q tests/test_phase2_frozen_graph.py
