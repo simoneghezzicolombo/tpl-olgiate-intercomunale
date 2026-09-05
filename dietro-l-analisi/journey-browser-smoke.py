@@ -19,6 +19,9 @@ def prepare_page(page, page_errors, console_log, failed_requests, requested_urls
         'https://tile.openstreetmap.org/**',
         lambda route: route.fulfill(status=200, content_type='image/png', body=TRANSPARENT_PNG),
     )
+    # Evidence must be runtime-local. Any surviving GitHub Raw dependency is a
+    # contract failure, not something CI is allowed to satisfy from the network.
+    page.route('https://raw.githubusercontent.com/**', lambda route: route.abort())
 
 
 def wait_ready(page, page_errors, console_log, failed_requests):
@@ -54,6 +57,9 @@ def wait_ready(page, page_errors, console_log, failed_requests):
               hasDirectorStrip: !!document.querySelector('.departure-strip'),
               hasServiceMovers: !!window.__analysisJourneyMap?.getLayer?.('service-movers'),
               hasDasymetricSparks: !!window.__analysisJourneyMap?.getLayer?.('dasymetric-sparks'),
+              hasRoadNetwork: !!window.__analysisJourneyMap?.getLayer?.('road-network'),
+              roadFallback: document.body.classList.contains('road-fallback'),
+              localAssets: window.ANALYSIS_JOURNEY_DATA?.meta?.localAssets || null,
               mapLayers: window.__analysisJourneyMap?.getStyle?.()?.layers?.map(x => x.id) || []
             })"""
         )
@@ -105,6 +111,8 @@ with sync_playwright() as p:
     ]:
         scene(page, name, frac)
 
+    assert page.evaluate("!!window.__analysisJourneyMap.getLayer('road-network')"), 'local Gate D road layer missing'
+    assert not page.evaluate("document.body.classList.contains('road-fallback')"), 'Gate D road layer fell back'
     assert page.locator('.representation-meter').count() == 1
     assert page.locator('.search-compression').count() == 1
     assert page.locator('.service-clock').count() == 1
@@ -112,6 +120,7 @@ with sync_playwright() as p:
     assert page.locator('.evidence-stack').count() == 1
     assert page.evaluate("document.documentElement.dataset.journeyMotion") == 'full'
     assert not any('basemaps.cartocdn.com' in url for url in requested_urls), 'legacy CARTO basemap request detected'
+    assert not any('raw.githubusercontent.com' in url for url in requested_urls), 'runtime GitHub Raw evidence request detected'
     assert not page_errors, 'desktop page errors: ' + ' | '.join(page_errors)
     page.close()
 
@@ -128,6 +137,7 @@ with sync_playwright() as p:
     assert mobile.locator('.chapter-rail').count() == 1
     assert not mobile_errors, 'mobile page errors: ' + ' | '.join(mobile_errors)
     assert not any('basemaps.cartocdn.com' in url for url in mobile_urls), 'legacy CARTO basemap request detected on mobile'
+    assert not any('raw.githubusercontent.com' in url for url in mobile_urls), 'runtime GitHub Raw evidence request detected on mobile'
     mobile.close()
 
     # Reduced-motion pass: certify behaviour, not a cosmetic label. The clock
@@ -157,9 +167,10 @@ with sync_playwright() as p:
         "window.__analysisJourneyMap.queryRenderedFeatures({layers:['service-movers']}).length"
     )
     assert rendered_movers == 0, f'reduced-motion service movers still rendered: {rendered_movers}'
+    assert not any('raw.githubusercontent.com' in url for url in reduced_urls), 'runtime GitHub Raw evidence request detected in reduced-motion pass'
     assert not reduced_errors, 'reduced-motion page errors: ' + ' | '.join(reduced_errors)
     reduced_context.close()
 
     browser.close()
 
-print('journey desktop + mobile + reduced-motion browser smoke PASS')
+print('journey source-closed desktop + mobile + reduced-motion browser smoke PASS')
