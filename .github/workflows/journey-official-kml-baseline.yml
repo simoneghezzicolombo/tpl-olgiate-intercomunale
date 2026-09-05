@@ -26,26 +26,40 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          normalize_kml() {
+            local src="$1"
+            local dst="$2"
+            python -c "import pathlib,sys,xml.etree.ElementTree as ET; s=pathlib.Path(sys.argv[1]).read_text(errors='ignore'); starts=[i for i in (s.find('<?xml'),s.find('<kml'),s.find('<kml ')) if i>=0]; assert starts, 'no KML/XML marker'; s=s[min(starts):]; end=s.rfind('</kml>'); assert end>=0, 'no closing kml'; s=s[:end+6]; pathlib.Path(sys.argv[2]).write_text(s); r=ET.parse(sys.argv[2]).getroot(); assert r.tag.rsplit('}',1)[-1].lower()=='kml', r.tag" "${src}" "${dst}"
+          }
           download_kml() {
             local route="$1"
             local out="$2"
             local path="atpcolc/images/Fil%20KML%202025/Urbano%20e%20interurbano%20Lecco/${route}.kml"
+            local target="http://www.tplcomoleccovarese.it/${path}"
             local ok=0
-            for host in "https://www.tplcomoleccovarese.it" "https://tecuting.halleylombardia.it"; do
-              url="${host}/${path}"
+            local candidates=(
+              "https://r.jina.ai/${target}"
+              "https://r.jina.ai/https://www.tplcomoleccovarese.it/${path}"
+              "https://www.tplcomoleccovarese.it/${path}"
+              "https://tecuting.halleylombardia.it/${path}"
+            )
+            for url in "${candidates[@]}"; do
               echo "Trying ${url}"
-              if curl --fail --location --retry 3 --retry-delay 2 \
+              if curl --fail --location --retry 2 --retry-delay 2 --connect-timeout 15 --max-time 45 \
                 --user-agent 'Mozilla/5.0 (compatible; tpl-olgiate-intercomunale/1.0; official open-data retrieval)' \
-                --header 'Accept: application/vnd.google-earth.kml+xml, application/xml, text/xml, */*' \
+                --header 'Accept: application/vnd.google-earth.kml+xml, application/xml, text/plain, text/xml, */*' \
                 "${url}" -o "${out}.tmp"; then
-                if python -c "import sys,xml.etree.ElementTree as ET; r=ET.parse(sys.argv[1]).getroot(); assert r.tag.rsplit('}',1)[-1].lower()=='kml', r.tag" "${out}.tmp"; then
-                  mv "${out}.tmp" "${out}"
+                echo "Candidate bytes: $(wc -c < "${out}.tmp")"
+                head -c 240 "${out}.tmp" | tr '\n' ' ' || true
+                echo
+                if normalize_kml "${out}.tmp" "${out}"; then
                   ok=1
                   break
                 fi
               fi
-              rm -f "${out}.tmp"
+              rm -f "${out}.tmp" "${out}"
             done
+            rm -f "${out}.tmp"
             if [[ "${ok}" != 1 ]]; then
               echo "Unable to retrieve ${route} official KML" >&2
               exit 1
