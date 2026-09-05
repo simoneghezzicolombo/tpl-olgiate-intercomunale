@@ -1,0 +1,16 @@
+{
+  "status": "PASS_SOURCE_PRESERVING_MASTER_BUILD",
+  "source_records_count": 105,
+  "source_records_by_family": {
+    "ASF_OPERATOR_OTP": 38,
+    "FROZEN_GTFS_REFERENCE": 66,
+    "SPECIAL_SERVICE_EVIDENCE": 1
+  },
+  "manual_identity_review_rows": 6,
+  "routing_terminal_selected_count": 0,
+  "boarding_point_conflation_performed": false,
+  "stop_place_finalization_performed": false,
+  "legacy_40m_cluster_used_as_boarding_identity": false,
+  "physical_municipality_exact_note": "ASF OTP rows carry polygon-assigned exact municipality from their evidence layer. Frozen/context and local-coordinate special-service rows remain blank until a dedicated ISTAT polygon containment materialization is run.",
+  "downstream_contract": "This artifact is neutral upstream evidence and MUST NOT be consumed as a routing-terminal list."
+}
