@@ -1,0 +1,80 @@
+name: Phase 2 Candidate GTFS Materializer V3
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - phase2-candidate-gtfs-materializer-v3
+    paths:
+      - src/phase2_candidate_gtfs_materializer_v3.py
+      - tests/test_phase2_candidate_gtfs_materializer_v3.py
+      - scripts/phase2_audit_candidate_gtfs_materializer_v3.py
+      - docs/PHASE2_CANDIDATE_GTFS_MATERIALIZER_V3.md
+      - .github/workflows/phase2-candidate-gtfs-materializer-v3.yml
+
+permissions:
+  contents: read
+
+jobs:
+  candidate-gtfs-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-candidate-gtfs-materializer-v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pytest
+        run: python -m pip install --disable-pip-version-check pytest==8.3.5
+      - name: Compile RT-014
+        run: |
+          python -m py_compile src/phase2_candidate_gtfs_materializer_v3.py
+          python -m py_compile scripts/phase2_audit_candidate_gtfs_materializer_v3.py
+      - name: Run RT-014 unit tests
+        run: pytest -q tests/test_phase2_candidate_gtfs_materializer_v3.py
+      - name: Run controlled candidate-GTFS audit
+        run: python scripts/phase2_audit_candidate_gtfs_materializer_v3.py
+      - name: Validate RT-014 evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('outputs/phase2/candidate_gtfs_materializer_v3/candidate_gtfs_materializer_v3_validation.json')
+          d = json.loads(p.read_text())
+          assert d['status'] == 'PASS_RT014_CANDIDATE_GTFS_MATERIALIZATION_CONTRACT_V3'
+          assert d['fixture_semantics'] == 'CONTROLLED_ABSTRACT_GTFS_FIXTURE_NOT_TERRITORIAL_DATA'
+          assert d['deterministic_files'] is True
+          assert d['deterministic_zip'] is True
+          assert d['zip_sha256'] == d['zip_sha256_recomputed']
+          assert d['required_gtfs_file_count'] == 6
+          assert d['required_gtfs_files'] == [
+              'agency.txt', 'calendar.txt', 'routes.txt',
+              'stop_times.txt', 'stops.txt', 'trips.txt'
+          ]
+          assert d['after_midnight_gtfs_time_preserved'] is True
+          assert d['fuzzy_matching_used'] is False
+          assert d['implicit_stop_creation'] is False
+          assert d['implicit_trip_generation'] is False
+          assert d['weighted_composite_score'] is False
+          assert d['territorial_candidate_claim'] is False
+          assert d['network_recommendation_claim'] is False
+          PY
+      - name: Guard against geography, source and decision leakage
+        run: |
+          ! grep -niE 'Arlate|Beverate|Perego|Mondonico|Calco|Brivio|Olgiate|Santa Maria|C146|ASF|PRIMARY|RUNNER-UP|recommended route' src/phase2_candidate_gtfs_materializer_v3.py scripts/phase2_audit_candidate_gtfs_materializer_v3.py
+          ! grep -niE 'fuzzy|nearest|snap' src/phase2_candidate_gtfs_materializer_v3.py
+          ! grep -nE 'np\.random|numpy\.random|random\.' src/phase2_candidate_gtfs_materializer_v3.py scripts/phase2_audit_candidate_gtfs_materializer_v3.py
+      - name: Whitespace check
+        run: git diff --check
+      - name: Upload RT-014 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-candidate-gtfs-materializer-v3
+          path: |
+            outputs/phase2/candidate_gtfs_materializer_v3/candidate_gtfs_materializer_v3_validation.json
+            outputs/phase2/candidate_gtfs_materializer_v3/controlled_candidate_gtfs.zip
+          if-no-files-found: error
