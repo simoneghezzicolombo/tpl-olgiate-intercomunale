@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "all_alpha_eligible_rows_are_route_ready": true,
+    "all_alpha_eligible_rows_have_graph_node": true,
+    "all_alpha_eligible_rows_have_human_identity": true,
+    "all_five_policy_municipalities_have_eligible_existing_infrastructure": true,
+    "eligible_rows_exist": true,
+    "no_non_existing_stop_is_alpha_eligible": true,
+    "reference_period_official_infrastructure_is_not_blanket_excluded": true
+  },
+  "contract": "EVIDENCE_ADAPTER_EXISTING_OFFICIAL_ROUTE_READY_HUMAN_IDENTIFIED_FIVE_MUNICIPALITIES_NOT_STOP_SELECTION",
+  "counts": {
+    "alpha_design_eligible_existing_stops": 43,
+    "eligible_by_municipality": {
+      "Brivio": 14,
+      "Calco": 9,
+      "La Valletta Brianza": 5,
+      "Olgiate Molgora": 6,
+      "Santa Maria Ho\u00e8": 9
+    },
+    "eligible_current_d184_d185": 28,
+    "eligible_reference_period_other_or_noncurrent": 15,
+    "foundation_rows": 179
+  },
+  "guards": {
+    "candidate_network_generated": false,
+    "named_service_area_forced": false,
+    "passenger_stop_pattern_selected": false,
+    "proposed_stop_promoted": false,
+    "winner_selected": false
+  },
+  "inputs": {
+    "foundation": "outputs/phase2/stop_pattern_redesign_v3/passenger_stop_foundation_v3.csv",
+    "foundation_sha256": "2c8c00281ce86070b84504286d6954ad66ff7c13ab5a559bdd710e152139ea69",
+    "routing_membership": "outputs/phase2/reduced_path_matrix_v2/routing_anchor_membership.csv",
+    "routing_membership_sha256": "97ff5fa29ac0cc5e9a02da0b8c7a105f4104d3ec0e58a101401dd48aad10f470"
+  },
+  "interpretation": "Eligibility is epistemic/design-universe admissibility only. It does not select a stop, corridor, topology, timetable or winner. Official reference-period infrastructure may be reused; proposed FIELD_CHECK_PENDING hypotheses remain outside the first canonical Alpha run.",
+  "output_sha256": "05fcfae0ed8cc5649155536519c1244a9e0d1d6c2638d9ea2bf8525a76baa8ea",
+  "status": "PASS_ALPHA_STOP_INVENTORY_BRIDGE_V3"
+}
