@@ -50,6 +50,7 @@ def wait_ready(page, page_errors, console_log, failed_requests):
               hasGeoData: !!window.TRA_PAESI_GEO,
               hasMap: !!window.__analysisJourneyMap,
               styleLoaded: !!window.__analysisJourneyMap?.isStyleLoaded?.(),
+              motion: document.documentElement.dataset.journeyMotion || null,
               hasDirectorStrip: !!document.querySelector('.departure-strip'),
               hasServiceMovers: !!window.__analysisJourneyMap?.getLayer?.('service-movers'),
               hasDasymetricSparks: !!window.__analysisJourneyMap?.getLayer?.('dasymetric-sparks'),
@@ -109,6 +110,7 @@ with sync_playwright() as p:
     assert page.locator('.service-clock').count() == 1
     assert page.locator('.departure-strip').count() == 1
     assert page.locator('.evidence-stack').count() == 1
+    assert page.evaluate("document.documentElement.dataset.journeyMotion") == 'full'
     assert not any('basemaps.cartocdn.com' in url for url in requested_urls), 'legacy CARTO basemap request detected'
     assert not page_errors, 'desktop page errors: ' + ' | '.join(page_errors)
     page.close()
@@ -128,6 +130,32 @@ with sync_playwright() as p:
     assert not any('basemaps.cartocdn.com' in url for url in mobile_urls), 'legacy CARTO basemap request detected on mobile'
     mobile.close()
 
+    # Reduced-motion pass: preserve information and camera targets but remove
+    # autonomous bus motion and long camera easing.
+    reduced_context = browser.new_context(
+        viewport={'width': 1280, 'height': 900},
+        reduced_motion='reduce',
+        device_scale_factor=1,
+    )
+    reduced = reduced_context.new_page()
+    reduced_errors, reduced_console, reduced_failed, reduced_urls = [], [], [], []
+    prepare_page(reduced, reduced_errors, reduced_console, reduced_failed, reduced_urls)
+    wait_ready(reduced, reduced_errors, reduced_console, reduced_failed)
+    assert reduced.evaluate("document.documentElement.dataset.journeyMotion") == 'reduced'
+    assert 'movimento ridotto' in reduced.locator('.service-clock__kicker').inner_text()
+    scene(reduced, 'time', .58, prefix='reduced-')
+    reduced.evaluate(
+        "window.__analysisJourneyMap.easeTo({center:[9.41,45.73],zoom:12,duration:5000,essential:true})"
+    )
+    reduced.wait_for_timeout(80)
+    assert reduced.evaluate("window.__analysisJourneyMap.isEasing ? !window.__analysisJourneyMap.isEasing() : true"), 'reduced-motion camera is still easing'
+    rendered_movers = reduced.evaluate(
+        "window.__analysisJourneyMap.queryRenderedFeatures({layers:['service-movers']}).length"
+    )
+    assert rendered_movers == 0, f'reduced-motion service movers still rendered: {rendered_movers}'
+    assert not reduced_errors, 'reduced-motion page errors: ' + ' | '.join(reduced_errors)
+    reduced_context.close()
+
     browser.close()
 
-print('journey desktop + mobile browser smoke PASS')
+print('journey desktop + mobile + reduced-motion browser smoke PASS')
