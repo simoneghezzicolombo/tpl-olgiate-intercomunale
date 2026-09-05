@@ -1,0 +1,71 @@
+name: Phase 2 Evaluation Contract V3
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - phase2-evaluation-contract-v3
+    paths:
+      - src/phase2_evaluation_contract_v3.py
+      - tests/test_phase2_evaluation_contract_v3.py
+      - scripts/phase2_audit_evaluation_contract_v3.py
+      - docs/PHASE2_EVALUATION_CONTRACT_V3.md
+      - .github/workflows/phase2-evaluation-contract-v3.yml
+
+permissions:
+  contents: read
+
+jobs:
+  evaluation-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase2-evaluation-contract-v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pytest
+        run: python -m pip install --disable-pip-version-check pytest==8.3.5
+      - name: Compile RT-011
+        run: |
+          python -m py_compile src/phase2_evaluation_contract_v3.py
+          python -m py_compile scripts/phase2_audit_evaluation_contract_v3.py
+      - name: Run RT-011 unit tests
+        run: pytest -q tests/test_phase2_evaluation_contract_v3.py
+      - name: Run controlled evaluation audit
+        run: python scripts/phase2_audit_evaluation_contract_v3.py
+      - name: Validate RT-011 evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('outputs/phase2/evaluation_contract_v3/evaluation_contract_v3_validation.json')
+          d = json.loads(p.read_text())
+          assert d['status'] == 'PASS_RT011_EVALUATION_CONTRACT_V3'
+          assert d['fixture_semantics'] == 'CONTROLLED_ABSTRACT_FIXTURE_NOT_TERRITORIAL_DATA'
+          assert d['same_share_le_15_min'] is True
+          assert d['near_weighted_mean_walk_min'] < d['far_weighted_mean_walk_min']
+          assert d['near_weighted_p90_walk_min'] < d['far_weighted_p90_walk_min']
+          assert d['tradeoff_candidates_both_preserved'] is True
+          assert d['dominated_candidate_removed'] is True
+          assert d['weighted_composite_score'] is False
+          assert d['threshold_only_accessibility'] is False
+          assert d['policy_guard_passes'] is False
+          assert d['unserved_area_preserved_as_diagnostic'] is True
+          PY
+      - name: Guard against geography, source data, decision leakage and random search
+        run: |
+          ! grep -niE 'Arlate|Beverate|Perego|Mondonico|Calco|Brivio|Olgiate|Santa Maria|C146|ASF|PRIMARY|RUNNER-UP|recommended route' src/phase2_evaluation_contract_v3.py
+          ! grep -nE 'np\.random|numpy\.random|random\.' src/phase2_evaluation_contract_v3.py scripts/phase2_audit_evaluation_contract_v3.py
+      - name: Whitespace check
+        run: git diff --check
+      - name: Upload RT-011 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-evaluation-contract-v3
+          path: outputs/phase2/evaluation_contract_v3/evaluation_contract_v3_validation.json
+          if-no-files-found: error
