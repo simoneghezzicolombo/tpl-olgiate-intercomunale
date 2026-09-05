@@ -2,17 +2,19 @@
   "contract": "EXISTING_STOP_FIRST_CROSS_SOURCE_AUDIT_NOT_ROUTE_SELECTION",
   "counts": {
     "frozen_osm_bus_stop_elements": 37,
-    "gtfs_clusters_with_confirmed_osm_evidence": 13,
-    "gtfs_clusters_without_confirmed_osm_evidence": 30,
+    "gtfs_clusters_with_confirmed_osm_evidence": 11,
+    "gtfs_clusters_without_confirmed_osm_evidence": 32,
     "match_status_counts": {
-      "CONFIRMED_EXACT_NAME_DISTANCE": 12,
-      "CONFIRMED_EXACT_REF": 1,
+      "CONFIRMED_EXACT_NAME_DISTANCE": 11,
+      "CONFLICT_EXACT_REF_DISTANCE_REVIEW": 1,
       "OSM_ONLY_UNMATCHED_REFERENCE_GTFS": 14,
       "PROBABLE_DISTANCE_ONLY_REVIEW": 8,
+      "PROBABLE_EXACT_NAME_DISTANCE_REVIEW": 1,
       "PROBABLE_TOKEN_NAME_DISTANCE_REVIEW": 2
     },
-    "osm_confirmed_elements": 13,
-    "osm_review_elements": 10,
+    "osm_confirmed_elements": 11,
+    "osm_conflict_elements": 1,
+    "osm_review_elements": 12,
     "osm_unmatched_elements": 14,
     "reference_gtfs_physical_clusters": 43,
     "reference_gtfs_records": 67
@@ -34,16 +36,19 @@
     "distance_only_can_confirm": false,
     "distance_review_max_m": 45.0,
     "distance_unique_margin_m": 15.0,
-    "exact_name_max_m": 300.0,
+    "exact_name_confirm_max_m": 75.0,
+    "exact_name_review_max_m": 300.0,
+    "identity_without_spatial_plausibility_can_confirm": false,
     "osm_only_promoted_to_official": false,
+    "ref_confirm_max_m": 75.0,
     "token_jaccard_min": 0.6,
-    "token_name_max_m": 150.0
+    "token_name_max_m": 100.0
   },
   "outputs": {
     "cluster_audit": "outputs/phase2/network_design_method_audit_v3/existing_stop_master_clusters_audit_v3.csv",
-    "cluster_audit_sha256": "ff2db52698de3d6f29db7a8afe34ffd5e89bb3288c0b18f4f852d7658ebc77d7",
+    "cluster_audit_sha256": "20bca86a62e18676b52b5c52d3840fb98c5b3f4cfe03333780f3984a0078f6dd",
     "matches": "outputs/phase2/network_design_method_audit_v3/existing_stop_gtfs_osm_matches_v3.csv",
-    "matches_sha256": "317b942dcab2d5df1215bccc45487e5b4803ee8918b1509c958ba67be90e832a"
+    "matches_sha256": "4371cd130859055881daa8103384b1edd8417ceedc84103d912c6243bfdd8892"
   },
   "status": "PASS_EXISTING_STOP_CONFLATION_AUDIT_V3"
 }
