@@ -9,6 +9,14 @@ from src import phase2_rt021_bounded_corpus_v3 as bounded
 from src import phase2_rt021_territorial_corridor_corpus_v3 as core
 from src.phase2_complete_directed_pairs_v3 import audit_pair_execution_completeness
 
+# Capture the certified bounded implementation before main() temporarily
+# monkeypatches bounded.route_corpus to the parallel dispatcher. On Linux,
+# ProcessPoolExecutor workers can inherit parent module state through fork;
+# calling bounded.route_corpus inside a worker would then recurse back into the
+# dispatcher. This immutable reference keeps worker semantics identical to the
+# tested RT-006 bounded implementation under both fork and spawn start methods.
+ORIGINAL_BOUNDED_ROUTE_CORPUS = bounded.route_corpus
+
 
 def partition_manifest(manifest: pd.DataFrame, workers: int) -> list[pd.DataFrame]:
     """Partition complete directed pairs by whole source-anchor groups."""
@@ -41,7 +49,7 @@ def _route_partition(payload):
     original_expected = core.EXPECTED_DIRECTED_PAIRS
     core.EXPECTED_DIRECTED_PAIRS = len(manifest)
     try:
-        return bounded.route_corpus(
+        return ORIGINAL_BOUNDED_ROUTE_CORPUS(
             manifest,
             anchors,
             edges,
