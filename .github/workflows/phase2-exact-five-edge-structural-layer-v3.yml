@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 env:
   PYTHONPATH: .
@@ -83,3 +83,17 @@ jobs:
           path: outputs/phase2/rt024_exact_five_edge_v3/
           if-no-files-found: error
           retention-days: 90
+      - name: Persist certified RT-024 handoff
+        if: github.event_name == 'push'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            outputs/phase2/rt024_exact_five_edge_v3/exact_five_edge_topology_neutral_structure_universe.csv \
+            outputs/phase2/rt024_exact_five_edge_v3/rt024_exact_five_edge_audit.json
+          if git diff --cached --quiet; then
+            echo 'RT-024 handoff already persisted byte-identically.'
+            exit 0
+          fi
+          git commit -m 'data(rt024): persist certified exact five-edge handoff'
+          git push origin HEAD:phase2-exact-five-edge-structural-layer-v3
