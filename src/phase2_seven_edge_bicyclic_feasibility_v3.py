@@ -71,6 +71,7 @@ def enumerate_exact_seven_edge_bicyclic_policy_structures(
     vertex_sets_scanned = 0
     vertex_sets_with_at_least_seven_induced_links = 0
     seven_edge_subsets_scanned = 0
+    seven_edge_subsets_using_all_six_terminals = 0
     seen: set[tuple[str, ...]] = set()
 
     for duplicate_group in groups:
@@ -80,6 +81,7 @@ def enumerate_exact_seven_edge_bicyclic_policy_structures(
                 chosen = tuple(sorted((*duplicate_pair, *singles)))
                 if len(set(chosen)) != 6:
                     raise AssertionError("six-terminal policy construction produced duplicate identity")
+                chosen_set = set(chosen)
                 vertex_sets_scanned += 1
 
                 induced: list[AbstractLink] = []
@@ -93,6 +95,18 @@ def enumerate_exact_seven_edge_bicyclic_policy_structures(
 
                 for subset in combinations(induced, 7):
                     seven_edge_subsets_scanned += 1
+                    subset_vertices = {
+                        endpoint
+                        for link in subset
+                        for endpoint in (link.u, link.v)
+                    }
+                    # The bicyclic proof is for V=6. A seven-edge subset can be
+                    # connected on only five of the six selected terminals when
+                    # the induced graph is dense. Such a subset is outside the
+                    # exact E=7,V=6 slice and must be skipped, not reinterpreted.
+                    if subset_vertices != chosen_set:
+                        continue
+                    seven_edge_subsets_using_all_six_terminals += 1
                     try:
                         record = classify_connected_structure(subset)
                     except ValueError as exc:
@@ -120,6 +134,7 @@ def enumerate_exact_seven_edge_bicyclic_policy_structures(
         "vertex_sets_scanned": vertex_sets_scanned,
         "vertex_sets_with_at_least_seven_induced_links": vertex_sets_with_at_least_seven_induced_links,
         "seven_edge_subsets_scanned": seven_edge_subsets_scanned,
+        "seven_edge_subsets_using_all_six_terminals": seven_edge_subsets_using_all_six_terminals,
         "required_policy_groups": groups,
         "contract": CONTRACT,
         "proof_semantics": (
@@ -128,7 +143,7 @@ def enumerate_exact_seven_edge_bicyclic_policy_structures(
         ),
         "generation_semantics": (
             "ENUMERATE_ALL_SIX_TERMINAL_POLICY_COVERING_VERTEX_SETS_THEN_ALL_SEVEN_EDGE_"
-            "SUBSETS_OF_THEIR_INDUCED_STRUCTURAL_GRAPH;KEEP_CONNECTED_ONLY"
+            "SUBSETS_OF_THEIR_INDUCED_STRUCTURAL_GRAPH;REQUIRE_ALL_SIX_SELECTED_TERMINALS;KEEP_CONNECTED_ONLY"
         ),
         "interpretation_boundary": (
             "BICYCLIC_FEASIBILITY_DIAGNOSTIC_ONLY_NOT_FULL_EDGE7_TOPOLOGY_NEUTRAL_CANDIDATE_UNIVERSE"
