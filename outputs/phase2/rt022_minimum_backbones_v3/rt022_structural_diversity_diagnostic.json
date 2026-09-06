@@ -1,0 +1,106 @@
+{
+  "counts": {
+    "accepted_structure_edge_occurrences": 352,
+    "distinct_terminal_stop_places_used": 16,
+    "reciprocal_structural_links": 110,
+    "structures": 88,
+    "unique_municipality_skeletons": 9
+  },
+  "cross_municipality_reciprocal_link_families_available": {
+    "family_count": 6,
+    "link_count_by_family": {
+      "Brivio | Calco": 16,
+      "Brivio | Olgiate Molgora": 5,
+      "Calco | Olgiate Molgora": 14,
+      "La Valletta Brianza | Olgiate Molgora": 1,
+      "La Valletta Brianza | Santa Maria Hoè": 7,
+      "Olgiate Molgora | Santa Maria Hoè": 6
+    }
+  },
+  "guards": {
+    "five_plus_edge_structures_declared_inferior": false,
+    "passenger_access_quality_inferred": false,
+    "primary_runner_up_selected": false,
+    "service_terminus_selected": false,
+    "topology_prior_introduced": false,
+    "winner_selected": false
+  },
+  "municipality_articulation_occurrences": {
+    "Brivio": 36,
+    "Calco": 28,
+    "La Valletta Brianza": 14,
+    "Olgiate Molgora": 88,
+    "Santa Maria Hoè": 60
+  },
+  "municipality_edge_family_occurrences_in_88_backbones": {
+    "Brivio | Calco": 64,
+    "Brivio | Olgiate Molgora": 60,
+    "Calco | Olgiate Molgora": 52,
+    "La Valletta Brianza | Olgiate Molgora": 28,
+    "La Valletta Brianza | Santa Maria Hoè": 74,
+    "Olgiate Molgora | Santa Maria Hoè": 74
+  },
+  "olgiate_molgora_degree_distribution_in_88_backbones": {
+    "2": 54,
+    "3": 30,
+    "4": 4
+  },
+  "same_municipality_reciprocal_links_available": {
+    "Brivio": 23,
+    "Calco": 15,
+    "La Valletta Brianza": 5,
+    "Olgiate Molgora": 9,
+    "Santa Maria Hoè": 9
+  },
+  "scope": "CERTIFIED_88_EXACT_MINIMUM_POLICY_BACKBONES_ONLY",
+  "semantics": "DESCRIPTIVE_ONLY_NOT_CANDIDATE_RANKING_OR_SERVICE_DESIGN",
+  "status": "PASS_NONDECISIONAL_RT022_STRUCTURAL_DIVERSITY_DIAGNOSTIC",
+  "structure_universe_sha256": "1d6ccd18a5707aa8e2e51b1eefcc9d27056678f0d5e260c9027d1414a1ddf8d7",
+  "terminal_options_by_municipality": {
+    "Brivio": {
+      "distinct_terminal_stop_places": 1,
+      "terminal_stop_places": [
+        {"municipality": "Brivio", "stop_name": "Brivio - s.s. briantea", "stop_place_id": "FROZEN::100005", "structure_count": 88, "structure_share": 1.0}
+      ]
+    },
+    "Calco": {
+      "distinct_terminal_stop_places": 6,
+      "terminal_stop_places": [
+        {"municipality": "Calco", "stop_name": "Calco - Via Virgilio", "stop_place_id": "ASF::CALCO_VIA_GARIBALDI", "structure_count": 22, "structure_share": 0.25},
+        {"municipality": "Calco", "stop_name": "Calco - Via Nazionale (edicola)", "stop_place_id": "ASF::CALCO_LARGO_POMEA", "structure_count": 18, "structure_share": 0.204545455},
+        {"municipality": "Calco", "stop_name": "Calco - Via Statale / Via Scagnello (Esselunga)", "stop_place_id": "MANUAL::CALCO_SCAGNELLO", "structure_count": 18, "structure_share": 0.204545455},
+        {"municipality": "Calco", "stop_name": "Calco - via Nazionale", "stop_place_id": "FROZEN::300634", "structure_count": 18, "structure_share": 0.204545455},
+        {"municipality": "Calco", "stop_name": "Arlate - Bivio per il Paese", "stop_place_id": "ASF::ARLATE_BIVIO_PER_IL_PAESE", "structure_count": 6, "structure_share": 0.068181818},
+        {"municipality": "Calco", "stop_name": "Calco - arlate (cimitero)", "stop_place_id": "FROZEN::300743", "structure_count": 6, "structure_share": 0.068181818}
+      ]
+    },
+    "La Valletta Brianza": {
+      "distinct_terminal_stop_places": 3,
+      "terminal_stop_places": [
+        {"municipality": "La Valletta Brianza", "stop_name": "Rovagnate - Statale / AGIP", "stop_place_id": "ASF::ROVAGNATE_STRADA_STATALE_AGIP", "structure_count": 30, "structure_share": 0.340909091},
+        {"municipality": "La Valletta Brianza", "stop_name": "Rovagnate - vinicola ghezzi", "stop_place_id": "FROZEN::300879", "structure_count": 30, "structure_share": 0.340909091},
+        {"municipality": "La Valletta Brianza", "stop_name": "Rovagnate - Statale / Via Lombardia", "stop_place_id": "ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA", "structure_count": 28, "structure_share": 0.318181818}
+      ]
+    },
+    "Olgiate Molgora": {
+      "distinct_terminal_stop_places": 4,
+      "terminal_stop_places": [
+        {"municipality": "Olgiate Molgora", "stop_name": "Olgiate Molgora - Via Statale", "stop_place_id": "ASF::OLGIATE_MOLGORA_VIA_STATALE", "structure_count": 56, "structure_share": 0.636363636},
+        {"municipality": "Olgiate Molgora", "stop_name": "Olgiate-Calco-Brivio FS", "stop_place_id": "FROZEN::L00407", "structure_count": 28, "structure_share": 0.318181818},
+        {"municipality": "Olgiate Molgora", "stop_name": "Olgiate Molgora - Scarpone", "stop_place_id": "ASF::OLGIATE_MOLGORA_SCARPONE", "structure_count": 2, "structure_share": 0.022727273},
+        {"municipality": "Olgiate Molgora", "stop_name": "Olgiate Molgora - Via Della Salute", "stop_place_id": "ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE", "structure_count": 2, "structure_share": 0.022727273}
+      ]
+    },
+    "Santa Maria Hoè": {
+      "distinct_terminal_stop_places": 2,
+      "terminal_stop_places": [
+        {"municipality": "Santa Maria Hoè", "stop_name": "Santa Maria Hoè - Alduno", "stop_place_id": "ASF::ROVAGNATE_FRAZIONE_ALDUNO", "structure_count": 74, "structure_share": 0.840909091},
+        {"municipality": "Santa Maria Hoè", "stop_name": "Santa Maria Hoè - Via Como / Alpino", "stop_place_id": "ASF::SANTA_MARIA_HOE_VIA_COMO", "structure_count": 14, "structure_share": 0.159090909}
+      ]
+    }
+  },
+  "topology_descriptive_post_generation": {
+    "by_class": {"PATH": 54, "TREE_BRANCHING": 34},
+    "by_max_degree": {"2": 54, "3": 30, "4": 4}
+  }
+}
