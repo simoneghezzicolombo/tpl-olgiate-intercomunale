@@ -5,7 +5,6 @@ on:
   push:
     branches: [phase2-territorial-structural-search-v3]
     paths:
-      - .github/workflows/phase2-territorial-structural-search-real-v3.yml
       - .rt022-real-run-trigger
 
 permissions:
