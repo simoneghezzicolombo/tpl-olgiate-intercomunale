@@ -11,6 +11,7 @@ from phase2_final_stop_pedestrian_accessibility_substrate_v3 import (
     DEFAULT_MAX_CONNECTOR_M,
     DEFAULT_WALK_SPEED_KMH,
     build_atomic_walk_matrix,
+    canonical_dataframe_sha256,
     parse_osm_pedestrian_graph,
     write_outputs,
 )
@@ -39,11 +40,15 @@ def main() -> None:
     if graph.osm_sha256 != meta["osm_snapshot_sha256"]:
         raise ValueError("OSM snapshot digest does not match acquisition metadata")
 
+    population_layer_digest = canonical_dataframe_sha256(pop, ["unit_id"])
+    final_stop_layer_digest = canonical_dataframe_sha256(stops, ["stop_place_id"])
     lineage = {
         "rt016_commit": RT016_COMMIT,
         "rt016_artifact_id": RT016_ARTIFACT_ID,
         "rt016_artifact_digest": RT016_ARTIFACT_DIGEST,
+        "population_layer_canonical_sha256": population_layer_digest,
         "final_stop_commit": FINAL_STOP_COMMIT,
+        "final_stop_layer_canonical_sha256": final_stop_layer_digest,
         "osm_snapshot_timestamp": str(meta["snapshot_timestamp"]),
         "osm_query_sha256": str(meta["query_sha256"]),
     }
@@ -55,6 +60,11 @@ def main() -> None:
         max_connector_m=args.max_connector_m,
         lineage=lineage,
     )
+    matrix["population_layer_canonical_sha256"] = population_layer_digest
+    matrix["final_stop_layer_canonical_sha256"] = final_stop_layer_digest
+    audit["matrix_sha256"] = canonical_dataframe_sha256(
+        matrix, ["population_unit_id", "stop_place_id"]
+    )
     audit["osm_snapshot_metadata"] = {
         "bbox_south_west_north_east": meta["bbox_south_west_north_east"],
         "overpass_endpoint_used": meta["overpass_endpoint_used"],
@@ -62,8 +72,17 @@ def main() -> None:
         "query_sha256": meta["query_sha256"],
     }
     audit["cross_engine_walk_check"] = {
-        "status": "NOT_RUN",
-        "reason": "No frozen validated R5/r5py WALK runtime is present in the repository; optional cross-check deliberately not substituted with a second unvalidated engine.",
+        "status": "NOT_RUN_TECHNICAL_BLOCKER",
+        "reason": (
+            "RT-012 certifies r5py 1.1.7 only on its pinned upstream Helsinki sample fixture. "
+            "RT-028 territorial evidence is a pinned Overpass OSM XML snapshot, while r5py requires an OSM PBF input. "
+            "The repository has no frozen validated territorial XML-to-PBF conversion lineage. Introducing a new conversion path here "
+            "would make the independent engine use a different, newly introduced graph-preparation lineage. The optional cross-check is "
+            "therefore not run; no second-engine value is fabricated or averaged into the primary result."
+        ),
+        "rt012_runtime_certified": True,
+        "rt012_certification_scope": "PINNED_UPSTREAM_HELSINKI_SAMPLE_FIXTURE_NOT_TERRITORIAL_DATA",
+        "territorial_xml_to_pbf_lineage_certified": False,
         "results_averaged_with_primary_engine": False,
     }
     write_outputs(matrix, audit, args.output_dir)
@@ -75,6 +94,8 @@ def main() -> None:
         "obstacle_geometry_count": len(graph.obstacle_geometries),
         "osm_snapshot_sha256": graph.osm_sha256,
         "pedestrian_graph_digest": graph.graph_digest,
+        "population_layer_canonical_sha256": population_layer_digest,
+        "final_stop_layer_canonical_sha256": final_stop_layer_digest,
     }
     out = Path(args.output_dir)
     (out / "rt028_pedestrian_graph_summary_v3.json").write_text(
