@@ -85,7 +85,7 @@ jobs:
           git fetch --no-tags --depth=1 origin "$RT016_COMMIT"
           git worktree add --detach /tmp/rt016 "$RT016_COMMIT"
           cd /tmp/rt016
-          PYTHONPATH=src python scripts/phase2_build_border_neutral_catchment_population_v3.py
+          PYTHONPATH=. python scripts/phase2_build_border_neutral_catchment_population_v3.py
           test -s outputs/phase2/border_neutral_catchment_population_v3/border_neutral_population_units_v3.csv
           cp outputs/phase2/border_neutral_catchment_population_v3/border_neutral_population_units_v3.csv \
             /tmp/rt028/input/rt016_border_neutral_population_units_v3.csv
