@@ -22,13 +22,15 @@ jobs:
     timeout-minutes: 30
     env:
       PYTHONPATH: "src"
+      RT022_RUN_ID: "34030321683"
+      RT022_ARTIFACT_ID: "9988386073"
+      RT022_ARTIFACT_DIGEST: "sha256:1cab2e18eec4920cbdb348d0d9cd224c7516f8d62bc63b0eacf2a91f6fb134d7"
       RT023_RUN_ID: "34034770563"
       RT023_ARTIFACT_ID: "9989805162"
       RT023_ARTIFACT_DIGEST: "sha256:d206af90c247f87940f51db17e5497183199cceb9070e84124c0ef3b5ddba981"
       RT028_RUN_ID: "34037985015"
       RT028_ARTIFACT_ID: "9990832031"
       RT028_ARTIFACT_DIGEST: "sha256:f09bfa9fb8d7aeacc9c7b80f4bc17dff5c4ce391e6a16c25bc0afd973e509415"
-      RT022_STRUCTURES: "outputs/phase2/rt022_minimum_backbones_v3/minimum_topology_neutral_backbone_universe.csv"
       OUT_DIR: "outputs/phase2/rt029_candidate_accessibility_pareto_v3"
 
     steps:
@@ -49,10 +51,21 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${RT022_ARTIFACT_ID}" --jq '.digest')" = "${RT022_ARTIFACT_DIGEST}"
           test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${RT023_ARTIFACT_ID}" --jq '.digest')" = "${RT023_ARTIFACT_DIGEST}"
           test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${RT028_ARTIFACT_ID}" --jq '.digest')" = "${RT028_ARTIFACT_DIGEST}"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RT022_RUN_ID}" --jq '.head_sha')" = "157badd6fc4aeaed4dcf19b08e37a48626b31b35"
           test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RT023_RUN_ID}" --jq '.head_sha')" = "0d9a82caa1d1d624e0f6945e709f3548785fb8dc"
           test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RT028_RUN_ID}" --jq '.head_sha')" = "8a926234b8635aa48db4b80a61fb293be35f74f2"
+
+      - name: Download certified RT-022 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: phase2-rt022-minimum-backbones-v3-real
+          path: _upstream/rt022
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 34030321683
 
       - name: Download certified RT-023 artifact
         uses: actions/download-artifact@v4
@@ -75,14 +88,16 @@ jobs:
       - name: Resolve certified input files
         run: |
           set -euo pipefail
-          test -f "${RT022_STRUCTURES}"
+          STRUCTURES="$(find _upstream/rt022 -type f -name 'minimum_topology_neutral_backbone_universe.csv' -print -quit)"
           MANIFEST="$(find _upstream/rt023 -type f -name 'structure_link_manifest.csv' -print -quit)"
           REALIZATIONS="$(find _upstream/rt023 -type f -name 'link_realization_catalog.csv' -print -quit)"
           WALK="$(find _upstream/rt028 -type f -name 'rt028_population_unit_stop_walk_matrix_v3.csv' -print -quit)"
+          test -n "${STRUCTURES}" && test -f "${STRUCTURES}"
           test -n "${MANIFEST}" && test -f "${MANIFEST}"
           test -n "${REALIZATIONS}" && test -f "${REALIZATIONS}"
           test -n "${WALK}" && test -f "${WALK}"
           {
+            echo "STRUCTURES=${STRUCTURES}"
             echo "MANIFEST=${MANIFEST}"
             echo "REALIZATIONS=${REALIZATIONS}"
             echo "WALK=${WALK}"
@@ -93,7 +108,7 @@ jobs:
           set -euo pipefail
           rm -rf "${OUT_DIR}"
           python scripts/phase2_run_rt029_candidate_accessibility_pareto_v3.py \
-            --structures "${RT022_STRUCTURES}" \
+            --structures "${STRUCTURES}" \
             --structure-link-manifest "${MANIFEST}" \
             --realizations "${REALIZATIONS}" \
             --walk-matrix "${WALK}" \
@@ -106,7 +121,7 @@ jobs:
           set -euo pipefail
           rm -rf /tmp/rt029-rebuild
           python scripts/phase2_run_rt029_candidate_accessibility_pareto_v3.py \
-            --structures "${RT022_STRUCTURES}" \
+            --structures "${STRUCTURES}" \
             --structure-link-manifest "${MANIFEST}" \
             --realizations "${REALIZATIONS}" \
             --walk-matrix "${WALK}" \
