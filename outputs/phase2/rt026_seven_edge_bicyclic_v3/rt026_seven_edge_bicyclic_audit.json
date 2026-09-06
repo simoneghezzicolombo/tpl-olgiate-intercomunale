@@ -1,0 +1,35 @@
+{
+  "complete": true,
+  "counts": {
+    "bicyclic_structures": 889,
+    "figure_eight_like_structures": 12,
+    "seven_edge_subsets_scanned": 1481,
+    "six_terminal_policy_vertex_sets_scanned": 189000,
+    "six_terminal_sets_with_at_least_seven_induced_links": 487
+  },
+  "duplicated_policy_group_counts": {
+    "Calco": 216,
+    "La Valletta Brianza": 24,
+    "Olgiate Molgora": 629,
+    "Santa Maria Hoè": 20
+  },
+  "figure_eight_like_subset_sha256": "d0a3d360b414e2c5eeb60365d951976802e0439ec036fab5cc2e653291989df1",
+  "generation_semantics": "ENUMERATE_ALL_SIX_TERMINAL_POLICY_COVERING_VERTEX_SETS_THEN_ALL_SEVEN_EDGE_SUBSETS_OF_THEIR_INDUCED_STRUCTURAL_GRAPH;REQUIRE_ALL_SIX_SELECTED_TERMINALS;KEEP_CONNECTED_ONLY",
+  "guards": {
+    "bicyclic_preferred": false,
+    "figure_eight_preferred": false,
+    "full_edge7_universe_claimed": false,
+    "primary_runner_up_selected": false,
+    "service_terminal_selected": false,
+    "topology_used_as_network_winner_prior": false
+  },
+  "interpretation_boundary": "BICYCLIC_FEASIBILITY_DIAGNOSTIC_ONLY_NOT_FULL_EDGE7_TOPOLOGY_NEUTRAL_CANDIDATE_UNIVERSE",
+  "proof_semantics": "CONNECTED_CYCLE_RANK_2_WITH_E7_IMPLIES_V6;V6_COVERING_FIVE_SINGLE_MEMBERSHIP_POLICY_GROUPS_IMPLIES_EXACTLY_ONE_DUPLICATED_GROUP",
+  "source_reciprocal_structural_links_sha256": "009789fbaf2cf5434555075c1de6a6931bee3bbc0473580e26a79a82d827885d",
+  "source_rt022_structure_universe_sha256": "1d6ccd18a5707aa8e2e51b1eefcc9d27056678f0d5e260c9027d1414a1ddf8d7",
+  "status": "PASS_RT026_EXACT_SEVEN_EDGE_BICYCLIC_FEASIBILITY_DIAGNOSTIC_V3",
+  "structure_universe_sha256": "138584bd89e238a56d117b41cf54c0e1028c6a3311376ef89a1b5e64ecfb4760",
+  "topology_counts": {
+    "BICYCLIC_ARTICULATED": 889
+  }
+}
