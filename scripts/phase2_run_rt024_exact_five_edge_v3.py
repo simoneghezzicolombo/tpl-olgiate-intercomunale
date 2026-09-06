@@ -67,7 +67,7 @@ def _structure_record(structure) -> dict[str, object]:
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--links", required=True, type=Path)
-    parser.add_argument("--attachments", required=True, type=Path)
+    parser.add_argument("--stop-inventory", required=True, type=Path)
     parser.add_argument("--rt022-audit", required=True, type=Path)
     parser.add_argument(
         "--out-dir",
@@ -80,7 +80,7 @@ def _parse_args() -> argparse.Namespace:
 def main() -> int:
     args = _parse_args()
     links = pd.read_csv(args.links).fillna("")
-    attachments = pd.read_csv(args.attachments).fillna("")
+    stop_inventory = pd.read_csv(args.stop_inventory).fillna("")
     rt022 = json.loads(args.rt022_audit.read_text(encoding="utf-8"))
 
     if rt022.get("status") != EXPECTED_RT022_STATUS or rt022.get("complete") is not True:
@@ -116,12 +116,12 @@ def main() -> int:
             f"{calculated_link_digest} != {expected_link_digest}"
         )
 
-    required_stop_columns = {"stop_place_id", "municipality", "service_class", "graph_epoch_id"}
-    missing = sorted(required_stop_columns - set(attachments.columns))
+    required_stop_columns = {"stop_place_id", "municipality", "service_class"}
+    missing = sorted(required_stop_columns - set(stop_inventory.columns))
     if missing:
-        raise ValueError(f"RT-022 stop attachments missing columns: {missing}")
-    conventional = attachments[
-        attachments["service_class"].astype(str).eq("CONVENTIONAL_TPL")
+        raise ValueError(f"canonical stop inventory missing columns: {missing}")
+    conventional = stop_inventory[
+        stop_inventory["service_class"].astype(str).eq("CONVENTIONAL_TPL")
     ].copy()
     if len(conventional) != EXPECTED_CONVENTIONAL:
         raise ValueError("RT-024 requires exactly 35 conventional RT-022 terminals")
@@ -129,9 +129,17 @@ def main() -> int:
         raise ValueError("duplicate conventional stop_place_id")
     if set(conventional["municipality"].astype(str)) != set(CORE_GROUPS):
         raise ValueError("conventional terminal mapping does not cover exactly the five core groups")
-    epochs = sorted(set(conventional["graph_epoch_id"].astype(str)))
-    if len(epochs) != 1 or epochs[0] != str(rt022.get("graph_epoch_id", "")):
-        raise ValueError("RT-022 graph epoch mismatch in RT-024 input")
+
+    link_terminals = set(links["terminal_a"].astype(str)) | set(links["terminal_b"].astype(str))
+    conventional_ids = set(conventional["stop_place_id"].astype(str))
+    if link_terminals != conventional_ids:
+        raise ValueError(
+            "RT-022 structural-link terminal universe differs from canonical 35 conventional stops"
+        )
+    stop_inventory_digest = canonical_frame_sha256(
+        stop_inventory,
+        sort_by=["stop_place_id"],
+    )
 
     terminal_groups = {
         str(row.stop_place_id): (str(row.municipality),)
@@ -175,8 +183,9 @@ def main() -> int:
     audit = {
         "status": PASS_STATUS,
         "complete": True,
-        "graph_epoch_id": epochs[0],
+        "graph_epoch_id": str(rt022["graph_epoch_id"]),
         "source_rt022_status": rt022["status"],
+        "source_stop_inventory_sha256": stop_inventory_digest,
         "source_rt022_structure_universe_sha256": rt022["digests"]["structure_universe_sha256"],
         "source_reciprocal_structural_links_sha256": calculated_link_digest,
         "counts": {
