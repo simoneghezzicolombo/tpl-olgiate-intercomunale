@@ -13,7 +13,7 @@ permissions:
 jobs:
   rt028:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 90
     env:
       PYTHONPATH: src
       RT016_COMMIT: 3eaa227fc7a3cd3f82a9c3161ac4827bc32b862a
@@ -38,6 +38,7 @@ jobs:
             "numpy>=2.0,<3" \
             "pandas>=2.2,<4" \
             "scipy>=1.13,<2" \
+            "networkx>=3.3,<4" \
             "shapely>=2.0,<3" \
             "requests>=2.31,<3" \
             "pytest>=8,<10" \
@@ -80,10 +81,69 @@ jobs:
           unzip -q /tmp/rt016_validation.zip -d /tmp/rt016_validation
           find /tmp/rt016_validation -maxdepth 2 -type f -print
 
-      - name: Materialize frozen RT-016 population units from real inputs
+      - name: Rebuild minimum frozen Gate A/B population prerequisites
         run: |
           git fetch --no-tags --depth=1 origin "$RT016_COMMIT"
+          git show "$RT016_COMMIT:scripts/audit_01_fetch_real_inputs.py" > /tmp/rt016_audit_01.py
+          git show "$RT016_COMMIT:scripts/audit_02_real_spatial.py" > /tmp/rt016_audit_02.py
+          cmp scripts/audit_01_fetch_real_inputs.py /tmp/rt016_audit_01.py
+          cmp scripts/audit_02_real_spatial.py /tmp/rt016_audit_02.py
+          PYTHONPATH=. python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+
+          from scripts.audit_01_fetch_real_inputs import (
+              step_1_istat_boundaries,
+              step_2_worldpop_raster,
+              step_8_istat_posas,
+          )
+          from scripts.audit_02_real_spatial import (
+              OUT_DIR,
+              POP_CELLS,
+              extract_worldpop_cells,
+              load_boundaries,
+              load_posas_totals,
+          )
+
+          boundaries = step_1_istat_boundaries()
+          step_2_worldpop_raster(boundaries)
+          step_8_istat_posas()
+
+          frozen_boundaries = load_boundaries()
+          frozen_posas = load_posas_totals()
+          cells = extract_worldpop_cells(frozen_boundaries, frozen_posas)
+          OUT_DIR.mkdir(parents=True, exist_ok=True)
+          pd.DataFrame(cells.drop(columns="geometry")).to_csv(POP_CELLS, index=False)
+
+          required = [
+              Path("data/raw/boundaries/Limiti01012026.zip"),
+              Path("data/raw/boundaries/comuni_core_istat_2026.geojson"),
+              Path("data/raw/worldpop/ita_ppp_2020_UNadj.tif"),
+              Path("data/audit_gate_b/population_cells_real.csv"),
+          ]
+          for p in required:
+              assert p.exists() and p.stat().st_size > 0, p
+          assert len(cells) > 1000
+          assert not pd.DataFrame(cells)["cell_id"].astype(str).duplicated().any()
+          print(f"PASS_FROZEN_GATE_AB_POPULATION_PREREQUISITES cells={len(cells)}")
+          PY
+
+      - name: Materialize frozen RT-016 population units from real inputs
+        run: |
+          rm -rf /tmp/rt016
           git worktree add --detach /tmp/rt016 "$RT016_COMMIT"
+          mkdir -p \
+            /tmp/rt016/data/raw/boundaries \
+            /tmp/rt016/data/raw/worldpop \
+            /tmp/rt016/data/audit_gate_b
+          ln -s "$GITHUB_WORKSPACE/data/raw/boundaries/Limiti01012026.zip" \
+            /tmp/rt016/data/raw/boundaries/Limiti01012026.zip
+          ln -s "$GITHUB_WORKSPACE/data/raw/boundaries/comuni_core_istat_2026.geojson" \
+            /tmp/rt016/data/raw/boundaries/comuni_core_istat_2026.geojson
+          ln -s "$GITHUB_WORKSPACE/data/raw/worldpop/ita_ppp_2020_UNadj.tif" \
+            /tmp/rt016/data/raw/worldpop/ita_ppp_2020_UNadj.tif
+          ln -s "$GITHUB_WORKSPACE/data/audit_gate_b/population_cells_real.csv" \
+            /tmp/rt016/data/audit_gate_b/population_cells_real.csv
           cd /tmp/rt016
           PYTHONPATH=. python scripts/phase2_build_border_neutral_catchment_population_v3.py
           test -s outputs/phase2/border_neutral_catchment_population_v3/border_neutral_population_units_v3.csv
