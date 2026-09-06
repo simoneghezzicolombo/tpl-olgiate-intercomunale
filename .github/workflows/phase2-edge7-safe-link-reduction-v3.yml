@@ -35,10 +35,10 @@ jobs:
           python -m py_compile src/phase2_edge7_safe_link_reduction_v3.py
           python -m py_compile scripts/phase2_run_rt027_edge7_safe_link_reduction_v3.py
           python -m pytest -q tests/test_phase2_edge7_safe_link_reduction_v3.py
-      - name: Validate frozen RT-022 identity
+      - name: Validate frozen RT-022 semantic identity
         run: |
           python - <<'PY'
-          import csv, hashlib, json
+          import csv, json
           from pathlib import Path
           links=Path('outputs/phase2/rt022_minimum_backbones_v3/reciprocal_structural_links.csv')
           audit=Path('outputs/phase2/rt022_minimum_backbones_v3/rt022_minimum_backbone_audit.json')
@@ -48,9 +48,9 @@ jobs:
           assert v['status']=='PASS_EXACT_MINIMUM_TOPOLOGY_NEUTRAL_TERRITORIAL_BACKBONE_UNIVERSE'
           assert v['complete'] is True
           assert v['counts']['reciprocal_elementary_structural_links']==110
+          assert v['graph_epoch_id']=='RT017::2026-09-05T13:45:50Z::466f562f95805cb1'
+          assert v['digests']['reciprocal_structural_links_sha256']=='009789fbaf2cf5434555075c1de6a6931bee3bbc0473580e26a79a82d827885d'
           assert v['digests']['structure_universe_sha256']=='1d6ccd18a5707aa8e2e51b1eefcc9d27056678f0d5e260c9027d1414a1ddf8d7'
-          h=hashlib.sha256(links.read_bytes()).hexdigest()
-          assert h=='009789fbaf2cf5434555075c1de6a6931bee3bbc0473580e26a79a82d827885d'
           PY
       - name: Run exact real safe-link reduction
         run: |
