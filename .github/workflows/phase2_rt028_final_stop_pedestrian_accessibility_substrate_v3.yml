@@ -1,0 +1,191 @@
+name: RT-028 final-stop pedestrian accessibility substrate V3
+
+on:
+  push:
+    branches:
+      - rt028-final-stop-pedestrian-accessibility-substrate-v3
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  rt028:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      PYTHONPATH: src
+      RT016_COMMIT: 3eaa227fc7a3cd3f82a9c3161ac4827bc32b862a
+      RT016_ARTIFACT_ID: "9971024216"
+      RT016_ARTIFACT_SHA256: 2937c60aec0280ae1837bc3f763103d5ac45acd2e3b93a949cc75235b1152fe9
+      FINAL_STOP_COMMIT: ea30fbd18421164abaf2125033292cbe827e024d
+      FINAL_STOP_PATH: outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/existing_stop_places_operational_gpt_v5.csv
+
+    steps:
+      - name: Checkout RT-028 branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deterministic build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            "numpy>=2.0,<3" \
+            "pandas>=2.2,<4" \
+            "scipy>=1.13,<2" \
+            "shapely>=2.0,<3" \
+            "requests>=2.31,<3" \
+            "pytest>=8,<10" \
+            "geopandas>=1.0,<2" \
+            "rasterio>=1.4,<2" \
+            "pyogrio>=0.10,<1"
+
+      - name: Controlled RT-028 contract tests
+        run: |
+          python -m pytest -q tests/test_phase2_final_stop_pedestrian_accessibility_substrate_v3.py
+
+      - name: Verify frozen 36-stop inventory is unchanged
+        run: |
+          git fetch --no-tags --depth=1 origin "$FINAL_STOP_COMMIT"
+          mkdir -p /tmp/rt028/input
+          git show "$FINAL_STOP_COMMIT:$FINAL_STOP_PATH" > /tmp/rt028/input/frozen_final_stops.csv
+          cmp "$FINAL_STOP_PATH" /tmp/rt028/input/frozen_final_stops.csv
+          python - <<'PY'
+          import pandas as pd
+          p = "/tmp/rt028/input/frozen_final_stops.csv"
+          df = pd.read_csv(p)
+          assert len(df) == 36
+          assert int((df["service_class"] == "CONVENTIONAL_TPL").sum()) == 35
+          special = df.loc[df["service_class"] == "SPECIAL_SERVICE", "stop_place_id"].astype(str).tolist()
+          assert special == ["SPECIAL::CASA_DI_COMUNITA_OLGIATE"]
+          print("PASS_FROZEN_36_STOP_INVENTORY")
+          PY
+
+      - name: Verify certified RT-016 validation artifact digest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/${GITHUB_REPOSITORY}/actions/artifacts/${RT016_ARTIFACT_ID}/zip" \
+            > /tmp/rt016_validation.zip
+          echo "${RT016_ARTIFACT_SHA256}  /tmp/rt016_validation.zip" | sha256sum -c -
+          rm -rf /tmp/rt016_validation
+          mkdir -p /tmp/rt016_validation
+          unzip -q /tmp/rt016_validation.zip -d /tmp/rt016_validation
+          find /tmp/rt016_validation -maxdepth 2 -type f -print
+
+      - name: Materialize frozen RT-016 population units from real inputs
+        run: |
+          git fetch --no-tags --depth=1 origin "$RT016_COMMIT"
+          git worktree add --detach /tmp/rt016 "$RT016_COMMIT"
+          cd /tmp/rt016
+          PYTHONPATH=src python scripts/phase2_build_border_neutral_catchment_population_v3.py
+          test -s outputs/phase2/border_neutral_catchment_population_v3/border_neutral_population_units_v3.csv
+          cp outputs/phase2/border_neutral_catchment_population_v3/border_neutral_population_units_v3.csv \
+            /tmp/rt028/input/rt016_border_neutral_population_units_v3.csv
+          cp outputs/phase2/border_neutral_catchment_population_v3/border_neutral_population_units_v3_summary.json \
+            /tmp/rt028/input/rt016_border_neutral_population_units_v3_summary.json
+          cd "$GITHUB_WORKSPACE"
+
+      - name: Assert RT-016 atomic population contract
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          p = "/tmp/rt028/input/rt016_border_neutral_population_units_v3.csv"
+          df = pd.read_csv(p, dtype={"municipality_code": str})
+          required = {
+              "unit_id", "lat", "lon", "municipality_code", "municipality_name",
+              "population_weight_2025", "population_scope",
+          }
+          assert required.issubset(df.columns), sorted(required - set(df.columns))
+          assert len(df) > 0
+          assert not df["unit_id"].astype(str).duplicated().any()
+          assert set(df["population_scope"].astype(str)).issubset({"core", "external"})
+          assert "core" in set(df["population_scope"].astype(str))
+          assert pd.to_numeric(df["population_weight_2025"], errors="coerce").notna().all()
+          print(f"PASS_RT016_ATOMIC_POPULATION units={len(df)}")
+          PY
+
+      - name: Acquire pinned RT-028 OSM pedestrian snapshot
+        run: |
+          PYTHONPATH=src python scripts/phase2_fetch_rt028_osm_pedestrian_snapshot_v3.py \
+            --population /tmp/rt028/input/rt016_border_neutral_population_units_v3.csv \
+            --stops /tmp/rt028/input/frozen_final_stops.csv \
+            --output-osm /tmp/rt028/input/rt028_osm_pedestrian_snapshot_v3.osm \
+            --output-meta /tmp/rt028/input/rt028_osm_pedestrian_snapshot_metadata_v3.json
+          test -s /tmp/rt028/input/rt028_osm_pedestrian_snapshot_v3.osm
+          test -s /tmp/rt028/input/rt028_osm_pedestrian_snapshot_metadata_v3.json
+
+      - name: Build real RT-028 atomic walk matrix
+        run: |
+          mkdir -p /tmp/rt028/output
+          PYTHONPATH=src python scripts/phase2_run_final_stop_pedestrian_accessibility_substrate_v3.py \
+            --population /tmp/rt028/input/rt016_border_neutral_population_units_v3.csv \
+            --stops /tmp/rt028/input/frozen_final_stops.csv \
+            --osm /tmp/rt028/input/rt028_osm_pedestrian_snapshot_v3.osm \
+            --osm-meta /tmp/rt028/input/rt028_osm_pedestrian_snapshot_metadata_v3.json \
+            --output-dir /tmp/rt028/output
+
+      - name: Assert real-data RT-028 PASS and ownership boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+
+          out = Path("/tmp/rt028/output")
+          audit = json.loads((out / "rt028_pedestrian_accessibility_validation_v3.json").read_text())
+          matrix = pd.read_csv(out / "rt028_population_unit_stop_walk_matrix_v3.csv")
+          pop = pd.read_csv("/tmp/rt028/input/rt016_border_neutral_population_units_v3.csv")
+
+          assert audit["status"] == "PASS"
+          assert audit["stop_count"] == 36
+          assert audit["conventional_stop_count"] == 35
+          assert audit["special_service_stop_count"] == 1
+          assert audit["population_unit_count"] == len(pop)
+          assert audit["pair_count"] == len(pop) * 36
+          assert len(matrix) == len(pop) * 36
+          assert matrix[["population_unit_id", "stop_place_id"]].drop_duplicates().shape[0] == len(matrix)
+          assert set(matrix["reachability_status"].astype(str)) <= {"REACHABLE", "UNREACHABLE"}
+          unreachable = matrix["reachability_status"].astype(str) == "UNREACHABLE"
+          assert matrix.loc[unreachable, "unreachable_reason"].fillna("").astype(str).str.len().gt(0).all()
+          assert all(value is False for value in audit["negative_assertions"].values())
+          assert audit["cross_engine_walk_check"]["results_averaged_with_primary_engine"] is False
+
+          forbidden = ("candidate", "backbone", "structure_id", "rank", "score", "primary", "runner_up", "winner", "pareto")
+          for col in matrix.columns:
+              assert not any(token in col.lower() for token in forbidden), col
+          print("PASS_REAL_RT028")
+          print(json.dumps({
+              "population_units": audit["population_unit_count"],
+              "pairs": audit["pair_count"],
+              "reachable": audit["reachable_pair_count"],
+              "unreachable": audit["unreachable_pair_count"],
+              "matrix_sha256": audit["matrix_sha256"],
+              "pedestrian_graph_digest": audit["pedestrian_graph_digest"],
+              "osm_snapshot_sha256": audit["osm_snapshot_sha256"],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Assemble certified RT-028 artifact
+        run: |
+          mkdir -p /tmp/rt028/artifact/input /tmp/rt028/artifact/output
+          cp /tmp/rt028/input/rt016_border_neutral_population_units_v3.csv /tmp/rt028/artifact/input/
+          cp /tmp/rt028/input/rt016_border_neutral_population_units_v3_summary.json /tmp/rt028/artifact/input/
+          cp /tmp/rt028/input/frozen_final_stops.csv /tmp/rt028/artifact/input/
+          cp /tmp/rt028/input/rt028_osm_pedestrian_snapshot_v3.osm /tmp/rt028/artifact/input/
+          cp /tmp/rt028/input/rt028_osm_pedestrian_snapshot_metadata_v3.json /tmp/rt028/artifact/input/
+          cp /tmp/rt028/output/* /tmp/rt028/artifact/output/
+
+      - name: Upload RT-028 certified artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rt028-final-stop-pedestrian-accessibility-substrate-v3
+          path: /tmp/rt028/artifact/
+          if-no-files-found: error
