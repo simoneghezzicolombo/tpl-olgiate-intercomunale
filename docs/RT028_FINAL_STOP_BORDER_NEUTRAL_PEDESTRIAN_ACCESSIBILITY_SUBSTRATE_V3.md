@@ -20,9 +20,9 @@ RT-028 MUST NOT:
 
 ## Old Access Equity audit
 
-The old `scripts/04_walk_network.py` implementation was audited before RT-028 implementation. It is not a graph-based pedestrian router: it derives direct coordinate distance and applies a slope correction. That routing result is therefore rejected for RT-028.
+The old `scripts/04_walk_network.py` implementation was audited before RT-028 implementation. It is not a graph-based pedestrian router: for every cell/stop pair it calls `calculate_distance_m(...)` directly on the coordinates, then converts that direct distance into standard and slope-adjusted time with `compute_walk_time(...)`. That territorial routing result is therefore rejected for RT-028.
 
-The newer Access Equity code contains generic deterministic population aggregation ideas, but no old catchment membership or territorial accessibility result is imported into this workstream.
+The later Access Equity V2 code is reusable only at the aggregation-contract level: it deterministically unions certified unit memberships, prevents double-counting and computes threshold/equity summaries. Its runner consumes already-materialised proposed/existing walking memberships rather than constructing a new pedestrian graph itself. RT-028 therefore reuses none of the old catchment memberships or territorial accessibility outputs; it builds a fresh atomic graph-based population-unit × final-stop layer instead.
 
 ## Frozen population lineage
 
@@ -110,7 +110,9 @@ Stable pair IDs and the canonical matrix digest are invariant to input row order
 
 ## Independent WALK engine check
 
-An R5/r5py WALK cross-check is optional under Issue #68. No frozen, validated R5/r5py WALK runtime or implementation is present in the repository lineage inspected for RT-028. The certified build therefore records the cross-engine status as `NOT_RUN` rather than introducing an unvalidated second engine.
+An R5/r5py WALK cross-check is optional under Issue #68. RT-012 **does** certify a deterministic `r5py 1.1.7` runtime, but its certification scope is the pinned upstream Helsinki sample fixture, not the RT-028 territorial graph. RT-028's certified territorial evidence is a pinned Overpass OSM XML snapshot, whereas r5py requires an OSM PBF input. No frozen, validated territorial XML-to-PBF conversion lineage exists in the repository.
+
+Introducing a new XML-to-PBF preparation path only for the cross-check would therefore add an uncertified graph-preparation lineage instead of independently replaying the same frozen territorial input. The certified build records `NOT_RUN_TECHNICAL_BLOCKER`, preserves the RT-012 runtime certification and its limited fixture scope explicitly, and does not block the primary graph result.
 
 No R5 result is fabricated, and RT-028 never averages the primary result with a second engine if they disagree.
 
