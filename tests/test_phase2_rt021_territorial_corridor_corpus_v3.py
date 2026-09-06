@@ -3,6 +3,9 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
+from src.phase2_alternative_corridor_generator_v3 import generate_bounded_alternative_corridors
+from src.phase2_frozen_graph import build_adjacency, build_turn_rule_index
+from src.phase2_rt021_bounded_corpus_v3 import generate_bounded_from_frozen_baseline
 from src.phase2_rt021_territorial_corridor_corpus_v3 import (
     EXPECTED_DIRECTED_PAIRS,
     adapt_rt017_nodes_for_rt018,
@@ -104,3 +107,58 @@ def test_corridor_id_depends_on_directed_pair_and_exact_edge_sequence():
     d = corridor_id("PAIR_B", ["e1", "e2"])
     assert a == b
     assert len({a, c, d}) == 3
+
+
+def test_frozen_baseline_wrapper_matches_rt006_post_oracle_generation():
+    edges = pd.DataFrame(
+        [
+            {"edge_id": "ab", "u_node_id": "A", "v_node_id": "B", "osm_way_id": "w1", "length_m": 100, "running_minutes_model": 1.0},
+            {"edge_id": "bd", "u_node_id": "B", "v_node_id": "D", "osm_way_id": "w2", "length_m": 100, "running_minutes_model": 1.0},
+            {"edge_id": "ac", "u_node_id": "A", "v_node_id": "C", "osm_way_id": "w3", "length_m": 110, "running_minutes_model": 1.1},
+            {"edge_id": "cd", "u_node_id": "C", "v_node_id": "D", "osm_way_id": "w4", "length_m": 110, "running_minutes_model": 1.1},
+            {"edge_id": "be", "u_node_id": "B", "v_node_id": "E", "osm_way_id": "w5", "length_m": 70, "running_minutes_model": 0.7},
+            {"edge_id": "ed", "u_node_id": "E", "v_node_id": "D", "osm_way_id": "w6", "length_m": 70, "running_minutes_model": 0.7},
+        ]
+    )
+    rules = pd.DataFrame(
+        columns=[
+            "relation_id",
+            "restriction",
+            "from_osm_way_id",
+            "via_node_id",
+            "to_osm_way_id",
+            "via_node_in_graph",
+        ]
+    )
+    adjacency = build_adjacency(edges)
+    rule_index = build_turn_rule_index(rules)
+    original = generate_bounded_alternative_corridors(
+        adjacency,
+        rule_index,
+        "A",
+        "D",
+        max_alternatives=3,
+        max_generation_rounds=10,
+        penalty_increment=0.20,
+        max_runtime_factor=1.50,
+        max_shared_runtime_fraction_allowed=0.90,
+    )
+    wrapped = generate_bounded_from_frozen_baseline(
+        adjacency,
+        rule_index,
+        __import__("src.phase2_alternative_corridor_generator_v3", fromlist=["edge_lookup"]).edge_lookup(adjacency),
+        "A",
+        "D",
+        list(original["baseline"].edge_ids),
+    )
+    assert [tuple(path.edge_ids) for path in original["corridors"]] == [
+        tuple(path["edge_ids"]) for path in wrapped["corridors"]
+    ]
+    assert [path.running_minutes_model for path in original["corridors"]] == [
+        path["running_minutes_model"] for path in wrapped["corridors"]
+    ]
+    assert [path.distance_m for path in original["corridors"]] == [
+        path["distance_m"] for path in wrapped["corridors"]
+    ]
+    assert original["contract"] == wrapped["contract"]
+    assert original["completeness_claim"] == wrapped["completeness_claim"]
