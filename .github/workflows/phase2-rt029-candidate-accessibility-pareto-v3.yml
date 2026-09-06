@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
+      PYTHONPATH: "src"
       RT023_RUN_ID: "34034770563"
       RT023_ARTIFACT_ID: "9989805162"
       RT023_ARTIFACT_DIGEST: "sha256:d206af90c247f87940f51db17e5497183199cceb9070e84124c0ef3b5ddba981"
