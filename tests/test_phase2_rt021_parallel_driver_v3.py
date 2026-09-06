@@ -43,7 +43,7 @@ def test_partition_is_input_order_invariant_at_pair_set_level():
     assert [set(part["pair_id"]) for part in forward] == [set(part["pair_id"]) for part in reverse]
 
 
-def test_worker_uses_original_bounded_router_even_if_module_symbol_is_monkeypatched(monkeypatch):
+def test_worker_uses_original_grid_router_even_if_bounded_module_is_monkeypatched(monkeypatch):
     manifest = pd.DataFrame(
         [
             {
@@ -65,7 +65,7 @@ def test_worker_uses_original_bounded_router_even_if_module_symbol_is_monkeypatc
     def recursive_dispatch_should_never_run(*args, **kwargs):
         raise AssertionError("worker called monkeypatched bounded.route_corpus")
 
-    monkeypatch.setattr(parallel, "ORIGINAL_BOUNDED_ROUTE_CORPUS", fake_original)
+    monkeypatch.setattr(parallel, "ORIGINAL_GRID_ROUTE_CORPUS", fake_original)
     monkeypatch.setattr(parallel.bounded, "route_corpus", recursive_dispatch_should_never_run)
 
     result = parallel._route_partition(
