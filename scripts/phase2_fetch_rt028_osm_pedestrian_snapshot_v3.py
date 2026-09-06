@@ -6,6 +6,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+import re
 
 import pandas as pd
 import requests
@@ -16,10 +17,30 @@ OVERPASS_ENDPOINTS = (
     "https://overpass.kumi.systems/api/interpreter",
 )
 BUFFER_M = 500.0
+_OSM_BASE_META_RE = re.compile(rb'<meta\s+osm_base="[^"]+"\s*/>')
 
 
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def canonicalize_overpass_osm_bytes(raw: bytes) -> bytes:
+    """Remove Overpass response-time metadata from an otherwise pinned snapshot.
+
+    Historical Overpass queries can return identical OSM entities while changing
+    only the root-level ``<meta osm_base=.../>`` value to the server replication
+    time at which the response was produced. That field is not part of the
+    requested historical OSM state and must not perturb RT-028 input, graph or
+    matrix digests.
+    """
+    matches = list(_OSM_BASE_META_RE.finditer(raw))
+    if len(matches) != 1:
+        raise RuntimeError(
+            "RT-028 expected exactly one volatile Overpass <meta osm_base=.../> element, "
+            f"found {len(matches)}"
+        )
+    match = matches[0]
+    return raw[: match.start()] + raw[match.end() :]
 
 
 def derive_bbox(pop: pd.DataFrame, stops: pd.DataFrame) -> tuple[float, float, float, float]:
@@ -94,11 +115,12 @@ def main() -> None:
     if response is None:
         raise RuntimeError("all pinned Overpass snapshot endpoints failed: " + " | ".join(failures))
 
-    endpoint, raw = response
+    endpoint, response_bytes = response
+    canonical_osm = canonicalize_overpass_osm_bytes(response_bytes)
     out = Path(args.output_osm)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_bytes(raw)
-    osm_sha = sha256_bytes(raw)
+    out.write_bytes(canonical_osm)
+    osm_sha = sha256_bytes(canonical_osm)
     meta = {
         "contract": "RT028_OSM_PEDESTRIAN_SNAPSHOT_V3",
         "snapshot_timestamp": SNAPSHOT_TIMESTAMP,
@@ -109,7 +131,10 @@ def main() -> None:
         "query": query,
         "query_sha256": query_sha,
         "osm_snapshot_sha256": osm_sha,
-        "osm_snapshot_bytes": len(raw),
+        "osm_snapshot_bytes": len(canonical_osm),
+        "overpass_response_bytes_before_canonicalization": len(response_bytes),
+        "overpass_volatile_osm_base_removed": True,
+        "canonicalization_rule": "REMOVE_ROOT_META_OSM_BASE_RESPONSE_TIME_ONLY",
         "selectors": [
             "highway",
             "barrier nodes/ways",
