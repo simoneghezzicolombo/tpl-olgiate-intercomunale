@@ -1,0 +1,48 @@
+{
+  "complete": true,
+  "completeness_semantics": "EVERY_CONNECTED_EDGE_SUBSET_HAS_AN_EDGE-DELETION_ORDER_TO_A_SINGLE_EDGE;REVERSING_THAT_ORDER_IS_GENERATED_BY_INCIDENT_EDGE_EXPANSION",
+  "connected_state_counts_by_edge_count": {
+    "1": 110,
+    "2": 723,
+    "3": 6299,
+    "4": 61409,
+    "5": 622352
+  },
+  "connected_states_at_target_before_policy_filter": 622352,
+  "counts": {
+    "conventional_terminals": 35,
+    "exact_five_edge_structures": 4076,
+    "reciprocal_structural_links": 110
+  },
+  "cycle_rank_distribution": {
+    "0": 4052,
+    "1": 24
+  },
+  "exact_edge_count": 5,
+  "generation_semantics": "ALL_SINGLE_EDGES_THEN_INCIDENT_EDGE_EXPANSION_WITH_CANONICAL_LINK_SET_DEDUPLICATION",
+  "graph_epoch_id": "RT017::2026-09-05T13:45:50Z::466f562f95805cb1",
+  "guards": {
+    "enumeration_cap_used": false,
+    "larger_edge_counts_enumerated": false,
+    "larger_structures_declared_inferior": false,
+    "municipality_used_as_routing_filter": false,
+    "primary_runner_up_selected": false,
+    "service_terminal_selected": false,
+    "topology_filter_used": false
+  },
+  "source_reciprocal_structural_links_sha256": "009789fbaf2cf5434555075c1de6a6931bee3bbc0473580e26a79a82d827885d",
+  "source_rt022_status": "PASS_EXACT_MINIMUM_TOPOLOGY_NEUTRAL_TERRITORIAL_BACKBONE_UNIVERSE",
+  "source_rt022_structure_universe_sha256": "1d6ccd18a5707aa8e2e51b1eefcc9d27056678f0d5e260c9027d1414a1ddf8d7",
+  "source_stop_inventory_sha256": "bbb95ebc3879320ccda4aa00db6d95b9c5f33bf15c8c997b1ab557fcbbe528d2",
+  "status": "PASS_RT024_EXACT_FIVE_EDGE_TOPOLOGY_NEUTRAL_STRUCTURAL_LAYER_V3",
+  "structure_universe_sha256": "b03c704bbfadfc8d66494087163604d794b2e1502d8b38d294f711d55230bc92",
+  "topology_counts": {
+    "PATH": 1374,
+    "TREE_BRANCHING": 2678,
+    "UNICYCLIC_BRANCHING": 24
+  },
+  "vertex_count_distribution": {
+    "5": 24,
+    "6": 4052
+  }
+}
