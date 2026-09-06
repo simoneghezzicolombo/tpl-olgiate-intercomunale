@@ -15,6 +15,9 @@ from phase2_final_stop_pedestrian_accessibility_substrate_v3 import (
     canonical_dataframe_sha256,
     parse_osm_pedestrian_graph,
 )
+from scripts.phase2_fetch_rt028_osm_pedestrian_snapshot_v3 import (
+    canonicalize_overpass_osm_bytes,
+)
 
 
 def _stops() -> pd.DataFrame:
@@ -210,6 +213,20 @@ def test_canonical_digest_is_row_order_invariant() -> None:
         matrix.sample(frac=1, random_state=7), ["population_unit_id", "stop_place_id"]
     )
     assert d1 == d2
+
+
+def test_overpass_snapshot_canonicalization_removes_response_time_only() -> None:
+    prefix = b'<osm version="0.6">\n<note>same entities</note>\n'
+    suffix = b'\n<node id="1" lat="45.0" lon="9.0"/>\n</osm>\n'
+    a = prefix + b'<meta osm_base="2026-09-06T14:05:18Z"/>' + suffix
+    b = prefix + b'<meta osm_base="2026-09-06T14:18:36Z"/>' + suffix
+    ca = canonicalize_overpass_osm_bytes(a)
+    cb = canonicalize_overpass_osm_bytes(b)
+    assert ca == cb
+    assert b"osm_base" not in ca
+    assert b'<node id="1" lat="45.0" lon="9.0"/>' in ca
+    with pytest.raises(RuntimeError, match="exactly one volatile Overpass"):
+        canonicalize_overpass_osm_bytes(prefix + suffix)
 
 
 def test_osm_parser_honours_foot_no_and_barrier_node(tmp_path: Path) -> None:
