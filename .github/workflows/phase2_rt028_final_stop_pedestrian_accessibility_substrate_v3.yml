@@ -136,14 +136,22 @@ jobs:
             /tmp/rt016/data/raw/boundaries \
             /tmp/rt016/data/raw/worldpop \
             /tmp/rt016/data/audit_gate_b
-          ln -s "$GITHUB_WORKSPACE/data/raw/boundaries/Limiti01012026.zip" \
-            /tmp/rt016/data/raw/boundaries/Limiti01012026.zip
-          ln -s "$GITHUB_WORKSPACE/data/raw/boundaries/comuni_core_istat_2026.geojson" \
-            /tmp/rt016/data/raw/boundaries/comuni_core_istat_2026.geojson
-          ln -s "$GITHUB_WORKSPACE/data/raw/worldpop/ita_ppp_2020_UNadj.tif" \
-            /tmp/rt016/data/raw/worldpop/ita_ppp_2020_UNadj.tif
-          ln -s "$GITHUB_WORKSPACE/data/audit_gate_b/population_cells_real.csv" \
-            /tmp/rt016/data/audit_gate_b/population_cells_real.csv
+          if [ ! -e /tmp/rt016/data/raw/boundaries/Limiti01012026.zip ]; then
+            ln -s "$GITHUB_WORKSPACE/data/raw/boundaries/Limiti01012026.zip" \
+              /tmp/rt016/data/raw/boundaries/Limiti01012026.zip
+          fi
+          if [ ! -e /tmp/rt016/data/raw/boundaries/comuni_core_istat_2026.geojson ]; then
+            ln -s "$GITHUB_WORKSPACE/data/raw/boundaries/comuni_core_istat_2026.geojson" \
+              /tmp/rt016/data/raw/boundaries/comuni_core_istat_2026.geojson
+          fi
+          if [ ! -e /tmp/rt016/data/raw/worldpop/ita_ppp_2020_UNadj.tif ]; then
+            ln -s "$GITHUB_WORKSPACE/data/raw/worldpop/ita_ppp_2020_UNadj.tif" \
+              /tmp/rt016/data/raw/worldpop/ita_ppp_2020_UNadj.tif
+          fi
+          if [ ! -e /tmp/rt016/data/audit_gate_b/population_cells_real.csv ]; then
+            ln -s "$GITHUB_WORKSPACE/data/audit_gate_b/population_cells_real.csv" \
+              /tmp/rt016/data/audit_gate_b/population_cells_real.csv
+          fi
           cd /tmp/rt016
           PYTHONPATH=. python scripts/phase2_build_border_neutral_catchment_population_v3.py
           test -s outputs/phase2/border_neutral_catchment_population_v3/border_neutral_population_units_v3.csv
