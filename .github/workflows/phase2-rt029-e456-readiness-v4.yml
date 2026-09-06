@@ -165,8 +165,12 @@ jobs:
           assert audit["passenger_stop_realization_required"] is True
           assert audit["final_passenger_stop_set_count"] is None
           assert all(v is False for v in audit["negative_assertions"].values())
+          forbidden_top_level = {
+              "primary", "runner_up", "winner", "weighted_composite_score",
+              "primary_structure_id", "runner_up_structure_id", "winner_structure_id",
+          }
+          assert not forbidden_top_level.intersection(audit)
           PY
-          ! grep -RniE 'PRIMARY|RUNNER.UP|winner|weighted_composite' "$(dirname "${READY_OUT}")" || exit 1
 
       - name: Upload deterministic readiness artifact
         uses: actions/upload-artifact@v4
