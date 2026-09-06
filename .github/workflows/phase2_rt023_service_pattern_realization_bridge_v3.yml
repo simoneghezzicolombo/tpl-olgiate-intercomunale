@@ -1,0 +1,89 @@
+name: RT-023 service-pattern realization bridge V3
+
+on:
+  push:
+    branches:
+      - rt023-service-pattern-realization-bridge-v3
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  rt023:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout RT-023 branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install audit dependencies
+        run: python -m pip install --upgrade pip pandas pytest
+
+      - name: Controlled RT-023 contract tests
+        run: python -m pytest -q tests/test_phase2_service_pattern_realization_bridge_v3.py
+
+      - name: Download certified RT-022 workflow artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          mkdir -p /tmp/rt022
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/${REPO}/actions/artifacts/9988386073/zip" \
+            > /tmp/rt022.zip
+          unzip -q /tmp/rt022.zip -d /tmp/rt022
+
+      - name: Verify RT-022 canonical handoff matches certified artifact
+        run: |
+          cmp \
+            outputs/phase2/rt022_minimum_backbones_v3/reciprocal_structural_links.csv \
+            /tmp/rt022/reciprocal_structural_links.csv
+          cmp \
+            outputs/phase2/rt022_minimum_backbones_v3/minimum_topology_neutral_backbone_universe.csv \
+            /tmp/rt022/minimum_topology_neutral_backbone_universe.csv
+          cmp \
+            outputs/phase2/rt022_minimum_backbones_v3/rt022_minimum_backbone_audit.json \
+            /tmp/rt022/rt022_minimum_backbone_audit.json
+
+      - name: Compile real RT-023 bridge
+        run: |
+          rm -rf /tmp/rt023
+          python scripts/phase2_run_rt023_service_pattern_realization_v3.py \
+            --reciprocal-links outputs/phase2/rt022_minimum_backbones_v3/reciprocal_structural_links.csv \
+            --structures outputs/phase2/rt022_minimum_backbones_v3/minimum_topology_neutral_backbone_universe.csv \
+            --elementary-corridors /tmp/rt022/elementary_corridors_for_reciprocity.csv \
+            --corridor-stop-occurrences /tmp/rt022/corridor_stop_occurrences.csv \
+            --rt022-audit outputs/phase2/rt022_minimum_backbones_v3/rt022_minimum_backbone_audit.json \
+            --output-dir /tmp/rt023
+
+      - name: Assert real-data PASS
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          audit = json.loads(Path("/tmp/rt023/rt023_service_pattern_realization_audit.json").read_text())
+          assert audit["status"] == "PASS"
+          assert audit["structural_link_count"] == 110
+          assert audit["structure_count"] == 88
+          assert audit["structure_link_reference_count"] == 352
+          assert audit["realization_count"] == 288
+          assert audit["a_to_b_realization_count"] == 141
+          assert audit["b_to_a_realization_count"] == 147
+          assert audit["pattern_fragment_count"] == 288
+          assert all(value is False for value in audit["negative_assertions"].values())
+          print("PASS_REAL_RT023")
+          PY
+
+      - name: Upload RT-023 real-data artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rt023-service-pattern-realization-v3
+          path: /tmp/rt023/
+          if-no-files-found: error
