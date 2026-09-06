@@ -1,0 +1,40 @@
+{
+  "complete": true,
+  "contract": "EXACT_MANDATORY_EDGE_POLICY_COVERAGE_MINIMUM_NOT_NETWORK_SELECTION",
+  "counts": {
+    "retained_safe_superset_links": 110,
+    "safely_excludable_links": 0,
+    "structural_links": 110
+  },
+  "edge7_safe_link_feasibility_sha256": "83bbe304d5ec6a21588b63a4878e18f8ec425675551834bc90350d356e661b62",
+  "guards": {
+    "municipality_used_as_routing_fence": false,
+    "ranking_performed": false,
+    "retained_link_exact_edge7_occurrence_claimed": false,
+    "service_terminal_selected": false,
+    "topology_preference_used": false
+  },
+  "interpretation_boundary": "MINIMUM_GT_TARGET_IS_SAFE_EXCLUSION;MINIMUM_LE_TARGET_IS_RETENTION_ONLY_NOT_EXACT_TARGET_OCCURRENCE_PROOF",
+  "minimum_edge_distribution": {
+    "4": 26,
+    "5": 59,
+    "6": 22,
+    "7": 3
+  },
+  "proof_semantics": "CONTRACT_REQUIRED_EDGE;ADD_SYNTHETIC_ROOT_GROUP;EXACT_GROUP_STEINER_DP;ADD_REQUIRED_EDGE_BACK",
+  "required_policy_groups": [
+    "Brivio",
+    "Calco",
+    "La Valletta Brianza",
+    "Olgiate Molgora",
+    "Santa Maria Hoè"
+  ],
+  "status": "PASS_EXACT_EDGE7_SAFE_LINK_FEASIBILITY_REDUCTION_V3",
+  "target_edge_count": 7,
+  "validation": {
+    "commit": "fa37ccdcb220cb16f0a1d91dcd25fcf3117be54d",
+    "run_id": 34034418520,
+    "artifact_id": 9989687315,
+    "artifact_digest": "sha256:06cf5db161cda54a20a9626904f097c53435d1aba786bc8a421f9c5202168614"
+  }
+}
