@@ -1,0 +1,120 @@
+name: RT-030 passenger-stop realization layer V3
+
+on:
+  push:
+    branches:
+      - rt030-passenger-stop-realization-layer-v3
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  rt030:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout RT-030 branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned audit dependencies
+        run: python -m pip install --upgrade "numpy==2.3.5" "pandas==2.2.3" "pyproj==3.7.2" "pytest==9.0.2"
+
+      - name: Run exactly 14 controlled adversarial tests
+        run: |
+          python -m pytest -q tests/test_phase2_passenger_stop_realization_layer_v3.py | tee /tmp/rt030-tests.txt
+          grep -Eq '^14 passed' /tmp/rt030-tests.txt
+
+      - name: Download frozen RT-023, RT-022 and RT-017 artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          mkdir -p /tmp/rt023 /tmp/rt022 /tmp/rt017
+          gh api -H "Accept: application/vnd.github+json" "/repos/${REPO}/actions/artifacts/9989805162/zip" > /tmp/rt023.zip
+          gh api -H "Accept: application/vnd.github+json" "/repos/${REPO}/actions/artifacts/9988386073/zip" > /tmp/rt022.zip
+          gh api -H "Accept: application/vnd.github+json" "/repos/${REPO}/actions/artifacts/9972204236/zip" > /tmp/rt017.zip
+          unzip -q /tmp/rt023.zip -d /tmp/rt023
+          unzip -q /tmp/rt022.zip -d /tmp/rt022
+          unzip -q /tmp/rt017.zip -d /tmp/rt017
+          test -f /tmp/rt023/link_realization_catalog.csv
+          test -f /tmp/rt022/elementary_corridors_for_reciprocity.csv
+          test -f /tmp/rt022/stop_attachments.csv
+          test -f /tmp/rt022/corridor_stop_occurrences.csv
+          test -f /tmp/rt017/frozen_graph_nodes.csv.gz
+          test -f /tmp/rt017/frozen_graph_edges.csv.gz
+
+      - name: Production rebuild A
+        run: |
+          python scripts/phase2_run_rt030_passenger_stop_realization_v3.py \
+            --rt023-run-realizations /tmp/rt023/link_realization_catalog.csv \
+            --elementary-corridors /tmp/rt022/elementary_corridors_for_reciprocity.csv \
+            --stop-attachments /tmp/rt022/stop_attachments.csv \
+            --corridor-stop-occurrences /tmp/rt022/corridor_stop_occurrences.csv \
+            --graph-nodes /tmp/rt017/frozen_graph_nodes.csv.gz \
+            --graph-edges /tmp/rt017/frozen_graph_edges.csv.gz \
+            --output-dir /tmp/rt030-a
+
+      - name: Production rebuild B
+        run: |
+          python scripts/phase2_run_rt030_passenger_stop_realization_v3.py \
+            --rt023-run-realizations /tmp/rt023/link_realization_catalog.csv \
+            --elementary-corridors /tmp/rt022/elementary_corridors_for_reciprocity.csv \
+            --stop-attachments /tmp/rt022/stop_attachments.csv \
+            --corridor-stop-occurrences /tmp/rt022/corridor_stop_occurrences.csv \
+            --graph-nodes /tmp/rt017/frozen_graph_nodes.csv.gz \
+            --graph-edges /tmp/rt017/frozen_graph_edges.csv.gz \
+            --output-dir /tmp/rt030-b
+
+      - name: Byte-for-byte deterministic rebuild gate
+        run: |
+          for f in \
+            rt030_realization_passenger_stop_patterns.csv \
+            rt030_realization_stop_occurrences.csv \
+            rt030_frozen_stop_physical_segment_attachments.csv \
+            rt030_diagnostics.csv \
+            rt030_audit.json; do
+            cmp "/tmp/rt030-a/${f}" "/tmp/rt030-b/${f}"
+          done
+
+      - name: Assert certified territorial result and negative assertions
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('/tmp/rt030-a/rt030_audit.json').read_text())
+          assert a['status']=='PASS'
+          assert a['realization_count']==288
+          assert a['endpoint_only_realization_count']==267
+          assert a['realizations_with_one_intermediate_passenger_stop']==21
+          assert a['occurrence_count']==597
+          assert a['recovered_intermediate_occurrence_count']==21
+          assert a['ambiguous_stop_segment_attachment_count']==0
+          assert a['recovered_intermediate_stop_identities']==[
+              'ASF::CALCO_LARGO_POMEA',
+              'ASF::OLGIATE_MOLGORA_SCARPONE',
+          ]
+          assert a['route_proximity_buffer_m']==0.0
+          assert a['attachment_edge_distance_m_summary']['count']==36
+          assert len(a['attachment_edge_distance_m_complete_distribution'])==36
+          assert a['unjustified_attachment_outlier_stop_ids']==[]
+          assert all(value is False for value in a['negative_assertions'].values())
+          r=a['rt023_lineage_reconciliation']
+          assert r['artifact_head_sha']=='0d9a82caa1d1d624e0f6945e709f3548785fb8dc'
+          assert r['final_certification_head_sha']=='2e8baf13ea4171164bc8c4b18d4b31bee4c3003d'
+          assert r['hash_reconciliation_proven'] is True
+          assert r['computed_final_realization_catalog_sha256']=='24d806b3b30cf75c91cf531746bada443bf3d5bedf3878e9587778cad7c9d36a'
+          print('PASS_CERTIFIED_RT030')
+          PY
+
+      - name: Upload certified RT-030 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rt030-passenger-stop-realization-v3
+          path: /tmp/rt030-a/
+          if-no-files-found: error
