@@ -12,7 +12,6 @@ import pandas as pd
 
 from src.phase2_exact_edge_policy_structures_v3 import enumerate_exact_edge_policy_structures
 from src.phase2_network_structure_search_v3 import AbstractLink, structure_to_record
-from src.phase2_territorial_structural_search_v3 import canonical_frame_sha256
 
 PASS_STATUS = "PASS_RT024_EXACT_FIVE_EDGE_TOPOLOGY_NEUTRAL_STRUCTURAL_LAYER_V3"
 CORE_GROUPS = (
@@ -26,6 +25,25 @@ EXPECTED_RT022_STATUS = "PASS_EXACT_MINIMUM_TOPOLOGY_NEUTRAL_TERRITORIAL_BACKBON
 EXPECTED_RT022_LINKS = 110
 EXPECTED_CONVENTIONAL = 35
 EXPECTED_EDGE_COUNT = 5
+
+
+def canonical_frame_sha256(
+    frame: pd.DataFrame,
+    *,
+    sort_by: list[str],
+) -> str:
+    """Hash a dataframe canonically without importing the heavier RT-022 orchestrator."""
+    columns = tuple(sorted(str(column) for column in frame.columns))
+    missing = sorted(set(sort_by) - set(columns))
+    if missing:
+        raise ValueError(f"canonical digest sort columns missing: {missing}")
+    canonical = frame.loc[:, list(columns)].copy().fillna("")
+    if sort_by:
+        canonical = canonical.sort_values(sort_by, kind="mergesort")
+    payload = canonical.reset_index(drop=True).to_csv(
+        index=False, lineterminator="\n"
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
 
 
 def _bool(value: object) -> bool:
