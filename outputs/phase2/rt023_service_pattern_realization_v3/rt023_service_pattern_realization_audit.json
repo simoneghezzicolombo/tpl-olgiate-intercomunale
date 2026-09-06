@@ -1,0 +1,39 @@
+{
+  "a_to_b_realization_count": 141,
+  "b_to_a_realization_count": 147,
+  "contract": "RT023_TOPOLOGY_NEUTRAL_SERVICE_PATTERN_REALIZATION_BRIDGE_V3",
+  "graph_epoch_id": "RT017::2026-09-05T13:45:50Z::466f562f95805cb1",
+  "lineage": {
+    "corridor_stop_occurrences_sha256": "6de033c008a5b4db9a44ad31652aea8276a3b588239fbd2e2d7c23b2e88add97",
+    "elementary_corridors_for_reciprocity_sha256": "7798f41b238dc818c76f4a440b4fc16203f4bb1e710f40394816399b39adf76c",
+    "minimum_topology_neutral_backbone_universe_sha256": "9a309e55c675fdca209b5d539d7fef5e3ed3a2141a067ee95441f17ace76fd8b",
+    "reciprocal_structural_links_sha256": "3c773163e1ffa792a72c0bda9ccd699b5be6666e01c9179a775f267baf97557a",
+    "rt022_minimum_backbone_audit_sha256": "604ae3825d695912a267c23f38259977672314d165dfbd252aab71515594010d"
+  },
+  "links_with_multiple_a_to_b_alternatives": 27,
+  "links_with_multiple_b_to_a_alternatives": 32,
+  "negative_assertions": {
+    "chooses_calendars": false,
+    "chooses_departures_or_timetables": false,
+    "chooses_frequencies_or_headways": false,
+    "chooses_hub_or_figure_8": false,
+    "chooses_service_areas": false,
+    "chooses_terminals_as_service_policy": false,
+    "constructs_reverse_direction_by_path_reversal": false,
+    "creates_passenger_stops": false,
+    "creates_structure_realization_cartesian_products": false,
+    "enumerates_network_topologies": false,
+    "ranks_structures": false,
+    "selects_network_topology": false,
+    "selects_primary_or_runner_up": false
+  },
+  "pattern_fragment_count": 288,
+  "realization_catalog_sha256": "a33b24664f9cd416f16989c7a66a668a3e90a83244dd3662cac735751532adc5",
+  "realization_count": 288,
+  "rt014_pattern_fragments_sha256": "b3bba85cfd3a1206cd267d8d122e4b0f447f841d57b832c770e88b32b1a777a9",
+  "status": "PASS",
+  "structural_link_count": 110,
+  "structure_count": 88,
+  "structure_link_manifest_sha256": "e382b476df0a1d319ae5be755fe1961d7350dd70cfcc54eb7266c6dadd05d499",
+  "structure_link_reference_count": 352
+}
