@@ -21,16 +21,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
       - name: Install pinned RT-022 dependencies
         run: |
           python -m pip install --disable-pip-version-check \
             pandas==2.2.3 pyproj==3.7.2 scipy==1.17.0 pytest==8.3.5
-
       - name: Import pinned certified RT-021 branch outputs
         run: |
           git fetch origin rt021-frozen-territorial-corridor-corpus-v3
@@ -61,64 +58,64 @@ jobs:
           assert v['stop_layer']['stop_place_count']==36
           print(v['graph_epoch_id'])
           PY
-
-      - name: Compile and test RT-022 semantic bridge
+      - name: Compile and test RT-022 exact minimum-backbone scope
         run: |
-          python -m py_compile src/phase2_territorial_structural_search_v3.py
-          python -m py_compile src/phase2_territorial_structural_search_rt006_compat_v3.py
-          python -m py_compile scripts/phase2_run_territorial_structural_search_v3.py
+          python -m py_compile src/phase2_minimum_policy_backbone_v3.py
+          python -m py_compile src/phase2_territorial_structural_search_minimal_v3.py
+          python -m py_compile scripts/phase2_run_rt022_minimum_backbone_v3.py
           python -m pytest -q \
+            tests/test_phase2_minimum_policy_backbone_v3.py \
             tests/test_phase2_territorial_structural_search_v3.py \
             tests/test_phase2_territorial_structural_search_rt006_compat_v3.py \
             tests/test_phase2_corridor_reciprocity_v3.py
-
-      - name: Run first real topology-neutral territorial structural search
+      - name: Run exact minimum-edge topology-neutral territorial backbone search
         run: |
-          rm -rf outputs/phase2/rt022_territorial_structural_search_v3
-          python scripts/phase2_run_territorial_structural_search_v3.py \
+          rm -rf outputs/phase2/rt022_minimum_backbones_v3
+          python scripts/phase2_run_rt022_minimum_backbone_v3.py \
             --attachments /tmp/rt021/rt021_stop_attachments_v3.csv \
             --pair-manifest /tmp/rt021/rt021_complete_directed_pair_manifest_v3.csv \
             --pair-results /tmp/rt021/rt021_pair_execution_status_v3.csv \
             --corridors /tmp/rt021/rt021_corridor_corpus_v3.csv.gz \
             --metadata /tmp/rt021/rt021_validation_v3.json \
-            --out-dir outputs/phase2/rt022_territorial_structural_search_v3 \
-            --max-states 100000 \
-            --max-structures 20000
-
-      - name: Validate real RT-022 evidence
+            --out-dir outputs/phase2/rt022_minimum_backbones_v3
+      - name: Validate real RT-022 minimum-backbone evidence
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          p=Path('outputs/phase2/rt022_territorial_structural_search_v3/rt022_audit.json')
+          p=Path('outputs/phase2/rt022_minimum_backbones_v3/rt022_minimum_backbone_audit.json')
           v=json.loads(p.read_text())
-          assert v['status']=='PASS_COMPLETE_TOPOLOGY_NEUTRAL_TERRITORIAL_STRUCTURE_UNIVERSE', v
+          assert v['status']=='PASS_EXACT_MINIMUM_TOPOLOGY_NEUTRAL_TERRITORIAL_BACKBONE_UNIVERSE', v
           assert v['complete'] is True
           assert v['counts']['stop_attachments']==36
           assert v['counts']['technical_pair_query_anchors']==35
           assert v['counts']['directed_pair_requests']==1190
           assert v['counts']['corridor_alternatives']==3044
+          assert v['counts']['reciprocal_elementary_structural_links']==110
+          assert v['counts']['exact_minimum_backbones'] > 0
+          assert v['search_metadata']['derived_minimum_edge_count']==4
+          assert v['search_metadata']['search_scope']=='EXACT_MINIMUM_POLICY_BACKBONES_ONLY'
+          assert v['search_metadata']['larger_edge_counts_enumerated'] is False
           assert v['guards']['service_terminal_selected'] is False
           assert v['guards']['topology_prior_used'] is False
           assert v['guards']['primary_runner_up_selected'] is False
           assert v['guards']['municipality_used_as_routing_filter'] is False
           assert v['guards']['partial_cap_hit_pool_usable'] is False
           assert v['guards']['gate_d_reachability_conflated_with_rt006_admission'] is False
+          assert v['guards']['larger_structure_claimed_complete'] is False
           print(json.dumps(v, indent=2, sort_keys=True))
           PY
-
       - name: Anti-bias guards
         run: |
           ! grep -nE 'np\.random|numpy\.random|import random|from random|Cassina|Circolare Meratese|PRIMARY|RUNNER-UP' \
-            src/phase2_territorial_structural_search_v3.py \
-            src/phase2_territorial_structural_search_rt006_compat_v3.py \
-            scripts/phase2_run_territorial_structural_search_v3.py
+            src/phase2_minimum_policy_backbone_v3.py \
+            src/phase2_territorial_structural_search_minimal_v3.py \
+            scripts/phase2_run_rt022_minimum_backbone_v3.py
           git diff --check
-
       - name: Upload real RT-022 evidence
         uses: actions/upload-artifact@v4
         with:
-          name: phase2-territorial-structural-search-v3-real
-          path: outputs/phase2/rt022_territorial_structural_search_v3/
+          name: phase2-rt022-minimum-backbones-v3-real
+          path: outputs/phase2/rt022_minimum_backbones_v3/
           if-no-files-found: error
           retention-days: 90
