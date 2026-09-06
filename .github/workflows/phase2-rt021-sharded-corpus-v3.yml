@@ -5,7 +5,9 @@ on:
     branches: [rt021-frozen-territorial-corridor-corpus-v3]
     paths:
       - scripts/phase2_rt021_sharded_corpus_v3.py
+      - scripts/phase2_rt021_parallel_shard_v3.py
       - tests/test_phase2_rt021_sharded_corpus_v3.py
+      - tests/test_phase2_rt021_parallel_shard_v3.py
       - .github/workflows/phase2-rt021-sharded-corpus-v3.yml
   workflow_dispatch:
 
@@ -37,9 +39,10 @@ jobs:
             geopandas==1.1.4 shapely==2.1.2 pyogrio==0.13.0 requests==2.34.2 \
             pytest==8.3.5
 
-      - name: Compile RT-021 sharded executor
+      - name: Compile RT-021 sharded executors
         run: |
           python -m py_compile scripts/phase2_rt021_sharded_corpus_v3.py
+          python -m py_compile scripts/phase2_rt021_parallel_shard_v3.py
           python -m py_compile src/phase2_rt021_territorial_corridor_corpus_v3.py
 
       - name: Verify frozen stop and RT-018 lineage
@@ -49,7 +52,7 @@ jobs:
           test "$(git hash-object "$STOP")" = "8d3a4368a6f62bbdf8fe18ee99482aff18e38fe5"
           test "$(($(wc -l < "$STOP") - 1))" -eq 36
 
-      - name: Run inherited and sharded adapter tests
+      - name: Run inherited and parallel-shard semantic tests
         env:
           PYTHONPATH: .
         run: |
@@ -57,12 +60,14 @@ jobs:
             tests/test_phase2_complete_directed_pairs_v3.py \
             tests/test_phase2_restriction_aware_ksp_v3.py \
             tests/test_phase2_rt021_territorial_corridor_corpus_v3.py \
-            tests/test_phase2_rt021_sharded_corpus_v3.py
+            tests/test_phase2_rt021_sharded_corpus_v3.py \
+            tests/test_phase2_rt021_parallel_shard_v3.py
 
       - name: Reject synthetic territorial data and geographic routing bias
         run: |
           if grep -n -E 'np\.random|numpy\.random|import random|from random|allowed_municip|denied_municip|whitelist.*municip|blacklist.*municip|Circolare Meratese|Cassina' \
-            scripts/phase2_rt021_sharded_corpus_v3.py; then
+            scripts/phase2_rt021_sharded_corpus_v3.py \
+            scripts/phase2_rt021_parallel_shard_v3.py; then
             echo 'Forbidden RT-021 sharded routing semantic found'
             exit 1
           fi
@@ -120,27 +125,29 @@ jobs:
           unzip -q /tmp/rt017_source.zip -d /tmp/rt017_source
           test -f /tmp/rt017_source/frozen_routing_envelope_metadata_v3.json
 
-      - name: Build source shard first replay
+      - name: Build source shard first replay with exact KSP workers
         env:
           PYTHONPATH: .
         run: |
-          python scripts/phase2_rt021_sharded_corpus_v3.py shard \
+          python scripts/phase2_rt021_parallel_shard_v3.py \
             --rt017-dir /tmp/rt017_source \
             --output-dir outputs/shard_a \
             --shard-index ${{ matrix.shard }} \
             --k 3 \
-            --max-raw-state-paths 20000
+            --max-raw-state-paths 20000 \
+            --workers 4
 
-      - name: Build source shard independent replay
+      - name: Build source shard independent replay with exact KSP workers
         env:
           PYTHONPATH: .
         run: |
-          python scripts/phase2_rt021_sharded_corpus_v3.py shard \
+          python scripts/phase2_rt021_parallel_shard_v3.py \
             --rt017-dir /tmp/rt017_source \
             --output-dir outputs/shard_b \
             --shard-index ${{ matrix.shard }} \
             --k 3 \
-            --max-raw-state-paths 20000
+            --max-raw-state-paths 20000 \
+            --workers 4
 
       - name: Verify deterministic replay
         run: diff -qr outputs/shard_a outputs/shard_b
