@@ -1,0 +1,13 @@
+{
+  "epistemic_status": "DERIVED",
+  "forbidden_history": "PROVEN_INFEASIBLE",
+  "input_kind": "CONTROLLED_TEST_FIXTURE",
+  "positive_history_control": "CERTIFIED_FEASIBLE",
+  "primary_selection_authorised": false,
+  "production_certified": false,
+  "runner_up_selection_authorised": false,
+  "status": "PASS_BOUNDED_TYPED_COMPOSITION_REPLAY_ONLY",
+  "territorial_search_performed": false,
+  "through_payload_sha256": "2ed712a75294971cfb7ca965675edc64272032a68f92425ba74f3a52e6530bc1",
+  "transfer_payload_sha256": "13a4cabe5e2db11651b8d4c96d8c3985c1101b943d25717828237131c8ce2755"
+}

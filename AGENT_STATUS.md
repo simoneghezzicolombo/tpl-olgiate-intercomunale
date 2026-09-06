@@ -229,3 +229,35 @@ Stato epistemico: **DERIVED / certified atomic pedestrian-access evidence**. RT-
 Problemi aperti RT-028: nessun blocker per il primary graph substrate. Il solo optional independent R5 cross-check resta `NOT_RUN_TECHNICAL_BLOCKER` per assenza di una frozen territorial XML→PBF lineage certificata; Issue #68 lo definisce non bloccante per il risultato primario.
 
 Richiesta ad Alpha: consumare questa matrice read-only solo downstream, combinandola con i candidate stop sets RT-022/RT-023. Escludere di default la fermata `SPECIAL_SERVICE` dall'automatic conventional candidate evaluation salvo attivazione esplicita; calcolare 5/8/10/12-minute access, equity, Pareto e shortlist solo nel workstream Alpha, senza modificare RT-028.
+
+## GPT handoff — RT-031 bounded typed composition
+
+**Timestamp:** 2026-09-06 (UTC)
+**Author:** GPT / Codex
+**Branch:** `codex/rt031-typed-composition-gate`
+**Base commit:** `8f138f8ea7ac2c1f39e76a79201125f041d69cd5`
+**Scope:** bounded implementation of the Astra representation/composition step and
+its three deep-red-team counterexamples; parent Issue #79.
+
+Files: `src/phase2_rt031_typed_composition_v3.py`, corresponding tests,
+`docs/RT031_TYPED_COMPOSITION_GATE.md`, deterministic replay script/output and CI.
+The exact source commit is the Git commit containing this handoff (no circular
+self-SHA is embedded).
+
+Local evidence: **32 tests PASS** (25 typed-composition cases + 7 existing macro
+regressions); separate replay A/B byte-identical. Epistemic status: **DERIVED on
+CONTROLLED_TEST_FIXTURE**, not territorial evidence. CI status is not claimed here.
+
+Preserves full restriction history, directed carrier occurrences, ordered service
+annotations, passenger/vehicle continuity separately, public eligibility and
+boundary provenance. Exact stop-identity guarantees require a complete nonempty
+compatible domain. No cross-realization journey guarantee or vehicle-run cost is
+inferred. Existing topology contraction remains unchanged.
+
+Open: certified RT-017 full restriction/context adapter; RT-023/030 segment-offset
+and visit correspondence binding; network/service decomposition; independent
+review; physical D184/D185 calibration; prospective search/stopping contract.
+See `docs/RT031_TYPED_COMPOSITION_GATE.md`. Production gate remains OPEN.
+No RT-029 change, territorial enumeration, new Pareto or winner selection.
+Independent reviewer should inspect the committed payload and tests, particularly
+restriction history, occurrence reconciliation and unknown service-state handling.
