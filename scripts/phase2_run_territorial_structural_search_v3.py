@@ -8,7 +8,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.phase2_territorial_structural_search_v3 import run_rt022_orchestrator
+from src.phase2_territorial_structural_search_rt006_compat_v3 import (
+    run_rt022_orchestrator_rt006_compatible,
+)
 
 
 def _parse_args() -> argparse.Namespace:
@@ -42,7 +44,7 @@ def main() -> int:
     corridors = pd.read_csv(args.corridors)
     metadata = json.loads(args.metadata.read_text(encoding="utf-8"))
 
-    result = run_rt022_orchestrator(
+    result = run_rt022_orchestrator_rt006_compatible(
         attachments,
         pair_manifest,
         pair_results,
@@ -98,6 +100,7 @@ def main() -> int:
             "primary_runner_up_selected": False,
             "municipality_used_as_routing_filter": False,
             "partial_cap_hit_pool_usable": False,
+            "gate_d_reachability_conflated_with_rt006_admission": False,
         },
     }
     (out / "rt022_audit.json").write_text(
