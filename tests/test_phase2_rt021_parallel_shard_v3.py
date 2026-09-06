@@ -87,8 +87,13 @@ def _canonical(frame: pd.DataFrame, sort_by: list[str]) -> bytes:
     return rt.canonical_csv_bytes(frame, sort_by=sort_by)
 
 
-def test_parallel_workers_preserve_exact_rt021_pair_and_corridor_semantics():
+def test_parallel_workers_preserve_exact_rt021_pair_and_corridor_semantics(monkeypatch):
     manifest, anchors, edges, rules, nodes, reference_pairs = _fixture()
+
+    # Production route_corpus deliberately fails closed unless it sees all 1,190
+    # real directed pairs. This controlled micro-test changes only that assertion
+    # so the sequential production implementation can serve as the oracle.
+    monkeypatch.setattr(rt, "EXPECTED_DIRECTED_PAIRS", len(manifest))
 
     sequential_corridors, sequential_pairs, _ = rt.route_corpus(
         manifest,
