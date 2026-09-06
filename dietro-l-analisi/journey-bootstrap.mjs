@@ -1,5 +1,12 @@
 import * as maplibreModule from './vendor/maplibre/maplibre-gl.mjs';
 
+// Keep the browser tab visually tied to the double-circular Tra Paesi concept.
+const favicon = document.createElement('link');
+favicon.rel = 'icon';
+favicon.type = 'image/svg+xml';
+favicon.href = './favicon.svg';
+document.head.appendChild(favicon);
+
 // MapLibre GL JS v6 is ESM-only. Keep the cinematic controller compatible
 // with the existing global-oriented modules through a mutable facade.
 window.maplibregl = { ...maplibreModule };
