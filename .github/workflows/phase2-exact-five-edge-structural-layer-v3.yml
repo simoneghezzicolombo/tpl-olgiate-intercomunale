@@ -49,7 +49,7 @@ jobs:
           rm -rf outputs/phase2/rt024_exact_five_edge_v3
           python scripts/phase2_run_rt024_exact_five_edge_v3.py \
             --links outputs/phase2/rt022_minimum_backbones_v3/reciprocal_structural_links.csv \
-            --attachments outputs/phase2/rt022_minimum_backbones_v3/stop_attachments.csv \
+            --stop-inventory outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/existing_stop_places_operational_gpt_v5.csv \
             --rt022-audit outputs/phase2/rt022_minimum_backbones_v3/rt022_minimum_backbone_audit.json
       - name: Assert real exhaustive counts and guards
         run: |
