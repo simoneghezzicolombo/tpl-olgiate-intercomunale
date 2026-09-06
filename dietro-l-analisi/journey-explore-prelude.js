@@ -4,7 +4,7 @@
   const mapEl = document.getElementById('map');
   if (mapEl) {
     mapEl.removeAttribute('aria-hidden');
-    mapEl.setAttribute('aria-label', 'Mappa interattiva dei dati territoriali, della rete attuale e delle alternative finaliste');
+    mapEl.setAttribute('aria-label', 'Mappa interattiva dei dati territoriali, della rete attuale e delle alternative finali');
   }
 
   const main = document.querySelector('main');
@@ -16,21 +16,21 @@
     section.dataset.label = 'Esplora';
     section.innerHTML = `
       <div class="copy copy--explore">
-        <p class="eyebrow">12 · La mappa resta aperta</p>
-        <h2>Adesso puoi <em>esplorarla davvero.</em></h2>
-        <p>Qui ritrovi tutto quello che hai visto nello scroll: popolazione, sezioni, edifici, accessibilità pedonale, grafo stradale, candidate, rete attuale e quattro lineage finaliste. Entra nella modalità libera, accendi i layer che vuoi e clicca direttamente sugli oggetti.</p>
+        <p class="eyebrow">12 · Adesso tocca a te</p>
+        <h2>Ora puoi <em>esplorare la mappa liberamente.</em></h2>
+        <p>Qui ritrovi tutto quello che hai visto nello scroll: popolazione, aree ISTAT, edifici, tempi a piedi, strade percorribili dai bus, possibili nuove fermate, rete attuale e alternative finali. Premi il pulsante, accendi quello che ti interessa e clicca direttamente sulla mappa.</p>
         <div class="explore-key" aria-label="Legenda mappa esplorabile">
-          <span><i class="explore-key__dot explore-key__dot--population"></i>territorio</span>
-          <span><i class="explore-key__dot explore-key__dot--walk"></i>accessibilità</span>
+          <span><i class="explore-key__dot explore-key__dot--population"></i>popolazione</span>
+          <span><i class="explore-key__dot explore-key__dot--walk"></i>tempi a piedi</span>
           <span><i class="explore-key__line explore-key__line--current"></i>rete attuale</span>
-          <span><i class="explore-key__line explore-key__line--final"></i>linee finaliste</span>
-          <span><i class="explore-key__dot explore-key__dot--candidate"></i>candidate</span>
-          <span><i class="explore-key__dot explore-key__dot--existing"></i>fermate</span>
+          <span><i class="explore-key__line explore-key__line--final"></i>alternative finali</span>
+          <span><i class="explore-key__dot explore-key__dot--candidate"></i>possibili fermate</span>
+          <span><i class="explore-key__dot explore-key__dot--existing"></i>fermate esistenti</span>
         </div>
         <button class="explore-enter" type="button" data-explore-enter>
           <span>Esplora la mappa</span><b>→</b>
         </button>
-        <p class="source-note">KML ufficiali D184/D185 + GTFS fermate + WorldPop/ISTAT/DBGT + Gate D + Reduced Path Matrix V2</p>
+        <p class="source-note">Fonti: KML e GTFS ufficiali, WorldPop, ISTAT, DBGT e rete stradale validata.</p>
       </div>`;
     main.appendChild(section);
   }
