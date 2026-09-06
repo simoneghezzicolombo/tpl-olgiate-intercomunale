@@ -13,6 +13,8 @@ permissions:
 jobs:
   rt030:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: src
     steps:
       - name: Checkout RT-030 branch
         uses: actions/checkout@v4
