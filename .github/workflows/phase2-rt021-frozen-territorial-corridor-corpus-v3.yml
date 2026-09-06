@@ -6,10 +6,12 @@ on:
     paths:
       - src/phase2_rt021_territorial_corridor_corpus_v3.py
       - src/phase2_rt021_bounded_corpus_v3.py
+      - src/phase2_rt021_validated_grid_corpus_v3.py
       - src/phase2_rt021_parallel_driver_v3.py
       - src/phase2_final_stop_materialization_v3.py
       - scripts/phase2_rt021_frozen_territorial_corridor_corpus_v3.py
       - tests/test_phase2_rt021_territorial_corridor_corpus_v3.py
+      - tests/test_phase2_rt021_validated_grid_corpus_v3.py
       - tests/test_phase2_rt021_parallel_driver_v3.py
       - .github/workflows/phase2-rt021-frozen-territorial-corridor-corpus-v3.yml
   workflow_dispatch:
@@ -45,6 +47,7 @@ jobs:
         run: |
           python -m py_compile src/phase2_rt021_territorial_corridor_corpus_v3.py
           python -m py_compile src/phase2_rt021_bounded_corpus_v3.py
+          python -m py_compile src/phase2_rt021_validated_grid_corpus_v3.py
           python -m py_compile src/phase2_rt021_parallel_driver_v3.py
           python -m py_compile src/phase2_final_stop_materialization_v3.py
           python -m py_compile src/phase2_complete_directed_pairs_v3.py
@@ -65,6 +68,7 @@ jobs:
           if grep -n -E 'np\.random|random\.|allowed_municip|denied_municip|whitelist.*municip|blacklist.*municip|Circolare Meratese|Cassina' \
             src/phase2_rt021_territorial_corridor_corpus_v3.py \
             src/phase2_rt021_bounded_corpus_v3.py \
+            src/phase2_rt021_validated_grid_corpus_v3.py \
             src/phase2_rt021_parallel_driver_v3.py \
             scripts/phase2_rt021_frozen_territorial_corridor_corpus_v3.py; then
             echo 'Forbidden RT-021 synthetic or geographic routing semantic found'
@@ -77,6 +81,7 @@ jobs:
             tests/test_phase2_complete_directed_pairs_v3.py \
             tests/test_phase2_restriction_aware_ksp_v3.py \
             tests/test_phase2_rt021_territorial_corridor_corpus_v3.py \
+            tests/test_phase2_rt021_validated_grid_corpus_v3.py \
             tests/test_phase2_rt021_parallel_driver_v3.py
 
       - name: Download pinned certified RT-017 graph artifact
@@ -169,14 +174,25 @@ jobs:
           assert all(v['checks'].values()), v['checks']
           assert v['corridor_corpus']['generator_contract']=='ALTERNATIVE_POOL_NOT_NETWORK_RECOMMENDATION'
           assert v['corridor_corpus']['completeness_claim']=='NO_K_SHORTEST_COMPLETENESS_CLAIM'
-          status=pd.read_csv(out/'rt021_pair_execution_status_v3.csv')
+          assert v['corridor_corpus']['generator']=='RT006_BOUNDED_DEFAULT_PLUS_VALIDATED_12_CONFIG_SENSITIVITY_UNION'
+          assert v['corridor_corpus']['full_state_yen_production_used'] is False
+          assert v['corridor_corpus']['sensitivity_grid']['configuration_count']==12
+          assert v['corridor_corpus']['sensitivity_grid']['parameter_selection_authorized'] is False
+          status=pd.read_csv(out/'rt021_pair_execution_status_v3.csv').fillna('')
           assert len(status)==1190
           assert status['pair_id'].nunique()==1190
-          assert status['corridor_count'].min()>=1
+          counts=status['corridor_count'].astype(int)
+          assert ((counts>0) | status['failure_reason'].astype(str).ne('')).all()
+          assert not status['ksp_fallback_used'].astype(str).str.lower().isin({'true','1'}).any()
+          zero=status[counts.eq(0)]
+          expected_reason='NO_PHYSICAL_LOOPLESS_CORRIDOR_ADMITTED_WITHIN_VALIDATED_RT006_PARAMETER_GRID'
+          assert zero['failure_reason'].astype(str).eq(expected_reason).all()
+          assert len(zero)==v['pair_universe']['explicit_failure_count']
           with gzip.open(out/'rt021_corridor_corpus_v3.csv.gz','rt',encoding='utf-8') as f:
               corpus=pd.read_csv(f)
-          assert len(corpus)>=1190
-          assert corpus['pair_id'].nunique()==1190
+          positive_ids=set(status.loc[counts.gt(0),'pair_id'].astype(str))
+          assert set(corpus['pair_id'].astype(str))==positive_ids
+          assert len(corpus)>=len(positive_ids)
           assert set(corpus['physical_loopless'].astype(str).str.lower())=={'true'}
           print(json.dumps(v, indent=2))
           PY
