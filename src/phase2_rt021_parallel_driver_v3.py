@@ -7,15 +7,13 @@ import pandas as pd
 
 from src import phase2_rt021_bounded_corpus_v3 as bounded
 from src import phase2_rt021_territorial_corridor_corpus_v3 as core
+from src import phase2_rt021_validated_grid_corpus_v3 as grid
 from src.phase2_complete_directed_pairs_v3 import audit_pair_execution_completeness
 
-# Capture the certified bounded implementation before main() temporarily
-# monkeypatches bounded.route_corpus to the parallel dispatcher. On Linux,
-# ProcessPoolExecutor workers can inherit parent module state through fork;
-# calling bounded.route_corpus inside a worker would then recurse back into the
-# dispatcher. This immutable reference keeps worker semantics identical to the
-# tested RT-006 bounded implementation under both fork and spawn start methods.
-ORIGINAL_BOUNDED_ROUTE_CORPUS = bounded.route_corpus
+# Capture the production RT-021 router before main() temporarily monkeypatches
+# bounded.route_corpus to the parallel dispatcher. Workers must always execute
+# the validated-grid implementation itself, never recurse into the dispatcher.
+ORIGINAL_GRID_ROUTE_CORPUS = grid.route_corpus
 
 
 def partition_manifest(manifest: pd.DataFrame, workers: int) -> list[pd.DataFrame]:
@@ -44,12 +42,12 @@ def partition_manifest(manifest: pd.DataFrame, workers: int) -> list[pd.DataFram
 
 def _route_partition(payload):
     manifest, anchors, edges, rules, graph_nodes, reference_pairs, epoch_id = payload
-    # The bounded worker validates its own supplied complete sub-manifest. The
-    # project-wide 1,190 cardinality is reasserted after deterministic merge.
+    # Each worker validates its supplied complete sub-manifest. The project-wide
+    # 1,190 cardinality is reasserted after deterministic merge.
     original_expected = core.EXPECTED_DIRECTED_PAIRS
     core.EXPECTED_DIRECTED_PAIRS = len(manifest)
     try:
-        return ORIGINAL_BOUNDED_ROUTE_CORPUS(
+        return ORIGINAL_GRID_ROUTE_CORPUS(
             manifest,
             anchors,
             edges,
@@ -100,6 +98,11 @@ def parallel_route_corpus(
         raise AssertionError("parallel merge did not restore exactly 1,190 directed pair statuses")
     if corridors.empty or corridors["corridor_id"].astype(str).duplicated().any():
         raise AssertionError("parallel merge produced empty or duplicate corridor corpus")
+    if not (
+        (status["corridor_count"].astype(int) > 0)
+        | status["failure_reason"].astype(str).ne("")
+    ).all():
+        raise AssertionError("parallel merge lost a pair without corridor or explicit failure")
 
     audits = [result[2] for result in results]
     return corridors, status, {
@@ -109,7 +112,18 @@ def parallel_route_corpus(
         "generation_paths_examined_total": sum(
             int(audit["generation_paths_examined_total"]) for audit in audits
         ),
-        "ksp_fallback_pair_count": sum(int(audit["ksp_fallback_pair_count"]) for audit in audits),
+        "ksp_fallback_pair_count": 0,
+        "sensitivity_fallback_pair_count": sum(
+            int(audit["sensitivity_fallback_pair_count"]) for audit in audits
+        ),
+        "sensitivity_recovered_pair_count": sum(
+            int(audit["sensitivity_recovered_pair_count"]) for audit in audits
+        ),
+        "sensitivity_grid_explicit_failure_count": sum(
+            int(audit["sensitivity_grid_explicit_failure_count"]) for audit in audits
+        ),
+        "validated_grid_configurations": len(grid.VALIDATED_RT006_GRID),
+        "full_state_yen_production_used": False,
         "parallel_workers": len(parts),
         "parallel_partition_semantics": "WHOLE_SOURCE_ANCHOR_GROUPS_NO_PAIR_SAMPLING_OR_OMISSION",
     }
@@ -118,7 +132,10 @@ def parallel_route_corpus(
 def main() -> int:
     original = bounded.route_corpus
     bounded.route_corpus = parallel_route_corpus
+    output_dir = grid.output_dir_from_argv()
     try:
-        return bounded.main()
+        result = bounded.main()
+        grid.rewrite_validation(output_dir)
+        return result
     finally:
         bounded.route_corpus = original
