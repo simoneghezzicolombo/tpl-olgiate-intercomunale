@@ -1,0 +1,112 @@
+name: Phase 2 RT-031 Hamiltonian Expressiveness V3
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - rt031-hamiltonian-expressiveness-v3
+    paths:
+      - "src/phase2_rt031_hamiltonian_expressiveness_v3.py"
+      - "scripts/phase2_run_rt031_hamiltonian_expressiveness_v3.py"
+      - "tests/test_phase2_rt031_hamiltonian_expressiveness_v3.py"
+      - "docs/PHASE2_RT031_HAMILTONIAN_EXPRESSIVENESS_V3.md"
+      - ".github/workflows/phase2-rt031-hamiltonian-expressiveness-v3.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  hamiltonian-expressiveness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: src
+      RT022_RUN_ID: "34030321683"
+      RT022_ARTIFACT_ID: "9988386073"
+      RT022_ARTIFACT_DIGEST: "sha256:1cab2e18eec4920cbdb348d0d9cd224c7516f8d62bc63b0eacf2a91f6fb134d7"
+      RT022_RUN_HEAD: "157badd6fc4aeaed4dcf19b08e37a48626b31b35"
+      RECIPROCAL_LINK_SHA256: "3c773163e1ffa792a72c0bda9ccd699b5be6666e01c9179a775f267baf97557a"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install runtime
+        run: python -m pip install --upgrade pip pandas pytest
+
+      - name: Run RT-031 Hamiltonian adversarial tests
+        run: python -m pytest -q tests/test_phase2_rt031_hamiltonian_expressiveness_v3.py
+
+      - name: Verify frozen RT-022 identity
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${RT022_ARTIFACT_ID}" --jq '.digest')" = "${RT022_ARTIFACT_DIGEST}"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RT022_RUN_ID}" --jq '.head_sha')" = "${RT022_RUN_HEAD}"
+
+      - name: Download frozen RT-022
+        uses: actions/download-artifact@v4
+        with:
+          name: phase2-rt022-minimum-backbones-v3-real
+          path: _upstream/rt022
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 34030321683
+
+      - name: Resolve and hash reciprocal structural graph
+        run: |
+          set -euo pipefail
+          RECIPROCAL_LINKS="$(find _upstream/rt022 -type f -name 'reciprocal_structural_links.csv' -print -quit)"
+          test -n "${RECIPROCAL_LINKS}" && test -f "${RECIPROCAL_LINKS}"
+          test "$(sha256sum "${RECIPROCAL_LINKS}" | awk '{print $1}')" = "${RECIPROCAL_LINK_SHA256}"
+          echo "RECIPROCAL_LINKS=${RECIPROCAL_LINKS}" >> "${GITHUB_ENV}"
+
+      - name: Build Hamiltonian diagnostic A
+        run: |
+          rm -rf outputs/phase2/rt031_hamiltonian_v3_a
+          python scripts/phase2_run_rt031_hamiltonian_expressiveness_v3.py \
+            --reciprocal-links "${RECIPROCAL_LINKS}" \
+            --expected-sha256 "${RECIPROCAL_LINK_SHA256}" \
+            --outdir outputs/phase2/rt031_hamiltonian_v3_a
+
+      - name: Build Hamiltonian diagnostic B
+        run: |
+          rm -rf outputs/phase2/rt031_hamiltonian_v3_b
+          python scripts/phase2_run_rt031_hamiltonian_expressiveness_v3.py \
+            --reciprocal-links "${RECIPROCAL_LINKS}" \
+            --expected-sha256 "${RECIPROCAL_LINK_SHA256}" \
+            --outdir outputs/phase2/rt031_hamiltonian_v3_b
+
+      - name: Enforce exact deterministic witness contract
+        run: |
+          set -euo pipefail
+          cmp outputs/phase2/rt031_hamiltonian_v3_a/rt031_hamiltonian_structural_witnesses.csv outputs/phase2/rt031_hamiltonian_v3_b/rt031_hamiltonian_structural_witnesses.csv
+          cmp outputs/phase2/rt031_hamiltonian_v3_a/rt031_hamiltonian_expressiveness_audit.json outputs/phase2/rt031_hamiltonian_v3_b/rt031_hamiltonian_expressiveness_audit.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          audit=json.loads(Path('outputs/phase2/rt031_hamiltonian_v3_a/rt031_hamiltonian_expressiveness_audit.json').read_text())
+          assert audit['status']=='PASS_HAMILTONIAN_EXPRESSIVENESS_DIAGNOSTIC_NOT_NETWORK_SEARCH_PASS'
+          assert audit['structural_vertex_count']==35
+          assert audit['structural_link_count']==110
+          assert audit['hamiltonian_path_feasible'] is True
+          assert audit['hamiltonian_path_vertex_count']==35
+          assert audit['hamiltonian_path_link_count']==34
+          assert audit['hamiltonian_cycle_feasible'] is True
+          assert audit['hamiltonian_cycle_vertex_count']==35
+          assert audit['hamiltonian_cycle_link_count']==35
+          assert all(value is False for value in audit['negative_assertions'].values())
+          PY
+
+      - name: Upload RT-031 Hamiltonian expressiveness diagnostic
+        uses: actions/upload-artifact@v4
+        with:
+          name: rt031-hamiltonian-expressiveness-diagnostic-v3
+          path: outputs/phase2/rt031_hamiltonian_v3_a
+          if-no-files-found: error
+          retention-days: 90
