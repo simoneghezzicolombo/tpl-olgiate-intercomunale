@@ -54,7 +54,7 @@ def pareto_front_fast(
     if frame["structure_id"].astype(str).duplicated().any():
         raise RT029V4ContractError("Pareto structure_id must be unique")
     columns = list(dimensions)
-    matrix = frame[columns].to_numpy(dtype=float)
+    matrix = frame[columns].to_numpy(dtype=float, copy=True)
     if not np.isfinite(matrix).all():
         raise RT029V4ContractError("non-finite Pareto metric")
     for index, column in enumerate(columns):
