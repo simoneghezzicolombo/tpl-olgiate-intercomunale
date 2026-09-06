@@ -97,3 +97,9 @@ def test_explicit_grid_failure_reason_does_not_claim_physical_unreachability():
     assert "VALIDATED_RT006_PARAMETER_GRID" in reason
     assert "UNROUTABLE" not in reason
     assert "NO_ROUTE" not in reason
+
+
+def test_production_grid_contract_never_authorizes_parameter_selection_or_yen_completion():
+    assert grid.SENSITIVITY_PROVENANCE == "RT006_VALIDATED_SENSITIVITY_UNION"
+    assert len(grid.validated_grid_signature()) == 12
+    assert grid.EXPLICIT_GRID_FAILURE_REASON.startswith("NO_PHYSICAL_LOOPLESS_CORRIDOR_ADMITTED")
