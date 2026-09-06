@@ -189,3 +189,43 @@ Stato epistemico: **DERIVED / non-decisional descriptive diagnostic**. Nessun we
 
 Problemi aperti per questo workstream: **nessuno**.  
 Richiesta all'altro agente: usare questi output come input read-only per il sito, mantenendo separata la baseline Current Service V4 e senza reinterpretare il diagnostic come ranking o raccomandazione.
+
+## Agent A handoff — RT-028 final-stop pedestrian accessibility substrate V3
+
+**Timestamp:** 2026-09-06 16:16 Europe/Rome  
+**Autore:** Agent A / GPT takeover  
+**Branch:** `rt028-final-stop-pedestrian-accessibility-substrate-v3`  
+**Computational evidence commit:** `8a926234b8635aa48db4b80a61fb293be35f74f2`  
+**Methodology correction commit:** `fbfe1f8ca4e20078ffc8f67a955bdfb360bb36a8`  
+**Task:** chiusura del substrato atomico border-neutral `population unit × final stop` per RT-028, senza candidate aggregation o selezione downstream.  
+**Certified computational workflow:** `34037985015` SUCCESS  
+**Certified artifact:** `9990832031`, SHA256 `f09bfa9fb8d7aeacc9c7b80f4bc17dff5c4ce391e6a16c25bc0afd973e509415`  
+**Validation contract:** `RT028_FINAL_STOP_BORDER_NEUTRAL_PEDESTRIAN_ACCESSIBILITY_SUBSTRATE_V3`, status `PASS`.
+
+Evidenza computazionale verificata indipendentemente dopo il takeover:
+- RT-016 population lineage: commit `3eaa227fc7a3cd3f82a9c3161ac4827bc32b862a`, artifact `9971024216`, digest `sha256:2937c60aec0280ae1837bc3f763103d5ac45acd2e3b93a949cc75235b1152fe9`;
+- 10.230 population units: 4.283 `core`, 5.947 `external`;
+- frozen final-stop lineage: commit `ea30fbd18421164abaf2125033292cbe827e024d`;
+- exact stop contract: 36 = 35 `CONVENTIONAL_TPL` + 1 `SPECIAL_SERVICE`;
+- pinned OSM timestamp `2026-09-06T12:00:00Z`, raw snapshot SHA256 `365a6a76c8364c441b3827328073009863f5813db1c60734a669f88773215230`;
+- pedestrian graph digest `0ab9ef773db40194f3c3d235a1466654e30761fd9cf5eccb1dbdfd62dd7a583f`;
+- 93.677 routable nodes, 194.062 directed edges, 220 blocking barrier nodes, 1.790 obstacle geometries;
+- matrix: 368.280 exact pairs = 10.230 × 36;
+- canonical matrix SHA256 `e20c59300c463d45a170fca70b8456db536f6eaab7d42f9dee3e9f7ab65cab1b`;
+- 301.140 `REACHABLE`, 67.140 `UNREACHABLE`, every unreachable row has an explicit reason;
+- population-level unreachable diagnostics: 1.504 units `POPULATION_NO_ACCESSIBLE_NODE_WITHIN_MAX_CONNECTOR`, 204 `POPULATION_CONNECTOR_BLOCKED_BY_BARRIER`, 157 `GRAPH_DISCONNECTED`; the remaining 8.365 units reach the final-stop component;
+- weighted population reachable: 44.937,376 / 45.828 core and 40.845,760 / 41.689,399 external; unresolved population remains explicit instead of being Euclidean-filled;
+- artifact ZIP digest, matrix digest and OSM snapshot digest were independently recomputed from downloaded bytes and match the certified metadata.
+
+Red-team findings and corrections:
+- legacy `scripts/04_walk_network.py` is direct coordinate-distance + slope correction, not graph routing, so its territorial output is rejected;
+- Access Equity V2 aggregation helpers are methodologically reusable only downstream for deterministic union/no-double-count summaries, not as a new graph engine;
+- the original RT-028 methodology text misstated the R5 state. Corrected at `fbfe1f8...`: RT-012 certifies `r5py 1.1.7` only on a pinned Helsinki fixture, while RT-028 has OSM XML and no certified territorial XML→PBF lineage. The optional R5 check is therefore explicitly `NOT_RUN_TECHNICAL_BLOCKER`, never fabricated or averaged;
+- all 15 RT-028 contract tests pass in the certified run, including graph-not-straight-line, barrier-aware connector, cross-municipality access, exact 36-stop freeze, old-43 fail-closed, explicit unreachable states, connector failure and row-order determinism;
+- candidate/topology/rank/score/PRIMARY/RUNNER-UP fields are absent and candidate identity is rejected by contract.
+
+Stato epistemico: **DERIVED / certified atomic pedestrian-access evidence**. RT-028 itself does not establish a preferred network, accessibility threshold result, Pareto set or recommendation.
+
+Problemi aperti RT-028: nessun blocker per il primary graph substrate. Il solo optional independent R5 cross-check resta `NOT_RUN_TECHNICAL_BLOCKER` per assenza di una frozen territorial XML→PBF lineage certificata; Issue #68 lo definisce non bloccante per il risultato primario.
+
+Richiesta ad Alpha: consumare questa matrice read-only solo downstream, combinandola con i candidate stop sets RT-022/RT-023. Escludere di default la fermata `SPECIAL_SERVICE` dall'automatic conventional candidate evaluation salvo attivazione esplicita; calcolare 5/8/10/12-minute access, equity, Pareto e shortlist solo nel workstream Alpha, senza modificare RT-028.
