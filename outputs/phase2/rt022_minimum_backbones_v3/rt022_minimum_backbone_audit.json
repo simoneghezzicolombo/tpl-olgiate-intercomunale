@@ -1,0 +1,66 @@
+{
+  "complete": true,
+  "counts": {
+    "corridor_alternatives": 3044,
+    "directed_pair_requests": 1190,
+    "exact_minimum_backbones": 88,
+    "reciprocal_elementary_structural_links": 110,
+    "stop_attachments": 36,
+    "stop_occurrences": 15304,
+    "technical_pair_query_anchors": 35
+  },
+  "digests": {
+    "corridor_corpus_sha256": "65f65924956f78b446f7143fc1e724ef6b4ae73f1e3175759f72bb01b213b48c",
+    "directional_availability_sha256": "2399c5c3e4ea874a39ecce277c47908b90837287f07d36efd720395299ac4672",
+    "elementary_classification_sha256": "e15704c549c2deef1312d4ab5eb6c0667a0606c6fda62047136de382c1753da5",
+    "occurrence_corpus_sha256": "1326bffd80040a9a4d936722bcf8c2324de2b83efda6fc03d18a33913ff23592",
+    "pair_manifest_sha256": "6269093e42065af392339fb485147adbf455d283403c1f7f7535da9c255872da",
+    "pair_results_sha256": "13cbdaec1e2d59d277a5c07a297644f9527e9c26084718e235785d815e72b80a",
+    "reciprocal_structural_links_sha256": "009789fbaf2cf5434555075c1de6a6931bee3bbc0473580e26a79a82d827885d",
+    "rt009_pair_audit_sha256": "d75264f570c5ab18b67541aadd8f2273193dfe70f82613fa4cd9b7c2ae1f363e",
+    "stop_attachments_sha256": "ee6ae253a0dd946c8fbfc1a05de08f8964a3bb43898532b065b972a7b7ba2af0",
+    "structure_universe_sha256": "1d6ccd18a5707aa8e2e51b1eefcc9d27056678f0d5e260c9027d1414a1ddf8d7"
+  },
+  "graph_epoch_id": "RT017::2026-09-05T13:45:50Z::466f562f95805cb1",
+  "guards": {
+    "gate_d_reachability_conflated_with_rt006_admission": false,
+    "larger_structure_claimed_complete": false,
+    "municipality_used_as_routing_filter": false,
+    "partial_cap_hit_pool_usable": false,
+    "primary_runner_up_selected": false,
+    "service_terminal_selected": false,
+    "topology_prior_used": false
+  },
+  "search_metadata": {
+    "complete": true,
+    "contract": "ABSTRACT_NETWORK_STRUCTURES_NOT_TERRITORIAL_RECOMMENDATIONS",
+    "derived_minimum_edge_count": 4,
+    "frontier_contract": "EXACT_MINIMUM_EDGE_POLICY_COVERAGE_WITHOUT_TOPOLOGY_GENERATION_PRIOR",
+    "generation_semantics": "ONE_TERMINAL_PER_REQUIRED_GROUP_THEN_EXACT_CONNECTED_G_MINUS_1_EDGE_ENUMERATION",
+    "induced_edge_combinations_scanned": 248,
+    "larger_edge_counts_enumerated": false,
+    "larger_structures_may_be_staged_later": true,
+    "proof_semantics": "WITH_EXACTLY_ONE_REQUIRED_GROUP_PER_TERMINAL_A_CONNECTED_STRUCTURE_COVERING_G_GROUPS_NEEDS_AT_LEAST_G_MINUS_1_EDGES;AT_EQUALITY_IT_HAS_EXACTLY_G_VERTICES",
+    "required_policy_groups": [
+      "Brivio",
+      "Calco",
+      "La Valletta Brianza",
+      "Olgiate Molgora",
+      "Santa Maria Hoè"
+    ],
+    "search_scope": "EXACT_MINIMUM_POLICY_BACKBONES_ONLY",
+    "status": "PASS_COMPLETE_EXACT_MINIMUM_POLICY_BACKBONE_ENUMERATION",
+    "structure_count": 88,
+    "technical_parameters": {
+      "enumeration_cap": null,
+      "minimum_edge_count": 4,
+      "search_scope": "EXACT_MINIMUM_POLICY_BACKBONES_ONLY",
+      "semantics": "LOGICALLY_DERIVED_MINIMUM_NOT_POLICY_WEIGHT_OR_TOPOLOGY_PRIOR"
+    },
+    "terminal_tuple_count": 12600,
+    "terminal_tuples_with_enough_induced_links": 152,
+    "territorial_winner_selected": false,
+    "topology_semantics": "DESCRIPTIVE_POST_GENERATION_CLASSIFICATION"
+  },
+  "status": "PASS_EXACT_MINIMUM_TOPOLOGY_NEUTRAL_TERRITORIAL_BACKBONE_UNIVERSE"
+}
