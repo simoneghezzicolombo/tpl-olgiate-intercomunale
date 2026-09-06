@@ -8,7 +8,7 @@ on:
       - .rt022-real-run-trigger
 
 permissions:
-  contents: read
+  contents: write
 
 env:
   PYTHONPATH: .
@@ -92,10 +92,11 @@ jobs:
           assert v['counts']['directed_pair_requests']==1190
           assert v['counts']['corridor_alternatives']==3044
           assert v['counts']['reciprocal_elementary_structural_links']==110
-          assert v['counts']['exact_minimum_backbones'] > 0
+          assert v['counts']['exact_minimum_backbones']==88
           assert v['search_metadata']['derived_minimum_edge_count']==4
           assert v['search_metadata']['search_scope']=='EXACT_MINIMUM_POLICY_BACKBONES_ONLY'
           assert v['search_metadata']['larger_edge_counts_enumerated'] is False
+          assert v['digests']['structure_universe_sha256']=='1d6ccd18a5707aa8e2e51b1eefcc9d27056678f0d5e260c9027d1414a1ddf8d7'
           assert v['guards']['service_terminal_selected'] is False
           assert v['guards']['topology_prior_used'] is False
           assert v['guards']['primary_runner_up_selected'] is False
@@ -112,6 +113,18 @@ jobs:
             src/phase2_territorial_structural_search_minimal_v3.py \
             scripts/phase2_run_rt022_minimum_backbone_v3.py
           git diff --check
+      - name: Persist certified compact RT-022 handoff
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            outputs/phase2/rt022_minimum_backbones_v3/minimum_topology_neutral_backbone_universe.csv \
+            outputs/phase2/rt022_minimum_backbones_v3/reciprocal_structural_links.csv \
+            outputs/phase2/rt022_minimum_backbones_v3/rt022_minimum_backbone_audit.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(rt022): persist certified minimum-backbone handoff"
+            git push origin HEAD:phase2-territorial-structural-search-v3
+          fi
       - name: Upload real RT-022 evidence
         uses: actions/upload-artifact@v4
         with:
