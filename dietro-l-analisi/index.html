@@ -13,7 +13,7 @@
 <body>
   <div id="loader" class="loader" aria-live="polite">
     <div class="loader__mark"></div>
-    <p>Sto ricostruendo il modello territoriale…</p>
+    <p>Sto preparando i dati e la mappa…</p>
   </div>
 
   <header class="topbar">
@@ -23,7 +23,7 @@
     </a>
     <div class="topbar__meta">
       <span class="live-dot"></span>
-      <span>evidence-driven journey</span>
+      <span>analisi basata sui dati</span>
     </div>
     <a class="topbar__cta" href="../index.html">Vai al sito principale <span>↗</span></a>
   </header>
@@ -39,140 +39,141 @@
     <section class="chapter hero is-active" data-scene="intro" data-label="Domanda">
       <div class="copy copy--hero">
         <p class="eyebrow">01 · Il punto di partenza</p>
-        <h1>Una domanda semplice.<br><em>Un problema molto meno semplice.</em></h1>
-        <p class="lede">Come si ridisegna una rete locale attorno a Olgiate-Calco-Brivio FS senza limitarsi a tracciare linee su una mappa?</p>
+        <h1>La domanda è semplice.<br><em>Capire la risposta, molto meno.</em></h1>
+        <p class="lede">Come si può migliorare il trasporto locale attorno alla stazione di Olgiate-Calco-Brivio? Non basta disegnare due linee: bisogna capire dove vivono le persone, quanto camminano, quali strade può usare un bus e come si incastrano gli orari.</p>
         <div class="hero-stats">
-          <div><strong>5</strong><span>comuni core</span></div>
+          <div><strong>5</strong><span>comuni analizzati</span></div>
           <div><strong>22.914</strong><span>residenti</span></div>
-          <div><strong>1</strong><span>nodo ferroviario</span></div>
+          <div><strong>1</strong><span>stazione al centro</span></div>
         </div>
         <p class="scroll-cue"><span></span> scorri dentro l’analisi</p>
       </div>
     </section>
 
-    <section class="chapter" data-scene="grid" data-label="Griglia">
+    <section class="chapter" data-scene="grid" data-label="Popolazione">
       <div class="copy">
-        <p class="eyebrow">02 · Prima rappresentazione</p>
-        <h2>All’inizio la popolazione era una <em>griglia di 100 metri.</em></h2>
-        <p>WorldPop ci dava una superficie continua e reale, calibrata sui totali ISTAT 2025. Era utile, ma non abbastanza precisa per capire cosa succede tra una casa, una strada e una fermata.</p>
-        <div class="fact"><strong id="worldpopCount">4.283</strong><span>celle WorldPop nel core</span></div>
-        <p class="source-note">V1 · WorldPop 100 m + POSAS ISTAT 2025</p>
+        <p class="eyebrow">02 · Dove vivono le persone</p>
+        <h2>Partiamo da una mappa della popolazione a <em>quadrati di 100 × 100 metri.</em></h2>
+        <p>WorldPop stima quante persone vivono in ogni piccolo quadrato. Abbiamo corretto i totali per farli coincidere con quelli ufficiali ISTAT del 2025. È un buon punto di partenza, ma non dice ancora in quale edificio vivono.</p>
+        <div class="fact"><strong id="worldpopCount">4.283</strong><span>celle da 100 m nel territorio studiato</span></div>
+        <p class="source-note">Fonte tecnica: WorldPop 100 m + POSAS ISTAT 2025</p>
       </div>
     </section>
 
-    <section class="chapter" data-scene="sections" data-label="Sezioni">
+    <section class="chapter" data-scene="sections" data-label="ISTAT">
       <div class="copy copy--right">
-        <p class="eyebrow">03 · Più struttura territoriale</p>
-        <h2>La griglia incontra le <em>sezioni di censimento.</em></h2>
-        <p>I conteggi ISTAT per sezione ci permettono di rispettare la geografia interna dei comuni. Ogni sezione viene poi riallineata ai totali comunali POSAS 2025, senza inventare una nuova distribuzione.</p>
-        <div class="mini-rule"><span></span><p>dato ufficiale → trasformazione dichiarata → controllo di quadratura</p></div>
+        <p class="eyebrow">03 · Aggiungiamo i dati ISTAT</p>
+        <h2>Poi dividiamo il territorio nelle <em>aree usate dal censimento.</em></h2>
+        <p>ISTAT ci dice quante persone vivono in ogni sezione di censimento. Questo ci permette di distribuire meglio la popolazione dentro ciascun comune senza cambiare i totali ufficiali.</p>
+        <div class="mini-rule"><span></span><p>dato ufficiale → passaggio tracciabile → totale finale controllato</p></div>
       </div>
     </section>
 
     <section class="chapter" data-scene="buildings" data-label="Edifici">
       <div class="copy">
-        <p class="eyebrow">04 · La svolta dasimetrica</p>
-        <h2>La popolazione prende finalmente la forma <em>degli edifici reali.</em></h2>
-        <p>Le sagome DBGT vengono classificate, incrociate con le sezioni e pesate con area o volume quando disponibile. Gli edifici esplicitamente non residenziali non ricevono residenti.</p>
+        <p class="eyebrow">04 · Arriviamo agli edifici</p>
+        <h2>A questo punto possiamo stimare <em>in quali edifici vivono le persone.</em></h2>
+        <p>Usiamo le sagome degli edifici della Regione Lombardia. La popolazione viene distribuita solo negli edifici compatibili con un uso residenziale, tenendo conto della loro dimensione. Capannoni e altri edifici chiaramente non residenziali restano vuoti nel modello.</p>
         <div class="split-stats">
-          <div><strong id="buildingCount">4.226</strong><span>edifici con popolazione nel core</span></div>
-          <div><strong>4.348</strong><span>unità edificio × sezione</span></div>
+          <div><strong id="buildingCount">4.226</strong><span>edifici con residenti stimati</span></div>
+          <div><strong>4.348</strong><span>parti di edificio analizzate</span></div>
         </div>
-        <div class="residual"><span class="residual__bar"><i></i></span><p><strong>22.820,84</strong> residenti localizzati. <strong>93,16</strong> restano esplicitamente non localizzati, invece di essere forzati nel modello.</p></div>
-        <p class="source-note">V2 · DBGT Lombardia + ISTAT sezioni + POSAS 2025</p>
+        <div class="residual"><span class="residual__bar"><i></i></span><p>Il modello riesce a localizzare <strong>22.820,84</strong> residenti. I restanti <strong>93,16</strong> non vengono messi a caso in un edificio: restano esplicitamente non localizzati.</p></div>
+        <p class="source-note">Fonte tecnica: DBGT Lombardia + sezioni ISTAT + POSAS 2025</p>
       </div>
     </section>
 
-    <section class="chapter" data-scene="walk" data-label="Cammino">
+    <section class="chapter" data-scene="walk" data-label="A piedi">
       <div class="copy copy--right">
-        <p class="eyebrow">05 · Accessibilità reale</p>
-        <h2>“Vicino alla fermata” non significa <em>dentro un cerchio.</em></h2>
-        <p>Ogni unità di popolazione viene collegata al grafo pedonale. Il tempo segue la rete reale, con connettori, direzione e pendenza. Mentre scorri, il colore mostra quanto è lontana la fermata esistente più vicina.</p>
+        <p class="eyebrow">05 · Quanto è davvero lontana una fermata</p>
+        <h2>La distanza non si misura in linea retta. Conta <em>il percorso a piedi.</em></h2>
+        <p>Per ogni zona abitata calcoliamo il tempo necessario per raggiungere una fermata seguendo strade e percorsi reali. Il colore cambia in base ai minuti a piedi dalla fermata più vicina.</p>
         <div class="thresholds">
           <span data-min="5">5 min <b>46,98%</b></span>
           <span data-min="8">8 min <b>68,47%</b></span>
           <span data-min="10">10 min <b>77,56%</b></span>
           <span data-min="12">12 min <b>84,87%</b></span>
         </div>
-        <p class="source-note">Il colore è calcolato sulle 4.348 unità del modello, non su buffer euclidei.</p>
+        <p class="source-note">Calcolo sulla rete pedonale, non con semplici cerchi attorno alle fermate.</p>
       </div>
     </section>
 
     <section class="chapter" data-scene="roads" data-label="Strade">
       <div class="copy">
-        <p class="eyebrow">06 · Lo spazio delle possibilità</p>
-        <h2>Prima di cercare una rete, abbiamo costruito <em>lo spazio in cui poteva esistere.</em></h2>
-        <p>Sensi unici, accessi bus e PSV, rotatorie, restrizioni di svolta, incertezze. Il grafo è congelato a una precisa epoca OSM, così ogni scenario viene confrontato sullo stesso mondo.</p>
+        <p class="eyebrow">06 · Dove può passare davvero un autobus</p>
+        <h2>Non tutte le strade sono <em>utilizzabili nello stesso modo.</em></h2>
+        <p>Abbiamo costruito una rete stradale che tiene conto di sensi unici, divieti, svolte e accessi consentiti ai bus. Tutte le alternative vengono provate sulla stessa versione della rete, così il confronto resta coerente.</p>
         <div class="metric-cascade">
-          <div><span>OSM highway ways</span><strong>24.384</strong></div>
-          <div><span>bus-eligible</span><strong>15.872</strong></div>
-          <div><span>nodi del grafo</span><strong>104.071</strong></div>
-          <div><span>archi diretti</span><strong>199.217</strong></div>
+          <div><span>strade OSM considerate</span><strong>24.384</strong></div>
+          <div><span>tratti utilizzabili dai bus</span><strong>15.872</strong></div>
+          <div><span>nodi della rete</span><strong>104.071</strong></div>
+          <div><span>collegamenti direzionati</span><strong>199.217</strong></div>
         </div>
-        <p class="source-note">Gate D · epoch congelata, nessuna query OSM live nel loop di ottimizzazione</p>
+        <p class="source-note">La rete OSM è stata congelata prima dei confronti. Nessun aggiornamento live durante l’ottimizzazione.</p>
       </div>
     </section>
 
-    <section class="chapter" data-scene="baseline" data-label="Baseline">
+    <section class="chapter" data-scene="baseline" data-label="Oggi">
       <div class="copy copy--right">
-        <p class="eyebrow">07 · Prima di proporre</p>
-        <h2>Abbiamo ricostruito ciò che <em>esiste già.</em></h2>
-        <p>D184 e D185 sono la baseline, non una quinta candidata. Fermate e identità vengono da fonti ufficiali. Per D185 la struttura ordinaria storica resta separata dalla deviazione temporanea del Ponte di Brivio.</p>
+        <p class="eyebrow">07 · Prima guardiamo la rete di oggi</p>
+        <h2>D184 e D185 sono <em>il punto di confronto.</em></h2>
+        <p>Abbiamo ricostruito i percorsi e le fermate delle due linee usando le fonti ufficiali. In questo modo ogni nuova proposta viene confrontata con ciò che esiste davvero oggi. La deviazione temporanea del Ponte di Brivio resta separata dal percorso ordinario.</p>
         <div class="legend-inline"><span class="blue"></span>D184 <span class="orange"></span>D185 <span class="white"></span>stazione</div>
-        <p class="source-note">Current Service Baseline V4 · PASS</p>
+        <p class="source-note">Percorsi KML ufficiali + fermate e servizio da GTFS ufficiale</p>
       </div>
     </section>
 
-    <section class="chapter" data-scene="candidates" data-label="Ricerca">
+    <section class="chapter" data-scene="candidates" data-label="Fermate">
       <div class="copy">
-        <p class="eyebrow">08 · Non abbiamo scelto una linea</p>
-        <h2>Abbiamo fatto emergere <em>possibilità</em>, poi le abbiamo eliminate.</h2>
-        <p>Le lacune di accessibilità generano punti di ricerca solo su strade strutturalmente bus-eligible. Poi arrivano thinning, ridondanza di catchment e filtri di utilità.</p>
+        <p class="eyebrow">08 · Dove avrebbe senso cercare nuove fermate</p>
+        <h2>Partiamo da migliaia di punti e ne teniamo <em>155 da studiare meglio.</em></h2>
+        <p>Cerchiamo prima le zone abitate che oggi richiedono troppo cammino. Poi consideriamo solo punti raggiungibili da un bus e scartiamo quelli troppo vicini tra loro o poco utili.</p>
         <div class="funnel" aria-label="Riduzione candidate">
-          <div style="--w:100%"><span>campioni stradali con accesso pedonale</span><b>3.858</b></div>
-          <div style="--w:74%"><span>seed su gap a 8 minuti</span><b>1.686</b></div>
-          <div style="--w:55%"><span>seed prima del thinning</span><b>1.074</b></div>
-          <div style="--w:34%"><span>candidate prima del pruning finale</span><b>292</b></div>
-          <div class="accent" style="--w:20%"><span>candidate finali</span><b>155</b></div>
+          <div style="--w:100%"><span>punti possibili lungo strade raggiungibili a piedi</span><b>3.858</b></div>
+          <div style="--w:74%"><span>punti nelle zone con oltre 8 minuti a piedi</span><b>1.686</b></div>
+          <div style="--w:55%"><span>dopo un primo filtro di distanza</span><b>1.074</b></div>
+          <div style="--w:34%"><span>dopo i filtri di utilità e sovrapposizione</span><b>292</b></div>
+          <div class="accent" style="--w:20%"><span>possibili nuove fermate da verificare</span><b>155</b></div>
         </div>
-        <p class="source-note">Ogni punto resta FIELD_CHECK_PENDING. Ipotesi, non raccomandazione.</p>
+        <p class="source-note">Sono punti da controllare sul posto, non fermate già decise.</p>
       </div>
     </section>
 
-    <section class="chapter" data-scene="finalists" data-label="Finaliste">
+    <section class="chapter" data-scene="finalists" data-label="Alternative">
       <div class="copy copy--wide">
-        <p class="eyebrow">09 · Dopo lo screening</p>
-        <h2>Alla fine restano quattro lineage. Ma il passeggero vede soprattutto <em>due assetti di servizio.</em></h2>
+        <p class="eyebrow">09 · Le alternative che superano i filtri</p>
+        <h2>Dopo tutti i controlli restano <em>quattro configurazioni finali.</em></h2>
+        <p>Si dividono in due durate di servizio: 16 ore al giorno oppure 18 ore e mezza. Per ciascuna durata restano due varianti tecniche, chiamate FIG e TWO.</p>
         <div class="finalist-grid">
-          <article><span>16 h</span><strong>FIG</strong><small>06:00–22:00 · H60</small></article>
-          <article><span>16 h</span><strong>TWO</strong><small>06:00–22:00 · H60</small></article>
-          <article><span>18,5 h</span><strong>FIG</strong><small>05:30–00:00 · H60</small></article>
-          <article><span>18,5 h</span><strong>TWO</strong><small>05:30–00:00 · H60</small></article>
+          <article><span>16 h</span><strong>FIG</strong><small>06:00–22:00 · ogni 60 min</small></article>
+          <article><span>16 h</span><strong>TWO</strong><small>06:00–22:00 · ogni 60 min</small></article>
+          <article><span>18,5 h</span><strong>FIG</strong><small>05:30–00:00 · ogni 60 min</small></article>
+          <article><span>18,5 h</span><strong>TWO</strong><small>05:30–00:00 · ogni 60 min</small></article>
         </div>
-        <p class="insight">Dentro ciascuno span, FIG e TWO hanno oggi le stesse route pubbliche, la stessa sequenza di fermate e gli stessi exact departures. Il diagnostic lo mostra invece di nasconderlo.</p>
+        <p class="insight">Nei risultati pubblicati, FIG e TWO finiscono per produrre gli stessi percorsi e gli stessi orari all’interno della stessa durata di servizio. Per questo sulla mappa possono sovrapporsi completamente.</p>
       </div>
     </section>
 
-    <section class="chapter" data-scene="time" data-label="Tempo">
+    <section class="chapter" data-scene="time" data-label="Orari">
       <div class="copy copy--right">
-        <p class="eyebrow">10 · La rete è anche tempo</p>
-        <h2>Le differenze decisive non stanno solo <em>sulla mappa.</em></h2>
-        <p>Il pacchetto 16 h concentra le due partenze al minuto :39. Il pacchetto 18,5 h usa :03 e :07. Le sensitivity Stage F mostrano come cambiano le connessioni quando cresce l’attrito di interscambio.</p>
+        <p class="eyebrow">10 · Non conta solo dove passa il bus</p>
+        <h2>Conta anche <em>a che minuto arriva e parte.</em></h2>
+        <p>Nel pacchetto da 16 ore le due linee partono entrambe al minuto :39. In quello da 18 ore e mezza partono ai minuti :03 e :07. Questi minuti cambiano la facilità con cui si riesce a prendere una coincidenza.</p>
         <div class="clock-compare">
-          <div><span>16 h</span><strong>:39</strong><strong>:39</strong><small>LOW / MID retention 100%</small></div>
-          <div><span>18,5 h</span><strong>:03</strong><strong>:07</strong><small>worst bidirectional 48,57%</small></div>
+          <div><span>16 h</span><strong>:39</strong><strong>:39</strong><small>nei test principali: 100% delle coincidenze considerate mantenute</small></div>
+          <div><span>18,5 h</span><strong>:03</strong><strong>:07</strong><small>nel test più severo: 48,57% mantenute</small></div>
         </div>
       </div>
     </section>
 
     <section class="chapter finale" data-scene="end" data-label="Scelta">
       <div class="copy copy--final">
-        <p class="eyebrow">11 · Il punto in cui l’analisi si ferma</p>
-        <h2>Tre giorni di lavoro non producono una risposta automatica.</h2>
-        <p class="final-line">Producono una scelta <em>molto più informata.</em></p>
-        <p>Il modello riduce l’incertezza, mette in luce i trade-off e rende visibile ciò che sappiamo e ciò che resta da verificare. La decisione politica resta umana.</p>
-        <a class="decision-cta" href="../index.html">Apri il confronto delle alternative <span>→</span></a>
-        <button id="restartBtn" class="restart" type="button">↺ rivedi il journey</button>
+        <p class="eyebrow">11 · Qui i dati smettono di decidere</p>
+        <h2>L’analisi non sceglie da sola quale rete fare.</h2>
+        <p class="final-line">Serve a rendere la scelta <em>più consapevole.</em></p>
+        <p>Mostra vantaggi, limiti e punti ancora da verificare. La decisione finale resta politica e amministrativa, ma parte da informazioni molto più solide.</p>
+        <a class="decision-cta" href="../index.html">Confronta le alternative <span>→</span></a>
+        <button id="restartBtn" class="restart" type="button">↺ ricomincia</button>
       </div>
     </section>
   </main>
