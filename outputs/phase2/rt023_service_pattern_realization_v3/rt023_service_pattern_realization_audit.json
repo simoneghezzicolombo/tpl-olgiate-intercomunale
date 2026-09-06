@@ -2,17 +2,26 @@
   "a_to_b_realization_count": 141,
   "b_to_a_realization_count": 147,
   "contract": "RT023_TOPOLOGY_NEUTRAL_SERVICE_PATTERN_REALIZATION_BRIDGE_V3",
+  "frozen_conventional_stop_count": 35,
+  "frozen_special_service_stop_count": 1,
+  "frozen_special_service_stop_id": "SPECIAL::CASA_DI_COMUNITA_OLGIATE",
+  "frozen_stop_contract": "RT023_FROZEN_36_STOP_ATTACHMENT_LAYER_V3",
+  "frozen_stop_count": 36,
   "graph_epoch_id": "RT017::2026-09-05T13:45:50Z::466f562f95805cb1",
   "lineage": {
     "corridor_stop_occurrences_sha256": "6de033c008a5b4db9a44ad31652aea8276a3b588239fbd2e2d7c23b2e88add97",
     "elementary_corridors_for_reciprocity_sha256": "7798f41b238dc818c76f4a440b4fc16203f4bb1e710f40394816399b39adf76c",
     "minimum_topology_neutral_backbone_universe_sha256": "9a309e55c675fdca209b5d539d7fef5e3ed3a2141a067ee95441f17ace76fd8b",
     "reciprocal_structural_links_sha256": "3c773163e1ffa792a72c0bda9ccd699b5be6666e01c9179a775f267baf97557a",
-    "rt022_minimum_backbone_audit_sha256": "604ae3825d695912a267c23f38259977672314d165dfbd252aab71515594010d"
+    "rt022_minimum_backbone_audit_sha256": "604ae3825d695912a267c23f38259977672314d165dfbd252aab71515594010d",
+    "stop_attachments_sha256": "30d64ff20e9b89c31f7878c415dd4c6bb5a0d10f51b24d041e4deb4d57e6571b"
   },
   "links_with_multiple_a_to_b_alternatives": 27,
   "links_with_multiple_b_to_a_alternatives": 32,
   "negative_assertions": {
+    "accepts_occurrence_outside_frozen_stop_layer": false,
+    "accepts_old_43_stop_universe": false,
+    "auto_materializes_special_service": false,
     "chooses_calendars": false,
     "chooses_departures_or_timetables": false,
     "chooses_frequencies_or_headways": false,
@@ -28,7 +37,7 @@
     "selects_primary_or_runner_up": false
   },
   "pattern_fragment_count": 288,
-  "realization_catalog_sha256": "a33b24664f9cd416f16989c7a66a668a3e90a83244dd3662cac735751532adc5",
+  "realization_catalog_sha256": "24d806b3b30cf75c91cf531746bada443bf3d5bedf3878e9587778cad7c9d36a",
   "realization_count": 288,
   "rt014_pattern_fragments_sha256": "b3bba85cfd3a1206cd267d8d122e4b0f447f841d57b832c770e88b32b1a777a9",
   "status": "PASS",

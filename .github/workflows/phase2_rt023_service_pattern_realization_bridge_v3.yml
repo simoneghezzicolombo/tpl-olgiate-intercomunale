@@ -26,7 +26,7 @@ jobs:
         run: python -m pip install --upgrade pip pandas pytest
 
       - name: Controlled RT-023 contract tests
-        run: python -m pytest -q tests/test_phase2_service_pattern_realization_bridge_v3.py
+        run: python -m pytest -q tests/test_phase2_service_pattern_realization_bridge_v3.py tests/test_phase2_service_pattern_realization_bridge_frozen_stop_contract_v3.py
 
       - name: Download certified RT-022 workflow artifact
         env:
@@ -58,6 +58,7 @@ jobs:
           python scripts/phase2_run_rt023_service_pattern_realization_v3.py \
             --reciprocal-links outputs/phase2/rt022_minimum_backbones_v3/reciprocal_structural_links.csv \
             --structures outputs/phase2/rt022_minimum_backbones_v3/minimum_topology_neutral_backbone_universe.csv \
+            --stop-attachments /tmp/rt022/stop_attachments.csv \
             --elementary-corridors /tmp/rt022/elementary_corridors_for_reciprocity.csv \
             --corridor-stop-occurrences /tmp/rt022/corridor_stop_occurrences.csv \
             --rt022-audit outputs/phase2/rt022_minimum_backbones_v3/rt022_minimum_backbone_audit.json \
@@ -70,6 +71,9 @@ jobs:
           from pathlib import Path
           audit = json.loads(Path("/tmp/rt023/rt023_service_pattern_realization_audit.json").read_text())
           assert audit["status"] == "PASS"
+          assert audit["frozen_stop_count"] == 36
+          assert audit["frozen_conventional_stop_count"] == 35
+          assert audit["frozen_special_service_stop_count"] == 1
           assert audit["structural_link_count"] == 110
           assert audit["structure_count"] == 88
           assert audit["structure_link_reference_count"] == 352

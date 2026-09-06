@@ -19,7 +19,7 @@ The RT-014 adapter requires `pattern_id`, `route_id`, `service_id`, `direction_i
 
 ## Real-data certification target
 
-The certified RT-022 handoff contains 110 reciprocal structural links and 88 exact minimum backbones. The RT-023 real-data run must compile:
+The certified RT-022 handoff contains 110 reciprocal structural links and 88 exact minimum backbones. The compiler also fail-closes unless the frozen stop layer is exactly 36 stop places: 35 `CONVENTIONAL_TPL` eligible for automatic materialization plus the single excluded `SPECIAL::CASA_DI_COMUNITA_OLGIATE` `SPECIAL_SERVICE` stop. The RT-023 real-data run must compile:
 
 - 352 structure-to-link references;
 - 288 directed link realizations;
@@ -27,7 +27,7 @@ The certified RT-022 handoff contains 110 reciprocal structural links and 88 exa
 - 147 B→A realizations;
 - 288 RT-014 pattern fragments.
 
-All negative assertions in the audit must remain false.
+All negative assertions in the audit must remain false. The controlled suite contains 16 contract tests, including graph-epoch mismatch, unknown link/pair/corridor failures and explicit rejection of a 43-stop input universe.
 
 ## Ownership boundary
 
