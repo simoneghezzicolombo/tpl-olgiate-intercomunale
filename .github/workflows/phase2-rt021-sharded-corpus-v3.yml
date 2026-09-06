@@ -33,7 +33,9 @@ jobs:
       - name: Install pinned validation dependencies
         run: |
           python -m pip install --disable-pip-version-check \
-            pandas==2.2.3 networkx==3.6.1 scipy==1.17.0 pyproj==3.7.2 pytest==8.3.5
+            pandas==2.2.3 networkx==3.6.1 scipy==1.17.0 pyproj==3.7.2 \
+            geopandas==1.1.4 shapely==2.1.2 pyogrio==0.13.0 requests==2.34.2 \
+            pytest==8.3.5
 
       - name: Compile RT-021 sharded executor
         run: |
@@ -85,7 +87,8 @@ jobs:
       - name: Install pinned routing dependencies
         run: |
           python -m pip install --disable-pip-version-check \
-            pandas==2.2.3 networkx==3.6.1 scipy==1.17.0 pyproj==3.7.2
+            pandas==2.2.3 networkx==3.6.1 scipy==1.17.0 pyproj==3.7.2 \
+            geopandas==1.1.4 shapely==2.1.2 pyogrio==0.13.0 requests==2.34.2
 
       - name: Download and verify pinned certified RT-017 graph artifact
         env:
@@ -166,7 +169,8 @@ jobs:
       - name: Install pinned merge dependencies
         run: |
           python -m pip install --disable-pip-version-check \
-            pandas==2.2.3 networkx==3.6.1 scipy==1.17.0 pyproj==3.7.2
+            pandas==2.2.3 networkx==3.6.1 scipy==1.17.0 pyproj==3.7.2 \
+            geopandas==1.1.4 shapely==2.1.2 pyogrio==0.13.0 requests==2.34.2
 
       - name: Download all deterministic source shards
         uses: actions/download-artifact@v4
