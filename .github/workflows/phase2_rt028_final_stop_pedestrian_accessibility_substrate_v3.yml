@@ -21,6 +21,7 @@ jobs:
       RT016_ARTIFACT_SHA256: 2937c60aec0280ae1837bc3f763103d5ac45acd2e3b93a949cc75235b1152fe9
       FINAL_STOP_COMMIT: ea30fbd18421164abaf2125033292cbe827e024d
       FINAL_STOP_PATH: outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/existing_stop_places_operational_gpt_v5.csv
+      RT028_CANONICAL_OSM_SHA256: 896f192bbb481f0c07cdc5d695424bf29de85f89ac33ea72986a06e521b424cd
 
     steps:
       - name: Checkout RT-028 branch
@@ -189,6 +190,7 @@ jobs:
             --output-meta /tmp/rt028/input/rt028_osm_pedestrian_snapshot_metadata_v3.json
           test -s /tmp/rt028/input/rt028_osm_pedestrian_snapshot_v3.osm
           test -s /tmp/rt028/input/rt028_osm_pedestrian_snapshot_metadata_v3.json
+          echo "${RT028_CANONICAL_OSM_SHA256}  /tmp/rt028/input/rt028_osm_pedestrian_snapshot_v3.osm" | sha256sum -c -
 
       - name: Build real RT-028 atomic walk matrix
         run: |
@@ -225,6 +227,7 @@ jobs:
           assert matrix.loc[unreachable, "unreachable_reason"].fillna("").astype(str).str.len().gt(0).all()
           assert all(value is False for value in audit["negative_assertions"].values())
           assert audit["cross_engine_walk_check"]["results_averaged_with_primary_engine"] is False
+          assert audit["osm_snapshot_sha256"] == "896f192bbb481f0c07cdc5d695424bf29de85f89ac33ea72986a06e521b424cd"
 
           forbidden = ("candidate", "backbone", "structure_id", "rank", "score", "primary", "runner_up", "winner", "pareto")
           for col in matrix.columns:
