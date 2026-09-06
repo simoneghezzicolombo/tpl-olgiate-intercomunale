@@ -1,0 +1,84 @@
+{
+  "contract_id": "ASTRA_RT031_REPRESENTATION_AND_COMPOSITION_GATE_V1",
+  "status": "PROPOSED_PRODUCTION_GATE_NOT_CERTIFIED",
+  "verdict": "REPRESENTATION CHANGE REQUIRED",
+  "scope": "Replace elementary-edge search complexity semantics; preserve certified graph and diagnostics",
+  "parent_issue": 79,
+  "upstream_rt031_commit": "62f241d4df89585cd9dad6965ba866e28c91128d",
+  "layers": {
+    "road_carrier": ["graph_epoch", "directed_edge_occurrences", "ordered_nodes", "restriction_state", "geometry_hash"],
+    "service_skeleton": ["macro_multigraph", "expanded_edge_occurrence_mapping", "branch_degrees", "cycle_rank", "graph_leaves", "route_membership", "transfer_semantics"],
+    "passenger_pattern": ["route_id", "direction", "occurrence_ordinal", "stop_place_id", "attachment_evidence", "carrier_position", "eligibility_status", "served_or_available"],
+    "geometry_descriptors": ["routed_length_m", "modeled_runtime_min", "reference_path_id", "directness_if_identifiable", "shared_directed_edges", "repeated_traversals"]
+  },
+  "invariants": [
+    "Ordinary degree-2 subdivision preserves macro topology; stop annotations do not define branch nodes",
+    "Branch and cycle changes alter macro topology; pure detours may preserve topology and must alter geometry descriptors",
+    "Contraction expands exactly to ordered directed road-edge occurrences, preserving multiplicity",
+    "Geometric crossings without a traversable graph junction do not create service junctions",
+    "Road junctions unused by service are not automatically service branches",
+    "Graph leaves are not automatically operational service termini",
+    "Skeleton signatures are descriptors, never candidate identity or automatic dedup keys",
+    "Parallel macro edges and self-loops survive contraction; pure-cycle canonical origin is not a terminus",
+    "Composition checks internal and boundary transitions with sufficient history for via-way restrictions",
+    "No reversal of A-to-B evidence to fabricate B-to-A",
+    "Shared or repeated road segments retain occurrence and route identity; costs do not silently become unique-edge sums",
+    "Missing transition or realization evidence remains UNKNOWN, never certified feasible"
+  ],
+  "composition_output_required": [
+    "source_realization_ids", "ordered_directed_edge_ids", "entry_exit_restriction_states",
+    "transition_evidence_ids", "composition_status", "failure_reason",
+    "rt030_stop_occurrence_provenance", "expanded_geometry_hash"
+  ],
+  "composition_statuses": ["CERTIFIED_FEASIBLE", "PROVEN_INFEASIBLE", "UNKNOWN_EVIDENCE", "RESOURCE_LIMIT_INCOMPLETE"],
+  "alternative_semantics": {
+    "storage": "Lazy compatibility relation or state DAG; no mandatory full Cartesian expansion",
+    "guaranteed": "Intersection over the certified feasible complete realization set for each declared directional service component",
+    "possible": "Union over feasible complete realizations, diagnostic only",
+    "no_complete_feasible_realization": "No vacuous guarantee; report proven infeasible or unresolved",
+    "unknown_completeness": "No exact guarantee claim; certified conservative bounds only with explicit proof",
+    "legacy_component_intersections": "May remain conservative lower bounds after compatibility filtering; do not relabel as exact compatible-set intersection"
+  },
+  "search_handoff": {
+    "first_scope": "Representation and composition certification on bounded fixtures and real calibration, not territorial search",
+    "future_domain": "Full frozen reciprocal graph may be reused as a scoped structural domain; it is not all RT017 road walks",
+    "required_declarations_before_search": ["candidate equivalence", "route decomposition", "repetition policy", "directionality", "admissibility", "enumeration completeness", "objective semantics", "stopping rule and authority"],
+    "elementary_edge_cap": null,
+    "macro_complexity_cap": null,
+    "time_limit_semantics": "RESOURCE_LIMIT_INCOMPLETE, never global completeness or normative stopping",
+    "topology_family_filter": null,
+    "passenger_stop_target": null,
+    "named_locality_anchors": [],
+    "pareto": "Only separately certified supported objectives, no weights; previous reductions invalid when objectives change"
+  },
+  "real_calibration": {
+    "sequence_input": "outputs/phase2/stop_pattern_redesign_v3/current_stop_spacing_patterns_v3.csv",
+    "normalized_sha256": "1d3a29ccb196e838dcb085f4ca0495eb1dc1e13cf55520b70b5e2a0a7748236c",
+    "patterns": [1, 13],
+    "observed_counts": [13, 14],
+    "current_status": "PASS_STOP_SEQUENCE_REPRESENTABILITY_ONLY",
+    "physical_geometry_status": "OPEN_REQUIRES_CERTIFIED_DIRECTED_CARRIER",
+    "legacy_stop_ids": "Calibration-only; never silently promoted to the frozen 35-stop candidate universe",
+    "spacing_semantics": "Geodesic inter-stop distance, not routed road spacing",
+    "required_completion": "Use certified shape/map match or exact road paths with explicit mapping uncertainty; if absent leave physical calibration open"
+  },
+  "upstream_reuse": {
+    "RT017": "Keep frozen directed graph, epoch and restriction evidence; contraction optional and transition preserving",
+    "RT019_RT023": "Keep primitive discovery and directional realizations; prove continuity at composition boundaries and completeness only within admitted corpus",
+    "RT028": "Reuse matrix unchanged for same certified stops and population; new stops need a separately certified matrix extension",
+    "RT030": "Authoritative attachment/provenance for frozen stops and certified realizations; generic new-carrier adapter needs separate tests/certification",
+    "population": "Preserve frozen atomic population and ISTAT identity",
+    "municipal_OD": "Context only; no route/passenger allocation or demand-weighted GJT inferred",
+    "RT029": "Preserve complete-through-E6 diagnostic and objective-specific Pareto",
+    "RT031": "Reuse existing contraction; Hamiltonian witnesses are structural existence evidence only"
+  },
+  "future_stops": {"status": "FIELD_CHECK_PENDING", "automatic_promotion": false, "current_gate_creates_stops": false},
+  "territorial_legibility": {"issue": 74, "action": "Visible evidence and explanation/counterfactual", "automatic_repair": false},
+  "decision_budget_km": null,
+  "uncertainty_band_min": null,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false,
+  "weighted_composite_score": false,
+  "empirical_missed_connection_probability_inferred": false,
+  "demand_weighted_gjt_improvement_min_inferred": false
+}

@@ -1,0 +1,131 @@
+{
+  "acceptance": {
+    "A_stop_invariance": "PASS_CONTROLLED",
+    "B_topology_and_geometry_sensitivity": "PASS_CONTROLLED",
+    "C_real_service_geometry": "OPEN_SEQUENCE_ONLY",
+    "D_no_hand_design": "PASS_SCOPE",
+    "E_RT030_provenance": "CONTRACT_ONLY_PRODUCTION_COMPOSITION_OPEN",
+    "F_future_stop_extensibility": "CONTRACT_ONLY_NO_STOPS_CREATED"
+  },
+  "architectural_verdict": "REPRESENTATION CHANGE REQUIRED",
+  "benchmark_normalized_sha256": "1d3a29ccb196e838dcb085f4ca0495eb1dc1e13cf55520b70b5e2a0a7748236c",
+  "check_count": 9,
+  "checks": {
+    "branch_detected": true,
+    "cycle_detected": true,
+    "detour_requires_geometry_descriptor": true,
+    "individually_valid_fragments_can_fail_join": true,
+    "opposite_direction_not_inferred": true,
+    "real_D184_D185_sequence_representability": true,
+    "same_carrier_2_or_15_stops": true,
+    "subdivision_2_to_15_vertices": true,
+    "unknown_edge_fails_closed": true
+  },
+  "contraction_normalized_sha256": "4fecada86dbdecbe56f955f25dc5e57bd53a8ee2ad2c0de9e1a5694f7e170334",
+  "decision_budget_km": null,
+  "fixture_geometry": {
+    "detour_length_fixture_m": 180,
+    "direct_length_fixture_m": 100
+  },
+  "fixture_topologies": {
+    "base": {
+      "branch_degrees": [],
+      "cycle_rank": 0,
+      "leaves": 2,
+      "macro_edges": 1,
+      "topology": "PATH_CORE"
+    },
+    "branch": {
+      "branch_degrees": [
+        3
+      ],
+      "cycle_rank": 0,
+      "leaves": 3,
+      "macro_edges": 3,
+      "topology": "TREE_BRANCHING_CORE"
+    },
+    "cycle": {
+      "branch_degrees": [],
+      "cycle_rank": 1,
+      "leaves": 0,
+      "macro_edges": 1,
+      "topology": "PURE_CYCLE_CORE"
+    },
+    "detour": {
+      "branch_degrees": [],
+      "cycle_rank": 0,
+      "leaves": 2,
+      "macro_edges": 1,
+      "topology": "PATH_CORE"
+    }
+  },
+  "full_search_run": false,
+  "primary_selection_authorised": false,
+  "production_turn_composition_certified": false,
+  "real_sequence_calibration": [
+    {
+      "ordered_stop_ids": [
+        "300194",
+        "L00808",
+        "L00807",
+        "L00873",
+        "L00782",
+        "L00902",
+        "L00879",
+        "L00872",
+        "L00878",
+        "L00804",
+        "L00871",
+        "L00803",
+        "300407"
+      ],
+      "passenger_stop_count": 13,
+      "pattern_index": "1",
+      "physical_topology_certified": false,
+      "route": "D184",
+      "scope": "OBSERVED_STOP_SEQUENCE_ONLY_NOT_ROUTED_GEOMETRY",
+      "sequence_skeleton": {
+        "branch_degrees": [],
+        "cycle_rank": 0,
+        "leaves": 2,
+        "macro_edges": 1,
+        "topology": "PATH_CORE"
+      }
+    },
+    {
+      "ordered_stop_ids": [
+        "300404",
+        "300062",
+        "300405",
+        "L00063",
+        "L00406",
+        "L00087",
+        "L00487",
+        "L00398",
+        "L00086",
+        "300956",
+        "300634",
+        "300397",
+        "300729",
+        "300407"
+      ],
+      "passenger_stop_count": 14,
+      "pattern_index": "13",
+      "physical_topology_certified": false,
+      "route": "D185",
+      "scope": "OBSERVED_STOP_SEQUENCE_ONLY_NOT_ROUTED_GEOMETRY",
+      "sequence_skeleton": {
+        "branch_degrees": [],
+        "cycle_rank": 0,
+        "leaves": 2,
+        "macro_edges": 1,
+        "topology": "PATH_CORE"
+      }
+    }
+  ],
+  "runner_up_selection_authorised": false,
+  "status": "PASS_BOUNDED_REPRESENTATION_DIAGNOSTIC",
+  "uncertainty_band_min": null,
+  "upstream_commit": "62f241d4df89585cd9dad6965ba866e28c91128d",
+  "weighted_score": false
+}
