@@ -6,6 +6,12 @@ on:
       - src/phase2_rt031_successor_via_way_relevance_v3.py
       - tests/test_phase2_rt031_successor_via_way_relevance_v3.py
       - scripts/phase2_audit_rt031_successor_via_way_relevance_v3.py
+      - scripts/phase2_audit_rt031_real_pairwise_compatible_domain_v3.py
+      - src/phase2_rt031_rt017_transition_adapter_v3.py
+      - src/phase2_rt031_rt023_scoped_transition_v3.py
+      - src/phase2_rt031_boundary_correspondence_v3.py
+      - src/phase2_rt031_rt023_physical_compatible_domain_v3.py
+      - src/phase2_rt031_rt023_pairwise_compatibility_v3.py
       - .github/workflows/phase2-rt031-successor-via-way-relevance-v3.yml
   workflow_dispatch:
 permissions:
@@ -45,9 +51,28 @@ jobs:
           python scripts/phase2_audit_rt031_successor_via_way_relevance_v3.py \
             --inputs /tmp/rt031-viaway \
             --out /tmp/rt031-successor-via-way-relevance.json
+      - name: Audit exact real RT023 physical compatible domain twice
+        env:
+          PYTHONPATH: .
+        run: |
+          python scripts/phase2_audit_rt031_real_pairwise_compatible_domain_v3.py \
+            --inputs /tmp/rt031-viaway \
+            --via-way-evidence /tmp/rt031-successor-via-way-relevance.json \
+            --out /tmp/rt031-real-compatible-a
+          python scripts/phase2_audit_rt031_real_pairwise_compatible_domain_v3.py \
+            --inputs /tmp/rt031-viaway \
+            --via-way-evidence /tmp/rt031-successor-via-way-relevance.json \
+            --out /tmp/rt031-real-compatible-b
+          diff -r /tmp/rt031-real-compatible-a /tmp/rt031-real-compatible-b
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: rt031-successor-via-way-relevance-v3
           path: /tmp/rt031-successor-via-way-relevance.json
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rt031-real-pairwise-compatible-domain-v3
+          path: /tmp/rt031-real-compatible-a/
           if-no-files-found: warn
