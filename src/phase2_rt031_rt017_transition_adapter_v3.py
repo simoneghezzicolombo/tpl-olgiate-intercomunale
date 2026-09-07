@@ -4,8 +4,15 @@ This module can prove a movement INFEASIBLE when a frozen RT-017 via-node rule
 forbids it. It does not by itself prove global route legality: RT-017 expansion
 levels contain via-way restrictions outside the frozen level-0 snapshot whose
 relevance to arbitrary future multi-fragment compositions has not yet been
-certified. Callers must therefore keep global composition completeness UNKNOWN
-until that separate proof closes.
+certified.
+
+The public ``oracle`` is deliberately tri-state and mechanically fail-closed:
+``False`` means a represented frozen rule proves the transition illegal,
+``True`` is returned only when global transition completeness is certified, and
+``None`` means the transition is merely not rejected by the represented frozen
+rules while some relevant restriction evidence remains unresolved. Callers
+therefore cannot accidentally promote safe rejection into legal-composition
+certification by pairing an incomplete adapter with a complete restriction flag.
 """
 from __future__ import annotations
 
@@ -101,6 +108,13 @@ class FrozenRT017ViaNodeAdapter:
         )
 
     def decision(self, history: tuple[str, ...], next_edge_id: str) -> dict:
+        """Return represented frozen-domain rejection evidence.
+
+        ``allowed=True`` here means only that no represented frozen via-node rule
+        rejects the movement. It is intentionally a lower-level diagnostic API;
+        callers requiring a legal-composition oracle must use :meth:`oracle`,
+        which additionally enforces global completeness.
+        """
         if not history:
             raise ValueError("transition decision requires nonempty carrier history")
         if next_edge_id not in self.edges or any(e not in self.edges for e in history):
@@ -137,5 +151,16 @@ class FrozenRT017ViaNodeAdapter:
         }
 
     def oracle(self, history: tuple[str, ...], next_edge_id: str) -> bool | None:
-        """Compatible with phase2_rt031_typed_composition_v3.compose()."""
-        return self.decision(history, next_edge_id)["allowed"]
+        """Fail-closed tri-state oracle for the typed composer.
+
+        A represented rejection is always safe to return as ``False``. A positive
+        legality claim is returned as ``True`` only when the adapter's restriction
+        evidence is globally complete for the declared domain. Otherwise a
+        non-rejected movement remains ``None`` / UNKNOWN.
+        """
+        decision = self.decision(history, next_edge_id)
+        if decision["allowed"] is False:
+            return False
+        if decision["allowed"] is None:
+            return None
+        return True if self.audit.global_transition_completeness else None
