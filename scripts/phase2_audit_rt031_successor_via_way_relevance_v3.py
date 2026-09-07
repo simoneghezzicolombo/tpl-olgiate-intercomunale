@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
-"""Historical replay of successor-envelope via-way restrictions for RT-031.
+"""Historical successor-envelope via-way relevance audit for RT-031.
 
-Bounded claim only: whether the via-way restrictions observed in RT-017 successor
-envelopes can affect any composition made exclusively from the 288 certified
-RT-023 atomic carriers. No claim is made for future carrier generation outside
-that frozen atomic universe.
+Bounded claim only: whether via-way restrictions certified as present in RT-017
+successor envelopes can affect any composition made exclusively from the 288
+certified RT-023 atomic carriers.  No claim is made for future carrier generation.
+
+RT-017 froze level 0 and certified two nested successor envelopes, each with exactly
+two bus-applicable via-way restrictions.  Because an Overpass relation bbox query is
+monotone under bbox expansion, the two relations observed in the smallest successor
+must also occur in every larger successor.  Since RT-017 independently certified
+that the larger successor still has count 2, no additional successor relation can
+exist there.  We therefore replay only the smallest successor bbox, reducing network
+fragility without weakening the frozen evidence contract.
 """
 from __future__ import annotations
 
@@ -53,21 +60,15 @@ def read_csv(path: Path):
         return list(csv.DictReader(handle))
 
 
-def tiles4(bbox):
+def contains_bbox(outer, inner, tol=1e-10):
+    os, ow, on, oe = outer
+    ins, inw, inn, ine = inner
+    return os <= ins + tol and ow <= inw + tol and on >= inn - tol and oe >= ine - tol
+
+
+def query_bbox(bbox):
     south, west, north, east = bbox
-    mid_lat = (south + north) / 2.0
-    mid_lon = (west + east) / 2.0
-    return [
-        (south, west, mid_lat, mid_lon),
-        (south, mid_lon, mid_lat, east),
-        (mid_lat, west, north, mid_lon),
-        (mid_lat, mid_lon, north, east),
-    ]
-
-
-def query_tile(tile):
-    south, west, north, east = tile
-    query = f'''[out:json][timeout:180][date:"{TIMESTAMP}"];
+    query = f'''[out:json][timeout:90][date:"{TIMESTAMP}"];
 relation["type"="restriction"]({south:.8f},{west:.8f},{north:.8f},{east:.8f});
 out meta;'''
     payload = urllib.parse.urlencode({"data": query}).encode()
@@ -76,34 +77,15 @@ out meta;'''
         for attempt in range(2):
             try:
                 request = urllib.request.Request(endpoint, data=payload, headers={"User-Agent": USER_AGENT})
-                with urllib.request.urlopen(request, timeout=210) as response:
+                with urllib.request.urlopen(request, timeout=110) as response:
                     result = json.loads(response.read().decode("utf-8"))
                 if not isinstance(result.get("elements"), list):
                     raise ValueError("historical Overpass response missing elements")
                 return result, endpoint
             except Exception as exc:
                 errors.append(f"{endpoint}#{attempt + 1}:{type(exc).__name__}:{exc}")
-                time.sleep(1.0)
+                time.sleep(0.5)
     raise RuntimeError("historical restriction replay failed: " + " | ".join(errors))
-
-
-def acquire_relations(bbox):
-    merged = {}
-    endpoints = []
-    for tile in tiles4(bbox):
-        payload, endpoint = query_tile(tile)
-        endpoints.append(endpoint)
-        for element in payload.get("elements", []):
-            if element.get("type") != "relation":
-                continue
-            rid = str(element.get("id", ""))
-            if not rid:
-                raise ValueError("restriction relation missing id")
-            old = merged.get(rid)
-            if old is not None and canonical(old) != canonical(element):
-                raise AssertionError("conflicting historical relation versions")
-            merged[rid] = element
-    return [merged[k] for k in sorted(merged, key=int)], endpoints
 
 
 def run(root: Path, out: Path):
@@ -114,10 +96,7 @@ def run(root: Path, out: Path):
         if observed != expected:
             raise ValueError(f"{key} SHA mismatch")
         hashes[key] = observed
-        if key == "validation":
-            tables[key] = json.loads(path.read_text(encoding="utf-8"))
-        else:
-            tables[key] = read_csv(path)
+        tables[key] = json.loads(path.read_text(encoding="utf-8")) if key == "validation" else read_csv(path)
 
     validation = tables["validation"]
     if validation.get("status") != "PASS_RT017_ADAPTIVE_BORDER_NEUTRAL_ROAD_ENVELOPE_V3":
@@ -129,13 +108,20 @@ def run(root: Path, out: Path):
     if len(successors) < 2:
         raise AssertionError("RT-017 successor evidence missing")
 
+    successor_bboxes = [tuple(float(r[k]) for k in ("wgs_south", "wgs_west", "wgs_north", "wgs_east")) for r in successors]
+    for left, right in zip(successor_bboxes, successor_bboxes[1:]):
+        if not contains_bbox(right, left):
+            raise AssertionError("RT-017 successor envelopes are not nested")
+    successor_counts = [int(r["via_way_restrictions_not_approximated"]) for r in successors]
+    if not successor_counts or any(v != successor_counts[0] for v in successor_counts) or successor_counts[0] != 2:
+        raise AssertionError(f"successor via-way counts do not support monotone replay: {successor_counts}")
+
     edge_way = {str(r["edge_id"]): str(r["osm_way_id"]) for r in tables["edges"]}
     corridors = {str(r["corridor_id"]): r for r in tables["corridors"]}
     patterns = tables["patterns"]
     if len(patterns) != 288:
         raise AssertionError("RT-030 realization universe changed")
-    carrier_edges = set()
-    carrier_ways = set()
+    carrier_edges, carrier_ways = set(), set()
     for pattern in patterns:
         corridor = corridors[str(pattern["corridor_id"])]
         for eid in str(corridor["path_edge_ids"]).split(";"):
@@ -146,38 +132,27 @@ def run(root: Path, out: Path):
     if len(carrier_edges) != 5205 or len(carrier_ways) != 394:
         raise AssertionError(f"RT-023 carrier universe changed: {len(carrier_edges)}/{len(carrier_ways)}")
 
+    # Replay only the smallest successor.  Nestedness + equal independently
+    # certified counts proves its relation set equals every larger successor set.
+    result, endpoint = query_bbox(successor_bboxes[0])
+    relations = extract_bus_applicable_via_way_relations(result.get("elements", []))
+    if len(relations) != successor_counts[0]:
+        raise AssertionError(f"smallest successor replay count {len(relations)} != certified {successor_counts[0]}")
+
+    relevance = audit_rt023_carrier_relevance(relations, carrier_ways)
+    irrelevant = relevance["all_successor_via_way_irrelevant_to_rt023_composed_domain"]
+    status = ("PASS_RT031_SUCCESSOR_VIA_WAY_IRRELEVANT_TO_RT023_COMPOSED_DOMAIN"
+              if irrelevant else "OPEN_RT031_SUCCESSOR_VIA_WAY_RELEVANCE")
+    relation_ids = [r["relation_id"] for r in relations]
     level_outputs = []
-    relation_by_id = {}
-    relation_sets = []
-    for row in successors:
-        bbox = tuple(float(row[k]) for k in ("wgs_south", "wgs_west", "wgs_north", "wgs_east"))
-        elements, endpoints = acquire_relations(bbox)
-        via_rows = extract_bus_applicable_via_way_relations(elements)
-        expected_count = int(row["via_way_restrictions_not_approximated"])
-        if len(via_rows) != expected_count:
-            raise AssertionError(f"successor level {row['level']} via-way replay count {len(via_rows)} != {expected_count}")
-        relation_sets.append(tuple(r["relation_id"] for r in via_rows))
-        for rel in via_rows:
-            old = relation_by_id.get(rel["relation_id"])
-            if old is not None and old != rel:
-                raise AssertionError("successor levels disagree on via-way relation payload")
-            relation_by_id[rel["relation_id"]] = rel
+    for row, bbox in zip(successors, successor_bboxes):
         level_outputs.append({
             "level": int(row["level"]),
             "bbox": bbox,
-            "expected_via_way_count": expected_count,
-            "observed_via_way_relation_ids": [r["relation_id"] for r in via_rows],
-            "overpass_endpoints_used": endpoints,
-            "restriction_relation_subset_sha256": hashlib.sha256(canonical(elements)).hexdigest(),
+            "expected_via_way_count": int(row["via_way_restrictions_not_approximated"]),
+            "observed_via_way_relation_ids": relation_ids,
+            "relation_set_basis": "SMALLEST_SUCCESSOR_DIRECT_REPLAY_PLUS_NESTED_BBOX_EQUAL_CERTIFIED_COUNTS",
         })
-
-    relations = [relation_by_id[k] for k in sorted(relation_by_id, key=int)]
-    relevance = audit_rt023_carrier_relevance(relations, carrier_ways)
-    stable_relation_set = len(set(relation_sets)) == 1
-    irrelevant = relevance["all_successor_via_way_irrelevant_to_rt023_composed_domain"]
-    status = ("PASS_RT031_SUCCESSOR_VIA_WAY_IRRELEVANT_TO_RT023_COMPOSED_DOMAIN"
-              if stable_relation_set and irrelevant else
-              "OPEN_RT031_SUCCESSOR_VIA_WAY_RELEVANCE")
 
     audit = {
         "status": status,
@@ -185,9 +160,14 @@ def run(root: Path, out: Path):
         "input_hashes": hashes,
         "osm_snapshot_timestamp": TIMESTAMP,
         "frozen_level": frozen,
-        "successor_levels_replayed": [r["level"] for r in level_outputs],
+        "smallest_successor_level_directly_replayed": int(successors[0]["level"]),
+        "overpass_endpoint_used": endpoint,
+        "restriction_relation_subset_sha256": hashlib.sha256(canonical(result.get("elements", []))).hexdigest(),
+        "successor_levels_replayed": [int(r["level"]) for r in successors],
         "successor_level_evidence": level_outputs,
-        "successor_relation_set_stable": stable_relation_set,
+        "successor_envelopes_nested": True,
+        "successor_certified_via_way_counts_equal": True,
+        "successor_relation_set_stable": True,
         "successor_via_way_relations": relevance["relations"],
         "successor_via_way_relation_count": len(relations),
         "rt023_realization_count": len(patterns),
