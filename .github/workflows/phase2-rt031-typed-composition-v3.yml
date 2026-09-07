@@ -10,6 +10,9 @@ on:
       - src/phase2_rt031_occurrence_binding_v3.py
       - tests/test_phase2_rt031_occurrence_binding_v3.py
       - scripts/phase2_audit_rt031_real_occurrence_binding_v3.py
+      - src/phase2_rt031_rt017_transition_adapter_v3.py
+      - tests/test_phase2_rt031_rt017_transition_adapter_v3.py
+      - scripts/phase2_audit_rt031_rt017_transition_adapter_v3.py
       - .github/workflows/phase2-rt031-typed-composition-v3.yml
   workflow_dispatch:
 permissions:
@@ -27,7 +30,7 @@ jobs:
       - name: Controlled adversarial and macro regression tests
         env:
           PYTHONPATH: .:src
-        run: python -m pytest tests/test_phase2_rt031_occurrence_binding_v3.py tests/test_phase2_rt031_typed_composition_v3.py tests/test_phase2_macro_structure_decoupling_v3.py -q
+        run: python -m pytest tests/test_phase2_rt031_occurrence_binding_v3.py tests/test_phase2_rt031_typed_composition_v3.py tests/test_phase2_rt031_rt017_transition_adapter_v3.py tests/test_phase2_macro_structure_decoupling_v3.py -q
       - name: Independent byte-for-byte replay
         env:
           PYTHONPATH: .
@@ -69,8 +72,20 @@ jobs:
           python scripts/phase2_audit_rt031_real_occurrence_binding_v3.py --inputs /tmp/rt031-inputs --out /tmp/rt031-real-a
           python scripts/phase2_audit_rt031_real_occurrence_binding_v3.py --inputs /tmp/rt031-inputs --out /tmp/rt031-real-b
           diff -r /tmp/rt031-real-a /tmp/rt031-real-b
+      - name: Audit frozen RT017 known transition rejections twice
+        env:
+          PYTHONPATH: .
+        run: |
+          python scripts/phase2_audit_rt031_rt017_transition_adapter_v3.py --inputs /tmp/rt031-inputs --out /tmp/rt031-turn-a
+          python scripts/phase2_audit_rt031_rt017_transition_adapter_v3.py --inputs /tmp/rt031-inputs --out /tmp/rt031-turn-b
+          diff -r /tmp/rt031-turn-a /tmp/rt031-turn-b
       - uses: actions/upload-artifact@v4
         with:
           name: rt031-pinned-real-occurrence-binding-v3
           path: /tmp/rt031-real-a/
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-pinned-rt017-transition-safe-rejection-v3
+          path: /tmp/rt031-turn-a/
           if-no-files-found: error
