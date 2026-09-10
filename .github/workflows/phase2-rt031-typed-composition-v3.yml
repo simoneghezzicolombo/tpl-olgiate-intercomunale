@@ -132,6 +132,8 @@ jobs:
           path: /tmp/rt031-boundary-a/
           if-no-files-found: error
 
+      - name: Install structural witness dependency
+        run: python -m pip install pandas
       - name: Download pinned scoped via-way certificate
         env:
           GH_TOKEN: ${{ github.token }}
