@@ -261,3 +261,36 @@ See `docs/RT031_TYPED_COMPOSITION_GATE.md`. Production gate remains OPEN.
 No RT-029 change, territorial enumeration, new Pareto or winner selection.
 Independent reviewer should inspect the committed payload and tests, particularly
 restriction history, occurrence reconciliation and unknown service-state handling.
+
+
+## GPT handoff — RT-031 linked service network and historical calibration
+
+Date: 2026-09-10 UTC. Author: GPT / Codex. Branch: `codex/rt031-typed-composition-gate`, PR #80.
+Base: `737391a439e043c933b229da5dc13c6027bc1bb6` (scoped physical composition).
+Exact implementation identity is the commit containing this handoff.
+
+Read the September 7 Agent A A–F review, tri-state blocker/fix and scoped physical
+composition handoff before continuing. No earlier branch state was overwritten.
+
+New bounded service-network contract binds complete macro incidence, atomic
+carriers, source visits, explicit service events, pattern labels and movement
+instances into one identity. Unknown physical legality cannot produce complete
+passenger relations. Location correspondence never implies event merge. Tests
+distinguish one movement with two labels from two separately operated movements.
+No real operating assignments, timetable or annual vehicle-km were introduced.
+
+Historical calibration inventory pins eight Arriva GTFS files: 42 D184/D185 trips
+(15/27), 541 occurrences and 18 direction/shape/eligibility profiles. All 18 shapes
+are present. Published feed period is 2026-01-01 to 2026-06-08: historical only.
+Full trip payload SHA256: `e4a7ca44c10cdcac9142f5ce35e5392a3e907e9bb728bfa42c7e6e956364671c`.
+No inferred interlining from shared block IDs; no historical stop promotion.
+
+Validation before push: 126 RT-031/macro tests PASS; historical A/B rebuild
+byte-identical. CI status is reported separately on #79/#80 with exact run/head.
+Epistemic scope: controlled service scenarios + DERIVED historical source inventory.
+See `docs/RT031_SERVICE_NETWORK_AND_CALIBRATION.md` and committed historical audit.
+
+Open: independent review of this delta; evidence-backed real service assignments;
+exact D184/D185 physical/turn/attachment calibration and historical stop mapping;
+production candidate domain/equivalence/repetition/objectives/stopping contract.
+RT-029 unchanged. No territorial search, new Pareto or winner selection.

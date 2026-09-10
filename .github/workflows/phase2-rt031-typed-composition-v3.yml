@@ -22,6 +22,10 @@ on:
       - tests/test_phase2_rt031_rt023_physical_compatible_domain_v3.py
       - src/phase2_rt031_rt023_pairwise_compatibility_v3.py
       - tests/test_phase2_rt031_rt023_pairwise_compatibility_v3.py
+      - src/phase2_rt031_service_network_v3.py
+      - tests/test_phase2_rt031_service_network_v3.py
+      - tests/test_phase2_rt031_historical_service_calibration_v3.py
+      - scripts/phase2_audit_rt031_historical_service_calibration_v3.py
       - .github/workflows/phase2-rt031-typed-composition-v3.yml
   workflow_dispatch:
 permissions:
@@ -40,15 +44,7 @@ jobs:
         env:
           PYTHONPATH: .:src
         run: |
-          python -m pytest \
-            tests/test_phase2_rt031_occurrence_binding_v3.py \
-            tests/test_phase2_rt031_typed_composition_v3.py \
-            tests/test_phase2_rt031_rt017_transition_adapter_v3.py \
-            tests/test_phase2_rt031_boundary_correspondence_v3.py \
-            tests/test_phase2_rt031_rt023_scoped_transition_v3.py \
-            tests/test_phase2_rt031_rt023_physical_compatible_domain_v3.py \
-            tests/test_phase2_rt031_rt023_pairwise_compatibility_v3.py \
-            tests/test_phase2_macro_structure_decoupling_v3.py -q
+          python -m pytest tests/test_phase2_rt031_*.py tests/test_phase2_macro_structure_decoupling_v3.py -q
       - name: Independent byte-for-byte replay
         env:
           PYTHONPATH: .
@@ -57,6 +53,19 @@ jobs:
           python scripts/phase2_audit_rt031_typed_composition_v3.py --out replay-b.json
           cmp replay-a.json replay-b.json
           cmp replay-a.json outputs/phase2/rt031_typed_composition_v3/bounded_replay.json
+      - name: Historical D184 D185 semantic inventory and deterministic replay
+        env:
+          PYTHONPATH: .
+        run: |
+          python scripts/phase2_audit_rt031_historical_service_calibration_v3.py --out /tmp/history-a
+          python scripts/phase2_audit_rt031_historical_service_calibration_v3.py --out /tmp/history-b
+          diff -r /tmp/history-a /tmp/history-b
+          cmp /tmp/history-a/historical_calibration_audit.json outputs/phase2/rt031_service_network_v3/historical_calibration_audit.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-historical-service-calibration-v3
+          path: /tmp/history-a/
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: rt031-bounded-typed-composition-v3

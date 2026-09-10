@@ -1,0 +1,50 @@
+{
+  "direction_shape_pickup_dropoff_profile_count": 18,
+  "drop_off_type_values": {
+    "0": 541
+  },
+  "epistemic_status": "DERIVED",
+  "feed_info": [
+    {
+      "feed_end_date": "20260608",
+      "feed_lang": "it",
+      "feed_publisher_name": "ARRIVA",
+      "feed_publisher_url": "https://arriva.it",
+      "feed_start_date": "20260101",
+      "feed_version": "20251217"
+    }
+  ],
+  "full_trip_payload_sha256": "e4a7ca44c10cdcac9142f5ce35e5392a3e907e9bb728bfa42c7e6e956364671c",
+  "historical_to_frozen_stop_mapping_pass": false,
+  "input_sha256": {
+    "calendar.txt": "df53464dd12a0cd9a1f91ce4b88cd8fb4574119c356794a457e7df7d201f6ce5",
+    "calendar_dates.txt": "de510c13a9d8e9c55160e2f7f26c9e59d1420b5d31327d7d8c4d0d7a809ef022",
+    "feed_info.txt": "a45d751ea105ab23122d928eeb96e885b71dc18b680b0763825cbb7c20a63030",
+    "routes.txt": "a59e48ac22ba0d71215be926818e368bb37a58531256b1b74850b6b9e2624583",
+    "shapes.txt": "a34ab65ecfc1e31e348b617d19a7e469cc056d40d6e3435030508fa5b066dee0",
+    "stop_times.txt": "c5b4a6f98935893c916281b58f1a7384e500ffe3800dac11f68550043cea5709",
+    "stops.txt": "099163a45d1c75f12fdd172f1ea9984132e3aa14f9d7741a196293dff405be72",
+    "trips.txt": "ff3005d3831bf14ce1a7965b3d746c278f3392d67b163d6be61a28a9644903bb"
+  },
+  "interlining_inferred_from_block_id": false,
+  "missing_shape_trip_count": 0,
+  "nonempty_block_id_trip_count": 2,
+  "physical_geometry_turn_calibration_pass": false,
+  "pickup_type_values": {
+    "0": 541
+  },
+  "present_shape_count": 18,
+  "production_rt031_pass": false,
+  "referenced_shape_count": 18,
+  "route_trip_counts": {
+    "D184": 15,
+    "D185": 27
+  },
+  "shape_manifest_sha256": "5bb5184e72b3b19e5b4be9994b0cc94ce2aa2e16ed9ac2afd9b5a348251775b9",
+  "source_role": "HISTORICAL_GTFS_NOT_CURRENT_SERVICE",
+  "status": "PASS_HISTORICAL_SERVICE_SEMANTICS_INVENTORY_ONLY",
+  "stop_count_target_selected": false,
+  "stop_occurrence_count": 541,
+  "trip_count": 42,
+  "trip_patterns_with_repeated_stop_ids": 0
+}
