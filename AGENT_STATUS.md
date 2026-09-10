@@ -294,3 +294,16 @@ Open: independent review of this delta; evidence-backed real service assignments
 exact D184/D185 physical/turn/attachment calibration and historical stop mapping;
 production candidate domain/equivalence/repetition/objectives/stopping contract.
 RT-029 unchanged. No territorial search, new Pareto or winner selection.
+
+## Codex handoff — complete-route physical distance bridge
+
+2026-09-10 UTC. Base 4d87d92677859923c4e3c29bbd2ff3544c98b311, PR #80.
+User explicitly requested substantial end-to-end progress. Implemented exact
+compatible realization count/minimum distance for declared complete chains and
+cyclic seams, plus a pinned real-data runner for six reproducible all-stop
+structural stress scenarios. Full-history replay independently checks selected
+witnesses. See docs/RT031_COMPLETE_ROUTE_EVALUATION.md.
+Local validation: 138 RT031/macro tests pass, including exhaustive comparison of
+all small compatibility graphs with brute-force enumeration. Real-data results
+are pending CI at this commit; report exact run/head separately on #79.
+No service assignments, territorial winner or production PASS inferred.
