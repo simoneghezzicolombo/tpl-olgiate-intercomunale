@@ -352,3 +352,24 @@ relaxes directions/turns conservatively and cannot certify feasibility or rule
 out independent disconnected service components. Result pending real CI; exact
 terminal/tree witnesses and the 24 policy contexts are saved with the 72
 predeclared-cycle contexts. Local RT031/macro suite: 153 passed.
+
+## Codex handoff — affordable physical walks + conditional access
+
+2026-09-11. Base 163ce18c1237221cc66d59ff196e2927db35a2b4, PR #80.
+Added a budget-bounded single closed physical walk label search over all 288
+atomic roots. No named-locality forcing, random search or elementary-edge cap;
+repeated vertices/edges and branching excursions allowed. State retains root,
+last atom and available-stop union; higher-distance identical states dominated
+only for physical distance/availability objectives. Execution limit 250,000
+expanded states is explicit; remaining labels mean RESOURCE_LIMIT_INCOMPLETE.
+
+Every found witness is full-history replayed and its available-stop set evaluated
+against pinned RT028 matrix using RT029 access/equity metrics. Coverage is
+conditional on future public service assignment, not observed service or boarding
+rights. Evaluated-set nondominance is descriptive, never a final ranking or
+production-search PASS. Single movement domain is not the general RT031 service
+network domain. See docs/RT031_AFFORDABLE_WALK_SEARCH.md.
+
+156 local RT031/macro tests pass. Real run and exact artifact/status to be reported
+on #79 after CI. No final recommendation yet. Existing approved policy decisions
+remain in force, including 111,419 annual bus-km cap and deterministic pathway.

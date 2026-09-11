@@ -28,6 +28,9 @@ on:
       - src/phase2_rt031_exact_resource_screen_v3.py
       - scripts/phase2_screen_rt031_resource_budget_v3.py
       - tests/test_phase2_rt031_exact_resource_screen_v3.py
+      - src/phase2_rt031_budgeted_walk_search_v3.py
+      - scripts/phase2_search_rt031_affordable_walks_v3.py
+      - tests/test_phase2_rt031_budgeted_walk_search_v3.py
       - src/phase2_rt031_complete_chain_distance_v3.py
       - tests/test_phase2_rt031_complete_chain_distance_v3.py
       - scripts/phase2_evaluate_rt031_complete_routes_v3.py
@@ -188,4 +191,26 @@ jobs:
         with:
           name: rt031-exact-resource-budget-screen-v3
           path: /tmp/rt031-resource-a/
+          if-no-files-found: error
+
+      - name: Download certified RT028 walking substrate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh api "/repos/${REPO}/actions/artifacts/9991182904/zip" > /tmp/rt028-walk.zip
+          echo 'e1ca83699593dd9e605d2870667da1b4dfc6068436a0c3116faf8587901b2e28  /tmp/rt028-walk.zip' | sha256sum -c
+          mkdir -p /tmp/rt028-walk
+          unzip -q /tmp/rt028-walk.zip -d /tmp/rt028-walk
+      - name: Budgeted physical walk exploration and conditional access comparison
+        env:
+          PYTHONPATH: .:src
+        run: |
+          evidence=$(find /tmp/rt031-via -name '*.json' | head -1)
+          walk=$(find /tmp/rt028-walk -name 'rt028_population_unit_stop_walk_matrix_v3.csv' | head -1)
+          python scripts/phase2_search_rt031_affordable_walks_v3.py --inputs /tmp/rt031-inputs --via-way-evidence "$evidence" --walk-matrix "$walk" --out /tmp/rt031-affordable-a --max-expansions 250000
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-affordable-physical-walk-access-comparison-v3
+          path: /tmp/rt031-affordable-a/
           if-no-files-found: error
