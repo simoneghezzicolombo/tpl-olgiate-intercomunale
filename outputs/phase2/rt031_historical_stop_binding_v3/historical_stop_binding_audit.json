@@ -1,0 +1,39 @@
+{
+  "contract": "RT031_HISTORICAL_STOP_PLACE_PROVENANCE_BINDING_V3",
+  "conventional_stop_count": 35,
+  "current_service_inferred": false,
+  "directional_boarding_bindings": 0,
+  "feed_is_historical_not_current": true,
+  "frozen_stop_count": 36,
+  "historical_occurrence_count": 541,
+  "historical_stop_identity_count": 70,
+  "historical_trip_count": 42,
+  "occurrence_binding_status_counts": {
+    "CONFIRMED_CROSSWALK_STOP_PLACE": 38,
+    "EXACT_FROZEN_SOURCE_PROVENANCE": 140,
+    "NO_FROZEN_BINDING_EVIDENCE": 291,
+    "UNCONFIRMED_STOP_PLACE_CANDIDATE": 72
+  },
+  "occurrence_payload_sha256": "6cefce41930e0577ad8bfc94a55ad5afa12c1159c591795a901f7fd9ed2cef6e",
+  "physical_calibration_pass": false,
+  "production_rt031_pass": false,
+  "rt017_attachments": 0,
+  "source_sha256": {
+    "arriva_stop_place_service_crosswalk_validated_gpt_v4.csv": "d5ea86615d1198124edb86070ab2d6630f8dc25cfce66af5343cb30e88e46a32",
+    "calendar.txt": "df53464dd12a0cd9a1f91ce4b88cd8fb4574119c356794a457e7df7d201f6ce5",
+    "calendar_dates.txt": "de510c13a9d8e9c55160e2f7f26c9e59d1420b5d31327d7d8c4d0d7a809ef022",
+    "existing_stop_places_operational_gpt_v5.csv": "53af82ccfc398719781faf526d482431d2258bd637a74349222e0c4967642076",
+    "feed_info.txt": "a45d751ea105ab23122d928eeb96e885b71dc18b680b0763825cbb7c20a63030",
+    "routes.txt": "a59e48ac22ba0d71215be926818e368bb37a58531256b1b74850b6b9e2624583",
+    "shapes.txt": "a34ab65ecfc1e31e348b617d19a7e469cc056d40d6e3435030508fa5b066dee0",
+    "stop_times.txt": "c5b4a6f98935893c916281b58f1a7384e500ffe3800dac11f68550043cea5709",
+    "stops.txt": "099163a45d1c75f12fdd172f1ea9984132e3aa14f9d7741a196293dff405be72",
+    "trips.txt": "ff3005d3831bf14ce1a7965b3d746c278f3392d67b163d6be61a28a9644903bb"
+  },
+  "unique_identity_status_counts": {
+    "CONFIRMED_CROSSWALK_STOP_PLACE": 3,
+    "EXACT_FROZEN_SOURCE_PROVENANCE": 18,
+    "NO_FROZEN_BINDING_EVIDENCE": 39,
+    "UNCONFIRMED_STOP_PLACE_CANDIDATE": 10
+  }
+}

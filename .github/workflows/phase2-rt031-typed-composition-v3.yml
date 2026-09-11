@@ -22,6 +22,9 @@ on:
       - tests/test_phase2_rt031_rt023_physical_compatible_domain_v3.py
       - src/phase2_rt031_rt023_pairwise_compatibility_v3.py
       - tests/test_phase2_rt031_rt023_pairwise_compatibility_v3.py
+      - src/phase2_rt031_historical_stop_binding_v3.py
+      - scripts/phase2_bind_rt031_historical_stops_v3.py
+      - tests/test_phase2_rt031_historical_stop_binding_v3.py
       - src/phase2_rt031_complete_chain_distance_v3.py
       - tests/test_phase2_rt031_complete_chain_distance_v3.py
       - scripts/phase2_evaluate_rt031_complete_routes_v3.py
@@ -64,6 +67,19 @@ jobs:
           python scripts/phase2_audit_rt031_historical_service_calibration_v3.py --out /tmp/history-b
           diff -r /tmp/history-a /tmp/history-b
           cmp /tmp/history-a/historical_calibration_audit.json outputs/phase2/rt031_service_network_v3/historical_calibration_audit.json
+      - name: Historical stop-place provenance binding and replay
+        env:
+          PYTHONPATH: .
+        run: |
+          python scripts/phase2_bind_rt031_historical_stops_v3.py --out /tmp/rt031-history-binding-a
+          python scripts/phase2_bind_rt031_historical_stops_v3.py --out /tmp/rt031-history-binding-b
+          diff -r /tmp/rt031-history-binding-a /tmp/rt031-history-binding-b
+          cmp /tmp/rt031-history-binding-a/historical_stop_binding_audit.json outputs/phase2/rt031_historical_stop_binding_v3/historical_stop_binding_audit.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-historical-stop-provenance-binding-v3
+          path: /tmp/rt031-history-binding-a/
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: rt031-historical-service-calibration-v3

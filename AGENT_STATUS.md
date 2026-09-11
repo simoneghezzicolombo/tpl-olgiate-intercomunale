@@ -307,3 +307,23 @@ Local validation: 138 RT031/macro tests pass, including exhaustive comparison of
 all small compatibility graphs with brute-force enumeration. Real-data results
 are pending CI at this commit; report exact run/head separately on #79.
 No service assignments, territorial winner or production PASS inferred.
+
+## Codex handoff — physical result and historical stop-place binding
+
+2026-09-11 UTC. Base d0db2bd3c1dad398cff57a5325edff97a91db039.
+Complete-route CI 34522467636 SUCCESS (PR merge 51517bebaabd324972997a365d1630cb56492118),
+artifact 10170243158, ZIP digest af4e47225fb19c7e198cab8364aeed04e537cdf21eaaaaae53e544b30bfc7a4f.
+Six full 35-stop structural stress scenarios physically compatible; forward/reverse
+cycle distances 35.139/36.121 km, repeating out-and-return 77.241 km (rounded).
+Independent full-history replay and A/B rebuild pass. This is not a service or
+territorial optimum. Details: docs/RT031_PROGRESS_2026_09_11.md.
+
+New historical provenance binder preserves all 541 visits/70 IDs/42 trips: 140
+occurrences direct provenance, 38 explicitly confirmed crosswalk, 72 unconfirmed
+candidates, 291 no binding evidence. Stop-place binding only; boarding/road
+attachments remain unset. Exact provider namespaces, special exclusion and
+ambiguity guards. Frozen 36/35 universe unchanged. Historical source coordinates
+and trip semantics retained. 143 local tests pass and A/B bytes identical.
+Occurrence payload SHA256 6cefce41930e0577ad8bfc94a55ad5afa12c1159c591795a901f7fd9ed2cef6e.
+Full occurrence payload in CI artifact; compact audit committed. Pending delta CI
+status and review reported separately on #79. Production gate remains OPEN.
