@@ -29,3 +29,16 @@ def test_half_open_window_omits_departure_at_end():
 @pytest.mark.parametrize('value',[0,-1,'NaN','Infinity'])
 def test_invalid_distance(value):
     with pytest.raises(ValueError):screen_cycle(value,headway=30,start=0,end=60,days=1,cap_km=10)
+
+
+def test_metric_mst_bound_can_use_nonterminal_steiner_vertices():
+    from src.phase2_rt031_exact_resource_screen_v3 import closed_walk_metric_mst_bound
+    r=closed_walk_metric_mst_bound([('a','s',1),('b','s',1),('c','s',1)],['a','b','c'])
+    # Terminal-metric tree costs four; any closed traversal of the star costs six.
+    assert r['lower_bound_m']=='4' and not r['feasibility_certified']
+
+
+def test_metric_mst_bound_ignores_direction_conservatively():
+    from src.phase2_rt031_exact_resource_screen_v3 import closed_walk_metric_mst_bound
+    r=closed_walk_metric_mst_bound([('a','b',10),('b','a',1),('b','c',2),('a','c',8)],['a','b','c'])
+    assert r['lower_bound_m']=='3'

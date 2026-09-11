@@ -12,6 +12,7 @@ from scripts.phase2_audit_rt031_real_pairwise_compatible_domain_v3 import (
 from src.phase2_rt031_hamiltonian_expressiveness_v3 import (
     FrozenStructuralGraph, find_hamiltonian_path, find_hamiltonian_cycle, verify_witness)
 from src.phase2_rt031_complete_chain_distance_v3 import optimize_chain
+from src.phase2_rt031_exact_resource_screen_v3 import closed_walk_metric_mst_bound
 from src.phase2_rt031_rt023_physical_compatible_domain_v3 import evaluate_realization_chain, LEGAL
 
 
@@ -54,6 +55,15 @@ def main(root, evidence, out):
     }
     edges = {e['edge_id']:e for e in tables['edges']}
     weights = {rid:sum((Decimal(edges[e]['length_m']) for e in r['edge_ids']),Decimal(0)) for rid,r in catalog.items()}
+    # A stop available inside any atom need not be an endpoint of a selected atom.
+    # Exclude ALL such possibilities, not only universally guaranteed interiors.
+    interiors = set()
+    for pattern in tables['patterns']:
+        interiors.update(pattern['ordered_passenger_stop_ids'].split(';')[1:-1])
+    mandatory = set(graph.vertices) - interiors
+    bound = closed_walk_metric_mst_bound(
+        [(r['source_stop_id'],r['target_stop_id'],weights[rid]) for rid,r in catalog.items()],mandatory)
+    bound['excluded_possible_interior_stop_ids'] = sorted(interiors)
     results = []
     for name,(vertices,closed) in declarations.items():
         slots = [directional[a,b] for a,b in zip(vertices,vertices[1:])]
@@ -78,6 +88,7 @@ def main(root, evidence, out):
     payload = dict(contract='RT031_DECLARED_COMPLETE_ROUTE_PHYSICAL_EVALUATION_V3',
                    source_sha256=hashes,via_way_evidence_sha256=sha256_file(evidence),
                    scenarios=results,production_rt031_pass=False,
+                   all_stop_single_closed_walk_lower_bound=bound,
                    scope='Six deterministic structural stress scenarios, not a territorial candidate frontier or an operated service.',
                    missing_for_service_evaluation=['evidence-backed service events','operating context and timetable','travel-time calibration','operating budget','production search contract'])
     out.mkdir(parents=True,exist_ok=True)
@@ -92,6 +103,7 @@ def main(root, evidence, out):
     lines += ['', 'Distances count every carrier traversal, including repeats. They exclude an unprovided depot/repositioning plan. No times, frequencies, annual bus-km, euro costs or passenger continuity are inferred. Zero means no compatible realization for this exact ordered scenario in the frozen atom domain, not impossibility of every all-stop network.','']
     (out/'complete_route_comparison.md').write_text('\n'.join(lines))
     print('\n'.join(lines))
+    print(json.dumps({'all_stop_single_closed_walk_lower_bound':bound},sort_keys=True))
     return payload
 
 

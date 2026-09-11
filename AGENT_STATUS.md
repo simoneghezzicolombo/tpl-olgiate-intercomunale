@@ -344,3 +344,11 @@ Rejecting a declared order does not reject all possible all-stop routes or prove
 another topology superior. Production search/calibration and review remain open.
 CI results reported separately on #79; this commit does not predeclare real-run
 success. Full resource output is uploaded by CI.
+
+Resource integration extension: added a route-order-independent metric-MST lower
+bound for ONE closed walk serving all mandatory endpoint stop identities. All
+possible atomic interior identities are excluded from the mandatory set. This
+relaxes directions/turns conservatively and cannot certify feasibility or rule
+out independent disconnected service components. Result pending real CI; exact
+terminal/tree witnesses and the 24 policy contexts are saved with the 72
+predeclared-cycle contexts. Local RT031/macro suite: 153 passed.

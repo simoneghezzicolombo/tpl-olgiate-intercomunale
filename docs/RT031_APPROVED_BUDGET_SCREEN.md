@@ -55,3 +55,25 @@ PYTHONPATH=. python scripts/phase2_screen_rt031_resource_budget_v3.py --routes R
 CI artifact: `rt031-exact-resource-budget-screen-v3`. Full exact context outputs,
 source policy hashes, phase counts and limitations are retained. Exact run and
 results are reported on #79 after execution.
+
+## Order-independent bound for a single all-stop closed walk
+
+The real runner also computes a conservative lower bound independent of the two
+Hamiltonian witness orders. Any stop identity occurring inside any atomic route
+is excluded from the mandatory endpoint set. This uses the union of all possible
+interior occurrences, not a guarantee across alternative realizations.
+
+For the remaining mandatory terminals, atom costs are relaxed to an undirected
+shortest-path metric and an exact minimum spanning tree of the terminal metric
+is computed. Every closed walk covering those terminals can be shortcut to a
+metric tour; removing one tour edge gives a terminal spanning tree. Therefore
+this MST cannot exceed the length of any such physical closed walk. Directions
+and turn restrictions are deliberately relaxed only in this lower bound.
+
+The bound can reject an all-stop single-cycle production independently of route
+order if it already exceeds the budget. Failure to reject proves no feasibility.
+It must not be applied to disconnected, independently operated components or
+misrepresented as a stop-count cap or full network-search optimum. Full terminal
+and tree-edge witnesses, excluded possible interior identities and phase/resource
+bounds are included in the artifacts. The main physical feasibility checks still
+use the directed, turn-restricted carrier domain.

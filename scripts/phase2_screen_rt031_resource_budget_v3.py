@@ -35,14 +35,24 @@ def main(routes_path,out):
                         annual_days=calendar['days'],calendar_status=calendar['status'],
                         span_status=span['status'],headway_status=grid['headway_status'])
                     rows.append(r)
+    lower_bound_screen=[]
+    bound=routes['all_stop_single_closed_walk_lower_bound']
+    for h in grid['headways_min']:
+        for span in grid['spans']:
+            for calendar in grid['annual_service_days']:
+                r=screen_cycle(bound['lower_bound_m'],headway=h,start=span['start_min'],end=span['end_min'],days=calendar['days'],cap_km=cap)
+                r.update(headway_min=h,span_id=span['span_id'],annual_days=calendar['days'])
+                lower_bound_screen.append(r)
     audit=dict(contract='RT031_EXACT_DECLARED_CYCLE_RESOURCE_SCREEN_V3',approved_annual_bus_km_cap=cap,
         policy_sha256=PINNED,route_input_sha256=hashlib.sha256(routes_path.read_bytes()).hexdigest(),
+        all_stop_single_closed_walk_lower_bound=bound,
+        all_stop_lower_bound_contexts=lower_bound_screen,
         evaluated_contexts=len(rows),status_counts=dict(sorted(Counter(r['status'] for r in rows).items())),
         scope='Necessary budget screen of three declared physical stress cycles under existing design assumptions; not a search over all 35-stop orders.',
         full_service_feasibility_certified=False,network_selected=False,rows=rows)
     out.mkdir(parents=True,exist_ok=True)
     (out/'exact_resource_screen.json').write_text(json.dumps(audit,sort_keys=True,indent=2)+'\n')
-    print(json.dumps({k:v for k,v in audit.items() if k!='rows'},sort_keys=True))
+    print(json.dumps({k:v for k,v in audit.items() if k not in ('rows','all_stop_lower_bound_contexts')},sort_keys=True))
     for r in rows:
         if r['headway_min']==60 and r['span_id']=='CORE_0600_2200' and r['annual_days']==260:
             print(json.dumps(r,sort_keys=True))
