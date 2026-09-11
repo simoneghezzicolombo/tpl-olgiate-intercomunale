@@ -1,6 +1,6 @@
 """Real-data physical walk search and conditional walking-access comparison."""
 import argparse
-from decimal import Decimal
+from decimal import Decimal, ROUND_CEILING
 import hashlib
 import json
 from pathlib import Path
@@ -47,6 +47,12 @@ def main(inputs,evidence,walk_file,out,max_expansions):
             raise AssertionError('availability union drift')
         r['stop_set_id']='WALK_'+hashlib.sha256(';'.join(r['available_stop_ids']).encode()).hexdigest()[:20]
         r['conditional_annual_carrier_km_h30_260days']=str(Decimal(r['minimum_found_distance_m'])*32*260/1000)
+        running=sum((Decimal(edges[e]['running_minutes_model']) for rid in r['realization_ids'] for e in cat[rid]['edge_ids']),Decimal(0))
+        if not running.is_finite() or running<=0:raise ValueError('invalid source running model')
+        r['running_minutes_source_model']=str(running)
+        r['running_time_status']='SOURCE_MODEL_NOT_OBSERVED_EXCLUDES_DWELL'
+        r['fleet_lower_bound_source_model_by_recovery']={str(recovery):int(((running+recovery)/30).to_integral_value(rounding=ROUND_CEILING)) for recovery in (5,10,15)}
+        r['vehicle_block_plan_certified']=False
     walk=validate_walk_matrix(pd.read_csv(walk_file))
     membership=pd.DataFrame([dict(stop_set_id=r['stop_set_id'],ordered_stop_place_ids=';'.join(r['available_stop_ids'])) for r in result['candidates']])
     access,municipality,equity=evaluate_unique_stop_sets(membership,walk)
@@ -56,7 +62,11 @@ def main(inputs,evidence,walk_file,out,max_expansions):
     for r in result['candidates']:
         sid=r['stop_set_id'];row=dict(stop_set_id=sid,available_stop_count=len(r['available_stop_ids']),
             carrier_distance_m=r['minimum_found_distance_m'],
-            conditional_annual_carrier_km_h30_260days=r['conditional_annual_carrier_km_h30_260days'])
+            conditional_annual_carrier_km_h30_260days=r['conditional_annual_carrier_km_h30_260days'],
+            running_minutes_source_model=r['running_minutes_source_model'],
+            model_fleet_lower_bound_recovery5=r['fleet_lower_bound_source_model_by_recovery']['5'],
+            model_fleet_lower_bound_recovery10=r['fleet_lower_bound_source_model_by_recovery']['10'],
+            model_fleet_lower_bound_recovery15=r['fleet_lower_bound_source_model_by_recovery']['15'])
         for t in (5,8,10,12):
             row[f'potential_core_share_{t}min']=float(core.loc[sid,f'share_le_{t}_min'])
             row[f'potential_worst_municipality_share_{t}min']=float(eq.loc[sid,t])

@@ -373,3 +373,10 @@ network domain. See docs/RT031_AFFORDABLE_WALK_SEARCH.md.
 156 local RT031/macro tests pass. Real run and exact artifact/status to be reported
 on #79 after CI. No final recommendation yet. Existing approved policy decisions
 remain in force, including 111,419 annual bus-km cap and deterministic pathway.
+
+Report-only model bridge added: sum existing frozen edge running_minutes_model
+on each exact retained carrier witness, preserving repeated traversals. Excludes
+dwell; source maxspeed/highway assumptions are not observations. Model fleet
+lower bounds for existing recovery 5/10/15 at H30 are reported, not feasibility.
+No runtime objective added to physical label dominance/frontier; longer/faster
+alternatives may have been discarded and no service optimality is asserted.

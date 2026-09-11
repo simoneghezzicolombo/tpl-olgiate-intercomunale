@@ -62,3 +62,19 @@ input hashes. These provide concrete affordable geometric alternatives for
 calibration and service assignment. No PRIMARY, RUNNER-UP or final recommendation
 is selected. Independent review of the scope/dominance proof and operational
 calibration remain open.
+
+## Report-only operational model bridge
+
+For each retained physical witness the runner also sums the frozen edge field
+`running_minutes_model` over every traversal. It does not replace these with a
+new assumed mean speed. Those source models depend on OSM maxspeed/highway
+assumptions; they are not observed journey times and exclude dwell. The existing
+5/10/15-minute recovery sensitivities yield a report-only model fleet lower bound
+ceil((source running model + recovery)/30). No dwell, driver duties, deadhead,
+vehicle block plan or calibrated timetable is silently included.
+
+These runtime/fleet columns are descriptive for the selected geometric witness.
+They are not added to label dominance or conditional-frontier objectives: the
+physical state compression is not lossless for runtime/service optimization and
+may discard a longer but faster alternative. No fleet-feasibility or final
+operational superiority is inferred from these lower bounds.
