@@ -25,6 +25,9 @@ on:
       - src/phase2_rt031_historical_stop_binding_v3.py
       - scripts/phase2_bind_rt031_historical_stops_v3.py
       - tests/test_phase2_rt031_historical_stop_binding_v3.py
+      - src/phase2_rt031_exact_resource_screen_v3.py
+      - scripts/phase2_screen_rt031_resource_budget_v3.py
+      - tests/test_phase2_rt031_exact_resource_screen_v3.py
       - src/phase2_rt031_complete_chain_distance_v3.py
       - tests/test_phase2_rt031_complete_chain_distance_v3.py
       - scripts/phase2_evaluate_rt031_complete_routes_v3.py
@@ -172,4 +175,17 @@ jobs:
         with:
           name: rt031-complete-real-route-evaluation-v3
           path: /tmp/rt031-routes-a/
+          if-no-files-found: error
+
+      - name: Exact resource screen with previously approved budget
+        env:
+          PYTHONPATH: .
+        run: |
+          python scripts/phase2_screen_rt031_resource_budget_v3.py --routes /tmp/rt031-routes-a/complete_route_evaluation.json --out /tmp/rt031-resource-a
+          python scripts/phase2_screen_rt031_resource_budget_v3.py --routes /tmp/rt031-routes-b/complete_route_evaluation.json --out /tmp/rt031-resource-b
+          diff -r /tmp/rt031-resource-a /tmp/rt031-resource-b
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-exact-resource-budget-screen-v3
+          path: /tmp/rt031-resource-a/
           if-no-files-found: error

@@ -327,3 +327,20 @@ and trip semantics retained. 143 local tests pass and A/B bytes identical.
 Occurrence payload SHA256 6cefce41930e0577ad8bfc94a55ad5afa12c1159c591795a901f7fd9ed2cef6e.
 Full occurrence payload in CI artifact; compact audit committed. Pending delta CI
 status and review reported separately on #79. Production gate remains OPEN.
+
+## Codex correction and resource-screen handoff — 2026-09-11
+
+Base 12c0b0ee9a2b2452489b47b9aa0d189eab8ade2e, PR #80.
+IMPORTANT: the existing human-approved final policy already selects a hard cap
+of 111,419 annual bus-km, no global uncertainty band and the deterministic V3
+pathway. Earlier statements that budget selection/full empirical GJT remained
+mandatory were stale. See config/phase2_final_policy_contract_v3.json and
+new docs/RT031_APPROVED_BUDGET_SCREEN.md. Do not ask again for these decisions.
+
+Added exact phase-enumerated necessary budget screen for three complete physical
+stress cycles across the existing headway/span/calendar assumptions (72 contexts).
+No speed/fleet/recovery assumptions introduced. Calendar remains hypothetical.
+Rejecting a declared order does not reject all possible all-stop routes or prove
+another topology superior. Production search/calibration and review remain open.
+CI results reported separately on #79; this commit does not predeclare real-run
+success. Full resource output is uploaded by CI.
