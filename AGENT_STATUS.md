@@ -229,3 +229,154 @@ Stato epistemico: **DERIVED / certified atomic pedestrian-access evidence**. RT-
 Problemi aperti RT-028: nessun blocker per il primary graph substrate. Il solo optional independent R5 cross-check resta `NOT_RUN_TECHNICAL_BLOCKER` per assenza di una frozen territorial XML→PBF lineage certificata; Issue #68 lo definisce non bloccante per il risultato primario.
 
 Richiesta ad Alpha: consumare questa matrice read-only solo downstream, combinandola con i candidate stop sets RT-022/RT-023. Escludere di default la fermata `SPECIAL_SERVICE` dall'automatic conventional candidate evaluation salvo attivazione esplicita; calcolare 5/8/10/12-minute access, equity, Pareto e shortlist solo nel workstream Alpha, senza modificare RT-028.
+
+## GPT handoff — RT-031 bounded typed composition
+
+**Timestamp:** 2026-09-06 (UTC)
+**Author:** GPT / Codex
+**Branch:** `codex/rt031-typed-composition-gate`
+**Base commit:** `8f138f8ea7ac2c1f39e76a79201125f041d69cd5`
+**Scope:** bounded implementation of the Astra representation/composition step and
+its three deep-red-team counterexamples; parent Issue #79.
+
+Files: `src/phase2_rt031_typed_composition_v3.py`, corresponding tests,
+`docs/RT031_TYPED_COMPOSITION_GATE.md`, deterministic replay script/output and CI.
+The exact source commit is the Git commit containing this handoff (no circular
+self-SHA is embedded).
+
+Local evidence: **32 tests PASS** (25 typed-composition cases + 7 existing macro
+regressions); separate replay A/B byte-identical. Epistemic status: **DERIVED on
+CONTROLLED_TEST_FIXTURE**, not territorial evidence. CI status is not claimed here.
+
+Preserves full restriction history, directed carrier occurrences, ordered service
+annotations, passenger/vehicle continuity separately, public eligibility and
+boundary provenance. Exact stop-identity guarantees require a complete nonempty
+compatible domain. No cross-realization journey guarantee or vehicle-run cost is
+inferred. Existing topology contraction remains unchanged.
+
+Open: certified RT-017 full restriction/context adapter; RT-023/030 segment-offset
+and visit correspondence binding; network/service decomposition; independent
+review; physical D184/D185 calibration; prospective search/stopping contract.
+See `docs/RT031_TYPED_COMPOSITION_GATE.md`. Production gate remains OPEN.
+No RT-029 change, territorial enumeration, new Pareto or winner selection.
+Independent reviewer should inspect the committed payload and tests, particularly
+restriction history, occurrence reconciliation and unknown service-state handling.
+
+
+## GPT handoff — RT-031 linked service network and historical calibration
+
+Date: 2026-09-10 UTC. Author: GPT / Codex. Branch: `codex/rt031-typed-composition-gate`, PR #80.
+Base: `737391a439e043c933b229da5dc13c6027bc1bb6` (scoped physical composition).
+Exact implementation identity is the commit containing this handoff.
+
+Read the September 7 Agent A A–F review, tri-state blocker/fix and scoped physical
+composition handoff before continuing. No earlier branch state was overwritten.
+
+New bounded service-network contract binds complete macro incidence, atomic
+carriers, source visits, explicit service events, pattern labels and movement
+instances into one identity. Unknown physical legality cannot produce complete
+passenger relations. Location correspondence never implies event merge. Tests
+distinguish one movement with two labels from two separately operated movements.
+No real operating assignments, timetable or annual vehicle-km were introduced.
+
+Historical calibration inventory pins eight Arriva GTFS files: 42 D184/D185 trips
+(15/27), 541 occurrences and 18 direction/shape/eligibility profiles. All 18 shapes
+are present. Published feed period is 2026-01-01 to 2026-06-08: historical only.
+Full trip payload SHA256: `e4a7ca44c10cdcac9142f5ce35e5392a3e907e9bb728bfa42c7e6e956364671c`.
+No inferred interlining from shared block IDs; no historical stop promotion.
+
+Validation before push: 126 RT-031/macro tests PASS; historical A/B rebuild
+byte-identical. CI status is reported separately on #79/#80 with exact run/head.
+Epistemic scope: controlled service scenarios + DERIVED historical source inventory.
+See `docs/RT031_SERVICE_NETWORK_AND_CALIBRATION.md` and committed historical audit.
+
+Open: independent review of this delta; evidence-backed real service assignments;
+exact D184/D185 physical/turn/attachment calibration and historical stop mapping;
+production candidate domain/equivalence/repetition/objectives/stopping contract.
+RT-029 unchanged. No territorial search, new Pareto or winner selection.
+
+## Codex handoff — complete-route physical distance bridge
+
+2026-09-10 UTC. Base 4d87d92677859923c4e3c29bbd2ff3544c98b311, PR #80.
+User explicitly requested substantial end-to-end progress. Implemented exact
+compatible realization count/minimum distance for declared complete chains and
+cyclic seams, plus a pinned real-data runner for six reproducible all-stop
+structural stress scenarios. Full-history replay independently checks selected
+witnesses. See docs/RT031_COMPLETE_ROUTE_EVALUATION.md.
+Local validation: 138 RT031/macro tests pass, including exhaustive comparison of
+all small compatibility graphs with brute-force enumeration. Real-data results
+are pending CI at this commit; report exact run/head separately on #79.
+No service assignments, territorial winner or production PASS inferred.
+
+## Codex handoff — physical result and historical stop-place binding
+
+2026-09-11 UTC. Base d0db2bd3c1dad398cff57a5325edff97a91db039.
+Complete-route CI 34522467636 SUCCESS (PR merge 51517bebaabd324972997a365d1630cb56492118),
+artifact 10170243158, ZIP digest af4e47225fb19c7e198cab8364aeed04e537cdf21eaaaaae53e544b30bfc7a4f.
+Six full 35-stop structural stress scenarios physically compatible; forward/reverse
+cycle distances 35.139/36.121 km, repeating out-and-return 77.241 km (rounded).
+Independent full-history replay and A/B rebuild pass. This is not a service or
+territorial optimum. Details: docs/RT031_PROGRESS_2026_09_11.md.
+
+New historical provenance binder preserves all 541 visits/70 IDs/42 trips: 140
+occurrences direct provenance, 38 explicitly confirmed crosswalk, 72 unconfirmed
+candidates, 291 no binding evidence. Stop-place binding only; boarding/road
+attachments remain unset. Exact provider namespaces, special exclusion and
+ambiguity guards. Frozen 36/35 universe unchanged. Historical source coordinates
+and trip semantics retained. 143 local tests pass and A/B bytes identical.
+Occurrence payload SHA256 6cefce41930e0577ad8bfc94a55ad5afa12c1159c591795a901f7fd9ed2cef6e.
+Full occurrence payload in CI artifact; compact audit committed. Pending delta CI
+status and review reported separately on #79. Production gate remains OPEN.
+
+## Codex correction and resource-screen handoff — 2026-09-11
+
+Base 12c0b0ee9a2b2452489b47b9aa0d189eab8ade2e, PR #80.
+IMPORTANT: the existing human-approved final policy already selects a hard cap
+of 111,419 annual bus-km, no global uncertainty band and the deterministic V3
+pathway. Earlier statements that budget selection/full empirical GJT remained
+mandatory were stale. See config/phase2_final_policy_contract_v3.json and
+new docs/RT031_APPROVED_BUDGET_SCREEN.md. Do not ask again for these decisions.
+
+Added exact phase-enumerated necessary budget screen for three complete physical
+stress cycles across the existing headway/span/calendar assumptions (72 contexts).
+No speed/fleet/recovery assumptions introduced. Calendar remains hypothetical.
+Rejecting a declared order does not reject all possible all-stop routes or prove
+another topology superior. Production search/calibration and review remain open.
+CI results reported separately on #79; this commit does not predeclare real-run
+success. Full resource output is uploaded by CI.
+
+Resource integration extension: added a route-order-independent metric-MST lower
+bound for ONE closed walk serving all mandatory endpoint stop identities. All
+possible atomic interior identities are excluded from the mandatory set. This
+relaxes directions/turns conservatively and cannot certify feasibility or rule
+out independent disconnected service components. Result pending real CI; exact
+terminal/tree witnesses and the 24 policy contexts are saved with the 72
+predeclared-cycle contexts. Local RT031/macro suite: 153 passed.
+
+## Codex handoff — affordable physical walks + conditional access
+
+2026-09-11. Base 163ce18c1237221cc66d59ff196e2927db35a2b4, PR #80.
+Added a budget-bounded single closed physical walk label search over all 288
+atomic roots. No named-locality forcing, random search or elementary-edge cap;
+repeated vertices/edges and branching excursions allowed. State retains root,
+last atom and available-stop union; higher-distance identical states dominated
+only for physical distance/availability objectives. Execution limit 250,000
+expanded states is explicit; remaining labels mean RESOURCE_LIMIT_INCOMPLETE.
+
+Every found witness is full-history replayed and its available-stop set evaluated
+against pinned RT028 matrix using RT029 access/equity metrics. Coverage is
+conditional on future public service assignment, not observed service or boarding
+rights. Evaluated-set nondominance is descriptive, never a final ranking or
+production-search PASS. Single movement domain is not the general RT031 service
+network domain. See docs/RT031_AFFORDABLE_WALK_SEARCH.md.
+
+156 local RT031/macro tests pass. Real run and exact artifact/status to be reported
+on #79 after CI. No final recommendation yet. Existing approved policy decisions
+remain in force, including 111,419 annual bus-km cap and deterministic pathway.
+
+Report-only model bridge added: sum existing frozen edge running_minutes_model
+on each exact retained carrier witness, preserving repeated traversals. Excludes
+dwell; source maxspeed/highway assumptions are not observations. Model fleet
+lower bounds for existing recovery 5/10/15 at H30 are reported, not feasibility.
+No runtime objective added to physical label dominance/frontier; longer/faster
+alternatives may have been discarded and no service optimality is asserted.
