@@ -153,14 +153,23 @@
   "reciprocal_envelope": {
     "considered_reciprocal_path_pairs": 5412651,
     "cross_direction_transfer_inferred": false,
+    "directional_stop_occurrence_guaranteed": false,
     "feasible_reciprocal_path_pairs": 5412651,
     "network_selected": false,
+    "ordered_service_event_guaranteed": false,
     "public_service_assigned": false,
     "reciprocal_endpoint_pair_count": 398,
     "shared_budget_m": "13391.70673076923076923076923",
+    "stop_identity_availability_only": true,
     "terminus_passenger_continuity_inferred": false,
     "terminus_vehicle_continuity_inferred": false,
     "unique_availability_set_count": 22220
+  },
+  "restriction_composition_semantics": {
+    "every_retained_witness_full_history_replayed": true,
+    "full_ordered_realization_witness_retained": true,
+    "new_carrier_or_uncertified_restriction_domain_covered": false,
+    "search_state_quotient_basis": "CERTIFIED_HISTORY_LOCALITY_FOR_FROZEN_RT023_ATOMIC_DOMAIN_ONLY"
   },
   "runner_up_selection_authorised": false,
   "search": {
@@ -170,19 +179,26 @@
     "execution_expansion_limit": 250000,
     "exhaustive": false,
     "expanded_states": 250000,
+    "full_ordered_realization_witness_retained": true,
     "named_endpoint_forced": false,
     "open_path_count": 71339,
     "pending_heap_entries": 750628,
     "production_search_pass": false,
     "public_service_assigned": false,
+    "restriction_state_equivalence_basis": "CALLER_CERTIFIED_HISTORY_LOCALITY_FOR_THE_FROZEN_RT023_ATOMIC_DOMAIN",
     "retained_label_count": 1000628,
     "status": "RESOURCE_LIMIT_INCOMPLETE"
   },
   "status": "NO_BROAD_ACCESS_RECIPROCAL_CORRIDOR_IN_BOUNDED_POOL",
+  "stop_guarantee_semantics": {
+    "directional_occurrence_guaranteed": false,
+    "ordered_service_event_guaranteed": false,
+    "passenger_journey_guaranteed": false,
+    "stop_identity_availability_only": true
+  },
   "terminus_passenger_continuity_inferred": false,
   "terminus_vehicle_continuity_inferred": false,
   "uncertainty_band_applied": false,
   "unique_availability_set_count": 22220,
   "weighted_score": false
 }
-

@@ -474,13 +474,13 @@ identity-only, never a directional occurrence or ordered service-event guarantee
 Compact search labels are admitted only by the pinned RT-023 history-locality
 certificate; complete witnesses are retained and full-history replayed.
 
-Initial certified run 34864124573 SUCCESS, two byte-identical executions, artifact
-10357161018, ZIP digest c473f9214b735126a433d20d407fb49879e75043451aa50088b012a75f5201c5.
+Final certified run 34865769629 SUCCESS, two byte-identical executions, artifact
+10357208237, ZIP digest 55ac800bfb6a8577c4430ff368b514f3a72238001e10ab97142110b2c21c4196.
 At the explicit 250,000-state limit: 71,339 open paths, 5,412,651 feasible
 reciprocal pairs, 22,220 unique availability sets. Current V4 exact-ID subset is
 no worse on all six same-substrate dimensions than all 22,220; zero broad-access
 replacement cases. Search remains RESOURCE_LIMIT_INCOMPLETE (750,628 pending), so
 this closes the supplied bounded family as a finalist source, not all possible
 networks. No network selected; both selection authorisations remain false. See
-`docs/RT031_RECIPROCAL_OPEN_CORRIDOR_SEARCH.md`. A semantics-strengthened rerun is
-pending at the commit containing this handoff.
+`docs/RT031_RECIPROCAL_OPEN_CORRIDOR_SEARCH.md`. The semantics-strengthened audit
+SHA256 is 41957e951b825e9677597d7385b759e54c5e9f579fb59e4bb5a345a0d40a8255.

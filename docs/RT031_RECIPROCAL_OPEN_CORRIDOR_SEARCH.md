@@ -45,12 +45,12 @@ is authorised.
 
 ## Reproducibility
 
-GitHub Actions run `34864124573` completed successfully at commit
-`9064007f977737f042943db8bb04c732873216d3`. Two full executions were byte-identical.
-Artifact `10357161018` has ZIP digest
-`sha256:c473f9214b735126a433d20d407fb49879e75043451aa50088b012a75f5201c5`.
-The committed audit is subsequently strengthened with explicit restriction-state
-and stop-occurrence semantics and re-certified by the next run.
+GitHub Actions run `34865769629` completed successfully at commit
+`6c4f93d2aa779bd006de960398005a593f79b070`. Two full executions were byte-identical.
+Artifact `10357208237` has ZIP digest
+`sha256:55ac800bfb6a8577c4430ff368b514f3a72238001e10ab97142110b2c21c4196`.
+The committed audit SHA256 is
+`41957e951b825e9677597d7385b759e54c5e9f579fb59e4bb5a345a0d40a8255`.
 
 ## Operational conclusion
 
