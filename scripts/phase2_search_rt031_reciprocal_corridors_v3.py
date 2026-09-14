@@ -150,6 +150,18 @@ def main(args):
         "output_sha256": {cases_path.name: sha256_file(cases_path),
                           dimension_path.name: sha256_file(dimension_path)},
         "candidate_coverage_semantics": "POTENTIAL_IF_STOPS_BECOME_PUBLICLY_SERVED",
+        "restriction_composition_semantics": {
+            "full_ordered_realization_witness_retained": True,
+            "search_state_quotient_basis": "CERTIFIED_HISTORY_LOCALITY_FOR_FROZEN_RT023_ATOMIC_DOMAIN_ONLY",
+            "every_retained_witness_full_history_replayed": True,
+            "new_carrier_or_uncertified_restriction_domain_covered": False,
+        },
+        "stop_guarantee_semantics": {
+            "stop_identity_availability_only": True,
+            "directional_occurrence_guaranteed": False,
+            "ordered_service_event_guaranteed": False,
+            "passenger_journey_guaranteed": False,
+        },
         "terminus_vehicle_continuity_inferred": False,
         "terminus_passenger_continuity_inferred": False,
         "weighted_score": False,

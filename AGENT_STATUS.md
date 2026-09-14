@@ -464,3 +464,23 @@ Tests: 35 passed across comparison, Current-Service V4 and movement portfolios.
 See docs/RT031_CURRENT_V4_SAME_SUBSTRATE_DECISION.md. Next valid design work must
 expand the physical/service search domain and bind typed public service events.
 primary_selection_authorised=false; runner_up_selection_authorised=false.
+## Codex handoff — reciprocal open-corridor stopping result
+
+2026-09-14. Branch `codex/rt031-decision-convergence`, PR #82. Added a bounded
+reciprocal A→B/B→A physical-corridor domain under the approved 111,419 annual
+bus-km cap. Directions remain independent: no vehicle turn, passenger continuity,
+transfer, route identity or public service is inferred. Stop availability is
+identity-only, never a directional occurrence or ordered service-event guarantee.
+Compact search labels are admitted only by the pinned RT-023 history-locality
+certificate; complete witnesses are retained and full-history replayed.
+
+Initial certified run 34864124573 SUCCESS, two byte-identical executions, artifact
+10357161018, ZIP digest c473f9214b735126a433d20d407fb49879e75043451aa50088b012a75f5201c5.
+At the explicit 250,000-state limit: 71,339 open paths, 5,412,651 feasible
+reciprocal pairs, 22,220 unique availability sets. Current V4 exact-ID subset is
+no worse on all six same-substrate dimensions than all 22,220; zero broad-access
+replacement cases. Search remains RESOURCE_LIMIT_INCOMPLETE (750,628 pending), so
+this closes the supplied bounded family as a finalist source, not all possible
+networks. No network selected; both selection authorisations remain false. See
+`docs/RT031_RECIPROCAL_OPEN_CORRIDOR_SEARCH.md`. A semantics-strengthened rerun is
+pending at the commit containing this handoff.

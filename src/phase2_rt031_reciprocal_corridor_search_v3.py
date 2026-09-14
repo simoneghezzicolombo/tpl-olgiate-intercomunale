@@ -110,6 +110,10 @@ def search_open_paths(catalog, pairs, weights, stop_sets, *, budget_m,
         "open_path_count": len(rows),
         "paths": rows,
         "closed_paths_excluded": True,
+        "full_ordered_realization_witness_retained": True,
+        "restriction_state_equivalence_basis": (
+            "CALLER_CERTIFIED_HISTORY_LOCALITY_FOR_THE_FROZEN_RT023_ATOMIC_DOMAIN"
+        ),
         "named_endpoint_forced": False,
         "public_service_assigned": False,
         "production_search_pass": False,
@@ -171,6 +175,9 @@ def reciprocal_availability_envelope(paths, *, shared_budget_m):
         "terminus_vehicle_continuity_inferred": False,
         "terminus_passenger_continuity_inferred": False,
         "cross_direction_transfer_inferred": False,
+        "stop_identity_availability_only": True,
+        "directional_stop_occurrence_guaranteed": False,
+        "ordered_service_event_guaranteed": False,
         "public_service_assigned": False,
         "network_selected": False,
     }

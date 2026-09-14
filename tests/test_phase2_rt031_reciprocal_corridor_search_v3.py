@@ -77,6 +77,9 @@ def test_reciprocal_pair_requires_opposite_endpoints_and_charges_both_paths():
     assert result["availability_summaries"][0]["distance_m"] == "5"
     assert not result["terminus_vehicle_continuity_inferred"]
     assert not result["terminus_passenger_continuity_inferred"]
+    assert result["stop_identity_availability_only"]
+    assert not result["directional_stop_occurrence_guaranteed"]
+    assert not result["ordered_service_event_guaranteed"]
 
 
 def test_reciprocal_budget_and_equal_cost_witnesses_are_exact():
