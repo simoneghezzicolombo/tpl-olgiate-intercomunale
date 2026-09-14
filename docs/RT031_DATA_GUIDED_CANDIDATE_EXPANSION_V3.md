@@ -41,10 +41,20 @@ the available hub-walk pool does not yet span enough of the territory. The
 targeted two-circuit witness found later is itself evidence that the generic
 one-million-state pool missed relevant compositions.
 
-A second search lane is therefore running with Olgiate FS as the declared root,
-a 30 km individual-walk envelope and two million expansions. Positive witnesses
-will be full-history replayed. Absence will not be treated as an impossibility
-proof if the search remains incomplete.
+A second search lane therefore used Olgiate FS as the declared root, a 30 km
+individual-walk envelope and two million expansions. It found 2,062 positive
+hub-serving stop-set witnesses spanning 29 stop identities, with up to 12 stops
+on one movement. Every retained witness passed full-history seam replay.
+
+Run `34896019917` succeeded at commit
+`57745200f0f6e6a90d1f38f108d9ff7d01b83b56`, artifact `10368324023`, ZIP
+digest
+`sha256:dedf6d067af0188dde13c3041c482dd5551e23b9d4551cf757c7a137590dcf6b`.
+The committed search-audit SHA256 is
+`075b75ff7baaa01889a2ae237722741f2b7642bf722979198a9560fba64cb45c`.
+
+The search remains `RESOURCE_LIMIT_INCOMPLETE` with 4,282,646 labels pending.
+Its positive witnesses are usable; absence is not an impossibility proof.
 
 This lane still contains closed walks only. Radial, trunk-branch, short-turn and
 interlined service families remain outside its candidate-domain completeness

@@ -34,8 +34,10 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 - none of these 9,789 pool-scoped portfolios matches the current exact-ID
   benchmark on all six access axes. This diagnoses an insufficient physical
   pool (only 16 hub-walk stop identities), not global optimality;
-- a two-million-state Olgiate-rooted search with a 30 km individual-walk
-  envelope is running to broaden the physical pool;
+- Olgiate-rooted search CI `34896019917` SUCCESS, artifact `10368324023`:
+  2,062 positive hub-serving stop-set witnesses across 29 stop identities, up
+  to 12 stops per movement; all retained witnesses pass full-history seam
+  replay. Search remains resource-incomplete with 4,282,646 labels pending;
 - radial, trunk-branch, short-turn and interlined families remain outside this
   closed-walk lane, so candidate-domain completeness is false.
 
