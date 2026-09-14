@@ -58,3 +58,9 @@ The next design search must expand beyond this truncated one/two-walk pool and
 must bind public service events before it can return a replacement finalist.
 `primary_selection_authorised=false` and
 `runner_up_selection_authorised=false` remain unchanged.
+
+Certification: GitHub Actions run `34834116331` succeeded on commit
+`b15aac5704216881ce38427c551332fd11660f3e`. The two complete computations
+were byte-identical. Artifact `10343392877`, GitHub-reported ZIP SHA256
+`e5d1b3a824535c76c74e7bca9e3060434c70c5491325a529e758f26f7f5aabe6`,
+matches the committed audit and comparison files byte for byte.
