@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import argparse
-from decimal import Decimal
+from decimal import Decimal, ROUND_CEILING
 import gzip
 import csv
 import json
@@ -150,6 +150,33 @@ def main(args):
         network = build_candidate(
             row, catalog=catalog, boundary=boundary, oracle=scoped.oracle,
             bound=bound, profile_id=profile_id)
+        component_runtime = []
+        for component_id, component in sorted(network["payload"]["components"].items()):
+            carrier = component["location_expansion"]["payload"]["carrier"]
+            running = sum((Decimal(edge["source_edge"]["running_minutes_model"])
+                           for edge in carrier), Decimal(0))
+            if not running.is_finite() or running <= 0:
+                raise ValueError("invalid source-model component running time")
+            component_runtime.append({
+                "component_id": component_id,
+                "running_minutes_source_model_excludes_dwell": str(running),
+                "ordered_service_event_count": len(component["events"]),
+            })
+        fleet_sensitivity = []
+        for recovery in (5, 10, 15):
+            per_component = [
+                int(((Decimal(item["running_minutes_source_model_excludes_dwell"]) + recovery) / headway)
+                    .to_integral_value(rounding=ROUND_CEILING))
+                for item in component_runtime
+            ]
+            fleet_sensitivity.append({
+                "recovery_min_design_sensitivity": recovery,
+                "independently_operated_component_fleet_lower_bound_source_model": sum(per_component),
+                "per_component_fleet_lower_bounds": per_component,
+                "dwell_included": False,
+                "vehicle_interlining_inferred": False,
+                "vehicle_block_plan_certified": False,
+            })
         declarations.append({
             "profile_id": profile_id,
             "movement_count": movement_count,
@@ -160,6 +187,11 @@ def main(args):
             "available_stop_ids": row["available_stop_ids"],
             "same_substrate_access_comparison": row["same_substrate_access_comparison"],
             "typed_network": network,
+            "operational_source_model_screen": {
+                "components": component_runtime,
+                "fleet_sensitivity": fleet_sensitivity,
+                "running_time_status": "SOURCE_MODEL_NOT_OBSERVED_EXCLUDES_DWELL",
+            },
             "cycle_seam_passenger_through_inferred": False,
             "cycle_seam_vehicle_turn_inferred": False,
             "cross_component_transfer_inferred": False,
