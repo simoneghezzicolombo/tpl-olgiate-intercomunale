@@ -36,6 +36,13 @@ redesign**, not PRIMARY or RUNNER-UP. The next network-design question is
 whether a shorter or differentiated service pattern can provide H≤30 where it
 matters while preserving the access/equity gain inside the cap.
 
+A transparent production envelope shows one such design space without selecting
+it: keeping a 16-hour span, 12 hours at H60 plus four hours of H30 overlay on
+both circuits requires 111,265.846 km/year, leaving 153.154 km/year below the
+cap. A fifth H30 overlay hour would require 116,829.139 km/year and exceed the
+cap by 5,410.139 km/year. The location of the four enhanced hours is not
+declared, and this mixed profile must not be relabelled as uniform H30.
+
 ## Superseded diagnostic witnesses
 
 The unconstrained 15.450 km two-movement and 11.930 km three-movement witnesses

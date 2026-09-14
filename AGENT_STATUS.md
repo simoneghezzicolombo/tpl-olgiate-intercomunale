@@ -35,6 +35,10 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
   exception is not established because the approved contract requires strict
   equity improvement over the frequent-class frontier and the current evidence
   has equality against only the current exact-ID subset;
+- non-selected production envelope: a 16-hour design with 12 hours H60 plus
+  four H30 overlay hours on both circuits is 111,265.846 km/year (153.154 below
+  cap); a fifth overlay hour exceeds the cap. No peak window is selected and
+  this is not uniform H30;
 - directional occurrences and ordered events are bound, with route, passenger
   and vehicle semantics kept distinct;
 - source-model runtimes are 23.834 and 23.482 minutes excluding dwell; fleet
