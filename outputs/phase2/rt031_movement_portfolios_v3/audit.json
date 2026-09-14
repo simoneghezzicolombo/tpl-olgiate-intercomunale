@@ -1,0 +1,57 @@
+{
+  "conditional_context": {
+    "annual_bus_km_cap": "111419.0",
+    "assumed_days": 260,
+    "departures_per_movement_per_day": 32,
+    "depot_movements_included": false,
+    "headway_per_movement_min": 30
+  },
+  "considered_by_movement_count": {
+    "1": 780,
+    "2": 303810
+  },
+  "coverage_semantics": "IF_AVAILABLE_STOPS_BECOME_PUBLICLY_SERVED; NO_TRANSFER_OR_ONBOARD_GUARANTEE",
+  "domain": "ALL_SINGLETONS_AND_UNORDERED_DISTINCT_PAIRS_OF_SUPPLIED_WITNESSES",
+  "dominance_arithmetic": "EXACT_SOURCE_DECIMAL_POPULATION_RATIOS_AND_DECIMAL_DISTANCE; FLOAT_COLUMNS_DISPLAY_ONLY",
+  "extrema": {
+    "potential_core_share_10min": 0.4296499202821133,
+    "potential_core_share_5min": 0.2344169899016446,
+    "potential_core_share_8min": 0.3738886819766349,
+    "potential_worst_municipality_share_10min": 0.2503166154365622,
+    "potential_worst_municipality_share_5min": 0.10320244779429882,
+    "potential_worst_municipality_share_8min": 0.19588845234821858
+  },
+  "feasible_portfolios": 304590,
+  "frontier_size": 1331,
+  "general_multimovement_search_complete": false,
+  "input_sha256": {
+    "pool": "b80e27f569b78d61a0cce8b0dbd5afd6723629ccf90e8822768ed4d7f3bd5751",
+    "walk_matrix": "a47bbce413d056db185180173ab2f05dce0463cb626a2c81f4aff64de91b50c1"
+  },
+  "maximum_available_stop_count": 17,
+  "movement_count_is_complexity_objective": false,
+  "output_sha256": {
+    "all_portfolios.csv.gz": "deb28a301767ecf46e367045d006e240f335ddcfbfdadf558c29d60061e8428b",
+    "availability_comparison.csv.gz": "de59464e060d8cac32bebeaa86d120ac8c7081b8f4651b4027a010dc729a541d",
+    "conditional_frontier.json": "d958d57380cd8567ea2b5755dba8989ecb1568f135160094b470c4582263dc15",
+    "frontier_access.csv": "ca970c001c16ee22cba7b08145b43b94d521cde7cd2028bb03299565383d2331",
+    "frontier_equity.csv": "693ac2cedb9f150f1f3302c6a48d8526c40c33be94f784ad5f2c1e0d57750f2f",
+    "frontier_municipality.csv": "bd032e0858df0024b089758b8f831fc0a626eca6e27702e38eb9dd7e21f4b508"
+  },
+  "passenger_service_assigned": false,
+  "policy_normalized_sha256": "28909df6b9cdcf49608d4e7456f819959d35d1bf2c41dd1800d026bb06d963e0",
+  "pool_size": 780,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false,
+  "runtime_or_fleet_optimization": false,
+  "service_equivalence_claimed": false,
+  "source_artifact": 10179715479,
+  "source_commit": "0dc76ea21e511308319fd8ceaf4caf82cc4ad165",
+  "source_run": 34547859460,
+  "status": "PASS_EXACT_SUPPLIED_POOL_COMPARISON_NOT_PRODUCTION_SEARCH",
+  "unique_stop_sets": 173663,
+  "upstream_exhaustive": false,
+  "upstream_status": "RESOURCE_LIMIT_INCOMPLETE",
+  "weighted_score": false,
+  "within_pool_enumeration_complete": true
+}

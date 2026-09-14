@@ -380,3 +380,32 @@ dwell; source maxspeed/highway assumptions are not observations. Model fleet
 lower bounds for existing recovery 5/10/15 at H30 are reported, not feasibility.
 No runtime objective added to physical label dominance/frontier; longer/faster
 alternatives may have been discarded and no service optimality is asserted.
+
+## Codex handoff — one/two independent movement comparison
+
+2026-09-14. Branch `codex/rt031-multimovement-budget-comparison`, draft PR #81
+against draft PR #80. Computational commit `0bd19e29fac9b146a3ddbc0cdf42529917cbf679`.
+CI run `34832485378` SUCCESS, full computation twice byte-identical; artifact
+`10343160253`, GitHub ZIP digest
+`06024e6f428894da3959a17da4e9c8bda16342909ac6388aca273ec5171244b9`.
+
+Exhaustive only within the pinned truncated pool: 780 singletons + 303,810 pairs,
+173,663 availability unions, 1,331 nondominated summaries. Exact decimal costs
+and rational population shares decide dominance; no weighted ranking. All feasible
+decompositions retained, including equal-cost distinct witnesses. Available stops
+are not boarding rights; shared physical edges are charged for each movement.
+
+Distinct extrema: max core10 42.9650%; max worst-municipality10 25.0317%, with
+core10 37.3673% and conditional annual carrier km 77,795.35. No selection.
+Existing approved 111,419 km cap retained. H30 per movement, 32 departures and
+260 days remain scenario assumptions, not an approved timetable/calendar.
+No new uncertainty band, demand allocation or empirical missed probability.
+
+39 combined tests passed before one additional precision regression; all 13 new
+module tests then passed. Publication commit adds evidence and that local test,
+separate from the pinned CI computational commit. Full tables in artifact;
+compact audit/frontier in Git. See docs/RT031_ONE_TWO_MOVEMENT_COMPARISON.md.
+Review focus: exact union/cost, rational dominance, retained witness semantics,
+and source truncation. Source expansion and typed operational/public-service
+binding remain open; dwell/recovery/timetable feasibility is not certified.
+primary_selection_authorised=false; runner_up_selection_authorised=false.
