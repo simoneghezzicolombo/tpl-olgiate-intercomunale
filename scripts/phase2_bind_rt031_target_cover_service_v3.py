@@ -31,7 +31,7 @@ from src.phase2_rt031_service_network_v3 import (
 )
 
 
-TARGET_SEARCH_SHA256 = "fc61cce2963300d7c51fec2b9973169398e0f895175bbd43f3628cc289006d35"
+TARGET_SEARCH_SHA256 = "57f2079dd69decfe24571dbcaa032765496e5715410c440b2f964b5225e15f5f"
 STOP_ATTACHMENTS_SHA256 = "30d64ff20e9b89c31f7878c415dd4c6bb5a0d10f51b24d041e4deb4d57e6571b"
 DESIGN_EVIDENCE = "RT031_TARGET_COVER_CANDIDATE_SERVICE_DECLARATION_NOT_OBSERVED"
 
@@ -102,6 +102,13 @@ def build_candidate(portfolio_row, *, catalog, boundary, oracle, bound, profile_
         raise AssertionError("typed movement distance differs from target-cover witness")
     if not network["service_relations_complete"] or not network["movement_assignment_complete"]:
         raise AssertionError("candidate service binding incomplete")
+    for component in network["payload"]["components"].values():
+        stop_ids = {
+            event["source_visit"]["source_visit"]["source_occurrence"]["stop_place_id"]
+            for event in component["events"]
+        }
+        if "FROZEN::L00407" not in stop_ids:
+            raise AssertionError("shortlisted component does not serve Olgiate FS")
     return network
 
 
@@ -136,9 +143,10 @@ def main(args):
         evidence_id="RT031_SUCCESSOR_VIA_WAY::" + sha256_file(args.via_way_evidence),
     )
 
-    rows = {row["maximum_movement_count"]: row for row in search["portfolio"]["results"]}
+    rows = {row["maximum_movement_count"]: row
+            for row in search["all_movements_serve_olgiate_fs_portfolio"]["results"]}
     declarations = []
-    for movement_count, headway in ((2, 60), (3, 30)):
+    for movement_count, headway in ((2, 60),):
         row = rows[movement_count]
         if not row["full_target_cover_found"]:
             raise ValueError("required target-cover witness absent")
@@ -210,6 +218,8 @@ def main(args):
         "ordered_service_events_bound": True,
         "passenger_and_vehicle_continuity_separate": True,
         "cross_component_transfers": None,
+        "every_component_serves_olgiate_fs": True,
+        "combined_hub_headway_inferred": False,
         "timetable_feasibility_certified": False,
         "s8_connection_retention_certified": False,
         "production_rt031_pass": False,
