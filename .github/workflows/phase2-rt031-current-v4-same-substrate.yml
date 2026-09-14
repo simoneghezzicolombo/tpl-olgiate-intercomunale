@@ -1,0 +1,60 @@
+name: RT031 current V4 same-substrate access audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - src/phase2_rt031_current_baseline_comparison_v3.py
+      - scripts/phase2_compare_rt031_with_current_baseline_v4.py
+      - tests/test_phase2_rt031_current_baseline_comparison_v3.py
+      - outputs/phase2/current_service_access_baseline_v4/**
+      - .github/workflows/phase2-rt031-current-v4-same-substrate.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  exact-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: .:src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install numpy pandas pytest
+      - run: >-
+          python -m pytest
+          tests/test_phase2_rt031_current_baseline_comparison_v3.py
+          tests/test_phase2_current_service_baseline_v4.py
+          tests/test_phase2_rt031_movement_portfolios_v3.py -q
+      - name: Acquire pinned RT028 and RT031 artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/${{ github.repository }}/actions/artifacts/9991182904/zip > /tmp/walk.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10343160253/zip > /tmp/portfolio.zip
+          echo 'e1ca83699593dd9e605d2870667da1b4dfc6068436a0c3116faf8587901b2e28  /tmp/walk.zip' | sha256sum -c
+          echo '06024e6f428894da3959a17da4e9c8bda16342909ac6388aca273ec5171244b9  /tmp/portfolio.zip' | sha256sum -c
+          unzip -q /tmp/walk.zip -d /tmp/walk
+          unzip -q /tmp/portfolio.zip -d /tmp/portfolio
+      - name: Exact same-substrate comparison twice
+        run: |
+          walk=$(find /tmp/walk -name rt028_population_unit_stop_walk_matrix_v3.csv)
+          stops=$(find /tmp/walk -name frozen_final_stops.csv)
+          for out in /tmp/comparison-a /tmp/comparison-b; do
+            python scripts/phase2_compare_rt031_with_current_baseline_v4.py \
+              --walk-matrix "$walk" \
+              --final-stops "$stops" \
+              --candidates /tmp/portfolio/availability_comparison.csv.gz \
+              --v4-clusters outputs/phase2/current_service_access_baseline_v4/current_service_physical_stop_clusters_v4.csv \
+              --v4-validation outputs/phase2/current_service_access_baseline_v4/current_service_access_baseline_v4_validation.json \
+              --output-dir "$out"
+          done
+          diff -r /tmp/comparison-a /tmp/comparison-b
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-current-v4-same-substrate-access-audit-v3
+          path: /tmp/comparison-a/
+          if-no-files-found: error

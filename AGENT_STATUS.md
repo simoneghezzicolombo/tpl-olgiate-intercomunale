@@ -409,3 +409,29 @@ Review focus: exact union/cost, rational dominance, retained witness semantics,
 and source truncation. Source expansion and typed operational/public-service
 binding remain open; dwell/recovery/timetable feasibility is not certified.
 primary_selection_authorised=false; runner_up_selection_authorised=false.
+
+## Codex handoff — RT031/current V4 same-substrate conclusion
+
+2026-09-14. Branch `codex/rt031-decision-convergence`. Current-Service V3/V4
+source, tests and persisted evidence were integrated unchanged from certified
+branch `origin/phase2-current-service-baseline-v4` at `95d99b5`.
+
+Added a fail-closed exact-ID bridge from the V4 D184/D185 structural stop universe
+to RT028 and compared all 173,663 RT031 one/two-movement availability sets on the
+same population/walking substrate. Eleven conventional stops map by shared
+official native ID; no name, coordinate, fuzzy or nearest-neighbour fallback.
+Exact rational comparison, no score/tolerance. Zero candidate sets are no worse
+than the current subset on all six 5/8/10-minute total/equity dimensions. The
+current subset is no worse than 173,427 sets; 236 retain only a trade-off.
+
+At 10 minutes, current exact-ID structural subset: core 48.7696%, worst municipality
+34.4032%; optimistic componentwise RT031-pool maxima: 42.9650% and 25.0317%.
+Conclusion: no broad-access replacement case is established in this supplied
+pool. This rejects promotion of this pool, not every possible future network.
+Candidate stops remain potential, not public service; V4 route-level activation
+is not relabelled as a stop-level operational snapshot. No network selected.
+
+Tests: 35 passed across comparison, Current-Service V4 and movement portfolios.
+See docs/RT031_CURRENT_V4_SAME_SUBSTRATE_DECISION.md. Next valid design work must
+expand the physical/service search domain and bind typed public service events.
+primary_selection_authorised=false; runner_up_selection_authorised=false.
