@@ -44,3 +44,14 @@ def test_service_surface_reports_without_filtering():
     assert {row["uniform_headway_min_per_movement"] for row in rows} == {30, 60}
     assert next(row for row in rows if row["uniform_headway_min_per_movement"] == 30
                 and row["span_minutes"] == 600)["annual_bus_km"] == "52000"
+
+
+def test_dynamic_envelope_matches_direct_envelope():
+    rows = [
+        movement(str(index), ["H", f"S{index:03d}"], index + 1)
+        for index in range(201)
+    ]
+    dynamic = enumerate_hub_portfolios(rows, hub_stop_id="H", max_movements=2)
+    assert dynamic["enumeration_method"] == "EXACT_ZERO_ONE_UNION_DYNAMIC_PROGRAM"
+    assert dynamic["objective_dominated_movement_count_pruned"] == 0
+    assert dynamic["unique_portfolio_stop_set_count"] == 201 + 201 * 200 // 2

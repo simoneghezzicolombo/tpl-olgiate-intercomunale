@@ -23,7 +23,7 @@ from src.phase2_rt031_data_guided_portfolios_v3 import (
 )
 
 
-POOL_SHA256 = "273109c45f899cb3c3170bd272a2d8e6aa00d4cb4e3a747caf3205e786cd5703"
+POOL_SHA256 = "b86b27f791b0b36f0e30997a96388c5763f46822411ea990bfeed3351cd8a65c"
 WALK_SHA256 = "a47bbce413d056db185180173ab2f05dce0463cb626a2c81f4aff64de91b50c1"
 HUB = "FROZEN::L00407"
 HEADWAYS = (20, 30, 40, 60)
@@ -47,6 +47,8 @@ def main(args):
         raise ValueError("unexpected physical pool")
     if pool.get("status") != "RESOURCE_LIMIT_INCOMPLETE":
         raise ValueError("upstream search completeness boundary changed")
+    if pool.get("required_root_stop_id") != HUB:
+        raise ValueError("Olgiate-rooted physical search required")
     current = json.loads(args.current_audit.read_text(encoding="utf-8"))
     if current.get("contract") != "RT031_CURRENT_EXACT_TARGET_COVER_RESOURCE_SYMMETRY_V3":
         raise ValueError("current benchmark contract drift")

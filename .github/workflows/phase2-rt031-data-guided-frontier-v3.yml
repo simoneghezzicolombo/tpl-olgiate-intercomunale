@@ -14,7 +14,7 @@ permissions:
 jobs:
   data-guided-frontier:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     env:
       PYTHONPATH: .:src
     steps:
@@ -29,9 +29,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p /tmp/pool /tmp/walk
-          gh api repos/${{ github.repository }}/actions/artifacts/10354879891/zip > /tmp/pool.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10368324023/zip > /tmp/pool.zip
           gh api repos/${{ github.repository }}/actions/artifacts/9991182904/zip > /tmp/walk.zip
-          echo '53b400b11a6db457037a531d612d3abf99147d7a3162573d11149f432131bd87  /tmp/pool.zip' | sha256sum -c
+          echo 'dedf6d067af0188dde13c3041c482dd5551e23b9d4551cf757c7a137590dcf6b  /tmp/pool.zip' | sha256sum -c
           echo 'e1ca83699593dd9e605d2870667da1b4dfc6068436a0c3116faf8587901b2e28  /tmp/walk.zip' | sha256sum -c
           unzip -q /tmp/pool.zip -d /tmp/pool
           unzip -q /tmp/walk.zip -d /tmp/walk
