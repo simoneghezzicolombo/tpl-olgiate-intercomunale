@@ -11,7 +11,8 @@ from src.phase2_rt031_rt023_pairwise_compatibility_v3 import LEGAL, ILLEGAL
 
 
 def search_walks(catalog, pairs, weights, stop_sets, *, budget_m, max_expansions,
-                 history_locality_certified, atomic_legality_certified):
+                 history_locality_certified, atomic_legality_certified,
+                 required_root_stop_id=None):
     if history_locality_certified is not True or atomic_legality_certified is not True:
         raise ValueError('certified physical scope required')
     if type(max_expansions) is not int or max_expansions<=0:
@@ -38,9 +39,18 @@ def search_walks(catalog, pairs, weights, stop_sets, *, budget_m, max_expansions
             if (r,s) not in index:raise ValueError('missing relevant pairwise evidence')
             if index[r,s]==LEGAL:compatible.append(s)
         adjacent[r]=compatible
-    # All atomic roots enter one global cost queue. No named locality is forced.
+    if required_root_stop_id is not None:
+        required_root_stop_id = str(required_root_stop_id)
+        if not required_root_stop_id or required_root_stop_id not in stop_ids:
+            raise ValueError('required root stop is absent from the physical domain')
+    # A hub-filtered search is a declared candidate-generation lane, not a
+    # claim that non-hub movements are globally irrelevant.
+    roots = [
+        root for root in ids
+        if required_root_stop_id is None or required_root_stop_id in stop_sets[root]
+    ]
     best={};queue=[]
-    for root in ids:
+    for root in roots:
         if costs[root]<=budget:
             key=(root,root,masks[root]);best[key]=costs[root]
             heapq.heappush(queue,(costs[root],root,root,masks[root],(root,)))
@@ -73,7 +83,9 @@ def search_walks(catalog, pairs, weights, stop_sets, *, budget_m, max_expansions
         status='EXHAUSTIVE_WITHIN_DECLARED_PHYSICAL_DOMAIN' if exhaustive else 'RESOURCE_LIMIT_INCOMPLETE',
         exhaustive=exhaustive,expanded_states=expanded,execution_expansion_limit=max_expansions,
         retained_label_count=len(best),pending_heap_entries=len(queue),
-        distance_budget_m=str(budget),root_realization_count=len(ids),
+        distance_budget_m=str(budget),root_realization_count=len(roots),
+        unfiltered_realization_count=len(ids),
+        required_root_stop_id=required_root_stop_id,
         elementary_edge_cap=None,random_search=False,named_locality_forced=False,
         service_equivalence_claimed=False,production_search_pass=False,
         found_stop_set_count=len(rows),candidates=rows)
