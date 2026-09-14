@@ -37,7 +37,7 @@ def enumerate_hub_portfolios(candidates, *, hub_stop_id: str, max_movements: int
             old["ids"].append(candidate_id)
     movements = [
         (tuple(sorted(value["ids"]))[0], stops, value["cost"])
-        for stops, value in sorted(by_stops.items(), key=lambda item: tuple(item[0]))
+        for stops, value in sorted(by_stops.items(), key=lambda item: tuple(sorted(item[0])))
     ]
 
     summaries = {}
@@ -60,7 +60,7 @@ def enumerate_hub_portfolios(candidates, *, hub_stop_id: str, max_movements: int
             "movement_count": value[1],
             "source_walk_ids": list(value[2]),
         }
-        for stops, value in sorted(summaries.items(), key=lambda item: tuple(item[0]))
+        for stops, value in sorted(summaries.items(), key=lambda item: tuple(sorted(item[0])))
     ]
     return {
         "hub_stop_id": hub_stop_id,
