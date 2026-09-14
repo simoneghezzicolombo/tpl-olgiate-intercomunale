@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - run: python -m pip install pytest
+      - run: python -m pip install pandas pytest
       - run: >-
           python -m pytest tests/test_phase2_rt031_target_coverage_search_v3.py
           tests/test_phase2_rt031_rt023_physical_compatible_domain_v3.py -q
