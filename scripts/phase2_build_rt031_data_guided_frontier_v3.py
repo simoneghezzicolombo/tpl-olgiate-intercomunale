@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 from decimal import Decimal
+from fractions import Fraction
 import hashlib
 import json
 from pathlib import Path
@@ -84,6 +85,31 @@ def main(args):
 
     current_result = current["all_movements_serve_olgiate_fs_portfolio"]["results"][1]
     current_vector = current_result["same_substrate_access_comparison"]["current_exact_ratios"]
+    exact_current_vector = tuple(Fraction(value) for value in current_vector)
+    benchmark_better_indices = [
+        index for index in frontier_indices
+        if all(vectors[index, axis] >= exact_current_vector[axis] for axis in range(6))
+        and any(vectors[index, axis] > exact_current_vector[axis] for axis in range(6))
+    ]
+    service_context_counts = {}
+    for headway in HEADWAYS:
+        for span in SPANS:
+            eligible = [
+                index for index in benchmark_better_indices
+                if costs[index] * Decimal(span) / Decimal(headway)
+                * Decimal(ANNUAL_DAYS) / 1000 <= cap
+            ]
+            service_context_counts[f"H{headway}_{span}MIN"] = {
+                "count": len(eligible),
+                "movement_count_distribution": {
+                    str(movement_count): sum(
+                        portfolios[index]["movement_count"] == movement_count
+                        for index in eligible
+                    )
+                    for movement_count in range(1, args.max_movements + 1)
+                    if any(portfolios[index]["movement_count"] == movement_count for index in eligible)
+                },
+            }
     frontier = []
     for index in frontier_indices:
         row = dict(portfolios[index])
@@ -143,6 +169,11 @@ def main(args):
         },
         "current_exact_id_subset_role": "BENCHMARK_ONLY_NOT_RETENTION_CONSTRAINT",
         "current_exact_access_ratios": current_vector,
+        "frontier_no_worse_than_current_all_six_and_strict_any_count": len(
+            benchmark_better_indices),
+        "reference_cap_service_context_counts_for_benchmark_better_frontier": (
+            service_context_counts),
+        "service_context_counts_are_selection": False,
         "upstream_limit": {
             "search_status": pool["status"],
             "expanded_states": pool["expanded_states"],
