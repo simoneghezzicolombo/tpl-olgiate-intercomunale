@@ -102,3 +102,18 @@ def test_float_projection_never_decides_near_tie_dominance():
     assert float(a) == float(b)
     v = np.array([[a, b], [b, a], [a, a]], dtype=object)
     assert set(pareto_indices(v, [Decimal(1)] * 3)) == {0, 1}
+
+
+def test_decimal_source_accumulation_exceeds_int64_without_rounding():
+    import numpy as np
+    import pandas as pd
+    from fractions import Fraction
+    from types import SimpleNamespace
+    from scripts.phase2_compare_rt031_movement_portfolios_v3 import threshold_vectors
+    weights = ['1000.0000000000000001', '2000.0000000000000002']
+    substrate = SimpleNamespace(population_meta=pd.DataFrame({
+        'population_scope': ['core', 'core'], 'population_municipality_code': ['x', 'x'],
+        'population_weight_2025': [1000., 2000.]}), stop_index={'A': 0},
+        walk_time_matrix=np.array([[4], [np.inf]], dtype=np.float32))
+    result = threshold_vectors([['A']] * 257, substrate, weights)
+    assert all(v == Fraction(1, 3) for v in result.flat)

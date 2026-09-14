@@ -34,3 +34,7 @@ ENV/
 .DS_Store
 Thumbs.db
 *.bak
+
+# RT031 portfolio bulk tables: reproducible, published as workflow artifacts.
+outputs/phase2/rt031_movement_portfolios_v3/*.csv
+outputs/phase2/rt031_movement_portfolios_v3/*.csv.gz

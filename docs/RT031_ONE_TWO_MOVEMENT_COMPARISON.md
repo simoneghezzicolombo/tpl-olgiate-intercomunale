@@ -84,3 +84,38 @@ feasibility, passenger continuity, H30 feasibility including dwell/recovery, or
 completeness for arbitrary numbers of services. Source-pool expansion and typed
 public-service/timetable binding remain necessary before a final recommendation.
 PRIMARY/RUNNER-UP authorization remains false.
+
+## Real computed result (2026-09-14)
+
+Implementation commit `0bd19e29fac9b146a3ddbc0cdf42529917cbf679`.
+All 780 singletons and 303,810 distinct pairs pass the distance screen for this
+particular source pool: 304,590 portfolios, 173,663 unique availability sets,
+1,331 nondominated availability/distance summaries. The maximum is 17 available
+stops across the full pool and 16 on this conditional frontier. These counts are
+outcomes, not service targets. All pairs fitting the envelope also emphasizes
+that the upstream truncated short-walk pool has not exhausted the budget domain.
+
+| Descriptive case | Core within 10 min | Worst municipality within 10 min | Conditional annual carrier km |
+|---|---:|---:|---:|
+| Best core-coverage pair in this pool | 42.9650% | 0.0800% | 78,810.35 |
+| Best worst-municipality pair in this pool | 37.3673% | 25.0317% | 77,795.35 |
+
+These are distinct descriptive extrema, not ranked recommendations. Exact witness
+IDs and ratios are in `conditional_frontier.json`. The corresponding source
+single-walk maxima were 22.0280% core and 0% worst-municipality coverage at 10 min.
+The second row therefore demonstrates that independently operated movements can
+provide simultaneous potential walking coverage in every core municipality
+within the conditional distance envelope, even though none of these 780 single
+walks did. It does not establish transfers between those movements or real H30
+passenger-service feasibility. No route is selected.
+
+Full output tables are stored locally and published in the workflow artifact;
+the compact hash audit and frontier are persisted in Git. The publication handoff
+records the exact completed run/artifact rather than assuming CI success here.
+
+Certification: GitHub Actions run `34832485378` succeeded on implementation
+commit `0bd19e29fac9b146a3ddbc0cdf42529917cbf679`; two complete computations
+were byte-identical. Artifact `10343160253` (GitHub-reported ZIP SHA256
+`06024e6f428894da3959a17da4e9c8bda16342909ac6388aca273ec5171244b9`)
+contains the full tables. Local and downloaded CI output manifests match.
+The evidence-publication commit is separate from this computational commit.
