@@ -50,10 +50,11 @@ jobs:
         run: |
           evidence=$(find /tmp/via -name '*.json' | head -1)
           stops=$(find /tmp/walk -name frozen_final_stops.csv | head -1)
+          walk=$(find /tmp/walk -name rt028_population_unit_stop_walk_matrix_v3.csv | head -1)
           for out in /tmp/target-a /tmp/target-b; do
             python scripts/phase2_search_rt031_current_target_cover_v3.py \
               --inputs /tmp/rt031-inputs --via-way-evidence "$evidence" \
-              --final-stops "$stops" \
+              --final-stops "$stops" --walk-matrix "$walk" \
               --v4-clusters outputs/phase2/current_service_access_baseline_v4/current_service_physical_stop_clusters_v4.csv \
               --v4-validation outputs/phase2/current_service_access_baseline_v4/current_service_access_baseline_v4_validation.json \
               --output-dir "$out" --max-expansions 2000000 --max-movements 3
