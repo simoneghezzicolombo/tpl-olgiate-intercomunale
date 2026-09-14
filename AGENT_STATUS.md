@@ -484,3 +484,26 @@ this closes the supplied bounded family as a finalist source, not all possible
 networks. No network selected; both selection authorisations remain false. See
 `docs/RT031_RECIPROCAL_OPEN_CORRIDOR_SEARCH.md`. The semantics-strengthened audit
 SHA256 is 41957e951b825e9677597d7385b759e54c5e9f579fb59e4bb5a345a0d40a8255.
+## Codex handoff — resource-symmetric target-cover correction
+
+2026-09-14. Branch `codex/rt031-decision-convergence`, PR #82. The earlier
+generic-pool result must not be interpreted as current-service optimality. A new
+target-only label search covers the same 11 exact-ID current stops while removing
+irrelevant stop identities from dominance. Search is physical and full-history
+replayed; no service semantics are inferred.
+
+Run 34868712081 SUCCESS at fc34ed89868cd60185570c61ada3834a4e598d84;
+two byte-identical executions; artifact 10358326654; ZIP SHA256
+d93e26c07f299863653c4bf720cfe086795369d45f77173abebfa97401bf6c54.
+At 2,000,000 states the search remains RESOURCE_LIMIT_INCOMPLETE with 1,286,499
+pending labels, but valid feasibility witnesses exist. Two movements cover all
+targets at 15.450427 km: H60/260d/16h uses 64,273.777 km/year and improves all
+three total-access axes while preserving exact equity. Three movements cover all
+targets at 11.929500 km: H30 uses 99,253.441 km/year, 12,165.559 below the approved
+cap, and is also no worse on all six axes with strict total-access improvement.
+
+These are the first credible physical shortlists from this workstream. Next gate:
+typed directional occurrences/service events, route identity, runtime/dwell/
+recovery, blocks, timetable and S8 stress. No network selected; PRIMARY and
+RUNNER-UP remain unauthorised. See
+`docs/RT031_CURRENT_TARGET_COVER_RESOURCE_SYMMETRY.md`.

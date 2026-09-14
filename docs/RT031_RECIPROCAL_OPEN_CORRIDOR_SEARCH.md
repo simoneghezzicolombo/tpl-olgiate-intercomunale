@@ -1,5 +1,12 @@
 # RT-031 reciprocal open-corridor search
 
+> **Later evidence:** the negative result below remains valid only for this
+> bounded one-corridor family. A targeted resource-symmetric search subsequently
+> found two- and three-movement physical portfolios that retain all 11 comparable
+> current stop identities and improve total access. See
+> `RT031_CURRENT_TARGET_COVER_RESOURCE_SYMMETRY.md`. Do not interpret this page as
+> evidence that D184/D185 are optimal.
+
 ## Decision result
 
 The bounded reciprocal-corridor pool does not establish a broad-access replacement
