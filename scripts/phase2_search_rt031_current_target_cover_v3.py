@@ -116,6 +116,21 @@ def main(args):
 
     portfolio = minimum_cover_portfolios(
         search["candidates"], targets, max_movements=args.max_movements)
+    hub_stop_id = "FROZEN::L00407"
+    if hub_stop_id not in targets:
+        raise ValueError("Olgiate FS exact target absent")
+    hub_source_indices = [
+        index for index, candidate in enumerate(search["candidates"])
+        if hub_stop_id in candidate["target_stop_ids"]
+    ]
+    hub_portfolio = minimum_cover_portfolios(
+        [search["candidates"][index] for index in hub_source_indices],
+        targets,
+        max_movements=args.max_movements,
+    )
+    for result in hub_portfolio["results"]:
+        result["candidate_indices"] = [hub_source_indices[index]
+                                       for index in result["candidate_indices"]]
     raw_walk = pd.read_csv(args.walk_matrix, dtype={"population_weight_2025": str})
     weight_map = (raw_walk[["population_unit_id", "population_weight_2025"]]
                   .drop_duplicates().set_index("population_unit_id")["population_weight_2025"].to_dict())
@@ -128,44 +143,45 @@ def main(args):
         "potential_worst_municipality_share_8min",
         "potential_worst_municipality_share_10min",
     )
-    for result in portfolio["results"]:
-        result["selected_witnesses"] = [
-            search["candidates"][index] for index in result["candidate_indices"]]
-        if result["minimum_found_total_distance_m"] is None:
-            result["service_class_screens"] = []
-            result["available_stop_ids"] = []
-            result["same_substrate_access_comparison"] = None
-            continue
-        available = sorted(set().union(*(
-            set(search["candidates"][index]["available_stop_ids"])
-            for index in result["candidate_indices"]
-        )))
-        vector = tuple(threshold_vectors([tuple(available)], substrate, exact_weights)[0])
-        result["available_stop_ids"] = available
-        result["same_substrate_access_comparison"] = {
-            "dimensions": list(dimensions),
-            "current_exact_ratios": [str(value) for value in baseline_vector],
-            "portfolio_exact_ratios": [str(value) for value in vector],
-            "current_display_shares": [float(value) for value in baseline_vector],
-            "portfolio_display_shares": [float(value) for value in vector],
-            "portfolio_no_worse_all_six": all(left >= right for left, right in zip(vector, baseline_vector)),
-            "portfolio_strictly_better_any": any(left > right for left, right in zip(vector, baseline_vector)),
-            "weighted_score": False,
-        }
-        distance = Decimal(result["minimum_found_total_distance_m"])
-        screens = []
-        for headway in HEADWAY_CLASSES:
-            repetitions = Decimal(SPAN_MINUTES) / headway * ANNUAL_DAYS
-            annual_km = distance * repetitions / 1000
-            screens.append({
-                "uniform_movement_headway_min": headway,
-                "span_minutes": SPAN_MINUTES,
-                "annual_service_days": ANNUAL_DAYS,
-                "annual_bus_km": str(annual_km),
-                "within_approved_cap": annual_km <= cap_km,
-                "calendar_and_uniform_headway_are_design_assumptions": True,
-            })
-        result["service_class_screens"] = screens
+    for candidate_portfolio in (portfolio, hub_portfolio):
+        for result in candidate_portfolio["results"]:
+            result["selected_witnesses"] = [
+                search["candidates"][index] for index in result["candidate_indices"]]
+            if result["minimum_found_total_distance_m"] is None:
+                result["service_class_screens"] = []
+                result["available_stop_ids"] = []
+                result["same_substrate_access_comparison"] = None
+                continue
+            available = sorted(set().union(*(
+                set(search["candidates"][index]["available_stop_ids"])
+                for index in result["candidate_indices"]
+            )))
+            vector = tuple(threshold_vectors([tuple(available)], substrate, exact_weights)[0])
+            result["available_stop_ids"] = available
+            result["same_substrate_access_comparison"] = {
+                "dimensions": list(dimensions),
+                "current_exact_ratios": [str(value) for value in baseline_vector],
+                "portfolio_exact_ratios": [str(value) for value in vector],
+                "current_display_shares": [float(value) for value in baseline_vector],
+                "portfolio_display_shares": [float(value) for value in vector],
+                "portfolio_no_worse_all_six": all(left >= right for left, right in zip(vector, baseline_vector)),
+                "portfolio_strictly_better_any": any(left > right for left, right in zip(vector, baseline_vector)),
+                "weighted_score": False,
+            }
+            distance = Decimal(result["minimum_found_total_distance_m"])
+            screens = []
+            for headway in HEADWAY_CLASSES:
+                repetitions = Decimal(SPAN_MINUTES) / headway * ANNUAL_DAYS
+                annual_km = distance * repetitions / 1000
+                screens.append({
+                    "uniform_movement_headway_min": headway,
+                    "span_minutes": SPAN_MINUTES,
+                    "annual_service_days": ANNUAL_DAYS,
+                    "annual_bus_km": str(annual_km),
+                    "within_approved_cap": annual_km <= cap_km,
+                    "calendar_and_uniform_headway_are_design_assumptions": True,
+                })
+            result["service_class_screens"] = screens
 
     full_cover_results = [row for row in portfolio["results"] if row["full_target_cover_found"]]
     status = (
@@ -177,6 +193,8 @@ def main(args):
         "status": status,
         "search": {key: value for key, value in search.items() if key != "candidates"},
         "portfolio": portfolio,
+        "all_movements_serve_olgiate_fs_portfolio": hub_portfolio,
+        "required_hub_stop_id": hub_stop_id,
         "current_exact_identity_subset": bridge,
         "approved_annual_bus_km_cap": str(cap_km),
         "comparison_correction": (
