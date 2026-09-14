@@ -410,6 +410,35 @@ and source truncation. Source expansion and typed operational/public-service
 binding remain open; dwell/recovery/timetable feasibility is not certified.
 primary_selection_authorised=false; runner_up_selection_authorised=false.
 
+## Codex handoff — expanded-pool terminal disposition
+
+2026-09-14. Branch `codex/rt031-decision-convergence`, draft PR #82.
+Expanded physical search commit `f7d062f`, run `34861503109` SUCCESS: one million
+states replayed twice identically, 1,742 single-walk sets, 10-stop maximum,
+2,864,434 queued labels; still RESOURCE_LIMIT_INCOMPLETE. Artifact `10354879891`,
+GitHub ZIP SHA256 `53b400b11a6db457037a531d612d3abf99147d7a3162573d11149f432131bd87`.
+
+Computational comparison commit `18a1e61b1cbb154b94659d3769e4c87d6bcc47e6`,
+run `34862836065` SUCCESS. Two byte-identical full comparisons; artifact
+`10356122465`, GitHub ZIP SHA256
+`50c1f7ff5885d34cac5afb50b1f0f448aee4872e6b6d77285959f20de07058bd`.
+Downloaded outputs match committed evidence byte-for-byte.
+
+All 1,742 singletons and 1,516,411 distinct pairs fit the conditional distance
+screen and reduce to 727,514 exact availability unions. Zero unions are no worse
+than the exact-ID current structural subset on all six access/equity axes. The
+enlarged pool beats the current subset on optimistic total core maxima, including
+51.6796% versus 48.7696% at 10 minutes, but misses worst-municipality equity at
+8 minutes (19.9168% vs 20.9192%) and 10 minutes (26.5823% vs 34.4032%).
+
+Technical disposition: DO NOT PROMOTE this supplied physical one/two-walk pool
+to operational finalists. Retain Current-Service V4 as structural comparison
+reference and require a broadened/redesigned candidate domain. This is not a
+global proof over all networks and does not select the current network as PRIMARY.
+No public service, timetable or passenger relation inferred. See
+docs/RT031_EXPANDED_POOL_CURRENT_V4.md.
+primary_selection_authorised=false; runner_up_selection_authorised=false.
+
 ## Codex handoff — RT031/current V4 same-substrate conclusion
 
 2026-09-14. Branch `codex/rt031-decision-convergence`. Current-Service V3/V4

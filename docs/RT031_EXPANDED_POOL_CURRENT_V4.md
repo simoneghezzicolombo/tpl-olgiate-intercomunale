@@ -60,3 +60,9 @@ missed-connection probability is inferred. No network is selected.
 `primary_selection_authorised=false`
 
 `runner_up_selection_authorised=false`
+
+Certification: GitHub Actions run `34862836065` succeeded on computational
+commit `18a1e61b1cbb154b94659d3769e4c87d6bcc47e6`. Both full 727,514-set
+computations were byte-identical. Artifact `10356122465`, GitHub-reported ZIP
+SHA256 `50c1f7ff5885d34cac5afb50b1f0f448aee4872e6b6d77285959f20de07058bd`,
+matches the committed outputs byte for byte.
