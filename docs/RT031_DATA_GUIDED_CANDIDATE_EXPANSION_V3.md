@@ -84,6 +84,37 @@ Pareto axes remain the separate total and worst-municipality 5/8/10-minute
 walking-access shares plus physical distance. There are no weights or scalar
 score.
 
+## Network-level connection and stop-retention preference
+
+The next exact lane combines the Olgiate-rooted physical pool with the earlier
+generic pool. A portfolio is admissible when at least one movement contains
+Olgiate FS and the movements form a connected intersection graph by shared stop
+identity. It is no longer required that every movement visit Olgiate FS.
+
+This is deliberately labelled **potential** network connectivity. A common stop
+identity does not certify compatible directions, ordered service events or a
+passenger transfer. Those properties require later typed operational binding.
+
+The 11 exact current stop identities are now an explicit Pareto preference:
+their retained count/share is maximised alongside the six separate access axes,
+while distance is minimised. Retention has no weight and is not an admission
+filter. It certifies identity retention only, not current order, adjacency,
+directional occurrence or passenger-service continuity.
+
+The initial exact two-movement envelope combines 3,804 positive witnesses into
+3,699 unique movement stop sets. Safe superset/distance dominance leaves 1,631
+movements, including 833 that serve Olgiate FS. Exact connected-union dynamic
+programming produces 62,947 portfolio stop sets and a 935-member eight-axis
+frontier. Of these, 155 are no worse than the current exact-ID benchmark on all
+six access axes and strictly better on at least one. Frontier alternatives
+retain between 1 and 8 of the 11 current identities: this variation confirms
+that retention operates as a trade-off, not a disguised hard constraint.
+
+The two-movement bound is an explicit scope boundary, not an impossibility
+claim. A local measurement found 1,373,871 connected stop unions at up to three
+movements before access evaluation; expanding that exact domain remains future
+computation rather than evidence that such portfolios do not exist.
+
 This lane still contains closed physical walks only. Its combinations can
 represent radial out-and-back and multiple independent movements, but public
 trunk-branch, short-turn and interlining semantics have not yet been assigned.

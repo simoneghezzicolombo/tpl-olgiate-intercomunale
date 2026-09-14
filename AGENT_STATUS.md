@@ -20,6 +20,31 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 ## Phase 2 — evidenze correnti
 
+### RT-031 network-connected expansion — STOP RETENTION IS A PREFERENCE
+
+- the 11 current exact stop identities are a separate no-weight Pareto benefit,
+  never an admissibility constraint;
+- Olgiate FS is required at network level: at least one movement serves it and
+  every other movement must join the same shared-stop-identity intersection
+  component; every movement no longer has to visit the hub;
+- shared stop identity means potential connectivity only, not a certified
+  directional occurrence, ordered service event or passenger transfer;
+- two pinned resource-incomplete physical pools provide 3,804 positive
+  witnesses, reduced by safe objective dominance to 1,631 movements;
+- exact initial two-movement enumeration: 62,947 connected stop unions and 935
+  no-weight Pareto alternatives over six access axes, exact-ID retention and
+  distance;
+- 155 frontier alternatives beat the current access benchmark weakly on all six
+  axes and strictly on at least one; frontier retention ranges from 1 to 8 of
+  the 11 current identities;
+- the two-movement bound is a declared computation scope, not an impossibility
+  claim; candidate-domain completeness remains false.
+
+`candidate_domain_complete=false`
+`network_selected=false`
+`primary_selection_authorised=false`
+`runner_up_selection_authorised=false`
+
 ### RT-031 data-guided expansion — 578,235 PORTFOLIOS / 2,410 FRONTIER
 
 - Current-Service stop retention removed as a candidate constraint; Olgiate FS
