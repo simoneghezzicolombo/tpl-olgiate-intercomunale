@@ -20,26 +20,28 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 ## Phase 2 — evidenze correnti
 
-### RT-031 data-guided expansion — 9,789 PORTFOLIOS / 233 FRONTIER
+### RT-031 data-guided expansion — 578,235 PORTFOLIOS / 2,410 FRONTIER
 
 - Current-Service stop retention removed as a candidate constraint; Olgiate FS
   remains the required hub;
-- CI `34896176171` SUCCESS, artifact `10368611576`;
-- 105 hub-serving closed-walk witnesses combined exhaustively within the
-  supplied pool up to four movements: 9,789 distinct portfolios and 233 exact
-  no-weight Pareto-frontier rows;
+- expanded-frontier CI `34897632951` SUCCESS, artifact `10370190130`;
 - frequency H20/H30/H40/H60, spans 600/720/960 minutes and annual bus-km are a
   reported service surface; neither frequency nor the 111,419 km reference cap
   filters the physical candidates;
-- none of these 9,789 pool-scoped portfolios matches the current exact-ID
-  benchmark on all six access axes. This diagnoses an insufficient physical
-  pool (only 16 hub-walk stop identities), not global optimality;
 - Olgiate-rooted search CI `34896019917` SUCCESS, artifact `10368324023`:
   2,062 positive hub-serving stop-set witnesses across 29 stop identities, up
   to 12 stops per movement; all retained witnesses pass full-history seam
   replay. Search remains resource-incomplete with 4,282,646 labels pending;
-- radial, trunk-branch, short-turn and interlined families remain outside this
-  closed-walk lane, so candidate-domain completeness is false.
+- exact union DP up to four movements: 578,235 distinct minimum-distance
+  portfolios and 2,410 no-weight Pareto alternatives;
+- 1,761 frontier alternatives are no worse than the current exact-ID benchmark
+  on all six access axes and strictly better on at least one;
+- reference-cap context counts among those 1,761: H30/10h 185, H30/12h 119,
+  H30/16h 0, H40/16h 119, H60/16h 752; H20 has zero at every tested span;
+- shortest benchmark-improving frontier member: two movements, 15.204 km;
+  126,498.713 km/year at H30/16h or 94,874.034 at H30/12h;
+- public trunk-branch, short-turn and interlining semantics remain unassigned,
+  so candidate-domain completeness is false.
 
 `candidate_domain_complete=false`
 `network_selected=false`
