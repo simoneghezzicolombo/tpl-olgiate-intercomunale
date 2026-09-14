@@ -20,6 +20,31 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 ## Phase 2 — evidenze correnti
 
+### RT-031 corrected hub-connected target cover — PROMISING CANDIDATE, NOT SELECTED
+
+- branch `codex/rt031-decision-convergence`;
+- hub-constrained search CI `34869733360` SUCCESS, artifact `10358581671`;
+- typed-service CI `34892996081` SUCCESS, artifact `10368011342`;
+- one two-circuit witness retains all 11 current exact-ID targets and requires
+  every circuit to serve Olgiate FS;
+- total 21.397278 km; H60/16h/260d = 89,012.677 bus-km/year, below the approved
+  111,419 cap by 22,406.323 km/year; H30 = 178,025.354 and is over cap;
+- same-substrate total walking access improves at 5/8/10 minutes while all three
+  worst-municipality safeguards are equal; no weighted score;
+- directional occurrences and ordered events are bound, with route, passenger
+  and vehicle semantics kept distinct;
+- source-model runtimes are 23.834 and 23.482 minutes excluding dwell; fleet
+  lower bound is two under 5/10/15-minute recovery sensitivity;
+- unconstrained earlier witnesses are superseded for promotion because they
+  included a hub-disconnected component and, in the three-movement case, a
+  265 m micro-loop;
+- pending gates: dwell-inclusive runtime, explicit timetable phasing, S8
+  deterministic retention, recovery/vehicle blocks and actual-service comparison.
+
+`network_selected=false`
+`primary_selection_authorised=false`
+`runner_up_selection_authorised=false`
+
 ### Tournament Contract Audit + Non-Decisional Frontier RT001 V3
 
 - branch `codex/phase2-final-tournament-rt001-v3`;
