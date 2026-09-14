@@ -20,6 +20,30 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 ## Phase 2 — evidenze correnti
 
+### RT-031 data-guided expansion — 9,789 PORTFOLIOS / 233 FRONTIER
+
+- Current-Service stop retention removed as a candidate constraint; Olgiate FS
+  remains the required hub;
+- CI `34896176171` SUCCESS, artifact `10368611576`;
+- 105 hub-serving closed-walk witnesses combined exhaustively within the
+  supplied pool up to four movements: 9,789 distinct portfolios and 233 exact
+  no-weight Pareto-frontier rows;
+- frequency H20/H30/H40/H60, spans 600/720/960 minutes and annual bus-km are a
+  reported service surface; neither frequency nor the 111,419 km reference cap
+  filters the physical candidates;
+- none of these 9,789 pool-scoped portfolios matches the current exact-ID
+  benchmark on all six access axes. This diagnoses an insufficient physical
+  pool (only 16 hub-walk stop identities), not global optimality;
+- a two-million-state Olgiate-rooted search with a 30 km individual-walk
+  envelope is running to broaden the physical pool;
+- radial, trunk-branch, short-turn and interlined families remain outside this
+  closed-walk lane, so candidate-domain completeness is false.
+
+`candidate_domain_complete=false`
+`network_selected=false`
+`primary_selection_authorised=false`
+`runner_up_selection_authorised=false`
+
 ### RT-031 corrected hub-connected target cover — PROMISING CANDIDATE, NOT SELECTED
 
 - branch `codex/rt031-decision-convergence`;
