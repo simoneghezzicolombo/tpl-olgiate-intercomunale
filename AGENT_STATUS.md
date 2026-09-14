@@ -31,6 +31,10 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
   111,419 cap by 22,406.323 km/year; H30 = 178,025.354 and is over cap;
 - same-substrate total walking access improves at 5/8/10 minutes while all three
   worst-municipality safeguards are equal; no weighted score;
+- decision consequence: H30 on both circuits is over cap, while the H60
+  exception is not established because the approved contract requires strict
+  equity improvement over the frequent-class frontier and the current evidence
+  has equality against only the current exact-ID subset;
 - directional occurrences and ordered events are bound, with route, passenger
   and vehicle semantics kept distinct;
 - source-model runtimes are 23.834 and 23.482 minutes excluding dwell; fleet
@@ -40,6 +44,12 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
   265 m micro-loop;
 - pending gates: dwell-inclusive runtime, explicit timetable phasing, S8
   deterministic retention, recovery/vehicle blocks and actual-service comparison.
+- exact cyclic hub-phase CI `34894073548` SUCCESS, artifact `10368250959`:
+  all 3,600 ordered minute pairs evaluated without weights; 2,236 are Pareto
+  non-dominated. All 60 exactly half-hour-spaced hub rotations remain
+  non-dominated across the separate S8 direction/profile axes. This is phase
+  opportunity geometry only: no daily span, timetable or deterministic
+  retention case is selected.
 
 `network_selected=false`
 `primary_selection_authorised=false`
