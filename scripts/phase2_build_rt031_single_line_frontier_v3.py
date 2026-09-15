@@ -106,6 +106,17 @@ def main(args):
         if all(access[index, axis] >= current_vector[axis] for axis in range(6))
         and any(access[index, axis] > current_vector[axis] for axis in range(6))
     ]
+    service_context_counts = {}
+    for headway in HEADWAYS:
+        for span in SPANS:
+            eligible = [index for index in benchmark_better
+                        if costs[index] * Decimal(span) / Decimal(headway)
+                        * Decimal(ANNUAL_DAYS) / 1000 <= cap]
+            service_context_counts[f"H{headway}_{span}MIN"] = {
+                "count": len(eligible),
+                "maximum_retained_current_exact_stop_count": max(
+                    (retention[index] for index in eligible), default=None),
+            }
     frontier = []
     for index in frontier_indices:
         row = dict(candidates[index])
@@ -168,6 +179,9 @@ def main(args):
             "frequency_used_as_candidate_filter": False,
             "annual_bus_km_used_as_candidate_filter": False,
         },
+        "reference_cap_service_context_counts_for_benchmark_better_frontier": (
+            service_context_counts),
+        "service_context_counts_are_selection": False,
         "municipal_od_spatially_downscaled": False,
         "demand_weighted_gjt_computed": False,
         "empirical_missed_connection_probability_computed": False,
