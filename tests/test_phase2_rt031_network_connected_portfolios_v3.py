@@ -159,7 +159,7 @@ def test_final_pareto_preprune_is_exact_and_compact():
             cost,
             identities,
         ))
-    assert (("A", "B", "C", "H"), Decimal("4"), ("ac", "hbc")) in decoded
+    assert (("A", "B", "C", "H"), Decimal("4"), ("hbc", "ac")) in decoded
     assert all(stops != ("A", "B", "H") for stops, _, _ in decoded)
 
 
