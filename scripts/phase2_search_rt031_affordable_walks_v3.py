@@ -17,7 +17,8 @@ from phase2_rt029_v4_metrics import evaluate_unique_stop_sets
 
 
 def main(inputs,evidence,walk_file,out,max_expansions,required_root_stop_id=None,
-         distance_budget_m=None,priority_mode='distance',preferred_stop_ids=()):
+         distance_budget_m=None,priority_mode='distance',preferred_stop_ids=(),
+         conditional_span_minutes=960):
     tables,hashes=load_inputs(inputs);validate_via_way_evidence(evidence)
     for path,digest in PINNED.items():
         if sha256_file(Path(path))!=digest:raise ValueError('approved policy lineage changed')
@@ -29,6 +30,10 @@ def main(inputs,evidence,walk_file,out,max_expansions,required_root_stop_id=None
             else Decimal(str(distance_budget_m)))
     if not budget.is_finite() or budget<=0:
         raise ValueError('positive explicit physical distance envelope required')
+    if (type(conditional_span_minutes) is not int
+            or conditional_span_minutes <= 0
+            or conditional_span_minutes % 30):
+        raise ValueError('positive H30-aligned conditional span required')
     cat,slots=build_realization_catalog(tables['patterns'],tables['corridors'],tables['edges'])
     boundary=build_boundary_catalog(tables['patterns'],tables['occurrences'],tables['corridors'],tables['edges'])
     adapter=FrozenRT017ViaNodeAdapter(tables['edges'],tables['rules'],unresolved_external_via_way_count=2)
@@ -52,7 +57,9 @@ def main(inputs,evidence,walk_file,out,max_expansions,required_root_stop_id=None
         if set(r['available_stop_ids'])!=set().union(*(set(stop_sets[rid]) for rid in r['realization_ids'])):
             raise AssertionError('availability union drift')
         r['stop_set_id']='WALK_'+hashlib.sha256(';'.join(r['available_stop_ids']).encode()).hexdigest()[:20]
-        r['conditional_annual_carrier_km_h30_260days']=str(Decimal(r['minimum_found_distance_m'])*32*260/1000)
+        departures_per_day=Decimal(conditional_span_minutes)/30
+        r['conditional_annual_carrier_km_h30_260days']=str(
+            Decimal(r['minimum_found_distance_m'])*departures_per_day*260/1000)
         running=sum((Decimal(edges[e]['running_minutes_model']) for rid in r['realization_ids'] for e in cat[rid]['edge_ids']),Decimal(0))
         if not running.is_finite() or running<=0:raise ValueError('invalid source running model')
         r['running_minutes_source_model']=str(running)
@@ -94,7 +101,11 @@ def main(inputs,evidence,walk_file,out,max_expansions,required_root_stop_id=None
         ('evaluated_set_conditional_frontier.csv',pd.DataFrame(frontier))]:frame.to_csv(out/name,index=False,lineterminator='\n')
     result.update(input_sha256=hashes,via_way_evidence_sha256=sha256_file(evidence),walk_matrix_sha256=sha256_file(walk_file),
         policy_sha256=PINNED,calendar_is_design_assumption=True,conditional_headway_min=30,
-        conditional_departure_window='06:00-22:00_HALF_OPEN',conditional_annual_days=260,
+        conditional_span_minutes=conditional_span_minutes,
+        conditional_departure_window=(
+            '06:00-22:00_HALF_OPEN' if conditional_span_minutes == 960
+            else f'DECLARED_{conditional_span_minutes}_MIN_HALF_OPEN'),
+        conditional_annual_days=260,
         coverage_semantics='CONDITIONAL_WALKING_ACCESS_IF_AVAILABLE_STOPS_BECOME_PUBLICLY_SERVED_NOT_CERTIFIED_PASSENGER_SERVICE',
         candidate_generation_priority_is_normative_selection=False,
         evaluated_set_frontier_size=len(frontier),maximum_available_stop_count=max(r['available_stop_count'] for r in summary),
@@ -115,5 +126,7 @@ if __name__=='__main__':
     p.add_argument('--distance-budget-m',type=Decimal)
     p.add_argument('--priority-mode',choices=('distance','available_stop_count','preferred_stop_count'),default='distance')
     p.add_argument('--preferred-stop-id',action='append',default=[])
+    p.add_argument('--conditional-span-minutes',type=int,default=960)
     a=p.parse_args();main(a.inputs,a.via_way_evidence,a.walk_matrix,a.out,a.max_expansions,
-        a.required_root_stop_id,a.distance_budget_m,a.priority_mode,a.preferred_stop_id)
+        a.required_root_stop_id,a.distance_budget_m,a.priority_mode,
+        a.preferred_stop_id,a.conditional_span_minutes)

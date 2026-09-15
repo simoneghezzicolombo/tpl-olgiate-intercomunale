@@ -28,6 +28,13 @@
     "role": "REQUIRED_LINE_SERVICE_NODE",
     "stop_place_id": "FROZEN::L00407"
   },
+  "caller_declared_service_context": {
+    "uniform_headway_min": 30,
+    "span_minutes": 600,
+    "span_hours": 10,
+    "annual_service_days": 260,
+    "annual_service_days_semantics": "DESIGN_ASSUMPTION_NOT_CALLER_SELECTION"
+  },
   "decision_budget_km": null,
   "uncertainty_band_min": null,
   "weighted_score": false,
