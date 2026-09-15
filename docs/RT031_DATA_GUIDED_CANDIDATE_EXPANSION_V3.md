@@ -183,6 +183,24 @@ requirement in its robust tail. The two latest candidate spans have no member on
 the joint frontier, but that bounded dominance result does not itself select an
 earlier operating span.
 
+### Historical scheduled-runtime calibration boundary
+
+The frozen Arriva GTFS for D184/D185 supplies 42 historical trips and 541 stop-
+time occurrences, with a validity end of 8 June 2026. For full trips of at
+least 8 km, the scheduled-speed envelope is compared with each candidate
+component's source-model speed. This is a plausibility audit only: the feed is
+historical and scheduled, not current AVL/reliability evidence.
+
+There are 32 comparable trips. Their full-trip scheduled-speed range is
+26.520–34.54875 km/h (median 26.8827); the ten candidate components' source-
+model speeds range from 27.524 to 30.322 km/h and all lie inside that broad
+historical envelope. This supports plausibility only, not calibration identity.
+
+All GTFS arrival/departure pairs for those occurrences are equal. That encoding
+does not demonstrate zero passenger dwell and cannot calibrate dwell. The audit
+therefore fails closed on dwell and forbids replacing candidate runtimes with a
+historical median under a different label.
+
 This lane still contains closed physical walks only. Its combinations can
 represent radial out-and-back and multiple independent movements, but public
 trunk-branch, short-turn and interlining semantics have not yet been assigned.

@@ -642,3 +642,12 @@ realisations and is byte-identical across two builds. Sixty joint
 territorial/operational Pareto contexts remain and all five profiles are still
 represented. No context is at most two vehicles in every engineering case;
 the robust maximum is four for every profile.
+
+Historical runtime follow-through: the pinned D184/D185 GTFS has 42 trips / 541
+stop-time occurrences and ends 2026-06-08. Its comparable >=8 km full-trip
+scheduled-speed envelope can test source-model plausibility, but all 541 arrival
+and departure clocks are equal. It therefore cannot provide observed dwell or
+reliability; those remain explicit blockers rather than inferred zeroes.
+The 32 comparable >=8 km historical trips span 26.520–34.54875 km/h scheduled;
+all ten candidate source-model components (27.524–30.322 km/h) lie inside that
+broad envelope. This is plausibility evidence only.
