@@ -628,3 +628,17 @@ typed directional occurrences/service events, route identity, runtime/dwell/
 recovery, blocks, timetable and S8 stress. No network selected; PRIMARY and
 RUNNER-UP remain unauthorised. See
 `docs/RT031_CURRENT_TARGET_COVER_RESOURCE_SYMMETRY.md`.
+
+## Codex handoff — exhaustive daily timetable surface
+
+The next RT031 gate exhausts every H30-aligned 12-hour span contained in the
+frozen S8 05:30–24:00 evidence window, all 30 regular combined-H15 phase pairs,
+all five typed development profiles and all 27 inherited engineering cases.
+It computes exact interlinable vehicle blocks plus separate deterministic S8
+transfer axes. This is a non-decisional surface: no span, phase, timetable or
+network is selected, and observed dwell validation remains open. The local
+exhaustive result covers 2,100 timetable contexts / 56,700 engineering
+realisations and is byte-identical across two builds. Sixty joint
+territorial/operational Pareto contexts remain and all five profiles are still
+represented. No context is at most two vehicles in every engineering case;
+the robust maximum is four for every profile.

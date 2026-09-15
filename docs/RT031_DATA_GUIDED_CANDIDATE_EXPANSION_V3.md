@@ -160,6 +160,29 @@ runtime/dwell/recovery finding: the phase surface is not a vehicle-block
 feasibility certificate. Daily timetable construction remains blocked until the
 operational stress gate is resolved.
 
+### Daily timetable and exact block surface
+
+The next gate does not silently turn the 12-hour production context into a
+selected operating span. It exhausts all 14 H30-aligned 12-hour windows wholly
+contained in the frozen 05:30–24:00 S8 design window. For every one of the five
+typed profiles it also evaluates all 30 regular combined-H15 clock rotations
+and all 27 inherited runtime/dwell/recovery cases. Exact vehicle blocks may
+interline the two components when their trip times permit it.
+
+Transfer-quality and deterministic bus-to-rail miss-share axes remain separate.
+No passenger weights, empirical probabilities or scalar score are introduced.
+The result is a robust Pareto surface; it cannot select a span, phase or
+timetable, and source-model dwell sensitivity is not observed dwell validation.
+
+The exhaustive run contains 2,100 timetable contexts and 56,700 engineering
+realisations. Sixty contexts remain nondominated after retaining the six exact
+territorial access/equity ratios alongside the operational axes; every one of
+the five profiles remains represented. No context stays within two vehicles in
+all 27 engineering cases, and every profile reaches an exact four-vehicle
+requirement in its robust tail. The two latest candidate spans have no member on
+the joint frontier, but that bounded dominance result does not itself select an
+earlier operating span.
+
 This lane still contains closed physical walks only. Its combinations can
 represent radial out-and-back and multiple independent movements, but public
 trunk-branch, short-turn and interlining semantics have not yet been assigned.
