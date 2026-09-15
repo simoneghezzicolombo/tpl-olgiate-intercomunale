@@ -68,6 +68,12 @@ H30 timetable/S8 retention, vehicle blocks and robustness remain open. The
 upstream physical pools remain resource-incomplete and the two-movement boundary
 is not an impossibility claim. No PRIMARY or RUNNER-UP is authorised.
 
+Exact H30 hub phasing is now implemented over the five profiles: 900 ordered
+integer-minute phase pairs, 559 nondominated against the frozen 74 S8 events and
+three transfer-friction profiles. The regular combined 15-minute subspace has 30
+pairs and all 30 remain nondominated, so clock rotation is not selected. Local
+tests and A/B output replay pass; real CI identity is pending at this commit.
+
 ### RT-031 data-guided expansion — 578,235 PORTFOLIOS / 2,410 FRONTIER
 
 - Current-Service stop retention removed as a candidate constraint; Olgiate FS

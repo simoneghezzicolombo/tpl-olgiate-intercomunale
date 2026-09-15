@@ -1,6 +1,7 @@
 from src.phase2_exact_timetable_optimizer_v2 import TransferProfile
 from src.phase2_rt031_hub_phase_frontier_v3 import (
     circular_max_gap,
+    exact_repeating_surface,
     exact_surface,
     next_cyclic_wait,
     pareto_frontier,
@@ -35,3 +36,22 @@ def test_exact_surface_keeps_all_ordered_route_phases():
     assert result["evaluated_phase_vector_count"] == 9
     assert len(result["phase_vectors"]) == 9
     assert result["frontier"]
+
+
+def test_repeating_h30_surface_expands_both_route_event_series():
+    profile = TransferProfile("P", 2.0, 4.0, 1.5, 12.0)
+    rail = [
+        {"direction": "MILANO", "arrival_min": 5, "departure_min": 6},
+        {"direction": "LECCO", "arrival_min": 12, "departure_min": 13},
+    ]
+    result = exact_repeating_surface(
+        rail, (profile,), route_headway_min=30, period=60)
+    assert result["evaluated_phase_vector_count"] == 900
+    staggered = next(row for row in result["phase_vectors"]
+                     if row["route_1_hub_phase_min"] == 0
+                     and row["route_2_hub_phase_min"] == 15)
+    aligned = next(row for row in result["phase_vectors"]
+                   if row["route_1_hub_phase_min"] == 0
+                   and row["route_2_hub_phase_min"] == 0)
+    assert staggered["combined_hub_max_gap_min"] == 15
+    assert aligned["combined_hub_max_gap_min"] == 30

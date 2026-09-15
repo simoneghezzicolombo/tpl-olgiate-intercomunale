@@ -144,6 +144,22 @@ remaining gate is operational: dwell-inclusive runtime, exact H30 phasing, S8
 deterministic retention and vehicle-block robustness must be compared before the
 approved decision layers can advance.
 
+### Exact H30 hub-phase surface
+
+The five profiles share the same hub-clock problem because each consists of two
+independent H30 components serving Olgiate FS. The complete ordered integer-minute
+domain contains 900 phase pairs (0–29 minutes per component). Against all 74
+frozen S8 events and the three existing transfer-friction profiles, 559 pairs are
+Pareto-nondominated across combined hub gap and the separate directional transfer-
+quality axes. Exactly 30 pairs give a regular 15-minute combined hub pattern, and
+all 30 remain nondominated.
+
+The phase evidence therefore supports a regular combined pattern but does not
+choose its clock rotation. More importantly, it cannot override the deterministic
+runtime/dwell/recovery finding: the phase surface is not a vehicle-block
+feasibility certificate. Daily timetable construction remains blocked until the
+operational stress gate is resolved.
+
 This lane still contains closed physical walks only. Its combinations can
 represent radial out-and-back and multiple independent movements, but public
 trunk-branch, short-turn and interlining semantics have not yet been assigned.
