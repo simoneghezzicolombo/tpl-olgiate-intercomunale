@@ -13,7 +13,7 @@ from src.phase2_rt031_historical_runtime_calibration_v3 import (
     historical_scheduled_metrics,
 )
 
-TYPED_FULL_SHA256 = "2195c3cd14d35e7aec4d341300c62918d9a683b90cfc868122a5957793330275"
+TYPED_FULL_SHA256 = "a221b2e467d7266f1aaf615f62ca8c76177ddcc83626da454be5743da59f61bc"
 GTFS_HASHES = {
     "routes.txt": "a59e48ac22ba0d71215be926818e368bb37a58531256b1b74850b6b9e2624583",
     "trips.txt": "ff3005d3831bf14ce1a7965b3d746c278f3392d67b163d6be61a28a9644903bb",
