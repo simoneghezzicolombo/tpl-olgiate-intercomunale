@@ -126,11 +126,13 @@ def test_non_materializing_mode_preserves_dynamic_program_counts():
 
 
 def test_final_pareto_preprune_is_exact_and_compact():
+    # No single movement safely dominates another. The final two-movement union
+    # H+A+B at cost 4 is nevertheless dominated by H+A+B+C at the same cost.
     candidates = [
         movement("ha", ["H", "A"], 3),
-        movement("hab", ["H", "A", "B"], 2),
-        movement("bc", ["B", "C"], 2),
-        movement("ad", ["A", "D"], 8),
+        movement("hb", ["H", "B"], 1),
+        movement("hbc", ["H", "B", "C"], 2),
+        movement("ac", ["A", "C"], 2),
     ]
     full = enumerate_network_connected_portfolios(
         candidates, hub_stop_id="H", max_movements=2)
@@ -157,8 +159,8 @@ def test_final_pareto_preprune_is_exact_and_compact():
             cost,
             identities,
         ))
-    assert (("A", "B", "H"), Decimal("2"), ("hab",)) in decoded
-    assert all(stops != ("A", "H") for stops, _, _ in decoded)
+    assert (("A", "B", "C", "H"), Decimal("4"), ("ac", "hbc")) in decoded
+    assert all(stops != ("A", "B", "H") for stops, _, _ in decoded)
 
 
 def test_final_preprune_never_drops_cheaper_subset():
