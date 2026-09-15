@@ -24,6 +24,9 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 - the 11 current exact stop identities are a separate no-weight Pareto benefit,
   never an admissibility constraint;
+- network-connected CI `34900153541` SUCCESS at `9864a42`, artifact
+  `10370024100`, ZIP digest
+  `sha256:b279b89e72c16f272c1439f4da96e6d6fbc53e417deeac0844e32405639bce45`;
 - Olgiate FS is required at network level: at least one movement serves it and
   every other movement must join the same shared-stop-identity intersection
   component; every movement no longer has to visit the hub;

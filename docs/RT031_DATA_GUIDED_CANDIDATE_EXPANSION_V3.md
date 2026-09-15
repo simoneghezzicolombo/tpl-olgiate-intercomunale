@@ -115,6 +115,13 @@ claim. A local measurement found 1,373,871 connected stop unions at up to three
 movements before access evaluation; expanding that exact domain remains future
 computation rather than evidence that such portfolios do not exist.
 
+Network-connected CI run `34900153541` succeeded at commit
+`9864a42168dbca769db2d04d217d21cf5f033064`. Artifact `10370024100` has ZIP
+digest
+`sha256:b279b89e72c16f272c1439f4da96e6d6fbc53e417deeac0844e32405639bce45`.
+The committed machine-readable audit SHA256 is
+`32990d94df7b3328d5c63db444fb758120bebe4e7dcc4e49cd83d131ba19874d`.
+
 ## Frequent-class operational development gate
 
 The certified two-movement frontier is next filtered only by decisions already
