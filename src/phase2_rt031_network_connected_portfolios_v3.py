@@ -117,26 +117,31 @@ def enumerate_network_connected_portfolios(
                 layers[1][mask] = proposal
     expansion_layers[1] = layers[1]
 
-    by_stop = [[] for _ in universe]
-    for movement in retained:
-        mask = movement[1]
+    # Integer bitsets replace per-state Python dictionaries when collecting
+    # movements that share at least one stop with the connected component.
+    # Bit index is the deterministic position in ``retained``.
+    by_stop = [0] * len(universe)
+    for movement_index, (_, mask, _) in enumerate(retained):
+        movement_flag = 1 << movement_index
         pending = mask
         while pending:
             least = pending & -pending
-            by_stop[least.bit_length() - 1].append(movement)
+            by_stop[least.bit_length() - 1] |= movement_flag
             pending ^= least
     for size in range(2, limit + 1):
         target = layers[size]
         for union_mask, (base_cost, base_ids) in expansion_layers[size - 1].items():
-            eligible = {}
+            eligible = 0
             pending = union_mask
             while pending:
                 least = pending & -pending
-                bit_index = least.bit_length() - 1
-                for movement in by_stop[bit_index]:
-                    eligible[movement[0]] = movement
+                eligible |= by_stop[least.bit_length() - 1]
                 pending ^= least
-            for identity, movement_mask, movement_cost in eligible.values():
+            while eligible:
+                movement_flag = eligible & -eligible
+                movement_index = movement_flag.bit_length() - 1
+                identity, movement_mask, movement_cost = retained[movement_index]
+                eligible ^= movement_flag
                 new_mask = union_mask | movement_mask
                 if new_mask == union_mask:
                     continue
@@ -185,6 +190,7 @@ def enumerate_network_connected_portfolios(
         "portfolios": rows,
         "enumeration_method": (
             "EXACT_CONNECTED_UNION_DYNAMIC_PROGRAM_WITH_SAFE_INTERMEDIATE_DOMINANCE"),
+        "eligibility_index": "EXACT_PER_STOP_MOVEMENT_INTEGER_BITSETS",
         "within_supplied_pool_complete": not any_expansion_pruning,
         "within_supplied_pool_pareto_complete_for_monotone_stop_union_objectives": True,
         "intermediate_dominance_semantics": (
