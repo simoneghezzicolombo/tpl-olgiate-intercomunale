@@ -20,6 +20,28 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 ## Phase 2 — evidenze correnti
 
+### RT-031 caller correction — ONE RECOGNIZABLE PUBLIC LINE
+
+- caller-declared requirement: one public route identity; two physical
+  movements or multiple vehicles must not be counted as two lines by default;
+- directional patterns may belong to the same line only after route identity,
+  directional occurrences, ordered service events and passenger-service
+  continuity are explicitly bound;
+- the existing five-profile/two-component lane is retained as engineering
+  evidence but is not certified to satisfy the single-recognizable-line
+  requirement merely by assigning one label;
+- a dedicated hub-rooted single-walk discovery lane now explores distance,
+  available-stop count and retained-current-stop count separately, without a
+  weighted score or retention filter;
+- current-stop conservation remains a Pareto preference; Olgiate FS remains a
+  required line service node.
+
+`single_public_line_required=true`
+`recognizable_public_line_certified=false`
+`network_selected=false`
+`primary_selection_authorised=false`
+`runner_up_selection_authorised=false`
+
 ### RT-031 network-connected expansion — STOP RETENTION IS A PREFERENCE
 
 - the 11 current exact stop identities are a separate no-weight Pareto benefit,

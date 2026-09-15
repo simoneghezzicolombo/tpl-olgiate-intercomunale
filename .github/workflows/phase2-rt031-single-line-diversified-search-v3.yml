@@ -64,7 +64,7 @@ jobs:
                 --inputs /tmp/rt031-inputs --via-way-evidence "$evidence" \
                 --walk-matrix "$walk" --out "$out" \
                 --required-root-stop-id FROZEN::L00407 \
-                --distance-budget-m 30000 --max-expansions 200000 \
+                --distance-budget-m 30000 --max-expansions 20000 \
                 --priority-mode "$mode" "${preferred_args[@]}"
             done
           done
