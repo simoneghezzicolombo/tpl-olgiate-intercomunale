@@ -17,7 +17,7 @@ from phase2_rt029_v4_metrics import evaluate_unique_stop_sets
 
 
 def main(inputs,evidence,walk_file,out,max_expansions,required_root_stop_id=None,
-         distance_budget_m=None):
+         distance_budget_m=None,priority_mode='distance',preferred_stop_ids=()):
     tables,hashes=load_inputs(inputs);validate_via_way_evidence(evidence)
     for path,digest in PINNED.items():
         if sha256_file(Path(path))!=digest:raise ValueError('approved policy lineage changed')
@@ -42,7 +42,8 @@ def main(inputs,evidence,walk_file,out,max_expansions,required_root_stop_id=None
     stop_sets={r['realization_id']:r['ordered_passenger_stop_ids'].split(';') for r in tables['patterns']}
     result=search_walks(cat,pairs,weights,stop_sets,budget_m=budget,max_expansions=max_expansions,
         history_locality_certified=True,atomic_legality_certified=True,
-        required_root_stop_id=required_root_stop_id)
+        required_root_stop_id=required_root_stop_id,priority_mode=priority_mode,
+        preferred_stop_ids=preferred_stop_ids)
     if not result['candidates']:raise ValueError('no closed walk found within execution budget')
     for r in result['candidates']:
         selected=[cat[rid] for rid in r['realization_ids']]
@@ -95,6 +96,7 @@ def main(inputs,evidence,walk_file,out,max_expansions,required_root_stop_id=None
         policy_sha256=PINNED,calendar_is_design_assumption=True,conditional_headway_min=30,
         conditional_departure_window='06:00-22:00_HALF_OPEN',conditional_annual_days=260,
         coverage_semantics='CONDITIONAL_WALKING_ACCESS_IF_AVAILABLE_STOPS_BECOME_PUBLICLY_SERVED_NOT_CERTIFIED_PASSENGER_SERVICE',
+        candidate_generation_priority_is_normative_selection=False,
         evaluated_set_frontier_size=len(frontier),maximum_available_stop_count=max(r['available_stop_count'] for r in summary),
         final_recommendation=False)
     (out/'physical_walk_search.json').write_bytes(canonical(result))
@@ -111,5 +113,7 @@ if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--inputs',type=Path,required=True);p.add_argument('--via-way-evidence',type=Path,required=True);p.add_argument('--walk-matrix',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--max-expansions',type=int,default=250000)
     p.add_argument('--required-root-stop-id')
     p.add_argument('--distance-budget-m',type=Decimal)
+    p.add_argument('--priority-mode',choices=('distance','available_stop_count','preferred_stop_count'),default='distance')
+    p.add_argument('--preferred-stop-id',action='append',default=[])
     a=p.parse_args();main(a.inputs,a.via_way_evidence,a.walk_matrix,a.out,a.max_expansions,
-        a.required_root_stop_id,a.distance_budget_m)
+        a.required_root_stop_id,a.distance_budget_m,a.priority_mode,a.preferred_stop_id)
