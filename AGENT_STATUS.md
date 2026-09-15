@@ -700,3 +700,38 @@ reliability; those remain explicit blockers rather than inferred zeroes.
 The 32 comparable >=8 km historical trips span 26.520–34.54875 km/h scheduled;
 all ten candidate source-model components (27.524–30.322 km/h) lie inside that
 broad envelope. This is plausibility evidence only.
+
+## Codex handoff — municipality-resolved and mixed-frequency correction
+
+2026-09-15. Branch `codex/rt031-decision-convergence`, PR #82. The old
+worst-municipality aggregation was audited and found decision-insufficient: the
+unique 10/11 candidate improves total access but sharply reduces Brivio access.
+The replacement no-weight V4 frontier keeps every municipality's 5/8/10-minute
+coverage separate. Run `35017718349` SUCCESS, artifact `10416805424`, ZIP
+SHA256 `d4726e765501c52944428111c43c34eb010b37667b62c96f5f09d8c48dec1d52`.
+It contains 778 nondominated one-line candidates, 736 within the 20-cycle
+reference cap; zero are componentwise non-regressive on all total and municipal
+axes. Non-regression remains diagnostic, not a hard constraint.
+
+Equal-production H30-peak/H60-base evaluation is also certified. Run
+`35018816775` SUCCESS, artifact `10417175153`, ZIP SHA256
+`78e78097b7279fceea196660415d3166459fa02aedcd28b7cc24ee53aa3cd48e`.
+For the 17 already typed candidates it evaluates 2,040 contexts / 55,080
+deterministic realisations. The 18-hour template has 20 departures, two H30 peak
+hours and 18 H60 base hours; all 510 candidate/phase contexts stay within three
+vehicles throughout the grid. The 12/14/16-hour templates all reach four.
+This makes 18 hours a live service-policy trade-off, not a selected pattern.
+
+Popular Times is qualitative temporal plausibility only. The operational sample
+is not complete for the 778-member municipal frontier. No demand-weighted GJT,
+municipal OD downscaling, empirical missed-connection probability, weighted
+score, selected budget, uncertainty band, network, timetable, PRIMARY or
+RUNNER-UP is introduced.
+
+`candidate_domain_complete=false`
+
+`network_selected=false`
+
+`primary_selection_authorised=false`
+
+`runner_up_selection_authorised=false`

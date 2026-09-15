@@ -150,6 +150,64 @@ conservative grid; therefore a smaller robust fleet is not certified until
 observed dwell evidence narrows that grid. Deterministic miss shares are not
 empirical missed-connection probabilities.
 
+### Municipality-resolved correction
+
+The earlier 197-member frontier used the minimum municipal share as a single
+equity coordinate. That aggregation concealed which municipality bore a loss.
+V4 therefore keeps all 5/8/10-minute shares for Brivio, Calco, Olgiate Molgora,
+Santa Maria Hoe and La Valletta Brianza as 15 separate Pareto preferences,
+alongside the three total-access shares, exact current-stop retention and
+distance. Municipal non-regression is not an admission constraint.
+
+Across the same 3,663 one-line candidates, this produces 778 nondominated
+alternatives; 736 fit the 20-daily-cycle reference cap. Retention within that
+cap ranges from one to ten of the 11 exact current identities: 146/161/141/61/
+45/124/34/14/9/1 alternatives retain respectively one through ten. No member is
+componentwise no worse than Current Service on all three total and all 15
+municipal axes. This is a trade-off diagnosis, not a filter or a proof that the
+current network is globally optimal.
+
+The former unique 10/11 candidate remains nondominated, but its apparent broad
+gain is purchased with a large Brivio loss. Total potential coverage changes
+from 21.74/38.73/48.77% to 33.25/52.48/58.73% at 5/8/10 minutes, while Brivio
+changes from 42.34/69.52/78.38% to 22.61/32.88/35.24%. It improves the other
+four municipalities on the same substrate. It must therefore not be called an
+alpha or a territorial winner absent an explicit normative preference about
+that distribution.
+
+Municipal-frontier run `35017718349` succeeded with artifact `10416805424`,
+ZIP digest
+`sha256:d4726e765501c52944428111c43c34eb010b37667b62c96f5f09d8c48dec1d52`
+and result SHA256
+`0757d9513e21e1e68a7fc43c1732b45c4ccd83242e84d20ea8a324d0866bca26`.
+
+### Equal-production mixed-frequency surface
+
+Four caller-visible service templates hold production at exactly 20 daily
+departures while trading peak H30 hours for a longer H60 base: 12 hours with
+eight H30 peak hours, 14 with six, 16 with four, and 18 with two. All 30 clock
+phases and all 27 inherited deterministic engineering cases are evaluated for
+the 17 already typed candidates: 2,040 contexts and 55,080 realisations.
+Popular Times only supports qualitative temporal plausibility of the tested
+windows; it is not demand, a weight or a hard filter.
+
+The mixed-only Pareto surface has 1,179 contexts. Its joint comparison with the
+uniform H30/10h surface retains 2,981: all 1,802 safely prepruned uniform
+contexts and 1,179 mixed contexts. Counts are not votes. The 12/14/16-hour
+templates reach four vehicles somewhere in every context's deterministic grid.
+Every one of the 510 tested 18-hour contexts instead remains at no more than
+three vehicles throughout that grid. Thus an 18-hour H30-peak/H60-base pattern
+is a serious resource-equivalent service-policy alternative, not a selected
+timetable; it trades away H30 hours and transfer quality.
+
+This timetable result is diagnostic for the 17 typed candidates only. The
+municipality-resolved frontier has 778 members, so operational binding of that
+larger frontier is still incomplete. Mixed-frequency run `35018816775`
+succeeded with artifact `10417175153`, ZIP digest
+`sha256:78e78097b7279fceea196660415d3166459fa02aedcd28b7cc24ee53aa3cd48e`
+and result SHA256
+`2ab04ca24a525fa32f450f419cfd21c495ea616001404bd114264e0bb4ce03bf`.
+
 Diversified-search CI run `34982075116` succeeded with artifact `10402211767`
 and ZIP digest
 `sha256:5b89fbe0b14edf2277404a93177383fef042cc1642477baa65c6802390421062`.
