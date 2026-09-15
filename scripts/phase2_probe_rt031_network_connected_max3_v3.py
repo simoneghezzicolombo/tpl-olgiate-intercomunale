@@ -48,19 +48,29 @@ def main(args):
 
     result = enumerate_network_connected_portfolios(
         candidates, hub_stop_id=HUB, max_movements=3,
-        materialize_portfolios=False)
+        materialize_portfolios=False, pareto_prune_final_states=True)
     if result["portfolios"] or not result["portfolio_materialization_skipped"]:
         raise AssertionError("diagnostic run unexpectedly materialized portfolios")
     if not result[
             "within_supplied_pool_pareto_complete_for_monotone_stop_union_objectives"]:
         raise AssertionError("safe-pruning Pareto-completeness contract failed")
+    if not result["final_pareto_preprune_applied"]:
+        raise AssertionError("final Pareto pre-prune was not applied")
+    before = result["final_state_count_before_pareto_preprune"]
+    after = result["final_state_count_after_pareto_preprune"]
+    pruned = result["objective_dominated_final_state_count_pruned"]
+    if before is None or after is None or before - after != pruned:
+        raise AssertionError("final-state pre-prune accounting mismatch")
 
     payload = {
         "contract": "RT031_NETWORK_CONNECTED_MAX3_DOMAIN_PROBE_V3",
-        "status": "PASS_DETERMINISTIC_DOMAIN_PROBE",
-        **{key: value for key, value in result.items() if key != "portfolios"},
+        "status": "PASS_DETERMINISTIC_DOMAIN_AND_FINAL_PARETO_PREPRUNE_PROBE",
+        **{
+            key: value for key, value in result.items()
+            if key not in {"portfolios", "compact_final_states", "stop_universe"}
+        },
         "purpose": (
-            "COMPUTATIONAL_TRACTABILITY_AND_STATE_COUNT_ONLY_NOT_ACCESS_FRONTIER_OR_SERVICE_SELECTION"),
+            "COMPUTATIONAL_TRACTABILITY_AND_EXACT_FINAL_PREPRUNE_COUNTS_ONLY_NOT_ACCESS_FRONTIER_OR_SERVICE_SELECTION"),
         "access_metrics_computed": False,
         "service_surface_computed": False,
         "network_selected": False,
