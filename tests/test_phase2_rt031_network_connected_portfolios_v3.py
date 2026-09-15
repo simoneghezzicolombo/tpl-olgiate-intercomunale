@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from src.phase2_rt031_network_connected_portfolios_v3 import (
     _prune_superset_cost_dominated_states,
     enumerate_network_connected_portfolios,
@@ -118,4 +120,60 @@ def test_non_materializing_mode_preserves_dynamic_program_counts():
         "objective_dominated_intermediate_state_count_pruned_by_movement_count"]
     assert diagnostic["portfolio_materialization_skipped"] is True
     assert diagnostic["unique_portfolio_stop_set_count"] is None
+    assert diagnostic["final_state_count_before_pareto_preprune"] is None
     assert diagnostic["portfolios"] == []
+    assert diagnostic["compact_final_states"] == []
+
+
+def test_final_pareto_preprune_is_exact_and_compact():
+    candidates = [
+        movement("ha", ["H", "A"], 3),
+        movement("hab", ["H", "A", "B"], 2),
+        movement("bc", ["B", "C"], 2),
+        movement("ad", ["A", "D"], 8),
+    ]
+    full = enumerate_network_connected_portfolios(
+        candidates, hub_stop_id="H", max_movements=2)
+    compact = enumerate_network_connected_portfolios(
+        candidates, hub_stop_id="H", max_movements=2,
+        materialize_portfolios=False, compact_final_states=True,
+        pareto_prune_final_states=True)
+
+    assert compact["portfolios"] == []
+    assert compact["portfolio_materialization_skipped"] is True
+    assert compact["compact_final_states_requested"] is True
+    assert compact["final_pareto_preprune_applied"] is True
+    assert compact["final_state_count_before_pareto_preprune"] == full[
+        "unique_portfolio_stop_set_count"]
+    assert compact["objective_dominated_final_state_count_pruned"] > 0
+    assert compact["final_state_count_after_pareto_preprune"] == len(
+        compact["compact_final_states"])
+
+    universe = compact["stop_universe"]
+    decoded = []
+    for mask, cost, identities in compact["compact_final_states"]:
+        decoded.append((
+            tuple(stop for index, stop in enumerate(universe) if mask & (1 << index)),
+            cost,
+            identities,
+        ))
+    assert (("A", "B", "H"), Decimal("2"), ("hab",)) in decoded
+    assert all(stops != ("A", "H") for stops, _, _ in decoded)
+
+
+def test_final_preprune_never_drops_cheaper_subset():
+    candidates = [
+        movement("ha-cheap", ["H", "A"], 1),
+        movement("hab-expensive", ["H", "A", "B"], 3),
+    ]
+    compact = enumerate_network_connected_portfolios(
+        candidates, hub_stop_id="H", max_movements=1,
+        materialize_portfolios=False, compact_final_states=True,
+        pareto_prune_final_states=True)
+    universe = compact["stop_universe"]
+    decoded = {
+        tuple(stop for index, stop in enumerate(universe) if mask & (1 << index))
+        for mask, _, _ in compact["compact_final_states"]
+    }
+    assert ("A", "H") in decoded
+    assert ("A", "B", "H") in decoded
