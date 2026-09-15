@@ -36,12 +36,15 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 - diversified-search CI `34982075116` SUCCESS, artifact `10402211767`: the two
   20,000-expansion lanes reach 34 total stop identities and 11/11 current exact
   identities, disproving the earlier apparent 12-stop ceiling;
-- single-line frontier CI `34982695261` SUCCESS, artifact `10402480319`:
-  2,457 ordered single-walk candidates, 158 Pareto alternatives, 29 improve the
-  current benchmark on all six access axes and four of those retain 11/11;
-- none of those 29 fits the reference cap at H30 for 10/12/16h; all fit H60/12h,
-  11 fit H60/16h, 25 fit H40/10h and one fits H40/12h. These are context counts,
-  not a frequency/span selection; shorter H30-envelope discovery remains open;
+- expanded single-line frontier CI `34983509128` SUCCESS, artifact
+  `10402507221`: 2,675 ordered single-walk candidates, 209 Pareto alternatives,
+  37 improve the current benchmark on all six access axes and four of those
+  retain 11/11;
+- H30-envelope search CI `34983044901` SUCCESS, artifact `10402307782`: eight
+  improved single lines fit the cap at H30/10h (four retain 9/11 and four retain
+  8/11); the shortest is 20.198 km / about 105,029 km/year. None fits H30/12h or
+  H30/16h in the supplied pool. These are context counts, not a frequency/span
+  selection;
 - current-stop conservation remains a Pareto preference; Olgiate FS remains a
   required line service node.
 

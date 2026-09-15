@@ -43,7 +43,8 @@ def read_rows(path):
 
 
 def build_candidate(portfolio_row, *, catalog, boundary, oracle, bound, profile_id,
-                    design_evidence=DESIGN_EVIDENCE):
+                    design_evidence=DESIGN_EVIDENCE,
+                    terminate_cycle_seam=False):
     macros, components, patterns, movements = [], [], [], []
     for component_index, witness in enumerate(portfolio_row["selected_witnesses"], start=1):
         rids = tuple(witness["realization_ids"])
@@ -57,17 +58,22 @@ def build_candidate(portfolio_row, *, catalog, boundary, oracle, bound, profile_
         ))
         location = concatenate_available(bound, rids)
         events = []
-        for event_index, visit in enumerate(location["payload"]["visits"], start=1):
+        visits = location["payload"]["visits"]
+        for event_index, visit in enumerate(visits, start=1):
             occurrence = visit["source_visit"]["source_occurrence"] if "source_visit" in visit else visit["source_occurrence"]
+            seam_endpoint = terminate_cycle_seam and event_index in (1, len(visits))
             events.append(ServiceEvent(
                 event_id=f"{component_id}::EVENT::{event_index}",
                 atom_slot=int(visit["slot"]),
                 source_stop_sequence=int(occurrence["stop_sequence"]),
-                event_kind="CANDIDATE_ORDINARY_PUBLIC_STOP",
-                pickup=True,
-                dropoff=True,
-                passenger_through=True,
-                vehicle_through=True,
+                event_kind=("COMPULSORY_ALIGHT" if terminate_cycle_seam
+                            and event_index == len(visits)
+                            else "CANDIDATE_CYCLE_SEAM_DEPARTURE" if seam_endpoint
+                            else "CANDIDATE_ORDINARY_PUBLIC_STOP"),
+                pickup=not (terminate_cycle_seam and event_index == len(visits)),
+                dropoff=not (terminate_cycle_seam and event_index == 1),
+                passenger_through=not seam_endpoint,
+                vehicle_through=not seam_endpoint,
                 evidence_id=design_evidence,
             ))
         components.append(ServiceComponent(

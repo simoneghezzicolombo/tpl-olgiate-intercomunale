@@ -107,18 +107,22 @@ and current-stop-rich states first, without a weighted score or admission
 filter. With 20,000 expansions each they find single walks with up to 34 stop
 identities and all 11 current exact identities.
 
-Combining the three positive pools yields 2,457 distinct ordered single-walk
-candidates and a 158-member no-weight frontier over six access axes, current-
-stop identity retention and distance. Twenty-nine frontier candidates are no
+Combining the positive pools, including the three H30-derived distance
+envelopes, yields 2,675 distinct ordered single-walk candidates and a 209-member
+no-weight frontier over six access axes, current-stop identity retention and
+distance. Thirty-seven frontier candidates are no
 worse than the current benchmark on all six access axes and strictly better on
 at least one; four of those retain all 11 current identities. The shortest of
 the four is 29.480 km and exposes 31 stop identities.
 
-At the 111,419 km/year reference cap, none of the 29 benchmark-improving
-candidates fits H30 at a 10, 12 or 16-hour span. All 29 fit H60/12h and 11 fit
-H60/16h; 25 fit H40/10h and one fits H40/12h. These are service-context counts,
-not a selected frequency or span. The physical pools remain incomplete, and
-ordered public events and passenger-service continuity are not yet certified.
+At the 111,419 km/year reference cap, eight of the 37 benchmark-improving
+candidates fit H30/10h; four of those retain 9/11 current exact identities and
+four retain 8/11. The shortest is 20.198 km, exposes 20 stop identities and
+requires about 105,029 km/year in that context. None fits H30/12h or H30/16h.
+All 37 fit H60/12h and 19 fit H60/16h; 33 fit H40/10h and nine fit H40/12h.
+These are service-context counts, not a selected frequency or span. The
+physical pools remain incomplete, and ordered public events and passenger-
+service continuity are not yet certified.
 
 Diversified-search CI run `34982075116` succeeded with artifact `10402211767`
 and ZIP digest
@@ -127,7 +131,14 @@ Single-line frontier CI run `34982695261` succeeded with artifact `10402480319`
 and ZIP digest
 `sha256:308828d3af91d33b039f89ac9669e2fe57e9bcf8811e331b80c50a218f2ffaf0`.
 The committed single-line audit SHA256 is
-`d8220d1b91fedd55826c00d9481f53f20ff8fbedf3a0a3ef207f18b0022e724d`.
+`433ea63276f30fac92b42fbb548687c4461cfa88a1bdca911c72cee72a1b48a4`.
+
+The H30-envelope search run `34983044901` succeeded with artifact
+`10402307782` and ZIP digest
+`sha256:772178af46d2dec587aac49e2fdfb4f5c29291f4be6a3be2c02af60e61ac2c03`.
+The expanded single-line frontier run `34983509128` succeeded with artifact
+`10402507221` and ZIP digest
+`sha256:0501e591ad604602ef7d587ea75c622e1aa5d6e5da4ff6e477cdae8cfcc2bf73`.
 
 This is deliberately labelled **potential** network connectivity. A common stop
 identity does not certify compatible directions, ordered service events or a
