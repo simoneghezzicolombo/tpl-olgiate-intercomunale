@@ -266,8 +266,6 @@ def main(args):
     result.write_bytes(canonical(output))
     audit = {key: value for key, value in output.items() if key != "frontier"}
     audit["result_sha256"] = sha256(result)
-    audit["frontier_candidate_ids"] = [
-        row["candidate_line_id"] for row in frontier]
     (args.output_dir / "rt031_municipal_access_frontier_v4_audit.json").write_bytes(
         canonical(audit))
     print(json.dumps(audit, sort_keys=True))
