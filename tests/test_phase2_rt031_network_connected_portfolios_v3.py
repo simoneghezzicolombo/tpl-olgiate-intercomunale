@@ -95,3 +95,27 @@ def test_intermediate_pruning_preserves_pareto_sufficient_expansion():
     ] is True
     assert any(row["available_stop_ids"] == ["A", "B", "C", "D", "H"]
                for row in result["portfolios"])
+
+
+def test_non_materializing_mode_preserves_dynamic_program_counts():
+    candidates = [
+        movement("ha", ["H", "A"], 3),
+        movement("ab", ["A", "B"], 3),
+        movement("hbc", ["H", "B", "C"], 2),
+        movement("ac", ["A", "C"], 2),
+        movement("bd", ["B", "D"], 1),
+    ]
+    full = enumerate_network_connected_portfolios(
+        candidates, hub_stop_id="H", max_movements=3)
+    diagnostic = enumerate_network_connected_portfolios(
+        candidates, hub_stop_id="H", max_movements=3,
+        materialize_portfolios=False)
+    assert diagnostic["dynamic_program_states_by_movement_count"] == full[
+        "dynamic_program_states_by_movement_count"]
+    assert diagnostic[
+        "objective_dominated_intermediate_state_count_pruned_by_movement_count"
+    ] == full[
+        "objective_dominated_intermediate_state_count_pruned_by_movement_count"]
+    assert diagnostic["portfolio_materialization_skipped"] is True
+    assert diagnostic["unique_portfolio_stop_set_count"] is None
+    assert diagnostic["portfolios"] == []
