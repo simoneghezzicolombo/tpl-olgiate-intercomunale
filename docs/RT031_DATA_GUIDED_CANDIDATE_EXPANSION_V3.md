@@ -121,8 +121,24 @@ four retain 8/11. The shortest is 20.198 km, exposes 20 stop identities and
 requires about 105,029 km/year in that context. None fits H30/12h or H30/16h.
 All 37 fit H60/12h and 19 fit H60/16h; 33 fit H40/10h and nine fit H40/12h.
 These are service-context counts, not a selected frequency or span. The
-physical pools remain incomplete, and ordered public events and passenger-
-service continuity are not yet certified.
+physical pools remain incomplete.
+
+All eight H30/10h alternatives are now bound as candidate service designs with
+one public route identity, one closed physical movement and one ordered public
+pattern. Directional occurrences and every ordered service event are explicit.
+Passenger continuity is declared only within that ordered pattern and is
+terminated at the Olgiate FS cycle seam; vehicle continuity is never substituted
+for passenger continuity. This certifies the one-line candidate structure, not
+an observed or selected production service.
+
+The exhaustive H30/10h timetable surface evaluates all 18 aligned ten-hour
+windows, all 30 clock phases and all 27 inherited deterministic
+runtime/dwell/recovery cases for every candidate: 4,320 timetable contexts and
+116,640 engineering realisations. The no-weight frontier retains 546 timetable
+contexts. Every candidate can use two vehicles in the light cases, but reaches
+four in the conservative tail; therefore two vehicles are not robustly
+certified until dwell evidence narrows the engineering grid. Deterministic miss
+shares are not empirical missed-connection probabilities.
 
 Diversified-search CI run `34982075116` succeeded with artifact `10402211767`
 and ZIP digest
@@ -139,6 +155,15 @@ The H30-envelope search run `34983044901` succeeded with artifact
 The expanded single-line frontier run `34983509128` succeeded with artifact
 `10402507221` and ZIP digest
 `sha256:0501e591ad604602ef7d587ea75c622e1aa5d6e5da4ff6e477cdae8cfcc2bf73`.
+
+Typed one-line binding run `34985174245` succeeded with artifact `10403361396`
+and ZIP digest
+`sha256:cc002bfb5f09c15f784259f83b385b91a87fba38502491780f651ea93ed068ad`.
+The exhaustive timetable run `34985778470` succeeded with artifact
+`10403538038` and ZIP digest
+`sha256:f35bbccc587f8ff313488098838e95076b36998f492dca02e1945da936212c54`.
+The committed timetable audit SHA256 is
+`8b6cdeb7f62f110a3fdd843f0b70f9a1550bc50d9e2a0c1ab455650b2c620756`.
 
 This is deliberately labelled **potential** network connectivity. A common stop
 identity does not certify compatible directions, ordered service events or a

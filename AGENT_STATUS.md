@@ -4,7 +4,7 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 ## Stato corrente
 
-**Data:** 2026-09-04  
+**Data:** 2026-09-15
 **Fase:** Phase 2 — final-tournament input readiness
 **Ultima lineage operativa integrata:** Stage E RT001 V3 @ `063e119` + repaired Stage-C evidence
 **Final-tournament contract audit:** **V2 INCOMPATIBLE; V3 non-decisional Pareto frontier PASS; final selection BLOCKED**
@@ -45,11 +45,21 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
   8/11); the shortest is 20.198 km / about 105,029 km/year. None fits H30/12h or
   H30/16h in the supplied pool. These are context counts, not a frequency/span
   selection;
+- typed single-line binding CI `34985174245` SUCCESS, artifact `10403361396`:
+  every one of the eight alternatives has exactly one public route identity,
+  one closed physical movement and one full ordered service pattern; passenger
+  continuity is explicit within the pattern and terminates at the cycle seam;
+- exhaustive H30/10h timetable CI `34985778470` SUCCESS, artifact
+  `10403538038`: 4,320 timetable contexts and 116,640 deterministic engineering
+  realisations produce a 546-context no-weight Pareto surface. All candidates
+  need two vehicles in the light cases and up to four in the conservative
+  runtime/dwell/recovery grid; observed dwell is not yet certified;
 - current-stop conservation remains a Pareto preference; Olgiate FS remains a
   required line service node.
 
 `single_public_line_required=true`
-`recognizable_public_line_certified=false`
+`single_recognizable_line_structure_certified=true`
+`observed_dwell_validation_complete=false`
 `network_selected=false`
 `primary_selection_authorised=false`
 `runner_up_selection_authorised=false`
