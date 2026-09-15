@@ -24,6 +24,9 @@ from scripts.phase2_bind_rt031_target_cover_service_v3 import (
     read_rows,
 )
 from src.phase2_rt031_occurrence_binding_v3 import bind_occurrences
+from src.phase2_rt031_frequent_access_shortlist_v3 import (
+    engineering_cycle_sensitivity,
+)
 from src.phase2_rt031_single_line_binding_v3 import (
     certify_single_public_line,
     eligible_h30_10h_candidates,
@@ -143,6 +146,13 @@ def main(args):
             "dwell_included": False,
             "vehicle_block_plan_certified": False,
         } for recovery in (5, 10, 15)]
+        component_screen = {
+            "component_id": route["service_component_id"],
+            "running_minutes_source_model_excludes_dwell": str(running),
+            "ordered_service_event_count": len(component["events"]),
+            "nonhub_public_stop_event_count": sum(
+                stop_id != HUB for stop_id in stop_ids),
+        }
         profiles.append({
             "profile_id": profile_id,
             "source_candidate_line_id": row["candidate_line_id"],
@@ -160,9 +170,11 @@ def main(args):
             "annual_service_days_design_context": ANNUAL_DAYS,
             "typed_network": network,
             "operational_source_model_screen": {
-                "running_minutes_source_model_excludes_dwell": str(running),
-                "ordered_service_event_count": len(component["events"]),
+                **component_screen,
                 "fleet_sensitivity": fleet,
+                "inherited_stage_f_engineering_grid":
+                    engineering_cycle_sensitivity(
+                        [component_screen], headway_min=HEADWAY_MIN),
                 "running_time_status": "SOURCE_MODEL_NOT_OBSERVED_EXCLUDES_DWELL",
             },
             "timetable_assigned": False,
