@@ -91,6 +91,44 @@ generic pool. A portfolio is admissible when at least one movement contains
 Olgiate FS and the movements form a connected intersection graph by shared stop
 identity. It is no longer required that every movement visit Olgiate FS.
 
+### Caller correction: one recognizable public line
+
+The decision objective is one recognizable public line, not a portfolio of
+independent passenger-facing lines. Physical movement count and vehicle count
+are therefore not line count. Multiple directions can belong to one line only
+after a common public route identity, directional occurrences, ordered service
+events and passenger-service continuity are bound explicitly.
+
+The original distance-priority hub pool was structurally uninformative for this
+objective: its 2,062 single closed walks reached at most 12 stop identities and
+no single walk improved the current benchmark on all six access axes. Two
+additional deterministic, resource-truncated discovery lanes expand stop-rich
+and current-stop-rich states first, without a weighted score or admission
+filter. With 20,000 expansions each they find single walks with up to 34 stop
+identities and all 11 current exact identities.
+
+Combining the three positive pools yields 2,457 distinct ordered single-walk
+candidates and a 158-member no-weight frontier over six access axes, current-
+stop identity retention and distance. Twenty-nine frontier candidates are no
+worse than the current benchmark on all six access axes and strictly better on
+at least one; four of those retain all 11 current identities. The shortest of
+the four is 29.480 km and exposes 31 stop identities.
+
+At the 111,419 km/year reference cap, none of the 29 benchmark-improving
+candidates fits H30 at a 10, 12 or 16-hour span. All 29 fit H60/12h and 11 fit
+H60/16h; 25 fit H40/10h and one fits H40/12h. These are service-context counts,
+not a selected frequency or span. The physical pools remain incomplete, and
+ordered public events and passenger-service continuity are not yet certified.
+
+Diversified-search CI run `34982075116` succeeded with artifact `10402211767`
+and ZIP digest
+`sha256:5b89fbe0b14edf2277404a93177383fef042cc1642477baa65c6802390421062`.
+Single-line frontier CI run `34982695261` succeeded with artifact `10402480319`
+and ZIP digest
+`sha256:308828d3af91d33b039f89ac9669e2fe57e9bcf8811e331b80c50a218f2ffaf0`.
+The committed single-line audit SHA256 is
+`d8220d1b91fedd55826c00d9481f53f20ff8fbedf3a0a3ef207f18b0022e724d`.
+
 This is deliberately labelled **potential** network connectivity. A common stop
 identity does not certify compatible directions, ordered service events or a
 passenger transfer. Those properties require later typed operational binding.
