@@ -50,7 +50,9 @@ def _prune_superset_cost_dominated_states(states):
 
 def enumerate_network_connected_portfolios(
         candidates, *, hub_stop_id: str, max_movements: int,
-        materialize_portfolios: bool = True):
+        materialize_portfolios: bool = True,
+        compact_final_states: bool = False,
+        pareto_prune_final_states: bool = False):
     """Return frontier-sufficient connected unions of stop IDs.
 
     Connectivity is deliberately weak: movements form a connected intersection
@@ -64,13 +66,27 @@ def enumerate_network_connected_portfolios(
 
     ``materialize_portfolios=False`` is a diagnostic mode for measuring larger
     dynamic-program domains without allocating the final human-readable rows.
-    It does not change enumeration or pruning; only final row materialization is
-    skipped and the union-count field is reported as ``None``.
+
+    ``pareto_prune_final_states=True`` applies the same exact cheaper/equal
+    strict-superset dominance only after all requested movement layers have
+    been enumerated. Because no further expansion follows, this is an exact
+    pre-prune for any final Pareto problem whose benefits are monotone in the
+    stop union and whose resource dimension is total movement distance.
+
+    ``compact_final_states=True`` exposes those final states as integer masks,
+    Decimal costs and deterministic witness tuples instead of allocating one
+    dictionary per human-readable portfolio. It is intended for scalable exact
+    downstream frontier metrics. Both new modes are opt-in so the certified
+    default materialization path keeps its previous semantics.
     """
     if not hub_stop_id or type(max_movements) is not int or max_movements < 1:
         raise ValueError("hub identity and positive movement bound required")
     if type(materialize_portfolios) is not bool:
         raise ValueError("materialize_portfolios must be boolean")
+    if type(compact_final_states) is not bool:
+        raise ValueError("compact_final_states must be boolean")
+    if type(pareto_prune_final_states) is not bool:
+        raise ValueError("pareto_prune_final_states must be boolean")
     source = []
     seen_ids = set()
     for row in candidates:
@@ -162,25 +178,61 @@ def enumerate_network_connected_portfolios(
         else:
             expansion_layers[size] = target
 
+    # Capture exact DP counts before optional final-state summarization mutates
+    # the last layer in place to avoid duplicating a potentially million-state
+    # dictionary in memory.
+    dynamic_counts = {
+        str(size): len(layers[size]) for size in range(1, limit + 1)
+    }
+    expansion_counts = {
+        str(size): len(expansion_layers[size]) for size in range(1, limit + 1)
+    }
+
     rows = []
+    compact_states = []
     unique_portfolio_stop_set_count = None
-    if materialize_portfolios:
-        summaries = {}
-        for size in range(1, limit + 1):
+    final_state_count_before_pareto_prune = None
+    final_state_pruned = 0
+    final_state_count_after_pareto_prune = None
+    needs_final_summary = (
+        materialize_portfolios or compact_final_states or pareto_prune_final_states)
+    if needs_final_summary:
+        # Reuse the largest final layer itself rather than allocating another
+        # million-entry dictionary. Lower-movement witnesses replace it only
+        # when they are deterministically cheaper/better for the same union.
+        summaries = layers[limit]
+        for size in range(1, limit):
             for mask, (cost, identities) in layers[size].items():
-                proposal = (cost, size, identities)
-                if mask not in summaries or proposal < summaries[mask]:
+                proposal = (cost, identities)
+                current = summaries.get(mask)
+                if (current is None or
+                        (cost, len(identities), identities) <
+                        (current[0], len(current[1]), current[1])):
                     summaries[mask] = proposal
-        for mask, (cost, size, identities) in summaries.items():
-            rows.append({
-                "available_stop_ids": [
-                    stop for stop in universe if mask & bits[stop]],
-                "total_distance_m": str(cost),
-                "movement_count": size,
-                "source_walk_ids": list(identities),
-            })
-        rows.sort(key=lambda row: tuple(row["available_stop_ids"]))
-        unique_portfolio_stop_set_count = len(rows)
+        unique_portfolio_stop_set_count = len(summaries)
+        final_state_count_before_pareto_prune = len(summaries)
+        final_states = summaries
+        if pareto_prune_final_states:
+            final_states, final_state_pruned = _prune_superset_cost_dominated_states(
+                summaries)
+        final_state_count_after_pareto_prune = len(final_states)
+
+        if compact_final_states:
+            compact_states = sorted(
+                (mask, cost, identities)
+                for mask, (cost, identities) in final_states.items())
+
+        if materialize_portfolios:
+            for mask, (cost, identities) in final_states.items():
+                rows.append({
+                    "available_stop_ids": [
+                        stop for stop in universe if mask & bits[stop]],
+                    "total_distance_m": str(cost),
+                    "movement_count": len(identities),
+                    "source_walk_ids": list(identities),
+                })
+            rows.sort(key=lambda row: tuple(row["available_stop_ids"]))
+
     any_expansion_pruning = any(expansion_pruned.values())
     return {
         "hub_stop_id": hub_stop_id,
@@ -191,15 +243,22 @@ def enumerate_network_connected_portfolios(
         "retained_hub_serving_movement_count": sum(
             bool(mask & hub_bit) for _, mask, _ in retained),
         "maximum_movement_count": max_movements,
-        "dynamic_program_states_by_movement_count": {
-            str(size): len(layers[size]) for size in range(1, limit + 1)},
-        "expansion_states_by_movement_count": {
-            str(size): len(expansion_layers[size]) for size in range(1, limit + 1)},
+        "dynamic_program_states_by_movement_count": dynamic_counts,
+        "expansion_states_by_movement_count": expansion_counts,
         "objective_dominated_intermediate_state_count_pruned_by_movement_count": (
             expansion_pruned),
         "unique_portfolio_stop_set_count": unique_portfolio_stop_set_count,
         "portfolio_materialization_skipped": not materialize_portfolios,
         "portfolios": rows,
+        "compact_final_states_requested": compact_final_states,
+        "compact_final_states": compact_states,
+        "stop_universe": universe if compact_final_states else [],
+        "final_pareto_preprune_applied": pareto_prune_final_states,
+        "final_state_count_before_pareto_preprune": (
+            final_state_count_before_pareto_prune),
+        "objective_dominated_final_state_count_pruned": final_state_pruned,
+        "final_state_count_after_pareto_preprune": (
+            final_state_count_after_pareto_prune),
         "enumeration_method": (
             "EXACT_CONNECTED_UNION_DYNAMIC_PROGRAM_WITH_SAFE_INTERMEDIATE_DOMINANCE"),
         "eligibility_index": "EXACT_PER_STOP_MOVEMENT_INTEGER_BITSETS",
@@ -207,6 +266,8 @@ def enumerate_network_connected_portfolios(
         "within_supplied_pool_pareto_complete_for_monotone_stop_union_objectives": True,
         "intermediate_dominance_semantics": (
             "CHEAPER_OR_EQUAL_STRICT_STOP_SUPERSET_SAFELY_DOMINATES_FOR_FUTURE_SHARED_STOP_CONNECTIONS"),
+        "final_pareto_preprune_semantics": (
+            "CHEAPER_OR_EQUAL_STRICT_STOP_SUPERSET_DOMINANCE_AFTER_ALL_REQUESTED_MOVEMENT_LAYERS"),
         "upstream_physical_search_complete": False,
         "closed_walk_domain_only": True,
         "at_least_one_movement_serves_hub_required": True,
