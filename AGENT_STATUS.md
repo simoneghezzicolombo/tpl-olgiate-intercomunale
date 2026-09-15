@@ -45,6 +45,29 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 `primary_selection_authorised=false`
 `runner_up_selection_authorised=false`
 
+## Codex handoff — frequent-access typed development shortlist
+
+2026-09-15. Branch `codex/rt031-decision-convergence`, PR #82. The latest
+network-connected artifact (run 34900153541, artifact 10370024100) passes and
+contains 62,947 exact two-movement stop unions with a 935-member no-weight
+frontier. 155 frontier members are within the approved H30/12h/260-day distance
+context, are no worse than the current exact-ID benchmark on all six 5/8/10-
+minute total/equity axes and strictly improve at least one.
+
+Added an exact access/equity-only Pareto gate that reduces those 155 profiles to
+five, then binds every source physical witness to directional occurrences and
+ordered candidate service events. Every component must serve Olgiate FS. Source-
+model runtime plus the inherited 27-case Stage-F runtime/dwell/recovery grid
+preserve explicit no-observation/no-block-plan status. Four profiles support a
+two-vehicle lower bound in 6/27 cases and one in 5/27; all reach four vehicles in
+the stressed tail. Controlled local validation: 47 tests pass. Real territorial A/B replay,
+artifact identity and exact profile results are pending CI at this commit.
+
+This is a development shortlist, not a selected network. Dwell-inclusive runtime,
+H30 timetable/S8 retention, vehicle blocks and robustness remain open. The
+upstream physical pools remain resource-incomplete and the two-movement boundary
+is not an impossibility claim. No PRIMARY or RUNNER-UP is authorised.
+
 ### RT-031 data-guided expansion — 578,235 PORTFOLIOS / 2,410 FRONTIER
 
 - Current-Service stop retention removed as a candidate constraint; Olgiate FS

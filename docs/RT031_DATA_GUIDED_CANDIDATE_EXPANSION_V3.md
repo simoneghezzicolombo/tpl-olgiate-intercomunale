@@ -115,6 +115,35 @@ claim. A local measurement found 1,373,871 connected stop unions at up to three
 movements before access evaluation; expanding that exact domain remains future
 computation rather than evidence that such portfolios do not exist.
 
+## Frequent-class operational development gate
+
+The certified two-movement frontier is next filtered only by decisions already
+present in the approved policy contract: H30 frequent service, the hard annual
+kilometre cap, and no regression against the current exact-ID benchmark on any
+of the six total/equity 5/8/10-minute dimensions.  For the longest H30 context
+that fits this supplied frontier (12 hours, 260 design days), all 155 benchmark-
+improving members remain within the cap.  Exact access/equity Pareto dominance
+reduces them to five territorial profiles without weights or a scalar score.
+
+`scripts/phase2_bind_rt031_frequent_access_shortlist_v3.py` binds all five source
+witnesses to exact directional carrier occurrences and ordered candidate public-
+stop events.  Every component must independently serve Olgiate FS.  The binding
+also reports source-model running time and 5/10/15-minute recovery fleet lower
+bounds.  These exclude dwell and are not a timetable or vehicle-block plan.
+
+The inherited Stage-F deterministic grid (runtime multipliers 0.9/1.0/1.1,
+non-hub dwell 0/0.5/1.0 minutes and recovery 5/10/15 minutes) is evaluated
+without probabilities. In the current source model, four profiles retain one
+vehicle per component in six of 27 cases and one profile in five of 27; every
+profile reaches a four-vehicle lower bound in the stressed tail. Therefore none
+is robustly certifiable as a two-vehicle H30 operation from source-model evidence
+alone. This is a screening result, not observed running-time validation.
+
+The five profiles are a development shortlist, not a network selection.  Their
+remaining gate is operational: dwell-inclusive runtime, exact H30 phasing, S8
+deterministic retention and vehicle-block robustness must be compared before the
+approved decision layers can advance.
+
 This lane still contains closed physical walks only. Its combinations can
 represent radial out-and-back and multiple independent movements, but public
 trunk-branch, short-turn and interlining semantics have not yet been assigned.

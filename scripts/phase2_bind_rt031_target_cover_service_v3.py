@@ -42,7 +42,8 @@ def read_rows(path):
         return list(csv.DictReader(handle))
 
 
-def build_candidate(portfolio_row, *, catalog, boundary, oracle, bound, profile_id):
+def build_candidate(portfolio_row, *, catalog, boundary, oracle, bound, profile_id,
+                    design_evidence=DESIGN_EVIDENCE):
     macros, components, patterns, movements = [], [], [], []
     for component_index, witness in enumerate(portfolio_row["selected_witnesses"], start=1):
         rids = tuple(witness["realization_ids"])
@@ -67,7 +68,7 @@ def build_candidate(portfolio_row, *, catalog, boundary, oracle, bound, profile_
                 dropoff=True,
                 passenger_through=True,
                 vehicle_through=True,
-                evidence_id=DESIGN_EVIDENCE,
+                evidence_id=design_evidence,
             ))
         components.append(ServiceComponent(
             component_id=component_id,
@@ -81,14 +82,14 @@ def build_candidate(portfolio_row, *, catalog, boundary, oracle, bound, profile_
             component_id=component_id,
             event_ids=tuple(event.event_id for event in events),
             applicability=profile_id,
-            evidence_id=DESIGN_EVIDENCE,
+            evidence_id=design_evidence,
         ))
         movements.append(Movement(
             movement_id=f"{profile_id}::MOVEMENT::{component_index}",
             component_id=component_id,
             multiplicity=1,
             applicability=profile_id,
-            evidence_id=DESIGN_EVIDENCE,
+            evidence_id=design_evidence,
         ))
     network = build_service_network(
         tuple(macros), tuple(components), tuple(patterns), tuple(movements),
