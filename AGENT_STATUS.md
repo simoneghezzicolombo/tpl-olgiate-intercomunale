@@ -36,24 +36,26 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 - diversified-search CI `34982075116` SUCCESS, artifact `10402211767`: the two
   20,000-expansion lanes reach 34 total stop identities and 11/11 current exact
   identities, disproving the earlier apparent 12-stop ceiling;
-- expanded single-line frontier CI `34983509128` SUCCESS, artifact
-  `10402507221`: 2,675 ordered single-walk candidates, 209 Pareto alternatives,
-  37 improve the current benchmark on all six access axes and four of those
-  retain 11/11;
-- H30-envelope search CI `34983044901` SUCCESS, artifact `10402307782`: eight
-  improved single lines fit the cap at H30/10h (four retain 9/11 and four retain
-  8/11); the shortest is 20.198 km / about 105,029 km/year. None fits H30/12h or
-  H30/16h in the supplied pool. These are context counts, not a frequency/span
-  selection;
-- typed single-line binding CI `34985174245` SUCCESS, artifact `10403361396`:
-  every one of the eight alternatives has exactly one public route identity,
+- caller-declared service context is H30 over 600 minutes; 260 annual service
+  days remains a design assumption and not a caller-selected value;
+- deep H30/10h search CI `34987371969` SUCCESS, artifact `10403709761`, adds
+  1,001 resource-bounded ordered witnesses and proves that the earlier 9/11
+  H30/10h retention ceiling was search truncation, not an impossibility;
+- expanded single-line frontier CI `35011955376` SUCCESS, artifact
+  `10414420652`: 3,663 ordered single-walk candidates, 197 Pareto alternatives
+  and 33 benchmark-improving alternatives; 17 fit the H30/10h reference-cap
+  context and their retention ranges from 7/11 to 10/11;
+- typed single-line binding CI `35012428602` SUCCESS, artifact `10414630100`:
+  every one of the 17 alternatives has exactly one public route identity,
   one closed physical movement and one full ordered service pattern; passenger
   continuity is explicit within the pattern and terminates at the cycle seam;
-- exhaustive H30/10h timetable CI `34985778470` SUCCESS, artifact
-  `10403538038`: 4,320 timetable contexts and 116,640 deterministic engineering
-  realisations produce a 546-context no-weight Pareto surface. All candidates
-  need two vehicles in the light cases and up to four in the conservative
-  runtime/dwell/recovery grid; observed dwell is not yet certified;
+- exhaustive H30/10h timetable CI `35012571290` SUCCESS, artifact
+  `10414363725`: 9,180 timetable contexts and 247,860 deterministic engineering
+  realisations produce a 1,802-context no-weight Pareto surface. All 17
+  candidates survive; the unique 10/11 alternative `SL_d25aca47905d0743f6a6`
+  contributes 97 contexts. Every context reaches four vehicles somewhere in
+  the conservative runtime/dwell/recovery grid; observed dwell is not yet
+  certified and Pareto-context counts are not votes;
 - current-stop conservation remains a Pareto preference; Olgiate FS remains a
   required line service node.
 

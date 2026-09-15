@@ -107,23 +107,30 @@ and current-stop-rich states first, without a weighted score or admission
 filter. With 20,000 expansions each they find single walks with up to 34 stop
 identities and all 11 current exact identities.
 
-Combining the positive pools, including the three H30-derived distance
-envelopes, yields 2,675 distinct ordered single-walk candidates and a 209-member
-no-weight frontier over six access axes, current-stop identity retention and
-distance. Thirty-seven frontier candidates are no
-worse than the current benchmark on all six access axes and strictly better on
-at least one; four of those retain all 11 current identities. The shortest of
-the four is 29.480 km and exposes 31 stop identities.
+The caller has now declared H30 over a ten-hour span. The annual 260-day count
+remains a design assumption. Two additional 75,000-expansion H30/10h search
+lanes add 1,001 resource-bounded ordered witnesses. Their result disproves the
+previous apparent 9/11 retention ceiling: it was a search-truncation result,
+not a structural impossibility.
 
-At the 111,419 km/year reference cap, eight of the 37 benchmark-improving
-candidates fit H30/10h; four of those retain 9/11 current exact identities and
-four retain 8/11. The shortest is 20.198 km, exposes 20 stop identities and
-requires about 105,029 km/year in that context. None fits H30/12h or H30/16h.
-All 37 fit H60/12h and 19 fit H60/16h; 33 fit H40/10h and nine fit H40/12h.
-These are service-context counts, not a selected frequency or span. The
-physical pools remain incomplete.
+Combining all positive pools yields 3,663 distinct ordered single-walk
+candidates and a 197-member no-weight frontier over six access axes,
+current-stop identity retention and distance. Thirty-three frontier candidates
+are no worse than the current benchmark on all six access axes and strictly
+better on at least one. Seventeen fit the 111,419 km/year H30/10h reference-cap
+context: one retains 10/11 current exact identities, six retain 9/11, eight
+retain 8/11 and two retain 7/11. None fits H30/12h or H30/16h. These are
+service-context counts, not a network selection, and the physical pools remain
+resource-incomplete.
 
-All eight H30/10h alternatives are now bound as candidate service designs with
+The unique 10/11 alternative is `SL_d25aca47905d0743f6a6`: 21.405390 km,
+approximately 111,308.028 km/year in the declared context, and 23 available
+stop identities. It retains every current exact identity except
+`FROZEN::300063`, the separately tracked historical Brivio naming-collision
+identity. This statement is exact-identity retention only; it does not silently
+promote stop identity to a directional-occurrence or ordered-event guarantee.
+
+All 17 H30/10h alternatives are now bound as candidate service designs with
 one public route identity, one closed physical movement and one ordered public
 pattern. Directional occurrences and every ordered service event are explicit.
 Passenger continuity is declared only within that ordered pattern and is
@@ -133,12 +140,15 @@ an observed or selected production service.
 
 The exhaustive H30/10h timetable surface evaluates all 18 aligned ten-hour
 windows, all 30 clock phases and all 27 inherited deterministic
-runtime/dwell/recovery cases for every candidate: 4,320 timetable contexts and
-116,640 engineering realisations. The no-weight frontier retains 546 timetable
-contexts. Every candidate can use two vehicles in the light cases, but reaches
-four in the conservative tail; therefore two vehicles are not robustly
-certified until dwell evidence narrows the engineering grid. Deterministic miss
-shares are not empirical missed-connection probabilities.
+runtime/dwell/recovery cases for every candidate: 9,180 timetable contexts and
+247,860 engineering realisations. The no-weight frontier retains 1,802 timetable
+contexts, and every one of the 17 candidates contributes at least one. The
+unique 10/11 candidate `SL_d25aca47905d0743f6a6` contributes 97 contexts, so it
+is not operationally dominated. Pareto-context counts are not votes and do not
+rank candidates. Every context reaches four vehicles somewhere in the
+conservative grid; therefore a smaller robust fleet is not certified until
+observed dwell evidence narrows that grid. Deterministic miss shares are not
+empirical missed-connection probabilities.
 
 Diversified-search CI run `34982075116` succeeded with artifact `10402211767`
 and ZIP digest
@@ -146,24 +156,29 @@ and ZIP digest
 Single-line frontier CI run `34982695261` succeeded with artifact `10402480319`
 and ZIP digest
 `sha256:308828d3af91d33b039f89ac9669e2fe57e9bcf8811e331b80c50a218f2ffaf0`.
-The committed single-line audit SHA256 is
+The committed audit SHA256 at that earlier discovery stage was
 `433ea63276f30fac92b42fbb548687c4461cfa88a1bdca911c72cee72a1b48a4`.
 
 The H30-envelope search run `34983044901` succeeded with artifact
 `10402307782` and ZIP digest
 `sha256:772178af46d2dec587aac49e2fdfb4f5c29291f4be6a3be2c02af60e61ac2c03`.
-The expanded single-line frontier run `34983509128` succeeded with artifact
-`10402507221` and ZIP digest
-`sha256:0501e591ad604602ef7d587ea75c622e1aa5d6e5da4ff6e477cdae8cfcc2bf73`.
-
-Typed one-line binding run `34985174245` succeeded with artifact `10403361396`
+Deep H30/10h search run `34987371969` succeeded with artifact `10403709761`
 and ZIP digest
-`sha256:cc002bfb5f09c15f784259f83b385b91a87fba38502491780f651ea93ed068ad`.
-The exhaustive timetable run `34985778470` succeeded with artifact
-`10403538038` and ZIP digest
-`sha256:f35bbccc587f8ff313488098838e95076b36998f492dca02e1945da936212c54`.
+`sha256:37b5e4f51240eabf0cc8ddbfa34746ebf6aa3226a8d9ca222a0b72f89854e7cc`.
+The expanded single-line frontier run `35011955376` succeeded with artifact
+`10414420652` and ZIP digest
+`sha256:0621c06a04bdccffefa60bd17dbe07bf9dbb0056b41929e86c57fdb6fcb28892`.
+The committed frontier audit SHA256 is
+`a755aaec2f3edbc903ae1bdb50a106911476b8d41f82b183c48b7563ea72c216`.
+
+Typed one-line binding run `35012428602` succeeded with artifact `10414630100`
+and ZIP digest
+`sha256:9dbc356dedb7e2fdf774f5d7e8d1fb6e3538f557fdd6dab5218b0930ebe8c673`.
+The exhaustive timetable run `35012571290` succeeded with artifact
+`10414363725` and ZIP digest
+`sha256:ae05e90d41ae198892372862cb32efc2c71c7d527be05dd76be3e5471f2b99ff`.
 The committed timetable audit SHA256 is
-`8b6cdeb7f62f110a3fdd843f0b70f9a1550bc50d9e2a0c1ab455650b2c620756`.
+`bfc1a901363666a461f1317d50086fbdaa26b5bbf7b039b5d735f05a095fed3c`.
 
 This is deliberately labelled **potential** network connectivity. A common stop
 identity does not certify compatible directions, ordered service events or a
