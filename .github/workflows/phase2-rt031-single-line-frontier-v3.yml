@@ -28,19 +28,28 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p /tmp/distance /tmp/diversified /tmp/walk
+          mkdir -p /tmp/distance /tmp/diversified /tmp/h30 /tmp/walk
           gh api repos/${{ github.repository }}/actions/artifacts/10368324023/zip > /tmp/distance.zip
           gh api repos/${{ github.repository }}/actions/artifacts/10402211767/zip > /tmp/diversified.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10402307782/zip > /tmp/h30.zip
           gh api repos/${{ github.repository }}/actions/artifacts/9991182904/zip > /tmp/walk.zip
           echo 'dedf6d067af0188dde13c3041c482dd5551e23b9d4551cf757c7a137590dcf6b  /tmp/distance.zip' | sha256sum -c
           echo '5b89fbe0b14edf2277404a93177383fef042cc1642477baa65c6802390421062  /tmp/diversified.zip' | sha256sum -c
+          echo '772178af46d2dec587aac49e2fdfb4f5c29291f4be6a3be2c02af60e61ac2c03  /tmp/h30.zip' | sha256sum -c
           echo 'e1ca83699593dd9e605d2870667da1b4dfc6068436a0c3116faf8587901b2e28  /tmp/walk.zip' | sha256sum -c
           unzip -q /tmp/distance.zip -d /tmp/distance
           unzip -q /tmp/diversified.zip -d /tmp/diversified
+          unzip -q /tmp/h30.zip -d /tmp/h30
           unzip -q /tmp/walk.zip -d /tmp/walk
           echo 'b86b27f791b0b36f0e30997a96388c5763f46822411ea990bfeed3351cd8a65c  /tmp/distance/physical_walk_search.json' | sha256sum -c
           echo '05e4623a3433befed218f95ae8412f6791d2239ef21dbbe2b386116faca1754a  /tmp/diversified/available_stop_count/physical_walk_search.json' | sha256sum -c
           echo '65c14d9183ed614f162f6b5e2d5c1acc21e5692afe6ff8e9c703f8772e962cf1  /tmp/diversified/preferred_stop_count/physical_walk_search.json' | sha256sum -c
+          echo 'a4a22ff8d8e681311226060bcb367702ba765e874c44b40711f1e69b6adc4c7b  /tmp/h30/H30_10H/available_stop_count/physical_walk_search.json' | sha256sum -c
+          echo 'a055296ef62aea3c57ce73648349e83a03d160df6895babeff53fcd0a9222ecc  /tmp/h30/H30_10H/preferred_stop_count/physical_walk_search.json' | sha256sum -c
+          echo '88eb0fd2a48df23dbc0dc82ca7957400c3cfffdf43834d56b6ffbf0978def710  /tmp/h30/H30_12H/available_stop_count/physical_walk_search.json' | sha256sum -c
+          echo '82972bc71d5169e19757bfc4a52f1071d5ee788d7f5736ba3756522b41e8ca2d  /tmp/h30/H30_12H/preferred_stop_count/physical_walk_search.json' | sha256sum -c
+          echo '74c8578fda0d0fef7325eee6e5b2439ab78f1338c8ccd06689540f2334df1e04  /tmp/h30/H30_16H/available_stop_count/physical_walk_search.json' | sha256sum -c
+          echo '1decd9a93c70dd2ea2f9bc23575e96d882ff99fb1b1a5dda492d31be4c198474  /tmp/h30/H30_16H/preferred_stop_count/physical_walk_search.json' | sha256sum -c
       - name: Build exact supplied-pool frontier twice
         run: |
           walk=$(find /tmp/walk -name rt028_population_unit_stop_walk_matrix_v3.csv | head -1)
@@ -49,6 +58,12 @@ jobs:
               --pool distance=/tmp/distance/physical_walk_search.json \
               --pool available_stop_count=/tmp/diversified/available_stop_count/physical_walk_search.json \
               --pool preferred_stop_count=/tmp/diversified/preferred_stop_count/physical_walk_search.json \
+              --pool h30_10_available=/tmp/h30/H30_10H/available_stop_count/physical_walk_search.json \
+              --pool h30_10_preferred=/tmp/h30/H30_10H/preferred_stop_count/physical_walk_search.json \
+              --pool h30_12_available=/tmp/h30/H30_12H/available_stop_count/physical_walk_search.json \
+              --pool h30_12_preferred=/tmp/h30/H30_12H/preferred_stop_count/physical_walk_search.json \
+              --pool h30_16_available=/tmp/h30/H30_16H/available_stop_count/physical_walk_search.json \
+              --pool h30_16_preferred=/tmp/h30/H30_16H/preferred_stop_count/physical_walk_search.json \
               --walk-matrix "$walk" \
               --current-audit outputs/phase2/rt031_current_exact_target_cover_v3/current_exact_target_cover_audit.json \
               --policy config/phase2_final_policy_contract_v3.json \
