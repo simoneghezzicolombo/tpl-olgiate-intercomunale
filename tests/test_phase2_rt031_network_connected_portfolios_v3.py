@@ -1,4 +1,5 @@
 from src.phase2_rt031_network_connected_portfolios_v3 import (
+    _prune_superset_cost_dominated_states,
     enumerate_network_connected_portfolios,
 )
 
@@ -56,3 +57,41 @@ def test_same_union_keeps_cheapest_connected_witness():
                  if row["available_stop_ids"] == ["A", "B", "H"])
     assert union["total_distance_m"] == "4"
     assert union["source_walk_ids"] == ["hub-b", "ab"]
+
+
+def test_state_pruning_requires_a_cheaper_or_equal_strict_superset():
+    kept, pruned = _prune_superset_cost_dominated_states({
+        0b001: (5, ("small",)),
+        0b011: (5, ("equal-cost-superset",)),
+        0b101: (4, ("other-superset",)),
+        0b111: (7, ("expensive-full",)),
+    })
+    assert pruned == 1
+    assert 0b001 not in kept
+    assert set(kept) == {0b011, 0b101, 0b111}
+
+    kept, pruned = _prune_superset_cost_dominated_states({
+        0b001: (3, ("cheap-subset",)),
+        0b011: (4, ("expensive-superset",)),
+    })
+    assert pruned == 0
+    assert set(kept) == {0b001, 0b011}
+
+
+def test_intermediate_pruning_preserves_pareto_sufficient_expansion():
+    result = enumerate_network_connected_portfolios([
+        movement("ha", ["H", "A"], 3),
+        movement("ab", ["A", "B"], 3),
+        movement("hbc", ["H", "B", "C"], 2),
+        movement("ac", ["A", "C"], 2),
+        movement("bd", ["B", "D"], 1),
+    ], hub_stop_id="H", max_movements=3)
+    assert result[
+        "objective_dominated_intermediate_state_count_pruned_by_movement_count"
+    ]["2"] > 0
+    assert result["within_supplied_pool_complete"] is False
+    assert result[
+        "within_supplied_pool_pareto_complete_for_monotone_stop_union_objectives"
+    ] is True
+    assert any(row["available_stop_ids"] == ["A", "B", "C", "D", "H"]
+               for row in result["portfolios"])
