@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the exhaustive H30/10h timetable surface for eight one-line candidates."""
+"""Build the exhaustive H30/10h timetable surface for all one-line candidates."""
 from __future__ import annotations
 
 import argparse
@@ -19,7 +19,7 @@ from src.phase2_rt031_single_line_timetable_surface_v3 import (
 )
 
 
-TYPED_AUDIT_SHA256 = "80e912ab0775461cb63d8be9f6efb8daa0d6bf45a330d4e78dbd9bcdde387be3"
+TYPED_AUDIT_SHA256 = "735c8f650dbcfc6c429e21cbad374be78cb7436af390bef84b54161baf6337cd"
 
 
 def sha256(path):
@@ -37,8 +37,8 @@ def main(args):
     typed = json.loads(args.typed_audit.read_text(encoding="utf-8"))
     if (typed.get("contract") != "RT031_SINGLE_LINE_H30_10H_TYPED_CONTEXT_V3"
             or typed.get("status")
-            != "PASS_EIGHT_TYPED_SINGLE_LINE_CANDIDATES_PENDING_OPERATIONS"
-            or typed.get("profile_count") != 8
+            != "PASS_SEVENTEEN_TYPED_SINGLE_LINE_CANDIDATES_PENDING_OPERATIONS"
+            or typed.get("profile_count") != 17
             or typed.get("single_recognizable_line_structure_certified") is not True
             or typed.get("network_selected") is not False):
         raise ValueError("typed one-line contract drift")

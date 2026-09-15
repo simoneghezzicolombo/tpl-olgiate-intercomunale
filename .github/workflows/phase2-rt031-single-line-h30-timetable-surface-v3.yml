@@ -33,10 +33,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p /tmp/typed
-          gh api repos/${{ github.repository }}/actions/artifacts/10403361396/zip > /tmp/typed.zip
-          echo 'cc002bfb5f09c15f784259f83b385b91a87fba38502491780f651ea93ed068ad  /tmp/typed.zip' | sha256sum -c
+          gh api repos/${{ github.repository }}/actions/artifacts/10414630100/zip > /tmp/typed.zip
+          echo '9dbc356dedb7e2fdf774f5d7e8d1fb6e3538f557fdd6dab5218b0930ebe8c673  /tmp/typed.zip' | sha256sum -c
           unzip -q /tmp/typed.zip -d /tmp/typed
-          echo '80e912ab0775461cb63d8be9f6efb8daa0d6bf45a330d4e78dbd9bcdde387be3  /tmp/typed/single_line_h30_typed_context_audit.json' | sha256sum -c
+          echo '735c8f650dbcfc6c429e21cbad374be78cb7436af390bef84b54161baf6337cd  /tmp/typed/single_line_h30_typed_context_audit.json' | sha256sum -c
       - name: Build complete surface twice and compare every byte
         run: |
           for out in /tmp/surface-a /tmp/surface-b; do
