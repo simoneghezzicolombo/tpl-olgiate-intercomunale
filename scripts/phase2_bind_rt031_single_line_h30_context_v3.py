@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bind the eight H30/10h one-line frontier candidates to typed service events."""
+"""Bind all H30/10h one-line frontier candidates to typed service events."""
 from __future__ import annotations
 
 import argparse
@@ -33,10 +33,13 @@ from src.phase2_rt031_single_line_binding_v3 import (
 )
 
 
-FRONTIER_SHA256 = "c92e8de08eb249a3e840f2eddaefe49d228bd37fb09dc292edae24d460a263b0"
-FRONTIER_AUDIT_SHA256 = "433ea63276f30fac92b42fbb548687c4461cfa88a1bdca911c72cee72a1b48a4"
+FRONTIER_SHA256 = "8ec006da2786376007d73caadfc61d62518ad6d705452d7dabbeFbb64bd8699a"
+FRONTIER_AUDIT_SHA256 = "a755aaec2f3edbc903ae1bdb50a106911476b8d41f82b183c48b7563ea72c216"
 CURRENT_AUDIT_SHA256 = "c164e047326c26a318851af86cf091c83aae345bcc39303d2ee46d92490fd0f1"
-H30_POOL_SHA256 = "a055296ef62aea3c57ce73648349e83a03d160df6895babeff53fcd0a9222ecc"
+H30_POOL_SHA256 = {
+    "ce569dccc6183c1f8e68e75624135f155666cd2f610c13fd48df155646470916",
+    "040522e6900bb1d18d894858bc41e3ac4ac6428be38b4c1a00fae9277dac75eb",
+}
 HUB = "FROZEN::L00407"
 HEADWAY_MIN = 30
 SPAN_MINUTES = 600
@@ -49,10 +52,11 @@ def main(args):
         args.frontier: FRONTIER_SHA256,
         args.frontier_audit: FRONTIER_AUDIT_SHA256,
         args.current_audit: CURRENT_AUDIT_SHA256,
-        args.h30_pool: H30_POOL_SHA256,
     }
     if any(sha256_file(path) != digest for path, digest in expected.items()):
         raise ValueError("pinned single-line input lineage drift")
+    if {sha256_file(path) for path in args.h30_pool} != H30_POOL_SHA256:
+        raise ValueError("pinned H30 pool set lineage drift")
     frontier = json.loads(args.frontier.read_text(encoding="utf-8"))
     frontier_audit = json.loads(args.frontier_audit.read_text(encoding="utf-8"))
     current = json.loads(args.current_audit.read_text(encoding="utf-8"))
@@ -68,18 +72,25 @@ def main(args):
         "results"][1]["same_substrate_access_comparison"]["current_exact_ratios"]
     eligible = eligible_h30_10h_candidates(
         frontier, current_exact_ratios=current_ratios)
-    if len(eligible) != 8:
+    if len(eligible) != 17:
         raise AssertionError("certified H30/10h one-line candidate identity drift")
 
-    pool = json.loads(args.h30_pool.read_text(encoding="utf-8"))
-    if (pool.get("contract") != "RT031_BUDGETED_PHYSICAL_CLOSED_WALK_SEARCH_V3"
-            or pool.get("status") != "RESOURCE_LIMIT_INCOMPLETE"
-            or pool.get("required_root_stop_id") != HUB
-            or pool.get("search_priority_mode") != "preferred_stop_count"
-            or pool.get("candidate_generation_priority_is_normative_selection") is not False):
-        raise ValueError("H30 physical witness pool contract drift")
-    witnesses = {tuple(row["realization_ids"]): row
-                 for row in pool["candidates"]}
+    witnesses = {}
+    for pool_path in args.h30_pool:
+        pool = json.loads(pool_path.read_text(encoding="utf-8"))
+        if (pool.get("contract") != "RT031_BUDGETED_PHYSICAL_CLOSED_WALK_SEARCH_V3"
+                or pool.get("status") != "RESOURCE_LIMIT_INCOMPLETE"
+                or pool.get("required_root_stop_id") != HUB
+                or pool.get("search_priority_mode") != "preferred_stop_count"
+                or pool.get("conditional_span_minutes") != SPAN_MINUTES
+                or pool.get("candidate_generation_priority_is_normative_selection") is not False):
+            raise ValueError("H30 physical witness pool contract drift")
+        for witness in pool["candidates"]:
+            path = tuple(witness["realization_ids"])
+            previous = witnesses.get(path)
+            if previous is not None and previous != witness:
+                raise ValueError("same ordered witness changed across H30 pools")
+            witnesses[path] = witness
 
     tables, hashes = load_inputs(args.inputs)
     validate_via_way_evidence(args.via_way_evidence)
@@ -182,7 +193,7 @@ def main(args):
         })
     audit = {
         "contract": "RT031_SINGLE_LINE_H30_10H_TYPED_CONTEXT_V3",
-        "status": "PASS_EIGHT_TYPED_SINGLE_LINE_CANDIDATES_PENDING_OPERATIONS",
+        "status": "PASS_SEVENTEEN_TYPED_SINGLE_LINE_CANDIDATES_PENDING_OPERATIONS",
         "profile_count": len(profiles),
         "profiles": profiles,
         "public_route_identity_count_per_candidate": 1,
@@ -214,7 +225,7 @@ def main(args):
             "frontier": FRONTIER_SHA256,
             "frontier_audit": FRONTIER_AUDIT_SHA256,
             "current_audit": CURRENT_AUDIT_SHA256,
-            "h30_pool": H30_POOL_SHA256,
+            "h30_pools": sorted(H30_POOL_SHA256),
         },
     }
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -236,6 +247,6 @@ if __name__ == "__main__":
     parser.add_argument("--frontier", type=Path, required=True)
     parser.add_argument("--frontier-audit", type=Path, required=True)
     parser.add_argument("--current-audit", type=Path, required=True)
-    parser.add_argument("--h30-pool", type=Path, required=True)
+    parser.add_argument("--h30-pool", type=Path, action="append", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     main(parser.parse_args())

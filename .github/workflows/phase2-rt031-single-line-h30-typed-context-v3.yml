@@ -34,37 +34,38 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p /tmp/rt031-inputs/{rt017,rt022,rt030} /tmp/via /tmp/frontier /tmp/h30
+          mkdir -p /tmp/rt031-inputs/{rt017,rt022,rt030} /tmp/via /tmp/frontier /tmp/deep
           gh api repos/${{ github.repository }}/actions/artifacts/9972204236/zip > /tmp/rt017.zip
           gh api repos/${{ github.repository }}/actions/artifacts/9988386073/zip > /tmp/rt022.zip
           gh api repos/${{ github.repository }}/actions/artifacts/9992507233/zip > /tmp/rt030.zip
           gh api repos/${{ github.repository }}/actions/artifacts/10023387513/zip > /tmp/via.zip
-          gh api repos/${{ github.repository }}/actions/artifacts/10402507221/zip > /tmp/frontier.zip
-          gh api repos/${{ github.repository }}/actions/artifacts/10402307782/zip > /tmp/h30.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10414420652/zip > /tmp/frontier.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10403709761/zip > /tmp/deep.zip
           echo 'e0b71f6fd673345c3bc0bf8e32ecf66b7f620e27802f1eb5b24690a8295c8225  /tmp/rt017.zip' | sha256sum -c
           echo '1cab2e18eec4920cbdb348d0d9cd224c7516f8d62bc63b0eacf2a91f6fb134d7  /tmp/rt022.zip' | sha256sum -c
           echo '350c5011565883228ccb52e186bc908a95fdc29f8dd4ebab21fd4c4cb16d6564  /tmp/rt030.zip' | sha256sum -c
           echo '1603606d02a170567c1d423b7689b7044933fff6490caeaf848ae0ca0f2d77d0  /tmp/via.zip' | sha256sum -c
-          echo '0501e591ad604602ef7d587ea75c622e1aa5d6e5da4ff6e477cdae8cfcc2bf73  /tmp/frontier.zip' | sha256sum -c
-          echo '772178af46d2dec587aac49e2fdfb4f5c29291f4be6a3be2c02af60e61ac2c03  /tmp/h30.zip' | sha256sum -c
+          echo '0621c06a04bdccffefa60bd17dbe07bf9dbb0056b41929e86c57fdb6fcb28892  /tmp/frontier.zip' | sha256sum -c
+          echo '37b5e4f51240eabf0cc8ddbfa34746ebf6aa3226a8d9ca222a0b72f89854e7cc  /tmp/deep.zip' | sha256sum -c
           unzip -q /tmp/rt017.zip -d /tmp/rt031-inputs/rt017
           unzip -q /tmp/rt022.zip -d /tmp/rt031-inputs/rt022
           unzip -q /tmp/rt030.zip -d /tmp/rt031-inputs/rt030
           unzip -q /tmp/via.zip -d /tmp/via
           unzip -q /tmp/frontier.zip -d /tmp/frontier
-          unzip -q /tmp/h30.zip -d /tmp/h30
-      - name: Bind eight alternatives twice and compare every byte
+          unzip -q /tmp/deep.zip -d /tmp/deep
+      - name: Bind all seventeen alternatives twice and compare every byte
         run: |
           evidence=$(find /tmp/via -name '*.json' | head -1)
           frontier=$(find /tmp/frontier -name rt031_single_line_frontier_v3.json | head -1)
           audit=$(find /tmp/frontier -name rt031_single_line_frontier_v3_audit.json | head -1)
-          pool=/tmp/h30/H30_10H/preferred_stop_count/physical_walk_search.json
           for out in /tmp/typed-a /tmp/typed-b; do
             python scripts/phase2_bind_rt031_single_line_h30_context_v3.py \
               --inputs /tmp/rt031-inputs --via-way-evidence "$evidence" \
               --frontier "$frontier" --frontier-audit "$audit" \
               --current-audit outputs/phase2/rt031_current_exact_target_cover_v3/current_exact_target_cover_audit.json \
-              --h30-pool "$pool" --output-dir "$out"
+              --h30-pool /tmp/deep/all_current/physical_walk_search.json \
+              --h30-pool /tmp/deep/gap_pair/physical_walk_search.json \
+              --output-dir "$out"
           done
           diff -r /tmp/typed-a /tmp/typed-b
       - uses: actions/upload-artifact@v4
