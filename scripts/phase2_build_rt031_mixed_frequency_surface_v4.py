@@ -119,6 +119,7 @@ def main(args):
         "template_id": template["template_id"],
         "span_minutes": template["span_minutes"],
         "h30_peak_hours": template["h30_peak_hours"],
+        "h60_base_hours": template["h60_base_hours"],
         "daily_departure_count": len(template["nominal_departure_minutes"]),
         "evaluated_context_count": sum(
             row["template_id"] == template["template_id"] for row in contexts),
@@ -174,7 +175,7 @@ def main(args):
               for code in codes for threshold in (5, 8, 10)],
             {"field": "retained_current_exact_stop_share", "direction": "max"},
             {"field": "service_span_minutes", "direction": "max"},
-            {"field": "h30_service_hours", "direction": "max"},
+            {"field": "h30_peak_hours", "direction": "max"},
             {"field": "robust_min_transfer_quality", "direction": "max"},
             {"field": "robust_unweighted_mean_transfer_quality", "direction": "max"},
             {"field": "conditional_annual_bus_km", "direction": "min"},
@@ -184,6 +185,10 @@ def main(args):
         ],
         "longer_service_span_is_caller_preference": True,
         "all_templates_have_equal_daily_departure_count": True,
+        "h30_h60_hours_partition_span": all(
+            template["h30_peak_hours"] + template["h60_base_hours"]
+            == template["span_minutes"] // 60
+            for template in templates),
         "daily_departure_count": 20,
         "popular_times_role": "QUALITATIVE_TEMPORAL_PLAUSIBILITY_FOR_TESTED_WINDOWS_ONLY",
         "popular_times_used_as_demand": False,
