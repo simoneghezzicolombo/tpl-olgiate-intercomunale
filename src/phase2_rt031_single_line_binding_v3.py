@@ -6,6 +6,7 @@ timetable, observed running time, vehicle block, or a selected network.
 from __future__ import annotations
 
 from fractions import Fraction
+from decimal import Decimal
 
 
 def eligible_h30_10h_candidates(frontier, *, current_exact_ratios):
@@ -36,6 +37,44 @@ def eligible_h30_10h_candidates(frontier, *, current_exact_ratios):
                 and contexts[0].get("within_approved_reference_cap") is True):
             eligible.append(row)
     return sorted(eligible, key=lambda row: row["candidate_line_id"])
+
+
+def municipal_frontier_within_cap(frontier, *, annual_bus_km_cap):
+    """Validate and return the municipal-axis frontier inside a declared cap.
+
+    Municipal non-regression and current-stop retention deliberately remain
+    Pareto dimensions rather than admission filters.
+    """
+    cap = Decimal(str(annual_bus_km_cap))
+    if not cap.is_finite() or cap <= 0:
+        raise ValueError("positive finite annual bus-km cap required")
+    selected = []
+    identities = set()
+    for row in frontier:
+        identity = row.get("candidate_line_id")
+        if not identity or identity in identities:
+            raise ValueError("unique municipal-frontier candidate identity required")
+        identities.add(identity)
+        distance = Decimal(str(row.get("total_distance_m")))
+        annual = Decimal(str(
+            row.get("conditional_annual_bus_km_at_20_daily_cycles")))
+        if (not distance.is_finite() or distance <= 0
+                or not annual.is_finite() or annual <= 0):
+            raise ValueError("positive finite candidate distance required")
+        expected = distance * Decimal(20) * Decimal(260) / Decimal(1000)
+        if annual != expected:
+            raise ValueError("municipal-frontier resource identity drift")
+        realization_ids = row.get("realization_ids", ())
+        stops = row.get("available_stop_ids", ())
+        municipal = row.get("exact_municipality_coverage", {})
+        if (not realization_ids or not stops or "FROZEN::L00407" not in stops
+                or len(municipal) != 5
+                or any(set(values) != {"5", "8", "10"}
+                       for values in municipal.values())):
+            raise ValueError("municipal-frontier candidate semantics drift")
+        if annual <= cap:
+            selected.append(row)
+    return sorted(selected, key=lambda row: row["candidate_line_id"])
 
 
 def certify_single_public_line(network, *, public_route_id):
