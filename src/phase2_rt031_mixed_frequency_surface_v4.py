@@ -29,15 +29,17 @@ def _template(template_id, start, span_hours, peak_slots):
             b - a for a, b in zip(departures, departures[1:])) - {30, 60}:
         raise ValueError("mixed template must contain 20 H30/H60 departures")
     h30_peak_hours = len(peak_slots)
-    h60_base_hours = span_hours - h30_peak_hours
-    if h60_base_hours < 0 or h30_peak_hours + h60_base_hours != span_hours:
-        raise ValueError("H30 and H60 hours must partition the service span")
+    h60_base_hours = span_hours
+    h60_offpeak_hours = span_hours - h30_peak_hours
+    if h60_offpeak_hours < 0 or h30_peak_hours + h60_offpeak_hours != span_hours:
+        raise ValueError("H30 and H60-only hours must partition the service span")
     return {
         "template_id": template_id,
         "nominal_span_start_min": start,
         "span_minutes": span_hours * 60,
         "h30_peak_hours": h30_peak_hours,
         "h60_base_hours": h60_base_hours,
+        "h60_offpeak_hours": h60_offpeak_hours,
         "nominal_departure_minutes": departures,
     }
 
@@ -165,6 +167,7 @@ def evaluate_mixed_context(profile, municipal_candidate, *, template, phase,
         "span_minutes": template["span_minutes"],
         "h30_peak_hours": template["h30_peak_hours"],
         "h60_base_hours": template["h60_base_hours"],
+        "h60_offpeak_hours": template["h60_offpeak_hours"],
         "phase_min": phase,
         "departure_count": len(departures),
         "departures_min": list(departures),

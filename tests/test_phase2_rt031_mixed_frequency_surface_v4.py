@@ -11,9 +11,10 @@ def test_templates_trade_peak_hours_for_longer_span_at_equal_departures():
     templates = mixed_service_templates()
     assert [row["span_minutes"] for row in templates] == [720, 840, 960, 1080]
     assert [row["h30_peak_hours"] for row in templates] == [8, 6, 4, 2]
-    assert [row["h60_base_hours"] for row in templates] == [4, 8, 12, 16]
+    assert [row["h60_base_hours"] for row in templates] == [12, 14, 16, 18]
+    assert [row["h60_offpeak_hours"] for row in templates] == [4, 8, 12, 16]
     for row in templates:
-        assert (row["h30_peak_hours"] + row["h60_base_hours"]
+        assert (row["h30_peak_hours"] + row["h60_offpeak_hours"]
                 == row["span_minutes"] // 60)
         departures = phased_departures(row, 0)
         assert len(departures) == 20

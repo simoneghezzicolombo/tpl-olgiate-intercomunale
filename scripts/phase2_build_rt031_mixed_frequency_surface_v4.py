@@ -120,6 +120,7 @@ def main(args):
         "span_minutes": template["span_minutes"],
         "h30_peak_hours": template["h30_peak_hours"],
         "h60_base_hours": template["h60_base_hours"],
+        "h60_offpeak_hours": template["h60_offpeak_hours"],
         "daily_departure_count": len(template["nominal_departure_minutes"]),
         "evaluated_context_count": sum(
             row["template_id"] == template["template_id"] for row in contexts),
@@ -186,7 +187,7 @@ def main(args):
         "longer_service_span_is_caller_preference": True,
         "all_templates_have_equal_daily_departure_count": True,
         "h30_h60_hours_partition_span": all(
-            template["h30_peak_hours"] + template["h60_base_hours"]
+            template["h30_peak_hours"] + template["h60_offpeak_hours"]
             == template["span_minutes"] // 60
             for template in templates),
         "daily_departure_count": 20,
