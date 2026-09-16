@@ -4,7 +4,7 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 ## Stato corrente
 
-**Data:** 2026-09-04  
+**Data:** 2026-09-15
 **Fase:** Phase 2 — final-tournament input readiness
 **Ultima lineage operativa integrata:** Stage E RT001 V3 @ `063e119` + repaired Stage-C evidence
 **Final-tournament contract audit:** **V2 INCOMPATIBLE; V3 non-decisional Pareto frontier PASS; final selection BLOCKED**
@@ -19,6 +19,176 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 - Le evidenze computazionali devono essere identificate tramite branch/commit, validation contract e SHA256.
 
 ## Phase 2 — evidenze correnti
+
+### RT-031 caller correction — ONE RECOGNIZABLE PUBLIC LINE
+
+- caller-declared requirement: one public route identity; two physical
+  movements or multiple vehicles must not be counted as two lines by default;
+- directional patterns may belong to the same line only after route identity,
+  directional occurrences, ordered service events and passenger-service
+  continuity are explicitly bound;
+- the existing five-profile/two-component lane is retained as engineering
+  evidence but is not certified to satisfy the single-recognizable-line
+  requirement merely by assigning one label;
+- a dedicated hub-rooted single-walk discovery lane now explores distance,
+  available-stop count and retained-current-stop count separately, without a
+  weighted score or retention filter;
+- diversified-search CI `34982075116` SUCCESS, artifact `10402211767`: the two
+  20,000-expansion lanes reach 34 total stop identities and 11/11 current exact
+  identities, disproving the earlier apparent 12-stop ceiling;
+- caller-declared service context is H30 over 600 minutes; 260 annual service
+  days remains a design assumption and not a caller-selected value;
+- deep H30/10h search CI `34987371969` SUCCESS, artifact `10403709761`, adds
+  1,001 resource-bounded ordered witnesses and proves that the earlier 9/11
+  H30/10h retention ceiling was search truncation, not an impossibility;
+- expanded single-line frontier CI `35011955376` SUCCESS, artifact
+  `10414420652`: 3,663 ordered single-walk candidates, 197 Pareto alternatives
+  and 33 benchmark-improving alternatives; 17 fit the H30/10h reference-cap
+  context and their retention ranges from 7/11 to 10/11;
+- typed single-line binding CI `35012428602` SUCCESS, artifact `10414630100`:
+  every one of the 17 alternatives has exactly one public route identity,
+  one closed physical movement and one full ordered service pattern; passenger
+  continuity is explicit within the pattern and terminates at the cycle seam;
+- exhaustive H30/10h timetable CI `35012571290` SUCCESS, artifact
+  `10414363725`: 9,180 timetable contexts and 247,860 deterministic engineering
+  realisations produce a 1,802-context no-weight Pareto surface. All 17
+  candidates survive; the unique 10/11 alternative `SL_d25aca47905d0743f6a6`
+  contributes 97 contexts. Every context reaches four vehicles somewhere in
+  the conservative runtime/dwell/recovery grid; observed dwell is not yet
+  certified and Pareto-context counts are not votes;
+- current-stop conservation remains a Pareto preference; Olgiate FS remains a
+  required line service node.
+
+`single_public_line_required=true`
+`single_recognizable_line_structure_certified=true`
+`observed_dwell_validation_complete=false`
+`network_selected=false`
+`primary_selection_authorised=false`
+`runner_up_selection_authorised=false`
+
+### RT-031 network-connected expansion — STOP RETENTION IS A PREFERENCE
+
+- the 11 current exact stop identities are a separate no-weight Pareto benefit,
+  never an admissibility constraint;
+- network-connected CI `34900153541` SUCCESS at `9864a42`, artifact
+  `10370024100`, ZIP digest
+  `sha256:b279b89e72c16f272c1439f4da96e6d6fbc53e417deeac0844e32405639bce45`;
+- Olgiate FS is required at network level: at least one movement serves it and
+  every other movement must join the same shared-stop-identity intersection
+  component; every movement no longer has to visit the hub;
+- shared stop identity means potential connectivity only, not a certified
+  directional occurrence, ordered service event or passenger transfer;
+- two pinned resource-incomplete physical pools provide 3,804 positive
+  witnesses, reduced by safe objective dominance to 1,631 movements;
+- exact initial two-movement enumeration: 62,947 connected stop unions and 935
+  no-weight Pareto alternatives over six access axes, exact-ID retention and
+  distance;
+- 155 frontier alternatives beat the current access benchmark weakly on all six
+  axes and strictly on at least one; frontier retention ranges from 1 to 8 of
+  the 11 current identities;
+- the two-movement bound is a declared computation scope, not an impossibility
+  claim; candidate-domain completeness remains false.
+
+`candidate_domain_complete=false`
+`network_selected=false`
+`primary_selection_authorised=false`
+`runner_up_selection_authorised=false`
+
+## Codex handoff — frequent-access typed development shortlist
+
+2026-09-15. Branch `codex/rt031-decision-convergence`, PR #82. The latest
+network-connected artifact (run 34900153541, artifact 10370024100) passes and
+contains 62,947 exact two-movement stop unions with a 935-member no-weight
+frontier. 155 frontier members are within the approved H30/12h/260-day distance
+context, are no worse than the current exact-ID benchmark on all six 5/8/10-
+minute total/equity axes and strictly improve at least one.
+
+Added an exact access/equity-only Pareto gate that reduces those 155 profiles to
+five, then binds every source physical witness to directional occurrences and
+ordered candidate service events. Every component must serve Olgiate FS. Source-
+model runtime plus the inherited 27-case Stage-F runtime/dwell/recovery grid
+preserve explicit no-observation/no-block-plan status. Four profiles support a
+two-vehicle lower bound in 6/27 cases and one in 5/27; all reach four vehicles in
+the stressed tail. Controlled local validation: 47 tests pass. Real territorial A/B replay,
+artifact identity and exact profile results are pending CI at this commit.
+
+This is a development shortlist, not a selected network. Dwell-inclusive runtime,
+H30 timetable/S8 retention, vehicle blocks and robustness remain open. The
+upstream physical pools remain resource-incomplete and the two-movement boundary
+is not an impossibility claim. No PRIMARY or RUNNER-UP is authorised.
+
+Exact H30 hub phasing is now implemented over the five profiles: 900 ordered
+integer-minute phase pairs, 559 nondominated against the frozen 74 S8 events and
+three transfer-friction profiles. The regular combined 15-minute subspace has 30
+pairs and all 30 remain nondominated, so clock rotation is not selected. Local
+tests and A/B output replay pass; real CI identity is pending at this commit.
+
+### RT-031 data-guided expansion — 578,235 PORTFOLIOS / 2,410 FRONTIER
+
+- Current-Service stop retention removed as a candidate constraint; Olgiate FS
+  remains the required hub;
+- expanded-frontier CI `34897632951` SUCCESS, artifact `10370190130`;
+- frequency H20/H30/H40/H60, spans 600/720/960 minutes and annual bus-km are a
+  reported service surface; neither frequency nor the 111,419 km reference cap
+  filters the physical candidates;
+- Olgiate-rooted search CI `34896019917` SUCCESS, artifact `10368324023`:
+  2,062 positive hub-serving stop-set witnesses across 29 stop identities, up
+  to 12 stops per movement; all retained witnesses pass full-history seam
+  replay. Search remains resource-incomplete with 4,282,646 labels pending;
+- exact union DP up to four movements: 578,235 distinct minimum-distance
+  portfolios and 2,410 no-weight Pareto alternatives;
+- 1,761 frontier alternatives are no worse than the current exact-ID benchmark
+  on all six access axes and strictly better on at least one;
+- reference-cap context counts among those 1,761: H30/10h 185, H30/12h 119,
+  H30/16h 0, H40/16h 119, H60/16h 752; H20 has zero at every tested span;
+- shortest benchmark-improving frontier member: two movements, 15.204 km;
+  126,498.713 km/year at H30/16h or 94,874.034 at H30/12h;
+- public trunk-branch, short-turn and interlining semantics remain unassigned,
+  so candidate-domain completeness is false.
+
+`candidate_domain_complete=false`
+`network_selected=false`
+`primary_selection_authorised=false`
+`runner_up_selection_authorised=false`
+
+### RT-031 corrected hub-connected target cover — PROMISING CANDIDATE, NOT SELECTED
+
+- branch `codex/rt031-decision-convergence`;
+- hub-constrained search CI `34869733360` SUCCESS, artifact `10358581671`;
+- typed-service CI `34892996081` SUCCESS, artifact `10368011342`;
+- one two-circuit witness retains all 11 current exact-ID targets and requires
+  every circuit to serve Olgiate FS;
+- total 21.397278 km; H60/16h/260d = 89,012.677 bus-km/year, below the approved
+  111,419 cap by 22,406.323 km/year; H30 = 178,025.354 and is over cap;
+- same-substrate total walking access improves at 5/8/10 minutes while all three
+  worst-municipality safeguards are equal; no weighted score;
+- decision consequence: H30 on both circuits is over cap, while the H60
+  exception is not established because the approved contract requires strict
+  equity improvement over the frequent-class frontier and the current evidence
+  has equality against only the current exact-ID subset;
+- non-selected production envelope: a 16-hour design with 12 hours H60 plus
+  four H30 overlay hours on both circuits is 111,265.846 km/year (153.154 below
+  cap); a fifth overlay hour exceeds the cap. No peak window is selected and
+  this is not uniform H30;
+- directional occurrences and ordered events are bound, with route, passenger
+  and vehicle semantics kept distinct;
+- source-model runtimes are 23.834 and 23.482 minutes excluding dwell; fleet
+  lower bound is two under 5/10/15-minute recovery sensitivity;
+- unconstrained earlier witnesses are superseded for promotion because they
+  included a hub-disconnected component and, in the three-movement case, a
+  265 m micro-loop;
+- pending gates: dwell-inclusive runtime, explicit timetable phasing, S8
+  deterministic retention, recovery/vehicle blocks and actual-service comparison.
+- exact cyclic hub-phase CI `34894073548` SUCCESS, artifact `10368250959`:
+  all 3,600 ordered minute pairs evaluated without weights; 2,236 are Pareto
+  non-dominated. All 60 exactly half-hour-spaced hub rotations remain
+  non-dominated across the separate S8 direction/profile axes. This is phase
+  opportunity geometry only: no daily span, timetable or deterministic
+  retention case is selected.
+
+`network_selected=false`
+`primary_selection_authorised=false`
+`runner_up_selection_authorised=false`
 
 ### Tournament Contract Audit + Non-Decisional Frontier RT001 V3
 
@@ -409,3 +579,159 @@ Review focus: exact union/cost, rational dominance, retained witness semantics,
 and source truncation. Source expansion and typed operational/public-service
 binding remain open; dwell/recovery/timetable feasibility is not certified.
 primary_selection_authorised=false; runner_up_selection_authorised=false.
+
+## Codex handoff — expanded-pool terminal disposition
+
+2026-09-14. Branch `codex/rt031-decision-convergence`, draft PR #82.
+Expanded physical search commit `f7d062f`, run `34861503109` SUCCESS: one million
+states replayed twice identically, 1,742 single-walk sets, 10-stop maximum,
+2,864,434 queued labels; still RESOURCE_LIMIT_INCOMPLETE. Artifact `10354879891`,
+GitHub ZIP SHA256 `53b400b11a6db457037a531d612d3abf99147d7a3162573d11149f432131bd87`.
+
+Computational comparison commit `18a1e61b1cbb154b94659d3769e4c87d6bcc47e6`,
+run `34862836065` SUCCESS. Two byte-identical full comparisons; artifact
+`10356122465`, GitHub ZIP SHA256
+`50c1f7ff5885d34cac5afb50b1f0f448aee4872e6b6d77285959f20de07058bd`.
+Downloaded outputs match committed evidence byte-for-byte.
+
+All 1,742 singletons and 1,516,411 distinct pairs fit the conditional distance
+screen and reduce to 727,514 exact availability unions. Zero unions are no worse
+than the exact-ID current structural subset on all six access/equity axes. The
+enlarged pool beats the current subset on optimistic total core maxima, including
+51.6796% versus 48.7696% at 10 minutes, but misses worst-municipality equity at
+8 minutes (19.9168% vs 20.9192%) and 10 minutes (26.5823% vs 34.4032%).
+
+Technical disposition: DO NOT PROMOTE this supplied physical one/two-walk pool
+to operational finalists. Retain Current-Service V4 as structural comparison
+reference and require a broadened/redesigned candidate domain. This is not a
+global proof over all networks and does not select the current network as PRIMARY.
+No public service, timetable or passenger relation inferred. See
+docs/RT031_EXPANDED_POOL_CURRENT_V4.md.
+primary_selection_authorised=false; runner_up_selection_authorised=false.
+
+## Codex handoff — RT031/current V4 same-substrate conclusion
+
+2026-09-14. Branch `codex/rt031-decision-convergence`. Current-Service V3/V4
+source, tests and persisted evidence were integrated unchanged from certified
+branch `origin/phase2-current-service-baseline-v4` at `95d99b5`.
+
+Added a fail-closed exact-ID bridge from the V4 D184/D185 structural stop universe
+to RT028 and compared all 173,663 RT031 one/two-movement availability sets on the
+same population/walking substrate. Eleven conventional stops map by shared
+official native ID; no name, coordinate, fuzzy or nearest-neighbour fallback.
+Exact rational comparison, no score/tolerance. Zero candidate sets are no worse
+than the current subset on all six 5/8/10-minute total/equity dimensions. The
+current subset is no worse than 173,427 sets; 236 retain only a trade-off.
+
+At 10 minutes, current exact-ID structural subset: core 48.7696%, worst municipality
+34.4032%; optimistic componentwise RT031-pool maxima: 42.9650% and 25.0317%.
+Conclusion: no broad-access replacement case is established in this supplied
+pool. This rejects promotion of this pool, not every possible future network.
+Candidate stops remain potential, not public service; V4 route-level activation
+is not relabelled as a stop-level operational snapshot. No network selected.
+
+Tests: 35 passed across comparison, Current-Service V4 and movement portfolios.
+See docs/RT031_CURRENT_V4_SAME_SUBSTRATE_DECISION.md. Next valid design work must
+expand the physical/service search domain and bind typed public service events.
+primary_selection_authorised=false; runner_up_selection_authorised=false.
+## Codex handoff — reciprocal open-corridor stopping result
+
+2026-09-14. Branch `codex/rt031-decision-convergence`, PR #82. Added a bounded
+reciprocal A→B/B→A physical-corridor domain under the approved 111,419 annual
+bus-km cap. Directions remain independent: no vehicle turn, passenger continuity,
+transfer, route identity or public service is inferred. Stop availability is
+identity-only, never a directional occurrence or ordered service-event guarantee.
+Compact search labels are admitted only by the pinned RT-023 history-locality
+certificate; complete witnesses are retained and full-history replayed.
+
+Final certified run 34865769629 SUCCESS, two byte-identical executions, artifact
+10357208237, ZIP digest 55ac800bfb6a8577c4430ff368b514f3a72238001e10ab97142110b2c21c4196.
+At the explicit 250,000-state limit: 71,339 open paths, 5,412,651 feasible
+reciprocal pairs, 22,220 unique availability sets. Current V4 exact-ID subset is
+no worse on all six same-substrate dimensions than all 22,220; zero broad-access
+replacement cases. Search remains RESOURCE_LIMIT_INCOMPLETE (750,628 pending), so
+this closes the supplied bounded family as a finalist source, not all possible
+networks. No network selected; both selection authorisations remain false. See
+`docs/RT031_RECIPROCAL_OPEN_CORRIDOR_SEARCH.md`. The semantics-strengthened audit
+SHA256 is 41957e951b825e9677597d7385b759e54c5e9f579fb59e4bb5a345a0d40a8255.
+## Codex handoff — resource-symmetric target-cover correction
+
+2026-09-14. Branch `codex/rt031-decision-convergence`, PR #82. The earlier
+generic-pool result must not be interpreted as current-service optimality. A new
+target-only label search covers the same 11 exact-ID current stops while removing
+irrelevant stop identities from dominance. Search is physical and full-history
+replayed; no service semantics are inferred.
+
+Run 34868712081 SUCCESS at fc34ed89868cd60185570c61ada3834a4e598d84;
+two byte-identical executions; artifact 10358326654; ZIP SHA256
+d93e26c07f299863653c4bf720cfe086795369d45f77173abebfa97401bf6c54.
+At 2,000,000 states the search remains RESOURCE_LIMIT_INCOMPLETE with 1,286,499
+pending labels, but valid feasibility witnesses exist. Two movements cover all
+targets at 15.450427 km: H60/260d/16h uses 64,273.777 km/year and improves all
+three total-access axes while preserving exact equity. Three movements cover all
+targets at 11.929500 km: H30 uses 99,253.441 km/year, 12,165.559 below the approved
+cap, and is also no worse on all six axes with strict total-access improvement.
+
+These are the first credible physical shortlists from this workstream. Next gate:
+typed directional occurrences/service events, route identity, runtime/dwell/
+recovery, blocks, timetable and S8 stress. No network selected; PRIMARY and
+RUNNER-UP remain unauthorised. See
+`docs/RT031_CURRENT_TARGET_COVER_RESOURCE_SYMMETRY.md`.
+
+## Codex handoff — exhaustive daily timetable surface
+
+The next RT031 gate exhausts every H30-aligned 12-hour span contained in the
+frozen S8 05:30–24:00 evidence window, all 30 regular combined-H15 phase pairs,
+all five typed development profiles and all 27 inherited engineering cases.
+It computes exact interlinable vehicle blocks plus separate deterministic S8
+transfer axes. This is a non-decisional surface: no span, phase, timetable or
+network is selected, and observed dwell validation remains open. The local
+exhaustive result covers 2,100 timetable contexts / 56,700 engineering
+realisations and is byte-identical across two builds. Sixty joint
+territorial/operational Pareto contexts remain and all five profiles are still
+represented. No context is at most two vehicles in every engineering case;
+the robust maximum is four for every profile.
+
+Historical runtime follow-through: the pinned D184/D185 GTFS has 42 trips / 541
+stop-time occurrences and ends 2026-06-08. Its comparable >=8 km full-trip
+scheduled-speed envelope can test source-model plausibility, but all 541 arrival
+and departure clocks are equal. It therefore cannot provide observed dwell or
+reliability; those remain explicit blockers rather than inferred zeroes.
+The 32 comparable >=8 km historical trips span 26.520–34.54875 km/h scheduled;
+all ten candidate source-model components (27.524–30.322 km/h) lie inside that
+broad envelope. This is plausibility evidence only.
+
+## Codex handoff — municipality-resolved and mixed-frequency correction
+
+2026-09-15. Branch `codex/rt031-decision-convergence`, PR #82. The old
+worst-municipality aggregation was audited and found decision-insufficient: the
+unique 10/11 candidate improves total access but sharply reduces Brivio access.
+The replacement no-weight V4 frontier keeps every municipality's 5/8/10-minute
+coverage separate. Run `35017718349` SUCCESS, artifact `10416805424`, ZIP
+SHA256 `d4726e765501c52944428111c43c34eb010b37667b62c96f5f09d8c48dec1d52`.
+It contains 778 nondominated one-line candidates, 736 within the 20-cycle
+reference cap; zero are componentwise non-regressive on all total and municipal
+axes. Non-regression remains diagnostic, not a hard constraint.
+
+Equal-production H30-peak/H60-base evaluation is also certified. Run
+`35018816775` SUCCESS, artifact `10417175153`, ZIP SHA256
+`78e78097b7279fceea196660415d3166459fa02aedcd28b7cc24ee53aa3cd48e`.
+For the 17 already typed candidates it evaluates 2,040 contexts / 55,080
+deterministic realisations. The 18-hour template has 20 departures, two H30 peak
+hours and 18 H60 base hours; all 510 candidate/phase contexts stay within three
+vehicles throughout the grid. The 12/14/16-hour templates all reach four.
+This makes 18 hours a live service-policy trade-off, not a selected pattern.
+
+Popular Times is qualitative temporal plausibility only. The operational sample
+is not complete for the 778-member municipal frontier. No demand-weighted GJT,
+municipal OD downscaling, empirical missed-connection probability, weighted
+score, selected budget, uncertainty band, network, timetable, PRIMARY or
+RUNNER-UP is introduced.
+
+`candidate_domain_complete=false`
+
+`network_selected=false`
+
+`primary_selection_authorised=false`
+
+`runner_up_selection_authorised=false`

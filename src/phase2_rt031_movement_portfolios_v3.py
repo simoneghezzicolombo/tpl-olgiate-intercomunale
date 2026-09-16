@@ -7,7 +7,7 @@ from decimal import Decimal
 from itertools import combinations
 
 
-def enumerate_portfolios(candidates, *, distance_budget_m):
+def _validated_source(candidates, distance_budget_m):
     budget = Decimal(str(distance_budget_m))
     if not budget.is_finite() or budget <= 0:
         raise ValueError('positive finite budget required')
@@ -25,6 +25,52 @@ def enumerate_portfolios(candidates, *, distance_budget_m):
         source[sid] = (frozenset(stops), cost)
     if not source:
         raise ValueError('empty witness pool')
+    return source, budget
+
+
+def enumerate_availability_envelope(candidates, *, distance_budget_m):
+    """Stream all one/two-walk combinations into exact union minima.
+
+    Unlike ``enumerate_portfolios``, this does not retain the full decomposition
+    table.  It is suitable for a bounded access-feasibility gate.  All equal-cost
+    minimum witnesses remain available for any union that survives downstream.
+    """
+    source, budget = _validated_source(candidates, distance_budget_m)
+    summaries = {}
+    considered = {1: 0, 2: 0}
+    feasible = {1: 0, 2: 0}
+    for size in (1, 2):
+        for ids in combinations(sorted(source), size):
+            considered[size] += 1
+            cost = sum((source[s][1] for s in ids), Decimal(0))
+            if cost > budget:
+                continue
+            feasible[size] += 1
+            key = tuple(sorted(frozenset().union(*(source[s][0] for s in ids))))
+            old = summaries.get(key)
+            if old is None or cost < old['cost']:
+                summaries[key] = {'cost': cost, 'witnesses': [list(ids)]}
+            elif cost == old['cost']:
+                old['witnesses'].append(list(ids))
+    return {
+        'availability_summaries': [
+            {'available_stop_ids': list(stops), 'distance_m': str(v['cost']),
+             'minimum_distance_witnesses': v['witnesses']}
+            for stops, v in sorted(summaries.items())],
+        'considered_by_movement_count': considered,
+        'feasible_by_movement_count': feasible,
+        'pool_size': len(source),
+        'full_portfolio_table_retained': False,
+        'minimum_witness_identity_retained': True,
+        'within_pool_enumeration_complete': True,
+        'general_multimovement_search_complete': False,
+        'passenger_service_assigned': False,
+        'service_equivalence_claimed': False,
+    }
+
+
+def enumerate_portfolios(candidates, *, distance_budget_m):
+    source, budget = _validated_source(candidates, distance_budget_m)
     # Keep all feasible portfolio identities, including equal-cost alternatives.
     portfolios = []
     summaries = {}
