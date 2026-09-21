@@ -429,3 +429,29 @@ The committed audit SHA256 is
 `primary_selection_authorised=false`
 
 `runner_up_selection_authorised=false`
+
+## Exact-ID Brivio/Santa Maria physical co-presence probe
+
+The municipal tradeoff audit found 21 within-reference-cap, ordered one-line
+candidates that are non-regressive in Brivio and total potential walking
+coverage at 5/8/10 minutes, but every one loses Santa Maria Hoe 10-minute
+potential coverage. This prompted a separate *physical discovery* probe, not
+an admission rule or a new municipality safeguard.
+
+CI run `35590523877` (artifact `10634044106`, ZIP SHA256
+`54fe50459dcd9fe739ecc97ddcd44a34ce115edaa1474ff7d8cda28c5d0f35b8`)
+replayed an Olgiate-FS-rooted closed-walk search twice with identical bytes.
+The four exact stop IDs—Brivio `300063`, Santa Maria Hoe
+`300782/300805/300873`—were search priorities only. Under the reference
+21,426.730769 m per-cycle physical cap, 250,000 state expansions found 2,733
+physical stop sets: 194 include exact Brivio but none of those includes one of
+the three exact Santa Maria stops; 1,774 include a Santa Maria stop but not
+exact Brivio. The overlap is empty *among found candidates*.
+
+The search still has 256 queued entries (`search_exhaustive=false`). Therefore
+the empty overlap is **not** an impossibility proof, even within the pinned
+physical domain. Moreover, physical stop availability does not certify an
+ordered public service event or a usable passenger journey. The committed
+[machine audit](../outputs/phase2/rt031_joint_corridor_search_v3/joint_corridor_search_audit_v3.json)
+fails closed on those distinctions. No candidate is selected; the next search
+or comparison must preserve the existing Pareto/no-weight semantics.

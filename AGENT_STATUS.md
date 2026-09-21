@@ -736,6 +736,25 @@ RUNNER-UP is introduced.
 
 `runner_up_selection_authorised=false`
 
+## Codex handoff — bounded Brivio/Santa Maria corridor probe
+
+2026-09-21. CI run `35590523877` succeeded with byte-identical duplicate
+replays. Artifact `10634044106` has ZIP digest
+`sha256:54fe50459dcd9fe739ecc97ddcd44a34ce115edaa1474ff7d8cda28c5d0f35b8`.
+The [machine audit](outputs/phase2/rt031_joint_corridor_search_v3/joint_corridor_search_audit_v3.json)
+records the pinned one-closed-physical-walk, Olgiate-FS-rooted search under the
+21,426.730769 m per-cycle reference distance cap. The four named stop IDs were
+search priorities, never admission filters.
+
+After 250,000 expanded states, 2,733 physical stop sets were found. None
+contains both exact Brivio stop `300063` and at least one of the three exact
+current Santa Maria Hoe stop IDs `300782/300805/300873`. However **256 queue
+entries remain**, so this is a resource-truncated negative observation, not an
+impossibility theorem. Physical stop availability is also not an ordered
+passenger-service guarantee. The absence cannot justify imposing a Brivio or
+Santa Maria constraint, nor choosing a candidate. Candidate-domain completion,
+network selection, PRIMARY and RUNNER-UP remain false.
+
 ## Codex handoff — full within-cap municipal frontier fleet screen
 
 2026-09-21. The intervening complete typed binding certified all 736
