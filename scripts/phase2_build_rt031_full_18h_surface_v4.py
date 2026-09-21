@@ -12,6 +12,7 @@ from src.phase2_exact_timetable_optimizer_v2 import load_profiles, rail_event_in
 from src.phase2_rt031_mixed_frequency_surface_v4 import (
     PHASE_DOMAIN,
     evaluate_mixed_context,
+    mixed_pareto_frontier,
     mixed_service_templates,
 )
 
@@ -141,9 +142,16 @@ def aggregate_shards(paths, expected_ids):
     for row in contexts:
         by_candidate.setdefault(row["source_candidate_line_id"], []).append(row)
     summaries = []
+    phase_frontier_count = 0
     for identity, rows in sorted(by_candidate.items()):
+        phase_frontier = mixed_pareto_frontier(
+            rows, ("97010", "97012", "97058", "97074", "97092"))
+        phase_frontier_count += len(phase_frontier)
         summaries.append({
             "source_candidate_line_id": identity,
+            "within_candidate_pareto_phase_count": len(phase_frontier),
+            "within_candidate_pareto_phase_min": [
+                row["phase_min"] for row in phase_frontier],
             "retained_current_exact_stop_count": rows[0][
                 "retained_current_exact_stop_count"],
             "maximum_exact_vehicle_count_across_phases": max(
@@ -162,6 +170,8 @@ def aggregate_shards(paths, expected_ids):
         "phase_count_per_candidate": len(PHASE_DOMAIN),
         "context_count": len(contexts),
         "engineering_realisation_count": len(contexts) * 27,
+        "within_candidate_pareto_phase_context_count": phase_frontier_count,
+        "within_candidate_pareto_no_weights": True,
         "template_id": TEMPLATE_ID,
         "daily_departure_count": 20,
         "service_span_minutes": 1080,
