@@ -32,7 +32,7 @@ def audit_search(source):
             or source.get("search_priority_mode") != "preferred_stop_count"
             or source.get("required_root_stop_id") != HUB
             or source.get("conditional_span_minutes") != 600
-            or source.get("execution_expansion_limit") != 200000
+            or source.get("execution_expansion_limit") != 250000
             or set(source.get("preferred_stop_ids_present_in_domain", ())) != PREFERRED
             or source.get("candidate_generation_priority_is_normative_selection") is not False
             or source.get("final_recommendation") is not False):
@@ -40,6 +40,11 @@ def audit_search(source):
     if (Decimal(source["distance_budget_m"]) * DAILY_CYCLES
             * DESIGN_DAYS / 1000 > REFERENCE_CAP_KM):
         raise ValueError("physical distance envelope exceeds reference cap")
+    if ((source["status"] == "EXHAUSTIVE_WITHIN_DECLARED_PHYSICAL_DOMAIN")
+            != (source.get("exhaustive") is True)
+            or (source.get("exhaustive") is True
+                and source.get("pending_heap_entries") != 0)):
+        raise ValueError("physical search completion state drift")
     candidates = source["candidates"]
     joint = []
     for row in candidates:
