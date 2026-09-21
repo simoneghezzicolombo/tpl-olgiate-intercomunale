@@ -4,6 +4,7 @@ These probes are not an exhaustive access frontier or a route selection.
 """
 import argparse
 from decimal import Decimal
+from itertools import combinations
 import json
 from pathlib import Path
 
@@ -30,11 +31,14 @@ DAILY_CYCLES = 20
 DESIGN_DAYS = 260
 
 
-def probe_targets(current_stops):
+def probe_targets(current_stops, subset_size=1):
     """Separate exact-stop probes; no stop-retention admission filter."""
     extra = sorted(set(current_stops) - {HUB, BRIVIO} - set(SANTA))
-    return [(arlate, None) for arlate in ARLATE] + [
-        (arlate, stop) for arlate in ARLATE for stop in extra]
+    if not 1 <= subset_size <= len(extra):
+        raise ValueError("retention subset size outside the available exact IDs")
+    return [(arlate, ()) for arlate in ARLATE] + [
+        (arlate, stops) for arlate in ARLATE
+        for stops in combinations(extra, subset_size)]
 
 
 def main(args):
@@ -76,8 +80,9 @@ def main(args):
                  for row in tables["patterns"]}
     cap_m = REFERENCE_CAP_KM * 1000 / (DAILY_CYCLES * DESIGN_DAYS)
     probes = []
-    for arlate, retained_stop in probe_targets(current_stops):
-        groups = ((arlate,),) + (((retained_stop,),) if retained_stop else ())
+    for arlate, retained_stops in probe_targets(
+            current_stops, args.retention_subset_size):
+        groups = ((arlate,),) + tuple((stop,) for stop in retained_stops)
         result = shortest_joint_cycle(
             catalog, pairs, weights, stop_sets,
             hub_stop_id=HUB, brivio_stop_id=BRIVIO,
@@ -94,12 +99,12 @@ def main(args):
                 raise AssertionError("physical cycle fails full-history replay")
             if not ({HUB, BRIVIO, arlate} <= set(stops)
                     and set(stops) & set(SANTA)
-                    and (retained_stop is None or retained_stop in stops)):
+                    and set(retained_stops) <= set(stops)):
                 raise AssertionError("target stop set drift")
         distance = result["minimum_joint_distance_m"]
         probes.append({
             "arlate_stop_id": arlate,
-            "additional_current_exact_stop_id": retained_stop,
+            "additional_current_exact_stop_ids": list(retained_stops),
             "minimum_distance_m": distance,
             "within_conditional_reference_cap":
                 distance is not None and Decimal(distance) <= cap_m,
@@ -122,6 +127,7 @@ def main(args):
                          **PINNED},
         "scoped_domain": "PINNED_288_ATOMIC_REALIZATIONS_HUB_ROOTED_CLOSED_WALKS",
         "probe_count": len(probes),
+        "retention_subset_size": args.retention_subset_size,
         "conditional_reference_cap_m_per_cycle": str(cap_m),
         "conditional_daily_cycles": DAILY_CYCLES,
         "conditional_annual_days": DESIGN_DAYS,
@@ -146,4 +152,5 @@ if __name__ == "__main__":
     parser.add_argument("--inputs", type=Path, required=True)
     parser.add_argument("--via-way-evidence", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--retention-subset-size", type=int, default=1)
     main(parser.parse_args())

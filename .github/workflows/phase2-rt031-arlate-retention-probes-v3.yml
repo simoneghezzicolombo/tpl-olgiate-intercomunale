@@ -43,10 +43,13 @@ jobs:
       - name: Reproduce target-specific retention distances
         run: |
           evidence=$(find /tmp/via -name '*.json' | head -1)
-          for replica in a b; do
-            python scripts/phase2_probe_rt031_arlate_retention_v3.py \
-              --inputs /tmp/rt031-inputs --via-way-evidence "$evidence" \
-              --output "/tmp/$replica/arlate_retention_probes_v3.json"
+          for size in 1 4; do
+            for replica in a b; do
+              python scripts/phase2_probe_rt031_arlate_retention_v3.py \
+                --inputs /tmp/rt031-inputs --via-way-evidence "$evidence" \
+                --retention-subset-size "$size" \
+                --output "/tmp/$replica/arlate_retention_probes_size${size}_v3.json"
+            done
           done
           diff -r /tmp/a /tmp/b
       - uses: actions/upload-artifact@v4
