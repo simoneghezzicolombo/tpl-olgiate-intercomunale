@@ -483,3 +483,26 @@ and municipality access have not been evaluated for this witness. The result
 does not select or prefer it. In particular, exact stop co-presence alone does
 not resolve the Santa Maria walking-coverage loss in the 21 already typed
 one-line alternatives.
+
+### Typed witness and same-substrate access diagnosis
+
+Those previously unevaluated dimensions were partly advanced by CI run
+`35620019598` (SUCCESS, two byte-identical replays; artifact `10648105026`,
+ZIP SHA256 `8d1d5aba220dd28a0decd543b7930cb346380fbf0e9069f97aeda488394ad721`).
+The [audit](../outputs/phase2/rt031_joint_target_typed_access_v3/joint_target_typed_access_audit_v3.json)
+binds 32 ordered candidate service events to **one** public route identity and
+one movement, with no inferred passenger-through at the cycle seam. Brivio
+`300063` and Santa Maria `300805` occur inside the same ordered pattern.
+This is a valid *candidate design declaration*, not observed service or an
+assigned timetable.
+
+Only 3 of the 11 exact current stop identities are retained (Brivio, Santa
+Maria `300805`, Olgiate FS). On the same walking substrate, potential total
+10-minute coverage is 46.37% versus 48.77% for the current exact-ID structural
+subset. Brivio is 78.23% versus 78.38%; Santa Maria Hoe 70.47% versus 75.39%;
+La Valletta Brianza just 1.09% versus 40.90%. Calco and Olgiate improve, but
+that does not compensate the other municipalities without an explicit
+preference. The physically shortest co-presence witness is therefore not a
+componentwise non-regressive replacement and is **not selected**. Fleet,
+clock phase, transfer quality, observed dwell and OD-weighted passenger
+benefit remain untested for this one witness.

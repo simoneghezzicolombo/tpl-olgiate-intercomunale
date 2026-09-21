@@ -769,6 +769,20 @@ comparison, timetable or candidate selection. The earlier negative observation
 was search truncation, not physical incompatibility. PRIMARY/RUNNER-UP remain
 false.
 
+The subsequent typed-access diagnostic passed CI run `35620019598` (artifact
+`10648105026`, ZIP SHA256
+`8d1d5aba220dd28a0decd543b7930cb346380fbf0e9069f97aeda488394ad721`).
+It binds the physical witness to a *candidate* single public route with 32
+ordered events; this is not observed service. The
+[machine audit](outputs/phase2/rt031_joint_target_typed_access_v3/joint_target_typed_access_audit_v3.json)
+retains only 3/11 exact current stops. Potential 10-minute total coverage is
+46.37% versus current exact-ID structural subset 48.77%; Brivio 78.23% versus
+78.38%; Santa Maria Hoe 70.47% versus 75.39%; La Valletta Brianza 1.09%
+versus 40.90%. Thus the minimum-distance physical witness is not a
+componentwise non-regressive substitute, despite its feasible geometry.
+No line is selected; timetable, fleet, transfers, dwell and passenger OD
+benefit are not inferred.
+
 ## Codex handoff — full within-cap municipal frontier fleet screen
 
 2026-09-21. The intervening complete typed binding certified all 736
