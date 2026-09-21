@@ -791,6 +791,23 @@ co-presence, versus zero at 250,000. Artifact `10649340509`, ZIP SHA256
 The search still has 315 pending states, so it is not complete and does not
 replace the targeted exact shortest-cycle certificate or authorise selection.
 
+All 99 found joint corridors were subsequently bound as candidate one-line
+service patterns with ordered events and exact-rational municipality access.
+Run `35620775271` SUCCESS, artifact `10649441275`, ZIP SHA256
+`004547d3d0c729d39ba979ca9740a025d3f20f076bb3558b3280e97e9e2e06c7`;
+full result SHA256
+`f98ff97d4ef22a44b03474ef986c76a253be2cb8016f3aca38b044526d5c98a8`.
+The [machine audit](outputs/phase2/rt031_joint_discovery_frontier_v3/joint_discovery_frontier_audit_v3.json)
+records ten no-weight Pareto members within this found set. **Two** are
+componentwise non-regressive versus the current exact-ID structural subset on
+total and all five municipalities at 5/8/10 minutes:
+`WALK_8586d7e865308d0510c6` (24 available stops, 7/11 retained,
+21,390.766 m/cycle) and `WALK_e5d89184ad2835c735e1` (25 available stops,
+7/11 retained, 21,409.948 m/cycle). They are close to the distance envelope,
+and no timetable, fleet, transfer, observed dwell or demand-weighted benefit
+is certified. Discovery remains resource-incomplete; these are promising
+alternatives for operational stress, **not** PRIMARY/RUNNER-UP selections.
+
 ## Codex handoff — full within-cap municipal frontier fleet screen
 
 2026-09-21. The intervening complete typed binding certified all 736

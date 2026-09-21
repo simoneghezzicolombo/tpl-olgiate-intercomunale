@@ -518,3 +518,42 @@ shortest-cycle certificate found 15,961.952 m. The
 [500k machine audit](../outputs/phase2/rt031_joint_corridor_search_500k_v3/joint_corridor_search_audit_v3.json)
 is retained as a reproducible diagnosis of search truncation, not as a
 separate ranking or final domain-completeness claim.
+
+### 99 joint corridors: typed single-line, exact municipal frontier
+
+All 99 joint physical witnesses were bound to candidate one-route patterns
+with ordered service events, then recomputed with exact rational population
+weights on the pinned walking substrate. CI run `35620775271` passed two
+byte-identical replays; artifact `10649441275`, ZIP SHA256
+`004547d3d0c729d39ba979ca9740a025d3f20f076bb3558b3280e97e9e2e06c7`,
+full result SHA256
+`f98ff97d4ef22a44b03474ef986c76a253be2cb8016f3aca38b044526d5c98a8`.
+The [machine audit](../outputs/phase2/rt031_joint_discovery_frontier_v3/joint_discovery_frontier_audit_v3.json)
+preserves all ten within-found-set Pareto members with their exact access
+ratios. The Pareto axes are separate total and five-municipality 5/8/10-minute
+potential walking coverage, current exact-stop retention as a *preference*,
+and physical distance as a cost. No weights or municipality safeguard were
+introduced.
+
+Among the 99 typed one-line candidates, **two** are non-regressive against the
+current exact-ID structural subset on *every* total and municipality walking
+axis at 5, 8 and 10 minutes. Both are on the ten-member Pareto frontier:
+
+- `WALK_8586d7e865308d0510c6`: 24 available stops, 53 ordered events,
+  7/11 current exact stops retained, 21,390.766 m/cycle; illustrative
+  20-cycle/260-day production 111,231.982 km/year. At 10 minutes: total
+  65.89%, Brivio 87.80%, Santa Maria Hoe 91.89%, La Valletta 52.48%.
+- `WALK_e5d89184ad2835c735e1`: 25 available stops, 55 ordered events,
+  7/11 retained, 21,409.948 m/cycle; 111,331.727 km/year on the same
+  design calendar. At 10 minutes: total 66.06%, Brivio 88.70%, Santa Maria
+  Hoe 91.89%, La Valletta 52.48%.
+
+The reference structural shares at 10 minutes are total 48.77%, Brivio
+78.38%, Santa Maria Hoe 75.39%, La Valletta 40.90%. The two witnesses are
+only about 36 m and 17 m per cycle below the reference distance envelope,
+respectively; they must not be called robust against route-length or operating
+uncertainty. The 99 came from a resource-truncated search, so neither the
+candidate domain nor the global Pareto set is complete. Ordered service-event
+structure is certified as a **candidate declaration**, but timetable, fleet,
+transfer quality, observed dwell, passenger demand and OD-weighted benefits
+remain unevaluated. No network or operating pattern is selected.
