@@ -25,14 +25,22 @@ from src.phase2_rt031_occurrence_binding_v3 import bind_occurrences
 from src.phase2_rt031_single_line_binding_v3 import certify_single_public_line
 
 
-PROBES_SHA256 = "fbb68e4c1ffc04bd1b7421aff7dc9e490717b860bde3f945bf4268df2b0bba7a"
+PROBES_SHA256 = {
+    3: "3cb560e4c99160acff586f07afd10f2c63a53e48076646fda45288d66982f4bc",
+    4: "fbb68e4c1ffc04bd1b7421aff7dc9e490717b860bde3f945bf4268df2b0bba7a",
+}
 THRESHOLDS = (5, 8, 10)
 
 
-def select_witnesses(source):
+def select_witnesses(source, subset_size=4):
+    expected = {3: (22, "FROZEN::300879"), 4: (32, None)}
+    if subset_size not in expected:
+        raise ValueError("unknown retained-line probe size")
+    count, required = expected[subset_size]
     if (source.get("contract") != "RT031_ARLATE_RETENTION_TARGET_PROBES_V3"
-            or source.get("retention_subset_size") != 4
-            or source.get("probe_count") != 32
+            or source.get("retention_subset_size") != subset_size
+            or source.get("probe_count") != count
+            or source.get("required_additional_current_stop_id") != required
             or source.get("candidate_domain_complete") is not False
             or source.get("network_selected") is not False
             or source.get("primary_selection_authorised") is not False
@@ -69,12 +77,12 @@ def select_witnesses(source):
 
 
 def main(args):
-    if (sha256_file(args.probes) != PROBES_SHA256
+    if (sha256_file(args.probes) != PROBES_SHA256[args.retention_subset_size]
             or sha256_file(args.walk_matrix) != WALK_SHA256
             or sha256_file(CURRENT_PATH) != CURRENT_SHA256):
         raise ValueError("probe, walking, or current lineage drift")
     source = json.loads(args.probes.read_text(encoding="utf-8"))
-    witnesses = select_witnesses(source)
+    witnesses = select_witnesses(source, args.retention_subset_size)
     if not witnesses:
         raise ValueError("no under-reference four-stop physical witnesses")
 
@@ -175,7 +183,7 @@ def main(args):
     output = {
         "contract": "RT031_ARLATE_RETAINED_ONE_LINE_ACCESS_FRONTIER_V3",
         "status": "PASS_PROBE_SCOPED_NON_DECISIONAL_PARETO",
-        "input_sha256": {"retention_probes": PROBES_SHA256,
+        "input_sha256": {"retention_probes": PROBES_SHA256[args.retention_subset_size],
                          "walking_substrate": WALK_SHA256,
                          "current_exact_id_audit": CURRENT_SHA256,
                          "via_way_evidence": sha256_file(args.via_way_evidence),
@@ -184,6 +192,9 @@ def main(args):
             bool(row["additional_current_exact_stop_ids"])
             and row["within_conditional_reference_cap"]
             for row in source["probes"]),
+        "retention_subset_size": args.retention_subset_size,
+        "required_additional_current_stop_id":
+            source.get("required_additional_current_stop_id"),
         "distinct_typed_path_count": len(typed),
         "single_recognizable_line_count": sum(
             row["single_recognizable_line_structure_certified"] for row in typed),
@@ -227,4 +238,6 @@ if __name__ == "__main__":
     parser.add_argument("--via-way-evidence", type=Path, required=True)
     parser.add_argument("--walk-matrix", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--retention-subset-size", type=int, default=4,
+                        choices=sorted(PROBES_SHA256))
     main(parser.parse_args())

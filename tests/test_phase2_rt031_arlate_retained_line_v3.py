@@ -16,6 +16,7 @@ def source():
     return {
         "contract": "RT031_ARLATE_RETENTION_TARGET_PROBES_V3",
         "retention_subset_size": 4, "probe_count": 32,
+        "required_additional_current_stop_id": None,
         "candidate_domain_complete": False, "network_selected": False,
         "primary_selection_authorised": False,
         "runner_up_selection_authorised": False,
@@ -35,3 +36,13 @@ def test_conflicting_same_path_fails_closed():
     value["probes"][1]["minimum_distance_m"] = "20001"
     with pytest.raises(ValueError, match="conflicting"):
         select_witnesses(value)
+
+
+def test_rovagnate_lane_is_explicitly_scoped():
+    value = source()
+    value["retention_subset_size"] = 3
+    value["probe_count"] = 22
+    value["required_additional_current_stop_id"] = "FROZEN::300879"
+    assert len(select_witnesses(value, 3)) == 1
+    with pytest.raises(ValueError, match="contract drift"):
+        select_witnesses(value, 4)
