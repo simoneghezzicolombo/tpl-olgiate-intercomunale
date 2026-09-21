@@ -41,19 +41,21 @@ jobs:
           unzip -q /tmp/rt022.zip -d /tmp/rt031-inputs/rt022
           unzip -q /tmp/rt030.zip -d /tmp/rt031-inputs/rt030
           unzip -q /tmp/via.zip -d /tmp/via
-      - name: Certify minimum joint physical cycle through inner Arlate twice
+      - name: Certify village and individual Arlate targets twice
         run: |
           evidence=$(find /tmp/via -name '*.json' | head -1)
-          for replica in a b; do
-            python scripts/phase2_certify_rt031_joint_target_distance_v3.py \
-              --inputs /tmp/rt031-inputs --via-way-evidence "$evidence" \
-              --extra-stop-id ASF::ARLATE_BIVIO_PER_IL_PAESE \
-              --extra-stop-id ASF::ARLATE_CANTINA_PIROVANO \
-              --output "/tmp/arlate-$replica.json"
+          for target in bivio cantina; do
+            if [ "$target" = bivio ]; then stop=ASF::ARLATE_BIVIO_PER_IL_PAESE; else stop=ASF::ARLATE_CANTINA_PIROVANO; fi
+            for replica in a b; do
+              python scripts/phase2_certify_rt031_joint_target_distance_v3.py \
+                --inputs /tmp/rt031-inputs --via-way-evidence "$evidence" \
+                --extra-stop-id "$stop" \
+                --output "/tmp/arlate-$target-$replica.json"
+            done
+            cmp "/tmp/arlate-$target-a.json" "/tmp/arlate-$target-b.json"
           done
-          cmp /tmp/arlate-a.json /tmp/arlate-b.json
       - uses: actions/upload-artifact@v4
         with:
-          name: rt031-arlate-extension-distance-v3
-          path: /tmp/arlate-a.json
+          name: rt031-arlate-individual-distance-v3
+          path: /tmp/arlate-*-a.json
           if-no-files-found: error
