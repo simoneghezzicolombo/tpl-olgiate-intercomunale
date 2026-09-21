@@ -1,0 +1,50 @@
+name: RT031 Arlate and Rovagnate exact tradeoff V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - scripts/phase2_compare_rt031_arlate_tradeoff_v3.py
+      - tests/test_phase2_rt031_arlate_tradeoff_v3.py
+      - .github/workflows/phase2-rt031-arlate-combined-tradeoff-v3.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  combined-tradeoff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: .:src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install numpy pandas pytest
+      - run: python -m pytest tests/test_phase2_rt031_arlate_tradeoff_v3.py -q
+      - name: Acquire pinned typed-line evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/arlate /tmp/joint
+          gh api repos/${{ github.repository }}/actions/artifacts/10669014825/zip > /tmp/arlate.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10649441275/zip > /tmp/joint.zip
+          echo 'b9608409250c58aea80eb8fc4e883c515b263df9e1c43b8a803dfa508e50f8af  /tmp/arlate.zip' | sha256sum -c
+          echo '004547d3d0c729d39ba979ca9740a025d3f20f076bb3558b3280e97e9e2e06c7  /tmp/joint.zip' | sha256sum -c
+          unzip -q /tmp/arlate.zip -d /tmp/arlate
+          unzip -q /tmp/joint.zip -d /tmp/joint
+      - name: Compare exact no-weight tradeoff twice
+        run: |
+          for replica in a b; do
+            python scripts/phase2_compare_rt031_arlate_tradeoff_v3.py \
+              --arlate /tmp/arlate/arlate-retained-line-size3-a.json \
+              --joint /tmp/joint/joint-frontier-a.json \
+              --output "/tmp/rt031-arlate-combined-tradeoff-$replica.json"
+          done
+          cmp /tmp/rt031-arlate-combined-tradeoff-a.json /tmp/rt031-arlate-combined-tradeoff-b.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-arlate-combined-tradeoff-v3
+          path: /tmp/rt031-arlate-combined-tradeoff-a.json
+          if-no-files-found: error
