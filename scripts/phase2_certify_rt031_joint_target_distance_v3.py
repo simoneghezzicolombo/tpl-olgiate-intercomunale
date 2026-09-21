@@ -59,13 +59,14 @@ def main(inputs, evidence, output):
         santa_maria_stop_ids=SANTA,
         history_locality_certified=True, atomic_legality_certified=True)
     path = result["minimum_joint_realization_ids"]
+    available_stops = sorted(set().union(*(set(stop_sets[r]) for r in path))) if path else []
     if path:
         selected = [cat[r] for r in path]
         if evaluate_realization_chain(
                 selected + [selected[0]], boundary, scoped.oracle)["status"] != LEGAL:
             raise AssertionError("minimum cycle fails independent full-history replay")
-        if not ({HUB, BRIVIO} <= set().union(*(set(stop_sets[r]) for r in path))
-                and set().union(*(set(stop_sets[r]) for r in path)) & set(SANTA)):
+        if not ({HUB, BRIVIO} <= set(available_stops)
+                and set(available_stops) & set(SANTA)):
             raise AssertionError("minimum cycle target coverage drift")
     cap_m = REFERENCE_CAP_KM * 1000 / (DAILY_CYCLES * DESIGN_DAYS)
     minimum = result["minimum_joint_distance_m"]
@@ -77,6 +78,7 @@ def main(inputs, evidence, output):
         policy_sha256=PINNED,
         hub_stop_id=HUB, brivio_stop_id=BRIVIO,
         santa_maria_stop_ids=list(SANTA),
+        minimum_joint_available_stop_ids=available_stops,
         reference_cap_km=str(REFERENCE_CAP_KM),
         design_daily_cycles=DAILY_CYCLES,
         design_annual_days=DESIGN_DAYS,
