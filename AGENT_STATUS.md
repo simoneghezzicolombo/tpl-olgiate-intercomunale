@@ -755,6 +755,20 @@ passenger-service guarantee. The absence cannot justify imposing a Brivio or
 Santa Maria constraint, nor choosing a candidate. Candidate-domain completion,
 network selection, PRIMARY and RUNNER-UP remain false.
 
+The subsequent exact target-distance solver **found the previously missed
+physical co-presence witness**: 15,961.952 m per cycle, including exact Brivio
+`300063`, exact Santa Maria Hoe `300805` and Olgiate FS `L00407`, below the
+21,426.731 m reference envelope. CI run `35619546328` SUCCESS, artifact
+`10646948679`, ZIP SHA256
+`a14abcfe07f882097b2c28d4d98249e639f211bb47de603cfd0d1737533633a1`;
+[machine certificate](outputs/phase2/rt031_joint_target_distance_v3/joint_target_distance_v3.json)
+SHA256 `f10f87c4c78f3f39ac5d80615e049acc84a0822ac02d991425b418da980f692c`.
+The result is exhaustive for this exact physical target over the pinned 288
+atomic realizations, but it is not a typed one-line public service, coverage
+comparison, timetable or candidate selection. The earlier negative observation
+was search truncation, not physical incompatibility. PRIMARY/RUNNER-UP remain
+false.
+
 ## Codex handoff — full within-cap municipal frontier fleet screen
 
 2026-09-21. The intervening complete typed binding certified all 736

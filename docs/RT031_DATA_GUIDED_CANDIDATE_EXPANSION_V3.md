@@ -455,3 +455,31 @@ ordered public service event or a usable passenger journey. The committed
 [machine audit](../outputs/phase2/rt031_joint_corridor_search_v3/joint_corridor_search_audit_v3.json)
 fails closed on those distinctions. No candidate is selected; the next search
 or comparison must preserve the existing Pareto/no-weight semantics.
+
+### Exact target-distance result supersedes the negative inference
+
+A targeted shortest-cycle calculation avoids enumerating every available-stop
+set. Its finite state tracks the certified pairwise physical transition,
+Olgiate-FS-rooted cycle and whether the exact Brivio and any exact Santa Maria
+target has appeared. It does **not** use those targets as final candidate
+admission requirements, nor does it rank access or service options.
+
+CI run `35619546328` succeeded with byte-identical independent replays;
+artifact `10646948679`, ZIP SHA256
+`a14abcfe07f882097b2c28d4d98249e639f211bb47de603cfd0d1737533633a1`,
+result SHA256 `f10f87c4c78f3f39ac5d80615e049acc84a0822ac02d991425b418da980f692c`.
+The [machine certificate](../outputs/phase2/rt031_joint_target_distance_v3/joint_target_distance_v3.json)
+proves that the shortest matching *physical closed walk in the pinned 288-leg
+domain* is 15,961.952 m, below the 21,426.731 m/cycle reference envelope.
+It includes exact Brivio `300063`, exact Santa Maria Hoe `300805` and Olgiate
+FS `L00407`. At the illustrative 20 cycles/day for 260 days its physical
+production is about 83,002 km/year, below the 111,419 km reference.
+
+This is a positive witness against any claim that the corridor pairing is
+physically impossible. Its 13 available stop identities and 16 atomic
+realizations are **not** a public one-line service design: directional
+occurrences, ordered passenger events, operating span, fleet, transfer quality
+and municipality access have not been evaluated for this witness. The result
+does not select or prefer it. In particular, exact stop co-presence alone does
+not resolve the Santa Maria walking-coverage loss in the 21 already typed
+one-line alternatives.
