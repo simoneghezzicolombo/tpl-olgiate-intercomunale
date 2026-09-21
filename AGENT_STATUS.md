@@ -762,3 +762,28 @@ Full-frontier transfer quality and S8 deterministic retention are not yet
 evaluated. Observed dwell, passenger demand and OD downscaling remain absent.
 No service pattern or network is selected; PRIMARY and RUNNER-UP remain
 unauthorised.
+
+## Codex handoff — complete 18-hour municipal phase surface
+
+2026-09-21. The equal-20-departure 18-hour H30-peak/H60-off-peak template has
+now been evaluated for every one of the 736 within-cap typed municipal lines
+and all 30 common clock phases: 22,080 line/phase contexts and 596,160
+deterministic engineering realisations. Eight independently replayed shards and
+the complete aggregation passed CI run `35588461021`; artifact `10633402248`,
+ZIP SHA256
+`1eb77d06a3fb0dda5d0b92217cbe1cd386ec59d39ae69d5280abbb43f16180e7`,
+result SHA256
+`4be12d21db6bf63cd87937df9baafaeeabbce7b86b160adf6dee0c7ab5dd1cfd`.
+
+Exact no-weight dominance among phases of the *same* line retains 14,395 of
+the 22,080 contexts, between five and 26 phases per line. All 736 distinct
+line identities remain; phase pruning is not a candidate vote or a cross-line
+selection. The municipal frontier was already nondominated across all 18
+separate total/municipal access axes, stop retention and distance, so adding
+operational axes cannot by itself make one of those lines dominate another on
+the inherited coordinates. The global cross-line Pareto pass was not performed.
+
+This is deterministic source-model transfer/vehicle evidence, not observed
+dwell or empirical connection-failure probability. Popular Times was not used
+as demand. `decision_budget_km` and `uncertainty_band_min` remain null; no
+service pattern or network is selected, and PRIMARY/RUNNER-UP remain false.

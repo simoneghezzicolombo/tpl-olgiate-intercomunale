@@ -221,7 +221,21 @@ the 736 candidates stays within three vehicles, whereas 108 need four under
 each of the 12/14/16-hour templates. Within the 18-hour case, all candidates
 retaining 7–10 exact current stops require three vehicles. This is not a
 three-vehicle admission rule or a selected timetable. The full 736-candidate
-30-phase transfer comparison remains open.
+30-phase transfer comparison was subsequently completed.
+
+The full 18-hour phase run `35588461021` succeeded with eight byte-replayed
+shards and an exact coverage check in the aggregate. Artifact `10633402248`
+has ZIP SHA256
+`1eb77d06a3fb0dda5d0b92217cbe1cd386ec59d39ae69d5280abbb43f16180e7`;
+the result SHA256 is
+`4be12d21db6bf63cd87937df9baafaeeabbce7b86b160adf6dee0c7ab5dd1cfd`.
+It contains 22,080 line/phase contexts and 596,160 deterministic engineering
+realisations. The no-weight within-line phase Pareto check retains 14,395
+contexts, five to 26 phases for each line. It does not eliminate any of the
+736 candidate lines. They were already mutually nondominated on the territorial,
+retention and distance coordinates, so a larger operational vector cannot
+manufacture a unique winner. No global cross-line Pareto pass, weighted score,
+empirical missed-connection probability or final network choice is claimed.
 
 Diversified-search CI run `34982075116` succeeded with artifact `10402211767`
 and ZIP digest
