@@ -23,7 +23,7 @@ DAILY_CYCLES = 20
 DESIGN_DAYS = 260
 
 
-def main(inputs, evidence, output):
+def main(inputs, evidence, output, extra_stop_ids=()):
     tables, hashes = load_inputs(inputs)
     validate_via_way_evidence(evidence)
     for path, digest in PINNED.items():
@@ -57,6 +57,7 @@ def main(inputs, evidence, output):
         cat, pairs, weights, stop_sets,
         hub_stop_id=HUB, brivio_stop_id=BRIVIO,
         santa_maria_stop_ids=SANTA,
+        additional_target_groups=(tuple(extra_stop_ids),) if extra_stop_ids else (),
         history_locality_certified=True, atomic_legality_certified=True)
     path = result["minimum_joint_realization_ids"]
     available_stops = sorted(set().union(*(set(stop_sets[r]) for r in path))) if path else []
@@ -66,7 +67,8 @@ def main(inputs, evidence, output):
                 selected + [selected[0]], boundary, scoped.oracle)["status"] != LEGAL:
             raise AssertionError("minimum cycle fails independent full-history replay")
         if not ({HUB, BRIVIO} <= set(available_stops)
-                and set(available_stops) & set(SANTA)):
+                and set(available_stops) & set(SANTA)
+                and (not extra_stop_ids or set(available_stops) & set(extra_stop_ids))):
             raise AssertionError("minimum cycle target coverage drift")
     cap_m = REFERENCE_CAP_KM * 1000 / (DAILY_CYCLES * DESIGN_DAYS)
     minimum = result["minimum_joint_distance_m"]
@@ -89,6 +91,10 @@ def main(inputs, evidence, output):
         candidate_domain_complete=False,
         primary_selection_authorised=False,
         runner_up_selection_authorised=False)
+    if extra_stop_ids:
+        result.update(
+            additional_any_stop_ids=sorted(set(extra_stop_ids)),
+            additional_target_is_candidate_generation_probe_only=True)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_bytes(canonical(result))
     print(json.dumps(result, sort_keys=True))
@@ -100,5 +106,6 @@ if __name__ == "__main__":
     parser.add_argument("--inputs", type=Path, required=True)
     parser.add_argument("--via-way-evidence", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--extra-stop-id", action="append", default=[])
     args = parser.parse_args()
-    main(args.inputs, args.via_way_evidence, args.output)
+    main(args.inputs, args.via_way_evidence, args.output, args.extra_stop_id)

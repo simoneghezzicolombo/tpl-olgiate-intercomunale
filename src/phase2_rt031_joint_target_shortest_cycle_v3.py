@@ -11,23 +11,34 @@ from src.phase2_rt031_rt023_pairwise_compatibility_v3 import LEGAL, ILLEGAL
 
 def shortest_joint_cycle(catalog, pairs, weights, stop_sets, *, hub_stop_id,
                          brivio_stop_id, santa_maria_stop_ids,
-                         history_locality_certified, atomic_legality_certified):
+                         history_locality_certified, atomic_legality_certified,
+                         additional_target_groups=()):
     if history_locality_certified is not True or atomic_legality_certified is not True:
         raise ValueError("certified physical transition scope required")
     ids = sorted(catalog)
     if not ids:
         raise ValueError("nonempty realization domain required")
     santa = frozenset(santa_maria_stop_ids)
+    additional = tuple(frozenset(group) for group in additional_target_groups)
     if not santa or brivio_stop_id in santa or hub_stop_id in santa:
         raise ValueError("distinct nonempty target stop groups required")
+    if any(not group for group in additional):
+        raise ValueError("additional target groups must be nonempty")
     observed = set().union(*(set(stop_sets[r]) for r in ids))
-    if not {hub_stop_id, brivio_stop_id}.issubset(observed) or not santa <= observed:
+    if (not {hub_stop_id, brivio_stop_id}.issubset(observed)
+            or not santa <= observed
+            or any(not group & observed for group in additional)):
         raise ValueError("target stop is absent from the physical domain")
     costs = {r: Decimal(str(weights[r])) for r in ids}
     if any(not c.is_finite() or c <= 0 for c in costs.values()):
         raise ValueError("positive finite realization distances required")
-    flags = {r: (int(brivio_stop_id in stop_sets[r]) |
-                 (2 if set(stop_sets[r]) & santa else 0)) for r in ids}
+    full_mask = (1 << (2 + len(additional))) - 1
+    flags = {
+        r: (int(brivio_stop_id in stop_sets[r])
+            | (2 if set(stop_sets[r]) & santa else 0)
+            | sum((1 << (index + 2)) for index, group in enumerate(additional)
+                  if set(stop_sets[r]) & group))
+        for r in ids}
     index = {}
     for pair in pairs:
         key = (pair["left_realization_id"], pair["right_realization_id"])
@@ -61,7 +72,7 @@ def shortest_joint_cycle(catalog, pairs, weights, stop_sets, *, hub_stop_id,
             continue
         settled += 1
         root, last, mask = state
-        if mask == 3 and root in adjacent[last]:
+        if mask == full_mask and root in adjacent[last]:
             winner = state
             break
         for nxt in adjacent[last]:

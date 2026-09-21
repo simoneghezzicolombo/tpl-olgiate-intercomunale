@@ -73,3 +73,20 @@ def test_missing_pair_or_uncertified_history_fails_closed():
         shortest_joint_cycle(catalog, pairs, weights, stops,
             hub_stop_id="H", brivio_stop_id="B", santa_maria_stop_ids=("S",),
             history_locality_certified=False, atomic_legality_certified=True)
+
+
+def test_additional_locality_group_is_targeted_feasibility_not_service_filter():
+    catalog, pairs, weights, stops = domain()
+    stops["hub_out"].add("ARLATE_A")
+    result = shortest_joint_cycle(
+        catalog, pairs, weights, stops, hub_stop_id="H",
+        brivio_stop_id="B", santa_maria_stop_ids=("S",),
+        additional_target_groups=(("ARLATE_A", "ARLATE_B"),),
+        history_locality_certified=True, atomic_legality_certified=True)
+    assert result["minimum_joint_distance_m"] == "17"
+    with pytest.raises(ValueError, match="target stop is absent"):
+        shortest_joint_cycle(
+            catalog, pairs, weights, stops, hub_stop_id="H",
+            brivio_stop_id="B", santa_maria_stop_ids=("S",),
+            additional_target_groups=(("MISSING",),),
+            history_locality_certified=True, atomic_legality_certified=True)
