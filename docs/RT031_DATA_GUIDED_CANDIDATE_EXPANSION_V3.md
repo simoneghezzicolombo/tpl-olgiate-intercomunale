@@ -557,3 +557,23 @@ candidate domain nor the global Pareto set is complete. Ordered service-event
 structure is certified as a **candidate declaration**, but timetable, fleet,
 transfer quality, observed dwell, passenger demand and OD-weighted benefits
 remain unevaluated. No network or operating pattern is selected.
+
+### Deterministic mixed-frequency fleet screen for the ten
+
+CI run `35621498429` SUCCESS (artifact `10649986059`, ZIP SHA256
+`039fc9750170488ac0c1551905d84bd660fdbc78ca338947f1d4935cc35e6d8b`)
+replayed the inherited 27 runtime/dwell/recovery engineering cases on all ten
+found-set Pareto lines, across four equal-20-departure H30-peak/H60-off-peak
+templates. The [machine screen](../outputs/phase2/rt031_joint_frontier_fleet_v3/joint_frontier_fleet_screen_v3.json)
+retains each line/template distribution, not just the extreme.
+
+For each of the two all-municipality non-regressive lines, source-model running
+time excluding dwell is 41.52–41.83 minutes and there are 51–53 non-hub public
+stop events. The 18-hour template (two H30 peak hours, sixteen H60-only hours)
+requires **2 or 3 exact vehicles** across the deterministic grid. The 12/14/16-
+hour templates require 2–4. This is not an imposed fleet cap, a selected span,
+an observed dwell calibration or a probability distribution. The departure
+clock is at the candidate cycle seam, which is **not Olgiate FS** for these
+two patterns. Consequently this fleet screen does not imply any hub phase,
+rail transfer quality or passenger connection guarantee; those require an
+explicitly bound hub event timing.

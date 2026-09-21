@@ -808,6 +808,17 @@ and no timetable, fleet, transfer, observed dwell or demand-weighted benefit
 is certified. Discovery remains resource-incomplete; these are promising
 alternatives for operational stress, **not** PRIMARY/RUNNER-UP selections.
 
+The ten-member frontier fleet screen passed CI run `35621498429`, artifact
+`10649986059`, ZIP SHA256
+`039fc9750170488ac0c1551905d84bd660fdbc78ca338947f1d4935cc35e6d8b`;
+[machine screen](outputs/phase2/rt031_joint_frontier_fleet_v3/joint_frontier_fleet_screen_v3.json).
+For both all-municipality non-regressive lines, the 18-hour equal-20-departure
+template (H30 peak 2h/H60-only 16h) uses 2–3 exact vehicles across the
+inherited 27 *deterministic* runtime/dwell/recovery cases. The 12/14/16-hour
+templates reach four vehicles. No fleet cap is caller-declared. The candidate
+cycle seam is not Olgiate FS, so this screen does not assign the hub clock or
+evaluate rail transfers; case frequencies are not probabilities.
+
 ## Codex handoff — full within-cap municipal frontier fleet screen
 
 2026-09-21. The intervening complete typed binding certified all 736
