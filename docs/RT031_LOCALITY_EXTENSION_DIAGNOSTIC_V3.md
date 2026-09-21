@@ -41,6 +41,20 @@ an explicit change in daily cycle count/span, or a different resource context
 would need to be evaluated; none is selected here. One additional kilometre
 per cycle would add 5,200 km/year under the illustrative 20×260 context.
 
+The exact same-substrate walking comparison of those two *physical stop sets*
+passed byte-identical CI run `35623594011` (artifact `10650214553`, ZIP SHA256
+`92fcaea5a5f2a9c58858cb77e593488e1233ce48bc3f93029a4d5364424143bb`;
+[machine audit](../outputs/phase2/rt031_arlate_access_v3/arlate_access_audit_v3.json)).
+At 10 minutes the shortest Bivio-per-il-Paese witness has total potential
+coverage 51.98%, Brivio 73.09%, Santa Maria Hoe 70.47% and La Valletta 1.09%.
+The shortest Cantina-Pirovano witness has total 49.25%, Brivio 78.24%, Santa
+Maria 70.47% and La Valletta 1.09%. The current exact-ID structural reference
+is 48.77%, 78.38%, 75.39% and 40.90% respectively. These physical witnesses
+retain only 3/11 exact current stops and have **not** been bound to public
+ordered service events. They show that distance-minimal Arlate detours alone
+would give up substantial territorial coverage; they do not prove that every
+Arlate-serving alternative must do so.
+
 ## Pianezzo and Sartirana: source-domain expansion needed
 
 Pianezzo is an OSM settlement anchor in Olgiate Molgora. Four nearby proposed

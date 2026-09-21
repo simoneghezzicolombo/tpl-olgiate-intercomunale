@@ -841,6 +841,17 @@ and [diagnostic](docs/RT031_LOCALITY_EXTENSION_DIAGNOSTIC_V3.md) distinguish
 these evidence states. Named localities are preferences, not hard filters;
 neither network nor PRIMARY/RUNNER-UP is selected.
 
+Exact potential walking access for the two *shortest physical* inner-Arlate
+probes passed CI run `35623594011`, artifact `10650214553`, ZIP SHA256
+`92fcaea5a5f2a9c58858cb77e593488e1233ce48bc3f93029a4d5364424143bb`;
+[machine audit](outputs/phase2/rt031_arlate_access_v3/arlate_access_audit_v3.json).
+The Bivio-per-il-Paese minimum has 10-minute total/Brivio/Santa Maria/La
+Valletta shares 51.98/73.09/70.47/1.09%, versus current structural
+48.77/78.38/75.39/40.90%. The Cantina minimum has
+49.25/78.24/70.47/1.09%. Thus those minimal physical detours sacrifice
+territorial coverage, but do not prove a universal Arlate tradeoff. Neither
+has public service events bound or a timetable.
+
 ## Codex handoff — full within-cap municipal frontier fleet screen
 
 2026-09-21. The intervening complete typed binding certified all 736
