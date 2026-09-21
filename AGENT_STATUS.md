@@ -787,3 +787,34 @@ This is deterministic source-model transfer/vehicle evidence, not observed
 dwell or empirical connection-failure probability. Popular Times was not used
 as demand. `decision_budget_km` and `uncertainty_band_min` remain null; no
 service pattern or network is selected, and PRIMARY/RUNNER-UP remain false.
+
+## Codex handoff — municipal tradeoff anatomy, no implicit safeguard
+
+2026-09-21. A separate exact-rational audit of all 736 within-reference-cap
+municipal-frontier lines compares potential walking coverage with the current
+exact-ID structural subset on the same substrate. Run `35589310664` SUCCESS,
+artifact `10633553070`, ZIP SHA256
+`1aaa37dc0cf28fd1aee045022863bfc714e3cb3883c70d55de1497dfbad74669`,
+result SHA256
+`0aed8abc60fef5dbb91822f3e307704c3b26b307703c6cba97005f9fccd7da01`.
+
+Twenty-one candidates simultaneously preserve or improve Brivio coverage at
+5/8/10 minutes and avoid total-coverage regression at all three thresholds,
+with at least one strict total gain. Seven retain six exact current identities; fourteen
+retain seven. None retaining eight, nine or ten meets that descriptive joint
+comparison. This is *not* a filter or a selected shortlist.
+
+All 21 worsen Santa Maria Hoe potential 10-minute coverage: 11.14–30.03%
+versus the current exact-ID structural subset's 75.39%. All 21 avoid regression
+in Calco and Olgiate Molgora on all three thresholds; only six avoid a regression in
+La Valletta Brianza on all three. Thus protecting Brivio by itself transfers
+the territorial loss; no componentwise non-regressive replacement on every
+municipal axis has been found in this supplied candidate pool. The pool is
+resource-incomplete, and these are potential walking catchments rather than
+observed passenger outcomes. No normative municipality priority is inferred.
+
+`network_selected=false`
+
+`primary_selection_authorised=false`
+
+`runner_up_selection_authorised=false`

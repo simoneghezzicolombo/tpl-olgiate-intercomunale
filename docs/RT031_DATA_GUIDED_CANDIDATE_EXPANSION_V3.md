@@ -237,6 +237,30 @@ retention and distance coordinates, so a larger operational vector cannot
 manufacture a unique winner. No global cross-line Pareto pass, weighted score,
 empirical missed-connection probability or final network choice is claimed.
 
+### Where a Brivio safeguard moves the loss
+
+An exact, descriptive audit compares all 736 within-cap municipal-frontier
+candidates to the current exact-ID structural stop subset. Brivio non-regression
+and total gain are *questions*, not added admission rules. Twenty-one candidates
+avoid regression at all 5/8/10-minute thresholds for both Brivio and total
+coverage, with at least one strict total gain: seven retain six and fourteen
+retain seven of the 11 exact current stop identities. No candidate retaining
+eight to ten does so in this supplied pool.
+
+The 21 do not solve equity for the whole territory. Their Santa Maria Hoe
+potential 10-minute walking coverage is 11.14–30.03%, against 75.39% for the
+current structural subset. All 21 avoid regression in Calco and Olgiate Molgora at all
+three thresholds; six also avoid La Valletta Brianza regression at all three.
+These are potential catchments, not passenger demand or a service guarantee.
+The result locates a real territorial trade-off within the resource-bounded
+pool; it does not prove that a better geometry is impossible outside it and
+does not nominate a replacement line.
+
+Trade-off run `35589310664` succeeded with artifact `10633553070`, ZIP
+SHA256 `1aaa37dc0cf28fd1aee045022863bfc714e3cb3883c70d55de1497dfbad74669`.
+The machine-readable result SHA256 is
+`0aed8abc60fef5dbb91822f3e307704c3b26b307703c6cba97005f9fccd7da01`.
+
 Diversified-search CI run `34982075116` succeeded with artifact `10402211767`
 and ZIP digest
 `sha256:5b89fbe0b14edf2277404a93177383fef042cc1642477baa65c6802390421062`.
