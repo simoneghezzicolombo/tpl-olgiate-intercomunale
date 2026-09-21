@@ -31,14 +31,17 @@ DAILY_CYCLES = 20
 DESIGN_DAYS = 260
 
 
-def probe_targets(current_stops, subset_size=1):
+def probe_targets(current_stops, subset_size=1, must_include_stop_id=None):
     """Separate exact-stop probes; no stop-retention admission filter."""
     extra = sorted(set(current_stops) - {HUB, BRIVIO} - set(SANTA))
     if not 1 <= subset_size <= len(extra):
         raise ValueError("retention subset size outside the available exact IDs")
+    if must_include_stop_id is not None and must_include_stop_id not in extra:
+        raise ValueError("required diagnostic stop is not an additional exact ID")
     return [(arlate, ()) for arlate in ARLATE] + [
         (arlate, stops) for arlate in ARLATE
-        for stops in combinations(extra, subset_size)]
+        for stops in combinations(extra, subset_size)
+        if must_include_stop_id is None or must_include_stop_id in stops]
 
 
 def main(args):
@@ -81,7 +84,8 @@ def main(args):
     cap_m = REFERENCE_CAP_KM * 1000 / (DAILY_CYCLES * DESIGN_DAYS)
     probes = []
     for arlate, retained_stops in probe_targets(
-            current_stops, args.retention_subset_size):
+            current_stops, args.retention_subset_size,
+            args.must_include_current_stop_id):
         groups = ((arlate,),) + tuple((stop,) for stop in retained_stops)
         result = shortest_joint_cycle(
             catalog, pairs, weights, stop_sets,
@@ -128,6 +132,8 @@ def main(args):
         "scoped_domain": "PINNED_288_ATOMIC_REALIZATIONS_HUB_ROOTED_CLOSED_WALKS",
         "probe_count": len(probes),
         "retention_subset_size": args.retention_subset_size,
+        "required_additional_current_stop_id":
+            args.must_include_current_stop_id,
         "conditional_reference_cap_m_per_cycle": str(cap_m),
         "conditional_daily_cycles": DAILY_CYCLES,
         "conditional_annual_days": DESIGN_DAYS,
@@ -153,4 +159,5 @@ if __name__ == "__main__":
     parser.add_argument("--via-way-evidence", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--retention-subset-size", type=int, default=1)
+    parser.add_argument("--must-include-current-stop-id")
     main(parser.parse_args())

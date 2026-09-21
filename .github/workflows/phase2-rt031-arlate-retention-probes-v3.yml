@@ -51,6 +51,13 @@ jobs:
                 --output "/tmp/$replica/arlate_retention_probes_size${size}_v3.json"
             done
           done
+          for replica in a b; do
+            python scripts/phase2_probe_rt031_arlate_retention_v3.py \
+              --inputs /tmp/rt031-inputs --via-way-evidence "$evidence" \
+              --retention-subset-size 3 \
+              --must-include-current-stop-id FROZEN::300879 \
+              --output "/tmp/$replica/arlate_retention_probes_size3_rovagnate_v3.json"
+          done
           diff -r /tmp/a /tmp/b
       - uses: actions/upload-artifact@v4
         with:
