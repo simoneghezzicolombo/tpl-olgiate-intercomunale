@@ -506,3 +506,15 @@ preference. The physically shortest co-presence witness is therefore not a
 componentwise non-regressive replacement and is **not selected**. Fleet,
 clock phase, transfer quality, observed dwell and OD-weighted passenger
 benefit remain untested for this one witness.
+
+The broader no-admission-filter discovery replay also completed at 500,000
+expansions: CI run `35618572973` SUCCESS, artifact `10649340509`, ZIP SHA256
+`1e582ad0ce637e748f318107f1ddf53c832ec7606cb4ee8a6db4db7cc5ee5472`.
+It found 5,485 physical stop sets, including **99** with exact Brivio and at
+least one exact Santa Maria stop, where the 250,000-expansion run had found
+none. The search remains non-exhaustive with 315 queued states, and its least
+found joint distance (20,801.919 m) is not the true minimum: the targeted
+shortest-cycle certificate found 15,961.952 m. The
+[500k machine audit](../outputs/phase2/rt031_joint_corridor_search_500k_v3/joint_corridor_search_audit_v3.json)
+is retained as a reproducible diagnosis of search truncation, not as a
+separate ranking or final domain-completeness claim.

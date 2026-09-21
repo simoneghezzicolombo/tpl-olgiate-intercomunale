@@ -783,6 +783,14 @@ componentwise non-regressive substitute, despite its feasible geometry.
 No line is selected; timetable, fleet, transfers, dwell and passenger OD
 benefit are not inferred.
 
+The 500,000-expansion broad search then succeeded in CI run `35618572973`:
+5,485 physical stop sets, including 99 with exact Brivio and Santa Maria
+co-presence, versus zero at 250,000. Artifact `10649340509`, ZIP SHA256
+`1e582ad0ce637e748f318107f1ddf53c832ec7606cb4ee8a6db4db7cc5ee5472`;
+[machine audit](outputs/phase2/rt031_joint_corridor_search_500k_v3/joint_corridor_search_audit_v3.json).
+The search still has 315 pending states, so it is not complete and does not
+replace the targeted exact shortest-cycle certificate or authorise selection.
+
 ## Codex handoff — full within-cap municipal frontier fleet screen
 
 2026-09-21. The intervening complete typed binding certified all 736
