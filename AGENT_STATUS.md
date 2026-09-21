@@ -819,6 +819,28 @@ templates reach four vehicles. No fleet cap is caller-declared. The candidate
 cycle seam is not Olgiate FS, so this screen does not assign the hub clock or
 evaluate rail transfers; case frequencies are not probabilities.
 
+## Codex handoff — caller's named-locality extension preference
+
+2026-09-21. The caller asks to explore Brivio centre, inner Arlate, Pianezzo
+and Sartirana as preferences. The two componentwise non-regressive one-line
+patterns already include Brivio capolinea and Bar Cristallo; one includes Via
+Como. They include Arlate *Bivio Brivio–Madonnina*, not the distinct village
+stops Bivio per il Paese or Cantina Pirovano. The exact Brivio/Santa/Olgiate
+physical target plus Cantina Pirovano has a shortest 18,522.728 m cycle;
+requiring Bivio per il Paese gives 19,587.311 m. Both are inside the
+conditional 20×260 reference envelope, but neither has been shown to retain
+the full municipal gains of the two stronger lines. The two stronger lines
+have only 35.965 m and 16.783 m per-cycle reference slack; adding a detour
+without replacing anything would exceed that context.
+
+Pianezzo has field-check-pending proposed stop candidates but no pinned RT022
+stop attachment. Sartirana's reference GTFS stops are in Merate, outside the
+present five-municipality core comparison and the pinned physical attachments.
+The [scope audit](outputs/phase2/rt031_locality_extension_scope_v3/locality_extension_scope_audit_v3.json)
+and [diagnostic](docs/RT031_LOCALITY_EXTENSION_DIAGNOSTIC_V3.md) distinguish
+these evidence states. Named localities are preferences, not hard filters;
+neither network nor PRIMARY/RUNNER-UP is selected.
+
 ## Codex handoff — full within-cap municipal frontier fleet screen
 
 2026-09-21. The intervening complete typed binding certified all 736
