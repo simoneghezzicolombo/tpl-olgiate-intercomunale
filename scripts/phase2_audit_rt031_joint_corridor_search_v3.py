@@ -32,7 +32,7 @@ def audit_search(source):
             or source.get("search_priority_mode") != "preferred_stop_count"
             or source.get("required_root_stop_id") != HUB
             or source.get("conditional_span_minutes") != 600
-            or source.get("execution_expansion_limit") != 250000
+            or source.get("execution_expansion_limit") != 500000
             or set(source.get("preferred_stop_ids_present_in_domain", ())) != PREFERRED
             or source.get("candidate_generation_priority_is_normative_selection") is not False
             or source.get("final_recommendation") is not False):

@@ -9,14 +9,14 @@ def fixture():
         "search_priority_mode": "preferred_stop_count",
         "required_root_stop_id": "FROZEN::L00407",
         "conditional_span_minutes": 600,
-        "execution_expansion_limit": 250000,
+        "execution_expansion_limit": 500000,
         "preferred_stop_ids_present_in_domain": [
             "FROZEN::300063", "FROZEN::300782", "FROZEN::300805",
             "FROZEN::300873"],
         "candidate_generation_priority_is_normative_selection": False,
         "final_recommendation": False,
         "distance_budget_m": "21426.73076923076923076923076",
-        "expanded_states": 250000,
+        "expanded_states": 500000,
         "pending_heap_entries": 1,
         "candidates": [
             {"stop_set_id": "x", "available_stop_ids": [
