@@ -208,6 +208,21 @@ succeeded with artifact `10417175153`, ZIP digest
 and result SHA256
 `2ab04ca24a525fa32f450f419cfd21c495ea616001404bd114264e0bb4ce03bf`.
 
+Subsequent complete typed binding closes that structural gap for all 736
+municipal-frontier candidates within the reference production cap (run
+`35076669258`, artifact `10438835538`, ZIP SHA256
+`a5c61c01934890c4a7a06a0bbc24c7e56ff477bb4efa7da8084c21a18c74cca6`).
+An exact full-frontier fleet screen then evaluates all four 20-departure
+templates across the inherited 27-case grid (run `35587456801`, artifact
+`10632938711`, ZIP SHA256
+`1dda77b013bf7cf0d95e1633a9128e8f5840af1f0fb44e54d48d387e444af627`).
+The 18-hour template has two H30 peak hours and 16 H60-only hours; every one of
+the 736 candidates stays within three vehicles, whereas 108 need four under
+each of the 12/14/16-hour templates. Within the 18-hour case, all candidates
+retaining 7–10 exact current stops require three vehicles. This is not a
+three-vehicle admission rule or a selected timetable. The full 736-candidate
+30-phase transfer comparison remains open.
+
 Diversified-search CI run `34982075116` succeeded with artifact `10402211767`
 and ZIP digest
 `sha256:5b89fbe0b14edf2277404a93177383fef042cc1642477baa65c6802390421062`.

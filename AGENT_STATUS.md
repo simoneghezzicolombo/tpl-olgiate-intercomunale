@@ -718,7 +718,7 @@ Equal-production H30-peak/H60-base evaluation is also certified. Run
 `78e78097b7279fceea196660415d3166459fa02aedcd28b7cc24ee53aa3cd48e`.
 For the 17 already typed candidates it evaluates 2,040 contexts / 55,080
 deterministic realisations. The 18-hour template has 20 departures, two H30 peak
-hours and 18 H60 base hours; all 510 candidate/phase contexts stay within three
+hours and 16 H60-only hours; all 510 candidate/phase contexts stay within three
 vehicles throughout the grid. The 12/14/16-hour templates all reach four.
 This makes 18 hours a live service-policy trade-off, not a selected pattern.
 
@@ -735,3 +735,30 @@ RUNNER-UP is introduced.
 `primary_selection_authorised=false`
 
 `runner_up_selection_authorised=false`
+
+## Codex handoff — full within-cap municipal frontier fleet screen
+
+2026-09-21. The intervening complete typed binding certified all 736
+within-reference-cap municipal-frontier candidates as distinct one-line
+candidate designs with ordered service events. Run `35076669258` SUCCESS,
+artifact `10438835538`, ZIP SHA256
+`a5c61c01934890c4a7a06a0bbc24c7e56ff477bb4efa7da8084c21a18c74cca6`.
+This is not an observed timetable or operational selection.
+
+The full-grid exact vehicle screen is run `35587456801` SUCCESS, artifact
+`10632938711`, ZIP SHA256
+`1dda77b013bf7cf0d95e1633a9128e8f5840af1f0fb44e54d48d387e444af627`.
+All 736 typed profiles are evaluated against each of four equal-20-departure
+templates and 27 deterministic runtime/dwell/recovery cases. Common clock
+rotation leaves exact vehicle count invariant; transfer quality still requires
+the separate 30-phase calculation. For 12/14/16 hours, 628 profiles remain at
+most three vehicles and 108 reach four. For 18 hours (two H30 peak hours plus
+16 H60-only hours), all 736 remain at most three: 19 need at most one, 568 at
+most two, 149 at most three. Every profile retaining 7–10 exact current stop
+identities requires three under the 18-hour template. A three-vehicle cap was
+not declared by the caller and is not used as a filter.
+
+Full-frontier transfer quality and S8 deterministic retention are not yet
+evaluated. Observed dwell, passenger demand and OD downscaling remain absent.
+No service pattern or network is selected; PRIMARY and RUNNER-UP remain
+unauthorised.
