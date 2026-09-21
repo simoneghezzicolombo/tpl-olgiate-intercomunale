@@ -4,7 +4,7 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 ## Stato corrente
 
-**Data:** 2026-09-15
+**Data:** 2026-09-22
 **Fase:** Phase 2 — final-tournament input readiness
 **Ultima lineage operativa integrata:** Stage E RT001 V3 @ `063e119` + repaired Stage-C evidence
 **Final-tournament contract audit:** **V2 INCOMPATIBLE; V3 non-decisional Pareto frontier PASS; final selection BLOCKED**
@@ -19,6 +19,28 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 - Le evidenze computazionali devono essere identificate tramite branch/commit, validation contract e SHA256.
 
 ## Phase 2 — evidenze correnti
+
+### RT-031 Arlate + Rovagnate — latest non-decisional comparison
+
+- Pinned [machine audit](outputs/phase2/rt031_arlate_rovagnate_convergence_v3/convergence_audit_v3.json)
+  and [explanation](docs/RT031_ARLATE_ROVAGNATE_TRADEOFF_V3.md) compare three
+  typed one-line Arlate-Cantina + Rovagnate alternatives with two earlier
+  Brivio + Santa Maria lines; all five are non-dominated in this small exact
+  no-weight comparison, not globally selected.
+- Best total-potential-walking Arlate line: 66.94% at 10 minutes and 64.69%
+  in La Valletta, versus 66.06% and 52.48% for the earlier comparator;
+  Brivio falls from 88.70% to 83.00%, with 6/11 rather than 7/11 retained
+  exact current stop identities.
+- All three new lines have one public route identity and ordered service
+  events; 18h H30-peak-2h/H60-offpeak-16h deterministic engineering grid
+  gives 2–3 vehicles, not an observed fleet requirement or a selected span.
+- `decision_budget_km` and `uncertainty_band_min` remain caller-declared and
+  unset. Walking access is not OD or empirical connection probability.
+
+`candidate_domain_complete=false`
+`network_selected=false`
+`primary_selection_authorised=false`
+`runner_up_selection_authorised=false`
 
 ### RT-031 caller correction — ONE RECOGNIZABLE PUBLIC LINE
 
