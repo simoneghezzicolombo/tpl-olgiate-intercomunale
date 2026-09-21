@@ -8,10 +8,11 @@ from pathlib import Path
 
 HUB = "FROZEN::L00407"
 BRIVIO = "FROZEN::300063"
-SANTA = "FROZEN::300805"
+SANTA = frozenset(("FROZEN::300782", "FROZEN::300805",
+                   "FROZEN::300873"))
 ARLATE = frozenset(("ASF::ARLATE_BIVIO_PER_IL_PAESE",
                    "ASF::ARLATE_CANTINA_PIROVANO"))
-PREFERRED = ARLATE | {BRIVIO, SANTA}
+PREFERRED = ARLATE | {BRIVIO, "FROZEN::300805"}
 REFERENCE_CAP_KM = Decimal("111419")
 
 
@@ -28,7 +29,7 @@ def audit(source):
             or source.get("search_priority_mode") != "preferred_stop_count"
             or source.get("required_root_stop_id") != HUB
             or source.get("conditional_span_minutes") != 600
-            or source.get("execution_expansion_limit") != 500000
+            or source.get("execution_expansion_limit") != 1000000
             or set(source.get("preferred_stop_ids_present_in_domain", ()))
             != PREFERRED
             or source.get("candidate_generation_priority_is_normative_selection")
@@ -49,7 +50,7 @@ def audit(source):
         stops = set(row["available_stop_ids"])
         if HUB not in stops:
             raise ValueError("Olgiate FS absent from rooted witness")
-        if {BRIVIO, SANTA} <= stops:
+        if BRIVIO in stops and stops & SANTA:
             brivio_santa += 1
             if stops & ARLATE:
                 joint.append(row)
@@ -67,7 +68,7 @@ def audit(source):
             (row["minimum_found_distance_m"] for row in joint),
             key=Decimal, default=None),
         "brivio_stop_id": BRIVIO,
-        "santa_maria_stop_id": SANTA,
+        "santa_maria_any_stop_ids": sorted(SANTA),
         "arlate_any_stop_ids": sorted(ARLATE),
         "named_stops_are_search_priority_not_admission_rule": True,
         "absence_is_impossibility_proof": False,

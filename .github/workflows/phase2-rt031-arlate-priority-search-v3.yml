@@ -53,7 +53,7 @@ jobs:
               --walk-matrix "$walk" --out "/tmp/$replica" \
               --required-root-stop-id FROZEN::L00407 \
               --distance-budget-m 21426.73076923076923076923076 \
-              --conditional-span-minutes 600 --max-expansions 500000 \
+              --conditional-span-minutes 600 --max-expansions 1000000 \
               --priority-mode preferred_stop_count \
               --preferred-stop-id FROZEN::300063 \
               --preferred-stop-id FROZEN::300805 \
