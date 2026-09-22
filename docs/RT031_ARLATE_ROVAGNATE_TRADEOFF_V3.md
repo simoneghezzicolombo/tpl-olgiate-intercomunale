@@ -6,21 +6,47 @@ fissa fonti, run, digest e limiti semantici. Le percentuali qui sotto sono
 **copertura pedonale potenziale della popolazione a 10 minuti**, non domanda
 osservata né tempi di viaggio generalizzati pesati per OD.
 
-| Linea strutturale | km/ciclo | Fermate attuali esatte | Totale | Brivio | Olgiate | Santa Maria | La Valletta |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Arlate Cantina + Rovagnate `PATH_271779790861d8f4cb39` | 21,22 | 6/11 | 66,94% | 83,00% | 53,05% | 91,89% | 64,69% |
-| Arlate Cantina + Rovagnate `PATH_b503ca14c59884289fa4` | 21,17 | 6/11 | 65,66% | 87,29% | 45,45% | 91,89% | 64,69% |
-| Arlate Cantina + Rovagnate `PATH_5d1fe65e1849feb21601` | 21,23 | 6/11 | 62,58% | 80,11% | 45,16% | 91,89% | 50,32% |
-| Arlate Cantina + Rovagnate + Santa Maria centro `PATH_f01db28ef0cefbc5e0b4` | 21,39 | 7/11 | 65,80% | 87,29% | 45,45% | 93,43% | 64,70% |
-| Arlate Cantina + Rovagnate + Santa Maria centro `PATH_2a3831867599e05d3fa1` | 21,42 | 7/11 | 62,72% | 80,11% | 45,16% | 93,43% | 50,32% |
-| Brivio + Santa Maria `WALK_8586d7e865308d0510c6` | 21,39 | 7/11 | 65,89% | 87,80% | 55,92% | 91,89% | 52,48% |
-| Brivio + Santa Maria `WALK_e5d89184ad2835c735e1` | 21,41 | 7/11 | 66,06% | 88,70% | 55,92% | 91,89% | 52,48% |
+| Linea strutturale | km/ciclo | Fermate attuali esatte | Totale | Brivio | Calco | Olgiate | Santa Maria | La Valletta |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Arlate Cantina + Rovagnate `PATH_271779790861d8f4cb39` | 21,22 | 6/11 | 66,94% | 83,00% | 62,52% | 53,05% | 91,89% | 64,69% |
+| Arlate Cantina + Rovagnate `PATH_b503ca14c59884289fa4` | 21,17 | 6/11 | 65,66% | 87,29% | 62,52% | 45,45% | 91,89% | 64,69% |
+| Arlate Cantina + Rovagnate `PATH_5d1fe65e1849feb21601` | 21,23 | 6/11 | 62,58% | 80,11% | 67,92% | 45,16% | 91,89% | 50,32% |
+| Arlate Cantina + Rovagnate + Santa Maria centro `PATH_f01db28ef0cefbc5e0b4` | 21,39 | 7/11 | 65,80% | 87,29% | 62,52% | 45,45% | 93,43% | 64,70% |
+| Arlate Cantina + Rovagnate + Santa Maria centro `PATH_2a3831867599e05d3fa1` | 21,42 | 7/11 | 62,72% | 80,11% | 67,92% | 45,16% | 93,43% | 50,32% |
+| Brivio + Santa Maria `WALK_8586d7e865308d0510c6` | 21,39 | 7/11 | 65,89% | 87,80% | 61,35% | 55,92% | 91,89% | 52,48% |
+| Brivio + Santa Maria `WALK_e5d89184ad2835c735e1` | 21,41 | 7/11 | 66,06% | 88,70% | 61,35% | 55,92% | 91,89% | 52,48% |
 
 I valori sono arrotondati: l'[artefatto di confronto esatto](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/35714978357)
 usa frazioni razionali sui cinque comuni e sulle soglie 5/8/10 minuti, più
 conservazione delle fermate come preferenza e distanza come costo. **Tutte e
 sette** le linee restano Pareto-non-dominate in questo insieme di prova. Non
 c'è un punteggio composito né una preferenza normativa per sceglierne una.
+
+## Sintesi per la prossima proposta
+
+Come **base di sviluppo**, non come linea selezionata, `PATH_271779790861d8f4cb39`
+è la scelta più promettente nell'insieme di sette: ha la maggiore copertura
+potenziale totale a 10 minuti (66,94%) e la maggiore copertura del comune
+meno servito (Olgiate, 53,05%). Tocca fermate di Arlate e Rovagnate. Questa
+indicazione di lavoro non converte il criterio *maximin* in una preferenza
+normativa del decisore e non prova che la linea sia globalmente migliore.
+
+La [sequenza territoriale desiderata dal committente](../config/rt031_caller_locality_itinerary_preference_v3.json)
+aggiunge un problema distinto: due anelli leggibili con un passaggio
+intermedio a Olgiate FS, più località e destinazioni oggi assenti o non
+ancora associabili a una fermata certificata. Le due varianti tipizzate
+Arlate + Rovagnate + Santa Maria non comprendono Perego, Mondonico, Casa di
+Comunità o San Zeno nelle fermate disponibili e non certificano il secondo
+anello tramite FS. Non sono quindi la realizzazione di quella sequenza.
+
+La proposta da sottoporre a confronto finale deve mostrare, per ogni
+alternativa, gli eventi ordinati, il passaggio intermedio e la continuità
+del servizio passeggeri a FS, le località effettivamente servite, la
+copertura di tutti e cinque i comuni, le fermate attuali conservate,
+km/ciclo e griglia di frequenza/mezzi. I luoghi ancora senza fermata
+verificata vanno marcati come non risolti, non conteggiati come serviti.
+Solo dopo questo confronto si può presentare una proposta di esercizio
+condizionata a verifiche sul campo e agli input del Decision Contract.
 
 ## Cosa è cambiato rispetto al percorso minimo via Arlate
 
