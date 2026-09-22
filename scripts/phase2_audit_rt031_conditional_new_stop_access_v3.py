@@ -15,14 +15,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from phase2_final_stop_pedestrian_accessibility_substrate_v3 import (
-    _dijkstra_to_stop, parse_osm_pedestrian_graph,
-)
-from phase2_rt029_v4_substrate import validate_walk_matrix
 from scripts.phase2_audit_rt031_local_stop_siting_v3 import sha256
-from scripts.phase2_build_rt031_municipal_access_frontier_v4 import (
-    MUNICIPALITY_NAMES, detailed_threshold_vectors,
-)
 
 
 EXPECTED = {
@@ -55,6 +48,14 @@ def weighted_ratio(mask, weights, eligible):
 
 
 def main(typed_path, baseline_access_path, matrix_path, osm_path, output):
+    from phase2_final_stop_pedestrian_accessibility_substrate_v3 import (
+        _dijkstra_to_stop, parse_osm_pedestrian_graph,
+    )
+    from phase2_rt029_v4_substrate import validate_walk_matrix
+    from scripts.phase2_build_rt031_municipal_access_frontier_v4 import (
+        MUNICIPALITY_NAMES, detailed_threshold_vectors,
+    )
+
     candidate_path = Path("outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv")
     paths = {"typed": typed_path, "baseline_access": baseline_access_path,
              "walk_matrix": matrix_path, "osm_pedestrian": osm_path,
