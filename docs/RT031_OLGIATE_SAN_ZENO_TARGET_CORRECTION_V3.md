@@ -49,8 +49,8 @@ ufficiali esistenti*, e relazione con i quattro percorsi RT031. Quest'ultimo
 indicatore di popolazione **non è** il guadagno marginale della nuova linea
 e non si somma alle percentuali RT028. Non c'è punteggio, raggio di
 ammissione o «migliore fermata» calcolata.
-La [CI dell'inventario](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/35749871735)
-ha eseguito due repliche byte-per-byte identiche (artefatto `10705050073`,
+La [CI dell'inventario](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/35750104153)
+ha eseguito due repliche byte-per-byte identiche (artefatto `10705380537`,
 SHA-256 `d3932f14bb550a98bc17620fe9067947380dcb2bd1df57920773891ea3075d6c`).
 
 Tre esempi mostrano perché il punto più vicino non è automaticamente giusto:

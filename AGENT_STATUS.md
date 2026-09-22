@@ -34,7 +34,7 @@ certificata per le candidate attuali.
   percorre Via Cesare Cantù presso l'ancora San Zeno; nessuna delle quattro
   ha un evento di salita lì. La precedente esclusione con ciclo fisso 60m
   non vincola RT031.
-- CI siting `35749871735` SUCCESS: audit di tutte le 40 ipotesi Olgiate,
+- CI siting `35750104153` SUCCESS: audit di tutte le 40 ipotesi Olgiate,
   nessuna verificata; nessuna candidata sul way Via Cantù. La traversata
   Via Cantù della variante inversa è dopo FS e non dimostra accesso rapido
   *verso* FS. Nessuna nuova fermata è selezionata; il modello V2 di
