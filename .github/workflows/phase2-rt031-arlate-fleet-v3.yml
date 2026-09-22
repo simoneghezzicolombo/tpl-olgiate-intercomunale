@@ -26,30 +26,38 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p /tmp/rt031-inputs/{rt017,rt022,rt030} /tmp/typed
+          mkdir -p /tmp/rt031-inputs/{rt017,rt022,rt030} /tmp/typed /tmp/typed2
           gh api repos/${{ github.repository }}/actions/artifacts/9972204236/zip > /tmp/rt017.zip
           gh api repos/${{ github.repository }}/actions/artifacts/9988386073/zip > /tmp/rt022.zip
           gh api repos/${{ github.repository }}/actions/artifacts/9992507233/zip > /tmp/rt030.zip
           gh api repos/${{ github.repository }}/actions/artifacts/10669014825/zip > /tmp/typed.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10688052877/zip > /tmp/typed2.zip
           echo 'e0b71f6fd673345c3bc0bf8e32ecf66b7f620e27802f1eb5b24690a8295c8225  /tmp/rt017.zip' | sha256sum -c
           echo '1cab2e18eec4920cbdb348d0d9cd224c7516f8d62bc63b0eacf2a91f6fb134d7  /tmp/rt022.zip' | sha256sum -c
           echo '350c5011565883228ccb52e186bc908a95fdc29f8dd4ebab21fd4c4cb16d6564  /tmp/rt030.zip' | sha256sum -c
           echo 'b9608409250c58aea80eb8fc4e883c515b263df9e1c43b8a803dfa508e50f8af  /tmp/typed.zip' | sha256sum -c
+          echo '5c625432b09513bffefbe63cd46d43d1f6fcaacaf1970fbd8c87a0204454055d  /tmp/typed2.zip' | sha256sum -c
           unzip -q /tmp/rt017.zip -d /tmp/rt031-inputs/rt017
           unzip -q /tmp/rt022.zip -d /tmp/rt031-inputs/rt022
           unzip -q /tmp/rt030.zip -d /tmp/rt031-inputs/rt030
           unzip -q /tmp/typed.zip -d /tmp/typed
+          unzip -q /tmp/typed2.zip -d /tmp/typed2
       - name: Evaluate deterministic engineering grid twice
         run: |
           for replica in a b; do
             python scripts/phase2_screen_rt031_arlate_fleet_v3.py \
               --typed /tmp/typed/arlate-retained-line-size3-a.json \
-              --inputs /tmp/rt031-inputs \
-              --output "/tmp/rt031-arlate-fleet-$replica.json"
+              --profile rovagnate --inputs /tmp/rt031-inputs \
+              --output "/tmp/rt031-arlate-fleet-rovagnate-$replica.json"
+            python scripts/phase2_screen_rt031_arlate_fleet_v3.py \
+              --typed /tmp/typed2/rt031-arlate-second-santa-line-a.json \
+              --profile second_santa --inputs /tmp/rt031-inputs \
+              --output "/tmp/rt031-arlate-fleet-second-santa-$replica.json"
           done
-          cmp /tmp/rt031-arlate-fleet-a.json /tmp/rt031-arlate-fleet-b.json
+          cmp /tmp/rt031-arlate-fleet-rovagnate-a.json /tmp/rt031-arlate-fleet-rovagnate-b.json
+          cmp /tmp/rt031-arlate-fleet-second-santa-a.json /tmp/rt031-arlate-fleet-second-santa-b.json
       - uses: actions/upload-artifact@v4
         with:
           name: rt031-arlate-rovagnate-fleet-v3
-          path: /tmp/rt031-arlate-fleet-a.json
+          path: /tmp/rt031-arlate-fleet-*-a.json
           if-no-files-found: error

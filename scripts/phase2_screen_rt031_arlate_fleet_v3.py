@@ -16,18 +16,30 @@ from src.phase2_rt031_mixed_frequency_surface_v4 import (
     mixed_service_templates, phased_departures)
 
 
-TYPED_SHA256 = "84aaca4d89dfd149c3589a05bc97e0bc034bb615c57ea5e4c267bc84759a5520"
+TYPED_PROFILES = {
+    "rovagnate": (
+        "84aaca4d89dfd149c3589a05bc97e0bc034bb615c57ea5e4c267bc84759a5520",
+        "RT031_ARLATE_RETAINED_ONE_LINE_ACCESS_FRONTIER_V3", 3),
+    "second_santa": (
+        "4c7b571383f8308ef6bac290ea7961e6e4c0f4208b944ee2359f925040f28762",
+        "RT031_ARLATE_SECOND_SANTA_ONE_LINE_ACCESS_V3", 2),
+}
 HUB = "FROZEN::L00407"
 
 
 def main(args):
-    if hashlib.sha256(args.typed.read_bytes()).hexdigest() != TYPED_SHA256:
+    digest, contract, count = TYPED_PROFILES[args.profile]
+    if hashlib.sha256(args.typed.read_bytes()).hexdigest() != digest:
         raise ValueError("Arlate typed-line lineage drift")
     typed = json.loads(args.typed.read_text(encoding="utf-8"))
-    if (typed.get("contract") != "RT031_ARLATE_RETAINED_ONE_LINE_ACCESS_FRONTIER_V3"
-            or typed.get("retention_subset_size") != 3
-            or typed.get("distinct_typed_path_count") != 3
-            or typed.get("single_recognizable_line_count") != 3
+    if (typed.get("contract") != contract
+            or len(typed.get("candidates", ())) != count
+            or (args.profile == "rovagnate"
+                and (typed.get("retention_subset_size") != 3
+                     or typed.get("distinct_typed_path_count") != 3
+                     or typed.get("single_recognizable_line_count") != 3))
+            or (args.profile == "second_santa"
+                and typed.get("typed_one_line_count") != 2)
             or typed.get("network_selected") is not False):
         raise ValueError("Arlate line contract drift")
     tables, hashes = load_inputs(args.inputs)
@@ -84,7 +96,8 @@ def main(args):
     output = {
         "contract": "RT031_ARLATE_ROVAGNATE_FLEET_SCREEN_V3",
         "status": "PASS_PROBE_SCOPED_DETERMINISTIC_FLEET_NON_DECISIONAL",
-        "input_sha256": {"arlate_rovagnate_typed": TYPED_SHA256, **hashes},
+        "input_sha256": {"typed_line": digest, **hashes},
+        "profile_scope": args.profile,
         "screened_line_count": len(rows),
         "engineering_cases_per_line_template": 27,
         "templates": [{k: v for k, v in template.items()
@@ -115,4 +128,6 @@ if __name__ == "__main__":
     parser.add_argument("--typed", type=Path, required=True)
     parser.add_argument("--inputs", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--profile", choices=sorted(TYPED_PROFILES),
+                        default="rovagnate")
     main(parser.parse_args())
