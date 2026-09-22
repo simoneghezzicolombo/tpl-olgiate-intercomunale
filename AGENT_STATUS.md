@@ -4,6 +4,12 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 
 ## Stato corrente
 
+**Prima di reinterpretare RT031:** leggere la
+[mappa dell'esperienza pregressa](docs/RT031_PRIOR_WORK_EVIDENCE_MAP.md).
+Best practice e figura 8 a doppio verso erano già nel repository; le
+prestazioni del concept originario non sono automaticamente evidenza
+certificata per le candidate attuali.
+
 **Data:** 2026-09-22
 **Fase:** Phase 2 — final-tournament input readiness
 **Ultima lineage operativa integrata:** Stage E RT001 V3 @ `063e119` + repaired Stage-C evidence
