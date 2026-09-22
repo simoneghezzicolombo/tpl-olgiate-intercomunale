@@ -26,6 +26,25 @@ certificata per le candidate attuali.
 
 ## Phase 2 — evidenze correnti
 
+### RT-031 figura a otto con cerniera Olgiate FS — verifica mirata
+
+- [Diagnostica](docs/RT031_HUB_SPLIT_FIG8_DIAGNOSTIC_V3.md): i due ordini
+  mirati FS→ovest→FS→est→FS hanno witness fisici legali nel dominio pinned;
+  i quattro pattern includono due varianti con Olgiate Via Statale.
+- CI fisica `35745222839`, tipizzazione `35745433362`, accesso esatto
+  `35745713815`: SUCCESS. L'accesso è potenziale a piedi, non OD o
+  prestazione oraria. I due versi condividono una identità di linea
+  *dichiarata* ma non un orario congiunto certificato.
+- Tra le quattro corsie, accesso totale a 10 minuti 61,63–64,79%, Olgiate
+  35,01–46,22%, conservazione 4/11 identità attuali, distanza fisica
+  22,148–22,464 km/ciclo. Via Statale aggiunge 6,95 punti a Olgiate nel
+  singolo pattern. Non è selezionata alcuna linea.
+
+`candidate_domain_complete=false`
+`network_selected=false`
+`primary_selection_authorised=false`
+`runner_up_selection_authorised=false`
+
 ### RT-031 Arlate + Rovagnate — latest non-decisional comparison
 
 - Pinned [machine audit](outputs/phase2/rt031_arlate_rovagnate_convergence_v3/convergence_audit_v3.json)
