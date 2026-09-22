@@ -29,7 +29,7 @@ jobs:
           gh api repos/${{ github.repository }}/actions/artifacts/9988386073/zip > /tmp/rt022.zip
           gh api repos/${{ github.repository }}/actions/artifacts/9992507233/zip > /tmp/rt030.zip
           gh api repos/${{ github.repository }}/actions/artifacts/10023387513/zip > /tmp/via.zip
-          gh api repos/${{ github.repository }}/actions/artifacts/10702776319/zip > /tmp/physical.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10702237572/zip > /tmp/physical.zip
           echo 'e0b71f6fd673345c3bc0bf8e32ecf66b7f620e27802f1eb5b24690a8295c8225  /tmp/rt017.zip' | sha256sum -c
           echo '1cab2e18eec4920cbdb348d0d9cd224c7516f8d62bc63b0eacf2a91f6fb134d7  /tmp/rt022.zip' | sha256sum -c
           echo '350c5011565883228ccb52e186bc908a95fdc29f8dd4ebab21fd4c4cb16d6564  /tmp/rt030.zip' | sha256sum -c
@@ -39,7 +39,7 @@ jobs:
           unzip -q /tmp/via.zip -d /tmp/via
           unzip -q /tmp/physical.zip -d /tmp/physical
           echo '14e39b47c09c4afe0d26d13b7369b906299db15d14690ba0e5d06e11b2fd7b7c  /tmp/via/rt031-successor-via-way-relevance.json' | sha256sum -c
-          echo 'c1cca6630d01f6449c9a46baf527401392f6995a30c7a7b566c906004a738e71  /tmp/physical/hub-split-a.json' | sha256sum -c
+          echo '358a45e1de5cddfea56acec4bb4ee335b6f1e210a1d2a5e1ed84b8a47651b57f  /tmp/physical/hub-split-a.json' | sha256sum -c
       - name: Bind both ordered directions twice
         run: |
           for replica in a b; do
