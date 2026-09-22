@@ -49,6 +49,9 @@ ufficiali esistenti*, e relazione con i quattro percorsi RT031. Quest'ultimo
 indicatore di popolazione **non è** il guadagno marginale della nuova linea
 e non si somma alle percentuali RT028. Non c'è punteggio, raggio di
 ammissione o «migliore fermata» calcolata.
+La [CI dell'inventario](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/35749871735)
+ha eseguito due repliche byte-per-byte identiche (artefatto `10705050073`,
+SHA-256 `d3932f14bb550a98bc17620fe9067947380dcb2bd1df57920773891ea3075d6c`).
 
 Tre esempi mostrano perché il punto più vicino non è automaticamente giusto:
 
@@ -65,6 +68,12 @@ diverso: il percorso inverso usa il way corretto, ma **non esiste nel
 catalogo un'ipotesi di fermata su quel way**. La prossima azione non è
 scegliere la candidata più vicina su un'altra via: è enumerare e verificare
 le possibili posizioni di salita nei due sensi lungo il tratto percorso.
+La traversata su Via Cantù si trova nel **primo segmento dell'anello est
+subito dopo Olgiate FS**: anche con una fermata, quella corsa sarebbe in
+uscita dalla stazione. Da sola non garantirebbe a San Zeno un viaggio breve
+*verso* FS. Occorre un passaggio utile nel senso opposto, oppure esplicitare
+il giro residuo e valutarlo con gli eventi e l'orario; la sola vicinanza
+geometrica non risolve la direttezza richiesta dal committente.
 
 Una proposta di fermata può avanzare solo con evidenza su lato/sensi di
 marcia, spazio bus e sicurezza, itinerario pedonale reale senza barriere,

@@ -181,8 +181,8 @@ def main(inputs, typed_path, output):
         "runner_up_selection_authorised": False,
     }
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(payload, ensure_ascii=False, sort_keys=True,
-                                 separators=(",", ":")) + "\n", encoding="utf-8")
+    output.write_bytes((json.dumps(payload, ensure_ascii=False, sort_keys=True,
+                                   separators=(",", ":")) + "\n").encode("utf-8"))
     print(json.dumps({"candidate_count": len(options),
                       "via_cantu_candidate": payload["via_cantu_way_has_existing_proposed_candidate"],
                       "route_via_cantu": {name: value["traverses_san_zeno_via_cesare_cantu_osm_way"]
