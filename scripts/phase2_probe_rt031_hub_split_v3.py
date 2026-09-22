@@ -65,6 +65,18 @@ PROBES = {
                  ("ASF::CALCO_VIA_GARIBALDI", "FROZEN::300634")),
     },
 }
+PROBES["ORDERED_REQUESTED_PLUS_OLGIATE_VIA_STATALE"] = {
+    "ordered": True,
+    "west": (PROBES["ORDERED_REQUESTED_CORE_WITH_VERIFIED_DOMAIN_STOPS"]["west"]
+             + (("ASF::OLGIATE_MOLGORA_VIA_STATALE",),)),
+    "east": PROBES["ORDERED_REQUESTED_CORE_WITH_VERIFIED_DOMAIN_STOPS"]["east"],
+}
+PROBES["ORDERED_REVERSE_PLUS_OLGIATE_VIA_STATALE"] = {
+    "ordered": True,
+    "west": (("ASF::OLGIATE_MOLGORA_VIA_STATALE",),)
+            + PROBES["ORDERED_REVERSE_CORE_WITH_VERIFIED_DOMAIN_STOPS"]["west"],
+    "east": PROBES["ORDERED_REVERSE_CORE_WITH_VERIFIED_DOMAIN_STOPS"]["east"],
+}
 
 
 def main(inputs: Path, via_way_evidence: Path, output: Path):
