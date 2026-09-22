@@ -23,17 +23,23 @@ Snapshot strutturata corrente del coordinamento. La cronologia completa resta ne
 ### RT-031 Arlate + Rovagnate — latest non-decisional comparison
 
 - Pinned [machine audit](outputs/phase2/rt031_arlate_rovagnate_convergence_v3/convergence_audit_v3.json)
-  and [explanation](docs/RT031_ARLATE_ROVAGNATE_TRADEOFF_V3.md) compare three
+  and [explanation](docs/RT031_ARLATE_ROVAGNATE_TRADEOFF_V3.md) compare five
   typed one-line Arlate-Cantina + Rovagnate alternatives with two earlier
-  Brivio + Santa Maria lines; all five are non-dominated in this small exact
+  Brivio + Santa Maria lines; all seven are non-dominated in this small exact
   no-weight comparison, not globally selected.
 - Best total-potential-walking Arlate line: 66.94% at 10 minutes and 64.69%
   in La Valletta, versus 66.06% and 52.48% for the earlier comparator;
   Brivio falls from 88.70% to 83.00%, with 6/11 rather than 7/11 retained
   exact current stop identities.
-- All three new lines have one public route identity and ordered service
+- The initial three Arlate lines have one public route identity and ordered service
   events; 18h H30-peak-2h/H60-offpeak-16h deterministic engineering grid
   gives 2–3 vehicles, not an observed fleet requirement or a selected span.
+- Two additional Arlate + Rovagnate lines serve both Santa Maria current
+  identities `300805` and `300782`, retain 7/11 exact current stops and fit
+  the conditional distance reference. The more balanced has 65.80% total,
+  93.43% Santa Maria and 64.70% La Valletta potential 10-minute access, but
+  Olgiate falls to 45.45%. Both are one-line typed; the same 18h engineering
+  template gives 2–3 vehicles in the 27-case deterministic grid.
 - `decision_budget_km` and `uncertainty_band_min` remain caller-declared and
   unset. Walking access is not OD or empirical connection probability.
 

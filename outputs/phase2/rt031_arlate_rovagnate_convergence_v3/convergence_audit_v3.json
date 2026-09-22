@@ -6,8 +6,10 @@
     "four_stop_retention": {"run_id": 35664953043, "artifact_id": 10668537794, "zip_sha256": "439106c02c353b80c4acefb798ffb8206b3f4bc22eac24e7adfe8169e35fc25e"},
     "rovagnate_retention": {"run_id": 35666141397, "artifact_id": 10669423832, "zip_sha256": "34ec007fe43a91df5fc7438755d671e7400dbb658d095771b711df78faaad638"},
     "typed_access": {"run_id": 35667480984, "artifact_id": 10669014825, "zip_sha256": "b9608409250c58aea80eb8fc4e883c515b263df9e1c43b8a803dfa508e50f8af", "rovagnate_line_json_sha256": "84aaca4d89dfd149c3589a05bc97e0bc034bb615c57ea5e4c267bc84759a5520"},
-    "combined_exact_tradeoff": {"run_id": 35667792082, "artifact_id": 10669164851, "zip_sha256": "6f3c57959f6f364e2288c7c5137ce3faa5a47acad76cffbb8a5f97f365ae41d5"},
-    "deterministic_fleet": {"run_id": 35667921715, "artifact_id": 10670010661, "zip_sha256": "86699d2a141e5c8a3fd05a954fe301852156711a082efa061df92743bbebed4a"}
+    "second_santa_physical": {"run_id": 35713854333, "artifact_id": 10688716659, "zip_sha256": "5eb68a90bc9451d48bd15d77ad1491492d7f9bcc2a245e2329d1e53d29682edd"},
+    "second_santa_typed_access": {"run_id": 35714609548, "artifact_id": 10688052877, "zip_sha256": "5c625432b09513bffefbe63cd46d43d1f6fcaacaf1970fbd8c87a0204454055d", "typed_line_json_sha256": "4c7b571383f8308ef6bac290ea7961e6e4c0f4208b944ee2359f925040f28762"},
+    "combined_exact_tradeoff": {"run_id": 35714978357, "artifact_id": 10688703138, "zip_sha256": "ab8de26a0cc11f2102dd47993dbaae65fd56d1c28e59c48a7cefa583d3a94c96"},
+    "deterministic_fleet": {"run_id": 35714850830, "artifact_id": 10689237509, "zip_sha256": "c713526b3bf31ecc23b8e2d4072887c753ca91e03d8b2f7ff4b699230541a037"}
   },
   "scope": {
     "required_public_line_identity_count": 1,
@@ -32,13 +34,19 @@
     "rovagnate_probe_distinct_one_line_witnesses": 3,
     "bivio_per_il_paese_plus_rovagnate_three_stop_minimum_km_per_cycle": 22.32502365366344,
     "bivio_per_il_paese_plus_rovagnate_three_stop_within_reference": false,
-    "combined_five_line_probe_pareto_count": 5
+    "second_santa_exact_target_queries": 9,
+    "second_santa_under_reference_physical_count": 2,
+    "second_santa_typed_one_line_count": 2,
+    "second_santa_retained_current_exact_stop_count": 7,
+    "combined_seven_line_probe_pareto_count": 7
   },
   "rounded_descriptive_metrics_semantics": "Percentages are potential population-weighted walking access at 10 minutes, rounded to two decimals. Exact rational values are in the pinned typed and combined-tradeoff artifacts; these are not observed ridership or demand-weighted generalized journey time.",
   "comparison_rows": [
     {"id": "PATH_5d1fe65e1849feb21601", "lane": "ARLATE_CANTINA_ROVAGNATE", "km_per_cycle": 21.23, "retained_current_exact_stop_count": 6, "total_10min_percent": 62.58, "brivio_10min_percent": 80.11, "calco_10min_percent": 67.92, "olgiate_10min_percent": 45.16, "santa_maria_10min_percent": 91.89, "la_valletta_10min_percent": 50.32},
     {"id": "PATH_271779790861d8f4cb39", "lane": "ARLATE_CANTINA_ROVAGNATE", "km_per_cycle": 21.22, "retained_current_exact_stop_count": 6, "total_10min_percent": 66.94, "brivio_10min_percent": 83.00, "calco_10min_percent": 62.52, "olgiate_10min_percent": 53.05, "santa_maria_10min_percent": 91.89, "la_valletta_10min_percent": 64.69},
     {"id": "PATH_b503ca14c59884289fa4", "lane": "ARLATE_CANTINA_ROVAGNATE", "km_per_cycle": 21.17, "retained_current_exact_stop_count": 6, "total_10min_percent": 65.66, "brivio_10min_percent": 87.29, "calco_10min_percent": 62.52, "olgiate_10min_percent": 45.45, "santa_maria_10min_percent": 91.89, "la_valletta_10min_percent": 64.69},
+    {"id": "PATH_f01db28ef0cefbc5e0b4", "lane": "ARLATE_CANTINA_ROVAGNATE_SECOND_SANTA", "km_per_cycle": 21.39, "retained_current_exact_stop_count": 7, "total_10min_percent": 65.80, "brivio_10min_percent": 87.29, "calco_10min_percent": 62.52, "olgiate_10min_percent": 45.45, "santa_maria_10min_percent": 93.43, "la_valletta_10min_percent": 64.70},
+    {"id": "PATH_2a3831867599e05d3fa1", "lane": "ARLATE_CANTINA_ROVAGNATE_SECOND_SANTA", "km_per_cycle": 21.42, "retained_current_exact_stop_count": 7, "total_10min_percent": 62.72, "brivio_10min_percent": 80.11, "calco_10min_percent": 67.92, "olgiate_10min_percent": 45.16, "santa_maria_10min_percent": 93.43, "la_valletta_10min_percent": 50.32},
     {"id": "WALK_8586d7e865308d0510c6", "lane": "EARLIER_BRIVIO_SANTA", "km_per_cycle": 21.39, "retained_current_exact_stop_count": 7, "total_10min_percent": 65.89, "brivio_10min_percent": 87.80, "calco_10min_percent": 61.35, "olgiate_10min_percent": 55.92, "santa_maria_10min_percent": 91.89, "la_valletta_10min_percent": 52.48},
     {"id": "WALK_e5d89184ad2835c735e1", "lane": "EARLIER_BRIVIO_SANTA", "km_per_cycle": 21.41, "retained_current_exact_stop_count": 7, "total_10min_percent": 66.06, "brivio_10min_percent": 88.70, "calco_10min_percent": 61.35, "olgiate_10min_percent": 55.92, "santa_maria_10min_percent": 91.89, "la_valletta_10min_percent": 52.48}
   ],
@@ -46,7 +54,7 @@
     "engineering_cases_per_line_template": 27,
     "h30_peak_2h_h60_offpeak_16h_span_h": 18,
     "daily_departures_in_this_template": 20,
-    "vehicle_count_range_in_deterministic_grid": [2, 3],
+    "vehicle_count_range_in_deterministic_grid_for_all_five_arlate_lines": [2, 3],
     "observed_dwell_available": false,
     "case_frequency_is_probability": false,
     "fleet_cap_declared_by_caller": false
