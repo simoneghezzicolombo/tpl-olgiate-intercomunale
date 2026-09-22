@@ -50,7 +50,7 @@
     {"ordinal": 4, "place": "Perego", "evidence": "ASF::PEREGO_VIA_STATALE_79;AREA_PEREGO", "state": "PINNED_STOP_AND_AREA_ANCHOR_DISTINCT"},
     {"ordinal": 5, "place": "Santa Maria Hoe", "evidence": "FROZEN::300782;FROZEN::300805;AREA_SMHOE", "state": "MULTIPLE_STOP_IDENTITIES; EXACT_CENTRE_BINDING_REQUIRED"},
     {"ordinal": 6, "place": "Crescenzaga", "evidence": "OSM_POINT_2101402496;P2V2S_0074", "state": "OPTIONAL; AREA_ANCHOR_AND_PROPOSED_STOP; FIELD_CHECK_PENDING"},
-    {"ordinal": 7, "place": "Olgiate residential / centro sportivo / oratorio", "evidence": null, "state": "DESTINATIONS_AND_BOARDING_POINTS_NOT_YET_RESOLVED"},
+    {"ordinal": 7, "place": "Olgiate residential / centro sportivo / oratorio", "evidence": "CENTRO_SPORTIVO_VIA_ALDO_MORO; ORATORIO_OLGIATE_IDENTITY_UNRESOLVED", "state": "CALLER_PRIORITY_CORRIDOR; CENTRO_SPORTIVO_ADDRESS_CORROBORATED; ORATORIO_IDENTITY_AND_BOARDING_POINTS_NOT_YET_RESOLVED"},
     {"ordinal": 8, "place": "Casa di Comunita Olgiate", "evidence": "SPECIAL::CASA_DI_COMUNITA_OLGIATE", "state": "SPECIAL_SERVICE_BOARDING_POINT; ORDINARY_LINE_SUITABILITY_UNVERIFIED"},
     {"ordinal": 9, "place": "Olgiate FS", "evidence": "FROZEN::L00407", "state": "SECOND_ORDERED_PASSAGE_NOT_YET_CERTIFIED"},
     {"ordinal": 10, "place": "Calco Cornello", "evidence": "AR148_004;AXW013", "state": "PUBLISHED_STOP_NAME; EXACT_COORDINATE_AND_RT031_STOP_BINDING_UNRESOLVED"},
@@ -60,9 +60,21 @@
     {"ordinal": 14, "place": "Arlate", "evidence": "ASF::ARLATE_CANTINA_PIROVANO;ASF::ARLATE_BIVIO_PER_IL_PAESE;AREA_ARLATE", "state": "MULTIPLE_DISTINCT_STOP_CHOICES"},
     {"ordinal": 15, "place": "Brivio centro", "evidence": "FROZEN::300063;ASF::BRIVIO_BAR_CRISTALLO;AREA_BRIVIO_CENTRO", "state": "MULTIPLE_STOP_CHOICES; CENTRE_BINDING_REQUIRED"},
     {"ordinal": 16, "place": "Beverate", "evidence": "FROZEN::300086;FROZEN::300398;ASF::BEVERATE_CARTELLO_PAESE;AREA_BEVERATE", "state": "MULTIPLE_STOP_CHOICES"},
-    {"ordinal": 17, "place": "San Zeno", "evidence": "AREA_SAN_ZENO", "state": "NO_CERTIFIED_STOP_ANCHOR_IN_CURRENT_UNIVERSE; FIELD_AND_ROUTE_CHECK_REQUIRED"},
+    {"ordinal": 17, "place": "San Zeno / Via Cesare Cantù", "evidence": "AREA_SAN_ZENO; OSM_WAY_581532442", "state": "CALLER_PRIORITY_CORRIDOR; REVERSE_HUB_SPLIT_PATTERN_HAS_PHYSICAL_VIA_CANTU_PASSAGE; NO_CERTIFIED_BOARDING_POINT; FIELD_AND_ROUTE_CHECK_REQUIRED"},
     {"ordinal": 18, "place": "Olgiate FS", "evidence": "FROZEN::L00407", "state": "FINAL_ORDERED_PASSAGE_NOT_YET_CERTIFIED"}
   ],
+  "caller_clarification_2026_09_22": {
+    "priority_target_corridors": [
+      "OLGIATE_CENTRO_SPORTIVO_VIA_ALDO_MORO_AND_RESIDENTIAL_AREA",
+      "OLGIATE_ORATORIO_EXACT_VENUE_UNRESOLVED",
+      "SAN_ZENO_VIA_CESARE_CANTU"
+    ],
+    "role": "EXPLICIT_CALLER_DESIGN_PREFERENCE_NOT_GLOBAL_CANDIDATE_ADMISSIBILITY_FILTER",
+    "road_passage_is_not_passenger_stop_service": true,
+    "proposed_or_special_stop_is_not_ordinary_tpl_certification": true,
+    "historical_60_minute_cycle_exclusion_not_binding": true,
+    "source_audit": "docs/RT031_OLGIATE_SAN_ZENO_TARGET_CORRECTION_V3.md"
+  },
   "sources": [
     "config/phase2_territorial_service_contract_v3.csv",
     "outputs/phase2/network_design_method_audit_v3/confirmed_unresolved_stop_evidence_gpt_v3.csv",

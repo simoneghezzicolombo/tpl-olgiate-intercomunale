@@ -75,6 +75,11 @@ confronto deve mettere sullo stesso piano l'8 migliorato per Olgiate e le
 alternative non-8, usando eventi, tempi per località, orari e accesso a
 parità di fonti. Conservazione fermate resta preferenza Pareto, non filtro.
 
+**Correzione successiva del committente:** [centro sportivo/Via Aldo Moro e
+San Zeno/Via Cesare Cantù](RT031_OLGIATE_SAN_ZENO_TARGET_CORRECTION_V3.md)
+sono corridoi prioritari della prossima prova, non località già servite
+dalle percentuali riportate sopra.
+
 `candidate_domain_complete=false` · `decision_budget_km=null` ·
 `uncertainty_band_min=null` · `network_selected=false` ·
 `primary_selection_authorised=false` · `runner_up_selection_authorised=false`

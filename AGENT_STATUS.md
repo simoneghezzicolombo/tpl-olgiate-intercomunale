@@ -28,6 +28,12 @@ certificata per le candidate attuali.
 
 ### RT-031 figura a otto con cerniera Olgiate FS — verifica mirata
 
+- Chiarimento del committente: [centro sportivo/Via Aldo Moro e San Zeno/
+  Via Cesare Cantù](docs/RT031_OLGIATE_SAN_ZENO_TARGET_CORRECTION_V3.md)
+  sono corridoi prioritari, ma non fermate certificate. La variante inversa
+  percorre Via Cesare Cantù presso l'ancora San Zeno; nessuna delle quattro
+  ha un evento di salita lì. La precedente esclusione con ciclo fisso 60m
+  non vincola RT031.
 - [Diagnostica](docs/RT031_HUB_SPLIT_FIG8_DIAGNOSTIC_V3.md): i due ordini
   mirati FS→ovest→FS→est→FS hanno witness fisici legali nel dominio pinned;
   i quattro pattern includono due varianti con Olgiate Via Statale.
