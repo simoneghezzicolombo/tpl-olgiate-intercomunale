@@ -1,0 +1,58 @@
+name: RT031 conditional new-stop walking access V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - scripts/phase2_audit_rt031_conditional_new_stop_access_v3.py
+      - tests/test_phase2_rt031_conditional_new_stop_access_v3.py
+      - .github/workflows/phase2-rt031-conditional-new-stop-access-v3.yml
+      - outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv
+permissions:
+  contents: read
+  actions: read
+jobs:
+  access:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .:src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install 'numpy>=2,<3' 'pandas>=2.2,<4' 'scipy>=1.13,<2' 'shapely>=2,<3' 'pytest>=8,<10'
+      - run: python -m pytest tests/test_phase2_rt031_conditional_new_stop_access_v3.py -q
+      - name: Acquire pinned RT028 walking and RT031 baseline evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/walk /tmp/typed /tmp/base
+          gh api repos/${{ github.repository }}/actions/artifacts/9991182904/zip > /tmp/walk.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10702692659/zip > /tmp/typed.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10701404155/zip > /tmp/base.zip
+          echo 'e1ca83699593dd9e605d2870667da1b4dfc6068436a0c3116faf8587901b2e28  /tmp/walk.zip' | sha256sum -c
+          unzip -q /tmp/walk.zip -d /tmp/walk
+          unzip -q /tmp/typed.zip -d /tmp/typed
+          unzip -q /tmp/base.zip -d /tmp/base
+          echo 'c0169f3e39e1132853c2e8324d00bbb3030dbf5219c65889eee6ae4acf31b32e  /tmp/typed/hub-split-typed-a.json' | sha256sum -c
+          echo 'a029684a5e788a0c2a23b5da389f4719ed787e5c31f6951a0f60fdd9b590a076  /tmp/base/hub-split-access-a.json' | sha256sum -c
+      - name: Reproduce every hypothetical candidate marginal on same substrate
+        run: |
+          matrix=$(find /tmp/walk -name rt028_population_unit_stop_walk_matrix_v3.csv | head -1)
+          osm=$(find /tmp/walk -name rt028_osm_pedestrian_snapshot_v3.osm | head -1)
+          test -n "$matrix" && test -n "$osm"
+          for replica in a b; do
+            python -m scripts.phase2_audit_rt031_conditional_new_stop_access_v3 \
+              --typed /tmp/typed/hub-split-typed-a.json \
+              --baseline-access /tmp/base/hub-split-access-a.json \
+              --matrix "$matrix" --osm "$osm" \
+              --output "/tmp/conditional-new-stop-access-$replica.json"
+          done
+          cmp /tmp/conditional-new-stop-access-a.json /tmp/conditional-new-stop-access-b.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-conditional-new-stop-access-v3
+          path: /tmp/conditional-new-stop-access-a.json
+          if-no-files-found: error
