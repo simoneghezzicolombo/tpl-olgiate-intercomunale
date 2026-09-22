@@ -8,6 +8,8 @@ on:
       - tests/test_phase2_rt031_conditional_new_stop_access_v3.py
       - .github/workflows/phase2-rt031-conditional-new-stop-access-v3.yml
       - outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv
+      - data/processed/poi_dataset.csv
+      - data/phase2/frozen_gate_d/source/structural_anchor_evidence.csv
 permissions:
   contents: read
   actions: read

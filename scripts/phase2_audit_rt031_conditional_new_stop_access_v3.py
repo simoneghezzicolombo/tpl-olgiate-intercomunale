@@ -31,6 +31,8 @@ EXPECTED = {
     "walk_matrix": "a47bbce413d056db185180173ab2f05dce0463cb626a2c81f4aff64de91b50c1",
     "osm_pedestrian": "896f192bbb481f0c07cdc5d695424bf29de85f89ac33ea72986a06e521b424cd",
     "candidates_normalized_newlines": "bf3f5c648803fb0ba03b2f9af2bd4fa02924cb387bb0a752fc3a7a8ee1f14bc0",
+    "poi_normalized_newlines": "5592e7ee0860f7acc71b42922b7e5f0986a5eb2357c52dc1025f5b51a303a672",
+    "anchors_normalized_newlines": "c3ab598a43bfb83f31f086d6a14f29d92941969a349ef9087b5e6d87fe10b3d1",
 }
 THRESHOLDS = (5, 8, 10)
 
@@ -56,9 +58,12 @@ def main(typed_path, baseline_access_path, matrix_path, osm_path, output):
     candidate_path = Path("outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv")
     paths = {"typed": typed_path, "baseline_access": baseline_access_path,
              "walk_matrix": matrix_path, "osm_pedestrian": osm_path,
-             "candidates_normalized_newlines": candidate_path}
+             "candidates_normalized_newlines": candidate_path,
+             "poi_normalized_newlines": Path("data/processed/poi_dataset.csv"),
+             "anchors_normalized_newlines": Path(
+                 "data/phase2/frozen_gate_d/source/structural_anchor_evidence.csv")}
     for name, path in paths.items():
-        if sha256(path, name == "candidates_normalized_newlines") != EXPECTED[name]:
+        if sha256(path, name.endswith("_normalized_newlines")) != EXPECTED[name]:
             raise ValueError(f"pinned source drift: {name}")
     typed = json.loads(typed_path.read_text(encoding="utf-8"))
     baseline_access = json.loads(baseline_access_path.read_text(encoding="utf-8"))
@@ -119,6 +124,20 @@ def main(typed_path, baseline_access_path, matrix_path, osm_path, output):
     if (graph.osm_sha256 != EXPECTED["osm_pedestrian"]
             or graph.graph_digest != "aaad8a16e4c3715161cce6f686acccbf29e4e9def57424e8ad02594c9a69f1f4"):
         raise ValueError("pedestrian graph OSM digest drift")
+    with paths["poi_normalized_newlines"].open("r", encoding="utf-8", newline="") as stream:
+        sport = next(row for row in csv.DictReader(stream)
+                     if row["nome"] == "Centro Sportivo Comunale Olgiate Molgora")
+    with paths["anchors_normalized_newlines"].open("r", encoding="utf-8", newline="") as stream:
+        san_zeno = next(row for row in csv.DictReader(stream)
+                        if row["anchor_id"] == "SAN_ZENO")
+    if san_zeno["epistemic_status"] != "ASSUMPTION":
+        raise ValueError("San Zeno target epistemic state drift")
+    target_snaps = {
+        "centro_sportivo_legacy_approximate_poi": graph.snap(
+            float(sport["lat"]), float(sport["lon"])),
+        "san_zeno_gate_d_assumption_anchor": graph.snap(
+            float(san_zeno["lat"]), float(san_zeno["lon"])),
+    }
     population_nodes = [snap_map[unit]["population_snap_node_id"]
                         for unit in meta["population_unit_id"]]
     population_connectors = np.array([
@@ -140,6 +159,14 @@ def main(typed_path, baseline_access_path, matrix_path, osm_path, output):
             "rt028_snap_status": snap.status,
             "rt028_snap_reason": snap.reason,
             "rt028_connector_m": snap.connector_distance_m,
+            "target_origin_walk_min_to_hypothetical_candidate": {
+                target: (f"{(distances.get(target_snap.node_id, math.inf)
+                              + float(target_snap.connector_distance_m or 0)
+                              + float(snap.connector_distance_m or 0)) / 80:.6f}"
+                         if target_snap.status == "REACHABLE"
+                         and snap.status == "REACHABLE"
+                         and target_snap.node_id in distances else None)
+                for target, target_snap in target_snaps.items()},
             "conditional_pattern_marginal_walking_access": {},
         }
         for name in names:
@@ -161,6 +188,14 @@ def main(typed_path, baseline_access_path, matrix_path, osm_path, output):
         "status": "NON_DECISIONAL_CONDITIONAL_WALKING_ONLY",
         "input_sha256": EXPECTED,
         "pedestrian_graph_digest": graph.graph_digest,
+        "target_snap_provenance": {
+            target: {"status": snap.status,
+                     "connector_m": (f"{snap.connector_distance_m:.6f}"
+                                     if snap.connector_distance_m is not None else None),
+                     "epistemic_status": ("LEGACY_APPROXIMATE_POI_NOT_SITE_PIN"
+                                          if target.startswith("centro_sportivo")
+                                          else "DESIGN_ASSUMPTION_NOT_BOARDING_POINT")}
+            for target, snap in target_snaps.items()},
         "candidate_count": len(candidates),
         "candidates": results,
         "candidate_stop_is_hypothetical_not_field_certified": True,
@@ -169,6 +204,7 @@ def main(typed_path, baseline_access_path, matrix_path, osm_path, output):
         "counterfactual_does_not_check_bus_path_or_detour_to_candidate": True,
         "marginal_is_relative_to_each_existing_four_pattern_stop_union": True,
         "gain_is_walking_access_not_observed_demand_or_journey_time": True,
+        "target_origin_walk_min_is_modelled_not_site_verified": True,
         "barrier_snap_is_model_only_not_field_safety_certification": True,
         "new_stop_selected": False,
         "decision_budget_km": None,
