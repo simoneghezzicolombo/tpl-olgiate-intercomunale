@@ -39,6 +39,18 @@ Arlate + Rovagnate + Santa Maria non comprendono Perego, Mondonico, Casa di
 Comunità o San Zeno nelle fermate disponibili e non certificano il secondo
 anello tramite FS. Non sono quindi la realizzazione di quella sequenza.
 
+Il chiarimento del committente rende la **linea ad 8** la topologia preferita
+da mettere alla prova, non un vincolo o una rete già scelta: Olgiate va
+servita per prima senza abbandonare gli altri quattro comuni; le frazioni
+devono raggiungere FS senza un giro eccessivo, con servizio frequente,
+regolare, esteso e riconoscibile. La sola forma ad 8 non garantisce questo
+risultato: occorrono eventi direzionali e orari per misurare i tempi da
+ciascuna frazione verso FS nei due sensi, attesa e continuità del viaggio.
+La tabella sopra misura accesso pedonale potenziale, **non** tali tempi di
+viaggio né affidabilità empirica. Pertanto la maggiore copertura totale di
+`PATH_271779790861d8f4cb39` non lo rende automaticamente migliore per
+l'obiettivo ora dichiarato.
+
 La proposta da sottoporre a confronto finale deve mostrare, per ogni
 alternativa, gli eventi ordinati, il passaggio intermedio e la continuità
 del servizio passeggeri a FS, le località effettivamente servite, la
