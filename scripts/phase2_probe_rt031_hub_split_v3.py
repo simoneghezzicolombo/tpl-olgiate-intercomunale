@@ -43,7 +43,8 @@ PROBES = {
     "ORDERED_REQUESTED_CORE_WITH_VERIFIED_DOMAIN_STOPS": {
         "ordered": True,
         "west": (("ASF::OLGIATE_MOLGORA_SCARPONE",),
-                 ("ASF::ROVAGNATE_FRAZIONE_ALDUNO", "FROZEN::300879"),
+                 ("ASF::ROVAGNATE_STRADA_STATALE_AGIP",
+                  "ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA", "FROZEN::300879"),
                  ("ASF::PEREGO_VIA_STATALE_79",),
                  ("FROZEN::300782", "FROZEN::300805")),
         "east": (("ASF::CALCO_VIA_GARIBALDI", "FROZEN::300634"),
