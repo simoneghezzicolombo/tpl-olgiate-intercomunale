@@ -52,6 +52,18 @@ PROBES = {
                  ("FROZEN::300063",),
                  ("ASF::BEVERATE_CARTELLO_PAESE", "FROZEN::300398")),
     },
+    "ORDERED_REVERSE_CORE_WITH_VERIFIED_DOMAIN_STOPS": {
+        "ordered": True,
+        "west": (("FROZEN::300782", "FROZEN::300805"),
+                 ("ASF::PEREGO_VIA_STATALE_79",),
+                 ("ASF::ROVAGNATE_STRADA_STATALE_AGIP",
+                  "ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA", "FROZEN::300879"),
+                 ("ASF::OLGIATE_MOLGORA_SCARPONE",)),
+        "east": (("ASF::BEVERATE_CARTELLO_PAESE", "FROZEN::300398"),
+                 ("FROZEN::300063",),
+                 ("ASF::ARLATE_CANTINA_PIROVANO", "ASF::ARLATE_BIVIO_PER_IL_PAESE"),
+                 ("ASF::CALCO_VIA_GARIBALDI", "FROZEN::300634")),
+    },
 }
 
 
