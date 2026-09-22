@@ -8,6 +8,15 @@
   "public_route_identity_count_required": 1,
   "preferred_topology": "FIGURE_EIGHT_WITH_WEST_AND_EAST_LOBES_MEETING_AT_OLGIATE_FS",
   "preferred_topology_is_admissibility_constraint": false,
+  "design_principle_sources": [
+    "docs/PHASE2_TRANSIT_BEST_PRACTICES.md",
+    "docs/PHASE2_SERVICE_DESIGN_SPEC.md"
+  ],
+  "historical_figure_eight_seed_sources": [
+    "docs/02_concetto_linea_8_e_nodo_olgiate.md",
+    "docs/03_modello_circolare_doppio_verso_merate.md"
+  ],
+  "historical_seed_performance_is_currently_certified": false,
   "caller_service_intent": [
     "OLGIATE_FIRST_WITHOUT_ABANDONING_OTHER_FOUR_MUNICIPALITIES",
     "SERVE_AS_MANY_VERIFIED_FRACTIONS_AS_PRACTICABLE",

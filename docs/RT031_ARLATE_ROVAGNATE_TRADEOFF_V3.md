@@ -24,12 +24,12 @@ c'è un punteggio composito né una preferenza normativa per sceglierne una.
 
 ## Sintesi per la prossima proposta
 
-Come **base di sviluppo**, non come linea selezionata, `PATH_271779790861d8f4cb39`
-è la scelta più promettente nell'insieme di sette: ha la maggiore copertura
+Come **riferimento di copertura pedonale**, non come base di linea selezionata,
+`PATH_271779790861d8f4cb39` ha la maggiore copertura
 potenziale totale a 10 minuti (66,94%) e la maggiore copertura del comune
 meno servito (Olgiate, 53,05%). Tocca fermate di Arlate e Rovagnate. Questa
-indicazione di lavoro non converte il criterio *maximin* in una preferenza
-normativa del decisore e non prova che la linea sia globalmente migliore.
+osservazione non converte il criterio *maximin* in una preferenza normativa
+del decisore e non prova che la linea sia migliore per il servizio completo.
 
 La [sequenza territoriale desiderata dal committente](../config/rt031_caller_locality_itinerary_preference_v3.json)
 aggiunge un problema distinto: due anelli leggibili con un passaggio
@@ -39,8 +39,11 @@ Arlate + Rovagnate + Santa Maria non comprendono Perego, Mondonico, Casa di
 Comunità o San Zeno nelle fermate disponibili e non certificano il secondo
 anello tramite FS. Non sono quindi la realizzazione di quella sequenza.
 
-Il chiarimento del committente rende la **linea ad 8** la topologia preferita
-da mettere alla prova, non un vincolo o una rete già scelta: Olgiate va
+La [figura 8 originaria](02_concetto_linea_8_e_nodo_olgiate.md), i
+[due versi](03_modello_circolare_doppio_verso_merate.md) e le
+[best practice Phase 2](PHASE2_TRANSIT_BEST_PRACTICES.md) codificavano già
+questa esigenza; il chiarimento del committente la conferma come topologia
+preferita **da verificare**, non come rete già scelta. Olgiate va
 servita per prima senza abbandonare gli altri quattro comuni; le frazioni
 devono raggiungere FS senza un giro eccessivo, con servizio frequente,
 regolare, esteso e riconoscibile. La sola forma ad 8 non garantisce questo
@@ -50,6 +53,12 @@ La tabella sopra misura accesso pedonale potenziale, **non** tali tempi di
 viaggio né affidabilità empirica. Pertanto la maggiore copertura totale di
 `PATH_271779790861d8f4cb39` non lo rende automaticamente migliore per
 l'obiettivo ora dichiarato.
+
+Le affermazioni iniziali sul ciclo di 55 minuti e sulle coincidenze
+«perfette» non sono evidenza RT031: [Gate F](GATE_F_PASS.md) ha già escluso
+di promuovere gli scenari hardcoded a raccomandazione. La domanda nuova non
+è quali principi usare, ma se una realizzazione ordinata e verificata
+della figura 8 li soddisfi meglio delle alternative sullo stesso substrato.
 
 La proposta da sottoporre a confronto finale deve mostrare, per ogni
 alternativa, gli eventi ordinati, il passaggio intermedio e la continuità
