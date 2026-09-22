@@ -36,11 +36,11 @@ jobs:
           echo 'e0b71f6fd673345c3bc0bf8e32ecf66b7f620e27802f1eb5b24690a8295c8225  /tmp/rt017.zip' | sha256sum -c
           echo '1cab2e18eec4920cbdb348d0d9cd224c7516f8d62bc63b0eacf2a91f6fb134d7  /tmp/rt022.zip' | sha256sum -c
           echo '350c5011565883228ccb52e186bc908a95fdc29f8dd4ebab21fd4c4cb16d6564  /tmp/rt030.zip' | sha256sum -c
-          echo '1603606d02a170567c1d423b7689b7044933fff6490ca0f2d77d0  /tmp/via.zip' | sha256sum -c
           unzip -q /tmp/rt017.zip -d /tmp/rt031-inputs/rt017
           unzip -q /tmp/rt022.zip -d /tmp/rt031-inputs/rt022
           unzip -q /tmp/rt030.zip -d /tmp/rt031-inputs/rt030
           unzip -q /tmp/via.zip -d /tmp/via
+          echo '14e39b47c09c4afe0d26d13b7369b906299db15d14690ba0e5d06e11b2fd7b7c  /tmp/via/rt031-successor-via-way-relevance.json' | sha256sum -c
       - name: Reproduce two hub-split probes byte for byte
         run: |
           evidence=$(find /tmp/via -name '*.json' | head -1)
