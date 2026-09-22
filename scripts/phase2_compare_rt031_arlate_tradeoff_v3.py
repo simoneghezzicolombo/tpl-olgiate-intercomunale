@@ -1,4 +1,4 @@
-"""No-weight comparison of three Arlate/Rovagnate lines and two earlier lines."""
+"""No-weight comparison of five Arlate/Rovagnate lines and two earlier lines."""
 import argparse
 from decimal import Decimal
 from fractions import Fraction
@@ -10,6 +10,7 @@ from src.phase2_rt031_municipal_access_frontier_v4 import exact_pareto_indices
 
 
 ARLATE_SHA256 = "84aaca4d89dfd149c3589a05bc97e0bc034bb615c57ea5e4c267bc84759a5520"
+SECOND_SANTA_SHA256 = "4c7b571383f8308ef6bac290ea7961e6e4c0f4208b944ee2359f925040f28762"
 JOINT_SHA256 = "f98ff97d4ef22a44b03474ef986c76a253be2cb8016f3aca38b044526d5c98a8"
 JOINT_IDS = ("WALK_8586d7e865308d0510c6",
              "WALK_e5d89184ad2835c735e1")
@@ -34,23 +35,30 @@ def vector(row, codes):
 
 
 def main(args):
-    if sha256(args.arlate) != ARLATE_SHA256 or sha256(args.joint) != JOINT_SHA256:
+    if (sha256(args.arlate) != ARLATE_SHA256
+            or sha256(args.second_santa) != SECOND_SANTA_SHA256
+            or sha256(args.joint) != JOINT_SHA256):
         raise ValueError("typed comparison lineage drift")
     arlate = json.loads(args.arlate.read_text(encoding="utf-8"))
+    second = json.loads(args.second_santa.read_text(encoding="utf-8"))
     joint = json.loads(args.joint.read_text(encoding="utf-8"))
     if (arlate.get("contract") != "RT031_ARLATE_RETAINED_ONE_LINE_ACCESS_FRONTIER_V3"
             or arlate.get("retention_subset_size") != 3
             or arlate.get("required_additional_current_stop_id") != "FROZEN::300879"
             or arlate.get("distinct_typed_path_count") != 3
             or arlate.get("single_recognizable_line_count") != 3
+            or second.get("contract") != "RT031_ARLATE_SECOND_SANTA_ONE_LINE_ACCESS_V3"
+            or second.get("typed_one_line_count") != 2
             or joint.get("contract") != "RT031_JOINT_DISCOVERY_TYPED_FRONTIER_V3"
             or joint.get("candidate_count") != 99
             or arlate.get("current_exact_id_structural_subset")
             != joint.get("current_exact_id_structural_subset")
+            or second.get("current_exact_id_structural_subset")
+            != joint.get("current_exact_id_structural_subset")
             or any(source.get("network_selected") is not False
                    or source.get("primary_selection_authorised") is not False
                    or source.get("runner_up_selection_authorised") is not False
-                   for source in (arlate, joint))):
+                   for source in (arlate, second, joint))):
         raise ValueError("typed comparison contract drift")
     prior = {row["stop_set_id"]: row for row in joint["candidates"]
              if row["stop_set_id"] in JOINT_IDS}
@@ -58,10 +66,12 @@ def main(args):
         raise ValueError("earlier comparator identity drift")
     candidates = [(row["path_id"], "ARLATE_ROVAGNATE_PROBE", row)
                   for row in arlate["candidates"]]
+    candidates += [(row["path_id"], "ARLATE_ROVAGNATE_SECOND_SANTA_PROBE", row)
+                   for row in second["candidates"]]
     candidates += [(identity, "EARLIER_BRIVIO_SANTA_PROBE", prior[identity])
                    for identity in JOINT_IDS]
-    if len({identity for identity, _, _ in candidates}) != 5:
-        raise ValueError("five distinct comparison identities required")
+    if len({identity for identity, _, _ in candidates}) != 7:
+        raise ValueError("seven distinct comparison identities required")
     codes = sorted(arlate["current_exact_id_structural_subset"]["municipal"])
     benefits = [vector(row, codes) for _, _, row in candidates]
     costs = [Decimal(row["distance_m"]) for _, _, row in candidates]
@@ -83,8 +93,9 @@ def main(args):
         })
     output = {
         "contract": "RT031_ARLATE_ROVAGNATE_COMBINED_TRADEOFF_V3",
-        "status": "PASS_FIVE_LINE_PROBE_SCOPED_NON_DECISIONAL_PARETO",
+        "status": "PASS_SEVEN_LINE_PROBE_SCOPED_NON_DECISIONAL_PARETO",
         "input_sha256": {"arlate_rovagnate_typed": ARLATE_SHA256,
+                         "second_santa_typed": SECOND_SANTA_SHA256,
                          "earlier_joint_typed": JOINT_SHA256},
         "comparison_line_count": len(rows),
         "combined_probe_pareto_count": len(frontier),
@@ -115,6 +126,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--arlate", type=Path, required=True)
+    parser.add_argument("--second-santa", type=Path, required=True)
     parser.add_argument("--joint", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     main(parser.parse_args())
