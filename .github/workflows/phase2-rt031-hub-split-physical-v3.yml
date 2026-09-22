@@ -1,0 +1,54 @@
+name: RT031 hub-split physical probe V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - src/phase2_rt031_hub_split_physical_probe_v3.py
+      - scripts/phase2_probe_rt031_hub_split_v3.py
+      - tests/test_phase2_rt031_hub_split_physical_probe_v3.py
+      - .github/workflows/phase2-rt031-hub-split-physical-v3.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  hub-split:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install pytest
+      - run: python -m pytest tests/test_phase2_rt031_hub_split_physical_probe_v3.py -q
+      - name: Acquire pinned RT017 RT022 RT030 and restriction evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/rt031-inputs/{rt017,rt022,rt030} /tmp/via
+          gh api repos/${{ github.repository }}/actions/artifacts/9972204236/zip > /tmp/rt017.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/9988386073/zip > /tmp/rt022.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/9992507233/zip > /tmp/rt030.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10023387513/zip > /tmp/via.zip
+          echo 'e0b71f6fd673345c3bc0bf8e32ecf66b7f620e27802f1eb5b24690a8295c8225  /tmp/rt017.zip' | sha256sum -c
+          echo '1cab2e18eec4920cbdb348d0d9cd224c7516f8d62bc63b0eacf2a91f6fb134d7  /tmp/rt022.zip' | sha256sum -c
+          echo '350c5011565883228ccb52e186bc908a95fdc29f8dd4ebab21fd4c4cb16d6564  /tmp/rt030.zip' | sha256sum -c
+          echo '1603606d02a170567c1d423b7689b7044933fff6490ca0f2d77d0  /tmp/via.zip' | sha256sum -c
+          unzip -q /tmp/rt017.zip -d /tmp/rt031-inputs/rt017
+          unzip -q /tmp/rt022.zip -d /tmp/rt031-inputs/rt022
+          unzip -q /tmp/rt030.zip -d /tmp/rt031-inputs/rt030
+          unzip -q /tmp/via.zip -d /tmp/via
+      - name: Reproduce two hub-split probes byte for byte
+        run: |
+          evidence=$(find /tmp/via -name '*.json' | head -1)
+          python -m scripts.phase2_probe_rt031_hub_split_v3 --inputs /tmp/rt031-inputs --via-way-evidence "$evidence" --output /tmp/hub-split-a.json
+          python -m scripts.phase2_probe_rt031_hub_split_v3 --inputs /tmp/rt031-inputs --via-way-evidence "$evidence" --output /tmp/hub-split-b.json
+          cmp /tmp/hub-split-a.json /tmp/hub-split-b.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-hub-split-physical-probe-v3
+          path: /tmp/hub-split-a.json
+          if-no-files-found: error
