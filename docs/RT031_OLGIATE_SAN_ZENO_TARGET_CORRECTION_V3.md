@@ -38,6 +38,42 @@ fermata esistente o scelta. Il catalogo non contiene una candidata sul way
 `581532442` di Via Cesare Cantù. Questi sono punti di partenza per
 ricognizione, non boarding events da aggiungere automaticamente alla linea.
 
+## Audit di localizzazione senza scelta discrezionale
+
+Lo [script di inventario](../scripts/phase2_audit_rt031_local_stop_siting_v3.py)
+verifica **tutte e 40** le ipotesi di Olgiate presenti nel catalogo fissato;
+nessuna è già fisicamente certificata. Per ciascuna espone separatamente
+distanza in linea d'aria dai luoghi, nome/attributi stradali, indicatore di
+popolazione aggiuntiva del *vecchio substrato V2 rispetto alle fermate
+ufficiali esistenti*, e relazione con i quattro percorsi RT031. Quest'ultimo
+indicatore di popolazione **non è** il guadagno marginale della nuova linea
+e non si somma alle percentuali RT028. Non c'è punteggio, raggio di
+ammissione o «migliore fermata» calcolata.
+
+Tre esempi mostrano perché il punto più vicino non è automaticamente giusto:
+
+| Ipotesi | Strada | Dal POI sportivo approssimato | Sul way già percorso dall'8 base? | Popolazione aggiuntiva V2 a 10 min | Evidenza fisica ancora mancante |
+| --- | --- | ---: | --- | ---: | --- |
+| `P2V2S_0082` | Via Buttero | 254 m | Sì, nei due pattern base; non nelle varianti Via Statale | 118 | Lato strada, spazio di arresto, accesso a piedi; marciapiede non indicato |
+| `P2V2S_0092` | Via Mondonico | 151 m | No | 151 | OSM indica `sidewalk=no`; larghezza, lato e accesso da verificare; servirebbe valutare una deviazione |
+| `P2V2S_0103` | Via Mondonico | 259 m | No | 264 | Come sopra; maggiore catchment V2 non prova utilità per la linea proposta |
+
+Le distanze sono rettilinee e i numeri di popolazione sono arrotondati:
+nessuno dei tre numeri prova che il centro sportivo sia raggiungibile in
+sicurezza o entro un tempo pedonale dato. Per Via Cantù il problema è
+diverso: il percorso inverso usa il way corretto, ma **non esiste nel
+catalogo un'ipotesi di fermata su quel way**. La prossima azione non è
+scegliere la candidata più vicina su un'altra via: è enumerare e verificare
+le possibili posizioni di salita nei due sensi lungo il tratto percorso.
+
+Una proposta di fermata può avanzare solo con evidenza su lato/sensi di
+marcia, spazio bus e sicurezza, itinerario pedonale reale senza barriere,
+identità del luogo servito, incremento di accesso sullo *stesso* substrato
+del confronto RT031, e costo in km/tempo per i passeggeri già serviti.
+Sicurezza e legalità sono prerequisiti; fra siti idonei, accesso e costo
+restano dimensioni di confronto senza pesi imposti dal modello. Fino alla
+verifica sul campo: `new_stop_selected=false`.
+
 Infine, le coordinate di `S_SAN_ZENO` nei vecchi GTFS di scenario
 `data/raw/gtfs/network_structural/stops.txt` (45.7248, 9.3821) sono a circa
 **2,26 km** dall'ancora Piazza San Zenone più recente. Quel record è di

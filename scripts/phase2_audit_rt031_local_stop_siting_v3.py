@@ -20,15 +20,18 @@ EXPECTED = {
     "nodes": "2ab72595b7c52d8a08ccf767a20a9a5fc00b39552b37da01a53f270467a4ca06",
     "corridors": "71d0728898e1b36a8b496763e512886c59775528908c0609a6f8b553a060e189",
     "patterns": "44fd5d95717ea99d8bee205fa1949c978b44074af4134420ac59bc8a0769684e",
-    "candidates": "866a73506d57472c2b3c6b169d76873326132ad8e9a3acef8e0c93cafc867607",
-    "poi": "0133989a80d370c11c7e64e20423a622ce72882b61181ff94106bcee5f4c76a4",
-    "anchors": "4067805e4099e9016b8225e290cebc2370673a46d07ec7af6bb516ee8a427aa3",
-    "roads": "9965baa9bd02a03162cc2261e986f9ee86b85eccfe5936d786af7c1211414631",
+    "candidates": "bf3f5c648803fb0ba03b2f9af2bd4fa02924cb387bb0a752fc3a7a8ee1f14bc0",
+    "poi": "5592e7ee0860f7acc71b42922b7e5f0986a5eb2357c52dc1025f5b51a303a672",
+    "anchors": "c3ab598a43bfb83f31f086d6a14f29d92941969a349ef9087b5e6d87fe10b3d1",
+    "roads": "2a1082b10f5a6560bdf69e8dc344541d3a892f751054316ea582fef32fe6b4c4",
 }
 VIA_CANTU_OSM_WAY_ID = "581532442"
+REPO_TEXT_KEYS = frozenset({"candidates", "poi", "anchors", "roads"})
 
 
-def sha256(path):
+def sha256(path, normalize_newlines=False):
+    if normalize_newlines:
+        return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
@@ -66,7 +69,8 @@ def main(inputs, typed_path, output):
         "anchors": Path("data/phase2/frozen_gate_d/source/structural_anchor_evidence.csv"),
         "roads": Path("data/raw/osm/osm_highways_core.geojson"),
     }
-    if any(sha256(path) != EXPECTED[key] for key, path in paths.items()):
+    if any(sha256(path, key in REPO_TEXT_KEYS) != EXPECTED[key]
+           for key, path in paths.items()):
         raise ValueError("pinned stop-siting source drift")
     typed = json.loads(typed_path.read_text(encoding="utf-8"))
     if (typed.get("contract") != "RT031_HUB_SPLIT_TYPED_ONE_LINE_V3"
@@ -156,6 +160,7 @@ def main(inputs, typed_path, output):
         "contract": "RT031_OLGIATE_STOP_SITING_INVENTORY_V3",
         "status": "NON_DECISIONAL_ALL_OLGIATE_PROPOSED_CANDIDATES",
         "input_sha256": EXPECTED,
+        "repo_text_sha256_normalizes_crlf_to_lf": True,
         "target_coordinate_semantics": {
             "centro_sportivo_legacy_approximate_poi": "LEGACY_APPROXIMATE_POI_NOT_SITE_PIN",
             "san_zeno_gate_d_assumption_anchor": "DESIGN_ASSUMPTION_NOT_BOARDING_POINT",
