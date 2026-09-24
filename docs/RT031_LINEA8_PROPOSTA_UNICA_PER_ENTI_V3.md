@@ -130,6 +130,22 @@ una rete automaticamente selezionata: l'effetto su tempi, risorse e
 viaggi verso FS va misurato. La 10/11 resta il confronto di efficienza,
 non un taglio già deciso.
 
+**Guardrail per il downgrade.** La differenza di soli 0,21 punti
+percentuali nel totale a 10 minuti non rende la 10/11 un taglio
+territorialmente neutro. Eliminare lo sperone per la fermata “Hoè” riduce
+la quota potenziale di Santa Maria Hoè da **72,88% a 64,21% entro 5
+minuti** (−8,67 punti), da **94,83% a 88,60% entro 8 minuti** (−6,22)
+e da **95,75% a 93,43% entro 10 minuti** (−2,32). Nel totale dei cinque
+comuni le perdite corrispondenti sono 0,80/0,57/0,21 punti. Questi sono
+risultati condizionali di accesso pedonale, non passeggeri persi. La
+variante 9/11 senza Calco Via Nazionale scende invece al 62,81% a
+10 minuti a Calco, contro 68,21% nella 11/11; non è un taglio innocuo.
+Un downgrade si giudica quindi su **tutte le quote 5/8/10 minuti per
+comune** e sugli eventi di servizio effettivi, non sul solo totale a
+10 minuti. H30 nelle punte e copertura geografica sono dimensioni
+diverse: diminuire la frequenza può lasciare invariata la percentuale
+pedonale ma peggiorare i viaggi realmente utili verso FS.
+
 ### Direttezza verso FS: perché servono davvero i due sensi
 
 Nel [percorso 10/11 modellato](../outputs/phase2/rt031_current_stop_repair_v3/road_options.json),
