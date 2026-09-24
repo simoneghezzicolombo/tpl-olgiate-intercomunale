@@ -1,33 +1,75 @@
-# RT031 — Quartiere di Olgiate a sud della Statale e San Zeno/Via Cantù
+# RT031 — Quartiere di Olgiate a sud della Statale
 
 **Correzione del committente, 24 settembre 2026.** La zona da servire è
 **l'intera area residenziale cerchiata sulla mappa a sud della SS342/Statale**,
 visivamente comprendente Canova–San Zeno e l'intorno di Via Piave. Il centro
-sportivo, l'oratorio e la Casa di Comunità sono riferimenti nel quartiere,
-non sostituti dell'obiettivo territoriale. La domanda progettuale è se un
+sportivo e l'oratorio erano riferimenti citati dal committente nella discussione
+precedente, ma non delimitano l'area. Le etichette «Casa di ...» visibili
+sulla schermata non identificano da sole la Casa di Comunità. Lo stop speciale
+catalogato è collocato nell'area meridionale dal suo *dato coordinato*;
+non equivale a una fermata ordinaria. La domanda progettuale è se un
 servizio riconoscibile permetta a chi abita in questa zona di raggiungere
 Olgiate FS con fermate accessibili, tempi e frequenze utili nei versi
 necessari. La schermata annotata indica l'intento del committente ma non è
 un poligono georeferenziato: i suoi bordi non sono stati convertiti in
-coordinate o in un denominatore di popolazione. Perciò **nessuna percentuale
-di copertura del quartiere** è ancora certificata.
+coordinate esatte. Le misure sotto usano due involucri geografici
+**provvisori**, non un perimetro certificato della cerchiatura.
 
-I risultati che seguono sui singoli siti e sul POI sportivo restano validi
-come verifiche *locali*, ma non rispondono da soli alla copertura dell'area
-cerchiata. Anche il fatto che un percorso passi per Via Cantù non prova che
-le residenze nella parte occidentale o interna del quartiere possano salire
-e arrivare alla stazione con un viaggio competitivo. La prossima analisi
-deve confrontare, sulla stessa base pedonale, le abitazioni dell'intera zona,
-le fermate esistenti e ipotizzate, e i viaggi ordinati verso FS.
+## Rettifica geografica e nuovo confronto
 
-### Primo controllo delle strade del quartiere
+La [mappa di controllo](../outputs/phase2/rt031_south_olgiate_provisional_area_v3/overview.png)
+mostra l'errore precedente. Il POI sportivo legacy (45.7345, 9.3980) e
+l'ancora `SAN_ZENO` presso Piazza San Zenone (45.735223, 9.407099) sono
+**a nord** della SS342 presso Olgiate; il secondo non identifica il quartiere
+Canova–San Zeno della schermata. Le analisi di Via Cantù, Via Buttero e
+Via Mondonico riferite a quei due punti restano diagnosi di un'altra zona:
+**non sono evidenza di servizio dell'area richiesta**. Il nome «San Zeno»
+aveva portato a confondere due riferimenti geografici.
+
+La proposta `P2V2S_0031` è invece su Via Aldo Moro a (45.721310,
+9.397265), circa 107 m in linea d'aria dalla coordinata dello stop
+`SPECIAL::CASA_DI_COMUNITA_OLGIATE` (45.722131, 9.397974).
+È `FIELD_CHECK_PENDING`; lo stop speciale non ne certifica l'idoneità per
+una linea ordinaria. La precedente frase che liquidava `P2V2S_0031` come
+«altra geografia» rispetto al POI sportivo era quindi fuorviante per la
+zona che il committente intendeva.
+
+Il [nuovo audit di sensibilità](../scripts/phase2_audit_rt031_south_olgiate_provisional_area_v3.py)
+traccia il limite settentrionale sulla SS342/Via Como dell'OSM fissato e
+usa due limiti laterali/meridionali assunti. Impiega le stesse unità di
+popolazione RT016, matrice e grafo pedonale RT028, e i quattro stop-set
+RT031. Le percentuali sono potenziale accesso **a piedi a una fermata**;
+non misurano un viaggio in bus verso FS, la qualità di un orario o la
+domanda osservata.
+
+| Involucro provvisorio | Popolazione modellata interna | A piedi entro 10 min da FS | Copertura a piedi delle quattro varianti, 10 min | Se `P2V2S_0031` fosse raggiunta e servita, 10 min |
+| --- | ---: | ---: | ---: | ---: |
+| Interno | 4.031 | 36,0% | 36,7–54,8% | 85,8–90,5% |
+| Esteso | 4.701 | 31,5% | 32,1–47,7% | 84,9–89,0% |
+
+La differenza condizionale è 35,6–49,1 punti nell'involucro interno e
+41,3–52,8 nell'esteso. La sensibilità del denominatore conferma che non
+si deve pubblicare un'unica «copertura del quartiere» come fatto. Però
+indica una lacuna territoriale concreta e una *ipotesi da provare* su Via
+Aldo Moro. Nessuno dei quattro percorsi stradali attuali attraversa il
+way della candidata. Servono un percorso bus legale fino al sito,
+fermata sicura, eventi di salita nei versi utili e tempi verso FS.
+L'audit non seleziona né fermata né linea.
+
+I risultati storici che seguono sui tre siti vicino al POI sportivo legacy
+restano controlli aritmetici locali, ma riguardano un'altra zona. Il nuovo
+screen sopra confronta già le unità di popolazione dell'area meridionale;
+restano da dimostrare percorso del bus, salita e viaggio verso FS.
+
+### Ricognizione precedente per nome di strada — non riferibile alla zona cerchiata
 
 L'[inventario riproducibile](../scripts/phase2_audit_rt031_local_stop_siting_v3.py)
 ora misura i bordi RT017 percorsi su alcune strade nominate nella zona o
 nelle verifiche precedenti. La corrispondenza è per *nome esatto della via*
-nel rilievo OSM fissato; questi nomi sono indizi geografici, non il confine
-del quartiere. Metri di percorso su una strada non equivalgono a residenti
-serviti o a una fermata utilizzabile.
+nel rilievo OSM fissato, anche quando una via omonima è fuori dalla zona
+richiesta. La tabella è conservata per tracciabilità, ma non misura la
+traversata del quartiere cerchiato. Metri di percorso su una strada non
+equivalgono a residenti serviti o a una fermata utilizzabile.
 
 | Variante dell'unica linea progettuale | Via Piave | Via Aldo Moro | Via Buttero | Via Mondonico | Via Cesare Cantù, tutti i way omonimi |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -38,14 +80,22 @@ serviti o a una fermata utilizzabile.
 
 I 997 m sommano *tutti* i way OSM denominati Via Cesare Cantù; i 980,10 m
 della ricognizione sotto riguardano il solo way `581532442`. In particolare,
-il passaggio parziale su Via Piave nella prima variante non dimostra un
+il passaggio parziale su un altro tratto chiamato Via Piave non dimostra un
 collegamento delle abitazioni di Canova–San Zeno verso FS; nelle varianti
-inverse il bus percorre Via Cantù, ma senza un evento di salita certificato.
-La carenza del quartiere va perciò esaminata come combinazione di **punti di
+inverse il bus percorre Via Cantù **a nord della SS342**. La carenza del
+quartiere va perciò esaminata come combinazione di **punti di
 salita, accesso pedonale dalle abitazioni, verso e tempo di viaggio**.
 La [CI dello screen aggiornato](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/35981547466)
 ha eseguito due repliche identiche; artefatto `10800501329`, SHA-256 JSON
 `61c18718037efe5b38bd31f621175055028b8ecad916093ce04ebb88ec630815`.
+Nello stesso inventario delle 40 ipotesi per Olgiate, per *nome esatto della
+strada* ci sono zero proposte su Via Piave e zero su Via Cesare Cantù; una
+su Via Buttero (`P2V2S_0082`), due su Via Mondonico (`P2V2S_0092`,
+`P2V2S_0103`) e una su Via Aldo Moro (`P2V2S_0031`, distante circa 1,47 km
+dal **POI sportivo legacy fuori area**). Quest'ultima è la candidata
+geograficamente rilevante per il nuovo screen, benché non certificata. Il
+catalogo, quindi, non offre già un set verificato di
+fermate distribuite su tutto il perimetro indicato.
 
 **Correzione del committente, 22 settembre 2026.** La copertura debole di
 Olgiate nelle quattro [prove della figura a otto](RT031_HUB_SPLIT_FIG8_DIAGNOSTIC_V3.md)
@@ -167,13 +217,12 @@ Il controllo generale di composizione sullo stesso commit è [verde](https://git
 I risultati delle due direzioni coincidono per queste tre ipotesi perché
 le differenze dei rispettivi stop-set non cambiano il loro catchment
 marginale; questo **non** certifica servizio bidirezionale alla fermata.
-Il POI sportivo è approssimato e il suo connettore al grafo RT028 è di
-73,34 m, vicino al limite modellistico di 90 m: resta prioritaria una
-verifica indipendente del percorso e delle barriere. Un'ipotesi più lontana
-dal centro sportivo può dare molti più punti di copertura comunale, ma
-risponde a un'altra geografia e può imporre molto più percorso al bus.
-Per San Zeno nessuna delle 40 ipotesi è sul way Via Cantù percorso dalla
-variante inversa; il controfattuale non colma quel vuoto di generazione.
+Il POI sportivo legacy è fuori dal nuovo perimetro provvisorio, e il suo
+connettore al grafo RT028 è di 73,34 m, vicino al limite modellistico di
+90 m. La sua distanza da `P2V2S_0031` non era una ragione valida per
+scartare quest'ultima rispetto all'area chiesta dal committente. Nessuna
+delle 40 ipotesi è sul way Via Cantù del vecchio riferimento a nord:
+questo fatto non determina il servizio nel quartiere meridionale.
 
 Infine, le coordinate di `S_SAN_ZENO` nei vecchi GTFS di scenario
 `data/raw/gtfs/network_structural/stops.txt` (45.7248, 9.3821) sono a circa
@@ -183,10 +232,12 @@ scenario, non una fermata ufficiale certificata. Le vecchie conclusioni
 tracciato e a un ciclo fisso di 60 minuti: non escludono Via Cantù nel
 progetto attuale. Non provano neppure che un bus possa fermarsi lì.
 
-**Prossima verifica decisiva:** definire una o più posizioni di salita
-*candidate* per Via Aldo Moro e Via Cesare Cantù, verificarle sul posto con
-ente/operatori, poi rieseguire accesso pedonale, geometria bus, entrambi i
-versi e tempi località→FS. Solo allora si confronta l'8 corretto con le
-alternative sulla stessa base. `network_selected=false`;
+**Prossima verifica decisiva:** provare collegamenti fisici legali dalla
+stazione alla zona Via Aldo Moro/Canova–San Zeno, includendo
+`P2V2S_0031` solo come ipotesi; verificare sul campo uno o più punti di
+salita, poi valutare eventi ordinati nei due versi, tempi effettivi verso FS
+e costo per gli utenti del resto della linea. Il perimetro provvisorio va
+confrontato con la cerchiatura prima di presentare una copertura definitiva.
+`network_selected=false`;
 `primary_selection_authorised=false`;
 `runner_up_selection_authorised=false`.

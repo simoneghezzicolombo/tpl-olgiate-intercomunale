@@ -60,7 +60,7 @@
     {"ordinal": 14, "place": "Arlate", "evidence": "ASF::ARLATE_CANTINA_PIROVANO;ASF::ARLATE_BIVIO_PER_IL_PAESE;AREA_ARLATE", "state": "MULTIPLE_DISTINCT_STOP_CHOICES"},
     {"ordinal": 15, "place": "Brivio centro", "evidence": "FROZEN::300063;ASF::BRIVIO_BAR_CRISTALLO;AREA_BRIVIO_CENTRO", "state": "MULTIPLE_STOP_CHOICES; CENTRE_BINDING_REQUIRED"},
     {"ordinal": 16, "place": "Beverate", "evidence": "FROZEN::300086;FROZEN::300398;ASF::BEVERATE_CARTELLO_PAESE;AREA_BEVERATE", "state": "MULTIPLE_STOP_CHOICES"},
-    {"ordinal": 17, "place": "San Zeno / Via Cesare Cantù", "evidence": "AREA_SAN_ZENO; OSM_WAY_581532442", "state": "CALLER_PRIORITY_CORRIDOR; REVERSE_HUB_SPLIT_PATTERN_HAS_PHYSICAL_VIA_CANTU_PASSAGE; NO_CERTIFIED_BOARDING_POINT; FIELD_AND_ROUTE_CHECK_REQUIRED"},
+    {"ordinal": 17, "place": "San Zeno / Via Cesare Cantù (earlier separate named-place preference)", "evidence": "AREA_SAN_ZENO; OSM_WAY_581532442", "state": "NORTH_OF_SS342_ANCHOR; NOT_A_PROXY_FOR_CALLER_ANNOTATED_CANOVA_SAN_ZENO_SOUTHERN_NEIGHBOURHOOD; NO_CERTIFIED_BOARDING_POINT"},
     {"ordinal": 18, "place": "Olgiate FS", "evidence": "FROZEN::L00407", "state": "FINAL_ORDERED_PASSAGE_NOT_YET_CERTIFIED"}
   ],
   "caller_clarification_2026_09_22": {
@@ -78,9 +78,13 @@
   "caller_clarification_2026_09_24": {
     "priority_target": "OLGIATE_RESIDENTIAL_NEIGHBOURHOOD_SOUTH_OF_SS342_AS_ANNOTATED_BY_CALLER",
     "extent_evidence": "CALLER_ANNOTATED_MAP_IN_CODEX_CONVERSATION_2026_09_24",
-    "visible_place_cues": ["CANOVA_SAN_ZENO", "VIA_PIAVE", "CENTRO_SPORTIVO_AND_LOCAL_COMMUNITY_DESTINATIONS"],
+    "visible_place_cues": ["SS342_NORTHERN_EDGE", "CANOVA_SAN_ZENO", "VIA_PIAVE", "RESIDENTIAL_BLOCKS"],
     "extent_status": "QUALITATIVE_SCREEN_ANNOTATION_NOT_GEOREFERENCED_BOUNDARY",
-    "correction_to_previous_interpretation": "THE_TARGET_IS_THE_BROADER_RESIDENTIAL_AREA; CENTRO_SPORTIVO_AND_SAN_ZENO_ARE_NOT_SUFFICIENT_SINGLE_POINT_PROXIES",
+    "correction_to_previous_interpretation": "THE_TARGET_IS_THE_BROADER_RESIDENTIAL_AREA; LEGACY_SPORTS_POI_AND_PIAZZA_SAN_ZENONE_ANCHOR_ARE_NORTH_OF_SS342_AND_NOT_AREA_PROXIES; CASA_DI_COMUNITA_LOCATION_COMES_FROM_STOP_COORDINATE_NOT_SCREEN_LABELS",
+    "provisional_screen": "RT031_SOUTH_OLGIATE_PROVISIONAL_AREA_SENSITIVITY_V3",
+    "provisional_screen_source": "scripts/phase2_audit_rt031_south_olgiate_provisional_area_v3.py",
+    "provisional_screen_is_caller_polygon": false,
+    "provisional_screen_is_decisional": false,
     "area_population_coverage_certified": false,
     "area_to_olgiate_fs_passenger_journey_certified": false,
     "single_stop_assumed_to_cover_entire_area": false,

@@ -30,17 +30,35 @@ certificata per le candidate attuali.
 
 - Correzione del committente 2026-09-24: l'obiettivo è tutto il quartiere
   residenziale di Olgiate cerchiato a sud della SS342/Statale, con Canova–San
-  Zeno e Via Piave come riferimenti. Centro sportivo, oratorio e Casa di
-  Comunità sono riferimenti interni, non proxy sufficienti. La schermata
-  non è georeferenziata; non esiste ancora una percentuale certificata di
-  copertura del quartiere né un viaggio abitazioni→FS dimostrato.
+  Zeno e Via Piave come riferimenti. Il POI sportivo legacy e l'ancora Piazza
+  San Zenone/Via Cantù sono a nord della SS342: la loro vecchia analisi era
+  fuori bersaglio per questa correzione. Le etichette «Casa di ...» sulla
+  schermata non provano la posizione della Casa di Comunità; il suo stop
+  speciale ha invece coordinate nell'area meridionale. La schermata non è
+  georeferenziata; gli involucri nuovi sono assunzioni, non il poligono del
+  committente. Nessun viaggio abitazioni→FS in bus è dimostrato.
 - Lo screen RT017 per nome di strada trova solo 259 m di Via Piave
   nell'ordine richiesto base, zero nelle altre tre varianti; Via Aldo Moro
   e Via Mondonico zero in tutte; Via Buttero 120–609 m; Via Cesare Cantù
   997 m in entrambe le inverse. Sono metri stradali, non copertura dei
-  residenti o fermate certificate. Dettaglio nel rapporto di correzione.
+  residenti o fermate certificate e **non misura la zona cerchiata**: i way
+  osservati qui sono fuori dal quartiere meridionale. Dettaglio nel rapporto.
   CI `35981547466` SUCCESS, artifact `10800501329`, JSON SHA256
   `61c18718037efe5b38bd31f621175055028b8ecad916093ce04ebb88ec630815`.
+- Nelle 40 proposte Olgiate del catalogo, nessuna è su way denominati Via
+  Piave o Via Cesare Cantù; una è su Via Buttero, due su Via Mondonico,
+  una su Via Aldo Moro (`P2V2S_0031`, 45.721310, 9.397265). Quest'ultima
+  è pertinente al nuovo screen, ma `FIELD_CHECK_PENDING` e fuori dai quattro
+  percorsi attuali. Il catalogo non fornisce fermate validate per tutto il
+  quartiere.
+- Nuovo screen RT016/RT028 dell'area a sud della SS342: due involucri
+  provvisori ricavati dal way SS342/Via Como e da limiti laterali/meridionali
+  assunti. Popolazione modellata interna 4.031/4.701; accesso a piedi diretto
+  a FS entro 10 min 36,0/31,5%; quattro pattern 36,7–54,8% / 32,1–47,7%.
+  Con `P2V2S_0031` ipoteticamente servita 85,8–90,5% / 84,9–89,0%.
+  Questa è sensibilità di catchment, non copertura certificata del poligono
+  del committente né viaggio in bus: il punto è FIELD_CHECK_PENDING e nessun
+  percorso/evento di servizio lo include.
 - Chiarimento del committente: [centro sportivo/Via Aldo Moro e San Zeno/
   Via Cesare Cantù](docs/RT031_OLGIATE_SAN_ZENO_TARGET_CORRECTION_V3.md)
   sono corridoi prioritari, ma non fermate certificate. La variante inversa
