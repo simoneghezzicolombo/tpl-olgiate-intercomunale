@@ -175,4 +175,6 @@ di esercizio segue le verifiche sopra. `network_selected=false`;
 `primary_selection_authorised=false`;
 `runner_up_selection_authorised=false`.
 
-Dettagli, fonti e limiti nella [proposta conclusiva](RT031_PROPOSTA_CONCLUSIVA_DI_INDIRIZZO_V3.md).
+La [lista verificabile delle consegne richieste](RT031_LINEA8_CAPITOLATO_DI_VERIFICA_V3.md)
+è pronta per Agenzia e operatore. Dettagli, fonti e limiti nella
+[proposta conclusiva](RT031_PROPOSTA_CONCLUSIVA_DI_INDIRIZZO_V3.md).

@@ -273,6 +273,12 @@ circuiti hub-connected). Il fascicolo da consegnare
 all'Agenzia/operatore richiede soltanto quattro verifiche prima della
 decisione di esercizio:
 
+Il [capitolato minimo di verifica](RT031_LINEA8_CAPITOLATO_DI_VERIFICA_V3.md)
+traduce queste verifiche in consegne controllabili: percorso e fermate nei
+due versi, eventi passeggeri, orario/blocchi/km e confronto di accessibilità
+e risorse. Ulteriore ricerca interna non può sostituire tali dati di
+esercizio e di sopralluogo.
+
 **Posizione da portare al tavolo:** mantenere il prodotto utile per il
 passeggero (frequenza dichiarata per ala e verso, accesso diretto a FS) come
 obiettivo e chiedere un piano di risorse coerente. La prova dei punti fissati
