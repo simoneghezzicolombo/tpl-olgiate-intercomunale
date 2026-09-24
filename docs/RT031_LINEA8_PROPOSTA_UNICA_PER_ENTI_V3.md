@@ -72,6 +72,21 @@ promessa di frequenza/span modificare.
 
 ## Riscontro tecnico già disponibile
 
+**Tracciato controllabile, non ancora itinerario TPL approvato.** La
+[polilinea GeoJSON dei due versi](../outputs/phase2/rt031_line8_inclusive_shape_v3/line8_inclusive_model.geojson)
+materializza gli archi ordinati del grafo stradale congelato per la
+variante inclusiva 11/11; una
+[vista statica](../outputs/phase2/rt031_line8_inclusive_shape_v3/line8_inclusive_preview.png)
+li sovrappone alla rete stradale e ai 25 punti esistenti incontrati e ai
+due nuovi bisogni di fermata. Le lunghezze esportate sono esattamente
+26,455 km nel verso ovest→est e 25,753 km nel verso opposto. Questo
+permette finalmente un controllo strada per strada della geometria che
+genera i chilometri. **Non dimostra** idoneità del bus, fermate in entrambi
+i sensi, restrizioni dipendenti dall'intero cammino, orario o continuità
+di servizio a FS. Le due stelle nuove non sono fermate certificate. La
+forma del tracciato va esaminata criticamente per deviazioni e ritorni
+prima di trattarlo come proposta operativa.
+
 Una [prova stradale fissata e riprodotta in CI](../outputs/phase2/rt031_unique_line_road_screen_v3/screen.json)
 ha confrontato sei modi di collocare Olgiate sud e San Zeno nelle ali,
 usando gli stessi punti rappresentativi. **Sud a ovest, San Zeno a est** è
