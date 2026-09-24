@@ -72,6 +72,25 @@ promessa di frequenza/span modificare.
 
 ### Prova di downgrade dell'esercizio, senza cancellare la geografia
 
+La [mappa comparativa](../outputs/phase2/rt031_line8_peak_core_v3/full_vs_peak_preview.png)
+esplicita il limite del rinforzo corto: la Linea 8 intercomunale resta il
+tracciato completo a sinistra; il rosso a destra serve quasi solo Olgiate.
+Non è quindi una sostituzione territorialmente soddisfacente della linea.
+
+**Prima verifica del taglio weekend.** I conti di questa sezione assumono
+già **260 giorni/anno**, cioè all'incirca i soli lunedì–venerdì: il sabato
+non è compreso e aggiungerlo costerebbe altri km. Il calendario non è ancora
+una programmazione approvata. La precedente ipotesi storica di 303 giorni
+includeva anche il sabato: passare da quella a 260 giorni riduce del 14,2%
+la produzione *a parità di servizio giornaliero*, ma questo risparmio è già
+incorporato nelle cifre qui sotto. Per l'inclusiva 11/11, perfino otto
+coppie complete giornaliere (il solo H30 nelle quattro ore di punta in
+entrambi i versi, senza alcuna corsa di morbida) costano circa
+**108.592 km/anno** su 260 giorni, prima di riposizionamenti. Quindi
+tagliare il weekend è ragionevole come prima scelta di calendario, ma
+**da solo non finanzia H30 intercomunale in punta più un servizio utile
+durante il resto della giornata** entro 111.419 km/anno.
+
 Il [probe stradale condizionale](../outputs/phase2/rt031_line8_peak_core_v3/probe.json)
 ha anche il [tracciato GeoJSON ispezionabile](../outputs/phase2/rt031_line8_peak_core_v3/road_options.geojson) dei sei anelli modellati; nessuno è ancora una linea TPL o un piano fermate approvato. Il probe
 ha composto sullo stesso grafo un anello breve **FS → Olgiate sud → FS →
