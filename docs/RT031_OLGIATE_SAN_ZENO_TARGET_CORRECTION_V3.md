@@ -85,6 +85,18 @@ bidirezionale da sottoporre alle verifiche successive. Non va sommato
 automaticamente al chilometraggio della figura a otto: un innesto reale
 potrebbe sostituire o modificare altri tratti.
 
+Come **sola prova aritmetica di aggiunta**, l'andata e ritorno FS–sud–FS
+del modello vale 3,018 km e 7,684 minuti di marcia. Sommarlo senza
+sostituire alcun tratto ai quattro cicli della figura a otto darebbe
+25,166–25,483 km/ciclo; allo scenario di 20 cicli/giorno per 260 giorni
+sono circa 130.865–132.510 km/anno, sopra il tetto approvato di 111.419.
+Questo non boccia l'obiettivo sud: dimostra che **aggiungere semplicemente
+una terza escursione alla figura a otto invariata** non è un piano di
+frequenza e risorse coerente. Occorre cercare un innesto che sostituisca
+tratti, un ciclo più corto o un diverso assetto di servizio, mantenendo
+visibili gli effetti per gli altri quattro comuni e per entrambe le
+direzioni ferroviarie. La somma non prova svolte ai giunti né un orario.
+
 I risultati storici che seguono sui tre siti vicino al POI sportivo legacy
 restano controlli aritmetici locali, ma riguardano un'altra zona. Il nuovo
 screen sopra confronta già le unità di popolazione dell'area meridionale;
