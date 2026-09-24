@@ -7,12 +7,14 @@ on:
       - scripts/phase2_probe_rt031_line8_peak_core_v3.py
       - tests/test_phase2_rt031_line8_peak_core_v3.py
       - outputs/phase2/rt031_line8_peak_core_v3/probe.json
+      - outputs/phase2/rt031_line8_peak_core_v3/road_options.geojson
       - .github/workflows/phase2-rt031-line8-peak-core-v3.yml
   pull_request:
     paths:
       - scripts/phase2_probe_rt031_line8_peak_core_v3.py
       - tests/test_phase2_rt031_line8_peak_core_v3.py
       - outputs/phase2/rt031_line8_peak_core_v3/probe.json
+      - outputs/phase2/rt031_line8_peak_core_v3/road_options.geojson
       - .github/workflows/phase2-rt031-line8-peak-core-v3.yml
 permissions:
   contents: read
@@ -56,5 +58,7 @@ jobs:
             --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
             --repair outputs/phase2/rt031_current_stop_repair_v3/road_options.json \
             --policy config/phase2_final_policy_contract_v3.json \
-            --output /tmp/rt031/peak-core.json
+            --output /tmp/rt031/peak-core.json \
+            --geojson-output /tmp/rt031/peak-core.geojson
           cmp /tmp/rt031/peak-core.json outputs/phase2/rt031_line8_peak_core_v3/probe.json
+          cmp /tmp/rt031/peak-core.geojson outputs/phase2/rt031_line8_peak_core_v3/road_options.geojson

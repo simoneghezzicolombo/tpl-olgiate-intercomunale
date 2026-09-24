@@ -17,7 +17,7 @@ from scripts.phase2_probe_rt031_unique_line_v3 import build_graph, screen_lobe
 FS = "FROZEN::L00407"
 
 
-def build(paths):
+def build(paths, with_geojson=False):
     edges, nodes, rules, attachments = build_graph(paths)
     road = json.loads(paths["road_screen"].read_text(encoding="utf-8"))
     repair = json.loads(paths["repair"].read_text(encoding="utf-8"))
@@ -43,6 +43,38 @@ def build(paths):
     eligible = {sid: row["graph_node_id"] for sid, row in attachments.items()
                 if row["route_ready"] == "True"
                 and row["service_class"] == "CONVENTIONAL_TPL"}
+    node_coords = ({nid: [float(row["lon"]), float(row["lat"])]
+                    for nid, row in nodes.items()} if with_geojson else None)
+    if with_geojson:
+        node_coords[VIRTUAL] = [float(candidate["lon"]), float(candidate["lat"])]
+    features = []
+
+    def add_line(name, path):
+        if not with_geojson:
+            return
+        edge_ids = path["_path_edge_ids"]
+        vertex_ids = [edges[edge_ids[0]]["u_node_id"]]
+        for eid in edge_ids:
+            if edges[eid]["u_node_id"] != vertex_ids[-1]:
+                raise ValueError(f"discontinuous short-core geometry: {name}")
+            vertex_ids.append(edges[eid]["v_node_id"])
+        if vertex_ids[0] != vertex_ids[-1]:
+            raise ValueError(f"short-core geometry does not return to FS: {name}")
+        if abs(sum(float(edges[eid]["length_m"]) for eid in edge_ids)
+               - path["distance_m"]) > .01:
+            raise ValueError(f"short-core geometry length mismatch: {name}")
+        features.append({
+            "type": "Feature",
+            "properties": {
+                "feature_type": "MODELED_SHORT_CORE_NOT_APPROVED_TPL_ROUTE",
+                "scenario": name,
+                "distance_m": path["distance_m"],
+                "ordered_edge_id_sha256": path["path_edge_id_sha256"],
+                "ordered_waypoints": path["ordered_waypoints"],
+            },
+            "geometry": {"type": "LineString", "coordinates":
+                         [node_coords[nid] for nid in vertex_ids]},
+        })
     sequences = {
         "south_only": [("FS", FS), ("Olgiate sud", VIRTUAL), ("FS", FS)],
         "north_only": [("FS", FS), ("San Zeno", NORTH), ("FS", FS)],
@@ -72,6 +104,7 @@ def build(paths):
             "represented_via_node_bad_turn_count": 0,
             "known_successor_via_way_overlap": [],
         }
+        add_line(name, path)
     if abs(loops["south_only"]["distance_m"] + loops["north_only"]["distance_m"]
            - loops["south_then_north"]["distance_m"]) > .002:
         raise ValueError("composed short circuit distance mismatch")
@@ -126,6 +159,7 @@ def build(paths):
             "within_cap_before_extras": annual <= cap,
             "ordered_edge_id_sha256": path["path_edge_id_sha256"],
         }
+        add_line(name, path)
     examples = []
     for variant_id in ("FIVE_QUATTRO_STRADE_THEN_CARIPLO",
                        "FOUR_QUATTRO_STRADE_THEN_CARIPLO"):
@@ -142,7 +176,7 @@ def build(paths):
                 "margin_to_approved_cap_before_all_extras_km": float(cap - annual),
                 "within_cap_before_all_extras": annual <= cap,
             })
-    return {
+    result = {
         "contract": "RT031_LINE8_PEAK_SHORT_CORE_ROAD_PROBE_V3",
         "status": "NON_DECISIONAL_ROAD_AND_DISTANCE_ARITHMETIC_ONLY",
         "source_sha256": {key: digest(paths[key], key in (
@@ -168,13 +202,49 @@ def build(paths):
         "primary_selection_authorised": False,
         "runner_up_selection_authorised": False,
     }
+    if not with_geojson:
+        return result
+    for sid, name, coord, status in (
+        (FS, "Olgiate-Calco-Brivio FS", node_coords[attachment_nodes[FS]],
+         "EXISTING_INVENTORY_STOP_NOT_EVENT_CERTIFIED"),
+        (VIRTUAL, "Olgiate sud / Via Aldo Moro", node_coords[VIRTUAL],
+         "FIELD_CHECK_PENDING"),
+        (NORTH, "San Zeno / Via Cantù", node_coords[attachment_nodes[NORTH]],
+         "ROAD_NODE_PROXY_NOT_STOP_SITE"),
+    ):
+        features.append({
+            "type": "Feature",
+            "properties": {"feature_type": "WAYPOINT_NOT_BOARDING_EVENT",
+                           "stop_place_id": sid, "name": name, "physical_status": status},
+            "geometry": {"type": "Point", "coordinates": coord},
+        })
+    geojson = {
+        "type": "FeatureCollection",
+        "name": "RT031_LINE8_PEAK_SHORT_CORE_ROAD_OPTIONS_V3",
+        "properties": {
+            "status": "NON_DECISIONAL_MODELED_ROAD_PATHS_NOT_CERTIFIED_TPL_SERVICE",
+            "source_sha256": result["source_sha256"],
+            "geometry_crs": "EPSG:4326",
+            "network_selected": False,
+            "primary_selection_authorised": False,
+            "runner_up_selection_authorised": False,
+        },
+        "features": features,
+    }
+    return result, geojson
 
 
-def main(paths, output):
-    result = build(paths)
+def main(paths, output, geojson_output=None):
+    built = build(paths, with_geojson=geojson_output is not None)
+    result, geojson = built if geojson_output is not None else (built, None)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, ensure_ascii=False, sort_keys=True,
                                  separators=(",", ":")) + "\n", encoding="utf-8")
+    if geojson_output is not None:
+        geojson_output.parent.mkdir(parents=True, exist_ok=True)
+        geojson_output.write_text(json.dumps(geojson, ensure_ascii=False,
+                                             sort_keys=True, separators=(",", ":")) + "\n",
+                                  encoding="utf-8")
     return result
 
 
@@ -183,6 +253,8 @@ if __name__ == "__main__":
     for key in (*EXPECTED, "anchor", "road_screen", "repair", "policy"):
         parser.add_argument("--" + key, required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--geojson-output", type=Path)
     args = parser.parse_args()
     main({key: getattr(args, key) for key in (*EXPECTED, "anchor", "road_screen",
-                                             "repair", "policy")}, args.output)
+                                             "repair", "policy")}, args.output,
+         args.geojson_output)

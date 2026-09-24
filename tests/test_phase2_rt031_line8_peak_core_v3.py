@@ -5,6 +5,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 PROBE = ROOT / "outputs/phase2/rt031_line8_peak_core_v3/probe.json"
+GEOJSON = ROOT / "outputs/phase2/rt031_line8_peak_core_v3/road_options.geojson"
 
 
 class PeakCoreProbeTest(unittest.TestCase):
@@ -38,6 +39,25 @@ class PeakCoreProbeTest(unittest.TestCase):
         self.assertFalse(result["runner_up_selection_authorised"])
         self.assertIsNone(result["decision_budget_km"])
         self.assertIsNone(result["uncertainty_band_min"])
+
+    def test_short_core_geometry_is_explicit_and_non_decisional(self):
+        probe = json.loads(PROBE.read_text(encoding="utf-8"))
+        geojson = json.loads(GEOJSON.read_text(encoding="utf-8"))
+        self.assertEqual(geojson["type"], "FeatureCollection")
+        self.assertEqual(geojson["properties"]["source_sha256"], probe["source_sha256"])
+        lines = [feature for feature in geojson["features"]
+                 if feature["geometry"]["type"] == "LineString"]
+        self.assertEqual(len(lines), 6)
+        expected = {**{key: row["distance_m"] for key, row in probe["loops"].items()},
+                    **{key: row["shortest_found_distance_m_for_fixed_waypoint_set"]
+                       for key, row in probe["fixed_waypoint_short_core_extensions"].items()}}
+        self.assertEqual({row["properties"]["scenario"]: row["properties"]["distance_m"]
+                          for row in lines}, expected)
+        for feature in lines:
+            coords = feature["geometry"]["coordinates"]
+            self.assertEqual(coords[0], coords[-1])
+            self.assertGreater(len(coords), 2)
+        self.assertFalse(geojson["properties"]["network_selected"])
 
 
 if __name__ == "__main__":

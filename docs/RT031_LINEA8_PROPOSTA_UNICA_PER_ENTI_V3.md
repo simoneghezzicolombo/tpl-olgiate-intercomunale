@@ -73,6 +73,7 @@ promessa di frequenza/span modificare.
 ### Prova di downgrade dell'esercizio, senza cancellare la geografia
 
 Il [probe stradale condizionale](../outputs/phase2/rt031_line8_peak_core_v3/probe.json)
+ha anche il [tracciato GeoJSON ispezionabile](../outputs/phase2/rt031_line8_peak_core_v3/road_options.geojson) dei sei anelli modellati; nessuno è ancora una linea TPL o un piano fermate approvato. Il probe
 ha composto sullo stesso grafo un anello breve **FS → Olgiate sud → FS →
 San Zeno → FS**: 4,737 km e 12,372 minuti di sola marcia modellata. Non
 incontra alcuna fermata d'inventario oltre FS: funziona come proposta di
