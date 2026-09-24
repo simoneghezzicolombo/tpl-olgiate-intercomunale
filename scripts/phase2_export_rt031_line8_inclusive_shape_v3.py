@@ -147,8 +147,9 @@ def materialise(paths):
         "properties": {
             "status": "NON_DECISIONAL_NOT_A_CERTIFIED_TPL_ROUTE_OR_STOP_PLAN",
             "variant_id": VARIANT,
-            "source_sha256": {key: digest(paths[key], key == "candidates_normalized_newlines"
-                                               or key == "road_screen") for key in paths},
+            "source_sha256": {key: digest(paths[key], key in (
+                "candidates_normalized_newlines", "anchor", "road_screen", "repair"))
+                              for key in paths},
             "existing_inventory_stop_points_encountered": 25,
             "new_stop_needs_not_certified": 2,
             "geometry_crs": "EPSG:4326",
