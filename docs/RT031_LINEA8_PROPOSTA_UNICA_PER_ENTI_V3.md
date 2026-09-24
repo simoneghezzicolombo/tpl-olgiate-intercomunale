@@ -94,6 +94,22 @@ sette coppie complete distribuite su una giornata lunga possono lasciare
 attese eccessive nelle località esterne. **Non è ancora la proposta di
 esercizio.**
 
+Una prova aggiuntiva inserisce fermate d'inventario vicine a FS nello
+stesso anello breve, mantenendo Olgiate sud e San Zeno come punti da
+verificare. Con sette coppie complete 11/11 e otto anelli brevi al giorno,
+il cammino più corto fra gli ordini provati misura **5,988 km** passando
+per Via Statale a Olgiate e Via Virgilio a Calco: **107.473 km/anno**
+prima degli extra, con tre identità esistenti incontrate incluso FS.
+Passando invece anche per Via della Salute e Via Virgilio misura
+**7,432 km** e **110.477 km/anno**, con quattro identità esistenti incluso
+FS. Sono inserimenti di waypoint sul grafo, non prove di fermata o di
+H30 effettivo. Il margine al cap del secondo caso è inferiore a
+1.000 km/anno prima di deposito e sabato; non va presentato come
+esercizio finanziato. Il primo caso lascia comunque soltanto sette
+traversate complete per verso al giorno per i luoghi esterni, da
+valutare come servizio temporale reale, non solo come percentuale
+pedonale invariata.
+
 ## Riscontro tecnico già disponibile
 
 **Tracciato controllabile, non ancora itinerario TPL approvato.** La

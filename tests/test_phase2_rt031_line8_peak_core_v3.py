@@ -22,6 +22,17 @@ class PeakCoreProbeTest(unittest.TestCase):
                                104871.1781)
         self.assertTrue(rows[(inclusive, 7)]["within_cap_before_all_extras"])
         self.assertFalse(rows[(inclusive, 8)]["within_cap_before_all_extras"])
+        extensions = result["fixed_waypoint_short_core_extensions"]
+        statale_calco = extensions["OLGIATE_STATALE_CALCO_VIRGILIO"]
+        self.assertEqual(statale_calco["shortest_found_distance_m_for_fixed_waypoint_set"],
+                         5988.218)
+        self.assertEqual(len(statale_calco[
+            "existing_inventory_stop_ids_encountered_not_boarding_guaranteed"]), 3)
+        self.assertAlmostEqual(statale_calco[
+            "annual_km_with_seven_inclusive_full_pairs_and_eight_short_loops_before_extras"],
+            107473.41826)
+        self.assertTrue(all(row["within_cap_before_extras"]
+                            for row in extensions.values()))
         self.assertFalse(result["network_selected"])
         self.assertFalse(result["primary_selection_authorised"])
         self.assertFalse(result["runner_up_selection_authorised"])

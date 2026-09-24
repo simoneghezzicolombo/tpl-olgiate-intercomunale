@@ -79,6 +79,53 @@ def build(paths):
     days = Decimal(260)
     peak_loops = Decimal(8)
     core_km = Decimal(str(loops["south_then_north"]["distance_m"])) / 1000
+    inclusive = repair["combined_repair_order_options"]["FIVE_QUATTRO_STRADE_THEN_CARIPLO"]
+    inclusive_pair_km = (Decimal(str(inclusive["forward_complete_cycle_distance_m"]))
+                         + Decimal(str(inclusive["reverse_complete_cycle_distance_m"]))) / 1000
+    extensions = {}
+    nominated_pairs = {
+        "OLGIATE_STATALE_CALCO_VIRGILIO": (
+            "ASF::OLGIATE_MOLGORA_VIA_STATALE", "ASF::CALCO_VIA_GARIBALDI"),
+        "OLGIATE_SALUTE_CALCO_VIRGILIO": (
+            "ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE", "ASF::CALCO_VIA_GARIBALDI"),
+        "SCARPONE_CALCO_VIRGILIO": (
+            "ASF::OLGIATE_MOLGORA_SCARPONE", "ASF::CALCO_VIA_GARIBALDI"),
+    }
+    for name, (left, right) in nominated_pairs.items():
+        if left not in attachment_nodes or right not in attachment_nodes:
+            raise ValueError(f"nominated stop attachment missing: {name}")
+        base = sequences["south_then_north"]
+        best = None
+        for left_index in range(1, len(base)):
+            once = base[:left_index] + [(attachments[left]["stop_name"], left)] + base[left_index:]
+            for right_index in range(1, len(once)):
+                sequence = (once[:right_index] + [(attachments[right]["stop_name"], right)]
+                            + once[right_index:])
+                path = screen_lobe(sequence, attachment_nodes, edges, rules)
+                if (not path["reachable"]
+                        or path["via_node_bad_turn_indices_at_leg_seams_or_within_legs"]
+                        or via_way_ids & set(path["osm_way_ids"])):
+                    continue
+                key = (path["distance_m"], left_index, right_index)
+                if best is None or key < best[0]:
+                    best = (key, path)
+        if best is None:
+            raise ValueError(f"no represented-via-node-legal insertion: {name}")
+        path = best[1]
+        annual = days * (inclusive_pair_km * 7
+                         + Decimal(str(path["distance_m"])) / 1000 * peak_loops)
+        extensions[name] = {
+            "nominated_existing_stop_ids": [left, right],
+            "ordered_waypoints": path["ordered_waypoints"],
+            "shortest_found_distance_m_for_fixed_waypoint_set": path["distance_m"],
+            "running_minutes_model_excluding_dwell_recovery": path["running_minutes_model"],
+            "existing_inventory_stop_ids_encountered_not_boarding_guaranteed": sorted(
+                path_stops(path, edges, eligible)),
+            "annual_km_with_seven_inclusive_full_pairs_and_eight_short_loops_before_extras": float(annual),
+            "margin_to_approved_cap_before_extras_km": float(cap - annual),
+            "within_cap_before_extras": annual <= cap,
+            "ordered_edge_id_sha256": path["path_edge_id_sha256"],
+        }
     examples = []
     for variant_id in ("FIVE_QUATTRO_STRADE_THEN_CARIPLO",
                        "FOUR_QUATTRO_STRADE_THEN_CARIPLO"):
@@ -102,6 +149,8 @@ def build(paths):
             "anchor", "candidates_normalized_newlines", "road_screen", "repair", "policy"))
                           for key in paths},
         "loops": loops,
+        "fixed_waypoint_short_core_extensions": extensions,
+        "extension_scope": "Shortest found insertion order for each nominated existing-stop pair only; not an exhaustive corridor search or passenger-service selection.",
         "annual_examples": examples,
         "annual_cap_km_not_decision_budget_km": float(cap),
         "assumed_annual_service_days": int(days),
