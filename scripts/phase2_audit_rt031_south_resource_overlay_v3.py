@@ -97,7 +97,7 @@ def main(paths, output):
             for profile, annual in high_retention],
         "overlay_proves_legal_seam_turns": False,
         "overlay_proves_stop_safety_or_passenger_service": False,
-        "overlay_satisfies_headway_policy": False,
+        "headway_policy_assessed": False,
         "network_selected": False,
         "primary_selection_authorised": False,
         "runner_up_selection_authorised": False,
