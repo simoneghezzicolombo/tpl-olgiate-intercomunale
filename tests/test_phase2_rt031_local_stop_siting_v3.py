@@ -1,5 +1,5 @@
 from scripts.phase2_audit_rt031_local_stop_siting_v3 import (
-    haversine_m, nearest_node_distance_m, sha256,
+    haversine_m, nearest_node_distance_m, normalized_street_name, sha256,
 )
 
 
@@ -24,3 +24,10 @@ def test_repo_text_digest_normalizes_line_endings(tmp_path):
     digest = sha256(source, normalize_newlines=True)
     source.write_bytes(b"a,b\n1,2\n")
     assert sha256(source, normalize_newlines=True) == digest
+
+
+def test_street_cue_matches_accented_osm_name():
+    assert normalized_street_name("Via Cesare Cantù") == normalized_street_name(
+        "Via Cesare Cantu")
+    assert normalized_street_name("Via Privata Piave") != normalized_street_name(
+        "Via Piave")

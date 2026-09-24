@@ -12,6 +12,7 @@ import json
 import math
 from pathlib import Path
 import re
+import unicodedata
 
 
 EXPECTED = {
@@ -26,6 +27,10 @@ EXPECTED = {
     "roads": "2a1082b10f5a6560bdf69e8dc344541d3a892f751054316ea582fef32fe6b4c4",
 }
 VIA_CANTU_OSM_WAY_ID = "581532442"
+NEIGHBOURHOOD_STREET_CUES = (
+    "Via Piave", "Via Aldo Moro", "Via Buttero", "Via Mondonico",
+    "Via Cesare Cantu",
+)
 REPO_TEXT_KEYS = frozenset({"candidates", "poi", "anchors", "roads"})
 
 
@@ -55,6 +60,11 @@ def haversine_m(lat_a, lon_a, lat_b, lon_b):
 def nearest_node_distance_m(nodes, ids, lat, lon):
     return round(min(haversine_m(lat, lon, float(nodes[n]["lat"]),
                                  float(nodes[n]["lon"])) for n in ids), 1)
+
+
+def normalized_street_name(value):
+    return "".join(character for character in unicodedata.normalize("NFKD", value or "")
+                   if not unicodedata.combining(character)).casefold()
 
 
 def main(inputs, typed_path, output):
@@ -89,6 +99,11 @@ def main(inputs, typed_path, output):
     }
     roads = {str(feature["properties"]["osm_id"]): feature["properties"]
              for feature in json.loads(paths["roads"].read_text(encoding="utf-8"))["features"]}
+    cue_way_ids = {
+        cue: {way_id for way_id, road in roads.items()
+              if normalized_street_name(road.get("name")) == normalized_street_name(cue)}
+        for cue in NEIGHBOURHOOD_STREET_CUES
+    }
     candidates = sorted((r for r in csv_rows(paths["candidates"])
                          if r["COMUNE"] == "Olgiate Molgora"),
                         key=lambda r: r["candidate_id"])
@@ -134,6 +149,17 @@ def main(inputs, typed_path, output):
             "via_cantu_edge_count": len(way_edges),
             "via_cantu_traversed_directed_edge_sequence_for_field_survey":
                 cantu_edge_sequence,
+            "named_neighbourhood_street_traversal_observation": {
+                cue: {
+                    "osm_way_ids_in_road_snapshot": sorted(way_ids),
+                    "directed_edge_count_on_pattern": sum(
+                        edges[eid]["osm_way_id"] in way_ids for eid in edge_ids),
+                    "modelled_distance_m_on_pattern": round(sum(
+                        float(edges[eid]["length_m"]) for eid in edge_ids
+                        if edges[eid]["osm_way_id"] in way_ids), 3),
+                }
+                for cue, way_ids in cue_way_ids.items()
+            },
             "nearest_route_graph_node_straight_m_to_targets": {
                 key: nearest_node_distance_m(nodes, route_nodes, *coords)
                 for key, coords in targets.items()},
@@ -190,6 +216,7 @@ def main(inputs, typed_path, output):
         "via_cantu_way_has_existing_proposed_candidate": any(
             o["on_san_zeno_via_cesare_cantu_osm_way"] for o in options),
         "via_cantu_edge_sequence_is_survey_geometry_not_stop_site": True,
+        "named_neighbourhood_streets_are_cues_not_a_georeferenced_area_boundary": True,
         "distance_is_straight_line_not_pedestrian_access": True,
         "additional_population_is_v2_existing_official_stop_baseline_not_rt031_marginal": True,
         "field_check_required_for_every_candidate": True,

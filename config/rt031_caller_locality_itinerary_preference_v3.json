@@ -50,7 +50,7 @@
     {"ordinal": 4, "place": "Perego", "evidence": "ASF::PEREGO_VIA_STATALE_79;AREA_PEREGO", "state": "PINNED_STOP_AND_AREA_ANCHOR_DISTINCT"},
     {"ordinal": 5, "place": "Santa Maria Hoe", "evidence": "FROZEN::300782;FROZEN::300805;AREA_SMHOE", "state": "MULTIPLE_STOP_IDENTITIES; EXACT_CENTRE_BINDING_REQUIRED"},
     {"ordinal": 6, "place": "Crescenzaga", "evidence": "OSM_POINT_2101402496;P2V2S_0074", "state": "OPTIONAL; AREA_ANCHOR_AND_PROPOSED_STOP; FIELD_CHECK_PENDING"},
-    {"ordinal": 7, "place": "Olgiate residential / centro sportivo / oratorio", "evidence": "CENTRO_SPORTIVO_VIA_ALDO_MORO; ORATORIO_OLGIATE_IDENTITY_UNRESOLVED", "state": "CALLER_PRIORITY_CORRIDOR; CENTRO_SPORTIVO_ADDRESS_CORROBORATED; ORATORIO_IDENTITY_AND_BOARDING_POINTS_NOT_YET_RESOLVED"},
+    {"ordinal": 7, "place": "Olgiate neighbourhood south of SS342 / Statale, including Canova-San Zeno and the Via Piave residential area", "evidence": "CALLER_ANNOTATED_MAP_2026_09_24; CENTRO_SPORTIVO_VIA_ALDO_MORO; ORATORIO_OLGIATE_IDENTITY_UNRESOLVED", "state": "CALLER_PRIORITY_AREA_NOT_A_SINGLE_POI; MAP_BOUNDARY_NOT_GEOREFERENCED; CENTRO_SPORTIVO_AND_ORATORIO_ARE_EXAMPLES_WITHIN_BROADER_AREA; BOARDING_POINTS_AND_FS_JOURNEYS_UNVERIFIED"},
     {"ordinal": 8, "place": "Casa di Comunita Olgiate", "evidence": "SPECIAL::CASA_DI_COMUNITA_OLGIATE", "state": "SPECIAL_SERVICE_BOARDING_POINT; ORDINARY_LINE_SUITABILITY_UNVERIFIED"},
     {"ordinal": 9, "place": "Olgiate FS", "evidence": "FROZEN::L00407", "state": "SECOND_ORDERED_PASSAGE_NOT_YET_CERTIFIED"},
     {"ordinal": 10, "place": "Calco Cornello", "evidence": "AR148_004;AXW013", "state": "PUBLISHED_STOP_NAME; EXACT_COORDINATE_AND_RT031_STOP_BINDING_UNRESOLVED"},
@@ -73,6 +73,18 @@
     "road_passage_is_not_passenger_stop_service": true,
     "proposed_or_special_stop_is_not_ordinary_tpl_certification": true,
     "historical_60_minute_cycle_exclusion_not_binding": true,
+    "source_audit": "docs/RT031_OLGIATE_SAN_ZENO_TARGET_CORRECTION_V3.md"
+  },
+  "caller_clarification_2026_09_24": {
+    "priority_target": "OLGIATE_RESIDENTIAL_NEIGHBOURHOOD_SOUTH_OF_SS342_AS_ANNOTATED_BY_CALLER",
+    "extent_evidence": "CALLER_ANNOTATED_MAP_IN_CODEX_CONVERSATION_2026_09_24",
+    "visible_place_cues": ["CANOVA_SAN_ZENO", "VIA_PIAVE", "CENTRO_SPORTIVO_AND_LOCAL_COMMUNITY_DESTINATIONS"],
+    "extent_status": "QUALITATIVE_SCREEN_ANNOTATION_NOT_GEOREFERENCED_BOUNDARY",
+    "correction_to_previous_interpretation": "THE_TARGET_IS_THE_BROADER_RESIDENTIAL_AREA; CENTRO_SPORTIVO_AND_SAN_ZENO_ARE_NOT_SUFFICIENT_SINGLE_POINT_PROXIES",
+    "area_population_coverage_certified": false,
+    "area_to_olgiate_fs_passenger_journey_certified": false,
+    "single_stop_assumed_to_cover_entire_area": false,
+    "role": "EXPLICIT_CALLER_DESIGN_PREFERENCE_NOT_GLOBAL_CANDIDATE_ADMISSIBILITY_FILTER",
     "source_audit": "docs/RT031_OLGIATE_SAN_ZENO_TARGET_CORRECTION_V3.md"
   },
   "sources": [

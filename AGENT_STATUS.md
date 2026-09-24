@@ -28,6 +28,17 @@ certificata per le candidate attuali.
 
 ### RT-031 figura a otto con cerniera Olgiate FS — verifica mirata
 
+- Correzione del committente 2026-09-24: l'obiettivo è tutto il quartiere
+  residenziale di Olgiate cerchiato a sud della SS342/Statale, con Canova–San
+  Zeno e Via Piave come riferimenti. Centro sportivo, oratorio e Casa di
+  Comunità sono riferimenti interni, non proxy sufficienti. La schermata
+  non è georeferenziata; non esiste ancora una percentuale certificata di
+  copertura del quartiere né un viaggio abitazioni→FS dimostrato.
+- Lo screen RT017 per nome di strada trova solo 259 m di Via Piave
+  nell'ordine richiesto base, zero nelle altre tre varianti; Via Aldo Moro
+  e Via Mondonico zero in tutte; Via Buttero 120–609 m; Via Cesare Cantù
+  997 m in entrambe le inverse. Sono metri stradali, non copertura dei
+  residenti o fermate certificate. Dettaglio nel rapporto di correzione.
 - Chiarimento del committente: [centro sportivo/Via Aldo Moro e San Zeno/
   Via Cesare Cantù](docs/RT031_OLGIATE_SAN_ZENO_TARGET_CORRECTION_V3.md)
   sono corridoi prioritari, ma non fermate certificate. La variante inversa

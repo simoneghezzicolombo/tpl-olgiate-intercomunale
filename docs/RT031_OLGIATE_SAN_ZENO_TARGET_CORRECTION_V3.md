@@ -1,4 +1,48 @@
-# RT031 — Centro sportivo di Olgiate e San Zeno/Via Cantù
+# RT031 — Quartiere di Olgiate a sud della Statale e San Zeno/Via Cantù
+
+**Correzione del committente, 24 settembre 2026.** La zona da servire è
+**l'intera area residenziale cerchiata sulla mappa a sud della SS342/Statale**,
+visivamente comprendente Canova–San Zeno e l'intorno di Via Piave. Il centro
+sportivo, l'oratorio e la Casa di Comunità sono riferimenti nel quartiere,
+non sostituti dell'obiettivo territoriale. La domanda progettuale è se un
+servizio riconoscibile permetta a chi abita in questa zona di raggiungere
+Olgiate FS con fermate accessibili, tempi e frequenze utili nei versi
+necessari. La schermata annotata indica l'intento del committente ma non è
+un poligono georeferenziato: i suoi bordi non sono stati convertiti in
+coordinate o in un denominatore di popolazione. Perciò **nessuna percentuale
+di copertura del quartiere** è ancora certificata.
+
+I risultati che seguono sui singoli siti e sul POI sportivo restano validi
+come verifiche *locali*, ma non rispondono da soli alla copertura dell'area
+cerchiata. Anche il fatto che un percorso passi per Via Cantù non prova che
+le residenze nella parte occidentale o interna del quartiere possano salire
+e arrivare alla stazione con un viaggio competitivo. La prossima analisi
+deve confrontare, sulla stessa base pedonale, le abitazioni dell'intera zona,
+le fermate esistenti e ipotizzate, e i viaggi ordinati verso FS.
+
+### Primo controllo delle strade del quartiere
+
+L'[inventario riproducibile](../scripts/phase2_audit_rt031_local_stop_siting_v3.py)
+ora misura i bordi RT017 percorsi su alcune strade nominate nella zona o
+nelle verifiche precedenti. La corrispondenza è per *nome esatto della via*
+nel rilievo OSM fissato; questi nomi sono indizi geografici, non il confine
+del quartiere. Metri di percorso su una strada non equivalgono a residenti
+serviti o a una fermata utilizzabile.
+
+| Variante dell'unica linea progettuale | Via Piave | Via Aldo Moro | Via Buttero | Via Mondonico | Via Cesare Cantù, tutti i way omonimi |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Ordine richiesto, base | 259 m | 0 | 480 m | 0 | 0 |
+| Ordine richiesto, Via Statale | 0 | 0 | 120 m | 0 | 0 |
+| Ordine inverso, base | 0 | 0 | 609 m | 0 | 997 m |
+| Ordine inverso, Via Statale | 0 | 0 | 120 m | 0 | 997 m |
+
+I 997 m sommano *tutti* i way OSM denominati Via Cesare Cantù; i 980,10 m
+della ricognizione sotto riguardano il solo way `581532442`. In particolare,
+il passaggio parziale su Via Piave nella prima variante non dimostra un
+collegamento delle abitazioni di Canova–San Zeno verso FS; nelle varianti
+inverse il bus percorre Via Cantù, ma senza un evento di salita certificato.
+La carenza del quartiere va perciò esaminata come combinazione di **punti di
+salita, accesso pedonale dalle abitazioni, verso e tempo di viaggio**.
 
 **Correzione del committente, 22 settembre 2026.** La copertura debole di
 Olgiate nelle quattro [prove della figura a otto](RT031_HUB_SPLIT_FIG8_DIAGNOSTIC_V3.md)
