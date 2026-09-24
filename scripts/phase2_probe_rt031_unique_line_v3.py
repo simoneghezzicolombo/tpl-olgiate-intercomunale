@@ -181,6 +181,38 @@ def main(paths, output):
             screen["known_successor_via_way_overlap"] = sorted(
                 via_ways & set(screen.pop("osm_way_ids")))
         screens[label] = screen
+    west_core = WEST[:-2] + WEST[-1:]
+    east_core = EAST[:-2] + EAST[-1:]
+    south, north = WEST[-2], EAST[-2]
+    allocations = {
+        "SOUTH_WEST_NORTH_EAST": (WEST, EAST),
+        "NORTH_WEST_SOUTH_EAST": (west_core[:-1] + [north] + west_core[-1:],
+                                  east_core[:-1] + [south] + east_core[-1:]),
+        "BOTH_WEST_SOUTH_NORTH": (west_core[:-1] + [south, north] + west_core[-1:],
+                                  east_core),
+        "BOTH_WEST_NORTH_SOUTH": (west_core[:-1] + [north, south] + west_core[-1:],
+                                  east_core),
+        "BOTH_EAST_SOUTH_NORTH": (west_core,
+                                  east_core[:-1] + [south, north] + east_core[-1:]),
+        "BOTH_EAST_NORTH_SOUTH": (west_core,
+                                  east_core[:-1] + [north, south] + east_core[-1:]),
+    }
+    allocation_sensitivity = {}
+    for name, (west_points, east_points) in allocations.items():
+        outward = [screen_lobe(lobe, attachment_nodes, edges, rules)
+                   for lobe in (west_points, east_points)]
+        reverse = [screen_lobe(list(reversed(lobe)), attachment_nodes, edges, rules)
+                   for lobe in (west_points, east_points)]
+        directional = {}
+        for label, lobes in (("outward", outward), ("reverse", reverse)):
+            directional[label] = {
+                "reachable": all(lobe["reachable"] for lobe in lobes),
+                "distance_m": round(sum(lobe["distance_m"] for lobe in lobes), 3)
+                if all(lobe["reachable"] for lobe in lobes) else None,
+                "via_node_bad_turn_count": sum(len(lobe["via_node_bad_turn_indices_at_leg_seams_or_within_legs"])
+                                                for lobe in lobes if lobe["reachable"]),
+            }
+        allocation_sensitivity[name] = directional
     payload = {
         "contract": "RT031_UNIQUE_LINE_ROAD_SCREEN_V3",
         "status": "CONDITIONAL_WAYPOINT_SHORTEST_PATH_DIAGNOSTIC",
@@ -199,6 +231,8 @@ def main(paths, output):
         "vehicle_suitability_certified": False,
         "timetable_certified": False,
         "screens": screens,
+        "allocation_sensitivity": allocation_sensitivity,
+        "allocation_sensitivity_semantics": "fastest independent road legs at the same representative points; no stop, full-history, or timetable certification",
         "conditional_complete_cycle": {
             "west_then_east_distance_m": round(
                 screens["west_toward_south"]["distance_m"]

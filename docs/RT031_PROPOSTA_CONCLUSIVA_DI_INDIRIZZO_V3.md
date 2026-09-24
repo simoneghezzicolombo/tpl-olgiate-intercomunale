@@ -98,6 +98,18 @@ Brivio centro e Beverate nell'ala est. Per il sud usa la candidata
 Cantù a 48,3 m in linea d'aria** dall'ancora provvisoria, non una fermata.
 Questi punti rendono misurabile la proposta, ma non sono fermate selezionate.
 
+La stessa prova colloca sud e Via Cantù nelle due ali in tutte le sei
+assegnazioni/ordinazioni essenziali, lasciando fissi gli altri punti
+rappresentativi. La **media dei due versi del percorso più rapido modellato**
+è 23,65 km/giro con **sud a ovest e San Zeno a est**; sale a 25,09 km se
+entrambi sono a ovest (sud prima di San Zeno), a 25,13 km se entrambi sono a
+est (San Zeno prima del sud), e a 25,52 km se si scambiano le due ali.
+Gli altri due ordini con entrambi nella stessa ala sono ancora più lunghi
+(25,88 e 26,21 km). In questa prova la collocazione proposta è quindi la
+meno onerosa delle sei, senza applicare pesi a copertura o fermate. È un
+confronto di strada sui medesimi proxy, non una garanzia di viaggio utile
+per chi sale né una dimostrazione di idoneità dei siti.
+
 | Giro completo dei due anelli | Tracciato più rapido nel modello, km | Limite inferiore ottimistico di distanza, km |
 | --- | ---: | ---: |
 | Ovest → FS → est, con sud e Via Cantù in rientro | 23,853 | 23,028 |
