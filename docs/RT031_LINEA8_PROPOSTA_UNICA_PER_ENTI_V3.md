@@ -70,6 +70,30 @@ la copertura né la continuità della traversata completa. Solo dopo tale
 verifica si può decidere esplicitamente se chiedere più risorse o quale
 promessa di frequenza/span modificare.
 
+### Prova di downgrade dell'esercizio, senza cancellare la geografia
+
+Il [probe stradale condizionale](../outputs/phase2/rt031_line8_peak_core_v3/probe.json)
+ha composto sullo stesso grafo un anello breve **FS → Olgiate sud → FS →
+San Zeno → FS**: 4,737 km e 12,372 minuti di sola marcia modellata. Non
+incontra alcuna fermata d'inventario oltre FS: funziona come proposta di
+servizio soltanto se i due nuovi punti diventano fermate sicure, servite
+nei versi utili, e le manovre e il passaggio a FS sono verificati. Nessun
+H30 o blocco veicolo è certificato da questa distanza.
+
+Come puro conto di produzione su 260 giorni, **sette** coppie giornaliere
+complete dei due versi della 11/11 più **otto** anelli brevi aggiuntivi
+fanno circa **104.871 km/anno**, lasciando 6.548 km prima dei
+riposizionamenti e degli altri servizi. Con **otto** coppie complete,
+invece, diventano **118.445 km/anno**, oltre il cap già prima degli extra.
+La 10/11 con otto coppie complete e otto anelli brevi arriva a circa
+112.355 km/anno, ancora oltre il cap e con la perdita locale pedonale
+descritta sopra. Otto anelli brevi potrebbero formare H30 per quattro
+ore *solo se* orario, eventi di fermata e mezzi lo consentono. Questo
+esperimento dimostra soltanto che H30 mirato è una famiglia da verificare;
+sette coppie complete distribuite su una giornata lunga possono lasciare
+attese eccessive nelle località esterne. **Non è ancora la proposta di
+esercizio.**
+
 ## Riscontro tecnico già disponibile
 
 **Tracciato controllabile, non ancora itinerario TPL approvato.** La
