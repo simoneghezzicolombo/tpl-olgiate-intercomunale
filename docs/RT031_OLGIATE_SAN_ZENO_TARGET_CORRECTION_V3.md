@@ -41,6 +41,12 @@ popolazione RT016, matrice e grafo pedonale RT028, e i quattro stop-set
 RT031. Le percentuali sono potenziale accesso **a piedi a una fermata**;
 non misurano un viaggio in bus verso FS, la qualità di un orario o la
 domanda osservata.
+L'[artefatto machine-readable](../outputs/phase2/rt031_south_olgiate_provisional_area_v3/sensitivity.json)
+contiene entrambe le geometrie e tutti i rapporti esatti. La
+[CI](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/35983864684)
+ha prodotto due repliche byte per byte identiche al file locale: artefatto
+`10800879844`, SHA-256
+`c30458ecdfe5a9671e8278d1f5d69d2f8a5360fb9ab29ba3017c07168c73f0ba`.
 
 | Involucro provvisorio | Popolazione modellata interna | A piedi entro 10 min da FS | Copertura a piedi delle quattro varianti, 10 min | Se `P2V2S_0031` fosse raggiunta e servita, 10 min |
 | --- | ---: | ---: | ---: | ---: |

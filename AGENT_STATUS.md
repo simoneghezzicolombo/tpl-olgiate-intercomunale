@@ -59,6 +59,9 @@ certificata per le candidate attuali.
   Questa è sensibilità di catchment, non copertura certificata del poligono
   del committente né viaggio in bus: il punto è FIELD_CHECK_PENDING e nessun
   percorso/evento di servizio lo include.
+  CI `35983864684` SUCCESS con due repliche identiche al file locale,
+  artefatto `10800879844`, SHA256
+  `c30458ecdfe5a9671e8278d1f5d69d2f8a5360fb9ab29ba3017c07168c73f0ba`.
 - Chiarimento del committente: [centro sportivo/Via Aldo Moro e San Zeno/
   Via Cesare Cantù](docs/RT031_OLGIATE_SAN_ZENO_TARGET_CORRECTION_V3.md)
   sono corridoi prioritari, ma non fermate certificate. La variante inversa
