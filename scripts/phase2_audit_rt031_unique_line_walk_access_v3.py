@@ -154,7 +154,7 @@ def main(paths, output):
     payload = {
         "contract": "RT031_UNIQUE_LINE_CONDITIONAL_WALK_ACCESS_V3",
         "status": "NON_DECISIONAL_POTENTIAL_WALKING_ACCESS",
-        "input_sha256": {key: sha256(value, key.endswith("normalized"))
+        "input_sha256": {key: sha256(value, key.endswith("normalized") or key == "road_screen")
                          for key, value in paths.items()},
         "representative_existing_stop_ids": stop_ids,
         "existing_attachment_node_stop_ids_encountered_both_directions": encountered_ids,
