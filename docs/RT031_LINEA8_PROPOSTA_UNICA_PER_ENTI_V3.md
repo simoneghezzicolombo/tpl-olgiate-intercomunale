@@ -8,9 +8,11 @@ Una sola linea pubblica riconoscibile, con **Olgiate-Calco-Brivio FS** come
 cerniera fra due ali e servizio progettato nei due versi:
 
 - **Ovest:** FS → Monticello/Scarpone e area Mondonico → Rovagnate → Perego
-  → Santa Maria Hoè → **Olgiate residenziale a sud della SS342** → FS.
-- **Est:** FS → Calco Cornello/centro, con verifica di Calco alta → Arlate
-  → Brivio centro → Beverate → **San Zeno/Via Cantù** → FS.
+  → Santa Maria Hoè e Tremonte/Via Trento → **Olgiate residenziale a sud
+  della SS342** → FS.
+- **Est:** FS → Calco Cornello/centro e Via Nazionale, con verifica di Calco alta → Arlate
+  → Brivio centro → Beverate, includendo Quattro Strade e Cariplo →
+  **San Zeno/Via Cantù** → FS.
 
 Olgiate sud e San Zeno/Via Cantù sono **due aree diverse**. Il progetto deve
 assegnare a entrambe punti di salita realmente accessibili e viaggi utili
@@ -46,26 +48,32 @@ dipendenti dalla storia, idoneità stradale e continuità passeggeri restano da
 validare.
 
 La [verifica pedonale sul substrato comune](../outputs/phase2/rt031_unique_line_walk_access_v3/access.json)
-trova 16 identità di fermata esistente i cui nodi sono incontrati dal
-percorso in entrambi i versi. Se diventassero tutte eventi di salita, e se
+individua i nodi di 16 fermate esistenti sul percorso iniziale. Una
+[riparazione mirata](../outputs/phase2/rt031_current_stop_repair_v3/road_options.json)
+attraverso Tremonte, Calco Via Nazionale e due fermate attuali di Beverate/Brivio porta a
+**24 identità incontrate nei due versi e 10/11 identità attuali**, senza
+perdere le 16 precedenti. Se diventassero tutte eventi di salita, e se
 i due punti nuovi fossero sicuri e serviti, la quota di popolazione con
 una fermata entro **10 minuti a piedi** sarebbe:
 
 | Brivio | Calco | Olgiate | Santa Maria Hoè | La Valletta | Totale |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 76,14% | 62,81% | 72,86% | 76,63% | 67,85% | 70,42% |
+| 81,88% | 68,21% | 84,56% | 93,43% | 67,85% | 77,58% |
 
-Queste percentuali sono **condizionali**: i 16 nodi non sono ancora un
+Queste percentuali sono **condizionali**: i 24 nodi non sono ancora un
 orario con fermate effettive, i due nuovi punti non sono approvati e la
 matrice misura accesso pedonale, non viaggio verso FS o domanda osservata.
 Per confronto, usando solo le fermate rappresentative già nominate nel
 percorso, Calco è al 47,97% e Olgiate al 31,26%: la scelta degli eventi di
 fermata cambia materialmente la proposta.
-Solo **5 delle 11 identità di fermata attuali** del sottoinsieme RT031 sono
-incontrate nei due versi: il confronto pedonale individua perdite locali
-anche dove la percentuale comunale cresce. In particolare Brivio passa
-condizionalmente dal 78,38% al 76,14% a 10 minuti. La conservazione delle
-fermate resta una preferenza da trattare con soluzioni locali motivate.
+La riparazione recupera Brivio rispetto al sottoinsieme attuale a 10 minuti
+(78,38% → 81,88%) e annulla nel controfattuale le perdite di accesso già
+coperto a Calco; resta il 2,32% della popolazione di Santa Maria.
+Includere anche l'ultima identità attuale a Santa Maria Hoè porta a
+**25 nodi esistenti, 11/11 identità e 77,79%** nel totale dei cinque comuni,
+ma aggiunge **1,464 km per giro completo** rispetto alla versione a 10/11.
+È un'alternativa esplicita di conservazione delle fermate, non una scelta
+automatica: l'effetto su tempi, risorse e viaggi verso FS va verificato.
 
 Il cap vigente è **111.419 bus-km/anno**. Con 260 giorni ipotetici, dieci
 giri completi per verso al giorno produrrebbero circa **122.991 km/anno**
@@ -76,6 +84,12 @@ km/anno** nel modello. Sono scenari aritmetici, senza riposizionamenti né
 orario o calendario approvati. Venti giri *totali* ripartiti fra i due versi
 non darebbero H30/H60 per verso. Non si deve usare il cap come
 `decision_budget_km` del finalizzatore.
+La riparazione mirata a 10/11 aggiunge circa **0,988 km per giro completo** nella
+sequenza stradale più corta: il corrispondente scenario nominale H30/H60
+per verso sarebbe circa **256.254 km/anno**, ancora senza dwell o
+riposizionamenti. L'ordine opposto delle due fermate di Beverate aumenta
+leggermente la distanza ma migliora un poco l'accesso a 5 minuti a Brivio;
+la scelta precisa richiede sopralluogo e orario.
 
 ## Richiesta al tavolo
 

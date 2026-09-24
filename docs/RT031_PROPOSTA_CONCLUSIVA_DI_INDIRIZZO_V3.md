@@ -165,16 +165,16 @@ potenzialmente utilizzabili senza deviazione modellata, **non ancora
 eventi ordinati di salita**; fermarsi a tutti aggiungerebbe sosta e potrebbe
 cambiare tempi e risorse. I due punti nuovi restano ipotesi di sito.
 
-| Popolazione con una fermata entro 10 minuti a piedi | Solo fermate rappresentative | Tutte le 16 identità incontrate, se servite | 16 identità più sud e San Zeno, se verificati e serviti |
-| --- | ---: | ---: | ---: |
-| Brivio | 72,08% | 76,14% | 76,14% |
-| Calco | 47,97% | 62,52% | 62,81% |
-| Olgiate Molgora | 31,26% | 37,44% | 72,86% |
-| Santa Maria Hoè | 70,78% | 76,63% | 76,63% |
-| La Valletta Brianza | 45,12% | 67,85% | 67,85% |
-| Cinque comuni insieme | 49,46% | 60,56% | 70,42% |
+| Popolazione con una fermata entro 10 minuti a piedi | Solo rappresentative | 16 identità incontrate | 16 più sud e San Zeno | Riparazione 10/11: 24 più due siti | Riparazione 11/11: 25 più due siti |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Brivio | 72,08% | 76,14% | 76,14% | 81,88% | 81,88% |
+| Calco | 47,97% | 62,52% | 62,81% | 68,21% | 68,21% |
+| Olgiate Molgora | 31,26% | 37,44% | 72,86% | 84,56% | 84,56% |
+| Santa Maria Hoè | 70,78% | 76,63% | 76,63% | 93,43% | 95,75% |
+| La Valletta Brianza | 45,12% | 67,85% | 67,85% | 67,85% | 67,85% |
+| Cinque comuni insieme | 49,46% | 60,56% | 70,42% | 77,58% | 77,79% |
 
-L'ultima colonna è un **controfattuale di accesso pedonale** e rende
+Le ultime due colonne sono **controfattuali di accesso pedonale** e rendono
 esplicito il potenziale politico della proposta, incluso Calco. Non è
 domanda osservata, non misura i minuti in autobus verso FS e non certifica
 fermate in entrambi i lati della strada. Il nuovo punto sud è ancora
@@ -193,6 +193,41 @@ guadagna. Il sopralluogo deve quindi affrontare soprattutto le località
 oggi servite dalle identità omesse, invece di guardare solo al totale.
 Questo confronto usa **11 stop ID**, non descrive da solo l'intera rete
 D184/D185 o i suoi orari.
+
+Una [prova mirata di riparazione](../outputs/phase2/rt031_current_stop_repair_v3/road_options.json)
+inserisce Tremonte/Via Trento nell'ala ovest e Calco Via Nazionale, Quattro
+Strade e Cariplo nell'ala est. Nel modello questa sequenza fa incontrare
+**24 identità di fermata esistente nei due versi**, comprese **10/11** delle
+attuali, senza perderne alcuna delle 16 precedenti. La versione Quattro
+Strade→Cariplo richiede in media **+0,988 km per giro completo** rispetto
+al percorso rappresentativo; il tempo di sola marcia è 50,16/49,90 minuti
+nei due versi, senza dwell e recupero. Insieme ai due nuovi punti ipotetici
+produce la penultima colonna della tabella. A Brivio, Calco, Olgiate e La
+Valletta nessuna popolazione già coperta dal sottoinsieme delle 11 identità
+perderebbe copertura a 10 minuti in questo controfattuale; a Santa Maria
+resta il 2,32% da trattare localmente. L'ordine alternativo
+Cariplo→Quattro Strade aggiunge altri 0,329 km/giro e offre un piccolo
+guadagno di accesso a 5 minuti a Brivio, pur dando le stesse quote a 10
+minuti: entrambi restano visibili senza scegliere un peso fra distanza e
+accessibilità.
+
+L'ultima identità attuale, Santa Maria Hoè, è recuperabile nel modello:
+**25 identità esistenti incontrate, 11/11 attuali e 77,79%** di accesso
+potenziale totale a 10 minuti. La perdita locale residua a Santa Maria
+scende a zero, ma la deviazione aggiunge **1,464 km per giro completo**
+rispetto alla versione 10/11 e circa tre minuti di sola marcia. Il guadagno
+di accesso totale è **0,21 punti percentuali**. Le due versioni sono un
+trade-off esplicito fra conservazione e risorse, non un ordinamento Pareto
+con pesi impliciti.
+
+La riparazione non autorizza a programmare automaticamente 26 o 27 fermate:
+24–25 sono nodi di fermate esistenti incontrati dal percorso e due sono
+ancora ipotesi. Ciascun evento effettivo richiede lato, sicurezza, tempo di
+sosta e impatto sui viaggi verso FS. Il riferimento di produzione H30/H60
+per verso salirebbe a circa **256.254 km/anno modellati** per la versione
+10/11 e **271.480 km/anno** per la versione 11/11, prima di
+riposizionamenti. La scelta delle fermate migliora la copertura, ma
+rafforza la necessità di una decisione esplicita sulle risorse.
 
 Queste grandezze sono di **accesso potenziale**, tracciato e produzione
 condizionale. L'OD lavoro è comunale, non assegnato a percorsi/passeggeri;

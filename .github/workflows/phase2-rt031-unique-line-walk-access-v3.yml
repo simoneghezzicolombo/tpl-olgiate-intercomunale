@@ -7,12 +7,14 @@ on:
       - scripts/phase2_audit_rt031_unique_line_walk_access_v3.py
       - outputs/phase2/rt031_unique_line_walk_access_v3/access.json
       - outputs/phase2/rt031_unique_line_road_screen_v3/screen.json
+      - outputs/phase2/rt031_current_stop_repair_v3/road_options.json
       - .github/workflows/phase2-rt031-unique-line-walk-access-v3.yml
   pull_request:
     paths:
       - scripts/phase2_audit_rt031_unique_line_walk_access_v3.py
       - outputs/phase2/rt031_unique_line_walk_access_v3/access.json
       - outputs/phase2/rt031_unique_line_road_screen_v3/screen.json
+      - outputs/phase2/rt031_current_stop_repair_v3/road_options.json
       - .github/workflows/phase2-rt031-unique-line-walk-access-v3.yml
 permissions:
   contents: read
@@ -45,6 +47,7 @@ jobs:
               --pedestrian_osm /tmp/rt028/input/rt028_osm_pedestrian_snapshot_v3.osm \
               --candidates_normalized outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
               --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
+              --repair_screen outputs/phase2/rt031_current_stop_repair_v3/road_options.json \
               --output "/tmp/access-$replica.json"
           done
           cmp /tmp/access-a.json /tmp/access-b.json

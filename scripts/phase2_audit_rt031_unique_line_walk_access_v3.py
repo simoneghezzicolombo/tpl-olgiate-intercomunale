@@ -58,6 +58,10 @@ def main(paths, output):
             or road["south_proxy"]["boarding_stop_certified"] is not False
             or road["north_proxy"]["boarding_stop_certified"] is not False):
         raise ValueError("road-screen semantics drift")
+    repair = json.loads(paths["repair_screen"].read_text(encoding="utf-8"))
+    if (repair.get("contract") != "RT031_CURRENT_STOP_REPAIR_ROAD_SCREEN_V3"
+            or repair.get("network_selected") is not False):
+        raise ValueError("current-stop repair semantics drift")
     if sha256(CURRENT_PATH) != CURRENT_SHA256:
         raise ValueError("current exact-stop reference drift")
     current_ids = set(json.loads(CURRENT_PATH.read_text(encoding="utf-8"))
@@ -127,6 +131,22 @@ def main(paths, output):
         "all_encountered_plus_both_hypothetical": np.minimum(
             np.minimum(encountered_time, south_time), north_time),
     }
+    for order, option in repair["combined_repair_order_options"].items():
+        expected_count = {"THREE": 9, "FOUR": 10, "FIVE": 11}[order.split("_", 1)[0]]
+        if (option["reachable_both_directions"] is not True
+                or option["represented_via_node_bad_turn_count"] != 0
+                or option["represented_via_node_joins_at_fs_allowed"] is not True
+                or option["known_successor_via_way_overlap"]
+                or option["previously_encountered_stop_ids_lost"]
+                or option["current_exact_stop_ids_encountered_count"] != expected_count):
+            raise ValueError("repair option road-screen drift")
+        ids = option["both_direction_encountered_stop_ids"]
+        if any(stop not in substrate.stop_index for stop in ids):
+            raise ValueError("repair stop not in walking matrix")
+        repaired_time = np.min(substrate.walk_time_matrix[:,
+                               [substrate.stop_index[stop] for stop in ids]], axis=1)
+        scenarios["repair_" + order + "_plus_both_hypothetical"] = np.minimum(
+            np.minimum(repaired_time, south_time), north_time)
     access = {}
     for name, times in scenarios.items():
         access[name] = {}
@@ -151,10 +171,27 @@ def main(paths, output):
                 (comparison_time > t) & (current_time <= t), weights, eligible))
                 for t in (5, 8, 10)},
         }
+    repair_change = {}
+    for name, times in scenarios.items():
+        if not name.startswith("repair_"):
+            continue
+        repair_change[name] = {}
+        for code, municipality in (("TOTAL", "Five municipalities"), *MUNICIPALITY_NAMES.items()):
+            eligible = core if code == "TOTAL" else core & (codes == code)
+            repair_change[name][code] = {
+                "municipality": municipality,
+                "newly_covered_fraction": {str(t): str(weighted_ratio(
+                    (times <= t) & (current_time > t), weights, eligible))
+                    for t in (5, 8, 10)},
+                "no_longer_covered_fraction": {str(t): str(weighted_ratio(
+                    (times > t) & (current_time <= t), weights, eligible))
+                    for t in (5, 8, 10)},
+            }
     payload = {
         "contract": "RT031_UNIQUE_LINE_CONDITIONAL_WALK_ACCESS_V3",
         "status": "NON_DECISIONAL_POTENTIAL_WALKING_ACCESS",
-        "input_sha256": {key: sha256(value, key.endswith("normalized") or key == "road_screen")
+        "input_sha256": {key: sha256(value, key.endswith("normalized")
+                                      or key in ("road_screen", "repair_screen"))
                          for key, value in paths.items()},
         "representative_existing_stop_ids": stop_ids,
         "existing_attachment_node_stop_ids_encountered_both_directions": encountered_ids,
@@ -173,6 +210,7 @@ def main(paths, output):
                   "boarding_event_certified": False},
         "access": access,
         "conditional_change_vs_current_exact_identity_subset": current_change,
+        "repair_change_vs_current_exact_identity_subset": repair_change,
         "scope": "core RT028 population; potential walk to a representative or hypothetical stop only",
         "directional_service_or_fs_journey_certified": False,
         "access_is_observed_demand": False,
@@ -190,8 +228,8 @@ def main(paths, output):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    for key in (*EXPECTED, "road_screen"):
+    for key in (*EXPECTED, "road_screen", "repair_screen"):
         parser.add_argument("--" + key, required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
-    main({key: getattr(args, key) for key in (*EXPECTED, "road_screen")}, args.output)
+    main({key: getattr(args, key) for key in (*EXPECTED, "road_screen", "repair_screen")}, args.output)
