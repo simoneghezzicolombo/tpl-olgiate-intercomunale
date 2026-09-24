@@ -31,18 +31,23 @@ substrato. Nessuno dei punti nuovi è una fermata autorizzata.
    viaggio verso FS e da FS nei due versi, comprensivo di cammino, attesa,
    sosta e tempi di corsa: i [minuti stradali](../outputs/phase2/rt031_current_stop_repair_v3/road_options.json)
    non sono un sostituto.
-3. **Orario e risorse.** Presentare l'orario feriale con il target 06–22,
-   H30 07–09 e 17–19, H60 nelle altre ore, specificando frequenza per
-   **ala e verso**; presentare separatamente sabato e altri giorni di
+3. **Orario e risorse.** Presentare prima un orario feriale credibile entro
+   111.419 bus-km/anno, cercando fascia 06–22 e rinforzo nelle punte
+   07–09 e 17–19. H30/H60 è una preferenza di servizio da verificare,
+   **non** un obbligo di 40 giri completi dell'8 ogni giorno. Specificare
+   frequenza effettiva per **località, ala e verso** e il tempo verso FS;
+   presentare separatamente sabato e altri giorni di
    esercizio. Misurare tempi con sosta, recupero e traffico; fornire
    blocchi veicolo, mezzi necessari, chilometri di servizio e di
    riposizionamento, calendario annuo e margini di robustezza. Verificare
    coincidenze S8 per Milano e Lecco, bus→treno e treno→bus, su eventi
    effettivi, senza convertirne gli esiti deterministici in probabilità.
-4. **Due conti e un confronto.** Il primo conto è il fabbisogno completo
-   per il target sopra; il secondo è un servizio *esplicitamente diverso*
-   entro il cap approvato di 111.419 bus-km/anno, se fattibile. Per
-   entrambi esporre 5/8/10 minuti di accesso pedonale nei cinque comuni e
+4. **Conto e confronto.** Il primo conto è il servizio progettato entro
+   il cap, se fattibile. Se non rende utili i viaggi da tutte le aree
+   richieste, presentare un'alternativa con il **minimo incremento di km
+   motivato** o una modifica fisica del percorso, esplicitando che cosa
+   migliora e che cosa peggiora. Per le alternative esporre 5/8/10 minuti
+   di accesso pedonale nei cinque comuni e
    nelle aree Olgiate sud/San Zeno, fermate attuali perse o conservate,
    tempo verso FS per località, span, frequenza, coincidenze, mezzi e
    chilometri. Confrontare anche la variante 11/11. La classe H60/mista
@@ -52,20 +57,30 @@ substrato. Nessuno dei punti nuovi è una fermata autorizzata.
 ## Criterio di lettura e decisione
 
 Il [conto condizionale](../outputs/phase2/rt031_line8_service_envelope_v3/envelope.json)
-indica circa **256.254 km/anno** per il target 10/11 su 260 giorni
-ipotetici, prima di chilometri ulteriori. È un segnale di fabbisogno,
-**non** un preventivo né un nuovo budget deliberato. Separare le ali a FS
-senza ridurre la produzione non risolve il divario. Corse limitate sono
+indica circa **256.254 km/anno** soltanto per uno stress test che impone
+20 giri completi **in ciascun verso** su 260 giorni ipotetici. Non è
+il target di spesa né una richiesta di budget. La stessa variante 10/11
+costerebbe nel modello circa 102.502 km con 16 giri completi totali al
+giorno o 128.127 km con 20, ma nessuno dei due conteggi prova un orario
+utile. Separare le ali a FS senza ridurre la produzione non risolve il
+divario. Corse limitate sono
 ammissibili come alternativa da analizzare, ma non ereditano automaticamente
 copertura, direttezza o continuità dell'intero 8.
+Se si mantenessero **20 giri completi totali al giorno** per 260 giorni,
+il cap imporrebbe una lunghezza media non superiore a **21,427 km/giro**
+prima di ogni riposizionamento; la variante 10/11 è a circa **24,640 km**.
+Servirebbe quindi togliere almeno **3,213 km/giro** al modello, oppure
+ottenere risorse ulteriori. È un obiettivo di ridisegno *condizionato a
+quei 20 giri*, non la prova che esista un percorso equivalente più corto.
 
 La decisione di esercizio resta **NON PRONUNCIABILE** se mancano percorso
 legale completo, fermate nei versi necessari, eventi passeggeri, orario
 congiunto, blocchi e km annui inclusivi dei riposizionamenti, oppure il
 confronto territoriale ricalcolato sul servizio effettivamente offerto.
-Se il target supera il cap, occorre una **delibera esplicita di risorse**;
-se il cap non cambia, occorre dichiarare precisamente la promessa ridotta
-e valutarla contro i benchmark e il servizio attuale. Nessun dato mancante
+Se il servizio utile supera il cap, occorre una **delibera esplicita di
+risorse** sul fabbisogno minimo motivato; se il cap non cambia, occorre
+dichiarare precisamente la promessa ridotta e valutarla contro i benchmark
+e il servizio attuale. Nessun dato mancante
 si sostituisce con OD comunale non disaggregata, GJT pesata inventata o
 probabilità empiriche di mancata coincidenza.
 

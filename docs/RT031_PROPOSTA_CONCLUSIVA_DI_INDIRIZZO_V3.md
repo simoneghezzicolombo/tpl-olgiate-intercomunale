@@ -57,23 +57,26 @@ quartiere sud è stato aggiunto al brief.
 
 ## Prodotto di servizio proposto per la verifica
 
-**Obiettivo, non orario approvato:** feriali, fascia indicativa 06:00–22:00,
-partenze a minuti regolari, H30 nelle due finestre 07:00–09:00 e
-17:00–19:00, H60 nelle altre ore; verificare anche il sabato prima di
-pubblicare una promessa di servizio settimanale. Le finestre sono una scelta
-progettuale del committente interpretata alla luce del segnale qualitativo
-Google Popular Times, non una stima di domanda. I 260 giorni usati nelle
-analisi sono un **calendario di confronto**, non un calendario osservato o
-approvato per il nuovo servizio. La policy vigente privilegia H≤30 e tratta
-H60 come eccezione territoriale; questo schema misto richiede quindi una
-delibera esplicita sulla classe di frequenza prima di diventare il contratto
-finale, non un adattamento silenzioso del finalizzatore.
+**Mandato di progetto, non orario approvato:** una Linea 8 utile ai cinque
+comuni, con Olgiate sud e San Zeno come due esigenze distinte, da progettare
+**prima entro il cap vigente**. Cercare una fascia estesa verso 06:00–22:00,
+partenze memorabili e rinforzo nelle punte 07:00–09:00 e 17:00–19:00.
+H30 in punta e H60 fuori punta sono una **preferenza da testare**, non una
+promessa simultanea su ogni ala e verso né una richiesta politica di
+256 mila km/anno. Le finestre riflettono il segnale qualitativo Google
+Popular Times, non una stima di domanda. Verificare anche il sabato. I
+260 giorni delle analisi sono un calendario di confronto, non osservato o
+approvato. La policy privilegia H≤30 e tratta H60 come eccezione: lo
+schema operativo effettivo richiederà una decisione esplicita, non un
+adattamento silenzioso del finalizzatore.
 
-La promessa di frequenza va scritta **per ala e per verso**. Se H30 nelle
+La frequenza ottenuta va scritta **per località, ala e verso**. Se H30 nelle
 quattro ore di punta e H60 nelle altre dodici ore della fascia 06–22
 significa un *giro completo di entrambe le ali* in ciascun verso, la
 contabilità nominale è 20 giri per verso al giorno, quindi 40 totali.
-Venti giri **totali** divisi tra i due versi non forniscono quella promessa.
+Questo è uno **stress test della specifica rigida**, non il servizio da
+richiedere. Venti giri **totali** divisi tra i due versi non forniscono
+quella promessa, ma nemmeno 40 giri devono diventare il default politico.
 Gli orari di confine, l'alternanza dei mezzi e le coincidenze richiedono
 comunque una tabella di eventi effettiva prima di chiamare questa una
 frequenza di esercizio.
@@ -144,7 +147,7 @@ km/anno**; perfino la media dei limiti inferiori è **118.563 km/anno**.
 Rispetto al cap politico di 111.419 km/anno, mancano rispettivamente circa
 **11.572** e **7.144 km/anno**. Lo scenario conta *giri completi* dei due
 anelli, non singole partenze da FS o blocchi veicolo: non è ancora un
-orario. Per la promessa nominale H30/H60 **in ciascun verso** descritta
+orario. Per lo stress test nominale H30/H60 **in ciascun verso** definito
 sopra, 20 giri completi per verso ×260 giorni darebbero circa **245.982
 km/anno** sul tracciato più rapido modellato; persino il limite inferiore
 ottimistico è circa **237.126 km/anno**. Questi sono conti condizionali,
@@ -223,11 +226,13 @@ con pesi impliciti.
 La riparazione non autorizza a programmare automaticamente 26 o 27 fermate:
 24–25 sono nodi di fermate esistenti incontrati dal percorso e due sono
 ancora ipotesi. Ciascun evento effettivo richiede lato, sicurezza, tempo di
-sosta e impatto sui viaggi verso FS. Il riferimento di produzione H30/H60
-per verso salirebbe a circa **256.254 km/anno modellati** per la versione
+sosta e impatto sui viaggi verso FS. Lo **stress test** H30/H60 su tutto
+l'8 in ciascun verso salirebbe a circa **256.254 km/anno modellati** per la versione
 10/11 e **271.480 km/anno** per la versione 11/11, prima di
-riposizionamenti. La scelta delle fermate migliora la copertura, ma
-rafforza la necessità di una decisione esplicita sulle risorse.
+riposizionamenti. Questo non è il preventivo da portare agli enti: mostra
+perché occorre progettare la produzione effettiva prima di parlare di
+risorse. La scelta delle fermate migliora la copertura, ma ne va misurato
+l'effetto sugli orari veri.
 
 Il [conto condizionale di produzione](../outputs/phase2/rt031_line8_service_envelope_v3/envelope.json)
 mostra il margine in modo più netto. Con 260 giorni ipotetici, il cap
@@ -279,15 +284,16 @@ due versi, eventi passeggeri, orario/blocchi/km e confronto di accessibilità
 e risorse. Ulteriore ricerca interna non può sostituire tali dati di
 esercizio e di sopralluogo.
 
-**Posizione da portare al tavolo:** mantenere il prodotto utile per il
-passeggero (frequenza dichiarata per ala e verso, accesso diretto a FS) come
-obiettivo e chiedere un piano di risorse coerente. La prova dei punti fissati
-esclude già la combinazione *stesso percorso rappresentativo + H30/H60 per
-verso su 16 ore + 260 giorni + cap di 111.419 km/anno*. Il maggior
-fabbisogno va deliberato esplicitamente dopo percorso e orario completi;
-non si valorizza per inferenza `decision_budget_km`. Se le risorse non
-possono crescere, occorre pubblicare quale parte della promessa cambia,
-senza etichettare H30/H60 una frequenza calcolata solo sommando i due versi.
+**Posizione da portare al tavolo:** chiedere **prima** una soluzione
+operativa verificabile per la Linea 8 entro 111.419 km/anno, che mostri
+frequenza realmente utile e tempi verso FS per ogni località. La prova
+dei punti fissati esclude solo la combinazione *stesso percorso completo
+in entrambi i versi + H30/H60 per verso su 16 ore + 260 giorni + cap*.
+Non esclude un disegno operativo diverso; questo però deve misurare senza
+scorciatoie cosa guadagnano e perdono i passeggeri. Se il cap non basta a
+un servizio utile, chiedere il **minimo incremento motivato** o la
+modifica fisica necessaria, da deliberare esplicitamente. Non si valorizza
+per inferenza `decision_budget_km`.
 
 1. **Sopralluogo e instradamento completo:** sito sicuro/accessibile nel
    quartiere sud e per San Zeno/Via Cantù, limiti dimensionali/stradali,

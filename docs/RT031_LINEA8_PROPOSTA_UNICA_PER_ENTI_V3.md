@@ -26,12 +26,18 @@ attuali è una preferenza da misurare, non un veto automatico.
 ## Servizio da progettare
 
 La richiesta è un orario prevedibile, con buona copertura della giornata e
-coincidenze S8 verso Milano e Lecco. Lo scenario di lavoro è 06–22 nei
-feriali, **H30 07–09 e 17–19, H60 nelle altre ore**, con frequenza dichiarata
-**per ala e per verso** e verifica separata del sabato. La classe H60 richiede
-una decisione esplicita rispetto alla policy vigente. Il passaggio intermedio
-a FS deve dire se il passeggero prosegue sulla stessa corsa o deve cambiare,
-e con quale attesa. Nessuna fase oraria ferroviaria è ancora selezionata.
+coincidenze S8 verso Milano e Lecco. **Prima consegna dell'operatore:** una
+proposta per **una sola Linea 8** che parta dal cap vigente di 111.419
+bus-km/anno e mostri per ogni località le partenze e i viaggi utili verso
+e dalla stazione, per ala e per verso. Si cerchi la fascia 06–22 e si
+dia priorità ai picchi 07–09 e 17–19, ma **H30 di punta/H60 di morbida
+non è un obbligo simultaneo su tutto l'8 in entrambi i sensi**. Se un
+servizio utile non sta nel cap, l'operatore deve mostrare la modifica
+minima verificabile di percorso, orario o risorse, con le perdite esplicite;
+non un preventivo implicito di 256 mila km. Verificare separatamente il
+sabato. La classe H60 richiede una decisione esplicita rispetto alla
+policy vigente. A FS va dichiarato se il passeggero resta sulla stessa
+corsa o cambia, con quale attesa. Nessuna fase S8 è ancora selezionata.
 
 ## Riscontro tecnico già disponibile
 
@@ -103,57 +109,38 @@ gran parte del beneficio. La verifica dell'operatore deve quindi mostrare
 per ciascun punto i tempi **porta/fermata→FS in entrambi i sensi**, insieme
 alle partenze effettive, non solo la lunghezza dell'intera linea.
 
-Il cap vigente è **111.419 bus-km/anno**. Con 260 giorni ipotetici, dieci
-giri completi per verso al giorno produrrebbero circa **122.991 km/anno**
-già nel modello; perfino il limite inferiore stradale ottimistico è
-**118.563 km/anno**. Se H30/H60 sulla fascia 06–22 significa nominalmente
-20 giri completi **per ciascun verso**, il conto sale a circa **245.982
-km/anno** nel modello. Sono scenari aritmetici, senza riposizionamenti né
-orario o calendario approvati. Venti giri *totali* ripartiti fra i due versi
-non darebbero H30/H60 per verso. Non si deve usare il cap come
-`decision_budget_km` del finalizzatore.
-La riparazione mirata a 10/11 aggiunge circa **0,988 km per giro completo** nella
-sequenza stradale più corta: il corrispondente scenario nominale H30/H60
-per verso sarebbe circa **256.254 km/anno**, ancora senza dwell o
-riposizionamenti. L'ordine opposto delle due fermate di Beverate aumenta
-leggermente la distanza ma migliora un poco l'accesso a 5 minuti a Brivio;
-la scelta precisa richiede sopralluogo e orario.
+Il cap vigente è **111.419 bus-km/anno**. L'ordine opposto delle due
+fermate di Beverate aumenta leggermente la distanza ma migliora un poco
+l'accesso a 5 minuti a Brivio; la scelta precisa richiede sopralluogo e
+orario. Non si deve usare il cap come `decision_budget_km` del finalizzatore.
 
-### La scelta di risorse, resa esplicita
+### Diagnosi del numero «256 mila»
 
 Il [conto riproducibile delle percorrenze complete](../outputs/phase2/rt031_line8_service_envelope_v3/envelope.json)
-usa il cap approvato e **260 giorni ipotetici**. Una coppia giornaliera
-significa un giro completo ovest+est per ciascuno dei due versi; non è
-una semplice coppia di partenze FS↔una frazione.
+usa il cap approvato e **260 giorni ipotetici**. Qui un «giro completo»
+attraversa entrambe le ali e torna a FS. Per la variante 10/11:
 
-| Variante | Km per coppia di giri | Massimo intero di coppie/giorno entro il cap, prima di altri km | H60 per 10 ore in entrambi i versi | H60 per 16 ore | H30 per 4 ore + H60 per 12 ore |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| 10/11 fermate attuali | 49,280 | 8 | 128.127 km/anno | 205.003 km/anno | 256.254 km/anno |
-| 11/11 fermate attuali | 52,208 | 8 | 135.740 km/anno | 217.184 km/anno | 271.480 km/anno |
+| Ipotesi puramente aritmetica | Giri completi/giorno | Bus-km/anno modellati |
+| --- | ---: | ---: |
+| 8 giri in ciascun verso | 16 | 102.502 |
+| 10 giri in ciascun verso | 20 | 128.127 |
+| H30/H60 **su tutto l'8 in ciascun verso** | 40 | 256.254 |
 
-Già **H60 per sole 10 ore nei due versi supera il cap** di 111.419
-km/anno, se ogni corsa percorre tutto l'8. Otto coppie al giorno della
-variante 10/11 consumano 102.502 km/anno e lasciano appena 8.917 km
-per ogni altra percorrenza; non sono un orario proposto. Il calcolo non
-esclude esercizi con corse limitate, interlinee o calendari differenti,
-ma questi richiedono una nuova descrizione degli eventi passeggeri e
-non possono ereditare automaticamente le quote di accesso dell'8 intero.
-La separazione delle due ali a FS **non crea da sola risparmio**: nella
-versione 10/11 una coppia di giri dell'ovest vale 24,014 km e una
-dell'est 25,265 km, che sommano agli stessi 49,280 km. Se il cap resta
-fisso, l'allocazione diventa uno scambio territoriale: 8 coppie quotidiane
-ovest e 9 est sono aritmeticamente entro il tetto, così come 10 ovest e
-7 est, ma nessuna delle due promette H60 per 10 ore su **entrambe** le ali.
-Sono conteggi di percorrenze, non orari con corse passeggeri o coincidenze.
-Per le 16 ore H30/H60 richieste, il solo modello 10/11 supera il cap
-di circa **144.835 km/anno**, prima di riposizionamenti e di qualsiasi
-servizio non contato nei 260 giorni ipotizzati.
+Il terzo rigo è **uno stress test della specifica eccessiva, non una
+proposta di spesa**. Nemmeno i primi due sono orari raccomandati: 16–20
+giri totali distribuiti su 16 ore non darebbero automaticamente frequenza
+utile nel senso rapido per ogni località, e mancano riposizionamenti e
+calendario approvato. La separazione delle ali a FS non fa risparmiare
+km a parità di corse: ovest ed est sommano comunque. Corse limitate,
+interlinee, percorso più corto o una diversa distribuzione temporale
+possono cambiare la produzione, **ma devono essere valutati come servizi
+effettivi**, con accessibilità, tempi verso FS e coincidenze ricalcolati.
 
-La richiesta politica al tavolo è quindi precisa: **quantificare e deliberare
-le risorse per il servizio completo desiderato**, oppure dichiarare quale
-parte della promessa cambia e ricalcolare accessibilità, tempi e
-coincidenze per quella versione. Il conto non seleziona da sé una frequenza
-ridotta né autorizza la variante 10/11 come rete in esercizio.
+La richiesta politica non è «finanziare 256 mila km». È ricevere **una
+proposta unica credibile entro il cap**, insieme alla quantificazione del
+più piccolo incremento eventualmente indispensabile per non sacrificare
+la funzione dei cinque comuni e delle due zone di Olgiate. Non si sceglie
+una frequenza ridotta solo dividendo un numero di giri.
 
 ## Richiesta al tavolo
 
@@ -164,17 +151,19 @@ ridotta né autorizza la variante 10/11 come rete in esercizio.
    indicando tempi frazione↔FS, coincidenze S8, mezzi e tutti i chilometri,
    inclusi riposizionamenti. Confrontare la copertura 5/8/10 minuti nei
    cinque comuni e nelle due aree di Olgiate con i benchmark già pubblicati.
-3. Presentare **due contabilità esplicite**: le risorse necessarie per la
-   frequenza richiesta e il servizio realmente ottenibile mantenendo il cap
-   vigente. La raccomandazione di progetto privilegia il servizio utile al
-   passeggero e porta il maggiore fabbisogno a decisione pubblica; non
-   approva qui un nuovo budget o una frequenza ridotta.
+3. Consegnare **prima** uno schema verificabile entro il cap,
+   dichiarando per ogni località le frequenze nel senso utile, span e
+   tempi verso FS. Se non soddisfa il brief territoriale, indicare il
+   minimo incremento di risorse o la modifica di tracciato necessari e
+   quantificarne l'effetto. Nessun nuovo budget o orario è approvato qui.
 
 Questa scheda fissa **un solo concept** e un confronto finito. La decisione
 di esercizio segue le verifiche sopra. `network_selected=false`;
 `primary_selection_authorised=false`;
 `runner_up_selection_authorised=false`.
 
-La [lista verificabile delle consegne richieste](RT031_LINEA8_CAPITOLATO_DI_VERIFICA_V3.md)
-è pronta per Agenzia e operatore. Dettagli, fonti e limiti nella
+La [bozza di comunicazione](RT031_EMAIL_A_AGENZIA_OPERATORE_V3.md) e la
+[lista verificabile delle consegne richieste](RT031_LINEA8_CAPITOLATO_DI_VERIFICA_V3.md)
+sono pronte per Agenzia e operatore; la comunicazione non è stata inviata.
+Dettagli, fonti e limiti nella
 [proposta conclusiva](RT031_PROPOSTA_CONCLUSIVA_DI_INDIRIZZO_V3.md).
