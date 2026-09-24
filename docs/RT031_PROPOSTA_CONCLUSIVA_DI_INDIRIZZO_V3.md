@@ -229,6 +229,18 @@ per verso salirebbe a circa **256.254 km/anno modellati** per la versione
 riposizionamenti. La scelta delle fermate migliora la copertura, ma
 rafforza la necessità di una decisione esplicita sulle risorse.
 
+Il [conto condizionale di produzione](../outputs/phase2/rt031_line8_service_envelope_v3/envelope.json)
+mostra il margine in modo più netto. Con 260 giorni ipotetici, il cap
+consente al massimo **8 coppie giornaliere di percorrenze complete nei due
+versi** per entrambe le varianti, prima di ogni altro km. Già H60 per
+10 ore nei due versi richiederebbe circa **128.127 km/anno** per la 10/11
+e **135.740** per la 11/11. H60 per 16 ore richiederebbe rispettivamente
+circa **205.003** e **217.184 km/anno**. Sono conseguenze aritmetiche
+dell'obbligo di percorrere l'8 intero a ogni partenza, non una prova che
+nessun disegno con corse limitate possa funzionare. Un tale disegno
+cambierebbe però la promessa territoriale e va valutato come nuovo orario
+con eventi passeggeri espliciti, non come scorciatoia contabile.
+
 Queste grandezze sono di **accesso potenziale**, tracciato e produzione
 condizionale. L'OD lavoro è comunale, non assegnato a percorsi/passeggeri;
 non esistono GJT pesate per domanda o probabilità empiriche di mancata

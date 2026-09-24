@@ -91,6 +91,35 @@ riposizionamenti. L'ordine opposto delle due fermate di Beverate aumenta
 leggermente la distanza ma migliora un poco l'accesso a 5 minuti a Brivio;
 la scelta precisa richiede sopralluogo e orario.
 
+### La scelta di risorse, resa esplicita
+
+Il [conto riproducibile delle percorrenze complete](../outputs/phase2/rt031_line8_service_envelope_v3/envelope.json)
+usa il cap approvato e **260 giorni ipotetici**. Una coppia giornaliera
+significa un giro completo ovest+est per ciascuno dei due versi; non è
+una semplice coppia di partenze FS↔una frazione.
+
+| Variante | Km per coppia di giri | Massimo intero di coppie/giorno entro il cap, prima di altri km | H60 per 10 ore in entrambi i versi | H60 per 16 ore | H30 per 4 ore + H60 per 12 ore |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 10/11 fermate attuali | 49,280 | 8 | 128.127 km/anno | 205.003 km/anno | 256.254 km/anno |
+| 11/11 fermate attuali | 52,208 | 8 | 135.740 km/anno | 217.184 km/anno | 271.480 km/anno |
+
+Già **H60 per sole 10 ore nei due versi supera il cap** di 111.419
+km/anno, se ogni corsa percorre tutto l'8. Otto coppie al giorno della
+variante 10/11 consumano 102.502 km/anno e lasciano appena 8.917 km
+per ogni altra percorrenza; non sono un orario proposto. Il calcolo non
+esclude esercizi con corse limitate, interlinee o calendari differenti,
+ma questi richiedono una nuova descrizione degli eventi passeggeri e
+non possono ereditare automaticamente le quote di accesso dell'8 intero.
+Per le 16 ore H30/H60 richieste, il solo modello 10/11 supera il cap
+di circa **144.835 km/anno**, prima di riposizionamenti e di qualsiasi
+servizio non contato nei 260 giorni ipotizzati.
+
+La richiesta politica al tavolo è quindi precisa: **quantificare e deliberare
+le risorse per il servizio completo desiderato**, oppure dichiarare quale
+parte della promessa cambia e ricalcolare accessibilità, tempi e
+coincidenze per quella versione. Il conto non seleziona da sé una frequenza
+ridotta né autorizza la variante 10/11 come rete in esercizio.
+
 ## Richiesta al tavolo
 
 1. Verificare su strada il percorso e i punti di salita nei due versi,
