@@ -40,6 +40,36 @@ decisione esplicita rispetto alla policy vigente. A FS va dichiarato se
 il passeggero resta sulla stessa corsa o cambia, con quale attesa. Nessuna
 fase S8 è ancora selezionata.
 
+### Il limite quantitativo della promessa di servizio
+
+L'[audit riproducibile del servizio](../outputs/phase2/rt031_line8_service_promise_v3/audit.json)
+conta solo traversate **complete** delle due ali nei due versi sul
+riferimento inclusivo 11/11; non presume fermate autorizzate, orario,
+coincidenze o mezzi disponibili. Con 260 giorni ipotetici, ciascuna coppia
+giornaliera dei due versi aggiunge 52,208 km/giorno. Il cap attuale di
+111.419 bus-km/anno ne contiene al massimo **otto al giorno**, per
+108.592 km/anno prima dei riposizionamenti e di qualunque altro servizio.
+
+| Promessa su tutte le località e i due versi, se ogni corsa fa l'intero 8 | Coppie complete/giorno | Km/anno prima degli extra | Rapporto col cap |
+| --- | ---: | ---: | --- |
+| H60 per 8 ore | 8 | 108.592 | Entro, con margine di soli 2.827 km |
+| H60 per 10 ore | 10 | 135.740 | Oltre di 24.321 km |
+| H60 per 16 ore | 16 | 217.184 | Oltre di 105.765 km |
+| H30 per 4 ore più H60 nelle altre 12 | 20 | 271.480 | Oltre di 160.061 km |
+
+Quindi **non è sostenibile promettere ora H60 06–22 su tutta la Linea 8
+inclusiva entro quel cap**. Distribuire gli otto passaggi per verso sulle
+16 ore darebbe in media un passaggio ogni due ore, non H60; quattro ore di
+H30 consumerebbero già tutti e otto i passaggi di ciascun verso. Nessuno
+di questi conteggi è un orario da pubblicare: il cap copre produzione
+stradale modellata e non include km di deposito, sabato o variabilità dei
+tempi. La geometria inclusiva resta il riferimento. Un esercizio con corse
+parziali, rinforzi mirati o diversa produzione annua va costruito con
+eventi passeggeri e chilometri propri: non può ereditare automaticamente
+la copertura né la continuità della traversata completa. Solo dopo tale
+verifica si può decidere esplicitamente se chiedere più risorse o quale
+promessa di frequenza/span modificare.
+
 ## Riscontro tecnico già disponibile
 
 Una [prova stradale fissata e riprodotta in CI](../outputs/phase2/rt031_unique_line_road_screen_v3/screen.json)
