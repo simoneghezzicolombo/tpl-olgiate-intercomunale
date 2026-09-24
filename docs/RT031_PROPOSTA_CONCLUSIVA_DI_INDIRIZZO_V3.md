@@ -13,7 +13,7 @@ nome di lavoro «Linea 8»**, incernierata su **Olgiate-Calco-Brivio FS**, con
 un'ala occidentale e una orientale, percorsi di ritorno progettati per non
 obbligare i passeggeri a un giro eccessivo verso la stazione, la **zona
 residenziale di Olgiate a sud della SS342 come parte del tracciato ordinario**
-e **San Zeno/Via Cantù come esigenza separata ma inclusa nel disegno**.
+e **San Zeno/Via Cantù come esigenza separata nell'ala est**.
 La geometria dell'8 è il linguaggio preferito dal committente, non l'obbligo
 di riprodurre i quattro vecchi percorsi RT031. Un percorso più corto con la
 stessa identità di servizio deve prevalere se rende migliori frequenza,
@@ -21,20 +21,26 @@ direttezza e accessibilità. I due versi devono essere dichiarati e orariati
 insieme; un vettore fisico continuo non basta a provare continuità per il
 passeggero.
 
-**Sequenza di progetto da verificare, non elenco di fermate certificate:**
+**Proposta unica di sequenza, da verificare su strada e con eventi di
+servizio; non è un elenco di fermate certificate:**
 
 1. Ala ovest: FS → Monticello/Mondonico → Rovagnate → Perego → Santa Maria
    Hoè → quartiere meridionale di Olgiate (Canova–San Zeno/Via Piave, con
    un punto ordinario sicuro da verificare nell'intorno di Via Aldo Moro e
    Casa di Comunità) → FS. Verificare anche l'ordine inverso.
 2. Ala est: FS → Calco Cornello/centro → Arlate → Brivio centro → Beverate
-   → FS. Cercare le fermate utili di Calco alta.
-3. Innesto Olgiate nord: includere San Zeno/Via Cantù come esigenza
-   territoriale distinta dal quartiere sud, preferibilmente con un passaggio
-   utile e leggibile verso FS nei due versi. L'inclusione è parte del brief,
-   ma deve essere provata su strada, tempi di ciclo e accesso passeggeri:
-   non basta attraversare Via Cantù, e non si può usare San Zeno per
-   dichiarare servita la zona sud.
+   → San Zeno/Via Cantù → FS. Cercare le fermate utili di Calco alta.
+   San Zeno è l'ultima località dell'ala est verso FS nel verso qui scritto;
+   nel verso inverso è la prima dopo FS. Questa collocazione è una scelta
+   di progetto da provare, non un instradamento già certificato: le varianti
+   inverse esplorate attraversano Via Cantù in uscita da FS, ma non hanno
+   una fermata né provano che il passaggio di rientro proposto sia legale.
+3. La linea pubblica è una sola: FS → ala ovest → FS → ala est → FS,
+   affiancata dal corrispondente servizio nei versi opposti. Il passaggio
+   intermedio a FS deve dichiarare se il passeggero resta a bordo oppure
+   cambia corsa, con l'attesa effettiva. Per Olgiate sud e San Zeno occorrono
+   salita e discesa utili nei versi di viaggio verso e dalla stazione;
+   il solo transito stradale non costituisce servizio.
 4. Crescenzaga/Pianezzo e Cassina restano opportunità da confrontare, non
    deviazioni da imporre a ogni corsa: il primo richiede verifica del sito;
    «Cassina» richiede ancora una localizzazione univoca. Non contare una
@@ -93,8 +99,8 @@ ricavata retroattivamente.
 ## Chiusura dell'analisi e condizioni finite per l'attivazione
 
 Non produrre altre migliaia di profili senza un oggetto concreto. La fase di
-studio si conclude con **un solo brief di progettazione: Linea 8 ridisegnata
-con sud Olgiate e San Zeno/Via Cantù inclusi come esigenze distinte**, più
+studio si conclude con **un solo brief di progettazione: Linea 8 ridisegnata,
+con Olgiate sud nell'ala ovest e San Zeno/Via Cantù nell'ala est**, più
 due benchmark già esistenti (migliore linea singola Arlate/Rovagnate e due
 circuiti hub-connected). Il fascicolo da consegnare
 all'Agenzia/operatore richiede soltanto quattro verifiche prima della
