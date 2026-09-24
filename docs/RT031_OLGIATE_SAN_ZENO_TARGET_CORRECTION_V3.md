@@ -60,6 +60,10 @@ nelle altre due, nessuno. Le due sequenze occupano rispettivamente gli indici
 538–581 e 521–564 del percorso stradale completo. Sono segmenti da ispezionare,
 non 44 possibili fermate e neppure una proposta di posizione. Nessun lato di
 salita, attraversamento o spazio di arresto è ancora certificato.
+La [CI aggiornata](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/35979793544)
+ha verificato due repliche identiche dell'inventario esteso: artefatto
+`10799751009`, JSON SHA-256
+`5218bc54076d0fe081d04b2cbc4bba09bcc7463deab9ef4cf3fa9d530e7b5b8e`.
 
 Tre esempi mostrano perché il punto più vicino non è automaticamente giusto:
 

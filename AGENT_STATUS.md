@@ -77,7 +77,10 @@ are off the current figure-eight route and carry OSM sidewalk=no.
 
 The RT017 Via Cantu survey sequence has now been exported in route order:
 44 directed edges, 980.10 m on each reverse variant; zero on each requested
-order variant. There is still no catalogued candidate on that way, and a
+order variant. CI run `35979793544` passed with two identical replicas;
+artifact `10799751009`, JSON SHA256
+`5218bc54076d0fe081d04b2cbc4bba09bcc7463deab9ef4cf3fa9d530e7b5b8e`.
+There is still no catalogued candidate on that way, and a
 road segment is not a certified stop location. No route, new stop, schedule,
 PRIMARY or RUNNER-UP has been selected; caller Decision Contract values
 remain null.
