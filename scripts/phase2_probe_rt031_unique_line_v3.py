@@ -184,7 +184,7 @@ def main(paths, output):
     payload = {
         "contract": "RT031_UNIQUE_LINE_ROAD_SCREEN_V3",
         "status": "CONDITIONAL_WAYPOINT_SHORTEST_PATH_DIAGNOSTIC",
-        "source_sha256": {key: digest(paths[key], key.endswith("normalized_newlines"))
+        "source_sha256": {key: digest(paths[key], key in ("candidates_normalized_newlines", "anchor"))
                           for key in paths},
         "north_proxy": {"anchor_status": "ASSUMPTION", "road_way_id": "581532442",
                         "graph_node_id": north_node,
