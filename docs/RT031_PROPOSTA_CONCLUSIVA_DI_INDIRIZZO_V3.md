@@ -11,8 +11,9 @@ vincitore del torneo che non lo sono. Non riapre la ricerca indiscriminata.
 Portare agli enti e al sopralluogo una **sola linea pubblica riconoscibile,
 nome di lavoro «Linea 8»**, incernierata su **Olgiate-Calco-Brivio FS**, con
 un'ala occidentale e una orientale, percorsi di ritorno progettati per non
-obbligare i passeggeri a un giro eccessivo verso la stazione, e la **zona
-residenziale di Olgiate a sud della SS342 come parte del tracciato ordinario**.
+obbligare i passeggeri a un giro eccessivo verso la stazione, la **zona
+residenziale di Olgiate a sud della SS342 come parte del tracciato ordinario**
+e **San Zeno/Via Cantù come esigenza separata ma inclusa nel disegno**.
 La geometria dell'8 è il linguaggio preferito dal committente, non l'obbligo
 di riprodurre i quattro vecchi percorsi RT031. Un percorso più corto con la
 stessa identità di servizio deve prevalere se rende migliori frequenza,
@@ -27,11 +28,14 @@ passeggero.
    un punto ordinario sicuro da verificare nell'intorno di Via Aldo Moro e
    Casa di Comunità) → FS. Verificare anche l'ordine inverso.
 2. Ala est: FS → Calco Cornello/centro → Arlate → Brivio centro → Beverate
-   → FS. Cercare le fermate utili di Calco alta e il collegamento al nord
-   residenziale di Olgiate/San Zeno–Via Cantù **senza confonderlo con il
-   quartiere sud**; verificarne l'effetto su tempo di ciclo e accesso a FS
-   nei due versi.
-3. Crescenzaga/Pianezzo e Cassina restano opportunità da confrontare, non
+   → FS. Cercare le fermate utili di Calco alta.
+3. Innesto Olgiate nord: includere San Zeno/Via Cantù come esigenza
+   territoriale distinta dal quartiere sud, preferibilmente con un passaggio
+   utile e leggibile verso FS nei due versi. L'inclusione è parte del brief,
+   ma deve essere provata su strada, tempi di ciclo e accesso passeggeri:
+   non basta attraversare Via Cantù, e non si può usare San Zeno per
+   dichiarare servita la zona sud.
+4. Crescenzaga/Pianezzo e Cassina restano opportunità da confrontare, non
    deviazioni da imporre a ogni corsa: il primo richiede verifica del sito;
    «Cassina» richiede ancora una localizzazione univoca. Non contare una
    località come servita per il solo passaggio sulla strada.
@@ -42,7 +46,8 @@ di salita/discesa e degli accessi a FS. Conservare le fermate attuali è una
 quanti residenti perdono accesso a 5/8/10 minuti e quale nuova fermata li
 serve. Il numero di fermate della D184/D185 non è né un obiettivo né un
 limite automatico. Olgiate FS è il nodo fermo; la zona sud non è sostituibile
-con l'ancora San Zeno posta a nord della statale.
+con San Zeno/Via Cantù, e San Zeno/Via Cantù non va esclusa solo perché il
+quartiere sud è stato aggiunto al brief.
 
 ## Prodotto di servizio proposto per la verifica
 
@@ -89,16 +94,17 @@ ricavata retroattivamente.
 
 Non produrre altre migliaia di profili senza un oggetto concreto. La fase di
 studio si conclude con **un solo brief di progettazione: Linea 8 ridisegnata
-con sud Olgiate**, più due benchmark già esistenti (migliore linea singola
-Arlate/Rovagnate e due circuiti hub-connected). Il fascicolo da consegnare
+con sud Olgiate e San Zeno/Via Cantù inclusi come esigenze distinte**, più
+due benchmark già esistenti (migliore linea singola Arlate/Rovagnate e due
+circuiti hub-connected). Il fascicolo da consegnare
 all'Agenzia/operatore richiede soltanto quattro verifiche prima della
 decisione di esercizio:
 
 1. **Sopralluogo e instradamento completo:** sito sicuro/accessibile nel
-   quartiere sud, limiti dimensionali/stradali, fermate effettive nei due
-   versi; percorso chiuso con memoria completa delle restrizioni e senza
-   perdite delle località core. La Casa di Comunità speciale non diventa
-   automaticamente fermata ordinaria.
+   quartiere sud e per San Zeno/Via Cantù, limiti dimensionali/stradali,
+   fermate effettive nei due versi; percorso chiuso con memoria completa
+   delle restrizioni e senza perdite delle località core. La Casa di
+   Comunità speciale non diventa automaticamente fermata ordinaria.
 2. **Orario ed esercizio:** entrambe le direzioni, eventi ordinati, tempi
    rilevati inclusi dwell e recupero, blocchi veicolo, chilometri complessivi
    (anche riposizionamenti) e calendario. Conteggiare *tutte* le corse dei
@@ -106,10 +112,11 @@ decisione di esercizio:
    la produzione. Applicare la policy o far approvare esplicitamente la
    classe mista H30 punta/H60 morbida.
 3. **Utilità e salvaguardia:** tempi effettivi verso/da FS per frazione,
-   accesso 5/8/10 minuti in ciascuno dei cinque comuni e nell'area sud
-   concordata, variazione delle fermate attuali, robustezza ingegneristica
-   e coincidenze S8 nei due versi. Confrontare lo stesso substrato con i
-   due benchmark, senza OD o probabilità inventate.
+   accesso 5/8/10 minuti in ciascuno dei cinque comuni, nell'area sud
+   concordata e nell'area San Zeno/Via Cantù, variazione delle fermate
+   attuali, robustezza ingegneristica e coincidenze S8 nei due versi.
+   Confrontare lo stesso substrato con i due benchmark, senza OD o
+   probabilità inventate.
 4. **Decisione pubblica:** se 1–3 passano, approvare percorso, orario e
    fermate. Se falliscono, **non sostituire D184/D185 con un servizio
    peggiore solo per poter dire che il progetto è chiuso**: presentare il
