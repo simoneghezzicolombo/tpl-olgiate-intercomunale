@@ -62,6 +62,29 @@ way della candidata. Servono un percorso bus legale fino al sito,
 fermata sicura, eventi di salita nei versi utili e tempi verso FS.
 L'audit non seleziona né fermata né linea.
 
+### Verifica stradale condizionale sulla fermata meridionale
+
+Un [probe riproducibile](../scripts/phase2_audit_rt031_south_road_probe_v3.py)
+ha ora proiettato `P2V2S_0031` sul suo segmento della Via Aldo Moro nel
+grafo stradale RT017 fissato e ha calcolato percorsi **nei due versi** da/per
+l'attacco certificato di Olgiate FS, rispettando le restrizioni via-node
+rappresentate. Nel modello: FS → punto proposto **1,542 km / 3,924 min**;
+punto proposto → FS **1,477 km / 3,760 min**. Sono tempi di sola marcia,
+senza fermata, sosta, traffico o margine di recupero. Nessuno dei due
+percorsi usa i due via-way delle restrizioni note nell'involucro successivo.
+L'[esito machine-readable](../outputs/phase2/rt031_south_olgiate_road_probe_v3/probe.json)
+conserva gli edge ID e i way ID, le impronte degli input e i limiti.
+
+Questo **non** certifica una nuova linea: la prova di completezza delle
+restrizioni via-way esistente vale soltanto per i vettori atomici RT023, non
+per questa nuova composizione. Il sito è ancora `FIELD_CHECK_PENDING` e
+mancano dimensioni/limiti della strada, fermate sicure nei versi utili,
+inserimento nel ciclo unico e orario. Il risultato trasforma però una
+semplice distanza in linea d'aria in una concreta ipotesi stradale
+bidirezionale da sottoporre alle verifiche successive. Non va sommato
+automaticamente al chilometraggio della figura a otto: un innesto reale
+potrebbe sostituire o modificare altri tratti.
+
 I risultati storici che seguono sui tre siti vicino al POI sportivo legacy
 restano controlli aritmetici locali, ma riguardano un'altra zona. Il nuovo
 screen sopra confronta già le unità di popolazione dell'area meridionale;

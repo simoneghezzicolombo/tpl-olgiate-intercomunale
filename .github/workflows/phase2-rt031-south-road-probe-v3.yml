@@ -1,0 +1,61 @@
+name: RT031 south Olgiate pinned road probe V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - scripts/phase2_audit_rt031_south_road_probe_v3.py
+      - tests/test_phase2_rt031_south_road_probe_v3.py
+      - outputs/phase2/rt031_south_olgiate_road_probe_v3/probe.json
+      - .github/workflows/phase2-rt031-south-road-probe-v3.yml
+      - outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv
+  pull_request:
+    paths:
+      - scripts/phase2_audit_rt031_south_road_probe_v3.py
+      - tests/test_phase2_rt031_south_road_probe_v3.py
+      - outputs/phase2/rt031_south_olgiate_road_probe_v3/probe.json
+      - .github/workflows/phase2-rt031-south-road-probe-v3.yml
+      - outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv
+permissions:
+  contents: read
+  actions: read
+jobs:
+  pinned-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install pytest
+      - run: python -m pytest tests/test_phase2_rt031_south_road_probe_v3.py -q
+      - name: Verify and fetch pinned evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REPO="${{ github.repository }}"
+          test "$(gh api "repos/$REPO/actions/artifacts/9972204236" --jq .digest)" = 'sha256:e0b71f6fd673345c3bc0bf8e32ecf66b7f620e27802f1eb5b24690a8295c8225'
+          test "$(gh api "repos/$REPO/actions/artifacts/9988386073" --jq .digest)" = 'sha256:1cab2e18eec4920cbdb348d0d9cd224c7516f8d62bc63b0eacf2a91f6fb134d7'
+          test "$(gh api "repos/$REPO/actions/artifacts/10023387513" --jq .digest)" = 'sha256:1603606d02a170567c1d423b7689b7044933fff6490caeaf848ae0ca0f2d77d0'
+          gh run download 33975545284 -n rt017-final-certified-evidence-v3 -D /tmp/rt031-south/rt017
+          gh run download 34030321683 -n phase2-rt022-minimum-backbones-v3-real -D /tmp/rt031-south/rt022
+          gh run download 34134177590 -n rt031-successor-via-way-relevance-v3 -D /tmp/rt031-south/successor
+      - name: Reproduce both directions twice
+        run: |
+          set -euo pipefail
+          for replica in a b; do
+            python -m scripts.phase2_audit_rt031_south_road_probe_v3 \
+              --edges /tmp/rt031-south/rt017/frozen_graph_edges.csv.gz \
+              --nodes /tmp/rt031-south/rt017/frozen_graph_nodes.csv.gz \
+              --rules /tmp/rt031-south/rt017/frozen_turn_rules.csv.gz \
+              --attachments /tmp/rt031-south/rt022/stop_attachments.csv \
+              --successor /tmp/rt031-south/successor/rt031-successor-via-way-relevance.json \
+              --candidates_normalized_newlines outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+              --output "/tmp/rt031-south/probe-$replica.json"
+          done
+          cmp /tmp/rt031-south/probe-a.json /tmp/rt031-south/probe-b.json
+          cmp /tmp/rt031-south/probe-a.json outputs/phase2/rt031_south_olgiate_road_probe_v3/probe.json
