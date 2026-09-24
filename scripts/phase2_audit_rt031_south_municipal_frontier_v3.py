@@ -56,6 +56,11 @@ def main(paths, output):
     stops = set().union(*(set(p["available_stop_ids"]) for p in profiles))
     if "P2V2S_0031" in stops:
         raise ValueError("southern proposed stop unexpectedly in frontier")
+    profiles_traversing_candidate_way = sum(
+        any(edge["source_edge"]["osm_way_id"] == "40627763"
+            for component in profile["typed_network"]["payload"]["components"].values()
+            for edge in component["location_expansion"]["payload"]["carrier"])
+        for profile in profiles)
     reachable = {stop: {threshold: set() for threshold in (5, 8, 10)}
                  for stop in stops}
     observed_stops = set()
@@ -115,6 +120,8 @@ def main(paths, output):
         "metric_semantics": "modelled population share within provisional area with <=10 min graph walk to any profile stop identity; not a served passenger journey",
         "provisional_area_not_caller_polygon": True,
         "new_southern_stop_in_profile_domain": False,
+        "profiles_traversing_southern_candidate_osm_way_40627763":
+            profiles_traversing_candidate_way,
         "network_selected": False,
         "primary_selection_authorised": False,
         "runner_up_selection_authorised": False,
