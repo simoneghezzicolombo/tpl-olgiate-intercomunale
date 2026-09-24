@@ -247,6 +247,14 @@ mostra che nel cap si possono scambiare corse fra le ali, ma non ottenere
 H60 per 10 ore in entrambe. La sola identità pubblica «Linea 8» non
 garantisce continuità a bordo o frequenza uguale nelle due ali.
 
+La [scheda per gli enti](RT031_LINEA8_PROPOSTA_UNICA_PER_ENTI_V3.md)
+espone anche i minuti di sola marcia verso FS per ogni waypoint nei due
+sensi della variante 10/11. Il migliore è entro circa 12,1 minuti per
+tutti i waypoint rappresentativi, ma l'altro può superare 20–25 minuti.
+Questa è una ragione concreta per **orariare e verificare entrambi i sensi**,
+non per dichiarare già certi i viaggi dei passeggeri: eventi di salita,
+attesa, sosta, accesso a piedi e coincidenze S8 restano da dimostrare.
+
 Queste grandezze sono di **accesso potenziale**, tracciato e produzione
 condizionale. L'OD lavoro è comunale, non assegnato a percorsi/passeggeri;
 non esistono GJT pesate per domanda o probabilità empiriche di mancata

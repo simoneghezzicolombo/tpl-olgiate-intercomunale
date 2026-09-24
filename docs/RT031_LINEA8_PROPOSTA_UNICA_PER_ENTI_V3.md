@@ -75,6 +75,34 @@ ma aggiunge **1,464 km per giro completo** rispetto alla versione a 10/11.
 È un'alternativa esplicita di conservazione delle fermate, non una scelta
 automatica: l'effetto su tempi, risorse e viaggi verso FS va verificato.
 
+### Direttezza verso FS: perché servono davvero i due sensi
+
+Nel [percorso 10/11 modellato](../outputs/phase2/rt031_current_stop_repair_v3/road_options.json),
+i minuti di **sola marcia stradale dal punto rappresentativo al successivo
+passaggio a FS** cambiano molto con il senso del giro:
+
+| Punto rappresentativo | Senso nell'ordine sopra | Senso inverso |
+| --- | ---: | ---: |
+| Monticello/Scarpone | 19,6 | 3,6 |
+| Rovagnate | 15,5 | 7,7 |
+| Santa Maria Hoè | 11,4 | 11,7 |
+| Olgiate sud | 3,8 | 19,2 |
+| Calco/Via Garibaldi | 25,5 | 1,9 |
+| Arlate | 19,5 | 7,9 |
+| Brivio centro | 14,0 | 12,1 |
+| Beverate | 9,1 | 16,9 |
+| San Zeno/Via Cantù | 2,4 | 24,4 |
+
+Il migliore dei due sensi è entro circa 12,1 minuti per tutti i waypoint
+di questa versione: è il vantaggio potenziale della forma a otto, **non
+una garanzia di viaggio**. La tabella omette attesa, sosta e cammino;
+i punti stradali non sono fermate certificate e i due sensi non hanno
+ancora eventi di salita e orari verificati. Offrire soltanto il senso
+lungo, o orariare quello rapido in modo inutilizzabile per S8, annullerebbe
+gran parte del beneficio. La verifica dell'operatore deve quindi mostrare
+per ciascun punto i tempi **porta/fermata→FS in entrambi i sensi**, insieme
+alle partenze effettive, non solo la lunghezza dell'intera linea.
+
 Il cap vigente è **111.419 bus-km/anno**. Con 260 giorni ipotetici, dieci
 giri completi per verso al giorno produrrebbero circa **122.991 km/anno**
 già nel modello; perfino il limite inferiore stradale ottimistico è

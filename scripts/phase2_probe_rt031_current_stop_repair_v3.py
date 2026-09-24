@@ -31,6 +31,33 @@ def path_stops(screen, edges, eligible):
     return {stop for stop, node in eligible.items() if node in nodes}
 
 
+def waypoint_running_to_fs(lobe, forward, reverse):
+    """Model road running to the next FS along either declared lobe direction."""
+    labels = [label for label, _ in lobe]
+    if (forward["ordered_waypoints"] != labels
+            or reverse["ordered_waypoints"] != list(reversed(labels))):
+        raise ValueError("lobe waypoint ordering drift")
+    if (len(forward["legs"]) != len(lobe) - 1
+            or len(reverse["legs"]) != len(lobe) - 1):
+        raise ValueError("lobe leg count drift")
+    result = []
+    for index, (label, stop) in enumerate(lobe[1:-1], start=1):
+        reverse_index = len(lobe) - 1 - index
+        result.append({
+            "waypoint_label": label,
+            "waypoint_id": stop,
+            "forward_running_minutes_from_waypoint_to_next_fs_excluding_dwell": round(
+                sum(leg["running_minutes_model"] for leg in forward["legs"][index:]), 6),
+            "reverse_running_minutes_from_waypoint_to_next_fs_excluding_dwell": round(
+                sum(leg["running_minutes_model"] for leg in reverse["legs"][reverse_index:]), 6),
+            "forward_running_minutes_from_fs_to_waypoint_excluding_dwell": round(
+                sum(leg["running_minutes_model"] for leg in forward["legs"][:index]), 6),
+            "reverse_running_minutes_from_fs_to_waypoint_excluding_dwell": round(
+                sum(leg["running_minutes_model"] for leg in reverse["legs"][:reverse_index]), 6),
+        })
+    return result
+
+
 def main(paths, output):
     edges, _, rules, attachments = build_graph(paths)
     road = json.loads(paths["road_screen"].read_text(encoding="utf-8"))
@@ -179,6 +206,10 @@ def main(paths, output):
             "west_reverse_lobe_distance_m": wr["distance_m"],
             "east_forward_lobe_distance_m": ef["distance_m"],
             "east_reverse_lobe_distance_m": er["distance_m"],
+            "west_waypoint_road_running_minutes": waypoint_running_to_fs(
+                selected_west, wf, wr),
+            "east_waypoint_road_running_minutes": waypoint_running_to_fs(
+                east_repair, ef, er),
             "forward_running_minutes_model_excluding_dwell_recovery": round(
                 wf["running_minutes_model"] + ef["running_minutes_model"], 6),
             "reverse_running_minutes_model_excluding_dwell_recovery": round(
@@ -205,6 +236,7 @@ def main(paths, output):
         "combined_repair_order_options": combined,
         "single_insertion_options_are_separate_from_combined_options": True,
         "road_node_encounter_is_not_a_passenger_boarding_event": True,
+        "waypoint_road_running_minutes_are_passenger_journeys": False,
         "full_history_via_way_composition_certified": False,
         "vehicle_suitability_and_stop_safety_certified": False,
         "network_selected": False,

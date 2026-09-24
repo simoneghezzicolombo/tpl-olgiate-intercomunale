@@ -5,12 +5,14 @@ on:
     branches: [codex/rt031-decision-convergence]
     paths:
       - scripts/phase2_probe_rt031_current_stop_repair_v3.py
+      - tests/test_phase2_rt031_waypoint_running_v3.py
       - outputs/phase2/rt031_current_stop_repair_v3/road_options.json
       - outputs/phase2/rt031_unique_line_road_screen_v3/screen.json
       - .github/workflows/phase2-rt031-current-stop-repair-v3.yml
   pull_request:
     paths:
       - scripts/phase2_probe_rt031_current_stop_repair_v3.py
+      - tests/test_phase2_rt031_waypoint_running_v3.py
       - outputs/phase2/rt031_current_stop_repair_v3/road_options.json
       - outputs/phase2/rt031_unique_line_road_screen_v3/screen.json
       - .github/workflows/phase2-rt031-current-stop-repair-v3.yml
@@ -28,6 +30,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+      - name: Check waypoint direction arithmetic
+        run: python -m unittest discover -s tests -p test_phase2_rt031_waypoint_running_v3.py
       - name: Verify and fetch pinned road evidence
         env:
           GH_TOKEN: ${{ github.token }}
