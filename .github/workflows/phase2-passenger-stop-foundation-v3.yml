@@ -1,0 +1,127 @@
+name: Phase 2 Passenger Stop Foundation V3
+
+on:
+  push:
+    branches:
+      - phase2-stop-pattern-redesign-v3
+    paths:
+      - scripts/phase2_build_passenger_stop_foundation_v3.py
+      - config/phase2_territorial_service_contract_v3.csv
+      - .github/workflows/phase2-passenger-stop-foundation-v3.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Materialise pinned Current Service Baseline V4 cluster input
+        run: |
+          git fetch origin phase2-current-service-baseline-v4 --no-tags
+          mkdir -p /tmp/current-v4
+          git show origin/phase2-current-service-baseline-v4:outputs/phase2/current_service_access_baseline_v4/current_service_physical_stop_clusters_v4.csv > /tmp/current-v4/current_service_physical_stop_clusters_v4.csv
+          test "$(sha256sum /tmp/current-v4/current_service_physical_stop_clusters_v4.csv | cut -d' ' -f1)" = "b9690e2814d93c62f26b104cd5713cb097ac64898b8d0c53bfbf64afff0404c9"
+
+      - name: Compile passenger-stop foundation builder
+        run: python -m py_compile scripts/phase2_build_passenger_stop_foundation_v3.py
+
+      - name: Build passenger-stop foundation V3
+        run: |
+          python scripts/phase2_build_passenger_stop_foundation_v3.py \
+            --existing-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --proposed-stops outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+            --settlements outputs/phase2/stop_universe_v2/settlement_destination_anchors.csv \
+            --current-v4-clusters /tmp/current-v4/current_service_physical_stop_clusters_v4.csv \
+            --territorial-contract config/phase2_territorial_service_contract_v3.csv \
+            --output-dir outputs/phase2/stop_pattern_redesign_v3
+
+      - name: Validate V3 foundation contract
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root=Path('outputs/phase2/stop_pattern_redesign_v3')
+          d=json.loads((root/'passenger_stop_foundation_v3_validation.json').read_text(encoding='utf-8'))
+          assert d['status']=='PASS_PASSENGER_STOP_FOUNDATION_V3'
+          assert d['route_generation_performed'] is False
+          assert d['topology_ranked'] is False
+          assert d['primary_selected'] is False
+          assert d['runner_up_selected'] is False
+          assert d['structural_waypoints_equated_to_passenger_stops'] is False
+          assert d['territorial_contract_unresolved_evidence_rows']==[]
+          assert 'AREA_SAN_ZENO' in d['intentionally_documented_missing_certified_anchor_areas']
+          assert d['proposed_candidates_are_automatically_finalist_ready'] is False
+          assert d['proposed_field_check_pending_count'] > 0
+          assert d['proposed_finalist_ready_now_count'] == 0
+          assert set(d['municipality_counts']) == {'Olgiate Molgora','Calco','Brivio','Santa Maria Hoè','La Valletta Brianza'}
+          for municipality, counts in d['municipality_counts'].items():
+              assert counts['current_d184_d185_reuse_ready'] > 0, (municipality, counts)
+              assert counts['proposed_hypothesis_total'] > 0, (municipality, counts)
+          rows=list(csv.DictReader((root/'passenger_stop_foundation_v3.csv').open(encoding='utf-8')))
+          assert rows
+          assert any(r['stop_class']=='EXISTING_OFFICIAL' and r['finalist_stop_ready']=='true' for r in rows)
+          assert not any(r['stop_class']=='PROPOSED_HYPOTHESIS' and r['finalist_stop_ready']=='true' for r in rows)
+          audit=list(csv.DictReader((root/'territorial_service_audit_points_v3.csv').open(encoding='utf-8')))
+          assert any(r['area_id']=='AREA_ARLATE' and r['evidence_resolved_as_declared']=='true' for r in audit)
+          assert any(r['area_id']=='AREA_CALCO_SUPERIORE' and r['evidence_resolved_as_declared']=='true' for r in audit)
+          assert any(r['area_id']=='AREA_BRIVIO_CENTRO' and r['evidence_resolved_as_declared']=='true' for r in audit)
+          assert any(r['area_id']=='AREA_SAN_ZENO' and r['evidence_status']=='MISSING_CERTIFIED_ANCHOR' for r in audit)
+          print(json.dumps({
+            'existing_foundation_stop_count': d['existing_foundation_stop_count'],
+            'proposed_hypothesis_count': d['proposed_hypothesis_count'],
+            'proposed_field_check_pending_count': d['proposed_field_check_pending_count'],
+            'municipality_counts': d['municipality_counts'],
+          }, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/passenger-foundation-rebuild
+          python scripts/phase2_build_passenger_stop_foundation_v3.py \
+            --existing-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --proposed-stops outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+            --settlements outputs/phase2/stop_universe_v2/settlement_destination_anchors.csv \
+            --current-v4-clusters /tmp/current-v4/current_service_physical_stop_clusters_v4.csv \
+            --territorial-contract config/phase2_territorial_service_contract_v3.csv \
+            --output-dir /tmp/passenger-foundation-rebuild >/dev/null
+          cmp outputs/phase2/stop_pattern_redesign_v3/passenger_stop_foundation_v3.csv /tmp/passenger-foundation-rebuild/passenger_stop_foundation_v3.csv
+          cmp outputs/phase2/stop_pattern_redesign_v3/territorial_service_audit_points_v3.csv /tmp/passenger-foundation-rebuild/territorial_service_audit_points_v3.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/stop_pattern_redesign_v3/passenger_stop_foundation_v3_validation.json').read_text())
+          b=json.loads(Path('/tmp/passenger-foundation-rebuild/passenger_stop_foundation_v3_validation.json').read_text())
+          for d in (a,b):
+              for v in d['lineage'].values(): v.pop('path', None)
+          assert a==b
+          PY
+
+      - name: Epistemic and anti-invention guard
+        run: |
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|winner|recommended route|primary recommendation' scripts/phase2_build_passenger_stop_foundation_v3.py
+          grep -q 'FIELD_CHECK_REQUIRED' scripts/phase2_build_passenger_stop_foundation_v3.py
+          grep -q 'MISSING_CERTIFIED_ANCHOR' config/phase2_territorial_service_contract_v3.csv
+          git diff --check
+
+      - name: Persist passenger-stop foundation evidence
+        run: |
+          git config user.name "phase2-stop-foundation-v3-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/stop_pattern_redesign_v3/passenger_stop_foundation_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/territorial_service_audit_points_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/passenger_stop_foundation_v3_validation.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist passenger-stop foundation V3 [skip ci]"
+            git push origin HEAD:phase2-stop-pattern-redesign-v3
+          fi

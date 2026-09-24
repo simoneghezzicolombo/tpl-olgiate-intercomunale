@@ -1,0 +1,40 @@
+polygon_municipality,asf_stop_name,asf_stop_code,route_id,source_endpoint,source_status
+Olgiate Molgora,Olgiate Molgora - Scarpone,OLGMOA05,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Olgiate Molgora,Olgiate Molgora - Scarpone,OLGMOR05,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Olgiate Molgora,Olgiate Molgora - Via Della Salute,OLGMOA06,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Olgiate Molgora,Olgiate Molgora - Via Della Salute,OLGMOR06,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Olgiate Molgora,Olgiate Molgora - Via Statale,OLGMOA04,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Olgiate Molgora,Olgiate Molgora - Via Statale,OLGMOR04,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Calco,Calco - Largo Pomea,CALCOA06,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Calco,Calco - Largo Pomea,CALCOR06,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Calco,Calco - Via Garibaldi,CALCOA05,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Calco,Calco - via Garibaldi,CALCOR05,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Calco,Arlate - Bivio per il Paese,CALCOA07,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Calco,Arlate - Bivio per il Paese,CALCOR07,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Calco,Arlate - Cantina Pirovano,CALCOA08,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Calco,Arlate - Cantina Pirovano,CALCOR08,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Calco,Arlate - B.vio Brivio - Madonnina,CALCOA09,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Calco,Imbersago - Località Cazzulino,IMBERA07,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Calco,Imbersago - Località Cazzulino,IMBERR07,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Brivio,Beverate - Cartello Paese,BRIVIA05,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Brivio,Beverate - Cartello Paese,BRIVIR05,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Brivio,Vaccarezza - Cartello Paese,BRIVIA04,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Brivio,Vaccarezza - Cartello Paese,BRIVIR04,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Brivio,Brivio - Bar Cristallo,BRIVIA03,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Brivio,Brivio - Bar Cristallo,BRIVIR03,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Brivio,Brivio - via Como - Pensilina,BRIVIA06,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Brivio,Brivio - Via Como - Pensilina,BRIVIR06,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+La Valletta Brianza,Rovagnate - S.S. - Ang. V. Lombardia,ROVAGA01,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+La Valletta Brianza,Rovagnate - S.S. - Ang. V. Lombardia,ROVAGR01,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+La Valletta Brianza,Rovagnate - Strada Statale - AGIP,ROVAGA03,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+La Valletta Brianza,Rovagnate - Strada Statale - AGIP,ROVAGR03,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+La Valletta Brianza,Perego - Via Statale 79,PERE_A01,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+La Valletta Brianza,Perego - Via Statale 79,PERE_R01,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Santa Maria Hoè,Santa Maria Hoè - Via Giovanni XXIII,SAMAHA04,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Santa Maria Hoè,Santa Maria Hoè - Via Giovanni XXIII,SAMAHR04,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Santa Maria Hoè,Santa Maria Hoè - Via Como,SAMAHA01,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Santa Maria Hoè,Santa Maria Hoè - Via Como,SAMAHR01,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Santa Maria Hoè,S. Maria Hoè - S.P. 58 ang. Via Cenisio,SAMAHA03,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Santa Maria Hoè,S. Maria Hoè - S.P. 58 ang. Via Cenisio,SAMAHR03,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Santa Maria Hoè,Rovagnate - Frazione Alduno,ROVAGA04,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR
+Santa Maria Hoè,Rovagnate - Frazione Alduno,ROVAGAR4,2:C_46,https://transitpay.asfautolinee.it/otp/routers/default/index/routes/2:C_46/stops,OFFICIAL_ASF_OTP_EXTRACT_REPORTED_BY_PARALLEL_EXECUTOR

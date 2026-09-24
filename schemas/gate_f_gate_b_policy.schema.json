@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gate_f_gate_b_policy.schema.json",
+  "title": "Gate F Gate B scenario coverage policy",
+  "type": "object",
+  "required": [
+    "schema_version", "comparison_id", "threshold_min", "max_stop_snap_m",
+    "walk_connector_kmh", "territory_definition_id"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "comparison_id": {"type": "string", "minLength": 1},
+    "threshold_min": {"type": "number", "exclusiveMinimum": 0},
+    "max_stop_snap_m": {"type": "number", "exclusiveMinimum": 0},
+    "walk_connector_kmh": {"type": "number", "exclusiveMinimum": 0},
+    "territory_definition_id": {"type": "string", "minLength": 1}
+  }
+}

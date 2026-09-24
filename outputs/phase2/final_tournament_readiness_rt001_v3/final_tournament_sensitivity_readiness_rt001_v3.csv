@@ -1,0 +1,11 @@
+dimension,requirement,materialized_values,readiness_status,authorized_for_final_selection,limitation
+WALK_WEIGHT,REQUIRED,"[1.5, 1.75, 2.0]",PARAMETER_GRID_ONLY,false,Full passenger journeys are not spatially allocated to candidate routes.
+WAIT_WEIGHT,REQUIRED,"[1.5, 2.0, 2.5]",PARAMETER_GRID_ONLY,false,Full passenger journeys are not spatially allocated to candidate routes.
+BUS_RUNNING_TIME,REQUIRED,"[0.0, 5.0, 10.0, 15.0]",PARTIAL_ENGINEERING_STRESS_ONLY,false,Only non-negative runtime stress is certified; the required decrease case is absent and no empirical distribution exists.
+DWELL_VARIATION,REQUIRED,[],MISSING,false,No certified Stage-E dwell sensitivity is materialised.
+RECOVERY_REQUIREMENT,REQUIRED,"[5, 10, 15]",AVAILABLE_ENGINEERING_SENSITIVITY,false,Recovery cases are evaluated but intentionally not selected.
+RAIL_DELAY,REQUIRED,[0.0],NOMINAL_ONLY,false,No certified non-zero rail-delay contract exists in the current lineage.
+ANNUAL_BUS_KM_ENVELOPE,REQUIRED,6,AVAILABLE_NOT_SELECTED,false,Six exact budget envelopes are materialised; the normative envelope remains a caller decision.
+DEMAND_WEIGHT_CHANGE,REQUIRED,[],MISSING,false,"Municipal OD is not spatially allocated to candidate routes, so plausible route-level demand perturbation is unavailable."
+FULL_DEMAND_WEIGHTED_GJT,DECISION_CONTRACT,false,MISSING,false,The certified journey universe explicitly reports full_gjt_ready=false.
+EMPIRICAL_MISSED_CONNECTION_PROBABILITY,DECISION_CONTRACT,false,MISSING,false,"Stage E reports deterministic retention under engineering stress, not a probability distribution."

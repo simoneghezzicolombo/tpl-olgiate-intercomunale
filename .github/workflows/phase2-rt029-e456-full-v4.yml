@@ -1,0 +1,225 @@
+name: Phase 2 RT-029 E4 E5 E6 Full Evaluation V4
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - rt029-e456-candidate-evaluation-v4
+    paths:
+      - "src/phase2_candidate_accessibility_pareto_v4.py"
+      - "src/phase2_rt029_v4_common.py"
+      - "src/phase2_rt029_v4_substrate.py"
+      - "src/phase2_rt029_v4_metrics.py"
+      - "src/phase2_rt029_v4_pareto.py"
+      - "scripts/phase2_run_rt029_e456_candidate_accessibility_pareto_v4.py"
+      - "tests/test_phase2_candidate_accessibility_pareto_v4.py"
+      - ".github/workflows/phase2-rt029-e456-full-v4.yml"
+      - "docs/PHASE2_RT029_E456_CANDIDATE_EVALUATION_V4.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  full-evaluation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: "src"
+      RT022_RUN_ID: "34030321683"
+      RT022_ARTIFACT_ID: "9988386073"
+      RT022_ARTIFACT_DIGEST: "sha256:1cab2e18eec4920cbdb348d0d9cd224c7516f8d62bc63b0eacf2a91f6fb134d7"
+      RT024_RUN_ID: "34032406204"
+      RT024_ARTIFACT_ID: "9989049119"
+      RT024_ARTIFACT_DIGEST: "sha256:6909e6c4395ad912eff7eeb2056cb9c8573975a647058e89f01263f2e1f69afc"
+      RT025_RUN_ID: "34032979836"
+      RT025_ARTIFACT_ID: "9989241752"
+      RT025_ARTIFACT_DIGEST: "sha256:725350ea9d2a42b75e58f7ec6240e381cde788e956f0de01046e1aad833419da"
+      RT023_RUN_ID: "34034770563"
+      RT023_ARTIFACT_ID: "9989805162"
+      RT023_ARTIFACT_DIGEST: "sha256:d206af90c247f87940f51db17e5497183199cceb9070e84124c0ef3b5ddba981"
+      RT028_RUN_ID: "34039162932"
+      RT028_ARTIFACT_ID: "9991182904"
+      RT028_ARTIFACT_DIGEST: "sha256:e1ca83699593dd9e605d2870667da1b4dfc6068436a0c3116faf8587901b2e28"
+      RT030_RUN_ID: "34043902080"
+      RT030_ARTIFACT_ID: "9992507233"
+      RT030_ARTIFACT_DIGEST: "sha256:350c5011565883228ccb52e186bc908a95fdc29f8dd4ebab21fd4c4cb16d6564"
+      RT030_PATTERNS_SHA256: "44fd5d95717ea99d8bee205fa1949c978b44074af4134420ac59bc8a0769684e"
+      OUT_DIR: "outputs/phase2/rt029_e456_candidate_accessibility_pareto_v4"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install minimal runtime
+        run: python -m pip install --upgrade pip numpy pandas pytest
+
+      - name: Run RT-029 V4 red-team tests
+        run: python -m pytest -q tests/test_phase2_candidate_accessibility_pareto_v4.py
+
+      - name: Verify all pinned upstream artifact identities
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${RT022_ARTIFACT_ID}" --jq '.digest')" = "${RT022_ARTIFACT_DIGEST}"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${RT024_ARTIFACT_ID}" --jq '.digest')" = "${RT024_ARTIFACT_DIGEST}"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${RT025_ARTIFACT_ID}" --jq '.digest')" = "${RT025_ARTIFACT_DIGEST}"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${RT023_ARTIFACT_ID}" --jq '.digest')" = "${RT023_ARTIFACT_DIGEST}"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${RT028_ARTIFACT_ID}" --jq '.digest')" = "${RT028_ARTIFACT_DIGEST}"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${RT030_ARTIFACT_ID}" --jq '.digest')" = "${RT030_ARTIFACT_DIGEST}"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RT022_RUN_ID}" --jq '.head_sha')" = "157badd6fc4aeaed4dcf19b08e37a48626b31b35"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RT024_RUN_ID}" --jq '.head_sha')" = "c6d86f8d91a0825e92ba52325af5ec3e200a8dc1"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RT025_RUN_ID}" --jq '.head_sha')" = "046fe3a9c8c88a60c88f7d70c830dd44e8bb940e"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RT023_RUN_ID}" --jq '.head_sha')" = "0d9a82caa1d1d624e0f6945e709f3548785fb8dc"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RT028_RUN_ID}" --jq '.head_sha')" = "10d54e32927701fad93095348de58ce4688fb41e"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RT030_RUN_ID}" --jq '.head_sha')" = "37873b8a8c693234603281283eec8ad88802fb7f"
+
+      - name: Download certified RT-022 E4 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: phase2-rt022-minimum-backbones-v3-real
+          path: _upstream/rt022
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 34030321683
+
+      - name: Download certified RT-024 E5 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: phase2-rt024-exact-five-edge-v3
+          path: _upstream/rt024
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 34032406204
+
+      - name: Download certified RT-025 E6 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: phase2-rt025-exact-six-edge-v3
+          path: _upstream/rt025
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 34032979836
+
+      - name: Download certified RT-023 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: rt023-service-pattern-realization-v3
+          path: _upstream/rt023
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 34034770563
+
+      - name: Download final canonical RT-028 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: rt028-final-stop-pedestrian-accessibility-substrate-v3
+          path: _upstream/rt028
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 34039162932
+
+      - name: Download certified RT-030 passenger-stop artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: rt030-passenger-stop-realization-v3
+          path: _upstream/rt030
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 34043902080
+
+      - name: Resolve and hash-lock exact input files
+        run: |
+          set -euo pipefail
+          E4="$(find _upstream/rt022 -type f -name 'minimum_topology_neutral_backbone_universe.csv' -print -quit)"
+          E5="$(find _upstream/rt024 -type f -name 'exact_five_edge_topology_neutral_structure_universe.csv' -print -quit)"
+          E6="$(find _upstream/rt025 -type f -name 'exact_six_edge_topology_neutral_structure_universe.csv' -print -quit)"
+          REALIZATIONS="$(find _upstream/rt023 -type f -name 'link_realization_catalog.csv' -print -quit)"
+          WALK="$(find _upstream/rt028 -type f -name 'rt028_population_unit_stop_walk_matrix_v3.csv' -print -quit)"
+          PATTERNS="$(find _upstream/rt030 -type f -name 'rt030_realization_passenger_stop_patterns.csv' -print -quit)"
+          RT030_AUDIT="$(find _upstream/rt030 -type f -name 'rt030_audit.json' -print -quit)"
+          for file in "${E4}" "${E5}" "${E6}" "${REALIZATIONS}" "${WALK}" "${PATTERNS}" "${RT030_AUDIT}"; do
+            test -n "${file}" && test -f "${file}"
+          done
+          test "$(sha256sum "${PATTERNS}" | awk '{print $1}')" = "${RT030_PATTERNS_SHA256}"
+          python - "${RT030_AUDIT}" <<'PY'
+          import json, sys
+          audit = json.load(open(sys.argv[1], encoding="utf-8"))
+          assert audit["status"] == "PASS"
+          assert audit["realization_count"] == 288
+          assert audit["endpoint_only_realization_count"] == 267
+          assert audit["realizations_with_one_intermediate_passenger_stop"] == 21
+          assert audit["recovered_intermediate_occurrence_count"] == 21
+          assert audit["route_proximity_buffer_m"] == 0.0
+          assert all(v is False for v in audit["negative_assertions"].values())
+          PY
+          {
+            echo "E4=${E4}"
+            echo "E5=${E5}"
+            echo "E6=${E6}"
+            echo "REALIZATIONS=${REALIZATIONS}"
+            echo "WALK=${WALK}"
+            echo "PATTERNS=${PATTERNS}"
+          } >> "${GITHUB_ENV}"
+
+      - name: Compile complete E4 E5 E6 candidate evaluation
+        run: |
+          set -euo pipefail
+          rm -rf "${OUT_DIR}"
+          python scripts/phase2_run_rt029_e456_candidate_accessibility_pareto_v4.py \
+            --e4-structures "${E4}" \
+            --e5-structures "${E5}" \
+            --e6-structures "${E6}" \
+            --realizations "${REALIZATIONS}" \
+            --passenger-patterns "${PATTERNS}" \
+            --walk-matrix "${WALK}" \
+            --output-dir "${OUT_DIR}"
+
+      - name: Deterministic byte-for-byte rebuild
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/rt029-e456-v4-rebuild
+          python scripts/phase2_run_rt029_e456_candidate_accessibility_pareto_v4.py \
+            --e4-structures "${E4}" \
+            --e5-structures "${E5}" \
+            --e6-structures "${E6}" \
+            --realizations "${REALIZATIONS}" \
+            --passenger-patterns "${PATTERNS}" \
+            --walk-matrix "${WALK}" \
+            --output-dir /tmp/rt029-e456-v4-rebuild
+          diff -qr "${OUT_DIR}" /tmp/rt029-e456-v4-rebuild
+
+      - name: Enforce RT-029 V4 decision contract
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("outputs/phase2/rt029_e456_candidate_accessibility_pareto_v4/rt029_e456_candidate_accessibility_pareto_audit_v4.json")
+          audit = json.loads(p.read_text(encoding="utf-8"))
+          assert audit["status"] == "PASS"
+          assert audit["structure_count"] == 112843
+          assert audit["layer_counts"] == {"4": 88, "5": 4076, "6": 108679}
+          assert audit["rt023_realization_count"] == 288
+          assert audit["decision_passenger_stop_set_count"] > 0
+          assert audit["shortlist_count"] > 0
+          assert audit["frontier_row_count"] > 0
+          assert all(v is False for v in audit["negative_assertions"].values())
+          forbidden_top_level = {
+              "primary", "runner_up", "winner", "rank", "weighted_composite_score",
+              "primary_structure_id", "runner_up_structure_id", "winner_structure_id",
+          }
+          assert not forbidden_top_level.intersection(audit)
+          PY
+
+      - name: Upload deterministic RT-029 E456 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rt029-e456-candidate-accessibility-pareto-v4
+          path: outputs/phase2/rt029_e456_candidate_accessibility_pareto_v4
+          if-no-files-found: error
+          retention-days: 90

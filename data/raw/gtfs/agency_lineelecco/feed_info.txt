@@ -1,0 +1,2 @@
+feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_contact_email,feed_contact_url,feed_version
+Linee Lecco S.p.A.,https://lineelecco.it/,it,20250913,20260608,,,UTC: 13-Sep-2025 12:24

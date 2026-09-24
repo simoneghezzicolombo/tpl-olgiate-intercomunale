@@ -1,0 +1,51 @@
+{
+  "source_scope": "ISTAT_2021_WORK_COMMUTING_ONLY",
+  "od_input": "data/raw/od/matrice_pendolarismo_istat_2021_core.csv",
+  "od_input_sha256": "defa63c8ef3d422017ebe4f5f1c2becc55f62ed76d9a052e167aece688efad3a",
+  "boundary_source": "https://www.istat.it/storage/cartografia/confini_amministrativi/non_generalizzati/2026/Limiti01012026.zip",
+  "rail_gtfs_routes_sha256": "b5dd85d2f2d51ab32bf55a2d8f7c3ddfb13b71e82f137badb5b6088d5d4fb31d",
+  "rail_gtfs_trips_sha256": "f74e8fcf721cec68ce2b0f925f97e59aa8700741bf589236eb19f75a346aad83",
+  "rail_gtfs_stop_times_sha256": "00bf5fecf631b6f5bfbcc1683cb4911bf451139e34f4297f17e441b0a86dcc8c",
+  "rail_gtfs_stops_sha256": "3d991975390570b657d57a5fc51819d66d87c2d7e4bc5247e22dbe5f5523d257",
+  "core_codes": [
+    "097010",
+    "097012",
+    "097058",
+    "097074",
+    "097092"
+  ],
+  "resident_workers": 8754,
+  "self_workers": 1315,
+  "other_core_workers": 1055,
+  "s8_direct_workers": 1882,
+  "other_external_workers": 4502,
+  "s8_direct_pct": 21.498743431574137,
+  "n_s8_gtfs_stop_records": 14,
+  "n_s8_municipalities": 11,
+  "s8_municipal_codes": [
+    "015146",
+    "015209",
+    "097002",
+    "097013",
+    "097020",
+    "097042",
+    "097058",
+    "097061",
+    "108004",
+    "108016",
+    "108033"
+  ],
+  "unmatched_2021_codes_against_2026_boundaries": [
+    "013228"
+  ],
+  "comparison_2011_status": "DEFERRED_PENDING_NORMALIZATION_AUDIT",
+  "classification_note": "S8_DIRECT means destination municipality contains an official S8 GTFS stop; it is not an observed rail modal share and excludes transfer-reachable destinations.",
+  "outputs": {
+    "outputs/phase2/od_2021_destinations_by_origin.csv": "cbe407f32c7d19b6f9adf914d2f3a7bcd8f9974028b7636849ef1d85b8230b51",
+    "outputs/phase2/od_2021_top_destinations_aggregate.csv": "2fcaf8ee9d2b4387d63ae1c6c83c5fb15c2df25dbbf974eb779fbadc279558aa",
+    "outputs/phase2/od_2021_corridor_summary.csv": "d1c45f68a6998df1681b74fb59277d2e1e9b45fc468f0c5cd587f6ceca7c0709",
+    "outputs/phase2/od_2021_inbound_origins_by_destination.csv": "b066db77f55cb63868325daa71f4fd64a9cdb7cec56dcdebcdb61bff4dae37b2",
+    "outputs/phase2/s8_station_municipalities.csv": "8c256464f7266b532781231acee7bb6d8da84eccf5ce3639da8375d489d26d1c",
+    "docs/PHASE2_DEMAND_PROFILE_2021.md": "77bb50136119ceb23ac50ade8a5c7ccefb8bb058fda8b0b5d5121eea2639334e"
+  }
+}

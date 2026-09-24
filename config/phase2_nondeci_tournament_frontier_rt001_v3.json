@@ -1,0 +1,241 @@
+{
+  "contract": "PHASE2_NON_DECISIONAL_CERTIFIED_METRIC_PARETO_FRONTIER_RT001_V3",
+  "contract_version": 3,
+  "purpose": "Expose non-dominated trade-offs in certified RT001 V3 metrics without constructing legacy CandidateEvaluation fields or selecting a recommendation.",
+  "identity_fields": [
+    "plan_context_id",
+    "selected_timetable_id"
+  ],
+  "partition_fields": [
+    "budget_suffix",
+    "evidence_completeness_class"
+  ],
+  "budget_semantics": "Each materialised annual bus-km envelope is evaluated as a separate sensitivity partition; no decision budget is selected.",
+  "evidence_completeness_classes": {
+    "BIDIRECTIONAL_ENGINEERING_RETENTION_AVAILABLE": "Stage E reports both BUS_TO_RAIL and RAIL_TO_BUS deterministic engineering-retention metrics.",
+    "NO_PLANNED_BUS_TO_RAIL_METRIC": "The context has no supported BUS_TO_RAIL generalized-access value and Stage E has no BUS_TO_RAIL summary metric for the exact timetable. Missing values are not imputed and rows are not compared against the complete class."
+  },
+  "dominance_rule": "Within one partition, A dominates B only when A is no worse on every applicable dimension and strictly better on at least one. Exact decimal comparisons use zero tolerance.",
+  "equivalence_rule": "Rows with identical applicable metric vectors are all retained and their equivalence multiplicity is reported.",
+  "missing_value_policy": "Never impute. Partition by the declared completeness class and require every applicable value inside that class.",
+  "weighted_composite_score": false,
+  "decision_budget_selected": false,
+  "uncertainty_band_selected": false,
+  "calendar_selected": false,
+  "recovery_selected": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false,
+  "prohibited_reinterpretations": [
+    "Stage-E deterministic retention or misses as empirical missed-connection probability",
+    "resident population accessibility weights as passenger demand",
+    "municipal work OD as route-level demand without certified spatial allocation",
+    "Stage-C generalized-access screening as demand-weighted GJT improvement",
+    "public route count as certified public-pattern complexity",
+    "separate uncertainty measures summed into an unverified-elements count"
+  ],
+  "dimensions": [
+    {
+      "field": "uniform_headway_min",
+      "direction": "min",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Declared uniform service headway; lower means more frequent service."
+    },
+    {
+      "field": "span_minutes",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Declared daily service span; higher means longer availability."
+    },
+    {
+      "field": "annual_service_days",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Declared annual service days; higher means broader calendar availability."
+    },
+    {
+      "field": "exact_annual_bus_km",
+      "direction": "min",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_D_RT001_V3",
+      "semantics": "Exact annual production of the selected timetable in this plan context."
+    },
+    {
+      "field": "public_population_coverage_share_5min",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Building-population accessibility coverage, not passenger demand."
+    },
+    {
+      "field": "public_population_coverage_share_8min",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Building-population accessibility coverage, not passenger demand."
+    },
+    {
+      "field": "public_population_coverage_share_10min",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Building-population accessibility coverage, not passenger demand."
+    },
+    {
+      "field": "public_worst_municipality_coverage_share_5min",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Worst-municipality accessibility coverage equity descriptor."
+    },
+    {
+      "field": "public_worst_municipality_coverage_share_8min",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Worst-municipality accessibility coverage equity descriptor."
+    },
+    {
+      "field": "public_worst_municipality_coverage_share_10min",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Worst-municipality accessibility coverage equity descriptor."
+    },
+    {
+      "field": "to_rail_reachable_share",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Potential feeder-dependent population reachable toward rail; not ridership."
+    },
+    {
+      "field": "from_rail_reachable_share",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Potential feeder-dependent population reachable from rail; not ridership."
+    },
+    {
+      "field": "bidirectional_reachable_share",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Potential feeder-dependent population reachable in both directions; not ridership."
+    },
+    {
+      "field": "to_rail_median_mean_generalized_access_min",
+      "direction": "min",
+      "required_when": "BUS_TO_RAIL_METRIC_PRESENT",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Pre-phase generalized feeder-access screening; not full passenger GJT."
+    },
+    {
+      "field": "from_rail_median_mean_generalized_access_min",
+      "direction": "min",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Pre-phase generalized feeder-access screening; not full passenger GJT."
+    },
+    {
+      "field": "retained_current_localizable_cluster_share_lower_bound",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "CURRENT_SERVICE_CONTINUITY_RT001_V3",
+      "semantics": "Retention share over exactly localisable current clusters; incomplete lower bound."
+    },
+    {
+      "field": "retained_current_localizable_directed_adjacent_pair_share_lower_bound",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "CURRENT_SERVICE_CONTINUITY_RT001_V3",
+      "semantics": "Directed corridor continuity over exactly localisable adjacent pairs; incomplete lower bound."
+    },
+    {
+      "field": "public_explicit_field_check_pending_count",
+      "direction": "min",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Count of explicit route elements still requiring field verification."
+    },
+    {
+      "field": "public_operational_unknown_distance_share_lower_bound",
+      "direction": "min",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_C_RT001_V3",
+      "semantics": "Lower-bound share of route distance with unresolved operational suitability."
+    },
+    {
+      "field": "stage_e_bus_to_rail_worst_retention_share_engineering",
+      "direction": "max",
+      "required_when": "BUS_TO_RAIL_METRIC_PRESENT",
+      "source_stage": "STAGE_E_RT001_V3",
+      "semantics": "Worst deterministic planned-connection retention across transfer profiles and bus runtime stress; not probability."
+    },
+    {
+      "field": "stage_e_rail_to_bus_worst_retention_share_engineering",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_E_RT001_V3",
+      "semantics": "Worst deterministic planned-connection retention across transfer profiles; rail delay is nominal-only; not probability."
+    },
+    {
+      "field": "stage_e_bidirectional_worst_retention_share_engineering",
+      "direction": "max",
+      "required_when": "BUS_TO_RAIL_METRIC_PRESENT",
+      "source_stage": "STAGE_E_RT001_V3",
+      "semantics": "Worst deterministic bidirectional retention descriptor, used only when both transfer directions are represented; not probability."
+    },
+    {
+      "field": "stage_e_bus_to_rail_max_service_gap_increase_min_engineering",
+      "direction": "min",
+      "required_when": "BUS_TO_RAIL_METRIC_PRESENT",
+      "source_stage": "STAGE_E_RT001_V3",
+      "semantics": "Maximum deterministic BUS_TO_RAIL service-gap increase under engineering stress."
+    },
+    {
+      "field": "stage_e_rail_to_bus_max_service_gap_increase_min_engineering",
+      "direction": "min",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_E_RT001_V3",
+      "semantics": "Maximum deterministic RAIL_TO_BUS service-gap increase; non-zero rail delay unavailable."
+    },
+    {
+      "field": "stage_e_worst_minimum_block_slack_min_engineering",
+      "direction": "max",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_E_RT001_V3",
+      "semantics": "Worst minimum exact vehicle-block slack over deterministic runtime/recovery cases."
+    },
+    {
+      "field": "stage_e_maximum_minimum_vehicle_requirement_engineering",
+      "direction": "min",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_E_RT001_V3",
+      "semantics": "Maximum recomputed minimum fleet requirement over deterministic cases."
+    },
+    {
+      "field": "stage_e_maximum_additional_vehicle_requirement_engineering",
+      "direction": "min",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_E_RT001_V3",
+      "semantics": "Maximum additional fleet requirement relative to nominal blocks under deterministic cases."
+    },
+    {
+      "field": "stage_e_maximum_vehicle_conflict_count_on_nominal_blocks_engineering",
+      "direction": "min",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_E_RT001_V3",
+      "semantics": "Maximum conflict count when deterministic stress is applied to nominal exact blocks."
+    },
+    {
+      "field": "stage_e_any_block_infeasibility_under_sensitivity",
+      "direction": "min",
+      "required_when": "ALWAYS",
+      "source_stage": "STAGE_E_RT001_V3",
+      "semantics": "Boolean engineering flag encoded false=0 and true=1 for Pareto comparison."
+    }
+  ]
+}

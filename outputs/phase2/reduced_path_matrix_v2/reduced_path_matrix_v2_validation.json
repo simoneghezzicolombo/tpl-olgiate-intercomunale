@@ -1,0 +1,70 @@
+{
+  "status": "PASS_REDUCED_PATH_MATRIX_V2_BUILD",
+  "contract": "PHASE2_REDUCED_STOP_PATH_MATRIX_V2",
+  "epoch_id": "gate-d-2026-09-03-834d5caa0bfd",
+  "hub_anchor_id": "rail:S01514",
+  "source_anchor_count": 199,
+  "source_anchor_counts": {
+    "EXISTING_PHYSICAL_STOP_CLUSTER": 43,
+    "HUB_RAIL": 1,
+    "PROPOSED_STOP": 155
+  },
+  "source_snap_status_counts": {
+    "ROUTE_READY_LE_75M": 199
+  },
+  "source_evidence_status_counts": {
+    "DERIVED_OFFICIAL_GTFS_REFERENCE_PERIOD_CLUSTER_CENTROID": 1,
+    "FACT_FROZEN_GATE_D_RAIL_ANCHOR": 1,
+    "FACT_OFFICIAL_GTFS_REFERENCE_PERIOD_NOT_CURRENT_SERVICE": 42,
+    "PROPOSED_STOP/FIELD_CHECK_PENDING": 155
+  },
+  "source_scope_counts": {
+    "ANALYSIS_ENVELOPE_GATE_D_GTFS_CLUSTER_CENTROID|GATE_B_CORE_GTFS_RECORD": 1,
+    "FROZEN_GATE_D_RAIL_ANCHOR": 1,
+    "GATE_B_CORE_GTFS_RECORD": 42,
+    "STOP_UNIVERSE_V2_PROPOSED": 155
+  },
+  "route_ready_source_anchors": 199,
+  "collapsed_same_graph_node_source_anchors": 2,
+  "routing_anchor_count": 198,
+  "unique_graph_node_count": 198,
+  "one_to_many_dijkstra_runs": 198,
+  "ordered_path_rows": 36672,
+  "ordered_path_rows_possible": 39006,
+  "path_matrix_completeness": 0.9401630518381787,
+  "missing_ordered_pairs": 2334,
+  "directionally_asymmetric_unordered_pairs": 15962,
+  "uncertainty_counts": {
+    "QUANTIFIED": 35330,
+    "UNKNOWN": 1342
+  },
+  "cache_strategy": "ONE_RESTRICTION_AWARE_ONE_TO_MANY_DIJKSTRA_PER_UNIQUE_ROUTING_SOURCE_NODE",
+  "lineage": {
+    "stop_universe_v2_persisted_head": "a578ebc81b8534e3919a6e56a76a478f6c6d0d2f",
+    "stop_universe_v2_computational_head": "1efbb01e95bb6a9eb87e4e998b62fd91e34b900c",
+    "stop_universe_v2_run_id": 33802506823,
+    "stop_universe_v2_artifact_id": 9911651930,
+    "stop_universe_v2_artifact_sha256": "25d3dbf52cb428d54a46569b7dbbf9e78dcee6fcf5ee69b9c6e928a367e0a2f9",
+    "stop_universe_validation": "outputs/phase2/stop_universe_v2/stop_universe_v2_validation.json",
+    "stop_universe_validation_sha256": "8c938317e043eac225f7138db25a1058930a371c15d8c5e8136b1bb9de5c9e67",
+    "frozen_graph_validation": "outputs/phase2/frozen_gate_d/graph_validation.json",
+    "frozen_graph_validation_sha256": "21304644c9ba9f5e66a28c661af8da7661634b7aeba4958603ad94c9301291fa",
+    "existing_stops": "outputs/phase2/stop_universe_v2/existing_official_stops.csv",
+    "existing_stops_sha256": "8a1879ca5cd2fa23072e9f4b1b284c6b1be455847cb70b6d5399b2db35d05a55",
+    "proposed_stops": "outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv",
+    "proposed_stops_sha256": "bf3f5c648803fb0ba03b2f9af2bd4fa02924cb387bb0a752fc3a7a8ee1f14bc0",
+    "routing_anchor_universe_sha256": "123a5e25a25207ec3d38a6ffa80fc9ea70b6da4793581b19f1d55dad3ae24cf7",
+    "routing_anchor_membership_sha256": "97ff5fa29ac0cc5e9a02da0b8c7a105f4104d3ec0e58a101401dd48aad10f470",
+    "reduced_path_matrix_sha256": "f43a7c3cad200d50f7041f9d535b729f6c93d9456597520852a1a64424bce500"
+  },
+  "prohibitions": {
+    "live_osm_used": false,
+    "random_generation_used": false,
+    "topology_selected": false,
+    "proposed_stop_physically_certified": false,
+    "context_gtfs_centroid_promoted_to_exact_fact_coordinate": false,
+    "headway_or_timetable_selected": false,
+    "budget_modified": false
+  },
+  "epistemic_note": "The V2 matrix makes validated Stop-Universe-V2 anchors routable on the complete frozen Gate-D epoch. It preserves the derived status of context-only GTFS cluster centroids and does not turn PROPOSED_STOP/FIELD_CHECK_PENDING into a verified physical stop."
+}

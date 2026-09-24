@@ -1,0 +1,57 @@
+{
+  "contract": "PHASE2_FINITE_BLOCKER_CLOSURE_AND_DECISION_PATHWAY_V3",
+  "contract_version": 3,
+  "purpose": "Freeze the finite Phase 2 decision-readiness blocker universe, distinguish evidence gaps from human decisions, and prevent unsupported legacy requirements from spawning new engineering work.",
+  "allowed_states": [
+    "CLOSED",
+    "CLOSED_WITH_CERTIFIED_BOUND",
+    "OPEN_DATA_EVIDENCE",
+    "HUMAN_DECISION_REQUIRED",
+    "NOT_REQUIRED_UNDER_V3_CONTRACT"
+  ],
+  "preserve_all_plan_contexts_until_final_decision": true,
+  "expected_plan_context_count": 16495,
+  "legacy_v2_pathway_id": "LEGACY_V2_FULL_EVIDENCE",
+  "v3_candidate_pathway_id": "V3_CERTIFIED_METRICS_DETERMINISTIC_ROBUSTNESS",
+  "v3_candidate_pathway_is_selected": false,
+  "legacy_v2_pathway_is_selected": false,
+  "new_blocker_creation_policy": {
+    "blocker_universe_closed": true,
+    "new_blocker_creation_authorized": false,
+    "gate_reopen_allowed_only_for": [
+      "CERTIFIED_VALIDATION_FAILURE",
+      "EXPLICIT_SELECTED_DECISION_CONTRACT_REQUIREMENT_WITHOUT_CERTIFIED_SOURCE",
+      "CERTIFIED_LINEAGE_CONTRADICTION"
+    ],
+    "legacy_field_absence_alone_may_create_new_blocker": false,
+    "descriptive_pareto_nonmembership_may_create_new_blocker": false
+  },
+  "external_sources": {
+    "stage_f": {
+      "branch": "phase2-stage-f-engineering-robustness-rt001-v3",
+      "commit": "746a17c796f8e5fc24a636e47d304cd9293f2a43",
+      "path": "outputs/phase2/stage_f_engineering_robustness_rt001_v3/stage_f_engineering_robustness_rt001_v3_validation.json",
+      "materialized_path": ".decision_gate_sources/stage_f_validation.json"
+    },
+    "current_service_baseline_v3": {
+      "branch": "phase2-current-service-baseline-v3",
+      "commit": "f2e173d4e2cb9ab7a8e5afca38acee993a328280",
+      "path": "outputs/phase2/current_service_access_baseline_v3/current_service_access_baseline_v3_validation.json",
+      "materialized_path": ".decision_gate_sources/current_service_baseline_v3_validation.json"
+    },
+    "stage_e_old_vs_new_audit": {
+      "branch": "phase2-stage-e-old-vs-new-robustness-audit-a",
+      "commit": "b67c5ce0f7a72a4f075d3b5c09d00e917be49545",
+      "path": "outputs/phase2/stage_e_old_vs_new_robustness_audit/stage_e_old_vs_new_robustness_audit_validation.json",
+      "materialized_path": ".decision_gate_sources/stage_e_old_vs_new_validation.json"
+    }
+  },
+  "non_certified_informative_workstreams": {
+    "gjt_identifiability_bounds_v3": {
+      "branch": "phase2-gjt-identifiability-bounds-v3",
+      "observed_head_when_gate_defined": "284057ebd6cf8fbcf21811532774db889243db15",
+      "certified_for_gate_input": false,
+      "reason": "No GitHub Actions run or persisted certified validation was present when this gate was defined; GJT availability is therefore taken only from already certified tournament-readiness evidence."
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "analysis_geometry": "analysis_envelope.geojson feature_role=ANALYSIS_ENVELOPE",
+  "building_source_snapshot": "data/phase2/analysis_envelope/source/dbgt_buildings_context.geojson.gz",
+  "census_section_source_snapshot": "data/phase2/analysis_envelope/source/census_sections_context.geojson.gz",
+  "clipping_rule": "Use full source features intersecting SOURCE_ACQUISITION_GUARD; classify analytical membership against ANALYSIS_ENVELOPE; preserve CORE/CONTEXT; never area-prorate POP21 at outer edge.",
+  "municipality_source_snapshot": "data/phase2/analysis_envelope/source/municipalities_context.geojson.gz",
+  "next_workstream_requirement": "Building-population allocation must preserve provenance and must not treat CONTEXT population as an equal core equity denominator by default.",
+  "road_source": "outputs/phase2/frozen_gate_d/graph_edges.csv.gz",
+  "source_acquisition_geometry": "analysis_envelope.geojson feature_role=SOURCE_ACQUISITION_GUARD",
+  "stop_source": "outputs/phase2/frozen_gate_d/anchor_universe.csv.gz"
+}

@@ -1,0 +1,2 @@
+agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url,agency_email
+LL,Linee Lecco S.p.A.,https://lineelecco.it/,Europe/Rome,it,+39 0341 359911,https://lineelecco.it/trasporto/tariffe/,movimento@lineelecco.it

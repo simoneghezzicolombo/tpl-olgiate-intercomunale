@@ -1,0 +1,61 @@
+{
+  "contract": "PHASE2_SERVICE_POLICY_DESIGN_SPACE_V2",
+  "status": "ASSUMPTION_DESIGN_SPACE_NOT_SERVICE_PLAN",
+  "uniform_clockface_baseline": true,
+  "peak_offpeak_differentiation_in_this_sweep": false,
+  "headways_min": [15, 20, 30, 60],
+  "headway_status": "ASSUMPTION_DESIGN_SPACE",
+  "headway_rationale": {
+    "30": "S8_FACTUAL_REFERENCE_HEADWAY_ON_2026_09_03_BUT_BUS_HEADWAY_REMAINS_DESIGN_ASSUMPTION",
+    "15_20_60": "CLOCKFACE_DESIGN_SENSITIVITY_NOT_OBSERVED_BUS_SERVICE_FACT"
+  },
+  "spans": [
+    {
+      "span_id": "CORE_0600_2200",
+      "start_min": 360,
+      "end_min": 1320,
+      "status": "ASSUMPTION_DESIGN_SPACE"
+    },
+    {
+      "span_id": "S8_EXTENDED_0530_2400",
+      "start_min": 330,
+      "end_min": 1440,
+      "status": "ASSUMPTION_DESIGN_SPACE",
+      "note": "Broad design span informed by the verified 2026-09-03 S8 operating window; it is not an observed bus span and exact S8 event phasing is deferred."
+    }
+  ],
+  "annual_service_days": [
+    {
+      "calendar_id": "IDEALISED_5_DAY_52_WEEK",
+      "days": 260,
+      "status": "ASSUMPTION_DESIGN_SPACE_NOT_ACTUAL_CALENDAR"
+    },
+    {
+      "calendar_id": "IDEALISED_6_DAY_52_WEEK",
+      "days": 312,
+      "status": "ASSUMPTION_DESIGN_SPACE_NOT_ACTUAL_CALENDAR"
+    },
+    {
+      "calendar_id": "IDEALISED_DAILY_YEAR",
+      "days": 365,
+      "status": "ASSUMPTION_DESIGN_SPACE_NOT_ACTUAL_CALENDAR"
+    }
+  ],
+  "recovery_min": [5, 10, 15],
+  "recovery_status": "ASSUMPTION_SENSITIVITY",
+  "scheduled_extension_shares": [0.0, 0.25, 0.5, 1.0],
+  "extension_share_status": "ASSUMPTION_DESIGN_SPACE",
+  "non_extension_family_share": 0.0,
+  "production_model": {
+    "formula": "annual_bus_km = expected_equal_pattern_set_cycle_km * (span_minutes / uniform_headway_minutes) * annual_service_days",
+    "status": "MODEL_OUTPUT_CONTINUOUS_CLOCKFACE_PRODUCTION_APPROXIMATION",
+    "exact_departure_count": false,
+    "exact_timetable": false,
+    "exact_s8_phase": false
+  },
+  "fleet_model": {
+    "formula": "aggregate_interlinable_fleet_lower_bound = ceil((expected_equal_pattern_set_cycle_runtime_min + recovery_min * public_route_count) / uniform_headway_min)",
+    "status": "MODEL_OUTPUT_LOWER_BOUND_NOT_VEHICLE_BLOCK_PLAN"
+  },
+  "epistemic_note": "This file declares a transparent search grid. It does not assert that any headway, span, calendar, recovery value or extension share is the current service, the politically preferred service or the final recommended service. The current-service timetable workstream explicitly does not infer annual service days."
+}

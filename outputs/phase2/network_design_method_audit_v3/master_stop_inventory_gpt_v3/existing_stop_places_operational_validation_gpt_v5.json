@@ -1,0 +1,20 @@
+{
+  "status": "PASS_OPERATIONAL_STOP_PLACE_LAYER",
+  "row_semantics": "ONE_ROW_PER_EXISTING_STOP_PLACE_DIRECTION_IGNORED",
+  "stop_places_count": 36,
+  "by_municipality": {
+    "Brivio": 10,
+    "Calco": 9,
+    "La Valletta Brianza": 4,
+    "Olgiate Molgora": 6,
+    "Santa Maria Hoè": 7
+  },
+  "directional_boarding_points_exposed": false,
+  "routing_terminal_selected": false,
+  "scagnello_included": true,
+  "excluded_known_obsolete_frozen_ids": [
+    "300397",
+    "300407",
+    "L00397"
+  ]
+}

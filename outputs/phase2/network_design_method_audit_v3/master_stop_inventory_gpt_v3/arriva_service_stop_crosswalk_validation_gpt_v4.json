@@ -1,0 +1,19 @@
+{
+  "status": "PASS_ARRIVA_SERVICE_STOP_PLACE_CROSSWALK",
+  "as_of_date": "2026-09-05",
+  "official_future_timing_point_rows": 18,
+  "resolved_or_strong_stop_place_crosswalks": 14,
+  "unresolved_stop_place_crosswalks": 4,
+  "official_coordinate_unresolved_count": 2,
+  "official_coordinate_unresolved_names": [
+    "CALCO Località Cornello",
+    "S. MARIA HOE' Tre Strade"
+  ],
+  "boarding_point_finalizations_performed": 0,
+  "routing_terminal_selected_count": 0,
+  "line_current_summer_index_facts": [
+    "D184",
+    "D185"
+  ],
+  "epistemic_note": "Official timetable names are FACT service evidence. Cross-operator stop-place links are DERIVED unless explicitly unresolved. No timetable-name crosswalk finalizes a physical boarding point or routing terminal."
+}

@@ -1,0 +1,134 @@
+name: Gate F Pareto workstream
+
+on:
+  push:
+    branches:
+      - gate-f-workstream
+  pull_request:
+    paths:
+      - 'src/gate_f_*.py'
+      - 'scripts/13_gate_f_*.py'
+      - 'scripts/gate_f_*.py'
+      - 'tests/test_gate_f_*.py'
+      - 'schemas/gate_f_*.json'
+      - 'docs/GATE_F_*.md'
+
+jobs:
+  gate-f-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch upstream workstream evidence refs
+        run: git fetch --no-tags origin antigravity-real-data gate-c-workstream gate-d-workstream gate-e-workstream
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Diff check against workstream baseline
+        run: git diff --check 549198743e7265b333da565ce6990f9241cfd1fd...HEAD
+      - name: Install focused dependencies
+        run: python -m pip install --upgrade pip pandas numpy pytest networkx scipy pyproj
+      - name: Gate F unit and integration tests
+        run: >-
+          pytest -q
+          tests/test_gate_f_pareto.py
+          tests/test_gate_f_inputs.py
+          tests/test_gate_f_status.py
+          tests/test_gate_f_status_git_objects.py
+          tests/test_gate_f_assembly.py
+          tests/test_gate_f_contract.py
+          tests/test_gate_f_end_to_end.py
+          tests/test_gate_f_v2.py
+          tests/test_gate_f_inputs_v2.py
+          tests/test_gate_f_gate_d_adapter.py
+          tests/test_gate_f_gate_b_bridge.py
+          tests/test_gate_f_s8_bridge.py
+          tests/test_gate_f_closure.py
+      - name: Compile Gate F code
+        run: >-
+          python -m py_compile
+          src/gate_f_pareto.py src/gate_f_inputs.py src/gate_f_status.py src/gate_f_assembly.py src/gate_f_contract.py
+          src/gate_f_contract_v2.py src/gate_f_v2.py src/gate_f_inputs_v2.py src/gate_f_closure.py
+          src/gate_f_gate_b_bridge.py src/gate_f_gate_d_adapter.py src/gate_f_gate_e_adapter.py src/gate_f_s8_bridge.py
+          scripts/13_gate_f_pareto.py scripts/gate_f_build_inputs.py
+          scripts/13_gate_f_pareto_v2.py scripts/gate_f_build_inputs_v2.py scripts/gate_f_build_status_bundle.py
+          scripts/gate_f_build_population_coverage.py scripts/gate_f_adapt_gate_d.py scripts/gate_f_adapt_gate_e.py
+          scripts/gate_f_build_s8_connections.py scripts/gate_f_regression_gate_b_baseline.py scripts/gate_f_close.py
+      - name: Verify real A-E PASS evidence across workstreams
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .gate_f_ci
+          AB=$(git rev-parse origin/antigravity-real-data)
+          C=$(git rev-parse origin/gate-c-workstream)
+          D=$(git rev-parse origin/gate-d-workstream)
+          E=$(git rev-parse origin/gate-e-workstream)
+          python scripts/gate_f_build_status_bundle.py \
+            --integration-id CI_ALL_UPSTREAM_PASS_EVIDENCE \
+            --gate "A,PASS,$AB,antigravity-real-data,docs/GATE_A_PASS.md" \
+            --gate "B,PASS,$AB,antigravity-real-data,docs/GATE_B_PASS.md" \
+            --gate "C,PASS,$C,gate-c-workstream,docs/GATE_C_PASS.md" \
+            --gate "D,PASS,$D,gate-d-workstream,docs/GATE_D_PASS.md" \
+            --gate "E,PASS,$E,gate-e-workstream,docs/GATE_E_PASS.md" \
+            --output .gate_f_ci/status.json
+          python - <<'PY'
+          from src.gate_f_status import load_gate_status_bundle
+          statuses, _ = load_gate_status_bundle('.gate_f_ci/status.json', '.')
+          assert statuses == {gate: 'PASS' for gate in 'ABCDE'}
+          PY
+      - name: Replay validated Gate B baseline through Gate F bridge
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/gate_b_pass
+          gh run download 33700372497 \
+            --repo simoneghezzicolombo/tpl-olgiate-intercomunale \
+            --name gate-b-spatial-audit-55d726564e13acca55ce563cc911263ac513acb0 \
+            --dir /tmp/gate_b_pass
+          python scripts/gate_f_regression_gate_b_baseline.py \
+            --artifact-dir /tmp/gate_b_pass \
+            --gate-b-commit 55d726564e13acca55ce563cc911263ac513acb0 \
+            --threshold-min 10 \
+            --max-stop-snap-m 250 \
+            --walk-connector-kmh 4.8
+      - name: Close Gate F on complete real Gate E alternative inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          git show origin/gate-e-workstream:outputs/gate_e/gate_d_pass_budget_envelope.csv > .gate_f_ci/paired.csv
+          git show origin/gate-e-workstream:outputs/gate_e/gate_d_pass_unpaired_candidates.csv > .gate_f_ci/unpaired.csv
+          python scripts/gate_f_close.py \
+            --paired .gate_f_ci/paired.csv \
+            --unpaired .gate_f_ci/unpaired.csv \
+            --status-bundle .gate_f_ci/status.json \
+            --inventory-output .gate_f_ci/scenario_inventory.csv \
+            --verdict-output .gate_f_ci/final_verdict.json
+          python - <<'PY'
+          import json
+          import pandas as pd
+          inv = pd.read_csv('.gate_f_ci/scenario_inventory.csv')
+          verdict = json.load(open('.gate_f_ci/final_verdict.json', encoding='utf-8'))
+          assert len(inv) == 9
+          assert (inv['inventory_class'] == 'PAIRED_BIDIRECTIONAL_HYPOTHESIS').sum() == 4
+          assert (inv['inventory_class'] == 'UNPAIRED_CANDIDATE').sum() == 5
+          assert verdict['upstream_gate_statuses'] == {gate: 'PASS' for gate in 'ABCDE'}
+          assert verdict['assumption_free_pairable_alternatives'] == 0
+          assert verdict['verdict'] == 'PASS'
+          assert verdict['recommendation_status'] == 'NO_DEFINITIVE_RECOMMENDATION_SUPPORTED_BY_CURRENT_EVIDENCE'
+          assert verdict['definitive_pareto_eligible'] is False
+          assert not inv['definitive_recommendation_eligible'].any()
+          assert 'FIG8_COMPACT' in set(inv['scenario_id'])
+          PY
+      - name: Legacy output refusal smoke test
+        shell: bash
+        run: |
+          set +e
+          python scripts/13_gate_f_pareto.py --input outputs/route_variants.csv > /tmp/gate_f_refusal.log 2>&1
+          code=$?
+          set -e
+          cat /tmp/gate_f_refusal.log
+          test "$code" -ne 0
+          grep -q 'INVALIDATED legacy/hardcoded output' /tmp/gate_f_refusal.log

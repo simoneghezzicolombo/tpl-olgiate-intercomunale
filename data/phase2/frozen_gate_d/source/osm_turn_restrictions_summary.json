@@ -1,0 +1,9 @@
+{
+  "relations_total": 575,
+  "bus_applicable_node_restrictions": 566,
+  "bus_exempt_restrictions": 0,
+  "via_way_restrictions_not_approximated": 8,
+  "missing_via_node_coordinates": 1,
+  "conditional_only_restrictions_not_enforced": 0,
+  "epistemic_status": "DERIVED_FROM_FACT_OSM_RELATIONS"
+}

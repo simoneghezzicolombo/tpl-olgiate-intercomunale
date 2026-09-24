@@ -1,0 +1,143 @@
+name: Phase 2 S8 interchange opportunity
+
+on:
+  push:
+    branches: [phase2-s8-interchange]
+    paths:
+      - 'src/phase2_s8_interchange.py'
+      - 'scripts/phase2_build_s8_interchange.py'
+      - 'tests/test_phase2_s8_interchange.py'
+      - 'docs/PHASE2_S8_INTERCHANGE_*.md'
+      - '.github/workflows/phase2-s8-interchange.yml'
+      - 'outputs/phase2/s8_*'
+  pull_request:
+    paths:
+      - 'src/phase2_s8_interchange.py'
+      - 'scripts/phase2_build_s8_interchange.py'
+      - 'tests/test_phase2_s8_interchange.py'
+      - 'docs/PHASE2_S8_INTERCHANGE_*.md'
+      - '.github/workflows/phase2-s8-interchange.yml'
+      - 'outputs/phase2/s8_*'
+
+permissions:
+  contents: read
+
+jobs:
+  s8-interchange:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: python -m pip install pytest
+
+      - name: Diff whitespace audit
+        shell: bash
+        run: |
+          base=$(git merge-base HEAD origin/phase2-service-design)
+          git diff --check "$base"...HEAD
+
+      - name: Compile
+        run: >-
+          python -m py_compile
+          src/phase2_s8_interchange.py
+          scripts/phase2_build_s8_interchange.py
+          tests/test_phase2_s8_interchange.py
+
+      - name: Unit and adversarial tests
+        run: pytest -q tests/test_phase2_s8_interchange.py
+
+      - name: Extract authoritative Gate C active S8 evidence
+        shell: bash
+        run: |
+          GATE_C_PASS=dcc3e75ae3b4f4ea5170f48e85345b83620c5536
+          git cat-file -e "$GATE_C_PASS^{commit}"
+          git show "$GATE_C_PASS:outputs/gate_c/live_trenord_2026-09-03.json" > /tmp/gate_c_live_s8.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/gate_c_live_s8.json', encoding='utf-8'))
+          assert p['gate']=='C'
+          assert p['source_type']=='LIVE_OFFICIAL_GTFS'
+          assert p['service_date']=='2026-09-03'
+          assert p['station']['stop_id']=='S01514'
+          assert p['active_s8_station_events_count']==74
+          assert len(p['events'])==74
+          PY
+
+      - name: Build real Phase 2 S8 opportunity bundle
+        run: >-
+          python scripts/phase2_build_s8_interchange.py
+          --gate-c-live-json /tmp/gate_c_live_s8.json
+          --gtfs-zip data/raw/gtfs/rail_trenord/trenord_gtfs.zip
+          --gate-c-commit dcc3e75ae3b4f4ea5170f48e85345b83620c5536
+          --demand outputs/phase2/od_2021_destinations_by_origin.csv
+          --s8-municipalities outputs/phase2/s8_station_municipalities.csv
+          --sfr data/raw/sfr/stazioni_s8_indice_2015_2025.csv
+          --output-dir /tmp/phase2_s8
+
+      - name: Validate production evidence contract
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root=Path('/tmp/phase2_s8')
+          events=list(csv.DictReader((root/'s8_events.csv').open(encoding='utf-8')))
+          assert len(events)==74
+          assert {r['direction'] for r in events}=={'MILANO','LECCO'}
+          assert all(r['epistemic_status']=='DERIVED_FROM_LIVE_OFFICIAL_GTFS' for r in events)
+          assert all(r['origin_stop_id'] and r['terminal_stop_id'] for r in events)
+          summary=list(csv.DictReader((root/'s8_direction_summary.csv').open(encoding='utf-8')))
+          assert len(summary)==2
+          by={r['direction']: r for r in summary}
+          assert int(by['MILANO']['event_count'])==37
+          assert int(by['LECCO']['event_count'])==37
+          assert by['MILANO']['first_departure']=='05:26:00'
+          assert by['MILANO']['last_departure']=='23:26:00'
+          assert by['LECCO']['first_departure']=='06:03:00'
+          assert by['LECCO']['last_departure']=='24:03:00'
+          assert by['MILANO']['departure_minute_offsets']=='26|56'
+          assert by['LECCO']['departure_minute_offsets']=='3|33'
+          for row in summary:
+              assert float(row['headway_mean_min'])==30.0
+              assert float(row['headway_median_min'])==30.0
+              assert float(row['headway_min_min'])==30.0
+              assert float(row['headway_p10_min'])==30.0
+              assert float(row['headway_p90_min'])==30.0
+              assert float(row['headway_max_min'])==30.0
+              assert float(row['service_span_min'])==1080.0
+          contract=json.load((root/'s8_interchange_contract.json').open(encoding='utf-8'))
+          work=contract['work_demand']
+          assert work['work_rows_workers_total']==8754
+          assert work['direct_s8_workers']==1882
+          assert work['verified_transfer_workers']==0
+          assert work['not_rail_assigned_workers']==6872
+          assert work['S8_DIRECT_is_modal_share'] is False
+          assert contract['topology_dependency']=='NONE'
+          assert contract['transfer_quality']['type']=='CONTINUOUS'
+          assert contract['transfer_quality']['hard_quality_threshold'] is None
+          assert contract['delay_robustness']['random_sampling'] is False
+          assert contract['optimizer_bus_event_contract']['forbidden_requirement']=='NO_ROUTE_TOPOLOGY_FIELD_REQUIRED'
+          sfr=contract['sfr_context']
+          assert sfr['latest_year']==2025
+          assert sfr['latest_saliti24h']==2400.0
+          assert 'NOT_MODAL_SHARE' in sfr['epistemic_status']
+          PY
+
+      - name: Static anti-shortcut guard
+        shell: bash
+        run: |
+          ! grep -R "np.random\|import random\|FIG8_COMPACT\|Raccomand" src/phase2_s8_interchange.py scripts/phase2_build_s8_interchange.py
+
+      - name: Upload S8 interchange evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-s8-interchange-${{ github.sha }}
+          path: /tmp/phase2_s8/
+          if-no-files-found: error
+          retention-days: 30

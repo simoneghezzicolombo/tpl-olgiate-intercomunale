@@ -1,0 +1,49 @@
+{
+  "status": "PASS_CURRENT_STOP_SPACING_BENCHMARK_V3",
+  "contract": "DESCRIPTIVE_EMPIRICAL_BENCHMARK_NOT_DESIGN_THRESHOLD",
+  "source_pattern_count": 18,
+  "source_routes": [
+    "D184",
+    "D185"
+  ],
+  "represented_trip_count": 42,
+  "route_pattern_counts": {
+    "D184": 8,
+    "D185": 10
+  },
+  "route_trip_counts": {
+    "D184": 15,
+    "D185": 27
+  },
+  "pattern_stop_count": {
+    "min": 2,
+    "median_unweighted": 8.5,
+    "max": 18,
+    "median_trip_weighted": 13.5
+  },
+  "segment_geodesic_distance_m": {
+    "segment_observation_count_unweighted": 154,
+    "median_unweighted": 521.6462348375702,
+    "p75_unweighted": 761.4896967286533,
+    "p90_unweighted": 1143.3557673454782,
+    "max_unweighted": 2096.2726045223926,
+    "median_trip_weighted": 521.6462348375702,
+    "p75_trip_weighted": 761.4896967286533,
+    "p90_trip_weighted": 1147.8640480773388,
+    "max_trip_weighted": 2096.2726045223926
+  },
+  "distance_semantics": "GEODESIC_DISTANCE_BETWEEN_CONSECUTIVE_OFFICIAL_GTFS_STOPS_NOT_ROUTED_ROAD_DISTANCE",
+  "design_threshold_selected": false,
+  "current_network_declared_optimal": false,
+  "purpose": "BENCHMARK_FUTURE_V3_STOP_PATTERN_DENSITY_AND_FLAG_SPARSE_LOCAL_SERVICE",
+  "lineage": {
+    "patterns": {
+      "path": "/tmp/current-spacing/patterns.csv",
+      "sha256": "015299f5cbff5283e01d8a4edcc41eb42027944af6a88e3ec303bc6d8ba26316"
+    },
+    "route_stops": {
+      "path": "/tmp/current-spacing/route_stops.csv",
+      "sha256": "eff91c3b0a75c7b5b120b25018adba940499dcd8e07ff9df81b4c4d83414217e"
+    }
+  }
+}

@@ -1,0 +1,263 @@
+name: Phase 2 Robustness Final V2
+
+on:
+  push:
+    branches:
+      - phase2-robustness-final-v2
+    paths:
+      - 'scripts/phase2_run_access_equity_v2_hub_bridge.py'
+      - 'scripts/phase2_build_current_service_access_baseline_v2.py'
+      - 'scripts/phase2_build_pre_gjt_screening_v2.py'
+      - 'src/phase2_access_equity_v2.py'
+      - 'src/phase2_pre_gjt_screening_v2.py'
+      - 'tests/test_phase2_access_equity_v2.py'
+      - 'tests/test_phase2_access_equity_hub_bridge_v2.py'
+      - 'tests/test_phase2_pre_gjt_screening_v2.py'
+      - '.github/workflows/phase2-robustness-final-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-robustness-final-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  corrected-access-baseline-pre-gjt:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install tests
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile corrected Phase 2 cascade
+        run: |
+          python -m py_compile src/phase2_access_equity_v2.py
+          python -m py_compile scripts/phase2_run_access_equity_v2.py
+          python -m py_compile scripts/phase2_run_access_equity_v2_hub_bridge.py
+          python -m py_compile scripts/phase2_build_current_service_access_baseline_v2.py
+          python -m py_compile src/phase2_pre_gjt_screening_v2.py
+          python -m py_compile scripts/phase2_build_pre_gjt_screening_v2.py
+
+      - name: Run corrected-cascade tests
+        run: >-
+          python -m pytest -q
+          tests/test_phase2_access_equity_v2.py
+          tests/test_phase2_access_equity_hub_bridge_v2.py
+          tests/test_phase2_pre_gjt_screening_v2.py
+
+      - name: Materialise Access Equity V2 with verified station hub bridge
+        run: >-
+          python scripts/phase2_run_access_equity_v2_hub_bridge.py
+          --bridge-stop-evidence outputs/phase2/stop_universe_v2/existing_official_stops.csv
+          --catalog outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv
+          --catalog-validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json
+          --stop-validation outputs/phase2/stop_universe_v2/stop_universe_v2_validation.json
+          --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json
+          --anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv
+          --proposed-catchments outputs/phase2/stop_universe_v2/proposed_stop_candidate_catchment_units_10min.csv
+          --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv
+          --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv
+          --scenario-output outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz
+          --validation-output outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+
+      - name: Validate station hub bridge contract
+        run: |
+          python - <<'PY'
+          import gzip, csv, json
+          from pathlib import Path
+          root=Path('outputs/phase2/access_equity_v2')
+          v=json.loads((root/'access_equity_v2_validation.json').read_text(encoding='utf-8'))
+          assert v['status']=='PASS_ACCESS_EQUITY_V2_BUILD'
+          assert v['contract']=='PHASE2_BUILDING_CATCHMENT_ACCESS_EQUITY_V2'
+          assert v['scenario_count']==100000
+          assert v['population_unit_count']==4348
+          bridge=v['hub_access_bridge']
+          assert bridge['status']=='VERIFIED_APPLIED'
+          assert bridge['scope']=='PEDESTRIAN_ACCESS_ONLY'
+          assert bridge['rail_anchor_id']=='rail:S01514'
+          assert bridge['official_bus_stop_id']=='L00407'
+          assert bridge['physical_cluster_id']=='EX_039'
+          for field in ('operational_network_changed','route_geometry_changed','runtime_changed','bus_km_changed','od_evidence_changed','s8_evidence_changed','service_policy_changed'):
+              assert bridge[field] is False, field
+          for field in ('passenger_demand_inferred','s8_demand_used','current_service_baseline_compared','topology_ranked','service_policy_selected','stop_set_selected','primary_selected','runner_up_selected','exact_timetable_constructed'):
+              assert v[field] is False, field
+          rows=0
+          with gzip.open(root/'scenario_access_equity_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              for _ in csv.DictReader(f):
+                  rows += 1
+          assert rows==100000
+          print(json.dumps({
+              'scenario_count': rows,
+              'unique_stop_set_count_evaluated': v['unique_stop_set_count_evaluated'],
+              'max_public_population_coverage_share_10min': v['max_public_population_coverage_share_10min'],
+              'max_public_worst_municipality_coverage_share_10min': v['max_public_worst_municipality_coverage_share_10min'],
+              'hub_access_bridge': bridge,
+          }, indent=2))
+          PY
+
+      - name: Deterministic station-bridge rebuild
+        run: |
+          rm -rf /tmp/phase2-access-hub-bridge
+          mkdir -p /tmp/phase2-access-hub-bridge
+          python scripts/phase2_run_access_equity_v2_hub_bridge.py \
+            --bridge-stop-evidence outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --catalog outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2.csv \
+            --catalog-validation outputs/phase2/structural_catalog_v2/structural_scenario_catalog_balanced_v2_validation.json \
+            --stop-validation outputs/phase2/stop_universe_v2/stop_universe_v2_validation.json \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --proposed-catchments outputs/phase2/stop_universe_v2/proposed_stop_candidate_catchment_units_10min.csv \
+            --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv \
+            --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
+            --scenario-output /tmp/phase2-access-hub-bridge/scenario.csv.gz \
+            --validation-output /tmp/phase2-access-hub-bridge/validation.json >/dev/null
+          cmp outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz /tmp/phase2-access-hub-bridge/scenario.csv.gz
+          cmp outputs/phase2/access_equity_v2/access_equity_v2_validation.json /tmp/phase2-access-hub-bridge/validation.json
+
+      - name: Materialise certified localizable current-service baseline
+        run: >-
+          python scripts/phase2_build_current_service_access_baseline_v2.py
+          --identity outputs/phase2/current_service_stop_identity_2026-09-03.csv
+          --identity-validation outputs/phase2/current_service_stop_identity_validation.json
+          --v2-official-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv
+          --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv
+          --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv
+          --localized-output outputs/phase2/current_service_access_baseline_v2/current_service_localized_rows_v2.csv
+          --validation-output outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json
+
+      - name: Validate conservative baseline semantics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json').read_text(encoding='utf-8'))
+          assert v['status']=='PASS_CURRENT_SERVICE_ACCESS_LOWER_BOUND_V2'
+          assert v['contract']=='PHASE2_CURRENT_SERVICE_CERTIFIED_LOCALIZABLE_ACCESS_LOWER_BOUND_V2'
+          assert v['route_scope']==['D184','D185']
+          assert v['baseline_role']=='CERTIFIED_LOCALIZABLE_LOWER_BOUND_ONLY'
+          assert v['baseline_complete'] is False
+          assert v['may_infer_true_current_total_coverage'] is False
+          assert v['may_use_unresolved_rows_for_spatial_access'] is False
+          assert v['localized_unique_physical_cluster_count'] > 0
+          assert v['unresolved_or_unlocalized_rows'] > 0
+          assert v['historical_station_identity_kept_separate_from_project_hub_bridge'] is True
+          assert v['historical_station_stop_id']=='300407'
+          assert v['project_station_access_stop_id']=='L00407'
+          assert v['project_station_access_cluster']=='EX_039'
+          for threshold in ('5','8','10'):
+              c=v['coverage_lower_bound'][threshold]
+              assert 0.0 <= c['coverage_share'] <= 1.0
+              assert 0.0 <= c['worst_municipality_coverage_share'] <= 1.0
+          print(json.dumps({
+              'localized_clusters': v['localized_unique_physical_clusters'],
+              'localized_cluster_count': v['localized_unique_physical_cluster_count'],
+              'coverage_lower_bound': v['coverage_lower_bound'],
+              'route_stats': v['route_stats'],
+          }, indent=2))
+          PY
+
+      - name: Deterministic current-baseline rebuild
+        run: |
+          rm -rf /tmp/current-service-access-v2
+          mkdir -p /tmp/current-service-access-v2
+          python scripts/phase2_build_current_service_access_baseline_v2.py \
+            --identity outputs/phase2/current_service_stop_identity_2026-09-03.csv \
+            --identity-validation outputs/phase2/current_service_stop_identity_validation.json \
+            --v2-official-stops outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --existing-catchments outputs/phase2/stop_universe_v2/existing_stop_catchment_units_12min.csv \
+            --population-units outputs/phase2/stop_universe_v2/accessibility_gap_building_pieces.csv \
+            --localized-output /tmp/current-service-access-v2/localized.csv \
+            --validation-output /tmp/current-service-access-v2/validation.json >/dev/null
+          cmp outputs/phase2/current_service_access_baseline_v2/current_service_localized_rows_v2.csv /tmp/current-service-access-v2/localized.csv
+          cmp outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json /tmp/current-service-access-v2/validation.json
+
+      - name: Rebuild Pre-GJT against corrected access layer
+        run: >-
+          python scripts/phase2_build_pre_gjt_screening_v2.py
+          --operational outputs/phase2/operational_screening_v2/operational_screening_v2.csv
+          --operational-validation outputs/phase2/operational_screening_v2/operational_screening_v2_validation.json
+          --access outputs/phase2/access_equity_v2/scenario_access_equity_v2.csv.gz
+          --access-validation outputs/phase2/access_equity_v2/access_equity_v2_validation.json
+          --policy-grid outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv
+          --policy-feasibility outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz
+          --policy-validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json
+          --s8-scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz
+          --s8-scenario-support outputs/phase2/passenger_gjt_v2/s8_scenario_passenger_support_v2.csv.gz
+          --s8-support-validation outputs/phase2/passenger_gjt_v2/s8_passenger_support_mask_v2_validation.json
+          --s8-gap-envelope outputs/phase2/passenger_gjt_v2/s8_transfer_gap_envelope_v2.csv.gz
+          --s8-gap-validation outputs/phase2/passenger_gjt_v2/s8_transfer_gap_envelope_v2_validation.json
+          --output outputs/phase2/pre_gjt_screening_v2/pre_gjt_scenario_timing_screening_v2.csv.gz
+          --validation outputs/phase2/pre_gjt_screening_v2/pre_gjt_screening_v2_validation.json
+
+      - name: Validate corrected Pre-GJT lineage
+        run: |
+          python - <<'PY'
+          import gzip, csv, json
+          from pathlib import Path
+          root=Path('outputs/phase2/pre_gjt_screening_v2')
+          v=json.loads((root/'pre_gjt_screening_v2_validation.json').read_text(encoding='utf-8'))
+          assert v['status']=='PASS_PRE_GJT_MULTI_LAYER_SCREENING_V2_BUILD'
+          assert v['contract']=='PHASE2_PRE_GJT_MULTI_LAYER_SCREENING_V2'
+          assert v['scenario_count']==100000
+          assert v['timing_archetype_count']==8
+          assert v['scenario_timing_row_count']==800000
+          assert v['reference_budget_annual_bus_km']==111419.0
+          assert v['reference_budget_feasible_scenario_count']==69186
+          assert v['reference_budget_infeasible_scenario_count']==30814
+          assert v['s8_worker_reference']==1882.0
+          for field in ('optional_extensions_selected','passenger_demand_assigned_to_routes','full_gjt_calculated','pareto_frontier_computed','phase_selected','topology_ranked','service_policy_selected','primary_selected','runner_up_selected'):
+              assert v[field] is False, field
+          rows=0
+          feasible=0
+          with gzip.open(root/'pre_gjt_scenario_timing_screening_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              for row in csv.DictReader(f):
+                  rows += 1
+                  feasible += row['reference_budget_timing_feasible']=='true'
+          assert rows==800000
+          assert feasible==v['reference_budget_feasible_scenario_timing_count']
+          print(json.dumps({
+              'rows': rows,
+              'reference_feasible_scenarios': v['reference_budget_feasible_scenario_count'],
+              'reference_feasible_scenario_timings': v['reference_budget_feasible_scenario_timing_count'],
+              'by_timing': v['reference_budget_feasible_scenario_counts_by_timing'],
+          }, indent=2))
+          PY
+
+      - name: Guard against synthetic or hidden selection logic
+        run: |
+          FILES="scripts/phase2_run_access_equity_v2_hub_bridge.py scripts/phase2_build_current_service_access_baseline_v2.py"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -n -E 'weighted composite|weighted score|manual_stop_alias|forced_nearest' $FILES
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-pre-gjt-screening-v2...HEAD
+
+      - name: Persist corrected audited evidence
+        run: |
+          git config user.name "phase2-robustness-final-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/access_equity_v2 outputs/phase2/current_service_access_baseline_v2 outputs/phase2/pre_gjt_screening_v2
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist corrected access baseline and pre-GJT [skip ci]"
+            git push origin HEAD:phase2-robustness-final-v2
+          fi
+
+      - name: Upload corrected Phase 2 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-robustness-final-v2-${{ github.sha }}
+          retention-days: 90
+          path: |
+            outputs/phase2/access_equity_v2
+            outputs/phase2/current_service_access_baseline_v2
+            outputs/phase2/pre_gjt_screening_v2

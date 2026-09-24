@@ -1,0 +1,156 @@
+name: Phase 2 Service Policy Search V2
+
+on:
+  push:
+    branches:
+      - phase2-service-policy-search-v2
+    paths:
+      - 'config/phase2_service_policy_design_space_v2.json'
+      - 'src/phase2_service_policy_search.py'
+      - 'scripts/phase2_run_service_policy_search_v2.py'
+      - 'tests/test_phase2_service_policy_search.py'
+      - '.github/workflows/phase2-service-policy-search-v2.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: phase2-service-policy-search-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest==9.0.2
+
+      - name: Compile Service Policy V2 engine
+        run: |
+          python -m py_compile src/phase2_service_policy_search.py
+          python -m py_compile scripts/phase2_run_service_policy_search_v2.py
+
+      - name: Run Service Policy V2 tests
+        run: python -m pytest -q tests/test_phase2_service_policy_search.py
+
+      - name: Materialise compact lossless policy feasibility search
+        run: >-
+          python scripts/phase2_run_service_policy_search_v2.py
+          --operational-screening outputs/phase2/operational_screening_v2/operational_screening_v2.csv
+          --operational-validation outputs/phase2/operational_screening_v2/operational_screening_v2_validation.json
+          --design-space config/phase2_service_policy_design_space_v2.json
+          --s8-contract outputs/phase2/s8_interchange_contract.json
+          --s8-characterization outputs/phase2/s8_timetable_characterization.json
+          --current-timetable-validation outputs/phase2/current_service_stop_timetable_validation_2026-09-03.json
+          --policy-grid-output outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv
+          --feasibility-output outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz
+          --validation outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json
+
+      - name: Validate Service Policy Search V2 contract
+        run: |
+          python - <<'PY'
+          import csv, gzip, json
+          from pathlib import Path
+          from src.phase2_service_policy_search import decode_policy_mask
+          root = Path('outputs/phase2/service_policy_search_v2')
+          val = json.loads((root/'service_policy_search_v2_validation.json').read_text(encoding='utf-8'))
+          assert val['status'] == 'PASS_SERVICE_POLICY_SEARCH_V2_BUILD'
+          assert val['contract'] == 'PHASE2_SERVICE_POLICY_FEASIBILITY_SEARCH_V2'
+          assert val['evidence_label'] == 'ASSUMPTION_DESIGN_SPACE_FEASIBILITY_NOT_SERVICE_PLAN'
+          assert val['scenario_count'] == 100000
+          assert val['policy_count'] == 288
+          assert val['nonextension_applicable_policy_count'] == 72
+          assert val['scheduled_extension_applicable_policy_count'] == 288
+          assert val['policy_mask_hex_width'] == 72
+          assert val['uniform_clockface_baseline'] is True
+          assert val['peak_offpeak_differentiation'] is False
+          assert val['exact_departure_count'] is False
+          assert val['exact_timetable_constructed'] is False
+          assert val['s8_phase_selected'] is False
+          assert val['passenger_utility_calculated'] is False
+          assert val['topology_ranked'] is False
+          assert val['service_policy_selected'] is False
+          assert val['stop_set_selected'] is False
+          assert val['current_annual_service_days_inferred'] is False
+          counts = list(val['feasible_scenario_counts_by_budget'].values())
+          assert counts == sorted(counts)
+          assert counts[-1] > 0
+          with (root/'service_policy_design_space_v2.csv').open(encoding='utf-8', newline='') as f:
+              policies = list(csv.DictReader(f))
+          assert len(policies) == 288
+          assert {int(p['uniform_headway_min']) for p in policies} == {15,20,30,60}
+          assert all('ASSUMPTION' in p['calendar_status'] for p in policies)
+          rows = 0
+          with gzip.open(root/'service_policy_feasibility_v2.csv.gz', 'rt', encoding='utf-8', newline='') as f:
+              reader = csv.DictReader(f)
+              for row in reader:
+                  rows += 1
+                  if rows in {1, 50000, 100000}:
+                      decoded = decode_policy_mask(row['feasible_policy_mask_hex_reference'], policy_count=288)
+                      assert len(decoded) == int(row['feasible_policy_count_reference'])
+          assert rows == 100000
+          print(json.dumps(val, indent=2))
+          PY
+
+      - name: Deterministic byte-for-byte policy rebuild
+        run: |
+          rm -rf /tmp/phase2-service-policy-search-v2
+          mkdir -p /tmp/phase2-service-policy-search-v2
+          python scripts/phase2_run_service_policy_search_v2.py \
+            --operational-screening outputs/phase2/operational_screening_v2/operational_screening_v2.csv \
+            --operational-validation outputs/phase2/operational_screening_v2/operational_screening_v2_validation.json \
+            --design-space config/phase2_service_policy_design_space_v2.json \
+            --s8-contract outputs/phase2/s8_interchange_contract.json \
+            --s8-characterization outputs/phase2/s8_timetable_characterization.json \
+            --current-timetable-validation outputs/phase2/current_service_stop_timetable_validation_2026-09-03.json \
+            --policy-grid-output /tmp/phase2-service-policy-search-v2/policies.csv \
+            --feasibility-output /tmp/phase2-service-policy-search-v2/feasibility.csv.gz \
+            --validation /tmp/phase2-service-policy-search-v2/validation.json
+          cmp outputs/phase2/service_policy_search_v2/service_policy_design_space_v2.csv /tmp/phase2-service-policy-search-v2/policies.csv
+          cmp outputs/phase2/service_policy_search_v2/service_policy_feasibility_v2.csv.gz /tmp/phase2-service-policy-search-v2/feasibility.csv.gz
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/service_policy_search_v2/service_policy_search_v2_validation.json').read_text())
+          b=json.loads(Path('/tmp/phase2-service-policy-search-v2/validation.json').read_text())
+          for p in (a,b):
+              for key in ('policy_grid','policy_grid_sha256','feasibility_output','feasibility_output_sha256'):
+                  p['lineage'].pop(key)
+          assert a == b
+          PY
+
+      - name: Guard explicit assumption semantics
+        run: |
+          FILES="config/phase2_service_policy_design_space_v2.json src/phase2_service_policy_search.py scripts/phase2_run_service_policy_search_v2.py"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|requests\.|urllib\.|httpx\.|overpass-api\.de' $FILES
+          ! grep -n -E '303|current annual service days =|recommended topology|primary recommendation|winner' $FILES
+          git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check origin/phase2-operational-screening-v2...HEAD
+
+      - name: Persist validated Service Policy Search V2
+        run: |
+          git config user.name "phase2-service-policy-search-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/service_policy_search_v2
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist audited Service Policy Search V2 [skip ci]"
+            git push origin HEAD:phase2-service-policy-search-v2
+          fi
+
+      - name: Upload Service Policy Search V2 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-service-policy-search-v2-${{ github.sha }}
+          retention-days: 90
+          path: outputs/phase2/service_policy_search_v2

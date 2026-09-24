@@ -1,0 +1,97 @@
+{
+  "budget_summary": {
+    "m10pct": {
+      "input_plan_count": 2578,
+      "multi_plan_equivalence_group_count": 1154,
+      "passenger_equivalence_group_count": 1167,
+      "survivor_plan_count": 2578,
+      "survivor_unique_scenario_count": 1487,
+      "survivor_unique_scenario_count_headway_30_or_better": 753
+    },
+    "m20pct": {
+      "input_plan_count": 2233,
+      "multi_plan_equivalence_group_count": 958,
+      "passenger_equivalence_group_count": 965,
+      "survivor_plan_count": 2233,
+      "survivor_unique_scenario_count": 1299,
+      "survivor_unique_scenario_count_headway_30_or_better": 571
+    },
+    "p10pct": {
+      "input_plan_count": 2913,
+      "multi_plan_equivalence_group_count": 1443,
+      "passenger_equivalence_group_count": 1470,
+      "survivor_plan_count": 2913,
+      "survivor_unique_scenario_count": 1511,
+      "survivor_unique_scenario_count_headway_30_or_better": 743
+    },
+    "p20pct": {
+      "input_plan_count": 3160,
+      "multi_plan_equivalence_group_count": 1565,
+      "passenger_equivalence_group_count": 1595,
+      "survivor_plan_count": 3160,
+      "survivor_unique_scenario_count": 1576,
+      "survivor_unique_scenario_count_headway_30_or_better": 834
+    },
+    "p30pct": {
+      "input_plan_count": 3296,
+      "multi_plan_equivalence_group_count": 1630,
+      "passenger_equivalence_group_count": 1666,
+      "survivor_plan_count": 3296,
+      "survivor_unique_scenario_count": 1612,
+      "survivor_unique_scenario_count_headway_30_or_better": 886
+    },
+    "reference": {
+      "input_plan_count": 2703,
+      "multi_plan_equivalence_group_count": 1342,
+      "passenger_equivalence_group_count": 1361,
+      "survivor_plan_count": 2703,
+      "survivor_unique_scenario_count": 1402,
+      "survivor_unique_scenario_count_headway_30_or_better": 663
+    }
+  },
+  "continuity_reason": "NOT_SUFFICIENTLY_MATERIALISED_AT_PLAN_LEVEL__NOT_INVENTED",
+  "continuity_with_existing_stops_corridors_tiebreak_applied": false,
+  "contract": "PHASE2_EXACT_PASSENGER_EQUIVALENCE_PRACTICAL_TIEBREAK_V2",
+  "cross_route_phase_selected": false,
+  "decision_budget_selected": false,
+  "exact_tie_group_count_after_supported_tiebreak": 8092,
+  "exact_timetable_constructed": false,
+  "final_reliability_proven": false,
+  "hard_s8_threshold_applied": false,
+  "input_plan_count": 16883,
+  "limitations": [
+    "This stage uses an exact zero-width passenger-equivalence band only; it does not declare a substantive uncertainty band.",
+    "S8 opportunity is pre-timetable evidence and does not prove a joint phase vector or missed-connection reliability.",
+    "Lower public route count is the only currently materialised public-facing simplicity proxy; topology-family ordering is not invented.",
+    "Continuity with existing stops/corridors remains unresolved and is not used to break residual exact ties.",
+    "Final PRIMARY/RUNNER-UP remains downstream of exact timetable, perturbation robustness and explicit decision inputs."
+  ],
+  "lineage": {
+    "audit_sha256": "d35347a7e836e12509366cbfc86286945cac6d72abd391c5030207aa82796e44",
+    "output_sha256": "93a13c7cccf827c111b87fedbd02018b69253e745844b0fd24997a754582143c",
+    "passenger_validation_sha256": "115d5fb06f877a886343d30cebad1538d1dc3e972d64094e66a82f2644312ff0",
+    "s8_surface_sha256": "fd656b3f66af9a658777486909c83dc170ecdc8066a7d2b68ef65b2c73cacbe8",
+    "s8_validation_sha256": "e04750fca8bd5c28805194e8079b8aeed36ebcae452fdc6ced5ff5d7ab10d643"
+  },
+  "missed_connection_probability_calculated": false,
+  "multi_plan_equivalence_group_count": 8092,
+  "non_equivalent_passenger_tradeoff_eliminated": false,
+  "passenger_equivalence_group_count": 8224,
+  "plans_removed_only_within_exact_passenger_equivalence_groups": 0,
+  "primary_selected": false,
+  "recovery_selected": false,
+  "reduced_equivalence_group_count": 0,
+  "runner_up_selected": false,
+  "service_policy_selected": false,
+  "status": "PASS_PHASE2_ZERO_BAND_TIEBREAK_V2",
+  "survivor_plan_count": 16883,
+  "tie_break_order_applied": [
+    "PRE_TIMETABLE_S8_OPPORTUNITY_CLASS_COMPLETE_MATCH_SHARE_AND_BEST_ACHIEVABLE_WORST_ROUTE_GAP",
+    "LOWER_PUBLIC_ROUTE_COUNT_AS_MEASURABLE_SIMPLICITY_PROXY",
+    "LOWER_ANNUAL_BUS_KM",
+    "FEWER_PUBLIC_EXPLICIT_FIELD_CHECK_PENDING_ELEMENTS"
+  ],
+  "uncertainty_band_semantics": "EXACT_STAGE_C_PASSENGER_UTILITY_AND_AVAILABILITY_EQUIVALENCE_ONLY",
+  "uncertainty_band_used": 0.0,
+  "weighted_composite_score": false
+}

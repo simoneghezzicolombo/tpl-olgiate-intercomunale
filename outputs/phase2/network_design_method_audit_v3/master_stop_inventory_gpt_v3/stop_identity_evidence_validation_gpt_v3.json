@@ -1,0 +1,15 @@
+{
+  "status": "PASS_IDENTITY_EVIDENCE_MATERIALIZATION",
+  "source_records_count": 105,
+  "distinct_source_alias_groups": 87,
+  "strong_crossfeed_alias_groups": 18,
+  "source_records_in_strong_alias_groups": 36,
+  "asf_source_records_count": 38,
+  "asf_operator_named_stop_places_count": 20,
+  "asf_two_record_named_stop_places": 18,
+  "asf_single_record_named_stop_places": 2,
+  "final_boarding_points_assigned": 0,
+  "final_cross_operator_stop_places_assigned": 0,
+  "routing_terminal_selected_count": 0,
+  "epistemic_note": "Source alias grouping is DERIVED evidence about duplicate source representation only. ASF operator-named stop places are FACT groupings from official operator naming. Neither statement proves shared physical boarding geometry."
+}

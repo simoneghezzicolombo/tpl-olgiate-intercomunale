@@ -1,0 +1,84 @@
+{
+  "model": "PHASE2_S8_INTERCHANGE_OPPORTUNITY_V1",
+  "topology_dependency": "NONE",
+  "station": {
+    "stop_id": "S01514",
+    "name": "Olgiate-Calco-Brivio"
+  },
+  "service_date": "2026-09-03",
+  "gate_c_commit": "dcc3e75ae3b4f4ea5170f48e85345b83620c5536",
+  "official_gtfs_sha256": "b4296f145b42ccb35c26085470ff4b3fd5dffe533251c0aab312312a73820ad6",
+  "active_s8_events": 74,
+  "rail_direction_method": "STOP_SEQUENCE_DOWNSTREAM_ENDPOINT_ANCHOR_NOT_TRAIN_NUMBER_HEURISTIC",
+  "bus_to_rail_anchor": "BUS_ARRIVAL_AT_HUB_VS_S8_DEPARTURE",
+  "rail_to_bus_anchor": "S8_ARRIVAL_VS_BUS_DEPARTURE_AT_HUB",
+  "transfer_quality": {
+    "type": "CONTINUOUS",
+    "formula": "LOGISTIC_CATCH_FACTOR_X_EXPONENTIAL_PREFERRED_WAIT_DECAY",
+    "hard_quality_threshold": null,
+    "parameter_status": "ASSUMPTION_SENSITIVITY",
+    "physical_miss_definition": "NEGATIVE_SLACK_AFTER_TRANSFER_WALK"
+  },
+  "delay_robustness": {
+    "method": "DETERMINISTIC_WEIGHTED_BUS_RAIL_DELAY_CASES",
+    "random_sampling": false,
+    "outputs": [
+      "expected_quality",
+      "worst_case_quality",
+      "hard_miss_probability",
+      "expected_slack_after_walk_min"
+    ]
+  },
+  "optimizer_bus_event_contract": {
+    "required_fields": [
+      "scenario_id",
+      "event_type",
+      "event_time"
+    ],
+    "event_types": [
+      "BUS_ARRIVAL",
+      "BUS_DEPARTURE"
+    ],
+    "forbidden_requirement": "NO_ROUTE_TOPOLOGY_FIELD_REQUIRED",
+    "compatible_topologies": [
+      "loop",
+      "radial",
+      "figure8",
+      "interlining",
+      "trunk_branches",
+      "short_turn",
+      "hybrid"
+    ]
+  },
+  "work_demand": {
+    "work_rows_workers_total": 8754,
+    "direct_s8_workers": 1882,
+    "verified_transfer_workers": 0,
+    "not_rail_assigned_workers": 6872,
+    "direct_s8_semantics": "ADDRESSABLE_WORK_DESTINATION_COUNT_NOT_RAIL_MODE_SHARE",
+    "scope": "ISTAT_2021_WORK_COMMUTING_ONLY",
+    "S8_DIRECT_is_modal_share": false,
+    "transfer_destinations_require_explicit_verified_evidence": true,
+    "verified_transfer_map_supplied": false
+  },
+  "sfr_context": {
+    "station": "Olgiate-Calco-Brivio",
+    "first_year": 2015,
+    "latest_year": 2025,
+    "latest_saliti24h": 2400.0,
+    "latest_index_2019_100": 169.01408450704224,
+    "series_min_saliti24h": 380.0,
+    "series_max_saliti24h": 2400.0,
+    "latest_source_period": "Frequentazione stazioni SFR (2024-2025)",
+    "epistemic_status": "DERIVED_SFR_CONTEXT_NOT_MODAL_SHARE",
+    "use_in_model": "CONTEXT_ONLY_NOT_OD_AND_NOT_MODAL_SHARE"
+  },
+  "epistemic_contract": {
+    "active_rail_service": "DERIVED_FROM_LIVE_OFFICIAL_GTFS_GATE_C",
+    "rail_stop_sequence_direction": "DERIVED_FROM_MATCHING_OFFICIAL_GTFS",
+    "work_OD": "ISTAT_2021_WORK_COMMUTING",
+    "transfer_profile": "ASSUMPTION_SENSITIVITY",
+    "delay_cases": "ASSUMPTION_SENSITIVITY",
+    "SFR": "DERIVED_CONTEXT_ONLY"
+  }
+}

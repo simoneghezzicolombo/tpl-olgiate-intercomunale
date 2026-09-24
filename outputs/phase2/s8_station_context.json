@@ -1,0 +1,11 @@
+{
+  "station": "Olgiate-Calco-Brivio",
+  "first_year": 2015,
+  "latest_year": 2025,
+  "latest_saliti24h": 2400.0,
+  "latest_index_2019_100": 169.01408450704224,
+  "series_min_saliti24h": 380.0,
+  "series_max_saliti24h": 2400.0,
+  "latest_source_period": "Frequentazione stazioni SFR (2024-2025)",
+  "epistemic_status": "DERIVED_SFR_CONTEXT_NOT_MODAL_SHARE"
+}

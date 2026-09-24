@@ -1,0 +1,165 @@
+name: Phase 2 Current Service Continuity V2
+
+on:
+  push:
+    branches:
+      - phase2-current-service-continuity-v2
+    paths:
+      - 'scripts/phase2_build_current_service_continuity_v2.py'
+      - 'tests/test_phase2_current_service_continuity_v2.py'
+      - '.github/workflows/phase2-current-service-continuity-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    env:
+      PYTHONPATH: .
+      OUTDIR: outputs/phase2/current_service_continuity_v2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile
+        run: python -m py_compile scripts/phase2_build_current_service_continuity_v2.py
+
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<9'
+
+      - name: Unit tests
+        run: python -m pytest -q tests/test_phase2_current_service_continuity_v2.py
+
+      - name: Build continuity lower bound
+        run: |
+          python scripts/phase2_build_current_service_continuity_v2.py \
+            --current-localized outputs/phase2/current_service_access_baseline_v2/current_service_localized_rows_v2.csv \
+            --current-validation outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json \
+            --routing-anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2_validation.json \
+            --scenario-output "$OUTDIR/scenario_current_service_continuity_lower_bound_v2.csv.gz" \
+            --plan-output "$OUTDIR/passenger_plans_current_service_continuity_lower_bound_v2.csv.gz" \
+            --validation "$OUTDIR/current_service_continuity_v2_validation.json"
+
+      - name: Validate continuity contract
+        run: |
+          python - <<'PY'
+          import csv, gzip, json
+          from pathlib import Path
+
+          outdir = Path('outputs/phase2/current_service_continuity_v2')
+          v = json.loads((outdir/'current_service_continuity_v2_validation.json').read_text())
+          assert v['status'] == 'PASS_PHASE2_CURRENT_SERVICE_CONTINUITY_LOWER_BOUND_V2'
+          assert v['contract'] == 'PHASE2_CERTIFIED_LOCALIZABLE_CURRENT_SERVICE_CONTINUITY_LOWER_BOUND_V2'
+          assert v['baseline_role'] == 'CERTIFIED_LOCALIZABLE_LOWER_BOUND_ONLY'
+          assert v['current_localizable_row_count'] == 12
+          assert v['current_unresolved_or_unlocalized_row_count'] == 39
+          assert v['current_localizable_cluster_count'] == 7
+          assert v['current_localizable_clusters'] == ['EX_002','EX_009','EX_011','EX_023','EX_026','EX_036','EX_041']
+          assert v['scenario_count'] == 100000
+          assert v['passenger_utility_plan_count'] == 16883
+          assert v['continuity_is_complete_current_service_measure'] is False
+          assert v['unresolved_current_rows_inferred'] is False
+          assert v['proximity_used_as_stop_retention'] is False
+          assert v['historical_station_EX_011_kept_separate_from_project_bridge_EX_039'] is True
+          assert v['project_station_bridge_counts_as_current_stop_retention'] is False
+          assert v['continuity_used_to_eliminate_candidate'] is False
+          assert v['continuity_used_to_select_primary'] is False
+          assert v['continuity_used_to_select_runner_up'] is False
+          assert v['weighted_composite_score'] is False
+          assert 0 <= v['scenario_retained_current_cluster_count_min'] <= v['scenario_retained_current_cluster_count_max'] <= 7
+          assert 0 <= v['scenario_retained_current_directed_pair_count_min'] <= v['scenario_retained_current_directed_pair_count_max'] <= len(v['current_localizable_directed_adjacent_pairs'])
+          assert len(v['current_localizable_directed_adjacent_pairs']) > 0
+
+          with gzip.open(outdir/'scenario_current_service_continuity_lower_bound_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              rows = list(csv.DictReader(f))
+          assert len(rows) == 100000
+          assert all(r['unresolved_current_rows_inferred'] == 'false' for r in rows)
+          assert all(r['project_station_bridge_EX_039_counts_as_current_continuity'] == 'false' for r in rows)
+          assert all(r['candidate_eliminated_by_continuity'] == 'false' for r in rows)
+
+          with gzip.open(outdir/'passenger_plans_current_service_continuity_lower_bound_v2.csv.gz','rt',encoding='utf-8',newline='') as f:
+              plans = list(csv.DictReader(f))
+          assert len(plans) == 16883
+          assert all(r['candidate_eliminated_by_continuity'] == 'false' for r in plans)
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/continuity-v2 && mkdir -p /tmp/continuity-v2
+          python scripts/phase2_build_current_service_continuity_v2.py \
+            --current-localized outputs/phase2/current_service_access_baseline_v2/current_service_localized_rows_v2.csv \
+            --current-validation outputs/phase2/current_service_access_baseline_v2/current_service_access_baseline_v2_validation.json \
+            --routing-anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --matrix-validation outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix_v2_validation.json \
+            --route-universe outputs/phase2/s8_phasing_v2/unique_route_cycles_v2.csv \
+            --scenario-mapping outputs/phase2/s8_phasing_v2/scenario_to_routes_v2.csv.gz \
+            --s8-validation outputs/phase2/s8_phasing_v2/s8_phasing_v2_validation.json \
+            --passenger-frontier outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2.csv.gz \
+            --passenger-validation outputs/phase2/passenger_utility_frontier_v2/passenger_utility_frontier_v2_validation.json \
+            --scenario-output /tmp/continuity-v2/scenario.csv.gz \
+            --plan-output /tmp/continuity-v2/plans.csv.gz \
+            --validation /tmp/continuity-v2/validation.json
+          cmp "$OUTDIR/scenario_current_service_continuity_lower_bound_v2.csv.gz" /tmp/continuity-v2/scenario.csv.gz
+          cmp "$OUTDIR/passenger_plans_current_service_continuity_lower_bound_v2.csv.gz" /tmp/continuity-v2/plans.csv.gz
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a = json.loads(Path('outputs/phase2/current_service_continuity_v2/current_service_continuity_v2_validation.json').read_text())
+          b = json.loads(Path('/tmp/continuity-v2/validation.json').read_text())
+          for x in (a,b):
+              x['lineage'].pop('scenario_output', None)
+              x['lineage'].pop('plan_output', None)
+          assert a == b
+          PY
+
+      - name: Guard epistemic boundary
+        run: |
+          ! grep -REn 'np\.random|random\.' scripts/phase2_build_current_service_continuity_v2.py tests/test_phase2_current_service_continuity_v2.py
+          ! grep -REn 'PRIMARY|RUNNER_UP|primary_selected *= *true|runner_up_selected *= *true' scripts/phase2_build_current_service_continuity_v2.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('outputs/phase2/current_service_continuity_v2/current_service_continuity_v2_validation.json').read_text())
+          forbidden_true = [
+              'unresolved_current_rows_inferred',
+              'proximity_used_as_stop_retention',
+              'project_station_bridge_counts_as_current_stop_retention',
+              'continuity_used_to_eliminate_candidate',
+              'continuity_used_to_select_primary',
+              'continuity_used_to_select_runner_up',
+              'weighted_composite_score',
+          ]
+          assert all(v[k] is False for k in forbidden_true)
+          PY
+
+      - name: Persist evidence
+        run: |
+          git config user.name 'phase2-continuity-v2-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$OUTDIR"
+          if git diff --cached --quiet; then
+            echo 'No evidence changes to persist'
+          else
+            git commit -m 'data(phase2): persist current-service continuity v2 [skip ci]'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase2-current-service-continuity-v2
+          path: outputs/phase2/current_service_continuity_v2
+          if-no-files-found: error

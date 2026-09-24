@@ -1,0 +1,41 @@
+{
+  "contract": "PHASE2_PASSENGER_GJT_SENSITIVITY_V2",
+  "status": "ASSUMPTION_SENSITIVITY_NOT_EMPIRICAL_INTERVAL",
+  "normative_reference": "docs/PHASE2_TRANSIT_BEST_PRACTICES.md",
+  "formula": "bus_ivt_weight*bus_ivt + rail_ivt + walk_weight*(walk+transfer_walk) + wait_weight*(wait+transfer_wait) + transfer_penalty_min*transfers + missed_connection_cost_multiplier*missed_connection_probability*missed_connection_cost_min",
+  "parameter_grid": {
+    "bus_ivt_weight": [1.0, 1.2, 1.4],
+    "walk_weight": [1.5, 1.75, 2.0],
+    "wait_weight": [1.5, 2.0, 2.5],
+    "transfer_penalty_min": [2.0, 6.0, 10.0],
+    "missed_connection_cost_multiplier": [1.0]
+  },
+  "parameter_semantics": {
+    "bus_ivt_weight": "TAG_RANGE_SENSITIVITY_RELATIVE_TO_RAIL_IVT_REFERENCE",
+    "walk_weight": "TAG_RANGE_SENSITIVITY",
+    "wait_weight": "TAG_RANGE_SENSITIVITY",
+    "transfer_penalty_min": "TAG_EQUIVALENT_MINUTES_SENSITIVITY",
+    "missed_connection_cost_multiplier": "IDENTITY_MULTIPLIER_ON_EXPLICIT_MISSED_CONNECTION_COST_MIN"
+  },
+  "expected_full_factorial_case_count": 81,
+  "demand_contract": {
+    "primary_empirical_layer": "ISTAT_2021_WORK_S8_DIRECT",
+    "source_resolution": "MUNICIPAL_OD",
+    "expected_demand_weight_sum": 1882,
+    "feeder_eligibility_field": "feeder_objective_eligible",
+    "feeder_eligibility_required_value": true,
+    "S8_DIRECT_is_modal_share": false
+  },
+  "spatial_contract": {
+    "municipal_od_is_sufficient_for_full_gjt": false,
+    "population_proportional_worker_allocation_allowed_as_fact": false,
+    "nearest_stop_imputation_allowed": false,
+    "full_gjt_requires_explicit_spatial_allocation_status": true,
+    "fine_walking_access_remains_separate_until_allocation_is_supported": true
+  },
+  "ranking_contract": {
+    "hidden_composite_score": false,
+    "territorial_non_regression_is_hard_constraint": true,
+    "robust_sensitivity_tournament_downstream": true
+  }
+}

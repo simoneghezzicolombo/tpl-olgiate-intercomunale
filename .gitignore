@@ -7,10 +7,21 @@ __pycache__/
 .coverage
 htmlcov/
 
-# Large binary external data (documented in data/manifest.csv with SHA256 and URL)
+# Large binary raw data (>25MB, documented in data/manifest.csv with SHA256 and official URL)
 data/external/*.pdf
 data/external/*.zip
-data/raw/dem/*.tif
+data/raw/boundaries/*.zip
+data/raw/od/*.zip
+data/raw/worldpop/ita_ppp_2020_UNadj.tif
+data/raw/dem/Copernicus_DSM_COG_10_N45_00_E009_00_DEM.tif
+data/raw/gtfs/rail_trenord/calendar_dates.txt
+cache/
+
+# Local multi-agent bridge state
+.agent_bridge_state.json
+.agent_bridge_state.json.tmp
+.agent_bridge.lock
+.agent_bridge_logs/
 
 # Environments
 .env

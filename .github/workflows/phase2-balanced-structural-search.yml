@@ -1,0 +1,40 @@
+name: Phase 2 balanced structural search
+
+on:
+  push:
+    branches: [phase2-balanced-structural-search]
+    paths:
+      - src/phase2_balanced_structural_search.py
+      - scripts/phase2_run_balanced_structural_search.py
+      - tests/test_phase2_balanced_structural_search.py
+      - .github/workflows/phase2-balanced-structural-search.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-balanced-search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pytest
+        run: python -m pip install pytest
+      - name: Compile
+        run: |
+          python -m py_compile src/phase2_balanced_structural_search.py
+          python -m py_compile scripts/phase2_run_balanced_structural_search.py
+      - name: Unit and adversarial tests
+        run: python -m pytest -q tests/test_phase2_balanced_structural_search.py
+      - name: Anti-random and whitespace guard
+        run: |
+          FILES="src/phase2_balanced_structural_search.py scripts/phase2_run_balanced_structural_search.py"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random' $FILES
+          ! grep -n -E '08_candidate_routes|route_variants\.csv|current_service_baseline\.csv' $FILES
+          git diff --check

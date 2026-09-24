@@ -1,0 +1,54 @@
+{
+  "contract": "PHASE2_FEEDER_GENERALIZED_ACCESS_SENSITIVITY_V2",
+  "status": "ASSUMPTION_SENSITIVITY_NOT_EMPIRICAL_INTERVAL",
+  "normative_reference": "docs/PHASE2_TRANSIT_BEST_PRACTICES.md",
+  "scope": "PRE_PHASE_S8_FEEDER_GENERALIZED_ACCESS_SCREENING",
+  "formula": "bus_ivt_weight*bus_ivt + walk_weight*(access_walk+station_transfer_walk) + wait_weight*(uniform_headway/2) + transfer_penalty_min",
+  "parameter_grid": {
+    "bus_ivt_weight": [1.0, 1.2, 1.4],
+    "walk_weight": [1.5, 1.75, 2.0],
+    "wait_weight": [1.5, 2.0, 2.5],
+    "transfer_penalty_min": [2.0, 6.0, 10.0],
+    "station_transfer_walk_min": [1.5, 2.0, 3.0]
+  },
+  "expected_full_factorial_case_count": 243,
+  "waiting_assumption": {
+    "rule": "UNIFORM_CLOCKFACE_RANDOM_ARRIVAL_MEAN_WAIT_EQUALS_HALF_HEADWAY",
+    "status": "ASSUMPTION_SCREENING_NOT_EXACT_S8_CONNECTION_WAIT",
+    "exact_s8_phase_used": false
+  },
+  "population_contract": {
+    "weight_layer": "DASYMETRIC_BUILDING_RESIDENT_POPULATION_MODEL",
+    "resident_is_passenger_demand": false,
+    "ridership_forecast": false,
+    "municipal_work_od_downscaled": false,
+    "purpose": "POTENTIAL_FEEDER_ACCESSIBILITY_SCREENING"
+  },
+  "direct_station_access_contract": {
+    "exclude_verified_direct_hub_walk_catchment_from_feeder_dependent_denominator": true,
+    "hub_walk_source": "ACCESS_EQUITY_V2_VERIFIED_RAIL_ANCHOR_BRIDGE_TO_EXISTING_STATION_STOP_CLUSTER",
+    "reason": "Residents already within the certified direct station walk catchment do not require a bus feeder to reach the hub. Exclusion is constant across scenarios and avoids rewarding feeder service to already directly accessible residents."
+  },
+  "direction_contract": {
+    "rail_to_bus": "PUBLIC_ROUTE_SERVICE_FROM_EXPLICIT_HUB_OCCURRENCE_TO_STOP_ANCHOR",
+    "bus_to_rail": "PUBLIC_ROUTE_SERVICE_FROM_STOP_ANCHOR_TO_NEXT_EXPLICIT_HUB_OCCURRENCE_ONLY",
+    "vehicle_only_return_closure_is_passenger_service": false,
+    "directions_combined_into_one_score": false
+  },
+  "deferred_components": {
+    "exact_s8_phase": true,
+    "rail_ivt": true,
+    "exact_train_connection_wait": true,
+    "missed_connection_probability": true,
+    "delay_robustness": true,
+    "exact_vehicle_blocks": true,
+    "current_service_full_gjt_comparison": true
+  },
+  "ranking_contract": {
+    "primary_selected": false,
+    "runner_up_selected": false,
+    "weighted_composite_score": false,
+    "this_stage_is_final_gjt": false,
+    "downstream_use": "PASSENGER_FACING_SCREENING_FRONTIER_BEFORE_EXACT_TIMETABLE"
+  }
+}

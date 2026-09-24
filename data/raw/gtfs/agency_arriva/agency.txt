@@ -1,0 +1,4 @@
+agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone
+175711,ADDABUS SRL,https://www.zaniviaggi.com/it/,Europe/Rome,it,035/678780
+289626,ADDABUS SRL,https://www.zaniviaggi.com/it/,Europe/Rome,it,02 867131
+A2013327,Arriva Italia Srl - Lecco,https://bergamo.arriva.it/,Europe/Rome,it,0341 369382

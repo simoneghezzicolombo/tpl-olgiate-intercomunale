@@ -1,0 +1,13 @@
+area_id,area_name,municipality,evidence_coordinate_available,existing_named_match_count,proposed_named_match_count,nearest_existing_official_m,nearest_proposed_hypothesis_m,catalog_status
+AREA_OLGIATE_CENTRO,Olgiate Molgora centro / stazione,Olgiate Molgora,true,0,0,148.4,198.2,OPTIONS_MATERIALIZED
+AREA_SAN_ZENO,San Zeno,Olgiate Molgora,false,0,0,,,NO_CERTIFIED_AREA_COORDINATE
+AREA_CALCO_CENTRO,Calco centro,Calco,true,12,0,74.7,201.7,OPTIONS_MATERIALIZED
+AREA_CALCO_SUPERIORE,Calco Superiore,Calco,true,0,0,589.3,156.0,OPTIONS_MATERIALIZED
+AREA_ARLATE,Arlate,Calco,true,5,0,278.0,663.7,OPTIONS_MATERIALIZED
+AREA_BRIVIO_CENTRO,Brivio centro,Brivio,true,13,0,140.1,404.1,OPTIONS_MATERIALIZED
+AREA_BEVERATE,Beverate,Brivio,true,6,0,102.1,128.0,OPTIONS_MATERIALIZED
+AREA_SMHOE,Santa Maria Hoè,Santa Maria Hoè,true,2,0,91.1,228.4,OPTIONS_MATERIALIZED
+AREA_ROVAGNATE,Rovagnate,La Valletta Brianza,true,6,0,157.6,439.1,OPTIONS_MATERIALIZED
+AREA_PEREGO,Perego,La Valletta Brianza,true,2,4,261.3,104.5,OPTIONS_MATERIALIZED
+AREA_MONDONICO,Mondonico,Olgiate Molgora,true,0,4,763.4,72.3,OPTIONS_MATERIALIZED
+AREA_MONTICELLO,Monticello / Scarpone,Olgiate Molgora,true,2,0,0.0,265.9,OPTIONS_MATERIALIZED

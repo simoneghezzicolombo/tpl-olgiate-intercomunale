@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "service_date": "2026-09-03",
+  "gate_c_commit": "dcc3e75ae3b4f4ea5170f48e85345b83620c5536",
+  "gate_c_artifact": "outputs/gate_c/live_bus_timetables_2026-09-03.json",
+  "gate_c_raw_url": "https://raw.githubusercontent.com/simoneghezzicolombo/tpl-olgiate-intercomunale/dcc3e75ae3b4f4ea5170f48e85345b83620c5536/outputs/gate_c/live_bus_timetables_2026-09-03.json",
+  "gate_c_artifact_sha256": "6b896754be5ceb989b0700f33fc5366f0c8d87a5e3e84c938f71a073281a8af3",
+  "route_ids": [
+    "D150",
+    "D170",
+    "D184",
+    "D185"
+  ],
+  "route_count": 4,
+  "active_timetable_columns_total": 104,
+  "dated_route_level_reference": true,
+  "stop_level_timetable_matrix": "NOT_MATERIALISED_BY_GATE_C",
+  "annual_production_from_this_snapshot": "NOT_IDENTIFIABLE",
+  "legacy_outputs_current_service_baseline_csv": "FORBIDDEN_AS_PHASE2_EVIDENCE",
+  "legacy_scripts_05_current_service_py": "FORBIDDEN_AS_PHASE2_EVIDENCE",
+  "epistemic_note": "Active timetable columns are reconstructed from official primary operator PDFs by Gate C. They are not GTFS trips, stop-level journey records or annual bus-km."
+}

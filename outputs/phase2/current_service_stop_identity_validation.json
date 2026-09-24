@@ -1,0 +1,87 @@
+{
+  "status": "PASS",
+  "reference_date": "2026-09-03",
+  "scope": "CURRENT_PDF_STOP_ROW_TO_OFFICIAL_STOP_IDENTITY_CROSSCHECK",
+  "pdf_stop_rows_total": 209,
+  "resolved_historical_gtfs_identity_rows": 54,
+  "unresolved_or_ambiguous_rows": 155,
+  "joined_v1_physical_cluster_rows": 13,
+  "identity_status_counts": {
+    "NO_HISTORICAL_GTFS_NAME_MATCH": 55,
+    "AMBIGUOUS_HISTORICAL_GTFS": 100,
+    "RESOLVED_ROUTE_NAME_UNIQUE": 9,
+    "RESOLVED_BEST_SEQUENCE_UNIQUE": 41,
+    "RESOLVED_EQUIVALENT_GTFS_RECORDS_SAME_NAME_COORDINATE": 4
+  },
+  "phase2_join_status_counts": {
+    "NO_RESOLVED_GTFS_IDENTITY": 155,
+    "GTFS_IDENTIFIED_NOT_IN_V1_STOP_UNIVERSE": 41,
+    "JOINED_V1_PHYSICAL_CLUSTER_BY_EQUIVALENT_EXACT_GTFS_RECORD": 13
+  },
+  "route_counts": {
+    "D150": {
+      "pdf_rows": 55,
+      "resolved_gtfs": 9,
+      "joined_v1_cluster": 1
+    },
+    "D170": {
+      "pdf_rows": 103,
+      "resolved_gtfs": 25,
+      "joined_v1_cluster": 0
+    },
+    "D184": {
+      "pdf_rows": 24,
+      "resolved_gtfs": 10,
+      "joined_v1_cluster": 6
+    },
+    "D185": {
+      "pdf_rows": 27,
+      "resolved_gtfs": 10,
+      "joined_v1_cluster": 6
+    }
+  },
+  "current_stop_time_rows_preserved": 1145,
+  "current_stop_trip_matrix_rows_preserved": 3089,
+  "matching_contract": {
+    "edit_distance_fuzzy_matching_used": false,
+    "forced_nearest_coordinate_matching_used": false,
+    "manual_stop_alias_whitelist_used": false,
+    "route_specific_manual_stop_mapping_used": false,
+    "exact_name_coordinate_duplicate_gtfs_records_collapsed": true,
+    "coordinate_distance_tolerance_for_equivalence_used": false,
+    "name_rule": "CONSERVATIVE_TOKEN_CONTAINMENT_WITH_LONG_TOKEN_PREFIX_ONLY",
+    "sequence_rule": "MAXIMUM_ORDERED_HISTORICAL_PATTERN_AGREEMENT; TIES PRESERVED",
+    "duplicate_record_rule": "SAME_NORMALIZED_OFFICIAL_GTFS_NAME_AND_EXACT_NUMERIC_COORDINATES",
+    "ambiguous_identity_policy": "UNRESOLVED_FAIL_OPEN_FOR_DATA_PRESERVATION_BUT_FORBIDDEN_FOR_WALKING_GJT_JOIN"
+  },
+  "historical_gtfs_semantics": {
+    "role": "VALIDITY_BOUNDED_OFFICIAL_IDENTITY_AND_SEQUENCE_CROSSCHECK_ONLY",
+    "used_to_assert_current_service_activation": false,
+    "used_to_fill_current_unpublished_times": false,
+    "current_pdf_times_remain_authoritative_for_2026_09_03": true
+  },
+  "v1_cluster_semantics": {
+    "join_key": "EXACT_GTFS_STOP_ID_OR_EXACT_NAME_COORDINATE_EQUIVALENT_GTFS_RECORD",
+    "external_or_not_in_v1_stops_are_not_force_joined": true,
+    "v2_refresh_expected": true
+  },
+  "input_sha256": {
+    "pdf_stop_rows": "6747731c5cd92baf0b3d018950f7524607b20ce2a9f1b54020d9a5e5be681f6a",
+    "current_stop_times": "a452fcb206960df8834cc1d873e9c37c5e910a7b14c4cf89dcd9b6f8e36a2288",
+    "current_stop_trip_matrix": "cdad9498702ef4e085a94e8fde2c3cab4e1163049dec92922b5281c16a517e24",
+    "historical_gtfs_stops": "099163a45d1c75f12fdd172f1ea9984132e3aa14f9d7741a196293dff405be72",
+    "historical_gtfs_trips": "ff3005d3831bf14ce1a7965b3d746c278f3392d67b163d6be61a28a9644903bb",
+    "historical_gtfs_stop_times": "c5b4a6f98935893c916281b58f1a7384e500ffe3800dac11f68550043cea5709",
+    "phase2_v1_existing_stops": "63187ecd6b8a3ef1b433c55b829c241e2622a0abb3b695afb2733cc470c01071"
+  },
+  "output_sha256": {
+    "identity": "55b390d567191a6bdcc517362099813cb86b0fea52d3b8e20cf33c1982d72733",
+    "stop_times_with_identity": "39dfb418f22ed8876fc80613733687e51b0bdd53ba1359957e11f900ac983ab6",
+    "matrix_with_identity": "bccad9013b9e5222f2efa849c3f923003772f386b726097d973468abfbb834a9"
+  },
+  "gjt_contract": {
+    "rows_with_resolved_gtfs_identity_may_be_joined_to_spatial_stop_evidence": true,
+    "ambiguous_or_unresolved_rows_may_not_be_used_as_spatial_stop_identity": true,
+    "v1_cluster_absence_does_not_mean_stop_absence": true
+  }
+}

@@ -1,0 +1,500 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-09-02T21:11:36Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 1847848087,
+  "lat": 45.7291359,
+  "lon": 9.4043941,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Olgiate Molgora FS - Piazza Repubblica",
+    "network": "Merate e dintorni",
+    "operator": "Arriva Italia",
+    "public_transport": "stop_position",
+    "ref": "300407"
+  }
+},
+{
+  "type": "node",
+  "id": 2428954867,
+  "lat": 45.7371600,
+  "lon": 9.3704765,
+  "tags": {
+    "bench": "no",
+    "bin": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "public_transport": "platform",
+    "shelter": "no",
+    "tactile_paving": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2428954874,
+  "lat": 45.7371666,
+  "lon": 9.3694523,
+  "tags": {
+    "bench": "no",
+    "bin": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "public_transport": "platform",
+    "shelter": "no",
+    "tactile_paving": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 3589553063,
+  "lat": 45.7135963,
+  "lon": 9.4180752,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 3589702911,
+  "lat": 45.7143343,
+  "lon": 9.4180216,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 3589784824,
+  "lat": 45.7196806,
+  "lon": 9.4238044,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 3589784827,
+  "lat": 45.7196993,
+  "lon": 9.4237025,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 3589822002,
+  "lat": 45.7167969,
+  "lon": 9.4214709,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 3589822072,
+  "lat": 45.7167988,
+  "lon": 9.4216077,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 4051648530,
+  "lat": 45.7371450,
+  "lon": 9.3745228,
+  "tags": {
+    "bench": "no",
+    "bus": "yes",
+    "covered": "no",
+    "highway": "bus_stop",
+    "name": "Via Statale - Via Barzaghi (La Valletta Brianza)",
+    "public_transport": "platform",
+    "shelter": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 4051648531,
+  "lat": 45.7372491,
+  "lon": 9.3742635,
+  "tags": {
+    "bench": "no",
+    "bus": "yes",
+    "covered": "no",
+    "highway": "bus_stop",
+    "name": "Via Statale - Via Barzaghi (La Valletta Brianza)",
+    "public_transport": "platform",
+    "shelter": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 5749368666,
+  "lat": 45.7424813,
+  "lon": 9.4459145,
+  "tags": {
+    "bench": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "lit": "yes",
+    "name": "Brivio - capolinea",
+    "public_transport": "platform",
+    "shelter": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "node",
+  "id": 5749603240,
+  "lat": 45.7413677,
+  "lon": 9.4456863,
+  "tags": {
+    "bench": "yes",
+    "bus": "yes",
+    "departures_board": "timetable",
+    "highway": "bus_stop",
+    "lit": "yes",
+    "name": "Via Como",
+    "public_transport": "platform",
+    "shelter": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "node",
+  "id": 5913688048,
+  "lat": 45.7168127,
+  "lon": 9.4080479,
+  "tags": {
+    "bench": "yes",
+    "bin": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "CALCO Via Statale/Scagnello (Esselunga)",
+    "public_transport": "platform",
+    "shelter": "yes",
+    "tactile_paving": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5913688049,
+  "lat": 45.7169204,
+  "lon": 9.4082853,
+  "tags": {
+    "bench": "yes",
+    "bin": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "public_transport": "platform",
+    "shelter": "yes",
+    "tactile_paving": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11574570667,
+  "lat": 45.7194048,
+  "lon": 9.4576552,
+  "tags": {
+    "bench": "yes",
+    "bus": "yes",
+    "departures_board": "timetable",
+    "highway": "bus_stop",
+    "name": "Via Robasacchi",
+    "network": "Bergamo Trasporti Ovest",
+    "operator": "Autoservizi Locatelli S.r.l.",
+    "public_transport": "platform",
+    "shelter": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11574583469,
+  "lat": 45.7158905,
+  "lon": 9.4585857,
+  "tags": {
+    "bench": "yes",
+    "bus": "yes",
+    "departures_board": "timetable",
+    "highway": "bus_stop",
+    "name": "Via S. Martirio",
+    "network": "Bergamo Trasporti Ovest",
+    "operator": "Autoservizi Locatelli S.r.l.",
+    "public_transport": "platform",
+    "shelter": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11574583470,
+  "lat": 45.7158990,
+  "lon": 9.4587463,
+  "tags": {
+    "bench": "no",
+    "bus": "yes",
+    "departures_board": "timetable",
+    "highway": "bus_stop",
+    "name": "Via S. Martirio",
+    "network": "Bergamo Trasporti Ovest",
+    "operator": "Autoservizi Locatelli S.r.l.",
+    "public_transport": "platform",
+    "shelter": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11574870786,
+  "lat": 45.7211592,
+  "lon": 9.4563229,
+  "tags": {
+    "bench": "no",
+    "bus": "yes",
+    "departures_board": "timetable",
+    "highway": "bus_stop",
+    "name": "Via delle Industrie",
+    "network": "Bergamo Trasporti Ovest",
+    "operator": "Autoservizi Locatelli S.r.l.",
+    "public_transport": "platform",
+    "shelter": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 13634821500,
+  "lat": 45.7559625,
+  "lon": 9.4544622,
+  "tags": {
+    "highway": "bus_stop",
+    "name": "Cisano - rotonda (via mayer)",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637611233,
+  "lat": 45.7240616,
+  "lon": 9.4152282,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Calco - via statale (edicola)",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637611234,
+  "lat": 45.7365450,
+  "lon": 9.4195372,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Calco - via nazionale, 85 (2)",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637611235,
+  "lat": 45.7414384,
+  "lon": 9.4233459,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Airuno - elettroadda",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637611236,
+  "lat": 45.7554554,
+  "lon": 9.4265994,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Airuno - statale",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637768775,
+  "lat": 45.7553131,
+  "lon": 9.4267657,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Airuno - statale",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637768776,
+  "lat": 45.7406747,
+  "lon": 9.4229650,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Brivio - beverate (cariplo)",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637768777,
+  "lat": 45.7373950,
+  "lon": 9.4280344,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Brivio - beverate (paese)",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637768778,
+  "lat": 45.7347441,
+  "lon": 9.4269884,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Brivio - beverate (quattro strade)",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637768780,
+  "lat": 45.7369195,
+  "lon": 9.4361736,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Brivio - vaccarezza",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637768781,
+  "lat": 45.7421563,
+  "lon": 9.4390570,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Brivio - via como (pizzeria)",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637768782,
+  "lat": 45.7235589,
+  "lon": 9.4441652,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Calco- arlate - (provinciale)",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637768783,
+  "lat": 45.7182107,
+  "lon": 9.4446158,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Imbersago - arlate (fiorista)",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 13637768784,
+  "lat": 45.7149035,
+  "lon": 9.4441009,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Imbersago - madonna bosco",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 14006806495,
+  "lat": 45.7291031,
+  "lon": 9.4043680,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Olgiate Molgora FS - Piazza Repubblica",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 14006806496,
+  "lat": 45.7250774,
+  "lon": 9.4128075,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Calco - via virgilio (pensilina asf)",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 14006806497,
+  "lat": 45.7249932,
+  "lon": 9.4149131,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Calco - via virgilio",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 14006806498,
+  "lat": 45.7292622,
+  "lon": 9.4174290,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Calco - Via Nazionale 90",
+    "public_transport": "platform"
+  }
+}
+
+  ]
+}

@@ -1,0 +1,128 @@
+name: Phase 2 real balanced structural catalog
+
+on:
+  push:
+    branches: [phase2-optimizer-core]
+    paths:
+      - src/phase2_balanced_structural_search.py
+      - scripts/phase2_run_balanced_structural_search.py
+      - outputs/phase2/routing_anchor_universe.csv
+      - outputs/phase2/reduced_path_matrix.csv
+      - .github/workflows/phase2-real-structural-catalog.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialise-real-catalog:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile real structural runner
+        run: |
+          python -m py_compile src/phase2_balanced_structural_search.py
+          python -m py_compile scripts/phase2_run_balanced_structural_search.py
+
+      - name: Generate 100000 real structural scenarios
+        run: >-
+          python scripts/phase2_run_balanced_structural_search.py
+          --hub rail:S01514
+          --anchors outputs/phase2/routing_anchor_universe.csv
+          --path-matrix outputs/phase2/reduced_path_matrix.csv
+          --output outputs/phase2/structural_scenario_catalog_balanced.csv
+          --validation outputs/phase2/structural_scenario_catalog_balanced_validation.json
+          --max-scenarios 100000
+          --max-loop-intermediate-anchors 4
+
+      - name: Validate structural coverage and lineage
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root = Path('outputs/phase2')
+          validation = json.loads((root / 'structural_scenario_catalog_balanced_validation.json').read_text(encoding='utf-8'))
+          assert validation['status'] == 'PASS'
+          assert validation['hub_anchor_id'] == 'rail:S01514'
+          assert validation['max_scenarios'] == 100000
+          assert validation['max_loop_intermediate_anchors'] == 4
+          assert validation['allocation_rule'] == 'EQUAL_FAMILY_AFTER_FINITE_SINGLE_RADIAL_CAPACITY'
+          assert validation['uses_live_osm'] is False
+          assert validation['uses_random_generation'] is False
+          assert validation['uses_legacy_candidate_routes'] is False
+          assert validation['uses_topology_preference_score'] is False
+          assert validation['search_allocation_is_decision_weight'] is False
+          counts = validation['family_counts']
+          targets = validation['family_targets']
+          assert len(counts) == 11
+          assert all(counts[family] > 0 for family in counts)
+          assert set(counts) == set(targets)
+          assert validation['generated_scenario_count'] == sum(counts.values())
+          assert validation['generated_scenario_count'] >= 90000, validation
+          assert validation['hub_bidirectional_nonhub_anchor_count'] == validation['valid_single_radial_count']
+          assert validation['hub_bidirectional_structural_anchor_count'] == validation['valid_single_radial_count'] + 1
+
+          with (root / 'structural_scenario_catalog_balanced.csv').open(encoding='utf-8', newline='') as handle:
+              rows = list(csv.DictReader(handle))
+          assert len(rows) == validation['generated_scenario_count']
+          ids = [row['scenario_id'] for row in rows]
+          assert len(ids) == len(set(ids))
+          catalog_counts = {}
+          for row in rows:
+              catalog_counts[row['topology_family']] = catalog_counts.get(row['topology_family'], 0) + 1
+          assert catalog_counts == counts
+          print(json.dumps(validation, indent=2))
+          PY
+
+      - name: Deterministic catalog rebuild
+        run: |
+          rm -rf /tmp/phase2-real-catalog
+          mkdir -p /tmp/phase2-real-catalog
+          python scripts/phase2_run_balanced_structural_search.py \
+            --hub rail:S01514 \
+            --anchors outputs/phase2/routing_anchor_universe.csv \
+            --path-matrix outputs/phase2/reduced_path_matrix.csv \
+            --output /tmp/phase2-real-catalog/catalog.csv \
+            --validation /tmp/phase2-real-catalog/validation.json \
+            --max-scenarios 100000 \
+            --max-loop-intermediate-anchors 4
+          cmp outputs/phase2/structural_scenario_catalog_balanced.csv /tmp/phase2-real-catalog/catalog.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('outputs/phase2/structural_scenario_catalog_balanced_validation.json').read_text())
+          b=json.loads(Path('/tmp/phase2-real-catalog/validation.json').read_text())
+          # Output paths and output hash differ only because the temporary catalog
+          # has another path; all structural facts must match exactly.
+          for payload in (a,b):
+              payload['lineage'].pop('scenario_catalog')
+              payload['lineage'].pop('scenario_catalog_sha256')
+          assert a == b
+          PY
+
+      - name: Guard structural search integrity
+        run: |
+          FILES="src/phase2_balanced_structural_search.py scripts/phase2_run_balanced_structural_search.py"
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|08_candidate_routes|route_variants\.csv|current_service_baseline\.csv' $FILES
+          git diff --check
+
+      - name: Persist real structural catalog
+        run: |
+          FILES="outputs/phase2/structural_scenario_catalog_balanced.csv outputs/phase2/structural_scenario_catalog_balanced_validation.json"
+          git config user.name "phase2-structural-search-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add $FILES
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): materialise 100k real structural catalog [skip ci]"
+            git push
+          fi

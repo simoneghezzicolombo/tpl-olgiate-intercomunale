@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "gate_e_commit": "e2d096ca929c92da0d8a4abdacde827445e208bd",
+  "gate_e_artifact": "outputs/gate_e/gate_d_pass_budget_envelope.csv",
+  "gate_d_commit": "7c220f7586d0f6e5cccd14a2d518be52eb1c4a55",
+  "gate_d_artifact_id": "9891607118",
+  "gate_d_artifact_sha256": "6fbc06d74d5ba970bc980e4cde6234245e0753c22386f703ea313c6a4de9206a",
+  "budget_status": "DERIVED_FROM_PDB_RECONSTRUCTED_LINE_TOTALS",
+  "pairable_route_ids": [
+    "EAST_CALCO_SUPERIORE_SENSITIVITY",
+    "EAST_COMPACT_ARLATE",
+    "FIG8_COMPACT",
+    "WEST_COMPACT_MONDONICO"
+  ],
+  "pairable_route_count": 4,
+  "reference_semantics": "D184_PLUS_D185_RECONSTRUCTED_ANNUAL_BUS_KM_RESOURCE_BENCHMARK",
+  "not_a_service_plan": true,
+  "gate_e_artifact_sha256": "0561ddc4e40164d148268693aee3b79d77a4f5d16b56906bc3d53e45a25372d3",
+  "reference_annual_bus_km": 111419.0,
+  "declared_changes_fraction": [
+    -0.2,
+    -0.1,
+    0.0,
+    0.1,
+    0.2,
+    0.3
+  ],
+  "annual_bus_km_caps": [
+    89135.20000000001,
+    100277.1,
+    111419.0,
+    122560.90000000001,
+    133702.8,
+    144844.7
+  ],
+  "envelope_count": 6,
+  "epistemic_note": "The reference production is DERIVED from the validated Gate E/PdB reconstruction. The proportional Phase 2 envelopes are declared optimisation design-space choices, not facts."
+}

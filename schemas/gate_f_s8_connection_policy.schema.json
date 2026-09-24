@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gate_f_s8_connection_policy.schema.json",
+  "title": "Gate F S8 connection comparison policy",
+  "type": "object",
+  "required": [
+    "schema_version", "comparison_id", "service_date", "service_day_group",
+    "connection_direction", "evaluation_start_time", "evaluation_end_time",
+    "minimum_transfer_min", "maximum_wait_min"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "comparison_id": {"type": "string", "minLength": 1},
+    "service_date": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "service_day_group": {"type": "string", "minLength": 1},
+    "connection_direction": {"enum": ["BUS_TO_S8", "S8_TO_BUS"]},
+    "evaluation_start_time": {"type": "string", "minLength": 4},
+    "evaluation_end_time": {"type": "string", "minLength": 4},
+    "minimum_transfer_min": {"type": "number", "minimum": 0},
+    "maximum_wait_min": {"type": "number", "exclusiveMinimum": 0}
+  }
+}

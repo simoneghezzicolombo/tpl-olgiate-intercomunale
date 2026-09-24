@@ -1,0 +1,8 @@
+finding_id,status,subject,evidence,semantic_consequence
+TR-001,PASS,Demand-weighted GJT,Certified lineage states full GJT unavailable; legacy GJT fields are MISSING and absent from readiness/frontier outputs.,No demand_weighted_gjt_improvement_min or equivalent finalist utility was manufactured.
+TR-002,PASS,Missed-connection probability,Stage-E retention remains deterministic engineering evidence and the legacy probability field is MISSING.,Engineering stress/misses are not empirical probabilities.
+TR-003,PASS,Legacy V2 finalizer,V2 schema incompatible; 6961 contexts would be collapsed by legacy identity.,Legacy finalizer is fail-closed and was not invoked.
+TR-004,PASS,Decision Contract inputs,decision_budget_km and uncertainty_band_min remain PENDING_CALLER_INPUT / DO_NOT_SELECT.,No budget or uncertainty preference was silently chosen.
+TR-005,PASS,Non-decisional Pareto frontier,16495 contexts retained in membership; 12284 non-dominated and 4211 dominated on reported axes.,Frontier membership is descriptive only; all contexts remain auditable.
+TR-006,PASS_WITH_EPISTEMIC_LIMIT,Lower-bound axes,"retained_current_localizable_cluster_share_lower_bound, retained_current_localizable_directed_adjacent_pair_share_lower_bound, public_operational_unknown_distance_share_lower_bound","Dominance is only over reported certified descriptors, not proof of latent true-system dominance; non-frontier pruning is unauthorized."
+TR-007,PASS,Downstream pruning/selection consumer,No executable Python consumer of frontier membership/output exists outside the frontier producer in the audited Codex head.,"The 4,211 dominated contexts are not currently pruned from a downstream tournament."

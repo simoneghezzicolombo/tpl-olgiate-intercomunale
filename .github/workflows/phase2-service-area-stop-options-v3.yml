@@ -1,0 +1,79 @@
+name: Phase 2 Service Area Stop Options V3
+
+on:
+  push:
+    branches:
+      - phase2-stop-pattern-redesign-v3
+    paths:
+      - scripts/phase2_build_service_area_stop_options_v3.py
+      - .github/workflows/phase2-service-area-stop-options-v3.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile builder
+        run: python -m py_compile scripts/phase2_build_service_area_stop_options_v3.py
+      - name: Build service-area stop option catalog
+        run: |
+          python scripts/phase2_build_service_area_stop_options_v3.py \
+            --contract outputs/phase2/stop_pattern_redesign_v3/territorial_service_audit_points_v3.csv \
+            --existing outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --proposed outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+            --output-dir outputs/phase2/stop_pattern_redesign_v3
+      - name: Validate catalog semantics
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path('outputs/phase2/stop_pattern_redesign_v3')
+          d=json.loads((root/'service_area_stop_options_v3_validation.json').read_text(encoding='utf-8'))
+          assert d['status']=='PASS_SERVICE_AREA_STOP_OPTIONS_V3'
+          assert d['automatic_stop_selected'] is False
+          assert d['service_area_count']==12
+          assert d['areas_without_coordinates']==['AREA_SAN_ZENO']
+          opts=list(csv.DictReader((root/'service_area_stop_options_v3.csv').open(encoding='utf-8')))
+          arlate=[r for r in opts if r['area_id']=='AREA_ARLATE' and r['option_class']=='EXISTING_OFFICIAL']
+          assert any('arlate' in r['human_label'].lower() and int(r['name_match_strength'])>=2 for r in arlate), arlate
+          brivio=[r for r in opts if r['area_id']=='AREA_BRIVIO_CENTRO' and r['option_class']=='EXISTING_OFFICIAL']
+          assert any('brivio' in r['human_label'].lower() for r in brivio)
+          assert not any(r['option_semantics']!='IDENTITY_AND_PROXIMITY_EVIDENCE_NOT_AUTOMATIC_SELECTION' for r in opts)
+          print(json.dumps(d,ensure_ascii=False,indent=2))
+          PY
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/service-options
+          python scripts/phase2_build_service_area_stop_options_v3.py \
+            --contract outputs/phase2/stop_pattern_redesign_v3/territorial_service_audit_points_v3.csv \
+            --existing outputs/phase2/stop_universe_v2/existing_official_stops.csv \
+            --proposed outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+            --output-dir /tmp/service-options >/dev/null
+          cmp outputs/phase2/stop_pattern_redesign_v3/service_area_stop_options_v3.csv /tmp/service-options/service_area_stop_options_v3.csv
+          cmp outputs/phase2/stop_pattern_redesign_v3/service_area_stop_options_summary_v3.csv /tmp/service-options/service_area_stop_options_summary_v3.csv
+          cmp outputs/phase2/stop_pattern_redesign_v3/service_area_stop_options_v3_validation.json /tmp/service-options/service_area_stop_options_v3_validation.json
+      - name: Epistemic guard
+        run: |
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|winner|recommended stop|selected stop' scripts/phase2_build_service_area_stop_options_v3.py
+          git diff --check
+      - name: Persist evidence
+        run: |
+          git config user.name "phase2-service-area-options-v3-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/stop_pattern_redesign_v3/service_area_stop_options_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/service_area_stop_options_summary_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/service_area_stop_options_v3_validation.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist service-area stop options V3 [skip ci]"
+            git push origin HEAD:phase2-stop-pattern-redesign-v3
+          fi

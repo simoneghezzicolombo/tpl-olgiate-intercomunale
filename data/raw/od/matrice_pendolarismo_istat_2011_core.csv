@@ -1,0 +1,1576 @@
+prov_orig,com_orig,comune_orig,prov_dest,com_dest,comune_dest,sesso,motivo,tipo_luogo,flusso_pendolari
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,220.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,220.0
+097,010,Brivio, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,010,Brivio, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,27.0
+097,010,Brivio, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,14.0
+097,010,Brivio, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,5.0
+097,010,Brivio, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,7.0
+097,010,Brivio, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,6.0
+097,010,Brivio, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,2.0
+097,010,Brivio, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,2.0
+097,010,Brivio, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,1.0
+097,010,Brivio, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,010,Brivio, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,010,Brivio, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,010,Brivio, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,2.0
+097,010,Brivio, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,2.0
+097,010,Brivio, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,2.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,5.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,4.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,14.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,9.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,11.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,4.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,010,Brivio, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,33.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,28.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,37.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,40.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,4.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,7.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,9.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,010,Brivio, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,1.0
+097,010,Brivio, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,2.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,2.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,2.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,2.0
+097,010,Brivio, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,4.0
+097,010,Brivio, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,010,Brivio, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,2.0
+097,010,Brivio, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,1.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,276.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,191.0
+097,010,Brivio, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,010,Brivio, 01, 10,Prov_ 01_Com_ 10,F,Lavoro, ,1.0
+097,010,Brivio, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,2.0
+097,010,Brivio, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,2.0
+097,010,Brivio, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,010,Brivio, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,3.0
+097,010,Brivio, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,010,Brivio, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,010,Brivio, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,010,Brivio, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,010,Brivio, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,010,Brivio, 01, 16,Prov_ 01_Com_ 16,F,Lavoro, ,1.0
+097,010,Brivio, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,1.0
+097,010,Brivio, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,010,Brivio, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,010,Brivio, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,010,Brivio, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,010,Brivio, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,2.0
+097,010,Brivio, 01, 06,Prov_ 01_Com_ 06,F,Lavoro, ,1.0
+097,010,Brivio, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,3.0
+097,010,Brivio, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,2.0
+097,010,Brivio, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,2.0
+097,010,Brivio, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,2.0
+097,010,Brivio, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,1.0
+097,010,Brivio, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,010,Brivio, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,010,Brivio, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,010,Brivio, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,010,Brivio, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,62.0
+097,010,Brivio, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,28.0
+097,010,Brivio, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,1.0
+097,010,Brivio, 01, 16,Prov_ 01_Com_ 16,F,Lavoro, ,1.0
+097,010,Brivio, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,010,Brivio, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,010,Brivio, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,1.0
+097,010,Brivio, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,010,Brivio, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,010,Brivio, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,010,Brivio, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,3.0
+097,010,Brivio, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,010,Brivio, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,010,Brivio, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,010,Brivio, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,010,Brivio, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,1.0
+097,010,Brivio, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,1.0
+097,010,Brivio, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,4.0
+097,010,Brivio, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,2.0
+097,010,Brivio, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,2.0
+097,010,Brivio, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,2.0
+097,010,Brivio, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,8.0
+097,010,Brivio, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,6.0
+097,010,Brivio, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,2.0
+097,010,Brivio, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,2.0
+097,010,Brivio, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,3.0
+097,010,Brivio, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,8.0
+097,010,Brivio, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,4.0
+097,010,Brivio, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,2.0
+097,010,Brivio, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,010,Brivio, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,010,Brivio, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,3.0
+097,010,Brivio, 01, 06,Prov_ 01_Com_ 06,F,Lavoro, ,1.0
+097,010,Brivio, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,63.0
+097,010,Brivio, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,16.0
+097,010,Brivio, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,1.0
+097,010,Brivio, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,2.0
+097,010,Brivio, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,010,Brivio, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,010,Brivio, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,010,Brivio, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,010,Brivio, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,010,Brivio, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,010,Brivio, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,2.0
+097,010,Brivio, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,4.0
+097,010,Brivio, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,1.0
+097,010,Brivio, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,2.0
+097,010,Brivio, 01, 16,Prov_ 01_Com_ 16,F,Lavoro, ,1.0
+097,010,Brivio, 01, 16,Prov_ 01_Com_ 16,F,Lavoro, ,1.0
+097,010,Brivio, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,3.0
+097,010,Brivio, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,3.0
+097,010,Brivio, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,4.0
+097,010,Brivio, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,4.0
+097,010,Brivio, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,3.0
+097,010,Brivio, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,010,Brivio, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,010,Brivio, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,010,Brivio, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,010,Brivio, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,2.0
+097,010,Brivio, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,010,Brivio, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,3.0
+097,010,Brivio, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,010,Brivio, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,2.0
+097,010,Brivio, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,10.0
+097,010,Brivio, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,7.0
+097,010,Brivio, 01, 25,Prov_ 01_Com_ 25,F,Lavoro, ,2.0
+097,010,Brivio, 01, 25,Prov_ 01_Com_ 25,F,Lavoro, ,1.0
+097,010,Brivio, 01, 25,Prov_ 01_Com_ 25,F,Lavoro, ,2.0
+097,010,Brivio, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,010,Brivio, 01, 06,Prov_ 01_Com_ 06,F,Lavoro, ,1.0
+097,010,Brivio, 01, 06,Prov_ 01_Com_ 06,F,Lavoro, ,1.0
+097,010,Brivio, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,010,Brivio, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,3.0
+097,010,Brivio, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,17.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,22.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,3.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,4.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,3.0
+097,010,Brivio, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,33.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,32.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,17.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,13.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,7.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,010,Brivio, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,18.0
+097,010,Brivio, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,12.0
+097,010,Brivio, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,010,Brivio, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,010,Brivio, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,010,Brivio, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,4.0
+097,010,Brivio, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,010,Brivio, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,3.0
+097,010,Brivio, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,3.0
+097,010,Brivio, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,2.0
+097,010,Brivio, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,6.0
+097,010,Brivio, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,4.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,2.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,45.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,38.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,15.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,4.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,52.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,105.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,8.0
+097,010,Brivio, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,4.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,7.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,6.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,4.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,6.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,22.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,31.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,32.0
+097,010,Brivio, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,15.0
+097,010,Brivio, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,20.0
+097,010,Brivio, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,22.0
+097,010,Brivio, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,2.0
+097,010,Brivio, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,5.0
+097,010,Brivio, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,2.0
+097,010,Brivio, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,2.0
+097,010,Brivio, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,4.0
+097,010,Brivio, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,1.0
+097,010,Brivio, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,13.0
+097,010,Brivio, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,10.0
+097,010,Brivio, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,11.0
+097,010,Brivio, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,6.0
+097,010,Brivio, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,10.0
+097,010,Brivio, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,6.0
+097,010,Brivio, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,3.0
+097,010,Brivio, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,010,Brivio, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,7.0
+097,010,Brivio, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,6.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,9.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,6.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,4.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,5.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,9.0
+097,010,Brivio, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,3.0
+097,010,Brivio, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,5.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,4.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,3.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,3.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,6.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,2.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,4.0
+097,010,Brivio, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,2.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,4.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,2.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,2.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,3.0
+097,010,Brivio, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,3.0
+097,010,Brivio, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,3.0
+097,010,Brivio, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,3.0
+097,010,Brivio, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,010,Brivio, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,010,Brivio, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,010,Brivio, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,3.0
+097,010,Brivio, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,13.0
+097,010,Brivio, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,9.0
+097,010,Brivio, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,010,Brivio, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,7.0
+097,010,Brivio, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,3.0
+097,010,Brivio, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,010,Brivio, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,4.0
+097,010,Brivio, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,010,Brivio, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,8.0
+097,010,Brivio, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,7.0
+097,010,Brivio, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,010,Brivio, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,010,Brivio, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,010,Brivio, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,010,Brivio, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,18.0
+097,010,Brivio, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,6.0
+097,010,Brivio, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,2.0
+097,010,Brivio, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,2.0
+097,010,Brivio, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,1.0
+097,010,Brivio, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,1.0
+097,010,Brivio, 00, 00,Prov_ 00_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,242.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,228.0
+097,012,Calco, 00, 07,Prov_ 00_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 00, 27,Prov_ 00_Com_ 27,F,Lavoro, ,1.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,26.0
+097,012,Calco, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,39.0
+097,012,Calco, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,5.0
+097,012,Calco, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,6.0
+097,012,Calco, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,4.0
+097,012,Calco, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,012,Calco, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,1.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,4.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,4.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,7.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,5.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,4.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,3.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,3.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,6.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,41.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,27.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,70.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,58.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,6.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,6.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,17.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,10.0
+097,012,Calco, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,1.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,5.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,2.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,2.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,9.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,5.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,4.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,4.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,1.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,1.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,172.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,149.0
+097,012,Calco, 00, 00,Prov_ 00_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 01, 06,Prov_ 01_Com_ 06,F,Lavoro, ,1.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,2.0
+097,012,Calco, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,2.0
+097,012,Calco, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,012,Calco, 01, 10,Prov_ 01_Com_ 10,F,Lavoro, ,1.0
+097,012,Calco, 01, 10,Prov_ 01_Com_ 10,F,Lavoro, ,1.0
+097,012,Calco, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,012,Calco, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,012,Calco, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,012,Calco, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,012,Calco, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,2.0
+097,012,Calco, 01, 16,Prov_ 01_Com_ 16,F,Lavoro, ,1.0
+097,012,Calco, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,012,Calco, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,012,Calco, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,012,Calco, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,1.0
+097,012,Calco, 01, 06,Prov_ 01_Com_ 06,F,Lavoro, ,2.0
+097,012,Calco, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,2.0
+097,012,Calco, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,012,Calco, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,2.0
+097,012,Calco, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,012,Calco, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,3.0
+097,012,Calco, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,2.0
+097,012,Calco, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,012,Calco, 01, 06,Prov_ 01_Com_ 06,F,Lavoro, ,1.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,3.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,2.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,6.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,5.0
+097,012,Calco, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,6.0
+097,012,Calco, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,1.0
+097,012,Calco, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,012,Calco, 01, 10,Prov_ 01_Com_ 10,F,Lavoro, ,1.0
+097,012,Calco, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,012,Calco, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,012,Calco, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,101.0
+097,012,Calco, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,78.0
+097,012,Calco, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,1.0
+097,012,Calco, 01, 16,Prov_ 01_Com_ 16,F,Lavoro, ,1.0
+097,012,Calco, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,012,Calco, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,2.0
+097,012,Calco, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,2.0
+097,012,Calco, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,012,Calco, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,012,Calco, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,1.0
+097,012,Calco, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,4.0
+097,012,Calco, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,3.0
+097,012,Calco, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,7.0
+097,012,Calco, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,5.0
+097,012,Calco, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,012,Calco, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,012,Calco, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,012,Calco, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,3.0
+097,012,Calco, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,2.0
+097,012,Calco, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,1.0
+097,012,Calco, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,1.0
+097,012,Calco, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,1.0
+097,012,Calco, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,7.0
+097,012,Calco, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,3.0
+097,012,Calco, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,2.0
+097,012,Calco, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,2.0
+097,012,Calco, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,2.0
+097,012,Calco, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,3.0
+097,012,Calco, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,012,Calco, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,4.0
+097,012,Calco, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,4.0
+097,012,Calco, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,012,Calco, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,012,Calco, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,4.0
+097,012,Calco, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,3.0
+097,012,Calco, 01, 06,Prov_ 01_Com_ 06,F,Lavoro, ,1.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,2.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,18.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,12.0
+097,012,Calco, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,1.0
+097,012,Calco, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,3.0
+097,012,Calco, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,012,Calco, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,012,Calco, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,012,Calco, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,012,Calco, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,3.0
+097,012,Calco, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,012,Calco, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,012,Calco, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,2.0
+097,012,Calco, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,1.0
+097,012,Calco, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,1.0
+097,012,Calco, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,3.0
+097,012,Calco, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,012,Calco, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,012,Calco, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,012,Calco, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,2.0
+097,012,Calco, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,012,Calco, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,012,Calco, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,2.0
+097,012,Calco, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,012,Calco, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,012,Calco, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,012,Calco, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,9.0
+097,012,Calco, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,1.0
+097,012,Calco, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,1.0
+097,012,Calco, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,1.0
+097,012,Calco, 01, 25,Prov_ 01_Com_ 25,F,Lavoro, ,2.0
+097,012,Calco, 01, 25,Prov_ 01_Com_ 25,F,Lavoro, ,1.0
+097,012,Calco, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,2.0
+097,012,Calco, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,012,Calco, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 03, 02,Prov_ 03_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 03, 03,Prov_ 03_Com_ 03,F,Lavoro, ,3.0
+097,012,Calco, 03, 02,Prov_ 03_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,9.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,7.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,7.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,012,Calco, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,3.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,57.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,43.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,6.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,10.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,9.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,5.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,9.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,4.0
+097,012,Calco, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,25.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,29.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,3.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,5.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,012,Calco, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,9.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,4.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,4.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,3.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,2.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,10.0
+097,012,Calco, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,15.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,37.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,37.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,20.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,18.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,3.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,105.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,163.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,10.0
+097,012,Calco, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,6.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,4.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,5.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,4.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,7.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,7.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,6.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,51.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,43.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,15.0
+097,012,Calco, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,5.0
+097,012,Calco, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,38.0
+097,012,Calco, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,20.0
+097,012,Calco, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,2.0
+097,012,Calco, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,6.0
+097,012,Calco, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,6.0
+097,012,Calco, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,3.0
+097,012,Calco, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,2.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,24.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,24.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,19.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,11.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,22.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,12.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,3.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,4.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,3.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,5.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,3.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,9.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,5.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,9.0
+097,012,Calco, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,3.0
+097,012,Calco, 09, 09,Prov_ 09_Com_ 09,F,Lavoro, ,1.0
+097,012,Calco, 09, 09,Prov_ 09_Com_ 09,F,Lavoro, ,1.0
+097,012,Calco, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,1.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,15.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,8.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,2.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,10.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,5.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,4.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,5.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,4.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,4.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,4.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,3.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,3.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,4.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,3.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,3.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,2.0
+097,012,Calco, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,012,Calco, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,4.0
+097,012,Calco, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,3.0
+097,012,Calco, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,012,Calco, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,012,Calco, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,012,Calco, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,012,Calco, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,012,Calco, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,5.0
+097,012,Calco, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,4.0
+097,012,Calco, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,4.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,3.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,19.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,13.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,2.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,8.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,6.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,012,Calco, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,012,Calco, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,012,Calco, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,012,Calco, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,11.0
+097,012,Calco, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,7.0
+097,012,Calco, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,012,Calco, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,4.0
+097,012,Calco, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,21.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,23.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,6.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,3.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,2.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,10.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,5.0
+097,012,Calco, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,253.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,247.0
+097,058,Olgiate Molgora, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,54.0
+097,058,Olgiate Molgora, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,48.0
+097,058,Olgiate Molgora, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,19.0
+097,058,Olgiate Molgora, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,9.0
+097,058,Olgiate Molgora, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,6.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,9.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,12.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,7.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,7.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,56.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,82.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,55.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,70.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,7.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,6.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,8.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,12.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,210.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,172.0
+097,058,Olgiate Molgora, 00, 27,Prov_ 00_Com_ 27,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 00, 14,Prov_ 00_Com_ 14,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,7.0
+097,058,Olgiate Molgora, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 10,Prov_ 01_Com_ 10,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 10,Prov_ 01_Com_ 10,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 06,Prov_ 01_Com_ 06,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 10,Prov_ 01_Com_ 10,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 10,Prov_ 01_Com_ 10,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 10,Prov_ 01_Com_ 10,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,124.0
+097,058,Olgiate Molgora, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,80.0
+097,058,Olgiate Molgora, 01, 16,Prov_ 01_Com_ 16,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,9.0
+097,058,Olgiate Molgora, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,6.0
+097,058,Olgiate Molgora, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,14.0
+097,058,Olgiate Molgora, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 01, 24,Prov_ 01_Com_ 24,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 25,Prov_ 01_Com_ 25,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 25,Prov_ 01_Com_ 25,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 25,Prov_ 01_Com_ 25,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 01, 10,Prov_ 01_Com_ 10,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 02, 11,Prov_ 02_Com_ 11,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 03, 03,Prov_ 03_Com_ 03,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 03, 02,Prov_ 03_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,11.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,7.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,19.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,7.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,57.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,29.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,70.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,66.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,13.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,9.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,8.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,9.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,29.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,31.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,8.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,7.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,50.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,50.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,20.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,8.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,85.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,126.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,12.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,6.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,8.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,7.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,22.0
+097,058,Olgiate Molgora, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,11.0
+097,058,Olgiate Molgora, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,24.0
+097,058,Olgiate Molgora, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,13.0
+097,058,Olgiate Molgora, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,10.0
+097,058,Olgiate Molgora, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,19.0
+097,058,Olgiate Molgora, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,12.0
+097,058,Olgiate Molgora, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,17.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,10.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,23.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,22.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,52.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,28.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,6.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,9.0
+097,058,Olgiate Molgora, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,6.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,8.0
+097,058,Olgiate Molgora, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,7.0
+097,058,Olgiate Molgora, 09, 09,Prov_ 09_Com_ 09,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,9.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,8.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,10.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,7.0
+097,058,Olgiate Molgora, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,8.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,8.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,26.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,17.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,8.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,5.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,28.0
+097,058,Olgiate Molgora, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,7.0
+097,058,Olgiate Molgora, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,3.0
+097,058,Olgiate Molgora, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,4.0
+097,058,Olgiate Molgora, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,1.0
+097,058,Olgiate Molgora, 00, 00,Prov_ 00_Com_ 00,F,Lavoro, ,2.0
+097,058,Olgiate Molgora, 00, 00,Prov_ 00_Com_ 00,F,Lavoro, ,2.0
+097,067,Perego, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,15.0
+097,067,Perego, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,5.0
+097,067,Perego, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,067,Perego, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,067,Perego, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,2.0
+097,067,Perego, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,067,Perego, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,17.0
+097,067,Perego, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,19.0
+097,067,Perego, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,067,Perego, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,11.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,15.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,2.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,4.0
+097,067,Perego, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,067,Perego, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,2.0
+097,067,Perego, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,52.0
+097,067,Perego, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,48.0
+097,067,Perego, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,067,Perego, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,2.0
+097,067,Perego, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,067,Perego, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,1.0
+097,067,Perego, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,067,Perego, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,067,Perego, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,067,Perego, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,067,Perego, 01, 06,Prov_ 01_Com_ 06,F,Lavoro, ,1.0
+097,067,Perego, 01, 06,Prov_ 01_Com_ 06,F,Lavoro, ,2.0
+097,067,Perego, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,1.0
+097,067,Perego, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,16.0
+097,067,Perego, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,7.0
+097,067,Perego, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,1.0
+097,067,Perego, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,067,Perego, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,067,Perego, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,067,Perego, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,067,Perego, 02, 11,Prov_ 02_Com_ 11,F,Lavoro, ,1.0
+097,067,Perego, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,067,Perego, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,067,Perego, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,9.0
+097,067,Perego, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,5.0
+097,067,Perego, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,067,Perego, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,067,Perego, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,067,Perego, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,4.0
+097,067,Perego, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,067,Perego, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,3.0
+097,067,Perego, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,4.0
+097,067,Perego, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,2.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,25.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,12.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,2.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,3.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,21.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,12.0
+097,067,Perego, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,067,Perego, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,067,Perego, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,067,Perego, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,067,Perego, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,2.0
+097,067,Perego, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,067,Perego, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,14.0
+097,067,Perego, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,15.0
+097,067,Perego, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,067,Perego, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,067,Perego, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,067,Perego, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,067,Perego, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,067,Perego, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,103.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,103.0
+097,072,Rovagnate, 00, 07,Prov_ 00_Com_ 07,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,9.0
+097,072,Rovagnate, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,6.0
+097,072,Rovagnate, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,25.0
+097,072,Rovagnate, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,30.0
+097,072,Rovagnate, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,35.0
+097,072,Rovagnate, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,34.0
+097,072,Rovagnate, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,16.0
+097,072,Rovagnate, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,32.0
+097,072,Rovagnate, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,072,Rovagnate, 03, 00,Prov_ 03_Com_ 00,F,Lavoro, ,2.0
+097,072,Rovagnate, 03, 00,Prov_ 03_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,7.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,13.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,20.0
+097,072,Rovagnate, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,19.0
+097,072,Rovagnate, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,29.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,13.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,5.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,13.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,5.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,2.0
+097,072,Rovagnate, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,4.0
+097,072,Rovagnate, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,140.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,89.0
+097,072,Rovagnate, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,4.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,3.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,3.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,5.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,3.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,6.0
+097,072,Rovagnate, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,3.0
+097,072,Rovagnate, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,5.0
+097,072,Rovagnate, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,5.0
+097,072,Rovagnate, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,3.0
+097,072,Rovagnate, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,5.0
+097,072,Rovagnate, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,12.0
+097,072,Rovagnate, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,8.0
+097,072,Rovagnate, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,3.0
+097,072,Rovagnate, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,64.0
+097,072,Rovagnate, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,47.0
+097,072,Rovagnate, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,14.0
+097,072,Rovagnate, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,3.0
+097,072,Rovagnate, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,6.0
+097,072,Rovagnate, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,5.0
+097,072,Rovagnate, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,6.0
+097,072,Rovagnate, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,30.0
+097,072,Rovagnate, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,21.0
+097,072,Rovagnate, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,4.0
+097,072,Rovagnate, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 16,Prov_ 01_Com_ 16,F,Lavoro, ,3.0
+097,072,Rovagnate, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,6.0
+097,072,Rovagnate, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,3.0
+097,072,Rovagnate, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,18.0
+097,072,Rovagnate, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,17.0
+097,072,Rovagnate, 01, 16,Prov_ 01_Com_ 16,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,2.0
+097,072,Rovagnate, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,072,Rovagnate, 02, 11,Prov_ 02_Com_ 11,F,Lavoro, ,1.0
+097,072,Rovagnate, 04, 03,Prov_ 04_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,6.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,3.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,12.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,6.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,44.0
+097,072,Rovagnate, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,32.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,12.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,6.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,4.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,5.0
+097,072,Rovagnate, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,072,Rovagnate, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,14.0
+097,072,Rovagnate, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,10.0
+097,072,Rovagnate, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,5.0
+097,072,Rovagnate, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,4.0
+097,072,Rovagnate, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,53.0
+097,072,Rovagnate, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,47.0
+097,072,Rovagnate, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,5.0
+097,072,Rovagnate, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,7.0
+097,072,Rovagnate, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,22.0
+097,072,Rovagnate, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,13.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,28.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,22.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,5.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,3.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,33.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,12.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,7.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,4.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,17.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,17.0
+097,072,Rovagnate, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,2.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,23.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,8.0
+097,072,Rovagnate, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,3.0
+097,072,Rovagnate, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,8.0
+097,072,Rovagnate, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,9.0
+097,072,Rovagnate, 09, 09,Prov_ 09_Com_ 09,F,Lavoro, ,4.0
+097,072,Rovagnate, 10, 07,Prov_ 10_Com_ 07,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,3.0
+097,072,Rovagnate, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,4.0
+097,072,Rovagnate, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,3.0
+097,072,Rovagnate, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,7.0
+097,072,Rovagnate, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,2.0
+097,072,Rovagnate, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,3.0
+097,072,Rovagnate, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,3.0
+097,072,Rovagnate, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,072,Rovagnate, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,6.0
+097,072,Rovagnate, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,5.0
+097,072,Rovagnate, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,5.0
+097,072,Rovagnate, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,2.0
+097,072,Rovagnate, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,5.0
+097,072,Rovagnate, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,4.0
+097,072,Rovagnate, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,4.0
+097,072,Rovagnate, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,2.0
+097,072,Rovagnate, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,072,Rovagnate, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,6.0
+097,072,Rovagnate, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,072,Rovagnate, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,072,Rovagnate, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,2.0
+097,072,Rovagnate, 00, 00,Prov_ 00_Com_ 00,F,Lavoro, ,6.0
+097,072,Rovagnate, 00, 00,Prov_ 00_Com_ 00,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,86.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,64.0
+097,074,Santa Maria Hoè, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,13.0
+097,074,Santa Maria Hoè, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,16.0
+097,074,Santa Maria Hoè, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,4.0
+097,074,Santa Maria Hoè, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,4.0
+097,074,Santa Maria Hoè, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,7.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,11.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,24.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,15.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,13.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,4.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,4.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,9.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,8.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,5.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,6.0
+097,074,Santa Maria Hoè, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,33.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,29.0
+097,074,Santa Maria Hoè, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,101.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,68.0
+097,074,Santa Maria Hoè, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 12,Prov_ 01_Com_ 12,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 00,Prov_ 01_Com_ 00,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 01, 09,Prov_ 01_Com_ 09,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 01, 13,Prov_ 01_Com_ 13,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 15,Prov_ 01_Com_ 15,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 01,Prov_ 01_Com_ 01,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 08,Prov_ 01_Com_ 08,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,25.0
+097,074,Santa Maria Hoè, 01, 14,Prov_ 01_Com_ 14,F,Lavoro, ,16.0
+097,074,Santa Maria Hoè, 01, 16,Prov_ 01_Com_ 16,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 18,Prov_ 01_Com_ 18,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 01, 19,Prov_ 01_Com_ 19,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 02,Prov_ 01_Com_ 02,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 03,Prov_ 01_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 04,Prov_ 01_Com_ 04,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 01, 05,Prov_ 01_Com_ 05,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 01, 07,Prov_ 01_Com_ 07,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 01, 11,Prov_ 01_Com_ 11,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 17,Prov_ 01_Com_ 17,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 01, 20,Prov_ 01_Com_ 20,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 21,Prov_ 01_Com_ 21,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 01, 22,Prov_ 01_Com_ 22,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 23,Prov_ 01_Com_ 23,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 01, 25,Prov_ 01_Com_ 25,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,13.0
+097,074,Santa Maria Hoè, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,8.0
+097,074,Santa Maria Hoè, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,8.0
+097,074,Santa Maria Hoè, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 00,Prov_ 09_Com_ 00,F,Lavoro, ,5.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,9.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,5.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,22.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,11.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,6.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,8.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,5.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,9.0
+097,074,Santa Maria Hoè, 09, 01,Prov_ 09_Com_ 01,F,Lavoro, ,6.0
+097,074,Santa Maria Hoè, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,11.0
+097,074,Santa Maria Hoè, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,5.0
+097,074,Santa Maria Hoè, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,7.0
+097,074,Santa Maria Hoè, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 02,Prov_ 09_Com_ 02,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,8.0
+097,074,Santa Maria Hoè, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,4.0
+097,074,Santa Maria Hoè, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,4.0
+097,074,Santa Maria Hoè, 09, 03,Prov_ 09_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,18.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,13.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,7.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,5.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,24.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,34.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 04,Prov_ 09_Com_ 04,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,7.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,37.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,27.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 05,Prov_ 09_Com_ 05,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,7.0
+097,074,Santa Maria Hoè, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,18.0
+097,074,Santa Maria Hoè, 09, 06,Prov_ 09_Com_ 06,F,Lavoro, ,13.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,4.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,30.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,26.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,7.0
+097,074,Santa Maria Hoè, 09, 07,Prov_ 09_Com_ 07,F,Lavoro, ,11.0
+097,074,Santa Maria Hoè, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,7.0
+097,074,Santa Maria Hoè, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,5.0
+097,074,Santa Maria Hoè, 09, 08,Prov_ 09_Com_ 08,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 09, 09,Prov_ 09_Com_ 09,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,5.0
+097,074,Santa Maria Hoè, 10, 00,Prov_ 10_Com_ 00,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,6.0
+097,074,Santa Maria Hoè, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,5.0
+097,074,Santa Maria Hoè, 10, 01,Prov_ 10_Com_ 01,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 02,Prov_ 10_Com_ 02,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,5.0
+097,074,Santa Maria Hoè, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,4.0
+097,074,Santa Maria Hoè, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 03,Prov_ 10_Com_ 03,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 10, 04,Prov_ 10_Com_ 04,F,Lavoro, ,2.0
+097,074,Santa Maria Hoè, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,6.0
+097,074,Santa Maria Hoè, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,3.0
+097,074,Santa Maria Hoè, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,1.0
+097,074,Santa Maria Hoè, 10, 05,Prov_ 10_Com_ 05,F,Lavoro, ,1.0

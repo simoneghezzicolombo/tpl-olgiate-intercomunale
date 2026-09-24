@@ -1,0 +1,27 @@
+{
+  "source": "ISTAT Matrice di pendolarismo per lavoro 2021",
+  "source_url": "https://esploradati.istat.it/databrowser/DWL/PERMPOP/MATPEN/matrix_pendoLAVORO_2021.zip",
+  "source_page": "https://www.istat.it/notizia/matrice-di-pendolarismo-per-lavoro/",
+  "reference_date": "2021-12-31",
+  "scope": "WORK_COMMUTING_ONLY",
+  "core_codes": [
+    "097010",
+    "097012",
+    "097058",
+    "097074",
+    "097092"
+  ],
+  "source_zip_sha256": "78795a98d97f75d26f14c66495f798f1ff96a3555587771a52f97e7f96d7bc51",
+  "source_member": "matrix_pendoLAVORO_2021.txt",
+  "core_output": "data/raw/od/matrice_pendolarismo_istat_2021_core.csv",
+  "core_output_sha256": "defa63c8ef3d422017ebe4f5f1c2becc55f62ed76d9a052e167aece688efad3a",
+  "core_output_bytes": 25364,
+  "delimiter": "\t",
+  "origin_column": "Procom_res",
+  "destination_column": "Procom_lav",
+  "value_column": "Pendolari",
+  "national_positive_od_rows": 523949,
+  "national_commuters_sum": 19565808,
+  "selected_raw_rows": 1566,
+  "selected_unique_od_pairs": 1566
+}

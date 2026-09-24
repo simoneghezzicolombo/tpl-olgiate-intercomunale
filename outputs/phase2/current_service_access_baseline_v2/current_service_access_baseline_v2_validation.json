@@ -1,0 +1,157 @@
+{
+  "baseline_complete": false,
+  "baseline_role": "CERTIFIED_LOCALIZABLE_LOWER_BOUND_ONLY",
+  "contract": "PHASE2_CURRENT_SERVICE_CERTIFIED_LOCALIZABLE_ACCESS_LOWER_BOUND_V2",
+  "coverage_lower_bound": {
+    "10": {
+      "coverage_share": 0.19239981461768968,
+      "covered_population": 4390.725373382349,
+      "municipality_coverage": {
+        "097010": {
+          "coverage_share": 0.48027947649407815,
+          "municipality": "Brivio"
+        },
+        "097012": {
+          "coverage_share": 0.0,
+          "municipality": "Calco"
+        },
+        "097058": {
+          "coverage_share": 0.27804314304234057,
+          "municipality": "Olgiate Molgora"
+        },
+        "097074": {
+          "coverage_share": 0.08749653370570745,
+          "municipality": "Santa Maria Ho\u00e8"
+        },
+        "097092": {
+          "coverage_share": 0.08337887727498923,
+          "municipality": "La Valletta Brianza"
+        }
+      },
+      "worst_municipality": "Calco",
+      "worst_municipality_coverage_share": 0.0
+    },
+    "5": {
+      "coverage_share": 0.07688841086357093,
+      "covered_population": 1754.658117361245,
+      "municipality_coverage": {
+        "097010": {
+          "coverage_share": 0.24917596926824406,
+          "municipality": "Brivio"
+        },
+        "097012": {
+          "coverage_share": 0.0,
+          "municipality": "Calco"
+        },
+        "097058": {
+          "coverage_share": 0.0659598732953283,
+          "municipality": "Olgiate Molgora"
+        },
+        "097074": {
+          "coverage_share": 0.05311808090763882,
+          "municipality": "Santa Maria Ho\u00e8"
+        },
+        "097092": {
+          "coverage_share": 0.03369485138799902,
+          "municipality": "La Valletta Brianza"
+        }
+      },
+      "worst_municipality": "Calco",
+      "worst_municipality_coverage_share": 0.0
+    },
+    "8": {
+      "coverage_share": 0.15028179465397837,
+      "covered_population": 3429.5567813088264,
+      "municipality_coverage": {
+        "097010": {
+          "coverage_share": 0.42451374493572425,
+          "municipality": "Brivio"
+        },
+        "097012": {
+          "coverage_share": 0.0,
+          "municipality": "Calco"
+        },
+        "097058": {
+          "coverage_share": 0.17835979542502833,
+          "municipality": "Olgiate Molgora"
+        },
+        "097074": {
+          "coverage_share": 0.07563655632719717,
+          "municipality": "Santa Maria Ho\u00e8"
+        },
+        "097092": {
+          "coverage_share": 0.069079637296811,
+          "municipality": "La Valletta Brianza"
+        }
+      },
+      "worst_municipality": "Calco",
+      "worst_municipality_coverage_share": 0.0
+    }
+  },
+  "historical_station_identity_kept_separate_from_project_hub_bridge": true,
+  "historical_station_stop_id": "300407",
+  "limitations": [
+    "The official current PDF establishes current stop rows and timetable service, but not complete spatial stop identities.",
+    "Historical GTFS is used only as a validity-bounded official identity crosscheck; it is not promoted to current-service activation evidence.",
+    "Any D184/D185 row without a unique resolved historical GTFS stop_id that exactly reappears in Stop Universe V2 remains spatially unresolved.",
+    "Coverage therefore represents a proven lower bound of current D184+D185 pedestrian access, not the true complete current-service coverage."
+  ],
+  "lineage": {
+    "existing_catchments_sha256": "3128cb1f894d001226795434cd75d007d4e7796522935515c514981de89fe49e",
+    "identity_sha256": "55b390d567191a6bdcc517362099813cb86b0fea52d3b8e20cf33c1982d72733",
+    "identity_validation_sha256": "170943a94b5f1689ef17a32e926b3e2ed2c7000f92d91e24f35a6937cb1feabd",
+    "localized_output_sha256": "d511ccb4362c60caa0bb9add0ff007e358e68d1c6912a8dae13fed84d68b628d",
+    "population_units_sha256": "a4fa70338225ef7b0c2213a569f866fe91acf9e5ae357c5b49e448b463b511a9",
+    "v2_official_stops_sha256": "8a1879ca5cd2fa23072e9f4b1b284c6b1be455847cb70b6d5399b2db35d05a55"
+  },
+  "localized_rows": 12,
+  "localized_unique_physical_cluster_count": 7,
+  "localized_unique_physical_clusters": [
+    "EX_002",
+    "EX_009",
+    "EX_011",
+    "EX_023",
+    "EX_026",
+    "EX_036",
+    "EX_041"
+  ],
+  "located_population_denominator": 22820.83993743439,
+  "may_infer_true_current_total_coverage": false,
+  "may_use_unresolved_rows_for_spatial_access": false,
+  "non_regression_safeguard_semantics": "CANDIDATE_MAY_BE_REJECTED_ONLY_FOR_REGRESSION_BELOW_PROVEN_LOCALIZABLE_CURRENT_LOWER_BOUND; UNRESOLVED_CURRENT_STOPS_CANNOT_PROMOTE_OR_REJECT",
+  "population_unit_count": 4348,
+  "project_station_access_cluster": "EX_039",
+  "project_station_access_stop_id": "L00407",
+  "resolved_historical_identity_rows": 20,
+  "route_scope": [
+    "D184",
+    "D185"
+  ],
+  "route_stats": {
+    "D184": {
+      "localized_rows": 6,
+      "localized_unique_clusters": [
+        "EX_011",
+        "EX_023",
+        "EX_026",
+        "EX_041"
+      ],
+      "pdf_stop_rows": 24,
+      "resolved_historical_identity_rows": 10
+    },
+    "D185": {
+      "localized_rows": 6,
+      "localized_unique_clusters": [
+        "EX_002",
+        "EX_009",
+        "EX_011",
+        "EX_036"
+      ],
+      "pdf_stop_rows": 27,
+      "resolved_historical_identity_rows": 10
+    }
+  },
+  "status": "PASS_CURRENT_SERVICE_ACCESS_LOWER_BOUND_V2",
+  "target_pdf_stop_rows": 51,
+  "unresolved_or_unlocalized_rows": 39
+}

@@ -1,0 +1,159 @@
+name: Phase 2 Corridor Seed Full Stop Patterns V3
+
+on:
+  push:
+    branches:
+      - phase2-stop-pattern-redesign-v3
+    paths:
+      - scripts/phase2_build_corridor_seed_stop_patterns_v3.py
+      - config/phase2_corridor_seed_service_areas_v3.csv
+      - .github/workflows/phase2-corridor-seed-stop-patterns-v3.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned frozen-graph dependencies
+        run: |
+          python -m pip install --disable-pip-version-check \
+            geopandas==1.1.2 \
+            networkx==3.6.1 \
+            pandas==2.2.3 \
+            pyproj==3.7.2 \
+            scipy==1.17.0 \
+            shapely==2.1.2 \
+            pyogrio==0.12.1
+
+      - name: Validate upstream V3 evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('outputs/phase2/stop_pattern_redesign_v3')
+          f=json.loads((root/'passenger_stop_foundation_v3_validation.json').read_text(encoding='utf-8'))
+          s=json.loads((root/'service_area_stop_options_v3_validation.json').read_text(encoding='utf-8'))
+          b=json.loads((root/'current_stop_spacing_benchmark_v3_validation.json').read_text(encoding='utf-8'))
+          assert f['status']=='PASS_PASSENGER_STOP_FOUNDATION_V3'
+          assert f['proposed_finalist_ready_now_count']==0
+          assert s['status']=='PASS_SERVICE_AREA_STOP_OPTIONS_V3'
+          assert s['automatic_stop_selected'] is False
+          assert b['status']=='PASS_CURRENT_STOP_SPACING_BENCHMARK_V3'
+          assert b['design_threshold_selected'] is False
+          PY
+
+      - name: Compile corridor seed builder
+        run: python -m py_compile scripts/phase2_build_corridor_seed_stop_patterns_v3.py
+
+      - name: Build source-closed corridor seeds and full stop patterns
+        run: |
+          python scripts/phase2_build_corridor_seed_stop_patterns_v3.py \
+            --seed-config config/phase2_corridor_seed_service_areas_v3.csv \
+            --service-options outputs/phase2/stop_pattern_redesign_v3/service_area_stop_options_v3.csv \
+            --membership outputs/phase2/reduced_path_matrix_v2/routing_anchor_membership.csv \
+            --routing-anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --foundation outputs/phase2/stop_pattern_redesign_v3/passenger_stop_foundation_v3.csv \
+            --matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --frozen-dir outputs/phase2/frozen_gate_d \
+            --spacing-benchmark outputs/phase2/stop_pattern_redesign_v3/current_stop_spacing_benchmark_v3_validation.json \
+            --output-dir outputs/phase2/stop_pattern_redesign_v3
+
+      - name: Validate RT-005 regression closure at seed level
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path('outputs/phase2/stop_pattern_redesign_v3')
+          d=json.loads((root/'corridor_seed_v3_validation.json').read_text(encoding='utf-8'))
+          assert d['status']=='PASS_CORRIDOR_SEED_FULL_STOP_PATTERN_V3'
+          assert d['seed_corridor_count']==2
+          assert d['seed_ids']==['EAST_BASE','WEST_BASE']
+          assert d['route_generation_scope']=='REGRESSION_AND_METHOD_VALIDATION_ONLY'
+          assert d['topology_ranked'] is False
+          assert d['headway_selected'] is False
+          assert d['primary_selected'] is False
+          assert d['runner_up_selected'] is False
+          assert d['winner_implied'] is False
+          assert d['proposed_stops_used'] is False
+          assert d['structural_waypoints_equated_to_passenger_stops'] is False
+          assert d['all_five_study_municipalities_explicitly_served_across_pair'] is True
+          assert d['study_municipalities_missing_explicit_stop_across_pair']==[]
+          assert d['at_least_one_corridor_has_more_passenger_stops_than_structural_waypoints'] is True
+          assert d['current_spacing_benchmark_used_as_rejection_threshold'] is False
+
+          w=list(csv.DictReader((root/'corridor_seed_waypoints_v3.csv').open(encoding='utf-8')))
+          assert len(w)==8
+          assert all(r['selected_source_anchor_id'].startswith('existing:') for r in w)
+          assert all(r['automatic_network_recommendation']=='false' for r in w)
+          assert any(r['area_id']=='AREA_ARLATE' and 'arlate' in r['selected_human_label'].lower() for r in w)
+          assert any(r['area_id']=='AREA_CALCO_CENTRO' and 'calco' in r['selected_human_label'].lower() for r in w)
+          assert any(r['area_id']=='AREA_BRIVIO_CENTRO' and 'brivio' in r['selected_human_label'].lower() for r in w)
+
+          stops=list(csv.DictReader((root/'corridor_seed_passenger_stops_v3.csv').open(encoding='utf-8')))
+          assert stops
+          assert not any(r['stop_class']=='PROPOSED_HYPOTHESIS' for r in stops)
+          assert all(r['interpolation_semantics']=='EXISTING_OFFICIAL_STOPS_ON_EXACT_FROZEN_GRAPH_PATH_NODE_ONLY' for r in stops)
+          municipalities={r['municipality'].replace('HoÃ¨','Hoè') for r in stops if r['municipality']}
+          assert {'Olgiate Molgora','Calco','Brivio','Santa Maria Hoè','La Valletta Brianza'} <= municipalities
+
+          orders=list(csv.DictReader((root/'corridor_seed_order_candidates_v3.csv').open(encoding='utf-8')))
+          assert len(orders)==48
+          assert sum(r['selected_seed_order']=='true' for r in orders)==2
+          assert all(r['ordering_semantics']=='MIN_FROZEN_GRAPH_RUNNING_TIME_WITHIN_HUMAN_DEFINED_SERVICE_AREA_SET_NOT_NETWORK_RANKING' for r in orders)
+          print(json.dumps(d,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Deterministic rebuild
+        run: |
+          rm -rf /tmp/corridor-seed-v3
+          python scripts/phase2_build_corridor_seed_stop_patterns_v3.py \
+            --seed-config config/phase2_corridor_seed_service_areas_v3.csv \
+            --service-options outputs/phase2/stop_pattern_redesign_v3/service_area_stop_options_v3.csv \
+            --membership outputs/phase2/reduced_path_matrix_v2/routing_anchor_membership.csv \
+            --routing-anchors outputs/phase2/reduced_path_matrix_v2/routing_anchor_universe.csv \
+            --foundation outputs/phase2/stop_pattern_redesign_v3/passenger_stop_foundation_v3.csv \
+            --matrix outputs/phase2/reduced_path_matrix_v2/reduced_path_matrix.csv \
+            --frozen-dir outputs/phase2/frozen_gate_d \
+            --spacing-benchmark outputs/phase2/stop_pattern_redesign_v3/current_stop_spacing_benchmark_v3_validation.json \
+            --output-dir /tmp/corridor-seed-v3 >/dev/null
+          for name in corridor_seed_waypoints_v3.csv corridor_seed_order_candidates_v3.csv corridor_seed_paths_v3.csv corridor_seed_passenger_stops_v3.csv corridor_seed_summary_v3.csv corridor_seed_v3_validation.json; do
+            cmp "outputs/phase2/stop_pattern_redesign_v3/$name" "/tmp/corridor-seed-v3/$name"
+          done
+
+      - name: Epistemic and anti-invention guard
+        run: |
+          FILE=scripts/phase2_build_corridor_seed_stop_patterns_v3.py
+          ! grep -n -E 'np\.random|numpy\.random|import random|from random|winner|recommended route|primary recommendation|FIELD_CHECK_PENDING.*allowed' "$FILE"
+          grep -q 'structural_waypoints_equated_to_passenger_stops' "$FILE"
+          grep -q 'proposed_stops_used' "$FILE"
+          grep -q 'NOT_NETWORK_RANKING' "$FILE"
+          git diff --check
+
+      - name: Persist corridor seed evidence
+        run: |
+          git config user.name "phase2-corridor-seed-v3-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/phase2/stop_pattern_redesign_v3/corridor_seed_waypoints_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/corridor_seed_order_candidates_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/corridor_seed_paths_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/corridor_seed_passenger_stops_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/corridor_seed_summary_v3.csv \
+                  outputs/phase2/stop_pattern_redesign_v3/corridor_seed_v3_validation.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(phase2): persist corridor seed full stop patterns V3 [skip ci]"
+            git push origin HEAD:phase2-stop-pattern-redesign-v3
+          fi

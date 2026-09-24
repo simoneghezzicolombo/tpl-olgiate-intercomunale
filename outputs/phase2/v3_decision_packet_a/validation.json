@@ -1,0 +1,20 @@
+{
+  "budget_caps_match_certified_source": true,
+  "budget_option_count": 6,
+  "certified_dimension_count": 29,
+  "contract": "PHASE2_V3_DECISION_PACKET_A_STATIC_SOURCE_VALIDATION",
+  "decision_rule_dimension_count": 29,
+  "descriptive_frontier_context_count_total": 12284,
+  "dimension_set_and_directions_exact_match": true,
+  "eligible_context_count_total": 16495,
+  "final_selection_authorized": false,
+  "gjt_interval_dominance_decision_signal_available": false,
+  "human_decision_required": true,
+  "next_step": "HUMAN_APPROVE_OR_EDIT_PATHWAY_BUDGET_UNCERTAINTY_SEMANTICS_AND_NO_WEIGHT_RULE",
+  "primary_selected": false,
+  "runner_up_selected": false,
+  "status": "PASS_PHASE2_V3_DECISION_PACKET_A_VALIDATION",
+  "v3_technical_open_data_requirement_count": 0,
+  "validation_pass": true,
+  "weighted_composite_score": false
+}

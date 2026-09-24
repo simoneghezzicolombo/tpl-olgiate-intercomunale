@@ -1,0 +1,160 @@
+name: Phase 2 current-service stop identity
+
+on:
+  push:
+    branches: [phase2-current-service-stop-identity]
+    paths:
+      - 'src/phase2_current_service_stop_identity.py'
+      - 'scripts/phase2_build_current_service_stop_identity.py'
+      - 'tests/test_phase2_current_service_stop_identity.py'
+      - 'docs/PHASE2_CURRENT_SERVICE_STOP_IDENTITY.md'
+      - '.github/workflows/phase2-current-service-stop-identity.yml'
+      - 'outputs/phase2/current_service_stop_identity*'
+      - 'outputs/phase2/current_service_stop_times_with_identity*'
+      - 'outputs/phase2/current_service_stop_trip_matrix_with_identity*'
+  pull_request:
+    branches: [phase2-optimizer-core]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  current-service-stop-identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependency
+        run: python -m pip install pytest
+
+      - name: Compile
+        run: |
+          python -m py_compile src/phase2_current_service_stop_identity.py
+          python -m py_compile scripts/phase2_build_current_service_stop_identity.py
+          python -m py_compile tests/test_phase2_current_service_stop_identity.py
+
+      - name: Unit and adversarial identity tests
+        run: pytest -q tests/test_phase2_current_service_stop_identity.py
+
+      - name: Build production identity evidence
+        run: python scripts/phase2_build_current_service_stop_identity.py
+
+      - name: Validate production identity contract
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root=Path('outputs/phase2')
+          identities=list(csv.DictReader((root/'current_service_stop_identity_2026-09-03.csv').open(encoding='utf-8')))
+          stop_times=list(csv.DictReader((root/'current_service_stop_times_with_identity_2026-09-03.csv').open(encoding='utf-8')))
+          matrix=list(csv.DictReader((root/'current_service_stop_trip_matrix_with_identity_2026-09-03.csv').open(encoding='utf-8')))
+          validation=json.load((root/'current_service_stop_identity_validation.json').open(encoding='utf-8'))
+          historical={r['stop_id'] for r in csv.DictReader(open('data/raw/gtfs/agency_arriva/stops.txt', encoding='utf-8-sig'))}
+          v1={r['stop_id']:r['physical_cluster_id'] for r in csv.DictReader(open('outputs/phase2/existing_official_stops.csv', encoding='utf-8-sig'))}
+          assert validation['status']=='PASS'
+          assert len(identities)==209
+          assert len(stop_times)==1145
+          assert len(matrix)==3089
+          assert set(r['route_id'] for r in identities)=={'D184','D185','D150','D170'}
+          assert len({(r['route_id'],r['source_page'],r['stop_sequence_on_page']) for r in identities})==209
+          resolved=[r for r in identities if r['historical_gtfs_stop_id']]
+          unresolved=[r for r in identities if not r['historical_gtfs_stop_id']]
+          assert resolved, 'At least some current PDF rows must be source-groundedly identifiable'
+          assert len(resolved)+len(unresolved)==209
+          assert all(r['historical_gtfs_stop_id'] in historical for r in resolved)
+          assert all(not r['historical_gtfs_stop_id'] for r in identities if r['identity_status'].startswith('AMBIGUOUS') or r['identity_status'].startswith('NO_'))
+          for r in identities:
+              if r['physical_cluster_id_v1']:
+                  assert r['historical_gtfs_stop_id'] in v1
+                  assert r['physical_cluster_id_v1']==v1[r['historical_gtfs_stop_id']]
+          for route, counts in validation['route_counts'].items():
+              assert counts['pdf_rows']>0
+              assert counts['resolved_gtfs']>0, f'{route} has zero resolved stop identities'
+          assert validation['matching_contract']['edit_distance_fuzzy_matching_used'] is False
+          assert validation['matching_contract']['forced_nearest_coordinate_matching_used'] is False
+          assert validation['matching_contract']['manual_stop_alias_whitelist_used'] is False
+          assert validation['matching_contract']['coordinate_distance_tolerance_for_equivalence_used'] is False
+          assert validation['historical_gtfs_semantics']['used_to_assert_current_service_activation'] is False
+          assert validation['historical_gtfs_semantics']['used_to_fill_current_unpublished_times'] is False
+          assert validation['v1_cluster_semantics']['external_or_not_in_v1_stops_are_not_force_joined'] is True
+          PY
+
+      - name: Verify deterministic byte-for-byte rebuild
+        shell: bash
+        run: |
+          mkdir -p /tmp/identity_first
+          cp outputs/phase2/current_service_stop_identity_2026-09-03.csv /tmp/identity_first/
+          cp outputs/phase2/current_service_stop_times_with_identity_2026-09-03.csv /tmp/identity_first/
+          cp outputs/phase2/current_service_stop_trip_matrix_with_identity_2026-09-03.csv /tmp/identity_first/
+          cp outputs/phase2/current_service_stop_identity_validation.json /tmp/identity_first/
+          python scripts/phase2_build_current_service_stop_identity.py >/dev/null
+          cmp /tmp/identity_first/current_service_stop_identity_2026-09-03.csv outputs/phase2/current_service_stop_identity_2026-09-03.csv
+          cmp /tmp/identity_first/current_service_stop_times_with_identity_2026-09-03.csv outputs/phase2/current_service_stop_times_with_identity_2026-09-03.csv
+          cmp /tmp/identity_first/current_service_stop_trip_matrix_with_identity_2026-09-03.csv outputs/phase2/current_service_stop_trip_matrix_with_identity_2026-09-03.csv
+          cmp /tmp/identity_first/current_service_stop_identity_validation.json outputs/phase2/current_service_stop_identity_validation.json
+
+      - name: Static anti-shortcut guard
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          paths = [
+              Path('src/phase2_current_service_stop_identity.py'),
+              Path('scripts/phase2_build_current_service_stop_identity.py'),
+          ]
+          text='\n'.join(path.read_text(encoding='utf-8') for path in paths)
+          forbidden = [
+              'np.random', 'numpy.random', 'import random', 'from random',
+              'fuzzywuzzy', 'rapidfuzz', 'SequenceMatcher', 'get_close_matches',
+              'current_service_baseline.csv', 'scripts/05_current_service.py',
+          ]
+          found=[token for token in forbidden if token in text]
+          assert not found, f'Forbidden shortcut tokens: {found}'
+          PY
+          git diff --check dbda7ee2a6f2c3b5f6bfc7d4c6e0e936b2e26189...HEAD -- \
+            src/phase2_current_service_stop_identity.py \
+            scripts/phase2_build_current_service_stop_identity.py \
+            tests/test_phase2_current_service_stop_identity.py \
+            docs/PHASE2_CURRENT_SERVICE_STOP_IDENTITY.md \
+            .github/workflows/phase2-current-service-stop-identity.yml
+
+      - name: Persist audited generated evidence
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase2-current-service-stop-identity'
+        shell: bash
+        run: |
+          git config user.name "phase2-stop-identity-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add \
+            outputs/phase2/current_service_stop_identity_2026-09-03.csv \
+            outputs/phase2/current_service_stop_times_with_identity_2026-09-03.csv \
+            outputs/phase2/current_service_stop_trip_matrix_with_identity_2026-09-03.csv \
+            outputs/phase2/current_service_stop_identity_validation.json
+          if git diff --cached --quiet; then
+            echo "Identity evidence already materialised."
+          else
+            git commit -m "data(phase2): materialise current-service stop identities [skip ci]"
+            git push origin HEAD:phase2-current-service-stop-identity
+          fi
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-current-service-stop-identity-${{ github.sha }}
+          path: |
+            outputs/phase2/current_service_stop_identity_2026-09-03.csv
+            outputs/phase2/current_service_stop_times_with_identity_2026-09-03.csv
+            outputs/phase2/current_service_stop_trip_matrix_with_identity_2026-09-03.csv
+            outputs/phase2/current_service_stop_identity_validation.json
+          if-no-files-found: error
+          retention-days: 30
