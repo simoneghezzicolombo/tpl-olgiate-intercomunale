@@ -39,6 +39,8 @@ certificata per le candidate attuali.
   e Via Mondonico zero in tutte; Via Buttero 120–609 m; Via Cesare Cantù
   997 m in entrambe le inverse. Sono metri stradali, non copertura dei
   residenti o fermate certificate. Dettaglio nel rapporto di correzione.
+  CI `35981547466` SUCCESS, artifact `10800501329`, JSON SHA256
+  `61c18718037efe5b38bd31f621175055028b8ecad916093ce04ebb88ec630815`.
 - Chiarimento del committente: [centro sportivo/Via Aldo Moro e San Zeno/
   Via Cesare Cantù](docs/RT031_OLGIATE_SAN_ZENO_TARGET_CORRECTION_V3.md)
   sono corridoi prioritari, ma non fermate certificate. La variante inversa

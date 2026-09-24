@@ -43,6 +43,9 @@ collegamento delle abitazioni di Canova–San Zeno verso FS; nelle varianti
 inverse il bus percorre Via Cantù, ma senza un evento di salita certificato.
 La carenza del quartiere va perciò esaminata come combinazione di **punti di
 salita, accesso pedonale dalle abitazioni, verso e tempo di viaggio**.
+La [CI dello screen aggiornato](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/35981547466)
+ha eseguito due repliche identiche; artefatto `10800501329`, SHA-256 JSON
+`61c18718037efe5b38bd31f621175055028b8ecad916093ce04ebb88ec630815`.
 
 **Correzione del committente, 22 settembre 2026.** La copertura debole di
 Olgiate nelle quattro [prove della figura a otto](RT031_HUB_SPLIT_FIG8_DIAGNOSTIC_V3.md)
