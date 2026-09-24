@@ -48,8 +48,27 @@ def main(policy_path, repair_path, output_path):
         forward = Decimal(str(row["forward_complete_cycle_distance_m"])) / 1000
         reverse = Decimal(str(row["reverse_complete_cycle_distance_m"])) / 1000
         pair = forward + reverse
+        west_pair = (Decimal(str(row["west_forward_lobe_distance_m"]))
+                     + Decimal(str(row["west_reverse_lobe_distance_m"]))) / 1000
+        east_pair = (Decimal(str(row["east_forward_lobe_distance_m"]))
+                     + Decimal(str(row["east_reverse_lobe_distance_m"]))) / 1000
+        if west_pair + east_pair != pair:
+            raise ValueError(f"lobe/full distance mismatch: {name}")
         annual_per_pair = pair * DAYS
         maximum = int((cap / annual_per_pair).to_integral_value(rounding=ROUND_FLOOR))
+        frontier = []
+        max_west = int((cap / (west_pair * DAYS)).to_integral_value(rounding=ROUND_FLOOR))
+        for west_daily_pairs in range(max_west + 1):
+            remainder = cap - west_pair * DAYS * west_daily_pairs
+            east_daily_pairs = int((remainder / (east_pair * DAYS)).to_integral_value(
+                rounding=ROUND_FLOOR))
+            frontier.append({
+                "west_daily_bidirectional_lobe_pairs": west_daily_pairs,
+                "east_daily_bidirectional_lobe_pairs": east_daily_pairs,
+                "both_wings_served": west_daily_pairs > 0 and east_daily_pairs > 0,
+                "annual_lobe_km_before_extras": float(DAYS * (
+                    west_pair * west_daily_pairs + east_pair * east_daily_pairs)),
+            })
         scenarios = []
         for scenario_id, daily_pairs in SCENARIOS:
             annual = annual_per_pair * daily_pairs
@@ -67,6 +86,9 @@ def main(policy_path, repair_path, output_path):
             "forward_full_traversal_km": float(forward),
             "reverse_full_traversal_km": float(reverse),
             "daily_bidirectional_pair_km": float(pair),
+            "west_daily_bidirectional_lobe_pair_km": float(west_pair),
+            "east_daily_bidirectional_lobe_pair_km": float(east_pair),
+            "maximum_east_pairs_for_each_west_count_before_extras": frontier,
             "maximum_integer_daily_bidirectional_pairs_within_cap_before_extras": maximum,
             "annual_km_at_that_maximum_before_extras": float(annual_per_pair * maximum),
             "unused_cap_km_at_that_maximum_before_extras": float(cap - annual_per_pair * maximum),

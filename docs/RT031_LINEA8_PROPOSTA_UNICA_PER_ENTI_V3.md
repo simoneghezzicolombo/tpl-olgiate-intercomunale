@@ -110,6 +110,13 @@ per ogni altra percorrenza; non sono un orario proposto. Il calcolo non
 esclude esercizi con corse limitate, interlinee o calendari differenti,
 ma questi richiedono una nuova descrizione degli eventi passeggeri e
 non possono ereditare automaticamente le quote di accesso dell'8 intero.
+La separazione delle due ali a FS **non crea da sola risparmio**: nella
+versione 10/11 una coppia di giri dell'ovest vale 24,014 km e una
+dell'est 25,265 km, che sommano agli stessi 49,280 km. Se il cap resta
+fisso, l'allocazione diventa uno scambio territoriale: 8 coppie quotidiane
+ovest e 9 est sono aritmeticamente entro il tetto, così come 10 ovest e
+7 est, ma nessuna delle due promette H60 per 10 ore su **entrambe** le ali.
+Sono conteggi di percorrenze, non orari con corse passeggeri o coincidenze.
 Per le 16 ore H30/H60 richieste, il solo modello 10/11 supera il cap
 di circa **144.835 km/anno**, prima di riposizionamenti e di qualsiasi
 servizio non contato nei 260 giorni ipotizzati.

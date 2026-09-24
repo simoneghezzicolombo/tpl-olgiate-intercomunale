@@ -175,6 +175,10 @@ def main(paths, output):
             "east_ordered_waypoints": [label for label, _ in east_repair],
             "forward_complete_cycle_distance_m": round(forward_m, 3),
             "reverse_complete_cycle_distance_m": round(reverse_m, 3),
+            "west_forward_lobe_distance_m": wf["distance_m"],
+            "west_reverse_lobe_distance_m": wr["distance_m"],
+            "east_forward_lobe_distance_m": ef["distance_m"],
+            "east_reverse_lobe_distance_m": er["distance_m"],
             "forward_running_minutes_model_excluding_dwell_recovery": round(
                 wf["running_minutes_model"] + ef["running_minutes_model"], 6),
             "reverse_running_minutes_model_excluding_dwell_recovery": round(

@@ -240,6 +240,12 @@ dell'obbligo di percorrere l'8 intero a ogni partenza, non una prova che
 nessun disegno con corse limitate possa funzionare. Un tale disegno
 cambierebbe però la promessa territoriale e va valutato come nuovo orario
 con eventi passeggeri espliciti, non come scorciatoia contabile.
+Separare le due ali a FS senza ridurre le corse non abbatte i chilometri:
+per la variante 10/11 le coppie di giri ovest ed est costano rispettivamente
+24,014 e 25,265 km. Il [dominio di allocazione intera](../outputs/phase2/rt031_line8_service_envelope_v3/envelope.json)
+mostra che nel cap si possono scambiare corse fra le ali, ma non ottenere
+H60 per 10 ore in entrambe. La sola identità pubblica «Linea 8» non
+garantisce continuità a bordo o frequenza uguale nelle due ali.
 
 Queste grandezze sono di **accesso potenziale**, tracciato e produzione
 condizionale. L'OD lavoro è comunale, non assegnato a percorsi/passeggeri;
