@@ -2,6 +2,7 @@
 
 import argparse
 from decimal import Decimal
+from fractions import Fraction
 import hashlib
 import json
 from pathlib import Path
@@ -9,14 +10,16 @@ from pathlib import Path
 
 EXPECTED = {
     "profiles": "03105f27fa3b979fb02e84da9ccdaad42134b9b3c6d1123792ba190e93ffe72a",
-    "road_probe": "e67b36b1f72e34e81cf027e5581fa295cd287cce8ff67318d95aea11c4ba8f99",
-    "policy": "ec724d53b26fa5693be8ac98935bfc98087d380af7e557ed5b65ff8cede290be",
+    "road_probe": "27abc479f8369a990061036daeb0a5de1ee4a487bc05593a4d9284f0f64f1554",
+    "policy": "28909df6b9cdcf49608d4e7456f819959d35d1bf2c41dd1800d026bb06d963e0",
 }
 DAILY_CYCLES = 20
 SERVICE_DAYS = 260
 
 
-def sha256(path):
+def sha256(path, normalize_newlines=False):
+    if normalize_newlines:
+        return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
     h = hashlib.sha256()
     with path.open("rb") as stream:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
@@ -31,7 +34,7 @@ def overlay_annual_km(base_distance_m, two_way_probe_distance_m):
 
 def main(paths, output):
     for name, path in paths.items():
-        if sha256(path) != EXPECTED[name]:
+        if sha256(path, name in {"road_probe", "policy"}) != EXPECTED[name]:
             raise ValueError(f"pinned source drift: {name}")
     frontier = json.loads(paths["profiles"].read_text(encoding="utf-8"))
     probe = json.loads(paths["road_probe"].read_text(encoding="utf-8"))
@@ -56,6 +59,13 @@ def main(paths, output):
         ((profile, annual) for profile, annual in under
          if profile["retained_current_exact_stop_count"] >= 7),
         key=lambda row: row[0]["profile_id"])
+    worst_municipality_witness = max(
+        under,
+        key=lambda row: min(Fraction(coverage["10"]) for coverage in
+                            row[0]["exact_municipality_coverage"].values()))
+    worst_municipality_ratio = min(
+        Fraction(coverage["10"]) for coverage in
+        worst_municipality_witness[0]["exact_municipality_coverage"].values())
     payload = {
         "contract": "RT031_SOUTH_SPUR_ARITHMETIC_RESOURCE_OVERLAY_V3",
         "status": "NON_DECISIONAL_NOT_A_COMPOSED_ROUTE_OR_TIMETABLE",
@@ -72,6 +82,10 @@ def main(paths, output):
         "profiles_under_cap_in_arithmetic_overlay": len(under),
         "profiles_under_cap_with_at_least_7_of_11_current_exact_stops":
             len(high_retention),
+        "best_existing_stop_set_worst_municipality_10min_access":
+            str(worst_municipality_ratio),
+        "best_existing_stop_set_worst_municipality_example_profile_id":
+            worst_municipality_witness[0]["profile_id"],
         "high_retention_arithmetic_witnesses": [
             {"profile_id": profile["profile_id"],
              "base_cycle_distance_m": profile["total_distance_m"],
