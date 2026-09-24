@@ -45,6 +45,28 @@ all'ancora provvisoria, **non una fermata**. Percorso completo, restrizioni
 dipendenti dalla storia, idoneità stradale e continuità passeggeri restano da
 validare.
 
+La [verifica pedonale sul substrato comune](../outputs/phase2/rt031_unique_line_walk_access_v3/access.json)
+trova 16 identità di fermata esistente i cui nodi sono incontrati dal
+percorso in entrambi i versi. Se diventassero tutte eventi di salita, e se
+i due punti nuovi fossero sicuri e serviti, la quota di popolazione con
+una fermata entro **10 minuti a piedi** sarebbe:
+
+| Brivio | Calco | Olgiate | Santa Maria Hoè | La Valletta | Totale |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 76,14% | 62,81% | 72,86% | 76,63% | 67,85% | 70,42% |
+
+Queste percentuali sono **condizionali**: i 16 nodi non sono ancora un
+orario con fermate effettive, i due nuovi punti non sono approvati e la
+matrice misura accesso pedonale, non viaggio verso FS o domanda osservata.
+Per confronto, usando solo le fermate rappresentative già nominate nel
+percorso, Calco è al 47,97% e Olgiate al 31,26%: la scelta degli eventi di
+fermata cambia materialmente la proposta.
+Solo **5 delle 11 identità di fermata attuali** del sottoinsieme RT031 sono
+incontrate nei due versi: il confronto pedonale individua perdite locali
+anche dove la percentuale comunale cresce. In particolare Brivio passa
+condizionalmente dal 78,38% al 76,14% a 10 minuti. La conservazione delle
+fermate resta una preferenza da trattare con soluzioni locali motivate.
+
 Il cap vigente è **111.419 bus-km/anno**. Con 260 giorni ipotetici, dieci
 giri completi per verso al giorno produrrebbero circa **122.991 km/anno**
 già nel modello; perfino il limite inferiore stradale ottimistico è

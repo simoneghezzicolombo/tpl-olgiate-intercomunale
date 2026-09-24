@@ -199,6 +199,19 @@ def main(paths, output):
         "forward_to_reverse_vehicle_continuation": joint("east_toward_cantu", "east_reverse"),
         "reverse_to_forward_vehicle_continuation": joint("west_reverse", "west_toward_south"),
     }
+    eligible_attachments = {stop: row["graph_node_id"]
+                            for stop, row in attachments.items()
+                            if row["route_ready"] == "True"
+                            and row["service_class"] == "CONVENTIONAL_TPL"}
+    for screen in screens.values():
+        path_nodes = {edges[e]["u_node_id"] for e in screen["_path_edge_ids"]}
+        path_nodes.add(edges[screen["_path_edge_ids"][-1]]["v_node_id"])
+        screen["existing_stop_attachment_nodes_encountered_not_service_events"] = sorted(
+            stop for stop, node in eligible_attachments.items() if node in path_nodes)
+    forward_stops = (set(screens["west_toward_south"]["existing_stop_attachment_nodes_encountered_not_service_events"])
+                     | set(screens["east_toward_cantu"]["existing_stop_attachment_nodes_encountered_not_service_events"]))
+    reverse_stops = (set(screens["west_reverse"]["existing_stop_attachment_nodes_encountered_not_service_events"])
+                     | set(screens["east_reverse"]["existing_stop_attachment_nodes_encountered_not_service_events"]))
     west_core = WEST[:-2] + WEST[-1:]
     east_core = EAST[:-2] + EAST[-1:]
     south, north = WEST[-2], EAST[-2]
@@ -244,6 +257,7 @@ def main(paths, output):
                           for key in paths},
         "north_proxy": {"anchor_status": "ASSUMPTION", "road_way_id": "581532442",
                         "graph_node_id": north_node,
+                        "lat": node_lat, "lon": node_lon,
                         "straight_line_distance_from_anchor_m": round(north_proxy_air_distance_m, 3),
                         "boarding_stop_certified": False},
         "south_proxy": {"candidate_id": "P2V2S_0031", "physical_status": "FIELD_CHECK_PENDING",
@@ -255,6 +269,8 @@ def main(paths, output):
         "vehicle_suitability_certified": False,
         "timetable_certified": False,
         "screens": screens,
+        "existing_stop_attachment_nodes_encountered_in_both_full_directions": sorted(
+            forward_stops & reverse_stops),
         "fs_joins": fs_joins,
         "allocation_sensitivity": allocation_sensitivity,
         "allocation_sensitivity_semantics": "fastest independent road legs at the same representative points; no stop, full-history, or timetable certification",

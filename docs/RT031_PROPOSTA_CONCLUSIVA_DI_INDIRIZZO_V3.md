@@ -155,6 +155,45 @@ risparmio effettivo prima di promettere questo percorso, questa produzione
 e questo cap insieme. Restano da verificare spazio di fermata, dimensioni
 stradali, tempi con sosta e recupero, accesso pedonale e coincidenze.
 
+### Accessibilità territoriale condizionale sul medesimo substrato
+
+La [matrice riproducibile di accesso pedonale](../outputs/phase2/rt031_unique_line_walk_access_v3/access.json)
+usa le stesse unità di popolazione e lo stesso grafo RT028 per tutti e
+cinque i comuni. Il percorso più rapido modellato incontra il nodo di
+**16 fermate convenzionali esistenti in entrambi i versi**. Sono siti
+potenzialmente utilizzabili senza deviazione modellata, **non ancora
+eventi ordinati di salita**; fermarsi a tutti aggiungerebbe sosta e potrebbe
+cambiare tempi e risorse. I due punti nuovi restano ipotesi di sito.
+
+| Popolazione con una fermata entro 10 minuti a piedi | Solo fermate rappresentative | Tutte le 16 identità incontrate, se servite | 16 identità più sud e San Zeno, se verificati e serviti |
+| --- | ---: | ---: | ---: |
+| Brivio | 72,08% | 76,14% | 76,14% |
+| Calco | 47,97% | 62,52% | 62,81% |
+| Olgiate Molgora | 31,26% | 37,44% | 72,86% |
+| Santa Maria Hoè | 70,78% | 76,63% | 76,63% |
+| La Valletta Brianza | 45,12% | 67,85% | 67,85% |
+| Cinque comuni insieme | 49,46% | 60,56% | 70,42% |
+
+L'ultima colonna è un **controfattuale di accesso pedonale** e rende
+esplicito il potenziale politico della proposta, incluso Calco. Non è
+domanda osservata, non misura i minuti in autobus verso FS e non certifica
+fermate in entrambi i lati della strada. Il nuovo punto sud è ancora
+`FIELD_CHECK_PENDING`; quello di San Zeno è solo un nodo stradale proiettato
+sul grafo pedonale. Se sopralluogo o orario eliminano un punto, le quote
+vanno ricalcolate, non conservate come promessa.
+
+Il confronto con il **sottoinsieme delle 11 identità di fermata attuali**
+sullo stesso RT028 è meno uniforme del solo totale: la proposta ne incontra
+**5/11**. Nel controfattuale completo il totale passa dal 48,77% al 70,42%
+a 10 minuti, ma il 5,36% della popolazione prima coperta da quel
+sottoinsieme perderebbe tale accesso e il 27,01% lo guadagnerebbe. Brivio
+scende dal 78,38% al 76,14% (5,74% perde accesso); a Santa Maria Hoè il
+totale sale dal 75,39% al 76,63%, ma l'8,76% perde accesso e il 10,00% lo
+guadagna. Il sopralluogo deve quindi affrontare soprattutto le località
+oggi servite dalle identità omesse, invece di guardare solo al totale.
+Questo confronto usa **11 stop ID**, non descrive da solo l'intera rete
+D184/D185 o i suoi orari.
+
 Queste grandezze sono di **accesso potenziale**, tracciato e produzione
 condizionale. L'OD lavoro è comunale, non assegnato a percorsi/passeggeri;
 non esistono GJT pesate per domanda o probabilità empiriche di mancata

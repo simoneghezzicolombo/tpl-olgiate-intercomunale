@@ -1,0 +1,51 @@
+name: RT031 unique Linea 8 conditional walking access V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - scripts/phase2_audit_rt031_unique_line_walk_access_v3.py
+      - outputs/phase2/rt031_unique_line_walk_access_v3/access.json
+      - outputs/phase2/rt031_unique_line_road_screen_v3/screen.json
+      - .github/workflows/phase2-rt031-unique-line-walk-access-v3.yml
+  pull_request:
+    paths:
+      - scripts/phase2_audit_rt031_unique_line_walk_access_v3.py
+      - outputs/phase2/rt031_unique_line_walk_access_v3/access.json
+      - outputs/phase2/rt031_unique_line_road_screen_v3/screen.json
+      - .github/workflows/phase2-rt031-unique-line-walk-access-v3.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  walk-access:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .:src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install 'numpy>=2,<3' 'pandas>=2.2,<4' 'scipy>=1.13,<2' 'shapely>=2,<3'
+      - name: Fetch pinned pedestrian substrate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(gh api "repos/${{ github.repository }}/actions/artifacts/9991182904" --jq .digest)" = 'sha256:e1ca83699593dd9e605d2870667da1b4dfc6068436a0c3116faf8587901b2e28'
+          gh run download 34039162932 -n rt028-final-stop-pedestrian-accessibility-substrate-v3 -D /tmp/rt028
+      - name: Reproduce five-municipality access twice
+        run: |
+          set -euo pipefail
+          for replica in a b; do
+            python -m scripts.phase2_audit_rt031_unique_line_walk_access_v3 \
+              --matrix /tmp/rt028/output/rt028_population_unit_stop_walk_matrix_v3.csv \
+              --pedestrian_osm /tmp/rt028/input/rt028_osm_pedestrian_snapshot_v3.osm \
+              --candidates_normalized outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+              --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
+              --output "/tmp/access-$replica.json"
+          done
+          cmp /tmp/access-a.json /tmp/access-b.json
+          cmp /tmp/access-a.json outputs/phase2/rt031_unique_line_walk_access_v3/access.json
