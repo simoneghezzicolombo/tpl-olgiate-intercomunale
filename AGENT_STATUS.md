@@ -56,6 +56,32 @@ certificata per le candidate attuali.
 `primary_selection_authorised=false`
 `runner_up_selection_authorised=false`
 
+## Codex handoff — Olgiate stop siting and same-substrate walking counterfactual
+
+2026-09-24. The all-40 Olgiate stop-siting inventory remains non-decisional.
+The pinned RT028 same-substrate counterfactual reproduces every base access
+ratio, then evaluates one hypothetical added stop at a time. CI run
+`35751414710` succeeded with two byte-identical replicas; artifact
+`10706300279`, JSON SHA256
+`e7bda2387e560d355a310300d140934c502252312ee50399eb29d88c34b4b8b3`.
+The broad composition CI `35751421664` also passed on the same commit.
+
+At 10 minutes the conditional Olgiate gain for `P2V2S_0082` (Via Buttero) is
++2.66 percentage points on the core figure-eight, +1.49 on the Via Statale
+variant. For `P2V2S_0092` (Via Mondonico), +2.68/+1.51; for `P2V2S_0103`,
++3.77/+2.60. Modelled walk from approximate sports POI: 6.68, 2.38, and
+3.60 minutes respectively. This is walking catchment only, conditional on
+a usable boarding site and route event. The POI's 73.34 m graph connector
+and all candidate sites require field/barrier checks. The Mondonico candidates
+are off the current figure-eight route and carry OSM sidewalk=no.
+
+The RT017 Via Cantu survey sequence has now been exported in route order:
+44 directed edges, 980.10 m on each reverse variant; zero on each requested
+order variant. There is still no catalogued candidate on that way, and a
+road segment is not a certified stop location. No route, new stop, schedule,
+PRIMARY or RUNNER-UP has been selected; caller Decision Contract values
+remain null.
+
 ### RT-031 Arlate + Rovagnate — latest non-decisional comparison
 
 - Pinned [machine audit](outputs/phase2/rt031_arlate_rovagnate_convergence_v3/convergence_audit_v3.json)

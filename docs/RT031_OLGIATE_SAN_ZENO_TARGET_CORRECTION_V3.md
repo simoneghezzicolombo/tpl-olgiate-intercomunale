@@ -53,6 +53,14 @@ La [CI dell'inventario](https://github.com/simoneghezzicolombo/tpl-olgiate-inter
 ha eseguito due repliche byte-per-byte identiche (artefatto `10705380537`,
 SHA-256 `d3932f14bb550a98bc17620fe9067947380dcb2bd1df57920773891ea3075d6c`).
 
+L'inventario ora esporta anche la sequenza orientata dei bordi RT017 di Via
+Cantù, con coordinate dei nodi e posizione nell'itinerario, per la ricognizione
+sul posto. Nelle due varianti inverse sono **44 bordi, 980,10 m modellati**;
+nelle altre due, nessuno. Le due sequenze occupano rispettivamente gli indici
+538–581 e 521–564 del percorso stradale completo. Sono segmenti da ispezionare,
+non 44 possibili fermate e neppure una proposta di posizione. Nessun lato di
+salita, attraversamento o spazio di arresto è ancora certificato.
+
 Tre esempi mostrano perché il punto più vicino non è automaticamente giusto:
 
 | Ipotesi | Strada | Dal POI sportivo approssimato | Sul way già percorso dall'8 base? | Popolazione aggiuntiva V2 a 10 min | Evidenza fisica ancora mancante |
@@ -82,6 +90,39 @@ del confronto RT031, e costo in km/tempo per i passeggeri già serviti.
 Sicurezza e legalità sono prerequisiti; fra siti idonei, accesso e costo
 restano dimensioni di confronto senza pesi imposti dal modello. Fino alla
 verifica sul campo: `new_stop_selected=false`.
+
+## Controfattuale sullo stesso grafo pedonale RT028
+
+Il [calcolo condizionale](../scripts/phase2_audit_rt031_conditional_new_stop_access_v3.py)
+usa **lo stesso** grafo, le stesse unità di popolazione e gli stessi quattro
+pattern RT031 dell'audit di accesso precedente. Riproduce esattamente le
+coperture base prima di aggiungere *ipoteticamente* ciascuna delle 40
+posizioni, una alla volta. È finalmente una misura marginale comparabile
+**per accesso a piedi**, ma assume una fermata accessibile e un evento di
+salita che oggi non sono certificati: non calcola deviazione del bus,
+orario, viaggio verso FS o idoneità fisica. Non si sommano guadagni di
+fermate diverse, perché le loro aree pedonali possono sovrapporsi.
+La [CI del controfattuale](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/35751414710)
+ha riprodotto due volte il risultato; artefatto `10706300279`, SHA-256 del JSON
+`e7bda2387e560d355a310300d140934c502252312ee50399eb29d88c34b4b8b3`.
+Il controllo generale di composizione sullo stesso commit è [verde](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/35751421664).
+
+| Ipotesi | Dal POI sportivo approssimato sul grafo RT028 | Incremento Olgiate a 10 min, 8 base | Incremento Olgiate a 10 min, 8 + Via Statale | Scarto essenziale |
+| --- | ---: | ---: | ---: | --- |
+| `P2V2S_0082` · Via Buttero | 6,68 min | +2,66 punti | +1,49 punti | Già sul way dell'8 base, non sul way delle varianti Via Statale; sito e lato non verificati |
+| `P2V2S_0092` · Via Mondonico | 2,38 min | +2,68 punti | +1,51 punti | Cammino modellato breve dal POI, ma fuori percorso e `sidewalk=no` in OSM |
+| `P2V2S_0103` · Via Mondonico | 3,60 min | +3,77 punti | +2,60 punti | Più accesso residenziale modellato, ma fuori percorso e `sidewalk=no` in OSM |
+
+I risultati delle due direzioni coincidono per queste tre ipotesi perché
+le differenze dei rispettivi stop-set non cambiano il loro catchment
+marginale; questo **non** certifica servizio bidirezionale alla fermata.
+Il POI sportivo è approssimato e il suo connettore al grafo RT028 è di
+73,34 m, vicino al limite modellistico di 90 m: resta prioritaria una
+verifica indipendente del percorso e delle barriere. Un'ipotesi più lontana
+dal centro sportivo può dare molti più punti di copertura comunale, ma
+risponde a un'altra geografia e può imporre molto più percorso al bus.
+Per San Zeno nessuna delle 40 ipotesi è sul way Via Cantù percorso dalla
+variante inversa; il controfattuale non colma quel vuoto di generazione.
 
 Infine, le coordinate di `S_SAN_ZENO` nei vecchi GTFS di scenario
 `data/raw/gtfs/network_structural/stops.txt` (45.7248, 9.3821) sono a circa

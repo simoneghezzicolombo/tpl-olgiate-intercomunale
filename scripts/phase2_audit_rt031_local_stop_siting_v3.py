@@ -105,17 +105,35 @@ def main(inputs, typed_path, output):
         edge_ids = [eid for rid in line["realization_ids"]
                     for eid in corridors[patterns[rid]["corridor_id"]]
                     ["path_edge_ids"].split(";")]
-        way_edges = [eid for eid in edge_ids
+        way_edges = [(position, eid) for position, eid in enumerate(edge_ids)
                      if edges[eid]["osm_way_id"] == VIA_CANTU_OSM_WAY_ID]
         route_nodes = {nid for eid in edge_ids
                        for nid in (edges[eid]["u_node_id"], edges[eid]["v_node_id"])}
         route_node_sets[name] = route_nodes
         route_way_sets[name] = {edges[eid]["osm_way_id"] for eid in edge_ids}
-        cantu_nodes = {nid for eid in way_edges
+        cantu_nodes = {nid for _, eid in way_edges
                        for nid in (edges[eid]["u_node_id"], edges[eid]["v_node_id"])}
+        cantu_edge_sequence = [{
+            "path_edge_index_zero_based": position,
+            "edge_id": eid,
+            "u_node_id": edges[eid]["u_node_id"],
+            "v_node_id": edges[eid]["v_node_id"],
+            "u_lat": nodes[edges[eid]["u_node_id"]]["lat"],
+            "u_lon": nodes[edges[eid]["u_node_id"]]["lon"],
+            "v_lat": nodes[edges[eid]["v_node_id"]]["lat"],
+            "v_lon": nodes[edges[eid]["v_node_id"]]["lon"],
+            "length_m": edges[eid]["length_m"],
+            "uncertainty_flags": edges[eid]["uncertainty_flags"],
+        } for position, eid in way_edges]
+        if any(right["path_edge_index_zero_based"] != left["path_edge_index_zero_based"] + 1
+               or right["u_node_id"] != left["v_node_id"]
+               for left, right in zip(cantu_edge_sequence, cantu_edge_sequence[1:])):
+            raise ValueError(f"Via Cantu survey segment is discontinuous: {name}")
         route[name] = {
             "traverses_san_zeno_via_cesare_cantu_osm_way": bool(way_edges),
             "via_cantu_edge_count": len(way_edges),
+            "via_cantu_traversed_directed_edge_sequence_for_field_survey":
+                cantu_edge_sequence,
             "nearest_route_graph_node_straight_m_to_targets": {
                 key: nearest_node_distance_m(nodes, route_nodes, *coords)
                 for key, coords in targets.items()},
@@ -171,6 +189,7 @@ def main(inputs, typed_path, output):
         "hub_split_route_proximity": route,
         "via_cantu_way_has_existing_proposed_candidate": any(
             o["on_san_zeno_via_cesare_cantu_osm_way"] for o in options),
+        "via_cantu_edge_sequence_is_survey_geometry_not_stop_site": True,
         "distance_is_straight_line_not_pedestrian_access": True,
         "additional_population_is_v2_existing_official_stop_baseline_not_rt031_marginal": True,
         "field_check_required_for_every_candidate": True,
