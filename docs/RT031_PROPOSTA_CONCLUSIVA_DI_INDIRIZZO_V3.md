@@ -69,6 +69,15 @@ H60 come eccezione territoriale; questo schema misto richiede quindi una
 delibera esplicita sulla classe di frequenza prima di diventare il contratto
 finale, non un adattamento silenzioso del finalizzatore.
 
+La promessa di frequenza va scritta **per ala e per verso**. Se H30 nelle
+quattro ore di punta e H60 nelle altre dodici ore della fascia 06–22
+significa un *giro completo di entrambe le ali* in ciascun verso, la
+contabilità nominale è 20 giri per verso al giorno, quindi 40 totali.
+Venti giri **totali** divisi tra i due versi non forniscono quella promessa.
+Gli orari di confine, l'alternanza dei mezzi e le coincidenze richiedono
+comunque una tabella di eventi effettiva prima di chiamare questa una
+frequenza di esercizio.
+
 Le coincidenze S8 vanno controllate per Milano e Lecco, bus→treno e
 treno→bus, con i tre profili di interscambio e la robustezza deterministica.
 Non fissare a priori :00/:30: fra le 60 rotazioni con due passaggi FS
@@ -130,7 +139,12 @@ km/anno**; perfino la media dei limiti inferiori è **118.563 km/anno**.
 Rispetto al cap politico di 111.419 km/anno, mancano rispettivamente circa
 **11.572** e **7.144 km/anno**. Lo scenario conta *giri completi* dei due
 anelli, non singole partenze da FS o blocchi veicolo: non è ancora un
-orario. Il risultato non esclude un altro sito di fermata, un diverso
+orario. Per la promessa nominale H30/H60 **in ciascun verso** descritta
+sopra, 20 giri completi per verso ×260 giorni darebbero circa **245.982
+km/anno** sul tracciato più rapido modellato; persino il limite inferiore
+ottimistico è circa **237.126 km/anno**. Questi sono conti condizionali,
+senza riposizionamenti, sosta o recupero: il fabbisogno reale non è stato
+certificato. Il risultato non esclude un altro sito di fermata, un diverso
 ordine o una linea ridisegnata più corta. Impone però di mostrare il
 risparmio effettivo prima di promettere questo percorso, questa produzione
 e questo cap insieme. Restano da verificare spazio di fermata, dimensioni
@@ -153,6 +167,16 @@ due benchmark già esistenti (migliore linea singola Arlate/Rovagnate e due
 circuiti hub-connected). Il fascicolo da consegnare
 all'Agenzia/operatore richiede soltanto quattro verifiche prima della
 decisione di esercizio:
+
+**Posizione da portare al tavolo:** mantenere il prodotto utile per il
+passeggero (frequenza dichiarata per ala e verso, accesso diretto a FS) come
+obiettivo e chiedere un piano di risorse coerente. La prova dei punti fissati
+esclude già la combinazione *stesso percorso rappresentativo + H30/H60 per
+verso su 16 ore + 260 giorni + cap di 111.419 km/anno*. Il maggior
+fabbisogno va deliberato esplicitamente dopo percorso e orario completi;
+non si valorizza per inferenza `decision_budget_km`. Se le risorse non
+possono crescere, occorre pubblicare quale parte della promessa cambia,
+senza etichettare H30/H60 una frequenza calcolata solo sommando i due versi.
 
 1. **Sopralluogo e instradamento completo:** sito sicuro/accessibile nel
    quartiere sud e per San Zeno/Via Cantù, limiti dimensionali/stradali,

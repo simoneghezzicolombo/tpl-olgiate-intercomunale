@@ -213,6 +213,12 @@ def main(paths, output):
                                                 for lobe in lobes if lobe["reachable"]),
             }
         allocation_sensitivity[name] = directional
+    forward_m = screens["west_toward_south"]["distance_m"] + screens["east_toward_cantu"]["distance_m"]
+    reverse_m = screens["west_reverse"]["distance_m"] + screens["east_reverse"]["distance_m"]
+    forward_bound_m = (screens["west_toward_south"]["unconstrained_distance_lower_bound_m"]
+                       + screens["east_toward_cantu"]["unconstrained_distance_lower_bound_m"])
+    reverse_bound_m = (screens["west_reverse"]["unconstrained_distance_lower_bound_m"]
+                       + screens["east_reverse"]["unconstrained_distance_lower_bound_m"])
     payload = {
         "contract": "RT031_UNIQUE_LINE_ROAD_SCREEN_V3",
         "status": "CONDITIONAL_WAYPOINT_SHORTEST_PATH_DIAGNOSTIC",
@@ -234,19 +240,30 @@ def main(paths, output):
         "allocation_sensitivity": allocation_sensitivity,
         "allocation_sensitivity_semantics": "fastest independent road legs at the same representative points; no stop, full-history, or timetable certification",
         "conditional_complete_cycle": {
-            "west_then_east_distance_m": round(
-                screens["west_toward_south"]["distance_m"]
-                + screens["east_toward_cantu"]["distance_m"], 3),
-            "opposite_direction_distance_m": round(
-                screens["west_reverse"]["distance_m"]
-                + screens["east_reverse"]["distance_m"], 3),
-            "west_then_east_unconstrained_lower_bound_m": round(
-                screens["west_toward_south"]["unconstrained_distance_lower_bound_m"]
-                + screens["east_toward_cantu"]["unconstrained_distance_lower_bound_m"], 3),
-            "opposite_direction_unconstrained_lower_bound_m": round(
-                screens["west_reverse"]["unconstrained_distance_lower_bound_m"]
-                + screens["east_reverse"]["unconstrained_distance_lower_bound_m"], 3),
+            "west_then_east_distance_m": round(forward_m, 3),
+            "opposite_direction_distance_m": round(reverse_m, 3),
+            "west_then_east_unconstrained_lower_bound_m": round(forward_bound_m, 3),
+            "opposite_direction_unconstrained_lower_bound_m": round(reverse_bound_m, 3),
             "unit": "one complete west and east traversal, not a bus departure or vehicle block",
+        },
+        "illustrative_production_arithmetic": {
+            "service_days_assumption": 260,
+            "policy_cap_bus_km_per_year": 111419,
+            "policy_cap_source": "config/phase2_final_policy_contract_v3.json",
+            "nominal_span_hours": 16,
+            "nominal_peak_hours": 4,
+            "nominal_base_hours": 12,
+            "nominal_complete_traversals_per_direction_for_h30_peak_h60_base": 20,
+            "nominal_complete_traversals_total_if_both_directions": 40,
+            "annual_km_for_10_complete_traversals_per_direction": round(
+                (forward_m + reverse_m) * 10 * 260 / 1000, 3),
+            "annual_unconstrained_lower_bound_km_for_10_per_direction": round(
+                (forward_bound_m + reverse_bound_m) * 10 * 260 / 1000, 3),
+            "annual_km_for_nominal_20_complete_traversals_per_direction": round(
+                (forward_m + reverse_m) * 20 * 260 / 1000, 3),
+            "annual_unconstrained_lower_bound_km_for_nominal_20_per_direction": round(
+                (forward_bound_m + reverse_bound_m) * 20 * 260 / 1000, 3),
+            "meaning": "conditional arithmetic only; timetable events, exact boundary departures, vehicle blocks and passenger headways unverified",
         },
         "network_selected": False,
         "primary_selection_authorised": False,
