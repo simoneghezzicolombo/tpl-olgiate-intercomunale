@@ -88,6 +88,42 @@ fermate. Non attribuire probabilità empiriche di coincidenza persa.
 | Linee singole Arlate/Rovagnate/Brivio/Santa Maria: fino a 66,94% totale a 10 minuti con 21,17–21,42 km/ciclo e 6–7/11 fermate esatte. | Sono il benchmark serio di copertura dei cinque comuni, ma non includono il sud, hanno margini di km esigui e non dimostrano i tempi verso FS della Linea 8. |
 | Due circuiti hub-connected: 21,397 km combinati, 60,20% totale a 10 minuti e 11/11 stop ID nella comparazione; H60/16h dentro il cap, H30/16h fuori. | È un benchmark di accesso/continuità, non automaticamente una linea pubblica unica; l'eccezione H60 e l'orario congiunto non sono provati. |
 
+### Prima prova stradale della proposta unica
+
+La [prova riproducibile dei due anelli](../outputs/phase2/rt031_unique_line_road_screen_v3/screen.json)
+usa punti rappresentativi già presenti nel grafo: Scarpone, Rovagnate,
+Perego e Santa Maria nell'ala ovest; Calco Via Garibaldi, Arlate Cantina,
+Brivio centro e Beverate nell'ala est. Per il sud usa la candidata
+`P2V2S_0031` ancora da sopralluogo; per San Zeno un **nodo stradale su Via
+Cantù a 48,3 m in linea d'aria** dall'ancora provvisoria, non una fermata.
+Questi punti rendono misurabile la proposta, ma non sono fermate selezionate.
+
+| Giro completo dei due anelli | Tracciato più rapido nel modello, km | Limite inferiore ottimistico di distanza, km |
+| --- | ---: | ---: |
+| Ovest → FS → est, con sud e Via Cantù in rientro | 23,853 | 23,028 |
+| Verso opposto dei due anelli | 23,451 | 22,573 |
+
+Le quattro ali sono raggiungibili nel grafo; i percorsi dei singoli tratti
+non presentano svolte vietate *via-node* e non attraversano i due *via-way*
+noti. Il limite inferiore ignora perfino le restrizioni di svolta: vale
+solo per **questi punti e quest'ordine**, ma mostra che non basta scegliere
+strade leggermente diverse per rientrare automaticamente nel riferimento.
+Il tracciato più rapido è la concatenazione di minimi per singolo tratto;
+la legalità della composizione completa, inclusa la giunzione fra le ali a
+FS e la memoria di percorso, resta non certificata.
+
+Nello scenario **condizionale** di dieci giri completi per verso al giorno
+per 260 giorni, la media dei tracciati più rapidi produce circa **122.991
+km/anno**; perfino la media dei limiti inferiori è **118.563 km/anno**.
+Rispetto al cap politico di 111.419 km/anno, mancano rispettivamente circa
+**11.572** e **7.144 km/anno**. Lo scenario conta *giri completi* dei due
+anelli, non singole partenze da FS o blocchi veicolo: non è ancora un
+orario. Il risultato non esclude un altro sito di fermata, un diverso
+ordine o una linea ridisegnata più corta. Impone però di mostrare il
+risparmio effettivo prima di promettere questo percorso, questa produzione
+e questo cap insieme. Restano da verificare spazio di fermata, dimensioni
+stradali, tempi con sosta e recupero, accesso pedonale e coincidenze.
+
 Queste grandezze sono di **accesso potenziale**, tracciato e produzione
 condizionale. L'OD lavoro è comunale, non assegnato a percorsi/passeggeri;
 non esistono GJT pesate per domanda o probabilità empiriche di mancata
