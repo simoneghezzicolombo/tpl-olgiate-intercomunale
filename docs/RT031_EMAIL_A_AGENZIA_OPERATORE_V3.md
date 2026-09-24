@@ -1,6 +1,9 @@
-# Bozza di comunicazione ad Agenzia e operatore — Linea 8
+# Bozza sospesa di comunicazione ad Agenzia e operatore — Linea 8
 
-**Da personalizzare con mittente, destinatari e data; non inviata.**
+**SUPERATA DAL MANDATO INCLUSIVO: NON INVIARE.** Il committente ha chiesto di
+conservare per ora tutte le località e studiare prima la variante 11/11;
+questa bozza precedente è mantenuta solo come traccia, non come testo da
+proporre. La priorità è chiudere la proposta tecnica, non l'email.
 
 **Oggetto:** Proposta di Linea 8 intercomunale con nodo a Olgiate FS — richiesta
 di verifica di esercizio entro le risorse vigenti

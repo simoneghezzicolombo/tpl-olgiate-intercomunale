@@ -21,23 +21,24 @@ frazione non si considerano serviti finché una fermata e un evento di corsa
 non lo dimostrano. Crescenzaga/Pianezzo e Cassina sono opportunità da
 confrontare con il costo di deviazione; Cassina richiede prima
 un'identificazione geografica univoca. La conservazione delle fermate
-attuali è una preferenza da misurare, non un veto automatico.
+attuali è una preferenza da misurare, non un veto automatico. **In questa
+fase la variante inclusiva 11/11 e tutti i luoghi richiesti restano nel
+perimetro**: nessuna fermata viene tolta preventivamente per il cap.
 
 ## Servizio da progettare
 
 La richiesta è un orario prevedibile, con buona copertura della giornata e
-coincidenze S8 verso Milano e Lecco. **Prima consegna dell'operatore:** una
-proposta per **una sola Linea 8** che parta dal cap vigente di 111.419
-bus-km/anno e mostri per ogni località le partenze e i viaggi utili verso
-e dalla stazione, per ala e per verso. Si cerchi la fascia 06–22 e si
-dia priorità ai picchi 07–09 e 17–19, ma **H30 di punta/H60 di morbida
-non è un obbligo simultaneo su tutto l'8 in entrambi i sensi**. Se un
-servizio utile non sta nel cap, l'operatore deve mostrare la modifica
-minima verificabile di percorso, orario o risorse, con le perdite esplicite;
-non un preventivo implicito di 256 mila km. Verificare separatamente il
-sabato. La classe H60 richiede una decisione esplicita rispetto alla
-policy vigente. A FS va dichiarato se il passeggero resta sulla stessa
-corsa o cambia, con quale attesa. Nessuna fase S8 è ancora selezionata.
+coincidenze S8 verso Milano e Lecco. La proposta conserva **l'intero
+itinerario desiderato**, con entrambe le ali e i due sensi da verificare,
+e chiede corse e viaggi utili per ogni località. La fascia 06–22 e il
+rinforzo dei picchi 07–09 e 17–19 sono obiettivi; **H30 di punta/H60 di
+morbida non è ancora un orario approvato** né un obbligo di percorrere
+sempre tutto l'8 a ogni corsa. Il cap di 111.419 bus-km/anno è il
+riferimento di confronto, non una ragione per tagliare adesso frazioni o
+fermate. Verificare separatamente il sabato. La classe H60 richiede una
+decisione esplicita rispetto alla policy vigente. A FS va dichiarato se
+il passeggero resta sulla stessa corsa o cambia, con quale attesa. Nessuna
+fase S8 è ancora selezionata.
 
 ## Riscontro tecnico già disponibile
 
@@ -62,11 +63,12 @@ perdere le 16 precedenti. Se diventassero tutte eventi di salita, e se
 i due punti nuovi fossero sicuri e serviti, la quota di popolazione con
 una fermata entro **10 minuti a piedi** sarebbe:
 
-| Brivio | Calco | Olgiate | Santa Maria Hoè | La Valletta | Totale |
-| ---: | ---: | ---: | ---: | ---: | ---: |
-| 81,88% | 68,21% | 84,56% | 93,43% | 67,85% | 77,58% |
+| Variante di studio | Brivio | Calco | Olgiate | Santa Maria Hoè | La Valletta | Totale |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 10/11, confronto più corto | 81,88% | 68,21% | 84,56% | 93,43% | 67,85% | 77,58% |
+| 11/11, riferimento inclusivo | 81,88% | 68,21% | 84,56% | 95,75% | 67,85% | 77,79% |
 
-Queste percentuali sono **condizionali**: i 24 nodi non sono ancora un
+Queste percentuali sono **condizionali**: i 24/25 nodi non sono ancora un
 orario con fermate effettive, i due nuovi punti non sono approvati e la
 matrice misura accesso pedonale, non viaggio verso FS o domanda osservata.
 Per confronto, usando solo le fermate rappresentative già nominate nel
@@ -78,8 +80,10 @@ coperto a Calco; resta il 2,32% della popolazione di Santa Maria.
 Includere anche l'ultima identità attuale a Santa Maria Hoè porta a
 **25 nodi esistenti, 11/11 identità e 77,79%** nel totale dei cinque comuni,
 ma aggiunge **1,464 km per giro completo** rispetto alla versione a 10/11.
-È un'alternativa esplicita di conservazione delle fermate, non una scelta
-automatica: l'effetto su tempi, risorse e viaggi verso FS va verificato.
+La 11/11 è ora il **riferimento inclusivo da verificare per primo**, non
+una rete automaticamente selezionata: l'effetto su tempi, risorse e
+viaggi verso FS va misurato. La 10/11 resta il confronto di efficienza,
+non un taglio già deciso.
 
 ### Direttezza verso FS: perché servono davvero i due sensi
 
@@ -136,11 +140,11 @@ interlinee, percorso più corto o una diversa distribuzione temporale
 possono cambiare la produzione, **ma devono essere valutati come servizi
 effettivi**, con accessibilità, tempi verso FS e coincidenze ricalcolati.
 
-La richiesta politica non è «finanziare 256 mila km». È ricevere **una
-proposta unica credibile entro il cap**, insieme alla quantificazione del
-più piccolo incremento eventualmente indispensabile per non sacrificare
-la funzione dei cinque comuni e delle due zone di Olgiate. Non si sceglie
-una frequenza ridotta solo dividendo un numero di giri.
+La richiesta politica non è «finanziare 256 mila km» né «tagliare subito
+3,213 km». È **verificare il concept inclusivo** e ricevere un progetto
+di esercizio che esponga trasparentemente servizio e risorse necessari.
+Il confronto con il cap viene dopo la verifica della funzione passeggeri;
+non si sceglie una frequenza ridotta solo dividendo un numero di giri.
 
 ## Richiesta al tavolo
 
@@ -151,19 +155,19 @@ una frequenza ridotta solo dividendo un numero di giri.
    indicando tempi frazione↔FS, coincidenze S8, mezzi e tutti i chilometri,
    inclusi riposizionamenti. Confrontare la copertura 5/8/10 minuti nei
    cinque comuni e nelle due aree di Olgiate con i benchmark già pubblicati.
-3. Consegnare **prima** uno schema verificabile entro il cap,
-   dichiarando per ogni località le frequenze nel senso utile, span e
-   tempi verso FS. Se non soddisfa il brief territoriale, indicare il
-   minimo incremento di risorse o la modifica di tracciato necessari e
-   quantificarne l'effetto. Nessun nuovo budget o orario è approvato qui.
+3. Consegnare lo schema inclusivo verificato, dichiarando per ogni
+   località le frequenze nel senso utile, span e tempi verso FS, insieme
+   a km e mezzi necessari. Confrontarlo **poi** con il cap e con una
+   variante di efficienza, senza eliminare oggi fermate o frazioni.
+   Nessun nuovo budget o orario è approvato qui.
 
 Questa scheda fissa **un solo concept** e un confronto finito. La decisione
 di esercizio segue le verifiche sopra. `network_selected=false`;
 `primary_selection_authorised=false`;
 `runner_up_selection_authorised=false`.
 
-La [bozza di comunicazione](RT031_EMAIL_A_AGENZIA_OPERATORE_V3.md) e la
-[lista verificabile delle consegne richieste](RT031_LINEA8_CAPITOLATO_DI_VERIFICA_V3.md)
-sono pronte per Agenzia e operatore; la comunicazione non è stata inviata.
+La [lista verificabile delle consegne richieste](RT031_LINEA8_CAPITOLATO_DI_VERIFICA_V3.md)
+accompagna la proposta. La precedente bozza di email non è stata inviata
+e va aggiornata soltanto dopo che la proposta tecnica sarà chiusa.
 Dettagli, fonti e limiti nella
 [proposta conclusiva](RT031_PROPOSTA_CONCLUSIVA_DI_INDIRIZZO_V3.md).

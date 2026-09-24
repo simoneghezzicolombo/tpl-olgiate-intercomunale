@@ -58,8 +58,9 @@ quartiere sud è stato aggiunto al brief.
 ## Prodotto di servizio proposto per la verifica
 
 **Mandato di progetto, non orario approvato:** una Linea 8 utile ai cinque
-comuni, con Olgiate sud e San Zeno come due esigenze distinte, da progettare
-**prima entro il cap vigente**. Cercare una fascia estesa verso 06:00–22:00,
+comuni, con Olgiate sud e San Zeno come due esigenze distinte. **Mantenere
+per ora tutti i luoghi richiesti e verificare prima la variante inclusiva
+11/11**, senza tagli preventivi per il cap. Cercare una fascia estesa verso 06:00–22:00,
 partenze memorabili e rinforzo nelle punte 07:00–09:00 e 17:00–19:00.
 H30 in punta e H60 fuori punta sono una **preferenza da testare**, non una
 promessa simultanea su ogni ala e verso né una richiesta politica di
@@ -221,7 +222,9 @@ scende a zero, ma la deviazione aggiunge **1,464 km per giro completo**
 rispetto alla versione 10/11 e circa tre minuti di sola marcia. Il guadagno
 di accesso totale è **0,21 punti percentuali**. Le due versioni sono un
 trade-off esplicito fra conservazione e risorse, non un ordinamento Pareto
-con pesi impliciti.
+con pesi impliciti. Su indicazione del committente, **la 11/11 è il
+riferimento inclusivo per il prossimo progetto di esercizio**; la 10/11
+resta un confronto, non una soppressione già deliberata.
 
 La riparazione non autorizza a programmare automaticamente 26 o 27 fermate:
 24–25 sono nodi di fermate esistenti incontrati dal percorso e due sono
@@ -284,15 +287,17 @@ due versi, eventi passeggeri, orario/blocchi/km e confronto di accessibilità
 e risorse. Ulteriore ricerca interna non può sostituire tali dati di
 esercizio e di sopralluogo.
 
-**Posizione da portare al tavolo:** chiedere **prima** una soluzione
-operativa verificabile per la Linea 8 entro 111.419 km/anno, che mostri
-frequenza realmente utile e tempi verso FS per ogni località. La prova
+**Posizione da portare al tavolo:** chiedere **prima** la verifica
+operativa della Linea 8 inclusiva, che mostri fermate effettive, frequenza
+utile e tempi verso FS per ogni località, oltre a km e mezzi necessari.
+Confrontare **poi** il risultato con il cap vigente di 111.419 km/anno e
+con la variante 10/11. La prova
 dei punti fissati esclude solo la combinazione *stesso percorso completo
 in entrambi i versi + H30/H60 per verso su 16 ore + 260 giorni + cap*.
 Non esclude un disegno operativo diverso; questo però deve misurare senza
 scorciatoie cosa guadagnano e perdono i passeggeri. Se il cap non basta a
-un servizio utile, chiedere il **minimo incremento motivato** o la
-modifica fisica necessaria, da deliberare esplicitamente. Non si valorizza
+un servizio utile, discutere l'incremento motivato o la modifica fisica
+necessaria **dopo** il confronto, non tagliare il brief in anticipo. Non si valorizza
 per inferenza `decision_budget_km`.
 
 1. **Sopralluogo e instradamento completo:** sito sicuro/accessibile nel
