@@ -116,6 +116,7 @@ def screen_lobe(lobe, attachment_nodes, edges, rules):
             "via_node_bad_turn_indices_at_leg_seams_or_within_legs": bad_turns,
             "path_edge_count": len(path),
             "path_edge_id_sha256": hashlib.sha256("\n".join(path).encode()).hexdigest(),
+            "_path_edge_ids": path,
             "osm_way_ids": sorted({edges[e]["osm_way_id"] for e in path})}
 
 
@@ -181,6 +182,23 @@ def main(paths, output):
             screen["known_successor_via_way_overlap"] = sorted(
                 via_ways & set(screen.pop("osm_way_ids")))
         screens[label] = screen
+    adapter = FrozenRT017ViaNodeAdapter(edges.values(), rules,
+                                         unresolved_external_via_way_count=2)
+
+    def joint(a, b):
+        left, right = screens[a]["_path_edge_ids"], screens[b]["_path_edge_ids"]
+        same_node = edges[left[-1]]["v_node_id"] == edges[right[0]]["u_node_id"]
+        decision = adapter.decision((left[-1],), right[0]) if same_node else None
+        return {"same_fs_graph_node": same_node,
+                "represented_via_node_turn_allowed": decision is not None and decision["allowed"] is True,
+                "incoming_edge_id": left[-1], "outgoing_edge_id": right[0]}
+
+    fs_joins = {
+        "west_to_east": joint("west_toward_south", "east_toward_cantu"),
+        "east_reverse_to_west_reverse": joint("east_reverse", "west_reverse"),
+        "forward_to_reverse_vehicle_continuation": joint("east_toward_cantu", "east_reverse"),
+        "reverse_to_forward_vehicle_continuation": joint("west_reverse", "west_toward_south"),
+    }
     west_core = WEST[:-2] + WEST[-1:]
     east_core = EAST[:-2] + EAST[-1:]
     south, north = WEST[-2], EAST[-2]
@@ -237,6 +255,7 @@ def main(paths, output):
         "vehicle_suitability_certified": False,
         "timetable_certified": False,
         "screens": screens,
+        "fs_joins": fs_joins,
         "allocation_sensitivity": allocation_sensitivity,
         "allocation_sensitivity_semantics": "fastest independent road legs at the same representative points; no stop, full-history, or timetable certification",
         "conditional_complete_cycle": {
@@ -271,6 +290,8 @@ def main(paths, output):
         "decision_budget_km": None,
         "uncertainty_band_min": None,
     }
+    for screen in screens.values():
+        screen.pop("_path_edge_ids", None)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(payload, ensure_ascii=False, sort_keys=True,
                                  separators=(",", ":")) + "\n", encoding="utf-8")

@@ -130,8 +130,13 @@ noti. Il limite inferiore ignora perfino le restrizioni di svolta: vale
 solo per **questi punti e quest'ordine**, ma mostra che non basta scegliere
 strade leggermente diverse per rientrare automaticamente nel riferimento.
 Il tracciato più rapido è la concatenazione di minimi per singolo tratto;
-la legalità della composizione completa, inclusa la giunzione fra le ali a
-FS e la memoria di percorso, resta non certificata.
+le quattro giunzioni stradali modellate a FS (ovest→est, est inverso→ovest
+inverso e ripartenze del veicolo fra i due giri) coincidono sul nodo di FS
+e non violano una svolta *via-node* rappresentata. Restano da certificare
+la memoria completa delle restrizioni sulla nuova composizione, l'idoneità
+fisica di fermata/manovra e la continuità del **servizio passeggeri**:
+un veicolo che può proseguire non prova da solo che la corsa pubblica
+prosegua senza cambio o attesa.
 
 Nello scenario **condizionale** di dieci giri completi per verso al giorno
 per 260 giorni, la media dei tracciati più rapidi produce circa **122.991
