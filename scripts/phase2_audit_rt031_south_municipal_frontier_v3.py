@@ -8,9 +8,6 @@ import hashlib
 import json
 from pathlib import Path
 
-from shapely.geometry import Point, shape
-
-
 EXPECTED = {
     "profiles": "03105f27fa3b979fb02e84da9ccdaad42134b9b3c6d1123792ba190e93ffe72a",
     "matrix": "a47bbce413d056db185180173ab2f05dce0463cb626a2c81f4aff64de91b50c1",
@@ -28,6 +25,8 @@ def ratio(numerator, denominator):
 
 
 def main(paths, output):
+    from shapely.geometry import Point, shape
+
     for label, path in paths.items():
         if sha256(path) != EXPECTED[label]:
             raise ValueError(f"pinned {label} source drift")
