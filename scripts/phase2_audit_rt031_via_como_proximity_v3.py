@@ -50,24 +50,25 @@ def build(paths):
                              LineString(feature["geometry"]["coordinates"]))
             nearest = line.interpolate(line.project(point))
             near_lon, near_lat = backward.transform(nearest.x, nearest.y)
+            near_coord = [round(near_lon, 8), round(near_lat, 8)]
             distance = round(point.distance(nearest), 3)
             comparisons[geometry_name][direction] = {
                 "planar_straight_line_distance_m": distance,
-                "nearest_route_point_lon_lat": [round(near_lon, 8), round(near_lat, 8)],
+                "nearest_route_point_lon_lat": near_coord,
             }
             if geometry_name == "west_swap":
                 features.append({
                     "type": "Feature",
                     "properties": {"feature_type": "NEAREST_MODELED_ROAD_POINT_NOT_STOP_SITE",
                                    "traversal": direction, "straight_line_distance_m": distance},
-                    "geometry": {"type": "Point", "coordinates": [near_lon, near_lat]},
+                    "geometry": {"type": "Point", "coordinates": near_coord},
                 })
                 features.append({
                     "type": "Feature",
                     "properties": {"feature_type": "STRAIGHT_LINE_SEPARATION_NOT_WALKING_PATH",
                                    "traversal": direction, "distance_m": distance},
                     "geometry": {"type": "LineString",
-                                 "coordinates": [[lon, lat], [near_lon, near_lat]]},
+                                 "coordinates": [[lon, lat], near_coord]},
                 })
     if max(r["planar_straight_line_distance_m"]
            for r in comparisons["baseline"].values()) > 5:
