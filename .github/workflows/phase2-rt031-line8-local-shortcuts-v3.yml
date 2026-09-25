@@ -11,6 +11,7 @@ on:
       - scripts/phase2_audit_rt031_line8_west_orders_v3.py
       - scripts/phase2_audit_rt031_line8_distance_objective_v3.py
       - scripts/phase2_audit_rt031_line8_waypoint_lower_bound_v3.py
+      - scripts/phase2_audit_rt031_line8_distance_walk_v3.py
       - scripts/phase2_render_rt031_line8_distance_option_v3.py
       - scripts/phase2_audit_rt031_south_road_probe_v3.py
       - scripts/phase2_probe_rt031_unique_line_v3.py
@@ -26,6 +27,7 @@ on:
       - outputs/phase2/rt031_line8_local_shortcuts_v3/waypoint_lower_bound.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option.png
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option_walk.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/west_full_retention.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.geojson
@@ -39,6 +41,7 @@ on:
       - scripts/phase2_audit_rt031_line8_west_orders_v3.py
       - scripts/phase2_audit_rt031_line8_distance_objective_v3.py
       - scripts/phase2_audit_rt031_line8_waypoint_lower_bound_v3.py
+      - scripts/phase2_audit_rt031_line8_distance_walk_v3.py
       - scripts/phase2_render_rt031_line8_distance_option_v3.py
       - scripts/phase2_audit_rt031_south_road_probe_v3.py
       - scripts/phase2_probe_rt031_unique_line_v3.py
@@ -54,6 +57,7 @@ on:
       - outputs/phase2/rt031_line8_local_shortcuts_v3/waypoint_lower_bound.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option.png
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option_walk.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/west_full_retention.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.geojson
@@ -207,3 +211,12 @@ jobs:
             --prior_access outputs/phase2/rt031_unique_line_walk_access_v3/access.json \
             --output /tmp/rt031/walk.json
           cmp /tmp/rt031/walk.json outputs/phase2/rt031_line8_local_shortcuts_v3/walk.json
+          python -m scripts.phase2_audit_rt031_line8_distance_walk_v3 \
+            --matrix /tmp/rt031/rt028/output/rt028_population_unit_stop_walk_matrix_v3.csv \
+            --pedestrian_osm /tmp/rt031/rt028/input/rt028_osm_pedestrian_snapshot_v3.osm \
+            --candidates_normalized outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+            --distance_audit outputs/phase2/rt031_line8_local_shortcuts_v3/distance_objective_audit.json \
+            --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
+            --prior_access outputs/phase2/rt031_unique_line_walk_access_v3/access.json \
+            --output /tmp/rt031/distance-option-walk.json
+          cmp /tmp/rt031/distance-option-walk.json outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option_walk.json

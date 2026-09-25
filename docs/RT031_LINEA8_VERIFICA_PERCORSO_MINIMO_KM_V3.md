@@ -32,6 +32,16 @@ La [mappa comparativa](../outputs/phase2/rt031_line8_local_shortcuts_v3/distance
 e il [tracciato GeoJSON](../outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option.geojson)
 mostrano entrambe le direzioni, le tre identità non più incontrate e i
 due bisogni di nuova fermata, ancora non approvati.
+La [matrice pedonale ricalcolata](../outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option_walk.json)
+mostra che, anche supponendo utilizzabili tutte le fermate incontrate e
+i due punti nuovi, il risparmio di 2.515 km/anno rispetto al riordino
+veloce 25/25 comporterebbe una perdita potenziale di **2,44 punti
+percentuali complessivi a 10 minuti**: **−6,39 pp a Olgiate Molgora** e
+**−3,55 pp a Brivio**; Calco, Santa Maria Hoè e La Valletta restano
+invariati a quella soglia. A 5 minuti la perdita è **−12,73 pp a
+Olgiate**, **−8,22 pp a Brivio** e **−5,08 pp complessivi**. Non è dunque
+il compromesso da promuovere solo perché più corto, e rimane comunque
+oltre il cap.
 
 Per verificare se un *ordine completamente diverso* potesse colmare il
 divario, il [limite inferiore su tutti gli ordini dei waypoint fissi](../outputs/phase2/rt031_line8_local_shortcuts_v3/waypoint_lower_bound.json)

@@ -31,6 +31,7 @@ class Line8DistanceObjectiveTest(unittest.TestCase):
         audit = json.loads((BASE / "distance_objective_audit.json").read_text(encoding="utf-8"))
         bound = json.loads((BASE / "waypoint_lower_bound.json").read_text(encoding="utf-8"))
         shape = json.loads((BASE / "distance_option.geojson").read_text(encoding="utf-8"))
+        walk = json.loads((BASE / "distance_option_walk.json").read_text(encoding="utf-8"))
         self.assertEqual(audit["contract"],
                          "RT031_LINE8_FIXED_WAYPOINT_DISTANCE_OBJECTIVE_AUDIT_V3")
         self.assertEqual(audit["variants"]["baseline_order"]["minutes"]
@@ -54,6 +55,13 @@ class Line8DistanceObjectiveTest(unittest.TestCase):
         self.assertEqual(sum(f["properties"].get(
             "encountered_in_shorter_road_both_directions") is False
             for f in shape["features"]), 3)
+        self.assertEqual(walk["contract"],
+                         "RT031_LINE8_DISTANCE_OBJECTIVE_CONDITIONAL_WALK_ACCESS_V3")
+        delta = walk["potential_access_percentage_point_change_vs_25_identity_baseline"]
+        self.assertEqual(delta["TOTAL"]["10"], -2.440711)
+        self.assertEqual(delta["97058"]["10"], -6.388113)
+        self.assertEqual(delta["97010"]["10"], -3.552198)
+        self.assertFalse(walk["network_selected"])
         self.assertFalse(audit["network_selected"])
         self.assertFalse(bound["network_selected"])
         self.assertFalse(audit["primary_selection_authorised"])
