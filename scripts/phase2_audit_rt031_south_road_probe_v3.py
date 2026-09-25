@@ -51,8 +51,10 @@ def projection(point, a, b):
                          point[1] - a[1] - t * dy)
 
 
-def shortest(edges, rules, source, target):
-    """Dijkstra over last directed edge; represented via-node turns are checked."""
+def shortest(edges, rules, source, target, objective="minutes"):
+    """Dijkstra over last directed edge; choose time or distance lexicographically."""
+    if objective not in ("minutes", "meters"):
+        raise ValueError("unsupported road-path objective")
     adapter = FrozenRT017ViaNodeAdapter(edges.values(), rules,
                                        unresolved_external_via_way_count=2)
     outgoing = defaultdict(list)
@@ -66,9 +68,9 @@ def shortest(edges, rules, source, target):
     heap = [(0.0, 0.0, source, "")]
     finish = None
     while heap:
-        minutes, meters, node, last = heapq.heappop(heap)
+        primary, secondary, node, last = heapq.heappop(heap)
         state = (node, last)
-        if (minutes, meters) != best[state]:
+        if (primary, secondary) != best[state]:
             continue
         if node == target:
             finish = state
@@ -78,8 +80,11 @@ def shortest(edges, rules, source, target):
                 continue
             edge = edges[eid]
             nxt = (edge["v_node_id"], eid)
-            cost = (minutes + float(edge["running_minutes_model"]),
-                    meters + float(edge["length_m"]))
+            increment = (float(edge["running_minutes_model"]),
+                         float(edge["length_m"]))
+            if objective == "meters":
+                increment = increment[::-1]
+            cost = (primary + increment[0], secondary + increment[1])
             if nxt not in best or cost < best[nxt]:
                 best[nxt] = cost
                 previous[nxt] = (state, eid)
@@ -93,8 +98,11 @@ def shortest(edges, rules, source, target):
         path.append(eid)
     path.reverse()
     ways = sorted({edges[eid]["osm_way_id"] for eid in path})
-    return {"distance_m": round(best[finish][1], 3),
-            "running_minutes_model": round(best[finish][0], 6),
+    primary, secondary = best[finish]
+    distance, running = ((primary, secondary) if objective == "meters"
+                         else (secondary, primary))
+    return {"distance_m": round(distance, 3),
+            "running_minutes_model": round(running, 6),
             "edge_ids": path, "osm_way_ids": ways,
             "via_node_rules_rejected_on_selected_path": False}
 

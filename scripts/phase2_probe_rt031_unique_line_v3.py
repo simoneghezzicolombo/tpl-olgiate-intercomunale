@@ -92,10 +92,11 @@ def build_graph(paths):
     return edges, nodes, rules, attachments
 
 
-def screen_lobe(lobe, attachment_nodes, edges, rules):
+def screen_lobe(lobe, attachment_nodes, edges, rules, objective="minutes"):
     legs, path = [], []
     for (from_label, from_id), (to_label, to_id) in zip(lobe, lobe[1:]):
-        leg = shortest(edges, rules, attachment_nodes[from_id], attachment_nodes[to_id])
+        leg = shortest(edges, rules, attachment_nodes[from_id], attachment_nodes[to_id],
+                       objective=objective)
         if leg is None:
             return {"reachable": False, "failed_leg": [from_label, to_label]}
         legs.append({"from": from_label, "to": to_label,

@@ -52,15 +52,26 @@ giornaliera dei due versi aggiunge 52,208 km/giorno. Il cap attuale di
 
 | Promessa su tutte le località e i due versi, se ogni corsa fa l'intero 8 | Coppie complete/giorno | Km/anno prima degli extra | Rapporto col cap |
 | --- | ---: | ---: | --- |
-| H60 per 8 ore | 8 | 108.592 | Entro, con margine di soli 2.827 km |
-| H60 per 10 ore | 10 | 135.740 | Oltre di 24.321 km |
-| H60 per 16 ore | 16 | 217.184 | Oltre di 105.765 km |
-| H30 per 4 ore più H60 nelle altre 12 | 20 | 271.480 | Oltre di 160.061 km |
+| H60 **in ciascun senso** per 8 ore | 8 | 108.592 | Entro, con margine di soli 2.827 km |
+| H60 **in ciascun senso** per 10 ore | 10 | 135.740 | Oltre di 24.321 km |
+| H60 **in ciascun senso** per 16 ore | 16 | 217.184 | Oltre di 105.765 km |
+| H30 per 4 ore più H60 nelle altre 12 **in ciascun senso** | 20 | 271.480 | Oltre di 160.061 km |
 
-Quindi **non è sostenibile promettere ora H60 06–22 su tutta la Linea 8
-inclusiva entro quel cap**. Distribuire gli otto passaggi per verso sulle
-16 ore darebbe in media un passaggio ogni due ore, non H60; quattro ore di
-H30 consumerebbero già tutti e otto i passaggi di ciascun verso. Nessuno
+Quindi **non è sostenibile promettere ora H60 06–22 in ciascun senso di
+percorrenza su tutta la Linea 8 inclusiva entro quel cap**. Distribuire
+gli otto passaggi per verso sulle 16 ore darebbe in media un passaggio
+ogni due ore *in quel verso*. Sono però 16 traversate giornaliere in
+totale, ciascuna potenzialmente capace di incontrare la stessa identità
+di fermata: la precedente
+lettura «H120 alla fermata» era errata. Né 16 incontri equivalgono
+automaticamente a un H60 regolare e utile verso FS. Per H30/H60 alla
+fermata servono in prima approssimazione 20 traversate complete totali,
+cioè 10 coppie dei due sensi: circa 135.740 km/anno sul tracciato di
+questa tabella, oppure 132.389 km/anno sul successivo riordino ovest che
+conserva le 25 identità incontrate, prima degli extra. La
+[verifica chilometrica più recente](RT031_LINEA8_VERIFICA_PERCORSO_MINIMO_KM_V3.md)
+mostra perché neppure la ricerca di strade e ordini minimi fra gli stessi
+waypoint chiude quel divario. Nessuno
 di questi conteggi è un orario da pubblicare: il cap copre produzione
 stradale modellata e non include km di deposito, sabato o variabilità dei
 tempi. La geometria inclusiva resta il riferimento. Un esercizio con corse
