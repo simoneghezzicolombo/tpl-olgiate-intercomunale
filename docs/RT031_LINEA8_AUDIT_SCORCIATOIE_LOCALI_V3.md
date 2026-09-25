@@ -51,6 +51,29 @@ fermata in ciascun verso, spazio di arresto e autorizzazione. Non si
 aggiunge una fermata fittizia alla matrice pedonale per cancellare la
 perdita a 5 minuti.
 
+Un'ulteriore [ricerca completa dei 12 riordini all'interno dei due
+piccoli gruppi ovest](../outputs/phase2/rt031_line8_local_shortcuts_v3/west_group_orders.json)
+ha trovato un compromesso diverso: **Monticello/Scarpone → Perego →
+Rovagnate → Hoè `300782` → Hoè `300873`**. Mantiene tutti i waypoint,
+le **25 identità di fermata** incontrate nel riferimento e le 11 attuali,
+risparmiando **1,289 km per coppia dei due versi**. Poiché la lista
+identica di punti è incontrata in entrambi i versi, anche i risultati
+*potenziali* della matrice pedonale 5/8/10 minuti rimangono identici
+sotto le stesse ipotesi di servizio; non equivale a garantire le stesse
+corse o gli stessi viaggi. La [mappa complessiva e ovest](../outputs/phase2/rt031_line8_local_shortcuts_v3/west_full_retention_preview.png)
+e il [GeoJSON](../outputs/phase2/rt031_line8_local_shortcuts_v3/west_full_retention.geojson)
+ne mostrano il percorso.
+
+Il costo nascosto di questo riordino è temporale: al waypoint Hoè
+`FROZEN::300782`, la marcia modellata verso la successiva FS aumenta
+di **2,928 min** nel verso ovest→est e diminuisce di **3,679 min** nel
+verso contrario, senza sosta o recupero. Non si può scegliere fra questo
+riordino e quello Rovagnate/Perego solo guardando ai km o al totale
+pedonale; mancano eventi passeggeri, attese, orario e tempi robusti.
+Neppure il riordino a conservazione integrale risolve il cap: con dieci
+coppie complete al giorno per 260 giorni produce circa **132.389
+km/anno** prima degli extra.
+
 Sull'ala est è stata fatta anche una ricerca finita e riproducibile:
 [tutti i 24 ordini](../outputs/phase2/rt031_line8_local_shortcuts_v3/east_tail_orders.json)
 dei quattro waypoint Brivio centro, Beverate, Quattro Strade e Cariplo,

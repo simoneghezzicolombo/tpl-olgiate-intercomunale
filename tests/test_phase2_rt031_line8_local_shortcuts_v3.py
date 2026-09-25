@@ -15,6 +15,9 @@ class Line8LocalShortcutsTest(unittest.TestCase):
         cls.shape = json.loads((BASE / "west_swap.geojson").read_text(encoding="utf-8"))
         cls.east = json.loads((BASE / "east_tail_orders.json").read_text(encoding="utf-8"))
         cls.via_como = json.loads((BASE / "via_como_proximity.json").read_text(encoding="utf-8"))
+        cls.west_orders = json.loads((BASE / "west_group_orders.json").read_text(encoding="utf-8"))
+        cls.full_retention_shape = json.loads((BASE / "west_full_retention.geojson").read_text(
+            encoding="utf-8"))
 
     def test_bounded_road_search_does_not_select(self):
         self.assertEqual(self.road["contract"],
@@ -79,6 +82,32 @@ class Line8LocalShortcutsTest(unittest.TestCase):
                          {26.058})
         self.assertIn("safe boarding and bus stopping", self.via_como["does_not_establish"])
         self.assertFalse(self.via_como["network_selected"])
+
+    def test_west_group_reorder_retains_all_encountered_identities_with_time_tradeoff(self):
+        self.assertEqual(self.west_orders["contract"],
+                         "RT031_LINE8_WEST_GROUP_WAYPOINT_ORDER_AUDIT_V3")
+        self.assertEqual(len(self.west_orders["orders"]), 12)
+        kept = [row for row in self.west_orders["orders"]
+                if row["represented_road_feasible"]
+                and row["pair_km_saved_vs_baseline"] > 0
+                and not row["existing_stop_ids_lost_both_directions"]]
+        self.assertEqual(len(kept), 1)
+        option = kept[0]
+        self.assertEqual(option["pair_km_saved_vs_baseline"], 1.288981)
+        self.assertEqual(option["current_exact_stop_ids_encountered_count"], 11)
+        self.assertEqual(option["both_direction_encountered_stop_ids_not_boarding_guaranteed"],
+                         self.west_orders["baseline"][
+                             "both_direction_encountered_stop_ids_not_boarding_guaranteed"])
+        hoe = option["road_running_to_next_fs_delta_min_by_west_waypoint_excluding_dwell"][
+            "FROZEN::300782"]
+        self.assertGreater(hoe["forward"], 2.9)
+        self.assertLess(hoe["reverse"], -3.6)
+        lines = [f for f in self.full_retention_shape["features"]
+                 if f["geometry"]["type"] == "LineString"]
+        self.assertEqual(len(lines), 2)
+        self.assertEqual(round(sum(f["properties"]["distance_m"] for f in lines), 3),
+                         option["bidirectional_pair_distance_m"])
+        self.assertFalse(self.full_retention_shape["properties"]["network_selected"])
 
 
 if __name__ == "__main__":

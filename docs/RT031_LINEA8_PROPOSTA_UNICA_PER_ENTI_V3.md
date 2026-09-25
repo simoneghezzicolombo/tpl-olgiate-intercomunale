@@ -73,11 +73,13 @@ promessa di frequenza/span modificare.
 ### Prova di downgrade dell'esercizio, senza cancellare la geografia
 
 L'[audit successivo delle scorciatoie locali](RT031_LINEA8_AUDIT_SCORCIATOIE_LOCALI_V3.md)
-ha individuato un riordino Rovagnate/Perego che risparmia 1,562 km per
-coppia dei due versi nel modello, conserva le 11 identità attuali e tutti
-i waypoint territoriali, ma perde l'incontro con Via Como e riduce un
-poco l'accesso pedonale a 5 minuti. È una prova da validare, non una
-soluzione alla frequenza né un ottimo globale.
+ha individuato due riordini ovest da confrontare: Rovagnate/Perego
+risparmia 1,562 km per coppia dei due versi ma perde l'incontro con Via
+Como e un po' di accesso a 5 minuti; riordinando anche i due waypoint
+di Hoè si risparmiano 1,289 km per coppia e restano incontrate tutte
+le 25 identità del riferimento, con però un cambiamento fino a circa
+3,7 minuti della marcia modellata verso FS per Hoè in un verso. Sono
+prove da validare, non una soluzione alla frequenza né un ottimo globale.
 
 La [mappa comparativa](../outputs/phase2/rt031_line8_peak_core_v3/full_vs_peak_preview.png)
 esplicita il limite del rinforzo corto: la Linea 8 intercomunale resta il

@@ -8,12 +8,15 @@ on:
       - scripts/phase2_audit_rt031_line8_local_shortcuts_walk_v3.py
       - scripts/phase2_export_rt031_line8_west_swap_v3.py
       - scripts/phase2_audit_rt031_line8_east_tail_orders_v3.py
+      - scripts/phase2_audit_rt031_line8_west_orders_v3.py
       - scripts/phase2_audit_rt031_via_como_proximity_v3.py
       - tests/test_phase2_rt031_line8_local_shortcuts_v3.py
       - outputs/phase2/rt031_line8_local_shortcuts_v3/audit.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/walk.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/west_swap.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/east_tail_orders.json
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/west_group_orders.json
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/west_full_retention.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.geojson
       - .github/workflows/phase2-rt031-line8-local-shortcuts-v3.yml
@@ -23,12 +26,15 @@ on:
       - scripts/phase2_audit_rt031_line8_local_shortcuts_walk_v3.py
       - scripts/phase2_export_rt031_line8_west_swap_v3.py
       - scripts/phase2_audit_rt031_line8_east_tail_orders_v3.py
+      - scripts/phase2_audit_rt031_line8_west_orders_v3.py
       - scripts/phase2_audit_rt031_via_como_proximity_v3.py
       - tests/test_phase2_rt031_line8_local_shortcuts_v3.py
       - outputs/phase2/rt031_line8_local_shortcuts_v3/audit.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/walk.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/west_swap.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/east_tail_orders.json
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/west_group_orders.json
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/west_full_retention.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.geojson
       - .github/workflows/phase2-rt031-line8-local-shortcuts-v3.yml
@@ -101,6 +107,30 @@ jobs:
             --local_audit outputs/phase2/rt031_line8_local_shortcuts_v3/audit.json \
             --output /tmp/rt031/east-tail-orders.json
           cmp /tmp/rt031/east-tail-orders.json outputs/phase2/rt031_line8_local_shortcuts_v3/east_tail_orders.json
+          python -m scripts.phase2_audit_rt031_line8_west_orders_v3 \
+            --edges /tmp/rt031/rt017/frozen_graph_edges.csv.gz \
+            --nodes /tmp/rt031/rt017/frozen_graph_nodes.csv.gz \
+            --rules /tmp/rt031/rt017/frozen_turn_rules.csv.gz \
+            --attachments /tmp/rt031/rt022/stop_attachments.csv \
+            --successor /tmp/rt031/successor/rt031-successor-via-way-relevance.json \
+            --candidates_normalized_newlines outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+            --anchor data/phase2/frozen_gate_d/source/structural_anchor_evidence.csv \
+            --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
+            --local_audit outputs/phase2/rt031_line8_local_shortcuts_v3/audit.json \
+            --output /tmp/rt031/west-group-orders.json
+          cmp /tmp/rt031/west-group-orders.json outputs/phase2/rt031_line8_local_shortcuts_v3/west_group_orders.json
+          python -m scripts.phase2_export_rt031_line8_west_swap_v3 \
+            --edges /tmp/rt031/rt017/frozen_graph_edges.csv.gz \
+            --nodes /tmp/rt031/rt017/frozen_graph_nodes.csv.gz \
+            --rules /tmp/rt031/rt017/frozen_turn_rules.csv.gz \
+            --attachments /tmp/rt031/rt022/stop_attachments.csv \
+            --successor /tmp/rt031/successor/rt031-successor-via-way-relevance.json \
+            --candidates_normalized_newlines outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+            --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
+            --audit outputs/phase2/rt031_line8_local_shortcuts_v3/audit.json \
+            --west-orders outputs/phase2/rt031_line8_local_shortcuts_v3/west_group_orders.json \
+            --output /tmp/rt031/west-full-retention.geojson
+          cmp /tmp/rt031/west-full-retention.geojson outputs/phase2/rt031_line8_local_shortcuts_v3/west_full_retention.geojson
           python -m scripts.phase2_audit_rt031_via_como_proximity_v3 \
             --baseline outputs/phase2/rt031_line8_inclusive_shape_v3/line8_inclusive_model.geojson \
             --swap outputs/phase2/rt031_line8_local_shortcuts_v3/west_swap.geojson \

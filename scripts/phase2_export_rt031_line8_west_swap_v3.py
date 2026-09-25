@@ -17,10 +17,30 @@ def build(paths):
     if (audit["contract"] != "RT031_LINE8_LOCAL_SHORTCUT_SINGLE_EDIT_AUDIT_V3"
             or audit["network_selected"] is not False):
         raise ValueError("local shortcut audit drift")
-    target = next(o for o in audit["options"]
-                  if o["edit"] == "SWAP_ADJACENT_EXISTING_WAYPOINTS"
-                  and o["wing"] == "west"
-                  and o["affected_waypoint_ids"] == SWAPPED_IDS)
+    full_retention = "west_orders" in paths
+    if full_retention:
+        west_orders = json.loads(paths["west_orders"].read_text(encoding="utf-8"))
+        if (west_orders["contract"] != "RT031_LINE8_WEST_GROUP_WAYPOINT_ORDER_AUDIT_V3"
+                or west_orders["source_sha256"]["local_audit"] != digest(paths["audit"], True)):
+            raise ValueError("west group order audit drift")
+        wanted = ["ASF::OLGIATE_MOLGORA_SCARPONE", "ASF::PEREGO_VIA_STATALE_79",
+                  "FROZEN::300879", "FROZEN::300782", "FROZEN::300873"]
+        target = next(o for o in west_orders["orders"]
+                      if o["west_ordered_waypoint_ids"] == wanted)
+        if (target["existing_stop_ids_lost_both_directions"]
+                or target["current_exact_stop_ids_encountered_count"] != 11):
+            raise ValueError("full-retention west order no longer retains stops")
+        variant = "ROVAGNATE_PEREGO_AND_HOE_ORDER_SWAP"
+        shape_name = "RT031_LINE8_WEST_FULL_RETENTION_ORDER_MODELED_ROAD_SHAPE_V3"
+        audit_key = "west_orders"
+    else:
+        target = next(o for o in audit["options"]
+                      if o["edit"] == "SWAP_ADJACENT_EXISTING_WAYPOINTS"
+                      and o["wing"] == "west"
+                      and o["affected_waypoint_ids"] == SWAPPED_IDS)
+        variant = "ROVAGNATE_PEREGO_ORDER_SWAP"
+        shape_name = "RT031_LINE8_WEST_WAYPOINT_SWAP_MODELED_ROAD_SHAPE_V3"
+        audit_key = "audit"
     if not target["represented_road_feasible"] or target["pair_km_saved_vs_baseline"] <= 0:
         raise ValueError("west swap no longer modeled as a shorter road path")
     edges, nodes, rules, attachments = build_graph(paths)
@@ -28,7 +48,11 @@ def build(paths):
     west, east = itinerary()
     if [sid for _, sid in west[2:4]] != SWAPPED_IDS:
         raise ValueError("west waypoint order drift")
-    west = west[:2] + list(reversed(west[2:4])) + west[4:]
+    west = (west[:2] + list(reversed(west[2:4]))
+            + (list(reversed(west[4:6])) if full_retention else west[4:6])
+            + west[6:])
+    west_ids = [sid for _, sid in west]
+    east_ids = [sid for _, sid in east]
     attachment_nodes = {sid: row["graph_node_id"] for sid, row in attachments.items()
                         if row["route_ready"] == "True"}
     attachment_nodes[VIRTUAL] = VIRTUAL
@@ -65,13 +89,13 @@ def build(paths):
         features.append({
             "type": "Feature",
             "properties": {"feature_type": "MODELED_ROAD_PATH_NOT_APPROVED_TPL_ROUTE",
-                           "variant": "ROVAGNATE_PEREGO_ORDER_SWAP",
+                           "variant": variant,
                            "traversal": direction, "distance_m": target[expected],
-                           "ordered_waypoint_ids": (target["west_waypoint_ids"]
-                                                    + target["east_waypoint_ids"][1:]
+                           "ordered_waypoint_ids": (west_ids
+                                                    + east_ids[1:]
                                                     if direction.startswith("forward") else
-                                                    list(reversed(target["east_waypoint_ids"]))
-                                                    + list(reversed(target["west_waypoint_ids"]))[1:])},
+                                                    list(reversed(east_ids))
+                                                    + list(reversed(west_ids))[1:])},
             "geometry": {"type": "LineString", "coordinates": [coords[n] for n in vertices]},
         })
     for sid in target["both_direction_encountered_stop_ids_not_boarding_guaranteed"]:
@@ -94,9 +118,9 @@ def build(paths):
         })
     return {
         "type": "FeatureCollection",
-        "name": "RT031_LINE8_WEST_WAYPOINT_SWAP_MODELED_ROAD_SHAPE_V3",
+        "name": shape_name,
         "properties": {"status": "NON_DECISIONAL_NOT_APPROVED_TPL_ROUTE",
-                       "audit_sha256": digest(paths["audit"], True),
+                       "audit_sha256": digest(paths[audit_key], True),
                        "pair_km_saved_vs_inclusive_baseline": target["pair_km_saved_vs_baseline"],
                        "network_selected": False,
                        "primary_selection_authorised": False,
@@ -117,7 +141,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     for key in (*EXPECTED, "road_screen", "audit"):
         parser.add_argument("--" + key, required=True, type=Path)
+    parser.add_argument("--west-orders", type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
-    main({key: getattr(args, key) for key in (*EXPECTED, "road_screen", "audit")},
-         args.output)
+    paths = {key: getattr(args, key) for key in (*EXPECTED, "road_screen", "audit")}
+    if args.west_orders is not None:
+        paths["west_orders"] = args.west_orders
+    main(paths, args.output)
