@@ -41,6 +41,26 @@ La [mappa a due scale](../outputs/phase2/rt031_line8_local_shortcuts_v3/west_swa
 e il [GeoJSON dei due versi](../outputs/phase2/rt031_line8_local_shortcuts_v3/west_swap.geojson)
 rendono controllabile lo spostamento di strada.
 
+La [prova geometrica dedicata a Via Como](../outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.json)
+trova il punto inventariato a **26,058 m in linea d'aria** dal nuovo
+cammino stradale in entrambi i versi, contro 1,317 m dal riferimento.
+La [mappa locale](../outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity_preview.png)
+mostra che la strada cambia vicino al punto, non che la fermata si possa
+spostare automaticamente: occorrono accesso pedonale reale, lato di
+fermata in ciascun verso, spazio di arresto e autorizzazione. Non si
+aggiunge una fermata fittizia alla matrice pedonale per cancellare la
+perdita a 5 minuti.
+
+Sull'ala est è stata fatta anche una ricerca finita e riproducibile:
+[tutti i 24 ordini](../outputs/phase2/rt031_line8_local_shortcuts_v3/east_tail_orders.json)
+dei quattro waypoint Brivio centro, Beverate, Quattro Strade e Cariplo,
+tenendo fissi tutti gli altri luoghi. L'unico ordine più corto fa
+risparmiare **1,065 km per coppia**, ma scende da 11 a 10 fermate
+attuali incontrate nei due versi. Nessun ordine di questo piccolo dominio
+è quindi un miglioramento chilometrico a conservazione piena delle 11
+identità; resta aperta la ricerca su altre strade, siti di fermata e
+ordini più ampi.
+
 Il risparmio è reale *nel modello*: circa **3,0%** della coppia,
 equivalente a **3.250 km/anno** se si effettuano otto coppie al giorno
 per 260 giorni. Anche così, dieci coppie giornaliere per 260 giorni
