@@ -1,5 +1,7 @@
 # Linea 8 — stato unico della proposta e controllo H30 passeggeri
 
+**Ultimo esito:** [correzione dell'orario, limite chilometrico e compromesso concreto non adottato](RT031_LINEA8_ESITO_CORREZIONE_ORARIO_V3.md). Il nuovo controllo lascia indipendenti le fasi mattutine e serali; il caso regolare a 34 corse esplicita le rinunce, senza sostituire la promessa richiesta.
+
 Il riferimento contabile invariato è ora disponibile [corsa per corsa](RT031_LINEA8_109K_CONTO_CORSE_V3.md), con [tutti i passaggi per località](RT031_LINEA8_109K_PASSAGGI_PER_LOCALITA_V3.md). Distingue esplicitamente le 34 corse del caso 109k dalle 38 del confronto 121k: traslare soltanto gli orari non cambia i chilometri.
 
 ## Il risultato che corregge la lettura precedente
