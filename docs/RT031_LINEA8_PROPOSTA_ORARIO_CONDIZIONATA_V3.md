@@ -1,5 +1,7 @@
 # Linea 8 — proposta tecnica d'orario condizionata, non selezionata
 
+**Aggiornamento:** la [scheda unica di avanzamento](RT031_LINEA8_SCHEDA_CONCLUSIVA_DI_AVANZAMENTO_V3.md) verifica le attese lato passeggeri: questo testimone da 109.286 km non soddisfa H30 nelle intere finestre di riferimento. La ricostruzione da zero su dominio finito è ora separata e costa di più. Non usare la tabella seguente come orario H30 validato.
+
 ## Cosa abbiamo finalmente costruito
 
 Un esempio completo di partenze e blocchi su entrambe le ali che incorpora **30 secondi per ogni occorrenza di fermata ipotizzata e +10% sul tempo di marcia**. Non è più il calendario a soste zero. Mantiene la geometria e le identità incontrate, senza tagli territoriali, e totalizza **109.285,990 km/anno** su 260 giorni ipotetici, prima degli extra.

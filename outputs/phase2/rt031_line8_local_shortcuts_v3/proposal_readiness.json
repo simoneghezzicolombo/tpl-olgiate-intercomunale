@@ -1,0 +1,22 @@
+{
+  "contract": "RT031_LINE8_CONSOLIDATED_PROPOSAL_READINESS_V3",
+  "status": "NOT_READY_FOR_FINAL_OPERATING_PROPOSAL",
+  "requirements": [
+    {"requirement": "physical_route", "status": "CONDITIONAL_GRAPH_WITNESS", "source": "full_retention_context.geojson", "missing": ["complete restriction history", "bus suitability", "field manoeuvres"]},
+    {"requirement": "stop_plan", "status": "PROVISIONAL_REGISTER_28_IDENTITIES_NOT_AUTHORISED", "source": "provisional_stop_register.csv", "missing": ["platform sides", "safe boarding", "approved new stops", "ordered public service events"]},
+    {"requirement": "territorial_access", "status": "POTENTIAL_ACCESS_NOT_PASSENGER_SERVICE_GUARANTEE", "source": "brivio_existing_sites_walk.json", "missing": ["recompute on authorised event plan"]},
+    {"requirement": "passenger_H30_peaks", "status": "ILLUSTRATIVE_WITNESS_FAILS_REFERENCE_WINDOWS", "source": "passenger_peaks.json", "missing": ["agreed train-informed peak windows", "joint timetable rebuilt to satisfy them"]},
+    {"requirement": "bounded_added_trip_repair", "status": "EXCEEDS_CAP_BEFORE_EXTRAS", "source": "peak_repair.json", "annual_km_before_extras": 128577.116, "semantics": "Finite add-only repair, not a global impossibility result"},
+    {"requirement": "rebuilt_reference_timetable", "status": "FINITE_DOMAIN_KM_OPTIMUM_EXCEEDS_CAP", "source": "rebuilt_timetable.json", "annual_km_before_extras": 127490.206, "semantics": "All old departure constraints removed; fixed four wings, 5-minute grid, 06-19 passenger-ready comparison. Not global street-network or peak-window optimum"},
+    {"requirement": "advanced_peak_comparison", "status": "ALL_THREE_FINITE_DOMAINS_EXCEED_CAP", "source": "rebuilt_peak_comparison.json", "minimum_of_examined_annual_km_before_extras": 121115.696, "semantics": "Reference, minus 15 and minus 30 minute peak windows; no phase or network selected"},
+    {"requirement": "rail_connections", "status": "FROZEN_DAY_CONDITIONAL", "source": "rail_boundaries.json", "missing": ["applicable railway timetable", "observed transfer and bus times"]},
+    {"requirement": "vehicles_and_dwell", "status": "ENGINEERING_SENSITIVITY_ONLY", "source": "dwell_sensitivity.json", "missing": ["observed dwell and moving time", "complete duty and depot blocks"]},
+    {"requirement": "annual_km_cap", "status": "NOT_CLOSED_FOR_REQUIRED_SERVICE", "source": "joint_phases.json", "semantics": "109285.990 is the preliminary witness service production, not a validated H30 plan", "missing": ["final timetable production", "depot and repositioning km", "actual annual calendar"]},
+    {"requirement": "economic_sustainability", "status": "NOT_ESTABLISHED", "missing": ["operator costs", "fleet availability", "driver duties"]}
+  ],
+  "decision_budget_km": null,
+  "uncertainty_band_min": null,
+  "network_selected": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false
+}
