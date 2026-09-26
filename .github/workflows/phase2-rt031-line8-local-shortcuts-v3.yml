@@ -4,6 +4,10 @@ on:
   push:
     branches: [codex/rt031-decision-convergence]
     paths:
+      - scripts/phase2_audit_rt031_line8_occurrence_service_v3.py
+      - tests/test_phase2_rt031_line8_occurrence_service_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/occurrence_service.json
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/road_occurrences.csv
       - scripts/phase2_probe_rt031_line8_brivio_existing_sites_v3.py
       - scripts/phase2_probe_rt031_line8_full_retention_context_v3.py
       - scripts/phase2_rt031_ordered_via_node_path_v3.py
@@ -45,6 +49,10 @@ on:
       - .github/workflows/phase2-rt031-line8-local-shortcuts-v3.yml
   pull_request:
     paths:
+      - scripts/phase2_audit_rt031_line8_occurrence_service_v3.py
+      - tests/test_phase2_rt031_line8_occurrence_service_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/occurrence_service.json
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/road_occurrences.csv
       - scripts/phase2_probe_rt031_line8_brivio_existing_sites_v3.py
       - scripts/phase2_probe_rt031_line8_full_retention_context_v3.py
       - scripts/phase2_rt031_ordered_via_node_path_v3.py
@@ -104,6 +112,7 @@ jobs:
           python -m unittest discover -s tests -p test_phase2_rt031_line8_local_shortcuts_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_distance_objective_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_existing_sites_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_occurrence_service_v3.py
       - name: Verify and fetch pinned road and pedestrian evidence
         env:
           GH_TOKEN: ${{ github.token }}
@@ -296,3 +305,17 @@ jobs:
             --contextual_audit outputs/phase2/rt031_line8_local_shortcuts_v3/full_retention_context.json \
             --output /tmp/rt031/sites-walk.json
           cmp /tmp/rt031/sites-walk.json outputs/phase2/rt031_line8_local_shortcuts_v3/brivio_existing_sites_walk.json
+          python -m scripts.phase2_audit_rt031_line8_occurrence_service_v3 \
+            --edges /tmp/rt031/rt017/frozen_graph_edges.csv.gz \
+            --nodes /tmp/rt031/rt017/frozen_graph_nodes.csv.gz \
+            --rules /tmp/rt031/rt017/frozen_turn_rules.csv.gz \
+            --attachments /tmp/rt031/rt022/stop_attachments.csv \
+            --successor /tmp/rt031/successor/rt031-successor-via-way-relevance.json \
+            --candidates_normalized_newlines outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+            --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
+            --policy config/phase2_final_policy_contract_v3.json \
+            --sensitivity config/phase2_service_policy_design_space_v2.json \
+            --witness outputs/phase2/rt031_line8_local_shortcuts_v3/full_retention_context.json \
+            --output /tmp/rt031/occurrence-service.json --events_csv /tmp/rt031/road-occurrences.csv
+          cmp /tmp/rt031/occurrence-service.json outputs/phase2/rt031_line8_local_shortcuts_v3/occurrence_service.json
+          cmp /tmp/rt031/road-occurrences.csv outputs/phase2/rt031_line8_local_shortcuts_v3/road_occurrences.csv

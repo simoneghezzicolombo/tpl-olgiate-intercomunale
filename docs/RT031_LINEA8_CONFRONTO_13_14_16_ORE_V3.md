@@ -48,3 +48,26 @@ Il passo necessario è trasformare questa geometria in sequenze direzionali di f
 Artefatti: `outputs/phase2/rt031_line8_local_shortcuts_v3/full_retention_context.json`, `.geojson`, `.png`; `brivio_existing_sites.json`; `brivio_existing_sites_walk.json`. Gli hash upstream sono nei JSON. Mappa statica tratta dalla geometria del grafo, non disegnata a mano.
 
 `network_selected=false`; `primary_selection_authorised=false`; `runner_up_selection_authorised=false`; `decision_budget_km=null`; `uncertainty_band_min=null`.
+
+## Verifica successiva: occorrenze, sensi e viaggio verso FS
+
+L'audit `occurrence_service.json` e il registro `road_occurrences.csv` conservano ogni occorrenza del nodo: arco entrante/uscente, progressivo sul percorso, minuti stradali e prima occorrenza FS successiva. Nessuna occorrenza diventa automaticamente una fermata autorizzata. Non si accorpano due passaggi nello stesso luogo per promettere un viaggio inesistente.
+
+Ripetere lo stesso percorso ogni 30/60 minuti ripete ogni sua occorrenza con quella cadenza **all'interno di una fascia stazionaria**, a condizione di poterla effettivamente servire. Alternare A/B a intervalli 30/60 dà invece 60/120 minuti sulla stessa occorrenza direzionale. La frequenza combinata fra lati e viaggi diversi non è certificata.
+
+Sono stati composti anche i due orientamenti misti delle ali, senza cambiare la rete stradale: ovest A + est B e ovest B + est A. Tutti e quattro conservano le 26 identità incontrate. Le svolte rappresentate consentono sia le giunzioni interne sia i raccordi fra giri dei quattro pattern; manovre reali, storia via-way completa e continuità passeggeri rimangono da validare.
+
+| Percorso ripetuto | Km/anno a 13 ore (17 giri, 260 giorni) | Olgiate sud → FS | San Zeno → FS |
+|---|---:|---:|---:|
+| A su entrambe le ali | 108.366,674 | 3,76 min | 23,41 min |
+| B su entrambe le ali | 111.215,788 | 22,10 min | 2,38 min |
+| Ovest A + est B | 110.745,575 | 3,76 min | 2,38 min |
+| Ovest B + est A | 108.836,887 | 22,10 min | 23,41 min |
+
+**Minuti stradali esclusi soste, attesa, accesso e recuperi; non tempi passeggeri certificati.** Il pattern misto ovest A + est B risolve il giro lungo verso FS per le due esigenze nuove, ma nel ritorno FS → Olgiate sud/San Zeno richiede rispettivamente 21,72/23,96 minuti. Il misto opposto fa il contrario (3,92/2,31 minuti da FS). Nessuno domina quindi l'altro per entrambe le direzioni di viaggio. Non è autorizzata la soppressione di un senso.
+
+Questo rende concreto il prossimo confronto: eventuali orientamenti differenziati per fascia devono essere verificati su tutti i luoghi, andata **e** ritorno, e sui passaggi fra fasce; non basta privilegiare i due punti nuovi. Il conto misto più rapido verso FS lascia solo circa 673 km/anno per gli extra.
+
+Inoltre, con i recuperi di sensibilità già dichiarati nel repository (5/10/15 minuti), il pattern A da 51,20 minuti lascia solo **3,80 minuti totali per soste e traffico** per rimanere in un ciclo di 60 minuti col recupero minimo di 5. Con 10 minuti di recupero supera già i 60 prima delle soste: il limite inferiore passa da due a tre mezzi in punta e da uno a due in morbida per quella ripetizione. Sono limiti inferiori, non blocchi veicolo validati.
+
+Conclusione: i 109.791 km medi non costituiscono ancora una soluzione affidabile approvabile. Abbiamo però identificato precisamente il compromesso: servizio a senso fisso più cadenzato ma asimmetrico nei tempi da/per FS; alternanza che riduce la frequenza direzionale; oppure risorse/percorsi diversi da quantificare. Deposito, soste e orario effettivo rimangono necessari, senza imputare zero ai dati mancanti.
