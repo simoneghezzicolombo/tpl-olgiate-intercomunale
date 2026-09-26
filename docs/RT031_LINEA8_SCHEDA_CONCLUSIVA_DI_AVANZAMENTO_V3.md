@@ -1,5 +1,7 @@
 # Linea 8 — stato unico della proposta e controllo H30 passeggeri
 
+Il riferimento contabile invariato è ora disponibile [corsa per corsa](RT031_LINEA8_109K_CONTO_CORSE_V3.md), con [tutti i passaggi per località](RT031_LINEA8_109K_PASSAGGI_PER_LOCALITA_V3.md). Distingue esplicitamente le 34 corse del caso 109k dalle 38 del confronto 121k: traslare soltanto gli orari non cambia i chilometri.
+
 ## Il risultato che corregge la lettura precedente
 
 **109.285,990 km/anno non sono ancora il costo di un servizio H30 in punta validato.** Sono il costo del testimone con 17 corse per ala, soste ipotetiche di mezzo minuto e +10% sulla marcia. Il nuovo controllo delle attese al luogo di salita mostra che quel calendario non soddisfa la promessa nelle due ore di riferimento.

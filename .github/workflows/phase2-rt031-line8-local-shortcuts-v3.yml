@@ -4,6 +4,10 @@ on:
   push:
     branches: [codex/rt031-decision-convergence]
     paths:
+      - scripts/phase2_export_rt031_line8_109k_ledger_v3.py
+      - tests/test_phase2_rt031_line8_109k_ledger_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/frozen_109k_trip_ledger.json
+      - docs/RT031_LINEA8_109K_*.md
       - outputs/phase2/rt031_line8_local_shortcuts_v3/rebuilt_peak_comparison.json
       - scripts/phase2_audit_rt031_line8_passenger_peaks_v3.py
       - scripts/phase2_audit_rt031_line8_peak_repair_v3.py
@@ -78,6 +82,10 @@ on:
       - .github/workflows/phase2-rt031-line8-local-shortcuts-v3.yml
   pull_request:
     paths:
+      - scripts/phase2_export_rt031_line8_109k_ledger_v3.py
+      - tests/test_phase2_rt031_line8_109k_ledger_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/frozen_109k_trip_ledger.json
+      - docs/RT031_LINEA8_109K_*.md
       - outputs/phase2/rt031_line8_local_shortcuts_v3/rebuilt_peak_comparison.json
       - scripts/phase2_audit_rt031_line8_passenger_peaks_v3.py
       - scripts/phase2_audit_rt031_line8_peak_repair_v3.py
@@ -167,6 +175,7 @@ jobs:
       - run: python -m pip install 'numpy>=2,<3' 'pandas>=2.2,<4' 'scipy>=1.13,<2' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'matplotlib>=3.8,<4'
       - name: Test committed bounded audit
         run: |
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_109k_ledger_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_local_shortcuts_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_distance_objective_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_existing_sites_v3.py
