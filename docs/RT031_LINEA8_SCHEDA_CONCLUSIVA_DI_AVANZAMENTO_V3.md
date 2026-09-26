@@ -1,5 +1,7 @@
 # Linea 8 — stato unico della proposta e controllo H30 passeggeri
 
+**Nuovo confronto orario:** [spostare corse intermedie alla sera](RT031_LINEA8_SPOSTARE_CORSE_ALLA_SERA_V3.md). Ultima partenza FS 20:40 anziché 18:40 agli stessi km, percorsi e 28 siti, mantenendo le banche di corse di punta: richiede H90 nella parte centrale, non H60. Dodici confronti distinguono il percorso da 115.800 km (controflusso locale ancora lento) da quello corretto da 130.567 km. Nessuna riduzione di frequenza adottata automaticamente, nessuna nuova certificazione delle finestre comuni H30.
+
 **Ultimo avanzamento:** [616 combinazioni di piccole esclusioni e 9 confronti con servizi locali separati](RT031_LINEA8_COMPROMESSI_COPERTURA_E_KM_V3.md). Un testimone arriva a 111.906 km (+0,44%) con collegamenti locali brevi, ma perde circa 19,69 punti di accesso a 10 minuti a Brivio e 12,08 a Calco: non è una proposta conforme alla richiesta di perdita territoriale contenuta. Nessuna selezione; mappa delle esclusioni e percentuali dei cinque comuni esplicite.
 
 **Ultimo confronto stradale:** [eliminazione del controflusso lento nei due quartieri](RT031_LINEA8_CONTROFLUSSO_LOCALE_V3.md). Quindici confronti senza perdita di siti: la correzione completa con tempi locali di 3–4 minuti porta a 130.567 km (+17,19%), non a un piccolo sforamento. Tracciato e orario condizionale espliciti; nessuna adozione automatica.

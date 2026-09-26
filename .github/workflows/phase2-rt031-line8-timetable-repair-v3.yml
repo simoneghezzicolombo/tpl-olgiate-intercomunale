@@ -4,6 +4,8 @@ on:
   push:
     branches: [codex/rt031-decision-convergence]
     paths:
+      - scripts/phase2_compare_rt031_line8_evening_reallocation_v3.py
+      - tests/test_phase2_rt031_line8_evening_reallocation_v3.py
       - scripts/phase2_retime_rt031_line8_peak_direction_v3.py
       - tests/test_phase2_rt031_line8_retiming_v3.py
       - scripts/phase2_build_rt031_line8_peak_direction_v3.py
@@ -19,6 +21,8 @@ on:
       - .github/workflows/phase2-rt031-line8-timetable-repair-v3.yml
   pull_request:
     paths:
+      - scripts/phase2_compare_rt031_line8_evening_reallocation_v3.py
+      - tests/test_phase2_rt031_line8_evening_reallocation_v3.py
       - scripts/phase2_retime_rt031_line8_peak_direction_v3.py
       - tests/test_phase2_rt031_line8_retiming_v3.py
       - scripts/phase2_build_rt031_line8_peak_direction_v3.py
@@ -51,6 +55,7 @@ jobs:
           python -m unittest discover -s tests -p test_phase2_rt031_line8_timetable_repair_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_peak_direction_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_retiming_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_evening_reallocation_v3.py
       - name: Independently reproduce relaxed wing infeasibility
         run: |
           set -euo pipefail
