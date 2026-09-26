@@ -1,5 +1,7 @@
 # Linea 8 — stato unico della proposta e controllo H30 passeggeri
 
+**Nuovo confronto richiesto dall'utente:** [collegamenti rapidi nelle direzioni delle punte con 18 corse per ala](RT031_LINEA8_COLLEGAMENTI_RAPIDI_IN_PUNTA_V3.md): 115.800 km/anno di servizio (+3,93%), nessuna perdita di siti, tempi ridotti per Olgiate sud e San Zeno verso FS al mattino e da FS nel resto della giornata. Non rende rapido il controflusso; extra e validazione operativa rimangono aperti. Nessun aumento del cap è stato adottato automaticamente.
+
 **Ultimo esito:** [correzione dell'orario, limite chilometrico e compromesso concreto non adottato](RT031_LINEA8_ESITO_CORREZIONE_ORARIO_V3.md). Il nuovo controllo lascia indipendenti le fasi mattutine e serali; il caso regolare a 34 corse esplicita le rinunce, senza sostituire la promessa richiesta.
 
 Il riferimento contabile invariato è ora disponibile [corsa per corsa](RT031_LINEA8_109K_CONTO_CORSE_V3.md), con [tutti i passaggi per località](RT031_LINEA8_109K_PASSAGGI_PER_LOCALITA_V3.md). Distingue esplicitamente le 34 corse del caso 109k dalle 38 del confronto 121k: traslare soltanto gli orari non cambia i chilometri.
