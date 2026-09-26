@@ -4,6 +4,9 @@ on:
   push:
     branches: [codex/rt031-decision-convergence]
     paths:
+      - scripts/phase2_audit_rt031_line8_band_switch_v3.py
+      - tests/test_phase2_rt031_line8_band_switch_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/band_switch.json
       - scripts/phase2_audit_rt031_line8_occurrence_service_v3.py
       - tests/test_phase2_rt031_line8_occurrence_service_v3.py
       - outputs/phase2/rt031_line8_local_shortcuts_v3/occurrence_service.json
@@ -49,6 +52,9 @@ on:
       - .github/workflows/phase2-rt031-line8-local-shortcuts-v3.yml
   pull_request:
     paths:
+      - scripts/phase2_audit_rt031_line8_band_switch_v3.py
+      - tests/test_phase2_rt031_line8_band_switch_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/band_switch.json
       - scripts/phase2_audit_rt031_line8_occurrence_service_v3.py
       - tests/test_phase2_rt031_line8_occurrence_service_v3.py
       - outputs/phase2/rt031_line8_local_shortcuts_v3/occurrence_service.json
@@ -113,6 +119,7 @@ jobs:
           python -m unittest discover -s tests -p test_phase2_rt031_line8_distance_objective_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_existing_sites_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_occurrence_service_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_band_switch_v3.py
       - name: Verify and fetch pinned road and pedestrian evidence
         env:
           GH_TOKEN: ${{ github.token }}
@@ -319,3 +326,8 @@ jobs:
             --output /tmp/rt031/occurrence-service.json --events_csv /tmp/rt031/road-occurrences.csv
           cmp /tmp/rt031/occurrence-service.json outputs/phase2/rt031_line8_local_shortcuts_v3/occurrence_service.json
           cmp /tmp/rt031/road-occurrences.csv outputs/phase2/rt031_line8_local_shortcuts_v3/road_occurrences.csv
+          python -m scripts.phase2_audit_rt031_line8_band_switch_v3 \
+            --source outputs/phase2/rt031_line8_local_shortcuts_v3/occurrence_service.json \
+            --policy config/phase2_final_policy_contract_v3.json \
+            --output /tmp/rt031/band-switch.json
+          cmp /tmp/rt031/band-switch.json outputs/phase2/rt031_line8_local_shortcuts_v3/band_switch.json
