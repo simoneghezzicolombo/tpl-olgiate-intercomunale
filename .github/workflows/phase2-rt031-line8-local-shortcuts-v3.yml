@@ -4,6 +4,9 @@ on:
   push:
     branches: [codex/rt031-decision-convergence]
     paths:
+      - scripts/phase2_audit_rt031_line8_joint_phases_v3.py
+      - tests/test_phase2_rt031_line8_joint_phases_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/joint_phases.json
       - scripts/phase2_audit_rt031_line8_dwell_sensitivity_v3.py
       - tests/test_phase2_rt031_line8_dwell_sensitivity_v3.py
       - outputs/phase2/rt031_line8_local_shortcuts_v3/dwell_sensitivity.json
@@ -65,6 +68,9 @@ on:
       - .github/workflows/phase2-rt031-line8-local-shortcuts-v3.yml
   pull_request:
     paths:
+      - scripts/phase2_audit_rt031_line8_joint_phases_v3.py
+      - tests/test_phase2_rt031_line8_joint_phases_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/joint_phases.json
       - scripts/phase2_audit_rt031_line8_dwell_sensitivity_v3.py
       - tests/test_phase2_rt031_line8_dwell_sensitivity_v3.py
       - outputs/phase2/rt031_line8_local_shortcuts_v3/dwell_sensitivity.json
@@ -149,6 +155,7 @@ jobs:
           python -m unittest discover -s tests -p test_phase2_rt031_line8_independent_wings_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_rail_boundaries_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_dwell_sensitivity_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_joint_phases_v3.py
       - name: Verify and fetch pinned road and pedestrian evidence
         env:
           GH_TOKEN: ${{ github.token }}
@@ -382,3 +389,8 @@ jobs:
             --source outputs/phase2/rt031_line8_local_shortcuts_v3/independent_wings.json \
             --output /tmp/rt031/dwell-sensitivity.json
           cmp /tmp/rt031/dwell-sensitivity.json outputs/phase2/rt031_line8_local_shortcuts_v3/dwell_sensitivity.json
+          python -m scripts.phase2_audit_rt031_line8_joint_phases_v3 \
+            --source outputs/phase2/rt031_line8_local_shortcuts_v3/independent_wings.json \
+            --rail_audit outputs/phase2/rt031_line8_local_shortcuts_v3/rail_boundaries.json \
+            --output /tmp/rt031/joint-phases.json
+          cmp /tmp/rt031/joint-phases.json outputs/phase2/rt031_line8_local_shortcuts_v3/joint_phases.json
