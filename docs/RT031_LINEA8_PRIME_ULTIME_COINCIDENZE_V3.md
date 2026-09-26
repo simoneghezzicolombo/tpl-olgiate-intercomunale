@@ -1,5 +1,7 @@
 # Linea 8: prime e ultime coincidenze sul giorno ferroviario congelato
 
+**Aggiornamento:** la successiva [verifica delle soste](RT031_LINEA8_VERIFICA_SOSTE_V3.md) mostra che la finestra 3–8 minuti qui descritta non supera la sensibilità di 30 secondi per occorrenza. I risultati sotto restano esclusivamente a soste zero, non una soluzione operativa.
+
 ## Fonte e confini
 
 Confronto con i 74 eventi S8 del **3 settembre 2026** già nel repository (`outputs/phase2/s8_events.csv`, contratto `s8_interchange_contract.json`). La fonte originaria è il GTFS ufficiale indicato dal contratto, ma in questo audit non viene riscaricato. **Non è una verifica dell'orario ferroviario vigente oggi.**
