@@ -12,6 +12,8 @@ on:
       - scripts/phase2_audit_rt031_line8_distance_objective_v3.py
       - scripts/phase2_audit_rt031_line8_waypoint_lower_bound_v3.py
       - scripts/phase2_audit_rt031_line8_distance_walk_v3.py
+      - scripts/phase2_probe_rt031_line8_brivio_bypass_v3.py
+      - scripts/phase2_audit_rt031_line8_free_partition_bound_v3.py
       - scripts/phase2_render_rt031_line8_distance_option_v3.py
       - scripts/phase2_audit_rt031_south_road_probe_v3.py
       - scripts/phase2_probe_rt031_unique_line_v3.py
@@ -28,6 +30,8 @@ on:
       - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option.png
       - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option_walk.json
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/brivio_relaxation_probe.json
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/free_partition_bound.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/west_full_retention.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.geojson
@@ -42,6 +46,8 @@ on:
       - scripts/phase2_audit_rt031_line8_distance_objective_v3.py
       - scripts/phase2_audit_rt031_line8_waypoint_lower_bound_v3.py
       - scripts/phase2_audit_rt031_line8_distance_walk_v3.py
+      - scripts/phase2_probe_rt031_line8_brivio_bypass_v3.py
+      - scripts/phase2_audit_rt031_line8_free_partition_bound_v3.py
       - scripts/phase2_render_rt031_line8_distance_option_v3.py
       - scripts/phase2_audit_rt031_south_road_probe_v3.py
       - scripts/phase2_probe_rt031_unique_line_v3.py
@@ -58,6 +64,8 @@ on:
       - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option.png
       - outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option_walk.json
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/brivio_relaxation_probe.json
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/free_partition_bound.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/west_full_retention.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.geojson
@@ -166,6 +174,28 @@ jobs:
             --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
             --output /tmp/rt031/waypoint-lower-bound.json
           cmp /tmp/rt031/waypoint-lower-bound.json outputs/phase2/rt031_line8_local_shortcuts_v3/waypoint_lower_bound.json
+          python -m scripts.phase2_audit_rt031_line8_free_partition_bound_v3 \
+            --edges /tmp/rt031/rt017/frozen_graph_edges.csv.gz \
+            --nodes /tmp/rt031/rt017/frozen_graph_nodes.csv.gz \
+            --rules /tmp/rt031/rt017/frozen_turn_rules.csv.gz \
+            --attachments /tmp/rt031/rt022/stop_attachments.csv \
+            --successor /tmp/rt031/successor/rt031-successor-via-way-relevance.json \
+            --candidates_normalized_newlines outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+            --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
+            --fixed_bound outputs/phase2/rt031_line8_local_shortcuts_v3/waypoint_lower_bound.json \
+            --output /tmp/rt031/free-partition.json
+          cmp /tmp/rt031/free-partition.json outputs/phase2/rt031_line8_local_shortcuts_v3/free_partition_bound.json
+          python -m scripts.phase2_probe_rt031_line8_brivio_bypass_v3 \
+            --edges /tmp/rt031/rt017/frozen_graph_edges.csv.gz \
+            --nodes /tmp/rt031/rt017/frozen_graph_nodes.csv.gz \
+            --rules /tmp/rt031/rt017/frozen_turn_rules.csv.gz \
+            --attachments /tmp/rt031/rt022/stop_attachments.csv \
+            --successor /tmp/rt031/successor/rt031-successor-via-way-relevance.json \
+            --candidates_normalized_newlines outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+            --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
+            --bound outputs/phase2/rt031_line8_local_shortcuts_v3/waypoint_lower_bound.json \
+            --output /tmp/rt031/brivio-relaxation.json
+          cmp /tmp/rt031/brivio-relaxation.json outputs/phase2/rt031_line8_local_shortcuts_v3/brivio_relaxation_probe.json
           python -m scripts.phase2_render_rt031_line8_distance_option_v3 \
             --edges /tmp/rt031/rt017/frozen_graph_edges.csv.gz \
             --nodes /tmp/rt031/rt017/frozen_graph_nodes.csv.gz \
@@ -218,5 +248,7 @@ jobs:
             --distance_audit outputs/phase2/rt031_line8_local_shortcuts_v3/distance_objective_audit.json \
             --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
             --prior_access outputs/phase2/rt031_unique_line_walk_access_v3/access.json \
+            --brivio_probe outputs/phase2/rt031_line8_local_shortcuts_v3/brivio_relaxation_probe.json \
+            --bound outputs/phase2/rt031_line8_local_shortcuts_v3/waypoint_lower_bound.json \
             --output /tmp/rt031/distance-option-walk.json
           cmp /tmp/rt031/distance-option-walk.json outputs/phase2/rt031_line8_local_shortcuts_v3/distance_option_walk.json

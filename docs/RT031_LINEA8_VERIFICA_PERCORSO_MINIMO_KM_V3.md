@@ -63,11 +63,22 @@ legale o conservare le fermate incontrate.
   km/anno**: appena **289 km** di margine teorico, prima di deposito,
   fermate, legalità delle giunzioni e viaggi passeggeri. Non è una
   proposta: omettere il waypoint non garantisce più il servizio al centro
-  di Brivio, che l'utente desidera, e questo limite può non essere
-  realizzabile. Il test locale di semplice omissione del waypoint
-  perdeva due identità d'inventario e 46,61 punti percentuali di accesso
-  potenziale a 10 minuti nel comune di Brivio: non va confuso con
-  questo nuovo limite ottimistico su tutti gli ordini.
+  di Brivio, che l'utente desidera. Il test locale di semplice omissione
+  del waypoint perdeva due identità d'inventario e 46,61 punti
+  percentuali di accesso potenziale a 10 minuti nel comune di Brivio:
+  non va confuso con questo nuovo limite su tutti gli ordini.
+
+La [prova stradale dell'ordine ottimistico senza il waypoint di Brivio
+centro](../outputs/phase2/rt031_line8_local_shortcuts_v3/brivio_relaxation_probe.json)
+mostra che il cammino è componibile secondo le sole svolte *via-node*
+rappresentate e misura effettivamente 42,742 km per coppia. Ma il punto
+d'inventario di Brivio centro resta **1.405 m in linea d'aria** dal
+cammino in entrambi i sensi, non viene incontrato, e gli incontri comuni
+di identità d'inventario scendono da 25 a 20. Nel confronto pedonale
+potenziale, Brivio perde **46,69 punti percentuali a 10 minuti** e
+l'insieme dei cinque comuni **10,93 punti**. Inoltre i 289 km/anno
+teorici residui non coprono con sicurezza deposito o variabilità: questa
+non è una soluzione accettabile mascherata da ottimizzazione.
 
 **Conclusione operativa:** il dominio «stessi punti precisi, due ali,
 stessa promessa di frequenza e 111.419 km» è insufficiente anche con
@@ -77,3 +88,33 @@ pedonale 5/8/10 minuti e i viaggi reali verso FS; oppure dichiarare i
 chilometri aggiuntivi necessari. La conservazione delle fermate resta
 una preferenza da misurare, non un vincolo inventato. Nessuna PRIMARY o
 RUNNER-UP è autorizzata.
+
+## Estensione: tutte le assegnazioni dei waypoint alle ali
+
+Il [controllo successivo](../outputs/phase2/rt031_line8_local_shortcuts_v3/free_partition_bound.json)
+libera anche l'appartenenza dei 15 waypoint alle ali: enumera implicitamente
+con Held–Karp tutti gli ordini per tutte le **16.383 partizioni non vuote**
+in due circuiti radicati a FS. Nessun waypoint viene eliminato o spostato.
+Le distanze minime sono ricavate da 240 collegamenti diretti sul medesimo
+grafo, con svolte via-node; il risultato resta un limite ottimistico, non
+un itinerario autorizzato.
+
+Il minimo con ordini reciproci nei due sensi resta **48,613 km per coppia**:
+cambiare ala ai punti non produce alcun risparmio oltre il precedente
+limite di **126.394 km/anno**. Il codice riproduce il precedente limite
+a partizione fissa come controllo indipendente.
+
+Una seconda rilassazione elimina persino l'obbligo di ordini reciproci:
+consente a ciascuna delle 20 traversate giornaliere di scegliere il più
+corto dei due-circuiti diretti, anche ripetendo sempre lo stesso verso.
+Neppure questo modello permissivo scende sotto **24,099 km per traversata**,
+cioè **125.317 km/anno** su 260 giorni, prima degli extra. Non è un H30/H60
+certificato e non è una nuova proposta di esercizio: serve a escludere che
+il divario dipenda soltanto dall'assegnazione alle ali o dall'ordine inverso.
+
+Il risultato riguarda **questi nodi rappresentativi sul grafo fissato**.
+Non prova impossibilità su strade assenti dal grafo, punti di fermata
+diversi, calendari diversi, né schemi di servizio con eventi differenti.
+Il prossimo dominio sensato è la sostituzione spaziale dei waypoint con
+siti di fermata verificabili, misurando esplicitamente il compromesso
+pedonale per ciascun comune; non ulteriori permutazioni degli stessi nodi.

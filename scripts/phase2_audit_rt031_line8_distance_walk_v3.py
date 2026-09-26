@@ -108,11 +108,12 @@ def build(paths):
         Fraction(candidate[code]["potential_walking_access_fraction"][str(threshold)])
         - Fraction(baseline[code]["potential_walking_access_fraction"][str(threshold)])), 6)
         for threshold in (5, 8, 10)} for code in baseline}
-    return {
+    result = {
         "contract": "RT031_LINE8_DISTANCE_OBJECTIVE_CONDITIONAL_WALK_ACCESS_V3",
         "status": "NON_DECISIONAL_POTENTIAL_WALKING_ACCESS_ONLY",
         "source_sha256": {key: sha256(paths[key], key in (
-            "candidates_normalized", "road_screen", "distance_audit", "prior_access"))
+            "candidates_normalized", "road_screen", "distance_audit", "prior_access",
+            "brivio_probe", "bound"))
                           for key in paths},
         "baseline_25_identity_potential_access": baseline,
         "shorter_22_identity_potential_access": candidate,
@@ -127,6 +128,21 @@ def build(paths):
         "primary_selection_authorised": False,
         "runner_up_selection_authorised": False,
     }
+    if "brivio_probe" in paths:
+        probe = json.loads(paths["brivio_probe"].read_text(encoding="utf-8"))
+        if (probe["contract"] != "RT031_LINE8_BRIVIO_WAYPOINT_RELAXATION_ROAD_PROBE_V3"
+                or probe["network_selected"] is not False
+                or "bound" not in paths
+                or probe["source_sha256"]["bound"] != sha256(paths["bound"], True)):
+            raise ValueError("Brivio bypass probe contract drift")
+        bypass = access(probe["both_direction_encountered_stop_ids_not_boarding_guaranteed"])
+        result["brivio_waypoint_relaxation_potential_access"] = bypass
+        result["brivio_waypoint_relaxation_potential_access_pp_change_vs_25_identity_baseline"] = {
+            code: {str(threshold): round(100 * float(
+                Fraction(bypass[code]["potential_walking_access_fraction"][str(threshold)])
+                - Fraction(baseline[code]["potential_walking_access_fraction"][str(threshold)])), 6)
+                for threshold in (5, 8, 10)} for code in baseline}
+    return result
 
 
 def main(paths, output):
@@ -142,8 +158,16 @@ if __name__ == "__main__":
     for key in ("matrix", "pedestrian_osm", "candidates_normalized",
                 "distance_audit", "road_screen", "prior_access"):
         parser.add_argument("--" + key, required=True, type=Path)
+    parser.add_argument("--brivio_probe", type=Path)
+    parser.add_argument("--bound", type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
-    main({key: getattr(args, key) for key in (
+    paths = {key: getattr(args, key) for key in (
         "matrix", "pedestrian_osm", "candidates_normalized",
-        "distance_audit", "road_screen", "prior_access")}, args.output)
+        "distance_audit", "road_screen", "prior_access")}
+    if args.brivio_probe is not None:
+        paths["brivio_probe"] = args.brivio_probe
+        if args.bound is None:
+            parser.error("--bound required with --brivio_probe")
+        paths["bound"] = args.bound
+    main(paths, args.output)
