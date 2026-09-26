@@ -10,7 +10,7 @@ import heapq
 from src.phase2_rt031_rt017_transition_adapter_v3 import FrozenRT017ViaNodeAdapter
 
 
-def ordered_path(edges, rules, waypoint_nodes, incoming=None, outgoing=None):
+def ordered_path(edges, rules, waypoint_nodes, incoming=None, outgoing=None, allow_internal_origin=True):
     if len(waypoint_nodes) < 2:
         raise ValueError("at least two ordered waypoint nodes required")
     if incoming and edges[incoming]["v_node_id"] != waypoint_nodes[0]:
@@ -44,7 +44,10 @@ def ordered_path(edges, rules, waypoint_nodes, incoming=None, outgoing=None):
             if last and adapter.decision((last,), eid)["allowed"] is not True:
                 continue
             edge = edges[eid]
-            nxt = (advance(index, edge["v_node_id"]), edge["v_node_id"], eid)
+            next_index = advance(index, edge["v_node_id"])
+            if not allow_internal_origin and edge['v_node_id'] == waypoint_nodes[0] and next_index < len(waypoint_nodes):
+                continue
+            nxt = (next_index, edge["v_node_id"], eid)
             cost = (meters + float(edge["length_m"]), minutes + float(edge["running_minutes_model"]))
             if nxt not in best or cost < best[nxt]:
                 best[nxt], previous[nxt] = cost, (state, eid)

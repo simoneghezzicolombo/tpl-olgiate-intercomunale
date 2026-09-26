@@ -1,5 +1,7 @@
 # Linea 8 — stato unico della proposta e controllo H30 passeggeri
 
+**Ultimo confronto stradale:** [eliminazione del controflusso lento nei due quartieri](RT031_LINEA8_CONTROFLUSSO_LOCALE_V3.md). Quindici confronti senza perdita di siti: la correzione completa con tempi locali di 3–4 minuti porta a 130.567 km (+17,19%), non a un piccolo sforamento. Tracciato e orario condizionale espliciti; nessuna adozione automatica.
+
 **Ultimo avanzamento, confronto non adottato:** [ricalibrazione delle stesse 36 corse e degli stessi 115.800 km](RT031_LINEA8_ORARIO_RICALIBRATO_STESSI_KM_V3.md). H60 ottimistico e nuovi treni mattutini mantenuti nei 27 scenari; primo treno 07:26 anziché 06:56, quattro mezzi nel caso nominale e cinque in alcuni stress. Restano i viaggi lunghi nel controflusso e le verifiche operative. I risultati sotto descrivono i precedenti testimoni, non il nuovo orario.
 
 **Nuovo confronto richiesto dall'utente:** [collegamenti rapidi nelle direzioni delle punte con 18 corse per ala](RT031_LINEA8_COLLEGAMENTI_RAPIDI_IN_PUNTA_V3.md): 115.800 km/anno di servizio (+3,93%), nessuna perdita di siti, tempi ridotti per Olgiate sud e San Zeno verso FS al mattino e da FS nel resto della giornata. Non rende rapido il controflusso; extra e validazione operativa rimangono aperti. Nessun aumento del cap è stato adottato automaticamente.
