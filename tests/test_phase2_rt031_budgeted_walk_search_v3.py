@@ -45,3 +45,44 @@ def test_missing_pair_fails_closed():
     cat,pairs,w,stops=fixture()
     with pytest.raises(ValueError):search_walks(cat,pairs[1:],w,stops,budget_m=6,max_expansions=10,
         history_locality_certified=True,atomic_legality_certified=True)
+
+
+def test_declared_root_stop_filter_keeps_only_hub_cycles():
+    cat,pairs,w,stops=fixture()
+    got=search_walks(cat,pairs,w,stops,budget_m=6,max_expansions=10000,
+        history_locality_certified=True,atomic_legality_certified=True,
+        required_root_stop_id='A')
+    assert got['required_root_stop_id']=='A'
+    assert got['root_realization_count']==2
+    assert all('A' in row['available_stop_ids'] for row in got['candidates'])
+    with pytest.raises(ValueError):
+        search_walks(cat,pairs,w,stops,budget_m=6,max_expansions=10,
+            history_locality_certified=True,atomic_legality_certified=True,
+            required_root_stop_id='MISSING')
+
+
+def test_stop_rich_priority_is_declared_and_does_not_change_exhaustive_answer():
+    cat,pairs,w,stops=fixture()
+    distance=search_walks(cat,pairs,w,stops,budget_m=6,max_expansions=10000,
+        history_locality_certified=True,atomic_legality_certified=True)
+    rich=search_walks(cat,pairs,w,stops,budget_m=6,max_expansions=10000,
+        history_locality_certified=True,atomic_legality_certified=True,
+        priority_mode='available_stop_count')
+    assert rich['exhaustive']
+    assert rich['search_priority_mode']=='available_stop_count'
+    assert [(r['available_stop_ids'],r['minimum_found_distance_m'])
+            for r in rich['candidates']]==[(r['available_stop_ids'],r['minimum_found_distance_m'])
+                                          for r in distance['candidates']]
+
+
+def test_preferred_stop_priority_is_not_an_admission_constraint():
+    cat,pairs,w,stops=fixture()
+    got=search_walks(cat,pairs,w,stops,budget_m=6,max_expansions=10000,
+        history_locality_certified=True,atomic_legality_certified=True,
+        priority_mode='preferred_stop_count',preferred_stop_ids=('C',))
+    assert got['preferred_stop_ids_present_in_domain']==['C']
+    assert any('C' not in row['available_stop_ids'] for row in got['candidates'])
+    with pytest.raises(ValueError):
+        search_walks(cat,pairs,w,stops,budget_m=6,max_expansions=10,
+            history_locality_certified=True,atomic_legality_certified=True,
+            priority_mode='weighted_score')

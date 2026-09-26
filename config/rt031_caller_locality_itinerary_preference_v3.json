@@ -1,0 +1,108 @@
+{
+  "contract": "RT031_CALLER_LOCALITY_ITINERARY_PREFERENCE_V3",
+  "status": "CALLER_PROPOSED_NON_DECISIONAL_PREFERENCE",
+  "semantics": "Desired ordered service-event itinerary for one recognizable public line; not an admissibility constraint, certified route, or selected timetable.",
+  "preference_role": "PARETO_REPORTING_NOT_ADMISSIBILITY",
+  "preference_weight": null,
+  "all_named_places_mandatory": false,
+  "public_route_identity_count_required": 1,
+  "preferred_topology": "FIGURE_EIGHT_WITH_WEST_AND_EAST_LOBES_MEETING_AT_OLGIATE_FS",
+  "preferred_topology_is_admissibility_constraint": false,
+  "design_principle_sources": [
+    "docs/PHASE2_TRANSIT_BEST_PRACTICES.md",
+    "docs/PHASE2_SERVICE_DESIGN_SPEC.md"
+  ],
+  "historical_figure_eight_seed_sources": [
+    "docs/02_concetto_linea_8_e_nodo_olgiate.md",
+    "docs/03_modello_circolare_doppio_verso_merate.md"
+  ],
+  "historical_seed_performance_is_currently_certified": false,
+  "caller_service_intent": [
+    "OLGIATE_FIRST_WITHOUT_ABANDONING_OTHER_FOUR_MUNICIPALITIES",
+    "SERVE_AS_MANY_VERIFIED_FRACTIONS_AS_PRACTICABLE",
+    "DIRECT_AND_REASONABLY_FAST_ACCESS_TO_OLGIATE_FS_FROM_EACH_LOBE",
+    "FREQUENT_PREDICTABLE_LONG_SPAN_SERVICE",
+    "OPERATIONALLY_ROBUST_SERVICE",
+    "ONE_MEMORABLE_PUBLIC_LINE_IDENTITY"
+  ],
+  "service_intent_role": "UNWEIGHTED_NORMATIVE_PREFERENCES_NOT_NUMERIC_THRESHOLDS",
+  "comparison_evidence_required_before_recommendation": [
+    "ORDERED_DIRECTIONAL_SERVICE_EVENTS_AND_FS_PASSAGES",
+    "PASSENGER_CONTINUITY_OR_EXPLICIT_TRANSFER_AT_INTERMEDIATE_FS",
+    "LOCALITY_TO_FS_IN_VEHICLE_TIME_BY_DIRECTION_AND_OCCURRENCE",
+    "LOCALITY_TO_FS_SCHEDULED_WAIT_AND_TOTAL_JOURNEY_TIME_WHEN_TIMETABLE_EXISTS",
+    "FIVE_MUNICIPALITY_WALK_ACCESS_5_8_10_MINUTES",
+    "VERIFIED_FRACTION_SERVICE_AND_UNRESOLVED_PLACE_LIST",
+    "EXACT_CURRENT_STOP_RETENTION",
+    "PHYSICAL_DISTANCE_AND_DETERMINISTIC_RUNTIME_DWELL_BUFFER_FLEET_SCREEN",
+    "HEADWAY_REGULARITY_AND_DAILY_SERVICE_SPAN"
+  ],
+  "passenger_journey_time_evidence_available_for_current_seven_line_pool": false,
+  "empirical_reliability_probability_available": false,
+  "memorable_line_name_selected": false,
+  "ordered_service_events_required_to_claim_itinerary": true,
+  "intermediate_olgiate_fs_passenger_continuity": "UNVERIFIED",
+  "locality_match_rule": "A locality is not served merely because a candidate passes a road, includes a nearby stop, or includes the same stop identity at another directional occurrence. Require a verified boarding point and an ordered passenger-service event; report walking access separately.",
+  "desired_sequence": [
+    {"ordinal": 1, "place": "Olgiate FS", "evidence": "FROZEN::L00407", "state": "PINNED_STOP_IDENTITY"},
+    {"ordinal": 2, "place": "Monticello / Mondonico", "evidence": "AREA_MONTICELLO;AREA_MONDONICO", "state": "TWO_DISTINCT_LOCALITIES; MONTICELLO_STOP_EXISTS; MONDONICO_AREA_ANCHOR_ONLY"},
+    {"ordinal": 3, "place": "Rovagnate", "evidence": "FROZEN::300879;AREA_ROVAGNATE", "state": "PINNED_STOP_AND_AREA_ANCHOR_DISTINCT"},
+    {"ordinal": 4, "place": "Perego", "evidence": "ASF::PEREGO_VIA_STATALE_79;AREA_PEREGO", "state": "PINNED_STOP_AND_AREA_ANCHOR_DISTINCT"},
+    {"ordinal": 5, "place": "Santa Maria Hoe", "evidence": "FROZEN::300782;FROZEN::300805;AREA_SMHOE", "state": "MULTIPLE_STOP_IDENTITIES; EXACT_CENTRE_BINDING_REQUIRED"},
+    {"ordinal": 6, "place": "Crescenzaga", "evidence": "OSM_POINT_2101402496;P2V2S_0074", "state": "OPTIONAL; AREA_ANCHOR_AND_PROPOSED_STOP; FIELD_CHECK_PENDING"},
+    {"ordinal": 7, "place": "Olgiate neighbourhood south of SS342 / Statale, including Canova-San Zeno and the Via Piave residential area", "evidence": "CALLER_ANNOTATED_MAP_2026_09_24; CENTRO_SPORTIVO_VIA_ALDO_MORO; ORATORIO_OLGIATE_IDENTITY_UNRESOLVED", "state": "CALLER_PRIORITY_AREA_NOT_A_SINGLE_POI; MAP_BOUNDARY_NOT_GEOREFERENCED; CENTRO_SPORTIVO_AND_ORATORIO_ARE_EXAMPLES_WITHIN_BROADER_AREA; BOARDING_POINTS_AND_FS_JOURNEYS_UNVERIFIED"},
+    {"ordinal": 8, "place": "Casa di Comunita Olgiate", "evidence": "SPECIAL::CASA_DI_COMUNITA_OLGIATE", "state": "SPECIAL_SERVICE_BOARDING_POINT; ORDINARY_LINE_SUITABILITY_UNVERIFIED"},
+    {"ordinal": 9, "place": "Olgiate FS", "evidence": "FROZEN::L00407", "state": "SECOND_ORDERED_PASSAGE_NOT_YET_CERTIFIED"},
+    {"ordinal": 10, "place": "Calco Cornello", "evidence": "AR148_004;AXW013", "state": "PUBLISHED_STOP_NAME; EXACT_COORDINATE_AND_RT031_STOP_BINDING_UNRESOLVED"},
+    {"ordinal": 11, "place": "Calco centro", "evidence": "AREA_CALCO_CENTRO", "state": "AREA_ANCHOR; STOP_TO_CENTRE_BINDING_REQUIRED"},
+    {"ordinal": 12, "place": "Calco alta", "evidence": "AREA_CALCO_SUPERIORE", "state": "AREA_ANCHOR; BOARDING_POINT_UNRESOLVED"},
+    {"ordinal": 13, "place": "Cassina", "evidence": null, "state": "PLACE_IDENTITY_AMBIGUOUS; DO_NOT_ASSUME_CASSINA_FRA_MARTINO"},
+    {"ordinal": 14, "place": "Arlate", "evidence": "ASF::ARLATE_CANTINA_PIROVANO;ASF::ARLATE_BIVIO_PER_IL_PAESE;AREA_ARLATE", "state": "MULTIPLE_DISTINCT_STOP_CHOICES"},
+    {"ordinal": 15, "place": "Brivio centro", "evidence": "FROZEN::300063;ASF::BRIVIO_BAR_CRISTALLO;AREA_BRIVIO_CENTRO", "state": "MULTIPLE_STOP_CHOICES; CENTRE_BINDING_REQUIRED"},
+    {"ordinal": 16, "place": "Beverate", "evidence": "FROZEN::300086;FROZEN::300398;ASF::BEVERATE_CARTELLO_PAESE;AREA_BEVERATE", "state": "MULTIPLE_STOP_CHOICES"},
+    {"ordinal": 17, "place": "San Zeno / Via Cesare Cantù (earlier separate named-place preference)", "evidence": "AREA_SAN_ZENO; OSM_WAY_581532442", "state": "NORTH_OF_SS342_ANCHOR; NOT_A_PROXY_FOR_CALLER_ANNOTATED_CANOVA_SAN_ZENO_SOUTHERN_NEIGHBOURHOOD; NO_CERTIFIED_BOARDING_POINT"},
+    {"ordinal": 18, "place": "Olgiate FS", "evidence": "FROZEN::L00407", "state": "FINAL_ORDERED_PASSAGE_NOT_YET_CERTIFIED"}
+  ],
+  "caller_clarification_2026_09_22": {
+    "priority_target_corridors": [
+      "OLGIATE_CENTRO_SPORTIVO_VIA_ALDO_MORO_AND_RESIDENTIAL_AREA",
+      "OLGIATE_ORATORIO_EXACT_VENUE_UNRESOLVED",
+      "SAN_ZENO_VIA_CESARE_CANTU"
+    ],
+    "role": "EXPLICIT_CALLER_DESIGN_PREFERENCE_NOT_GLOBAL_CANDIDATE_ADMISSIBILITY_FILTER",
+    "road_passage_is_not_passenger_stop_service": true,
+    "proposed_or_special_stop_is_not_ordinary_tpl_certification": true,
+    "historical_60_minute_cycle_exclusion_not_binding": true,
+    "source_audit": "docs/RT031_OLGIATE_SAN_ZENO_TARGET_CORRECTION_V3.md"
+  },
+  "caller_clarification_2026_09_24": {
+    "priority_target": "OLGIATE_RESIDENTIAL_NEIGHBOURHOOD_SOUTH_OF_SS342_AS_ANNOTATED_BY_CALLER",
+    "extent_evidence": "CALLER_ANNOTATED_MAP_IN_CODEX_CONVERSATION_2026_09_24",
+    "visible_place_cues": ["SS342_NORTHERN_EDGE", "CANOVA_SAN_ZENO", "VIA_PIAVE", "RESIDENTIAL_BLOCKS"],
+    "extent_status": "QUALITATIVE_SCREEN_ANNOTATION_NOT_GEOREFERENCED_BOUNDARY",
+    "correction_to_previous_interpretation": "THE_TARGET_IS_THE_BROADER_RESIDENTIAL_AREA; LEGACY_SPORTS_POI_AND_PIAZZA_SAN_ZENONE_ANCHOR_ARE_NORTH_OF_SS342_AND_NOT_AREA_PROXIES; CASA_DI_COMUNITA_LOCATION_COMES_FROM_STOP_COORDINATE_NOT_SCREEN_LABELS",
+    "provisional_screen": "RT031_SOUTH_OLGIATE_PROVISIONAL_AREA_SENSITIVITY_V3",
+    "provisional_screen_source": "scripts/phase2_audit_rt031_south_olgiate_provisional_area_v3.py",
+    "provisional_screen_is_caller_polygon": false,
+    "provisional_screen_is_decisional": false,
+    "area_population_coverage_certified": false,
+    "area_to_olgiate_fs_passenger_journey_certified": false,
+    "single_stop_assumed_to_cover_entire_area": false,
+    "role": "EXPLICIT_CALLER_DESIGN_PREFERENCE_NOT_GLOBAL_CANDIDATE_ADMISSIBILITY_FILTER",
+    "source_audit": "docs/RT031_OLGIATE_SAN_ZENO_TARGET_CORRECTION_V3.md"
+  },
+  "sources": [
+    "config/phase2_territorial_service_contract_v3.csv",
+    "outputs/phase2/network_design_method_audit_v3/confirmed_unresolved_stop_evidence_gpt_v3.csv",
+    "outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/existing_stop_places_operational_gpt_v5.csv",
+    "outputs/phase2/stop_universe_v2/settlement_destination_anchors.csv",
+    "docs/RT031_ARLATE_ROVAGNATE_TRADEOFF_V3.md"
+  ],
+  "candidate_domain_complete": false,
+  "itinerary_feasibility_certified": false,
+  "decision_budget_km": null,
+  "uncertainty_band_min": null,
+  "network_selected": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false
+}

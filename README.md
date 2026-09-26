@@ -1,11 +1,22 @@
 # Progetto Linea 8 Olgiate Molgora
 ## Rete TPL Circolare a Doppio Verso (Modello Merate D201/D202) Integrata con il Nodo Ferroviario S8
 
+> **Stato delle evidenze (2026-09-22).** La figura 8 e i due versi sono il
+> concetto progettuale originario, non una rete già selezionata. Le stime
+> iniziali di 55 minuti/ciclo, 5 minuti di margine, 112.261 km/anno e
+> coincidenze «perfette» riportate sotto sono **ipotesi storiche**, non
+> prestazioni certificate della proposta attuale. Per i criteri di progetto
+> usare [Transit best practices](docs/PHASE2_TRANSIT_BEST_PRACTICES.md);
+> per il limite delle conclusioni iniziali vedere [Gate F](docs/GATE_F_PASS.md);
+> per il confronto RT031 corrente vedere il [rapporto Arlate–Rovagnate](docs/RT031_ARLATE_ROVAGNATE_TRADEOFF_V3.md).
+> Una [mappa dell'esperienza pregressa](docs/RT031_PRIOR_WORK_EVIDENCE_MAP.md)
+> collega questi filoni e indica quali risultati sono tuttora riutilizzabili.
+
 Benvenuto nel repository del progetto **Linea 8 Olgiate Molgora**. Questo workspace raccoglie tutti i dati quantitativi, i modelli di simulazione di esercizio, i bilanci chilometrici, l'analisi territoriale WorldPop e la dashboard interattiva per la trasformazione delle attuali linee radiali frammentate **D184** e **D185** in una **rete circolare continua a forma di "8"**, operante in **entrambi i versi di marcia (orario e antiorario)** e incernierata sulla **stazione ferroviaria di Olgiate-Calco-Brivio**.
 
 ---
 
-## 📊 I Numeri Chiave dello Studio
+## 📊 Numeri del concept originario (non una raccomandazione certificata)
 
 1. **Popolazione del Bacino Core (5 Comuni, ISTAT 2025)**:
    - **La Valletta Brianza + Santa Maria Hoè**: $6.765 \text{ residenti}$ ($29,5\%$)
