@@ -113,7 +113,7 @@ def build(paths):
         "status": "NON_DECISIONAL_POTENTIAL_WALKING_ACCESS_ONLY",
         "source_sha256": {key: sha256(paths[key], key in (
             "candidates_normalized", "road_screen", "distance_audit", "prior_access",
-            "brivio_probe", "bound"))
+            "brivio_probe", "bound", "siting_audit", "contextual_audit"))
                           for key in paths},
         "baseline_25_identity_potential_access": baseline,
         "shorter_22_identity_potential_access": candidate,
@@ -142,6 +142,62 @@ def build(paths):
                 Fraction(bypass[code]["potential_walking_access_fraction"][str(threshold)])
                 - Fraction(baseline[code]["potential_walking_access_fraction"][str(threshold)])), 6)
                 for threshold in (5, 8, 10)} for code in baseline}
+    if "siting_audit" in paths:
+        sites = json.loads(paths["siting_audit"].read_text(encoding="utf-8"))
+        if (sites["contract"] != "RT031_LINE8_BRIVIO_EXISTING_SITE_REPLACEMENT_PROBE_V3"
+                or sites["network_selected"] is not False
+                or sites["source_sha256"]["distance_audit"] != sha256(paths["distance_audit"], True)):
+            raise ValueError("existing-site probe contract drift")
+        rows = []
+        for index, row in enumerate(sites["options"]):
+            if not row.get("represented_road_feasible"):
+                continue
+            value = access(row["both_direction_encountered_stop_ids_not_boarding_guaranteed"])
+            changes = {code: {str(threshold): round(100 * float(
+                Fraction(value[code]["potential_walking_access_fraction"][str(threshold)])
+                - Fraction(baseline[code]["potential_walking_access_fraction"][str(threshold)])), 6)
+                for threshold in (5, 8, 10)} for code in baseline}
+            rows.append({"road_option_index": index, "replacement_id": row["replacement_id"],
+                         "replacement_name": row["replacement_name"], "mode": row["mode"],
+                         "annual_10_pairs_260_days_km_before_extras": row["annual_10_pairs_260_days_km_before_extras"],
+                         "forward_running_minutes_excluding_dwell": row["forward_running_minutes_excluding_dwell"],
+                         "reverse_running_minutes_excluding_dwell": row["reverse_running_minutes_excluding_dwell"],
+                         "lost_reference_inventory_ids": row["lost_reference_inventory_ids"],
+                         "potential_access": value,
+                         "potential_access_pp_change_vs_reference": changes})
+        def dominates(a, b):
+            # No weighted aggregation; retain each municipality/threshold separately.
+            numeric_a = [-a["annual_10_pairs_260_days_km_before_extras"],
+                         -a["forward_running_minutes_excluding_dwell"],
+                         -a["reverse_running_minutes_excluding_dwell"]]
+            numeric_b = [-b["annual_10_pairs_260_days_km_before_extras"],
+                         -b["forward_running_minutes_excluding_dwell"],
+                         -b["reverse_running_minutes_excluding_dwell"]]
+            for code in MUNICIPALITY_NAMES:
+                for threshold in ("5", "8", "10"):
+                    numeric_a.append(Fraction(a["potential_access"][code]["potential_walking_access_fraction"][threshold]))
+                    numeric_b.append(Fraction(b["potential_access"][code]["potential_walking_access_fraction"][threshold]))
+            lost_a, lost_b = set(a["lost_reference_inventory_ids"]), set(b["lost_reference_inventory_ids"])
+            return (lost_a <= lost_b and all(x >= y for x, y in zip(numeric_a, numeric_b))
+                    and (lost_a < lost_b or any(x > y for x, y in zip(numeric_a, numeric_b))))
+        result["existing_site_options"] = rows
+        result["existing_site_pareto_road_option_indices"] = [row["road_option_index"] for row in rows
+            if not any(dominates(other, row) for other in rows)]
+        result["existing_site_pareto_semantics"] = "Bounded witness set only: minimize annual model km and both directional running times; maximize each municipality's 5/8/10-minute potential access and retained reference-identity set inclusion. No weights, centre-equivalence guarantee or selected service."
+    if "contextual_audit" in paths:
+        contextual = json.loads(paths["contextual_audit"].read_text(encoding="utf-8"))
+        if (contextual["contract"] != "RT031_LINE8_ALL_REFERENCE_CONTEXTUAL_ROAD_WITNESS_V3"
+                or contextual["network_selected"] is not False
+                or contextual["source_sha256"]["distance_audit"] != sha256(paths["distance_audit"], True)
+                or contextual["known_successor_via_way_overlap"]):
+            raise ValueError("contextual road witness not supported")
+        value = access(contextual["both_direction_encountered_stop_ids_not_boarding_guaranteed"])
+        result["all_reference_contextual_potential_access"] = value
+        result["all_reference_contextual_access_pp_change_vs_reference"] = {
+            code: {str(threshold): round(100 * float(
+                Fraction(value[code]["potential_walking_access_fraction"][str(threshold)])
+                - Fraction(baseline[code]["potential_walking_access_fraction"][str(threshold)])), 6)
+                for threshold in (5, 8, 10)} for code in baseline}
     return result
 
 
@@ -160,6 +216,8 @@ if __name__ == "__main__":
         parser.add_argument("--" + key, required=True, type=Path)
     parser.add_argument("--brivio_probe", type=Path)
     parser.add_argument("--bound", type=Path)
+    parser.add_argument("--siting_audit", type=Path)
+    parser.add_argument("--contextual_audit", type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
     paths = {key: getattr(args, key) for key in (
@@ -170,4 +228,8 @@ if __name__ == "__main__":
         if args.bound is None:
             parser.error("--bound required with --brivio_probe")
         paths["bound"] = args.bound
+    if args.siting_audit is not None:
+        paths["siting_audit"] = args.siting_audit
+    if args.contextual_audit is not None:
+        paths["contextual_audit"] = args.contextual_audit
     main(paths, args.output)
