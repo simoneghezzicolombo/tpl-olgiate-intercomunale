@@ -72,8 +72,14 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
     if set(raw) != {'west_A', 'west_B', 'east_A', 'east_B'} or any(
             joins.get(a + '>' + b) is not True for a in raw for b in raw):
         raise ValueError('occupation formulation requires every represented FS join')
-    if len({e['stop_place_id'] for loop in raw.values() for e in loop['events']}) != 27:
-        raise ValueError('site domain drift')
+    actual_sites = {e['stop_place_id'] for loop in raw.values() for e in loop['events']}
+    declared_sites = family.get('comparison_nonhub_site_ids')
+    if declared_sites is None:
+        if len(actual_sites) != 27:
+            raise ValueError('site domain drift')
+    elif (len(declared_sites) != len(set(declared_sites)) or set(declared_sites) != actual_sites
+          or not set(LOCAL_SITES) <= actual_sites):
+        raise ValueError('declared comparison site domain drift')
     trips = [{'loop': pattern, 'departure_min': minute} for pattern in sorted(raw)
              for minute in range(360, ready_span[1] + 1, 5)]
     adjusted = {(m, d): adjusted_loops(raw, m, d) for m, d in GRID}
@@ -161,7 +167,11 @@ def verify(problem, trips, phases, fleet_bound):
             raise ValueError('rail anchor verification failure')
     grid = []
     for (m, d), loops in problem['adjusted'].items():
-        for opportunities in events_by_site(trips, loops).values():
+        available = events_by_site(trips, loops)
+        expected_sites = {e['stop_place_id'] for loop in loops.values() for e in loop['events']}
+        if {sid for sid, direction in available} != expected_sites:
+            raise ValueError('selected trips omit declared service sites')
+        for opportunities in available.values():
             times = [t for _, t in opportunities]
             if uncovered_intervals(times, *problem['ready_span'], problem['offpeak_wait']):
                 raise ValueError('off-peak continuous verification failure')
