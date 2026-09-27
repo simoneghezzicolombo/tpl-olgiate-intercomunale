@@ -23,6 +23,7 @@ from scripts.phase2_solve_rt031_line8_flexible_peaks_v3 import interval_covers
 GRID = tuple(itertools.product((.9, 1., 1.1), (0., .5, 1.)))
 PHASES = [('AM', t) for t in range(390, 421, 5)] + [('PM', t) for t in range(990, 1021, 5)]
 LOCAL_SITES = ('RT031::P2V2S_0031_PROJECTED_ROAD_POINT', 'PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE')
+DEFAULT_PM_ARRIVALS = (992, 1022, 1052, 1082, 1112, 1172, 1232)
 
 
 def family_inputs(sources):
@@ -59,9 +60,14 @@ def events_by_site(trips, loops):
     return result
 
 
-def prepare(family, offpeak_wait, compile_constraints=True):
-    if offpeak_wait not in (60, 90):
+def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 1240),
+            pm_arrivals=DEFAULT_PM_ARRIVALS):
+    if offpeak_wait not in (60, 90, 120):
         raise ValueError('unsupported off-peak comparison')
+    if ready_span[0] != 390 or ready_span[1] not in (1180, 1210, 1240):
+        raise ValueError('unsupported service span comparison')
+    if not pm_arrivals or len(set(pm_arrivals)) != len(pm_arrivals):
+        raise ValueError('missing or duplicate declared PM anchors')
     raw, joins = family['loops'], family['joins']
     if set(raw) != {'west_A', 'west_B', 'east_A', 'east_B'} or any(
             joins.get(a + '>' + b) is not True for a in raw for b in raw):
@@ -69,14 +75,14 @@ def prepare(family, offpeak_wait, compile_constraints=True):
     if len({e['stop_place_id'] for loop in raw.values() for e in loop['events']}) != 27:
         raise ValueError('site domain drift')
     trips = [{'loop': pattern, 'departure_min': minute} for pattern in sorted(raw)
-             for minute in range(360, 1241, 5)]
+             for minute in range(360, ready_span[1] + 1, 5)]
     adjusted = {(m, d): adjusted_loops(raw, m, d) for m, d in GRID}
     n = len(trips)
     covers = set()
     if compile_constraints:
         for loops in adjusted.values():
             for events in events_by_site(trips, loops).values():
-                covers.update((cover, -1) for cover in interval_covers(events, 390, 1240, offpeak_wait))
+                covers.update((cover, -1) for cover in interval_covers(events, *ready_span, offpeak_wait))
                 for phase_index, (_, start) in enumerate(PHASES):
                     covers.update((cover, phase_index) for cover in interval_covers(events, start, start + 120, 30))
     # Inherited engineering comparison ceiling, NOT a caller-approved preference:
@@ -100,7 +106,7 @@ def prepare(family, offpeak_wait, compile_constraints=True):
             anchors.append({'wing': wing, 'kind': 'bus_to_rail', 'rail_min': target, 'eligible': eligible})
         # Frozen PM train arrivals already represented by the 16:40..18:40 bank
         # plus the two evening arrivals. Retain the original eight-minute wait.
-        for arrival in (992, 1022, 1052, 1082, 1112, 1172, 1232):
+        for arrival in pm_arrivals:
             eligible = tuple(i for i, trip in enumerate(trips)
                              if trip['loop'].startswith(wing)
                              and (family['all_patterns_fast_local'] or trip['loop'] == rest)
@@ -131,6 +137,7 @@ def prepare(family, offpeak_wait, compile_constraints=True):
     matrix = csc_matrix((data, (rows, cols)), shape=(len(lower), n + len(PHASES)))
     costs = np.array([raw[t['loop']]['distance_m'] / 1000 for t in trips] + [0.] * len(PHASES))
     return dict(family=family, offpeak_wait=offpeak_wait, trips=trips, adjusted=adjusted,
+                ready_span=tuple(ready_span), pm_arrivals=tuple(pm_arrivals),
                 constraints_compiled=compile_constraints,
                 anchors=anchors, wait_ceiling=wait_ceiling, matrix=matrix, costs=costs,
                 lower=np.array(lower), upper=np.array(upper), fleet_rows=fleet_rows)
@@ -152,7 +159,7 @@ def verify(problem, trips, phases, fleet_bound):
     for (m, d), loops in problem['adjusted'].items():
         for opportunities in events_by_site(trips, loops).values():
             times = [t for _, t in opportunities]
-            if uncovered_intervals(times, 390, 1240, problem['offpeak_wait']):
+            if uncovered_intervals(times, *problem['ready_span'], problem['offpeak_wait']):
                 raise ValueError('off-peak continuous verification failure')
             for phase in phases:
                 if uncovered_intervals(times, phase['start_min'], phase['end_min'], 30):
@@ -168,18 +175,27 @@ def verify(problem, trips, phases, fleet_bound):
     return grid
 
 
-def solve(problem, fleet_bound, time_limit=30):
+def solve(problem, fleet_bound, time_limit=30, fixed_peak_starts=None):
     if not problem['constraints_compiled']:
         raise ValueError('coverage constraints not compiled')
     if fleet_bound not in (4, 5, 6):
         raise ValueError('unsupported comparison fleet bound')
     upper = problem['upper'].copy()
     upper[problem['fleet_rows']] = fleet_bound
+    variable_upper = np.ones(len(problem['costs']))
+    if fixed_peak_starts is not None:
+        if set(fixed_peak_starts) != {'AM', 'PM'} or any((label, start) not in PHASES for label, start in fixed_peak_starts.items()):
+            raise ValueError('fixed peaks outside declared phase domain')
+        for i, (label, start) in enumerate(PHASES):
+            if start != fixed_peak_starts[label]:
+                variable_upper[len(problem['trips']) + i] = 0
     started = time.monotonic()
     answer = milp(problem['costs'], integrality=np.ones(len(problem['costs'])),
-                  bounds=Bounds(0, 1), constraints=LinearConstraint(problem['matrix'], problem['lower'], upper),
+                  bounds=Bounds(0, variable_upper), constraints=LinearConstraint(problem['matrix'], problem['lower'], upper),
                   options={'time_limit': time_limit, 'mip_rel_gap': 0})
     result = {'family_id': problem['family']['name'], 'offpeak_wait_comparison_min': problem['offpeak_wait'],
+              'ready_span_comparison_min': list(problem['ready_span']),
+              'declared_pm_rail_arrival_targets_min': list(problem['pm_arrivals']),
               'nominal_fleet_bound_comparison': fleet_bound, 'candidate_trip_count': len(problem['trips']),
               'constraint_count': problem['matrix'].shape[0], 'solver_status': int(answer.status),
               'solver_message': str(answer.message), 'solver_time_limit_s': time_limit,
@@ -188,6 +204,8 @@ def solve(problem, fleet_bound, time_limit=30):
               'optimality_proven_in_this_domain': bool(answer.success),
               'am_residual_wait_ceiling_inherited_comparison_min': problem['wait_ceiling'],
               'witness_found': False, 'policy_adopted': False}
+    if fixed_peak_starts is not None:
+        result['fixed_comparison_peak_starts_min'] = dict(fixed_peak_starts)
     bound = getattr(answer, 'mip_dual_bound', None)
     if bound is not None and np.isfinite(bound):
         result['annual_service_km_lower_bound_in_domain'] = round(float(bound) * 260, 6)
