@@ -4,6 +4,9 @@ on:
   push:
     branches: [codex/rt031-decision-convergence]
     paths:
+      - scripts/phase2_compare_rt031_line8_mixed_local_v3.py
+      - tests/test_phase2_rt031_line8_mixed_local_v3.py
+      - docs/RT031_LINEA8_COMBINAZIONE_SERVIZI_LOCALI_V3.md
       - scripts/phase2_probe_rt031_line8_free_orders_v3.py
       - scripts/phase2_export_rt031_line8_free_orders_v3.py
       - tests/test_phase2_rt031_line8_free_orders_v3.py
@@ -60,6 +63,9 @@ on:
       - .github/workflows/phase2-rt031-line8-timetable-repair-v3.yml
   pull_request:
     paths:
+      - scripts/phase2_compare_rt031_line8_mixed_local_v3.py
+      - tests/test_phase2_rt031_line8_mixed_local_v3.py
+      - docs/RT031_LINEA8_COMBINAZIONE_SERVIZI_LOCALI_V3.md
       - scripts/phase2_probe_rt031_line8_free_orders_v3.py
       - scripts/phase2_export_rt031_line8_free_orders_v3.py
       - tests/test_phase2_rt031_line8_free_orders_v3.py
@@ -144,6 +150,7 @@ jobs:
           python -m unittest discover -s tests -p test_phase2_rt031_line8_robustness_cost_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_partial_services_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_free_orders_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_mixed_local_v3.py
       - name: Independently reproduce relaxed wing infeasibility
         run: |
           set -euo pipefail

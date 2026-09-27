@@ -48,15 +48,19 @@ def occupied_sets(trips, loops, recovery):
 def events_by_site(trips, loops):
     result = defaultdict(list)
     for i, trip in enumerate(trips):
-        for event in loops[trip['loop']]['events']:
+        loop = loops[trip['loop']]
+        for event in loop['events']:
             if event['stop_place_id'] in LOCAL_SITES:
                 same = [e for e in loops[trip['loop']]['events'] if e['stop_place_id'] == event['stop_place_id']]
                 # Do not let an early local pass followed by the long loop satisfy
                 # a frequency promise intended for the short journey to FS.
                 if event['offset_from_wing_origin_min'] < max(e['offset_from_wing_origin_min'] for e in same):
                     continue
-            result[event['stop_place_id'], 'to_fs'].append((i, trip['departure_min'] + event['offset_from_wing_origin_min']))
-            result[event['stop_place_id'], 'from_fs'].append((i, trip['departure_min']))
+            directions = loop.get('local_service_directions', {}).get(event['stop_place_id'], ('to_fs', 'from_fs'))
+            if 'to_fs' in directions:
+                result[event['stop_place_id'], 'to_fs'].append((i, trip['departure_min'] + event['offset_from_wing_origin_min']))
+            if 'from_fs' in directions:
+                result[event['stop_place_id'], 'from_fs'].append((i, trip['departure_min']))
     return result
 
 
@@ -78,11 +82,24 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
         raise ValueError('missing or duplicate declared PM anchors')
     raw, joins = family['loops'], family['joins']
     core_patterns = {'west_A', 'west_B', 'east_A', 'east_B'}
+    qualified_locals = family.get('local_direction_contract') == 'REFERENCE_FAST_RIDE_ENVELOPE_V3'
+    if qualified_locals and family.get('rail_anchor_scope') != 'each_declared_site':
+        raise ValueError('local directional eligibility requires per-site rail anchors')
+    if not qualified_locals and any('local_service_directions' in loop for loop in raw.values()):
+        raise ValueError('local directional eligibility requires its explicit contract')
+    if qualified_locals:
+        for loop in raw.values():
+            local_ids = {e['stop_place_id'] for e in loop['events']} & set(LOCAL_SITES)
+            permissions = loop.get('local_service_directions', {})
+            if set(permissions) != local_ids or any(
+                    not isinstance(v, list) or len(v) != len(set(v)) or not set(v) <= {'to_fs', 'from_fs'}
+                    for v in permissions.values()):
+                raise ValueError('explicit local directional eligibility required for every pattern')
     extended = set(raw) != core_patterns
     if extended and (not core_patterns <= set(raw)
                      or any(not p.startswith(('west_', 'east_')) for p in raw)
                      or family.get('rail_anchor_scope') != 'each_declared_site'
-                     or not family['all_patterns_fast_local']):
+                     or not (family['all_patterns_fast_local'] or qualified_locals)):
         raise ValueError('extended patterns require explicit per-site rail anchors and fast locals')
     if not core_patterns <= set(raw) or any(
             joins.get(a + '>' + b) is not True for a in raw for b in raw):
@@ -98,6 +115,23 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
     trips = [{'loop': pattern, 'departure_min': minute} for pattern in sorted(raw)
              for minute in range(360, ready_span[1] + 1, 5)]
     adjusted = {(m, d): adjusted_loops(raw, m, d) for m, d in grid}
+    if qualified_locals:
+        # Independently reject a label that credits a slower local direction.
+        # The four unchanged corrected core paths define the comparison, not
+        # a newly invented public-service minute threshold.
+        for (m, d), loops in adjusted.items():
+            def rides(loop, sid):
+                own = [e['offset_from_wing_origin_min'] for e in loop['events'] if e['stop_place_id'] == sid]
+                return {'to_fs': loop['road_minutes'] - max(own), 'from_fs': min(own) - d}
+            for sid in LOCAL_SITES:
+                reference_rides = [rides(loops[p], sid) for p in sorted(core_patterns)
+                                   if any(e['stop_place_id'] == sid for e in loops[p]['events'])]
+                envelope = {direction: max(r[direction] for r in reference_rides)
+                            for direction in ('to_fs', 'from_fs')}
+                for loop in loops.values():
+                    for direction in loop['local_service_directions'].get(sid, []):
+                        if rides(loop, sid)[direction] > envelope[direction] + 1e-8:
+                            raise ValueError('local ride exceeds reference fast envelope')
     n = len(trips)
     covers = set()
     if compile_constraints:
@@ -125,7 +159,7 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
         for target in targets:
             eligible = tuple(i for i, trip in enumerate(trips)
                              if trip['loop'].startswith(wing)
-                             and (family['all_patterns_fast_local'] or trip['loop'] == am)
+                             and (qualified_locals or family['all_patterns_fast_local'] or trip['loop'] == am)
                              and all(-1e-8 <= target - trip['departure_min'] - loops[trip['loop']]['road_minutes'] - 3 <= wait_ceiling + 1e-8
                                      for loops in adjusted.values()))
             anchors.append({'wing': wing, 'kind': 'bus_to_rail', 'rail_min': target, 'eligible': eligible})
@@ -134,7 +168,7 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
         for arrival in pm_arrivals:
             eligible = tuple(i for i, trip in enumerate(trips)
                              if trip['loop'].startswith(wing)
-                             and (family['all_patterns_fast_local'] or trip['loop'] == rest)
+                             and (qualified_locals or family['all_patterns_fast_local'] or trip['loop'] == rest)
                              and 3 <= trip['departure_min'] - arrival <= 8)
             anchors.append({'wing': wing, 'kind': 'rail_to_bus', 'rail_min': arrival, 'eligible': eligible})
     if family.get('rail_anchor_scope') == 'each_declared_site':
@@ -144,8 +178,11 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
             wing_sites = set.union(*(s for p, s in pattern_sites.items()
                                     if p in core_patterns and p.startswith(anchor['wing'])))
             for sid in sorted(wing_sites):
+                direction = 'to_fs' if anchor['kind'] == 'bus_to_rail' else 'from_fs'
                 site_anchors.append({**anchor, 'stop_place_id': sid,
-                                     'eligible': tuple(i for i in anchor['eligible'] if sid in pattern_sites[trips[i]['loop']])})
+                                     'eligible': tuple(i for i in anchor['eligible']
+                                                       if sid in pattern_sites[trips[i]['loop']]
+                                                       and direction in raw[trips[i]['loop']].get('local_service_directions', {}).get(sid, ('to_fs', 'from_fs')))})
         anchors = site_anchors
     if any(not a['eligible'] for a in anchors):
         raise ValueError('empty rail anchor domain; do not relax silently')
@@ -194,7 +231,7 @@ def verify(problem, trips, phases, fleet_bound):
     for (m, d), loops in problem['adjusted'].items():
         available = events_by_site(trips, loops)
         expected_sites = {e['stop_place_id'] for loop in loops.values() for e in loop['events']}
-        if {sid for sid, direction in available} != expected_sites:
+        if set(available) != {(sid, direction) for sid in expected_sites for direction in ('to_fs', 'from_fs')}:
             raise ValueError('selected trips omit declared service sites')
         for opportunities in available.values():
             times = [t for _, t in opportunities]
