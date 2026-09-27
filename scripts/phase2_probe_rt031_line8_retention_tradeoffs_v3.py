@@ -37,7 +37,7 @@ def removal_domain(loop):
     return [()] + [(s,) for s in sequence] + [tuple(sorted(pair)) for pair in zip(sequence,sequence[1:])]
 
 
-def load_access(paths, sites):
+def load_access(paths, sites, include_context=False):
     for k in ('matrix','pedestrian_osm','candidates_normalized'):
         if sha256(paths[k],k=='candidates_normalized')!=WALK_EXPECTED[k]:
             raise ValueError('pedestrian source drift: '+k)
@@ -87,6 +87,9 @@ def load_access(paths, sites):
         raise ValueError('full-retention coverage does not reproduce upstream reference')
     supported={r.stop_place_id for r in raw[['stop_place_id','stop_service_class']].drop_duplicates().itertuples(index=False)
                if r.stop_service_class=='CONVENTIONAL_TPL'}
+    if include_context:
+        return access,baseline,supported,dict(substrate=substrate, local=local,
+            graph=graph, snap_map=snap_map, units=units, weights=weights, core=core, codes=codes)
     return access,baseline,supported
 
 

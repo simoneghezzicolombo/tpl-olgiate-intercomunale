@@ -4,6 +4,12 @@ on:
   push:
     branches: [codex/rt031-decision-convergence]
     paths:
+      - scripts/phase2_probe_rt031_line8_stop_relocation_v3.py
+      - scripts/phase2_check_rt031_line8_relocation_timetable_v3.py
+      - scripts/phase2_export_rt031_line8_stop_relocation_v3.py
+      - scripts/phase2_probe_rt031_line8_retention_tradeoffs_v3.py
+      - tests/test_phase2_rt031_line8_stop_relocation_v3.py
+      - docs/RT031_LINEA8_SPOSTAMENTO_FERMATE_E_SCORCIATOIE_V3.md
       - scripts/phase2_compare_rt031_line8_peak_directions_v3.py
       - scripts/phase2_export_rt031_line8_peak_directions_v3.py
       - scripts/phase2_render_rt031_line8_counterflow_v3.py
@@ -37,6 +43,12 @@ on:
       - .github/workflows/phase2-rt031-line8-timetable-repair-v3.yml
   pull_request:
     paths:
+      - scripts/phase2_probe_rt031_line8_stop_relocation_v3.py
+      - scripts/phase2_check_rt031_line8_relocation_timetable_v3.py
+      - scripts/phase2_export_rt031_line8_stop_relocation_v3.py
+      - scripts/phase2_probe_rt031_line8_retention_tradeoffs_v3.py
+      - tests/test_phase2_rt031_line8_stop_relocation_v3.py
+      - docs/RT031_LINEA8_SPOSTAMENTO_FERMATE_E_SCORCIATOIE_V3.md
       - scripts/phase2_compare_rt031_line8_peak_directions_v3.py
       - scripts/phase2_export_rt031_line8_peak_directions_v3.py
       - scripts/phase2_render_rt031_line8_counterflow_v3.py
@@ -93,6 +105,7 @@ jobs:
           python -m unittest discover -s tests -p test_phase2_rt031_line8_shorter_span_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_site_rides_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_peak_directions_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_stop_relocation_v3.py
       - name: Independently reproduce relaxed wing infeasibility
         run: |
           set -euo pipefail

@@ -61,7 +61,7 @@ def events_by_site(trips, loops):
 
 
 def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 1240),
-            pm_arrivals=DEFAULT_PM_ARRIVALS):
+            pm_arrivals=DEFAULT_PM_ARRIVALS, am_wait_ceiling_comparison_min=None):
     if offpeak_wait not in (60, 90, 120):
         raise ValueError('unsupported off-peak comparison')
     if ready_span[0] != 390 or ready_span[1] not in (1180, 1210, 1240):
@@ -95,6 +95,10 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
     wait_ceiling = max(target - departure - loops[p]['road_minutes'] - 3
                        for p, times in original_am.items() for departure, target in zip(times, targets)
                        for loops in adjusted.values())
+    if am_wait_ceiling_comparison_min is not None:
+        if not np.isfinite(am_wait_ceiling_comparison_min) or am_wait_ceiling_comparison_min < 0:
+            raise ValueError('invalid explicit AM wait comparison ceiling')
+        wait_ceiling = float(am_wait_ceiling_comparison_min)
     anchors = []
     for wing, am, rest in (('west', 'west_A', 'west_B'), ('east', 'east_B', 'east_A')):
         for target in targets:
