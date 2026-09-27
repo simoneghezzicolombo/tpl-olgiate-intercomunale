@@ -10,6 +10,10 @@
 > flotta, manovre e fermate restano da validare prima dell'esercizio.
 > [Scelta registrata](config/rt031_31_trip_service_authorisation_v3.json) ·
 > [Stato completo e confronti storici](docs/RT031_LINEA8_SCHEDA_CONCLUSIVA_DI_AVANZAMENTO_V3.md).
+> [Piano fermate e manovre](docs/RT031_LINEA8_PIANO_FERMATE_E_MANOVRE_V3.md):
+> 28 siti numerati, sei manovre localizzate e confronto di poche aggiunte strategiche
+> senza cambiare percorso o partenze. Due esempi migliorano la copertura senza km
+> aggiuntivi, ma nessuna nuova palina è adottata o fisicamente approvata.
 >
 > **Evidenze storiche.** La figura 8 a doppio verso era il concetto originario;
 > il servizio passeggeri nei due sensi non implica due percorsi opposti a ogni ora. Le stime

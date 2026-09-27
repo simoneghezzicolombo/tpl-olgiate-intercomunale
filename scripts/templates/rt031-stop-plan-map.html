@@ -1,0 +1,89 @@
+<div id="rt031-stop-plan-map">
+  <h3>Linea 8 · fermate e punti da verificare</h3>
+  <div class="viz-row text-small">
+    <span><span class="west-key">━</span> Ovest</span>
+    <span><span class="east-key">━</span> Est</span>
+    <span>● Siti d’inventario</span>
+    <span><span class="local-key">■</span> Due siti locali proposti</span>
+    <span><span class="turn-key">▲</span> Manovre da verificare</span>
+    <span><span class="candidate-key">＋</span> Possibili aggiunte, non adottate</span>
+  </div>
+  <svg class="stop-plan-geography" role="img" aria-label="Tracciati stradali delle due ali, 28 siti numerati, sei inversioni di marcia e ipotesi di nuove fermate"></svg>
+  <label class="form-label" for="rt031-stop-choice">Dettaglio del punto</label>
+  <select class="form-select" id="rt031-stop-choice"></select>
+  <div class="text-small" aria-live="polite" id="rt031-stop-detail"></div>
+  <div class="text-small text-muted">Strade: snapshot OpenStreetMap del progetto · posizioni e accessi non autorizzati all’esercizio</div>
+</div>
+<style>
+#rt031-stop-plan-map .west-key{color:var(--viz-series-1)}
+#rt031-stop-plan-map .east-key{color:var(--viz-series-2)}
+#rt031-stop-plan-map .turn-key{color:var(--viz-series-3)}
+#rt031-stop-plan-map .local-key{color:var(--viz-series-4)}
+#rt031-stop-plan-map .candidate-key{color:var(--viz-series-5)}
+#rt031-stop-plan-map .stop-plan-geography{width:100%;display:block}
+#rt031-stop-plan-map .map-label{fill:var(--foreground);font-size:12px;paint-order:stroke;stroke:var(--background);stroke-width:3px;stroke-linejoin:round}
+#rt031-stop-plan-map #rt031-stop-detail{margin:8px 0}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script type="application/json" id="rt031-stop-map-data">__DATA__</script>
+<script>
+(() => {
+  const root=document.getElementById('rt031-stop-plan-map');
+  const data=JSON.parse(document.getElementById('rt031-stop-map-data').textContent);
+  const svg=d3.select(root.querySelector('svg'));
+  const select=root.querySelector('select');
+  const detail=root.querySelector('#rt031-stop-detail');
+  const items=data.features.filter(f=>['site','manoeuvre','candidate'].includes(f.properties.kind));
+  const routes=data.features.filter(f=>f.properties.kind==='route');
+  const roads=data.features.filter(f=>f.properties.kind==='context_road');
+  const key=f=>f.properties.key;
+  let selected=window.openai?.widgetState?.modelContent?.selected;
+  if(!items.some(f=>key(f)===selected)) selected=key(items[0]);
+  for(const f of items){const option=document.createElement('option');option.value=key(f);option.textContent=f.properties.label;select.append(option);}
+  function text(){
+    const f=items.find(x=>key(x)===selected);select.value=selected;
+    detail.textContent=f.properties.detail;
+  }
+  function choose(value,save){
+    if(!items.some(f=>key(f)===value))return;
+    selected=value;text();draw();
+    if(save)window.openai?.setWidgetState({modelContent:{selected,label:items.find(f=>key(f)===selected).properties.label},privateContent:null}).catch(()=>{});
+  }
+  function draw(){
+    const width=root.getBoundingClientRect().width;
+    if(!width)return;
+    const height=Math.max(220,Math.min(660,width*.60));
+    svg.attr('viewBox',`0 0 ${width} ${height}`).attr('height',height);svg.selectAll('*').remove();
+    const projection=d3.geoMercator().fitExtent([[30,24],[width-30,height-28]],{type:'FeatureCollection',features:routes});
+    const path=d3.geoPath(projection);
+    svg.append('title').text('Linea 8: geometria confermata, fermate e manovre da verificare');
+    svg.append('defs').append('clipPath').attr('id','rt031-map-clip').append('rect').attr('width',width).attr('height',height);
+    const area=svg.append('g').attr('clip-path','url(#rt031-map-clip)');
+    area.selectAll('.context-road').data(roads).join('path').attr('d',path).attr('fill','none').attr('stroke','var(--border)').attr('stroke-width',1);
+    area.selectAll('.route').data(routes).join('path').attr('d',path).attr('fill','none').attr('stroke',f=>f.properties.pattern==='west_B'?'var(--viz-series-1)':'var(--viz-series-2)').attr('stroke-width',2.5);
+    const labels=[];
+    for(const f of items){
+      const p=f.properties,[x,y]=projection(f.geometry.coordinates),active=key(f)===selected;
+      const color=p.kind==='manoeuvre'?'var(--viz-series-3)':p.kind==='candidate'?'var(--viz-series-5)':p.proposed?'var(--viz-series-4)':'var(--foreground)';
+      const symbol=p.kind==='manoeuvre'?d3.symbolTriangle:p.kind==='candidate'?d3.symbolCross:p.proposed?d3.symbolSquare:d3.symbolCircle;
+      area.append('path').attr('d',d3.symbol().type(symbol).size(active?135:p.kind==='candidate'?35:65)()).attr('transform',`translate(${x},${y})`).attr('fill',color);
+      area.append('circle').attr('cx',x).attr('cy',y).attr('r',14).attr('fill','transparent').attr('class','cursor-interaction').on('click',()=>choose(key(f),true));
+      const label=p.short;
+      const w=Math.max(15,label.length*7);
+      const slots=[[9,-9],[9,16],[-w-8,-9],[-w-8,17],[12,-25],[-w-8,-25],[14,31],[-w-8,31]];
+      const offset=slots.find(([dx,dy])=>{
+        const box=[x+dx,y+dy-12,x+dx+w,y+dy+2];
+        return box[0]>=2&&box[2]<width-2&&box[1]>=2&&box[3]<height-2&&!labels.some(b=>!(box[2]+3<b[0]||box[0]>b[2]+3||box[3]+3<b[1]||box[1]>b[3]+3));
+      });
+      if(offset){const [dx,dy]=offset;labels.push([x+dx,y+dy-12,x+dx+w,y+dy+2]);
+        if(Math.abs(dy)>18)area.append('line').attr('x1',x).attr('y1',y).attr('x2',x+dx).attr('y2',y+dy-5).attr('stroke','var(--muted-foreground)').attr('stroke-width',1);
+        area.append('text').attr('x',x+dx).attr('y',y+dy).attr('class','map-label').text(label);
+      }
+    }
+    const north=svg.append('text').attr('x',width-20).attr('y',18).attr('text-anchor','end').attr('class','map-label');north.text('N ↑');
+  }
+  select.addEventListener('change',()=>choose(select.value,true));
+  window.addEventListener('openai:set_globals',e=>{const value=e.detail?.globals?.widgetState?.modelContent?.selected;if(value)choose(value,false);});
+  new ResizeObserver(draw).observe(root);text();draw();
+})();
+</script>
