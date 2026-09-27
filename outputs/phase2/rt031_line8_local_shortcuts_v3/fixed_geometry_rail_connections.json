@@ -1,0 +1,3891 @@
+{
+  "actual_timetable_certified": false,
+  "connections": [
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        6.610501597422228,
+        28.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 14.610501597422228,
+      "fs_departure_min": 390,
+      "fs_return_grid_min_range": [
+        417.3186805112,
+        439.3894984025778
+      ],
+      "fs_return_nominal_min": 431.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 445.0,
+        "arrival_time": "07:25:00",
+        "departure_min": 446.0,
+        "departure_time": "07:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124825-2026-09-15-2026-10-09",
+        "trip_id": "124825-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24825"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 385.0,
+        "arrival_time": "06:25:00",
+        "departure_min": 386.0,
+        "departure_time": "06:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124821-2026-09-15-2026-10-09",
+        "trip_id": "124821-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24821"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 5.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 0
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        13.610501597422228,
+        35.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 21.61050159742223,
+      "fs_departure_min": 390,
+      "fs_return_grid_min_range": [
+        417.3186805112,
+        439.3894984025778
+      ],
+      "fs_return_nominal_min": 431.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 452.0,
+        "arrival_time": "07:32:00",
+        "departure_min": 453.0,
+        "departure_time": "07:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124820-2026-09-15-2026-10-09",
+        "trip_id": "124820-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24820"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 362.0,
+        "arrival_time": "06:02:00",
+        "departure_min": 363.0,
+        "departure_time": "06:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124814-2026-09-15-2026-10-09",
+        "trip_id": "124814-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24814"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 28.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 0
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672168
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 395,
+      "fs_return_grid_min_range": [
+        422.13039695732783,
+        441.15937405895625
+      ],
+      "fs_return_nominal_min": 434.65937405895625,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 445.0,
+        "arrival_time": "07:25:00",
+        "departure_min": 446.0,
+        "departure_time": "07:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124825-2026-09-15-2026-10-09",
+        "trip_id": "124825-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24825"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 385.0,
+        "arrival_time": "06:25:00",
+        "departure_min": 386.0,
+        "departure_time": "06:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124821-2026-09-15-2026-10-09",
+        "trip_id": "124821-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24821"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 1
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672168
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 395,
+      "fs_return_grid_min_range": [
+        422.13039695732783,
+        441.15937405895625
+      ],
+      "fs_return_nominal_min": 434.65937405895625,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 452.0,
+        "arrival_time": "07:32:00",
+        "departure_min": 453.0,
+        "departure_time": "07:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124820-2026-09-15-2026-10-09",
+        "trip_id": "124820-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24820"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 392.0,
+        "arrival_time": "06:32:00",
+        "departure_min": 393.0,
+        "departure_time": "06:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124816-2026-09-15-2026-10-09",
+        "trip_id": "124816-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24816"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 1
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        6.610501597422228,
+        28.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 14.610501597422228,
+      "fs_departure_min": 420,
+      "fs_return_grid_min_range": [
+        447.3186805112,
+        469.3894984025778
+      ],
+      "fs_return_nominal_min": 461.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 475.0,
+        "arrival_time": "07:55:00",
+        "departure_min": 476.0,
+        "departure_time": "07:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124827-2026-09-15-2026-10-09",
+        "trip_id": "124827-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24827"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 415.0,
+        "arrival_time": "06:55:00",
+        "departure_min": 416.0,
+        "departure_time": "06:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124823-2026-09-15-2026-10-09",
+        "trip_id": "124823-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24823"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 5.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 2
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        13.610501597422228,
+        35.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 21.61050159742223,
+      "fs_departure_min": 420,
+      "fs_return_grid_min_range": [
+        447.3186805112,
+        469.3894984025778
+      ],
+      "fs_return_nominal_min": 461.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 482.0,
+        "arrival_time": "08:02:00",
+        "departure_min": 483.0,
+        "departure_time": "08:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124822-2026-09-15-2026-10-09",
+        "trip_id": "124822-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24822"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 392.0,
+        "arrival_time": "06:32:00",
+        "departure_min": 393.0,
+        "departure_time": "06:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124816-2026-09-15-2026-10-09",
+        "trip_id": "124816-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24816"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 28.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 2
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672168
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 425,
+      "fs_return_grid_min_range": [
+        452.13039695732783,
+        471.15937405895625
+      ],
+      "fs_return_nominal_min": 464.65937405895625,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 475.0,
+        "arrival_time": "07:55:00",
+        "departure_min": 476.0,
+        "departure_time": "07:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124827-2026-09-15-2026-10-09",
+        "trip_id": "124827-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24827"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 415.0,
+        "arrival_time": "06:55:00",
+        "departure_min": 416.0,
+        "departure_time": "06:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124823-2026-09-15-2026-10-09",
+        "trip_id": "124823-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24823"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 3
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672168
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 425,
+      "fs_return_grid_min_range": [
+        452.13039695732783,
+        471.15937405895625
+      ],
+      "fs_return_nominal_min": 464.65937405895625,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 482.0,
+        "arrival_time": "08:02:00",
+        "departure_min": 483.0,
+        "departure_time": "08:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124822-2026-09-15-2026-10-09",
+        "trip_id": "124822-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24822"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 422.0,
+        "arrival_time": "07:02:00",
+        "departure_min": 423.0,
+        "departure_time": "07:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124818-2026-09-15-2026-10-09",
+        "trip_id": "124818-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24818"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 3
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        6.610501597422228,
+        28.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 14.610501597422228,
+      "fs_departure_min": 450,
+      "fs_return_grid_min_range": [
+        477.3186805112,
+        499.3894984025778
+      ],
+      "fs_return_nominal_min": 491.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 505.0,
+        "arrival_time": "08:25:00",
+        "departure_min": 506.0,
+        "departure_time": "08:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124829-2026-09-15-2026-10-09",
+        "trip_id": "124829-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24829"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 445.0,
+        "arrival_time": "07:25:00",
+        "departure_min": 446.0,
+        "departure_time": "07:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124825-2026-09-15-2026-10-09",
+        "trip_id": "124825-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24825"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 5.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 4
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        13.610501597422228,
+        35.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 21.61050159742223,
+      "fs_departure_min": 450,
+      "fs_return_grid_min_range": [
+        477.3186805112,
+        499.3894984025778
+      ],
+      "fs_return_nominal_min": 491.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 512.0,
+        "arrival_time": "08:32:00",
+        "departure_min": 513.0,
+        "departure_time": "08:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124824-2026-09-15-2026-10-09",
+        "trip_id": "124824-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24824"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 422.0,
+        "arrival_time": "07:02:00",
+        "departure_min": 423.0,
+        "departure_time": "07:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124818-2026-09-15-2026-10-09",
+        "trip_id": "124818-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24818"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 28.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 4
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672168
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 455,
+      "fs_return_grid_min_range": [
+        482.13039695732783,
+        501.15937405895625
+      ],
+      "fs_return_nominal_min": 494.65937405895625,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 505.0,
+        "arrival_time": "08:25:00",
+        "departure_min": 506.0,
+        "departure_time": "08:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124829-2026-09-15-2026-10-09",
+        "trip_id": "124829-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24829"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 445.0,
+        "arrival_time": "07:25:00",
+        "departure_min": 446.0,
+        "departure_time": "07:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124825-2026-09-15-2026-10-09",
+        "trip_id": "124825-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24825"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 5
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672168
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 455,
+      "fs_return_grid_min_range": [
+        482.13039695732783,
+        501.15937405895625
+      ],
+      "fs_return_nominal_min": 494.65937405895625,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 512.0,
+        "arrival_time": "08:32:00",
+        "departure_min": 513.0,
+        "departure_time": "08:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124824-2026-09-15-2026-10-09",
+        "trip_id": "124824-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24824"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 452.0,
+        "arrival_time": "07:32:00",
+        "departure_min": 453.0,
+        "departure_time": "07:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124820-2026-09-15-2026-10-09",
+        "trip_id": "124820-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24820"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 5
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        6.610501597422285,
+        28.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 14.610501597422285,
+      "fs_departure_min": 480,
+      "fs_return_grid_min_range": [
+        507.3186805112,
+        529.3894984025777
+      ],
+      "fs_return_nominal_min": 521.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 535.0,
+        "arrival_time": "08:55:00",
+        "departure_min": 536.0,
+        "departure_time": "08:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124831-2026-09-15-2026-10-09",
+        "trip_id": "124831-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24831"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 475.0,
+        "arrival_time": "07:55:00",
+        "departure_min": 476.0,
+        "departure_time": "07:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124827-2026-09-15-2026-10-09",
+        "trip_id": "124827-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24827"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 5.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 6
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        13.610501597422285,
+        35.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 21.610501597422285,
+      "fs_departure_min": 480,
+      "fs_return_grid_min_range": [
+        507.3186805112,
+        529.3894984025777
+      ],
+      "fs_return_nominal_min": 521.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 542.0,
+        "arrival_time": "09:02:00",
+        "departure_min": 543.0,
+        "departure_time": "09:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124826-2026-09-15-2026-10-09",
+        "trip_id": "124826-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24826"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 452.0,
+        "arrival_time": "07:32:00",
+        "departure_min": 453.0,
+        "departure_time": "07:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124820-2026-09-15-2026-10-09",
+        "trip_id": "124820-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24820"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 28.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 6
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 485,
+      "fs_return_grid_min_range": [
+        512.1303969573278,
+        531.1593740589562
+      ],
+      "fs_return_nominal_min": 524.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 535.0,
+        "arrival_time": "08:55:00",
+        "departure_min": 536.0,
+        "departure_time": "08:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124831-2026-09-15-2026-10-09",
+        "trip_id": "124831-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24831"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 475.0,
+        "arrival_time": "07:55:00",
+        "departure_min": 476.0,
+        "departure_time": "07:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124827-2026-09-15-2026-10-09",
+        "trip_id": "124827-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24827"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 7
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 485,
+      "fs_return_grid_min_range": [
+        512.1303969573278,
+        531.1593740589562
+      ],
+      "fs_return_nominal_min": 524.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 542.0,
+        "arrival_time": "09:02:00",
+        "departure_min": 543.0,
+        "departure_time": "09:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124826-2026-09-15-2026-10-09",
+        "trip_id": "124826-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24826"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 482.0,
+        "arrival_time": "08:02:00",
+        "departure_min": 483.0,
+        "departure_time": "08:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124822-2026-09-15-2026-10-09",
+        "trip_id": "124822-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24822"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 7
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        6.610501597422285,
+        28.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 14.610501597422285,
+      "fs_departure_min": 510,
+      "fs_return_grid_min_range": [
+        537.3186805112,
+        559.3894984025777
+      ],
+      "fs_return_nominal_min": 551.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 565.0,
+        "arrival_time": "09:25:00",
+        "departure_min": 566.0,
+        "departure_time": "09:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124833-2026-09-15-2026-10-09",
+        "trip_id": "124833-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24833"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 505.0,
+        "arrival_time": "08:25:00",
+        "departure_min": 506.0,
+        "departure_time": "08:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124829-2026-09-15-2026-10-09",
+        "trip_id": "124829-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24829"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 5.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 8
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        13.610501597422285,
+        35.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 21.610501597422285,
+      "fs_departure_min": 510,
+      "fs_return_grid_min_range": [
+        537.3186805112,
+        559.3894984025777
+      ],
+      "fs_return_nominal_min": 551.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 572.0,
+        "arrival_time": "09:32:00",
+        "departure_min": 573.0,
+        "departure_time": "09:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124828-2026-09-15-2026-10-09",
+        "trip_id": "124828-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24828"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 482.0,
+        "arrival_time": "08:02:00",
+        "departure_min": 483.0,
+        "departure_time": "08:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124822-2026-09-15-2026-10-09",
+        "trip_id": "124822-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24822"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 28.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 8
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 515,
+      "fs_return_grid_min_range": [
+        542.1303969573278,
+        561.1593740589562
+      ],
+      "fs_return_nominal_min": 554.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 565.0,
+        "arrival_time": "09:25:00",
+        "departure_min": 566.0,
+        "departure_time": "09:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124833-2026-09-15-2026-10-09",
+        "trip_id": "124833-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24833"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 505.0,
+        "arrival_time": "08:25:00",
+        "departure_min": 506.0,
+        "departure_time": "08:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124829-2026-09-15-2026-10-09",
+        "trip_id": "124829-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24829"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 9
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 515,
+      "fs_return_grid_min_range": [
+        542.1303969573278,
+        561.1593740589562
+      ],
+      "fs_return_nominal_min": 554.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 572.0,
+        "arrival_time": "09:32:00",
+        "departure_min": 573.0,
+        "departure_time": "09:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124828-2026-09-15-2026-10-09",
+        "trip_id": "124828-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24828"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 512.0,
+        "arrival_time": "08:32:00",
+        "departure_min": 513.0,
+        "departure_time": "08:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124824-2026-09-15-2026-10-09",
+        "trip_id": "124824-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24824"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 9
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        6.610501597422285,
+        28.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 14.610501597422285,
+      "fs_departure_min": 540,
+      "fs_return_grid_min_range": [
+        567.3186805112,
+        589.3894984025777
+      ],
+      "fs_return_nominal_min": 581.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 595.0,
+        "arrival_time": "09:55:00",
+        "departure_min": 596.0,
+        "departure_time": "09:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124835-2026-09-15-2026-10-09",
+        "trip_id": "124835-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24835"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 535.0,
+        "arrival_time": "08:55:00",
+        "departure_min": 536.0,
+        "departure_time": "08:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124831-2026-09-15-2026-10-09",
+        "trip_id": "124831-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24831"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 5.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 10
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        13.610501597422285,
+        35.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 21.610501597422285,
+      "fs_departure_min": 540,
+      "fs_return_grid_min_range": [
+        567.3186805112,
+        589.3894984025777
+      ],
+      "fs_return_nominal_min": 581.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 602.0,
+        "arrival_time": "10:02:00",
+        "departure_min": 603.0,
+        "departure_time": "10:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124830-2026-09-15-2026-10-09",
+        "trip_id": "124830-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24830"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 512.0,
+        "arrival_time": "08:32:00",
+        "departure_min": 513.0,
+        "departure_time": "08:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124824-2026-09-15-2026-10-09",
+        "trip_id": "124824-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24824"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 28.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 10
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 545,
+      "fs_return_grid_min_range": [
+        572.1303969573278,
+        591.1593740589562
+      ],
+      "fs_return_nominal_min": 584.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 595.0,
+        "arrival_time": "09:55:00",
+        "departure_min": 596.0,
+        "departure_time": "09:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124835-2026-09-15-2026-10-09",
+        "trip_id": "124835-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24835"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 535.0,
+        "arrival_time": "08:55:00",
+        "departure_min": 536.0,
+        "departure_time": "08:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124831-2026-09-15-2026-10-09",
+        "trip_id": "124831-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24831"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 11
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 545,
+      "fs_return_grid_min_range": [
+        572.1303969573278,
+        591.1593740589562
+      ],
+      "fs_return_nominal_min": 584.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 602.0,
+        "arrival_time": "10:02:00",
+        "departure_min": 603.0,
+        "departure_time": "10:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124830-2026-09-15-2026-10-09",
+        "trip_id": "124830-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24830"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 542.0,
+        "arrival_time": "09:02:00",
+        "departure_min": 543.0,
+        "departure_time": "09:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124826-2026-09-15-2026-10-09",
+        "trip_id": "124826-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24826"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 11
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        6.610501597422285,
+        28.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 14.610501597422285,
+      "fs_departure_min": 600,
+      "fs_return_grid_min_range": [
+        627.3186805112,
+        649.3894984025777
+      ],
+      "fs_return_nominal_min": 641.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 655.0,
+        "arrival_time": "10:55:00",
+        "departure_min": 656.0,
+        "departure_time": "10:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124839-2026-09-15-2026-10-09",
+        "trip_id": "124839-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24839"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 595.0,
+        "arrival_time": "09:55:00",
+        "departure_min": 596.0,
+        "departure_time": "09:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124835-2026-09-15-2026-10-09",
+        "trip_id": "124835-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24835"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 5.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 12
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        13.610501597422285,
+        35.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 21.610501597422285,
+      "fs_departure_min": 600,
+      "fs_return_grid_min_range": [
+        627.3186805112,
+        649.3894984025777
+      ],
+      "fs_return_nominal_min": 641.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 662.0,
+        "arrival_time": "11:02:00",
+        "departure_min": 663.0,
+        "departure_time": "11:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124834-2026-09-15-2026-10-09",
+        "trip_id": "124834-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24834"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 572.0,
+        "arrival_time": "09:32:00",
+        "departure_min": 573.0,
+        "departure_time": "09:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124828-2026-09-15-2026-10-09",
+        "trip_id": "124828-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24828"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 28.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 12
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 605,
+      "fs_return_grid_min_range": [
+        632.1303969573278,
+        651.1593740589562
+      ],
+      "fs_return_nominal_min": 644.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 655.0,
+        "arrival_time": "10:55:00",
+        "departure_min": 656.0,
+        "departure_time": "10:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124839-2026-09-15-2026-10-09",
+        "trip_id": "124839-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24839"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 595.0,
+        "arrival_time": "09:55:00",
+        "departure_min": 596.0,
+        "departure_time": "09:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124835-2026-09-15-2026-10-09",
+        "trip_id": "124835-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24835"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 13
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 605,
+      "fs_return_grid_min_range": [
+        632.1303969573278,
+        651.1593740589562
+      ],
+      "fs_return_nominal_min": 644.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 662.0,
+        "arrival_time": "11:02:00",
+        "departure_min": 663.0,
+        "departure_time": "11:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124834-2026-09-15-2026-10-09",
+        "trip_id": "124834-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24834"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 602.0,
+        "arrival_time": "10:02:00",
+        "departure_min": 603.0,
+        "departure_time": "10:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124830-2026-09-15-2026-10-09",
+        "trip_id": "124830-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24830"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 13
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        31.610501597422285,
+        53.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 39.610501597422285,
+      "fs_departure_min": 695,
+      "fs_return_grid_min_range": [
+        722.3186805112,
+        744.3894984025777
+      ],
+      "fs_return_nominal_min": 736.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 775.0,
+        "arrival_time": "12:55:00",
+        "departure_min": 776.0,
+        "departure_time": "12:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124847-2026-09-15-2026-10-09",
+        "trip_id": "124847-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24847"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 685.0,
+        "arrival_time": "11:25:00",
+        "departure_min": 686.0,
+        "departure_time": "11:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124841-2026-09-15-2026-10-09",
+        "trip_id": "124841-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24841"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 14
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        8.610501597422285,
+        30.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 16.610501597422285,
+      "fs_departure_min": 695,
+      "fs_return_grid_min_range": [
+        722.3186805112,
+        744.3894984025777
+      ],
+      "fs_return_nominal_min": 736.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 752.0,
+        "arrival_time": "12:32:00",
+        "departure_min": 753.0,
+        "departure_time": "12:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124840-2026-09-15-2026-10-09",
+        "trip_id": "124840-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24840"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 692.0,
+        "arrival_time": "11:32:00",
+        "departure_min": 693.0,
+        "departure_time": "11:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124836-2026-09-15-2026-10-09",
+        "trip_id": "124836-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24836"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 14
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 725,
+      "fs_return_grid_min_range": [
+        752.1303969573278,
+        771.1593740589562
+      ],
+      "fs_return_nominal_min": 764.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 775.0,
+        "arrival_time": "12:55:00",
+        "departure_min": 776.0,
+        "departure_time": "12:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124847-2026-09-15-2026-10-09",
+        "trip_id": "124847-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24847"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 715.0,
+        "arrival_time": "11:55:00",
+        "departure_min": 716.0,
+        "departure_time": "11:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124843-2026-09-15-2026-10-09",
+        "trip_id": "124843-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24843"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 15
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 725,
+      "fs_return_grid_min_range": [
+        752.1303969573278,
+        771.1593740589562
+      ],
+      "fs_return_nominal_min": 764.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 782.0,
+        "arrival_time": "13:02:00",
+        "departure_min": 783.0,
+        "departure_time": "13:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124842-2026-09-15-2026-10-09",
+        "trip_id": "124842-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24842"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 722.0,
+        "arrival_time": "12:02:00",
+        "departure_min": 723.0,
+        "departure_time": "12:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124838-2026-09-15-2026-10-09",
+        "trip_id": "124838-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24838"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 15
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 815,
+      "fs_return_grid_min_range": [
+        842.1303969573278,
+        861.1593740589562
+      ],
+      "fs_return_nominal_min": 854.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 865.0,
+        "arrival_time": "14:25:00",
+        "departure_min": 866.0,
+        "departure_time": "14:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124853-2026-09-15-2026-10-09",
+        "trip_id": "124853-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24853"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 805.0,
+        "arrival_time": "13:25:00",
+        "departure_min": 806.0,
+        "departure_time": "13:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124849-2026-09-15-2026-10-09",
+        "trip_id": "124849-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24849"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 16
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 815,
+      "fs_return_grid_min_range": [
+        842.1303969573278,
+        861.1593740589562
+      ],
+      "fs_return_nominal_min": 854.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 872.0,
+        "arrival_time": "14:32:00",
+        "departure_min": 873.0,
+        "departure_time": "14:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124848-2026-09-15-2026-10-09",
+        "trip_id": "124848-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24848"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 812.0,
+        "arrival_time": "13:32:00",
+        "departure_min": 813.0,
+        "departure_time": "13:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124844-2026-09-15-2026-10-09",
+        "trip_id": "124844-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24844"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 16
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        31.610501597422285,
+        53.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 39.610501597422285,
+      "fs_departure_min": 815,
+      "fs_return_grid_min_range": [
+        842.3186805112,
+        864.3894984025777
+      ],
+      "fs_return_nominal_min": 856.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 895.0,
+        "arrival_time": "14:55:00",
+        "departure_min": 896.0,
+        "departure_time": "14:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124855-2026-09-15-2026-10-09",
+        "trip_id": "124855-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24855"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 805.0,
+        "arrival_time": "13:25:00",
+        "departure_min": 806.0,
+        "departure_time": "13:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124849-2026-09-15-2026-10-09",
+        "trip_id": "124849-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24849"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 17
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        8.610501597422285,
+        30.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 16.610501597422285,
+      "fs_departure_min": 815,
+      "fs_return_grid_min_range": [
+        842.3186805112,
+        864.3894984025777
+      ],
+      "fs_return_nominal_min": 856.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 872.0,
+        "arrival_time": "14:32:00",
+        "departure_min": 873.0,
+        "departure_time": "14:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124848-2026-09-15-2026-10-09",
+        "trip_id": "124848-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24848"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 812.0,
+        "arrival_time": "13:32:00",
+        "departure_min": 813.0,
+        "departure_time": "13:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124844-2026-09-15-2026-10-09",
+        "trip_id": "124844-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24844"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 17
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 935,
+      "fs_return_grid_min_range": [
+        962.1303969573278,
+        981.1593740589562
+      ],
+      "fs_return_nominal_min": 974.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 985.0,
+        "arrival_time": "16:25:00",
+        "departure_min": 986.0,
+        "departure_time": "16:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124861-2026-09-15-2026-10-09",
+        "trip_id": "124861-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24861"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 925.0,
+        "arrival_time": "15:25:00",
+        "departure_min": 926.0,
+        "departure_time": "15:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124857-2026-09-15-2026-10-09",
+        "trip_id": "124857-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24857"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 18
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 935,
+      "fs_return_grid_min_range": [
+        962.1303969573278,
+        981.1593740589562
+      ],
+      "fs_return_nominal_min": 974.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 992.0,
+        "arrival_time": "16:32:00",
+        "departure_min": 993.0,
+        "departure_time": "16:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124856-2026-09-15-2026-10-09",
+        "trip_id": "124856-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24856"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 932.0,
+        "arrival_time": "15:32:00",
+        "departure_min": 933.0,
+        "departure_time": "15:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124852-2026-09-15-2026-10-09",
+        "trip_id": "124852-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24852"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 18
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        31.610501597422285,
+        53.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 39.610501597422285,
+      "fs_departure_min": 935,
+      "fs_return_grid_min_range": [
+        962.3186805112,
+        984.3894984025777
+      ],
+      "fs_return_nominal_min": 976.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1015.0,
+        "arrival_time": "16:55:00",
+        "departure_min": 1016.0,
+        "departure_time": "16:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124863-2026-09-15-2026-10-09",
+        "trip_id": "124863-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24863"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 925.0,
+        "arrival_time": "15:25:00",
+        "departure_min": 926.0,
+        "departure_time": "15:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124857-2026-09-15-2026-10-09",
+        "trip_id": "124857-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24857"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 19
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        8.610501597422285,
+        30.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 16.610501597422285,
+      "fs_departure_min": 935,
+      "fs_return_grid_min_range": [
+        962.3186805112,
+        984.3894984025777
+      ],
+      "fs_return_nominal_min": 976.3894984025777,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 992.0,
+        "arrival_time": "16:32:00",
+        "departure_min": 993.0,
+        "departure_time": "16:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124856-2026-09-15-2026-10-09",
+        "trip_id": "124856-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24856"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 932.0,
+        "arrival_time": "15:32:00",
+        "departure_min": 933.0,
+        "departure_time": "15:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124852-2026-09-15-2026-10-09",
+        "trip_id": "124852-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24852"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 19
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 995,
+      "fs_return_grid_min_range": [
+        1022.1303969573278,
+        1041.1593740589562
+      ],
+      "fs_return_nominal_min": 1034.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1045.0,
+        "arrival_time": "17:25:00",
+        "departure_min": 1046.0,
+        "departure_time": "17:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124865-2026-09-15-2026-10-09",
+        "trip_id": "124865-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24865"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 985.0,
+        "arrival_time": "16:25:00",
+        "departure_min": 986.0,
+        "departure_time": "16:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124861-2026-09-15-2026-10-09",
+        "trip_id": "124861-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24861"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 20
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 995,
+      "fs_return_grid_min_range": [
+        1022.1303969573278,
+        1041.1593740589562
+      ],
+      "fs_return_nominal_min": 1034.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1052.0,
+        "arrival_time": "17:32:00",
+        "departure_min": 1053.0,
+        "departure_time": "17:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124860-2026-09-15-2026-10-09",
+        "trip_id": "124860-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24860"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 992.0,
+        "arrival_time": "16:32:00",
+        "departure_min": 993.0,
+        "departure_time": "16:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124856-2026-09-15-2026-10-09",
+        "trip_id": "124856-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24856"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 20
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        31.61050159742217,
+        53.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 39.61050159742217,
+      "fs_departure_min": 995,
+      "fs_return_grid_min_range": [
+        1022.3186805112,
+        1044.3894984025778
+      ],
+      "fs_return_nominal_min": 1036.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1075.0,
+        "arrival_time": "17:55:00",
+        "departure_min": 1076.0,
+        "departure_time": "17:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124867-2026-09-15-2026-10-09",
+        "trip_id": "124867-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24867"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 985.0,
+        "arrival_time": "16:25:00",
+        "departure_min": 986.0,
+        "departure_time": "16:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124861-2026-09-15-2026-10-09",
+        "trip_id": "124861-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24861"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 21
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        8.610501597422171,
+        30.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 16.61050159742217,
+      "fs_departure_min": 995,
+      "fs_return_grid_min_range": [
+        1022.3186805112,
+        1044.3894984025778
+      ],
+      "fs_return_nominal_min": 1036.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1052.0,
+        "arrival_time": "17:32:00",
+        "departure_min": 1053.0,
+        "departure_time": "17:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124860-2026-09-15-2026-10-09",
+        "trip_id": "124860-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24860"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 992.0,
+        "arrival_time": "16:32:00",
+        "departure_min": 993.0,
+        "departure_time": "16:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124856-2026-09-15-2026-10-09",
+        "trip_id": "124856-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24856"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 21
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 1025,
+      "fs_return_grid_min_range": [
+        1052.1303969573278,
+        1071.1593740589562
+      ],
+      "fs_return_nominal_min": 1064.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1075.0,
+        "arrival_time": "17:55:00",
+        "departure_min": 1076.0,
+        "departure_time": "17:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124867-2026-09-15-2026-10-09",
+        "trip_id": "124867-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24867"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1015.0,
+        "arrival_time": "16:55:00",
+        "departure_min": 1016.0,
+        "departure_time": "16:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124863-2026-09-15-2026-10-09",
+        "trip_id": "124863-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24863"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 22
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 1025,
+      "fs_return_grid_min_range": [
+        1052.1303969573278,
+        1071.1593740589562
+      ],
+      "fs_return_nominal_min": 1064.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1082.0,
+        "arrival_time": "18:02:00",
+        "departure_min": 1083.0,
+        "departure_time": "18:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124862-2026-09-15-2026-10-09",
+        "trip_id": "124862-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24862"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1022.0,
+        "arrival_time": "17:02:00",
+        "departure_min": 1023.0,
+        "departure_time": "17:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124858-2026-09-15-2026-10-09",
+        "trip_id": "124858-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24858"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 22
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        31.61050159742217,
+        53.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 39.61050159742217,
+      "fs_departure_min": 1025,
+      "fs_return_grid_min_range": [
+        1052.3186805112,
+        1074.3894984025778
+      ],
+      "fs_return_nominal_min": 1066.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1105.0,
+        "arrival_time": "18:25:00",
+        "departure_min": 1106.0,
+        "departure_time": "18:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124869-2026-09-15-2026-10-09",
+        "trip_id": "124869-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24869"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1015.0,
+        "arrival_time": "16:55:00",
+        "departure_min": 1016.0,
+        "departure_time": "16:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124863-2026-09-15-2026-10-09",
+        "trip_id": "124863-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24863"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 23
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        8.610501597422171,
+        30.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 16.61050159742217,
+      "fs_departure_min": 1025,
+      "fs_return_grid_min_range": [
+        1052.3186805112,
+        1074.3894984025778
+      ],
+      "fs_return_nominal_min": 1066.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1082.0,
+        "arrival_time": "18:02:00",
+        "departure_min": 1083.0,
+        "departure_time": "18:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124862-2026-09-15-2026-10-09",
+        "trip_id": "124862-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24862"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1022.0,
+        "arrival_time": "17:02:00",
+        "departure_min": 1023.0,
+        "departure_time": "17:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124858-2026-09-15-2026-10-09",
+        "trip_id": "124858-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24858"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 23
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 1055,
+      "fs_return_grid_min_range": [
+        1082.1303969573278,
+        1101.1593740589562
+      ],
+      "fs_return_nominal_min": 1094.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1105.0,
+        "arrival_time": "18:25:00",
+        "departure_min": 1106.0,
+        "departure_time": "18:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124869-2026-09-15-2026-10-09",
+        "trip_id": "124869-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24869"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1045.0,
+        "arrival_time": "17:25:00",
+        "departure_min": 1046.0,
+        "departure_time": "17:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124865-2026-09-15-2026-10-09",
+        "trip_id": "124865-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24865"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 24
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 1055,
+      "fs_return_grid_min_range": [
+        1082.1303969573278,
+        1101.1593740589562
+      ],
+      "fs_return_nominal_min": 1094.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1112.0,
+        "arrival_time": "18:32:00",
+        "departure_min": 1113.0,
+        "departure_time": "18:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124864-2026-09-15-2026-10-09",
+        "trip_id": "124864-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24864"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1052.0,
+        "arrival_time": "17:32:00",
+        "departure_min": 1053.0,
+        "departure_time": "17:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124860-2026-09-15-2026-10-09",
+        "trip_id": "124860-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24860"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 24
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        31.61050159742217,
+        53.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 39.61050159742217,
+      "fs_departure_min": 1055,
+      "fs_return_grid_min_range": [
+        1082.3186805112,
+        1104.3894984025778
+      ],
+      "fs_return_nominal_min": 1096.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1135.0,
+        "arrival_time": "18:55:00",
+        "departure_min": 1136.0,
+        "departure_time": "18:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124871-2026-09-15-2026-10-09",
+        "trip_id": "124871-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24871"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1045.0,
+        "arrival_time": "17:25:00",
+        "departure_min": 1046.0,
+        "departure_time": "17:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124865-2026-09-15-2026-10-09",
+        "trip_id": "124865-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24865"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 25
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        8.610501597422171,
+        30.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 16.61050159742217,
+      "fs_departure_min": 1055,
+      "fs_return_grid_min_range": [
+        1082.3186805112,
+        1104.3894984025778
+      ],
+      "fs_return_nominal_min": 1096.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1112.0,
+        "arrival_time": "18:32:00",
+        "departure_min": 1113.0,
+        "departure_time": "18:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124864-2026-09-15-2026-10-09",
+        "trip_id": "124864-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24864"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1052.0,
+        "arrival_time": "17:32:00",
+        "departure_min": 1053.0,
+        "departure_time": "17:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124860-2026-09-15-2026-10-09",
+        "trip_id": "124860-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24860"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 25
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 1085,
+      "fs_return_grid_min_range": [
+        1112.1303969573278,
+        1131.1593740589562
+      ],
+      "fs_return_nominal_min": 1124.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1135.0,
+        "arrival_time": "18:55:00",
+        "departure_min": 1136.0,
+        "departure_time": "18:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124871-2026-09-15-2026-10-09",
+        "trip_id": "124871-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24871"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1075.0,
+        "arrival_time": "17:55:00",
+        "departure_min": 1076.0,
+        "departure_time": "17:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124867-2026-09-15-2026-10-09",
+        "trip_id": "124867-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24867"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 26
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 1085,
+      "fs_return_grid_min_range": [
+        1112.1303969573278,
+        1131.1593740589562
+      ],
+      "fs_return_nominal_min": 1124.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1142.0,
+        "arrival_time": "19:02:00",
+        "departure_min": 1143.0,
+        "departure_time": "19:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124866-2026-09-15-2026-10-09",
+        "trip_id": "124866-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24866"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1082.0,
+        "arrival_time": "18:02:00",
+        "departure_min": 1083.0,
+        "departure_time": "18:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124862-2026-09-15-2026-10-09",
+        "trip_id": "124862-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24862"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 26
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        31.61050159742217,
+        53.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 39.61050159742217,
+      "fs_departure_min": 1085,
+      "fs_return_grid_min_range": [
+        1112.3186805112,
+        1134.3894984025778
+      ],
+      "fs_return_nominal_min": 1126.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1165.0,
+        "arrival_time": "19:25:00",
+        "departure_min": 1166.0,
+        "departure_time": "19:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124873-2026-09-15-2026-10-09",
+        "trip_id": "124873-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24873"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1075.0,
+        "arrival_time": "17:55:00",
+        "departure_min": 1076.0,
+        "departure_time": "17:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124867-2026-09-15-2026-10-09",
+        "trip_id": "124867-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24867"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 27
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        8.610501597422171,
+        30.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 16.61050159742217,
+      "fs_departure_min": 1085,
+      "fs_return_grid_min_range": [
+        1112.3186805112,
+        1134.3894984025778
+      ],
+      "fs_return_nominal_min": 1126.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1142.0,
+        "arrival_time": "19:02:00",
+        "departure_min": 1143.0,
+        "departure_time": "19:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124866-2026-09-15-2026-10-09",
+        "trip_id": "124866-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24866"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1082.0,
+        "arrival_time": "18:02:00",
+        "departure_min": 1083.0,
+        "departure_time": "18:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124862-2026-09-15-2026-10-09",
+        "trip_id": "124862-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24862"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 27
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 1115,
+      "fs_return_grid_min_range": [
+        1142.1303969573278,
+        1161.1593740589562
+      ],
+      "fs_return_nominal_min": 1154.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1165.0,
+        "arrival_time": "19:25:00",
+        "departure_min": 1166.0,
+        "departure_time": "19:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124873-2026-09-15-2026-10-09",
+        "trip_id": "124873-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24873"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1105.0,
+        "arrival_time": "18:25:00",
+        "departure_min": 1106.0,
+        "departure_time": "18:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124869-2026-09-15-2026-10-09",
+        "trip_id": "124869-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24869"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 28
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 1115,
+      "fs_return_grid_min_range": [
+        1142.1303969573278,
+        1161.1593740589562
+      ],
+      "fs_return_nominal_min": 1154.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1172.0,
+        "arrival_time": "19:32:00",
+        "departure_min": 1173.0,
+        "departure_time": "19:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124868-2026-09-15-2026-10-09",
+        "trip_id": "124868-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24868"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1112.0,
+        "arrival_time": "18:32:00",
+        "departure_min": 1113.0,
+        "departure_time": "18:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124864-2026-09-15-2026-10-09",
+        "trip_id": "124864-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24864"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 28
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        31.61050159742217,
+        53.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 39.61050159742217,
+      "fs_departure_min": 1115,
+      "fs_return_grid_min_range": [
+        1142.3186805112,
+        1164.3894984025778
+      ],
+      "fs_return_nominal_min": 1156.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1195.0,
+        "arrival_time": "19:55:00",
+        "departure_min": 1196.0,
+        "departure_time": "19:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124875-2026-09-15-2026-10-09",
+        "trip_id": "124875-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24875"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1105.0,
+        "arrival_time": "18:25:00",
+        "departure_min": 1106.0,
+        "departure_time": "18:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124869-2026-09-15-2026-10-09",
+        "trip_id": "124869-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24869"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 29
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        8.610501597422171,
+        30.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 16.61050159742217,
+      "fs_departure_min": 1115,
+      "fs_return_grid_min_range": [
+        1142.3186805112,
+        1164.3894984025778
+      ],
+      "fs_return_nominal_min": 1156.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1172.0,
+        "arrival_time": "19:32:00",
+        "departure_min": 1173.0,
+        "departure_time": "19:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124868-2026-09-15-2026-10-09",
+        "trip_id": "124868-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24868"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1112.0,
+        "arrival_time": "18:32:00",
+        "departure_min": 1113.0,
+        "departure_time": "18:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124864-2026-09-15-2026-10-09",
+        "trip_id": "124864-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24864"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 29
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        4.840625941043754,
+        23.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.340625941043754,
+      "fs_departure_min": 1145,
+      "fs_return_grid_min_range": [
+        1172.1303969573278,
+        1191.1593740589562
+      ],
+      "fs_return_nominal_min": 1184.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1195.0,
+        "arrival_time": "19:55:00",
+        "departure_min": 1196.0,
+        "departure_time": "19:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124875-2026-09-15-2026-10-09",
+        "trip_id": "124875-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24875"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1135.0,
+        "arrival_time": "18:55:00",
+        "departure_min": 1136.0,
+        "departure_time": "18:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124871-2026-09-15-2026-10-09",
+        "trip_id": "124871-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24871"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 30
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        11.840625941043754,
+        30.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 18.340625941043754,
+      "fs_departure_min": 1145,
+      "fs_return_grid_min_range": [
+        1172.1303969573278,
+        1191.1593740589562
+      ],
+      "fs_return_nominal_min": 1184.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1202.0,
+        "arrival_time": "20:02:00",
+        "departure_min": 1203.0,
+        "departure_time": "20:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124870-2026-09-15-2026-10-09",
+        "trip_id": "124870-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24870"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1142.0,
+        "arrival_time": "19:02:00",
+        "departure_min": 1143.0,
+        "departure_time": "19:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124866-2026-09-15-2026-10-09",
+        "trip_id": "124866-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24866"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 30
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        31.61050159742217,
+        53.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 39.61050159742217,
+      "fs_departure_min": 1145,
+      "fs_return_grid_min_range": [
+        1172.3186805112,
+        1194.3894984025778
+      ],
+      "fs_return_nominal_min": 1186.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1225.0,
+        "arrival_time": "20:25:00",
+        "departure_min": 1226.0,
+        "departure_time": "20:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124877-2026-09-15-2026-10-09",
+        "trip_id": "124877-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24877"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1135.0,
+        "arrival_time": "18:55:00",
+        "departure_min": 1136.0,
+        "departure_time": "18:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124871-2026-09-15-2026-10-09",
+        "trip_id": "124871-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24871"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 10.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 31
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        8.610501597422171,
+        30.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 16.61050159742217,
+      "fs_departure_min": 1145,
+      "fs_return_grid_min_range": [
+        1172.3186805112,
+        1194.3894984025778
+      ],
+      "fs_return_nominal_min": 1186.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1202.0,
+        "arrival_time": "20:02:00",
+        "departure_min": 1203.0,
+        "departure_time": "20:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124870-2026-09-15-2026-10-09",
+        "trip_id": "124870-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24870"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1142.0,
+        "arrival_time": "19:02:00",
+        "departure_min": 1143.0,
+        "departure_time": "19:03:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124866-2026-09-15-2026-10-09",
+        "trip_id": "124866-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24866"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 3.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 31
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        29.840625941043754,
+        48.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 36.340625941043754,
+      "fs_departure_min": 1180,
+      "fs_return_grid_min_range": [
+        1207.1303969573278,
+        1226.1593740589562
+      ],
+      "fs_return_nominal_min": 1219.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1255.0,
+        "arrival_time": "20:55:00",
+        "departure_min": 1256.0,
+        "departure_time": "20:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124879-2026-09-15-2026-10-09",
+        "trip_id": "124879-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24879"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1165.0,
+        "arrival_time": "19:25:00",
+        "departure_min": 1166.0,
+        "departure_time": "19:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124873-2026-09-15-2026-10-09",
+        "trip_id": "124873-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24873"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 15.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 32
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        6.840625941043754,
+        25.869603042672225
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 13.340625941043754,
+      "fs_departure_min": 1180,
+      "fs_return_grid_min_range": [
+        1207.1303969573278,
+        1226.1593740589562
+      ],
+      "fs_return_nominal_min": 1219.6593740589562,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1232.0,
+        "arrival_time": "20:32:00",
+        "departure_min": 1233.0,
+        "departure_time": "20:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124872-2026-09-15-2026-10-09",
+        "trip_id": "124872-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24872"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "east_A",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1172.0,
+        "arrival_time": "19:32:00",
+        "departure_min": 1173.0,
+        "departure_time": "19:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124868-2026-09-15-2026-10-09",
+        "trip_id": "124868-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24868"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 8.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 32
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        26.61050159742217,
+        48.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 34.61050159742217,
+      "fs_departure_min": 1180,
+      "fs_return_grid_min_range": [
+        1207.3186805112,
+        1229.3894984025778
+      ],
+      "fs_return_nominal_min": 1221.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1255.0,
+        "arrival_time": "20:55:00",
+        "departure_min": 1256.0,
+        "departure_time": "20:56:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124879-2026-09-15-2026-10-09",
+        "trip_id": "124879-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24879"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1165.0,
+        "arrival_time": "19:25:00",
+        "departure_min": 1166.0,
+        "departure_time": "19:26:00",
+        "direction": "MILANO",
+        "downstream_stop_ids": [
+          "S01513",
+          "S01512",
+          "S01511",
+          "S01510",
+          "S01322",
+          "S01325",
+          "S01326",
+          "S01645"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124873-2026-09-15-2026-10-09",
+        "trip_id": "124873-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24873"
+      },
+      "rail_direction": "MILANO",
+      "train_to_bus_wait_including_transfer_min": 15.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 33
+    },
+    {
+      "bus_to_train_wait_grid_including_transfer_min_range": [
+        3.6105015974221715,
+        25.6813194888
+      ],
+      "bus_to_train_wait_nominal_including_transfer_min": 11.610501597422171,
+      "fs_departure_min": 1180,
+      "fs_return_grid_min_range": [
+        1207.3186805112,
+        1229.3894984025778
+      ],
+      "fs_return_nominal_min": 1221.3894984025778,
+      "next_train_after_bus_return_all_grid": {
+        "arrival_min": 1232.0,
+        "arrival_time": "20:32:00",
+        "departure_min": 1233.0,
+        "departure_time": "20:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124872-2026-09-15-2026-10-09",
+        "trip_id": "124872-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24872"
+      },
+      "passenger_connection_certified": false,
+      "pattern": "west_B",
+      "previous_train_for_outward_bus": {
+        "arrival_min": 1172.0,
+        "arrival_time": "19:32:00",
+        "departure_min": 1173.0,
+        "departure_time": "19:33:00",
+        "direction": "LECCO",
+        "downstream_stop_ids": [
+          "S01515",
+          "S01524",
+          "S01522",
+          "S01520"
+        ],
+        "service_date": "2026-09-28",
+        "service_id": "124868-2026-09-15-2026-10-09",
+        "trip_id": "124868-2026-09-15-2026-10-09",
+        "trip_short_name": "S8 - 24868"
+      },
+      "rail_direction": "LECCO",
+      "train_to_bus_wait_including_transfer_min": 8.0,
+      "transfer_walk_comparison_min": 3,
+      "trip_index": 33
+    }
+  ],
+  "contract": "RT031_FIXED_GEOMETRY_DATED_RAIL_CONNECTION_LEDGER_V3",
+  "network_selected": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false,
+  "semantics": "Nearest compatible scheduled trains with 3-minute assumed transfer. No maximum-wait guarantee for every train, empirical reliability, cross-trip journey or annual calendar certification.",
+  "service_date": "2026-09-28",
+  "source_sha256_normalized_newlines": {
+    "rail": "a1a20369095c87b000b6710e07c508638b3634f3c542e2c6c6bcf9fba989179e",
+    "timetable": "f9b10b308c812455dd42ac458cab3ab1bc8005723f48ab5d8f3aa38d031f50df"
+  }
+}
