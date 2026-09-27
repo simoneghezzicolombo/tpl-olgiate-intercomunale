@@ -12,7 +12,7 @@ from scripts.phase2_export_rt031_line8_inclusive_shape_v3 import NORTH
 from scripts.phase2_probe_rt031_line8_local_counterflow_v3 import inputs, BASE
 
 
-def render(graph_dir, output):
+def render(graph_dir, output, patterns=None, title=None, show_baseline=True):
     paths=inputs(graph_dir)
     shape=json.loads((BASE/'local_counterflow.geojson').read_text(encoding='utf-8'))
     audit=json.loads((BASE/'local_counterflow.json').read_text(encoding='utf-8'))
@@ -24,11 +24,17 @@ def render(graph_dir, output):
     nodes={n['node_id']:(float(n['lon']),float(n['lat'])) for n in rows(paths['nodes'])}
     roads=[(nodes[e['u_node_id']],nodes[e['v_node_id']]) for e in rows(paths['edges'])]
     lines=[f for f in shape['features'] if f['geometry']['type']=='LineString' and f['properties']['case']=='both']
+    if patterns is not None:
+        lines=[f for f in lines if f['properties']['pattern'] in patterns]
+        if {f['properties']['pattern'] for f in lines}!=set(patterns):
+            raise ValueError('requested patterns missing from frozen shape')
     base=[f for f in shape['features'] if f['geometry']['type']=='LineString' and f['properties']['case']=='baseline']
+    if not show_baseline:
+        base=[]
     points=[f for f in shape['features'] if f['geometry']['type']=='Point']
     local=[f for f in points if f['properties']['site_id'] in (FS,VIRTUAL,NORTH)]
     fig,axes=plt.subplots(1,2,figsize=(14,6),gridspec_kw={'width_ratios':[1.9,1]},constrained_layout=True)
-    for ax,focus,title in zip(axes,(points,local),('Tutti i territori conservati','Dettaglio: passaggi aggiuntivi vicino a FS')):
+    for ax,focus,panel_title in zip(axes,(points,local),('28 siti del confronto conservati' if patterns is not None else 'Tutti i territori conservati','Dettaglio: passaggi aggiuntivi vicino a FS')):
         coords=[f['geometry']['coordinates'] for f in focus]
         pad=.004 if ax==axes[0] else .003
         xlim=(min(p[0] for p in coords)-pad,max(p[0] for p in coords)+pad)
@@ -40,7 +46,9 @@ def render(graph_dir, output):
         for f in lines:
             p=f['properties']['pattern']; west=p.startswith('west'); morning=p in ('west_A','east_B')
             ax.plot(*zip(*f['geometry']['coordinates']),color='#087e8b' if west else '#aa3c13',
-                    lw=1.8,ls='-' if morning else '--',label=f'{"Ovest" if west else "Est"}: {"mattina" if morning else "resto"}',zorder=3)
+                    lw=1.8,ls='-' if patterns is not None or morning else '--',
+                    label=(f'{"Ovest" if west else "Est"} {p[-1]}: intera giornata' if patterns is not None
+                           else f'{"Ovest" if west else "Est"}: {"mattina" if morning else "resto"}'),zorder=3)
         for f in points:
             x,y=f['geometry']['coordinates']; sid=f['properties']['site_id']
             islocal=sid in (FS,VIRTUAL,NORTH)
@@ -64,10 +72,10 @@ def render(graph_dir, output):
                     ax.annotate(label,f['geometry']['coordinates'],xytext=offset,textcoords='offset points',
                                 fontsize=9,bbox=dict(facecolor='white',alpha=.85,edgecolor='none',pad=1))
         ax.set_xlim(*xlim); ax.set_ylim(*ylim); ax.set_aspect(1/.7)
-        ax.set_xticks([]); ax.set_yticks([]); ax.set_title(title,loc='left',fontsize=12)
+        ax.set_xticks([]); ax.set_yticks([]); ax.set_title(panel_title,loc='left',fontsize=12)
     axes[0].legend(loc='lower left',fontsize=9)
-    fig.suptitle('Linea 8 — confronto con passaggi brevi in entrambi i versi\n'
-                 '130.567 km/anno di servizio (+17,2%): confronto, non proposta adottata',fontsize=14)
+    fig.suptitle(title or ('Linea 8 — confronto con passaggi brevi in entrambi i versi\n'
+                 '130.567 km/anno di servizio (+17,2%): confronto, non proposta adottata'),fontsize=14)
     fig.supxlabel('Cammini del grafo congelato. 28 siti provvisori; paline, manovre e idoneità autobus non autorizzate.',fontsize=10)
     fig.savefig(output,dpi=150,bbox_inches='tight'); plt.close(fig)
 
