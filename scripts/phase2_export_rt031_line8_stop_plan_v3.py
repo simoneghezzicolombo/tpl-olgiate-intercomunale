@@ -52,7 +52,18 @@ def report(r):
     passing=sum(c['timing']['fixed_31_timetable_pass'] for c in r['single_additions'])
     examples=study_examples(r)
     lines=['# Linea 8 — piano fermate e manovre sulla proposta a 31 corse','',
-           '**Geometria e orario di progetto restano invariati: nessuna nuova fermata aggiunta automaticamente.** '
+           '**Precisazione sul servizio:** si corregge l’interpretazione della richiesta del committente: '
+           'ogni corsa sull’intero percorso, come aveva sempre inteso. Il conteggio storico a corse d’ala '
+           'non è la proposta finale. [Percorso unico completo](RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md). '
+           'Il registro dei siti e le scelte sulle due aggiunte restano utili; non autorizzano corse parziali.','',
+           '**Aggiornamento successivo del committente:** N1212 nell’area di Arlate è accolta '
+           'come fermata di progetto; N0655 in Via Indipendenza è esclusa per la segnalazione del cavalcavia. '
+           'Non si cerca automaticamente una palina poco prima o dopo. La base corrente diventa '
+           '**29 siti di progetto**, mentre i 28 qui numerati sono il registro precedente. '
+           'Olgiate sud e San Zeno rimangono inclusi. '
+           '[Scelte e continuità intercomunale](RT031_LINEA8_CONTINUITA_INTERCOMUNALE_V3.md). '
+           'Le comparazioni sotto restano evidenza storica dell’audit, non revocano queste scelte.','',
+           '**Ambito dell’audit storico sotto: geometria e orario allora invariati, nessuna aggiunta automatica.** '
            'Questo documento rende verificabili i 28 siti, i diversi passaggi e le sei inversioni; '
            'esamina inoltre zero, una o due aggiunte come confronto circoscritto.','',
            '## Cosa sappiamo sulle fermate','',

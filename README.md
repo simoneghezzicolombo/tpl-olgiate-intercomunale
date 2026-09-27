@@ -1,19 +1,23 @@
 # Progetto Linea 8 Olgiate Molgora
 ## Rete TPL Circolare a Doppio Verso (Modello Merate D201/D202) Integrata con il Nodo Ferroviario S8
 
-> **Proposta corrente (2026-09-27): [Linea 8, orario a 31 corse](docs/RT031_LINEA8_ORARIO_31_CORSE_V3.md).**
-> Il committente ha confermato la geometria e accettato 15 corse ovest + 16 est,
-> **111.460,883 km di servizio/anno** su 260 giorni ipotizzati: **+41,883 km (+0,0376%)**.
-> H30 nelle punte 07–09 e 16:55–18:55; ultime partenze FS 19:40.
-> Compromesso centrale esplicito: fino a **155 minuti ovest e 120 est**.
-> Stessi 28 siti provvisori, non paline autorizzate. Calendario, costi complessivi,
-> flotta, manovre e fermate restano da validare prima dell'esercizio.
-> [Scelta registrata](config/rt031_31_trip_service_authorisation_v3.json) ·
-> [Stato completo e confronti storici](docs/RT031_LINEA8_SCHEDA_CONCLUSIVA_DI_AVANZAMENTO_V3.md).
-> [Piano fermate e manovre](docs/RT031_LINEA8_PIANO_FERMATE_E_MANOVRE_V3.md):
-> 28 siti numerati, sei manovre localizzate e confronto di poche aggiunte strategiche
-> senza cambiare percorso o partenze. Due esempi migliorano la copertura senza km
-> aggiuntivi, ma nessuna nuova palina è adottata o fisicamente approvata.
+> **Contratto corrente (2026-09-27): [Linea 8, stesso percorso completo per ogni corsa](docs/RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md).**
+> Una sola linea: ogni corsa commerciale percorre entrambe le ali; FS è anche fermata
+> intermedia, senza cambio obbligatorio. Nessuna corsa pubblica limitata alla singola ala.
+> La precedente proposta da **31 corse d'ala è superata come soluzione finale**;
+> non diventa automaticamente una proposta da 31 giri completi.
+> Geometria confermata e **29 siti di progetto**: aggiunta Arlate/Via Nuova Provinciale
+> accolta, N0655 sul cavalcavia di Via Indipendenza esclusa senza spostamenti automatici.
+> Olgiate sud e San Zeno restano inclusi. Non sono paline autorizzate.
+> Il giro completo è 27,679 km: 15 giri/giorno sono 107.947 km/anno su 260 giorni ipotizzati,
+> **solo aritmetica, non un orario verificato**. Il primo confronto che conserva tutte le
+> condizioni temporali ereditate richiede almeno 20 giri (143.929 km) nel dominio esaminato:
+> non è un minimo globale né un aumento adottato. Si riesaminano quelle condizioni,
+> senza rinunciare automaticamente a H30 in punta, ferrovia o utilità intercomunale.
+> Calendario, costi complessivi, flotta, manovre e fermate restano da validare.
+> [Contratto corretto](config/rt031_uniform_complete_line_authority_v3.json) ·
+> [Stato completo e confronti storici](docs/RT031_LINEA8_SCHEDA_CONCLUSIVA_DI_AVANZAMENTO_V3.md) ·
+> [Piano fermate storico e sei manovre da verificare](docs/RT031_LINEA8_PIANO_FERMATE_E_MANOVRE_V3.md).
 >
 > **Evidenze storiche.** La figura 8 a doppio verso era il concetto originario;
 > il servizio passeggeri nei due sensi non implica due percorsi opposti a ogni ora. Le stime
@@ -26,7 +30,7 @@
 > Una [mappa dell'esperienza pregressa](docs/RT031_PRIOR_WORK_EVIDENCE_MAP.md)
 > collega questi filoni e indica quali risultati sono tuttora riutilizzabili.
 
-Benvenuto nel repository del progetto **Linea 8 Olgiate Molgora**. Questo workspace raccoglie dati quantitativi, modelli di simulazione di esercizio, bilanci chilometrici, analisi territoriale WorldPop e dashboard. Il concept originario prevedeva la trasformazione delle linee **D184** e **D185** in una rete circolare a forma di **otto a doppio verso**, centrata sulla **stazione ferroviaria di Olgiate-Calco-Brivio**. Per la geometria e l'orario di progetto correnti fa fede il collegamento alla proposta a 31 corse sopra, non i numeri storici sotto.
+Benvenuto nel repository del progetto **Linea 8 Olgiate Molgora**. Questo workspace raccoglie dati quantitativi, modelli di simulazione di esercizio, bilanci chilometrici, analisi territoriale WorldPop e dashboard. Il concept originario prevedeva la trasformazione delle linee **D184** e **D185** in una rete circolare a forma di **otto a doppio verso**, centrata sulla **stazione ferroviaria di Olgiate-Calco-Brivio**. Per lo stato corrente fa fede il contratto di percorso unico completo sopra: la geometria è conservata, l'orario è da ricostruire; i numeri storici sotto non sono prestazioni certificate.
 
 ---
 

@@ -1,6 +1,10 @@
-# Linea 8 — proposta di progetto a 31 corse
+# Linea 8 — precedente proposta a 31 corse d’ala, superata come soluzione finale
 
-**Scelta del committente registrata: 31 corse e il lieve sforamento dello specifico scenario.** Questa è la proposta corrente; sostituisce l’orario da 34 corse e 122.340 km come base di lavoro. Geometria invariata. Non è un’autorizzazione all’esercizio né una copertura finanziaria.
+**Contratto corretto:** tutte le corse commerciali devono percorrere l’intero otto. I 31 giri d’ala qui documentati non soddisfano quella definizione e non sono più la proposta finale. [Ricostruzione del percorso unico completo](RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md).
+
+**Aggiornamento fermate e continuità:** il committente ha accolto la nuova fermata nell’area di Arlate ed escluso l’ipotesi in Via Indipendenza. Il confronto storico comprende **29 siti di progetto**, mantenendo le 31 partenze d’ala e gli stessi km ai soli fini del confronto. Il [confronto sulla continuità intercomunale](RT031_LINEA8_CONTINUITA_INTERCOMUNALE_V3.md) ricontrolla i tempi con Arlate; le tabelle e prove originarie sotto restano riferite ai 28 siti della base precedente. Nessuna prosecuzione a bordo è ancora approvata all’esercizio.
+
+**Scelta del committente registrata: 31 corse e il lieve sforamento dello specifico scenario.** Questa era la base a corse d’ala; sostituiva l’orario da 34 corse e 122.340 km. Geometria invariata. Non è un’autorizzazione all’esercizio né una copertura finanziaria.
 
 ## Quadro conclusivo
 
