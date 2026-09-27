@@ -61,7 +61,15 @@ def events_by_site(trips, loops):
 
 
 def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 1240),
-            pm_arrivals=DEFAULT_PM_ARRIVALS, am_wait_ceiling_comparison_min=None):
+            pm_arrivals=DEFAULT_PM_ARRIVALS, am_wait_ceiling_comparison_min=None,
+            timing_grid=None):
+    # Explicit diagnostic subsets only; never silently reduce the default grid.
+    grid = GRID if timing_grid is None else tuple(tuple(pair) for pair in timing_grid)
+    if (not grid or len(set(grid)) != len(grid) or not set(grid) <= set(GRID)
+            or (1.1, .5) not in grid):
+        raise ValueError('invalid timing comparison grid; nominal fleet case required')
+    if set(grid) != set(GRID) and am_wait_ceiling_comparison_min is None:
+        raise ValueError('reduced timing grid requires explicit unchanged AM comparison ceiling')
     if offpeak_wait not in (60, 90, 120):
         raise ValueError('unsupported off-peak comparison')
     if ready_span[0] != 390 or ready_span[1] not in (1180, 1210, 1240):
@@ -82,7 +90,7 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
         raise ValueError('declared comparison site domain drift')
     trips = [{'loop': pattern, 'departure_min': minute} for pattern in sorted(raw)
              for minute in range(360, ready_span[1] + 1, 5)]
-    adjusted = {(m, d): adjusted_loops(raw, m, d) for m, d in GRID}
+    adjusted = {(m, d): adjusted_loops(raw, m, d) for m, d in grid}
     n = len(trips)
     covers = set()
     if compile_constraints:
@@ -148,7 +156,7 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
     costs = np.array([raw[t['loop']]['distance_m'] / 1000 for t in trips] + [0.] * len(PHASES))
     return dict(family=family, offpeak_wait=offpeak_wait, trips=trips, adjusted=adjusted,
                 ready_span=tuple(ready_span), pm_arrivals=tuple(pm_arrivals),
-                constraints_compiled=compile_constraints,
+                constraints_compiled=compile_constraints, timing_grid=grid,
                 anchors=anchors, wait_ceiling=wait_ceiling, matrix=matrix, costs=costs,
                 lower=np.array(lower), upper=np.array(upper), fleet_rows=fleet_rows)
 
@@ -209,6 +217,7 @@ def solve(problem, fleet_bound, time_limit=30, fixed_peak_starts=None):
                   options={'time_limit': time_limit, 'mip_rel_gap': 0})
     result = {'family_id': problem['family']['name'], 'offpeak_wait_comparison_min': problem['offpeak_wait'],
               'ready_span_comparison_min': list(problem['ready_span']),
+              'timing_grid_comparison': [list(pair) for pair in problem['timing_grid']],
               'declared_pm_rail_arrival_targets_min': list(problem['pm_arrivals']),
               'nominal_fleet_bound_comparison': fleet_bound, 'candidate_trip_count': len(problem['trips']),
               'constraint_count': problem['matrix'].shape[0], 'solver_status': int(answer.status),
