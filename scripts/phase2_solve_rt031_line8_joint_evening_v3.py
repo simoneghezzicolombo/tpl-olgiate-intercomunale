@@ -64,9 +64,32 @@ def events_by_site(trips, loops):
     return result
 
 
+def service_windows(problem):
+    return problem.get('offpeak_windows', [(*problem['ready_span'], problem['offpeak_wait'])])
+
+
+def validate_service_windows(windows, ready_span, default_wait):
+    if windows is None:
+        return [(*ready_span, default_wait)]
+    normalized = []
+    cursor = ready_span[0]
+    for row in windows:
+        if len(row) != 3:
+            raise ValueError('service window must contain start, end and wait')
+        start, end, wait = row
+        if (not all(np.isfinite(v) for v in row) or start != cursor or end <= start
+                or end > ready_span[1] or wait not in (60, 90, 120)):
+            raise ValueError('service windows must exactly partition the ready span')
+        normalized.append((start, end, wait))
+        cursor = end
+    if not normalized or cursor != ready_span[1]:
+        raise ValueError('service windows leave an uncovered ready span')
+    return normalized
+
+
 def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 1240),
             pm_arrivals=DEFAULT_PM_ARRIVALS, am_wait_ceiling_comparison_min=None,
-            timing_grid=None):
+            timing_grid=None, offpeak_windows=None):
     # Explicit diagnostic subsets only; never silently reduce the default grid.
     grid = GRID if timing_grid is None else tuple(tuple(pair) for pair in timing_grid)
     if (not grid or len(set(grid)) != len(grid) or not set(grid) <= set(GRID)
@@ -78,6 +101,7 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
         raise ValueError('unsupported off-peak comparison')
     if ready_span[0] != 390 or ready_span[1] not in (1180, 1210, 1240):
         raise ValueError('unsupported service span comparison')
+    windows = validate_service_windows(offpeak_windows, ready_span, offpeak_wait)
     if not pm_arrivals or len(set(pm_arrivals)) != len(pm_arrivals):
         raise ValueError('missing or duplicate declared PM anchors')
     raw, joins = family['loops'], family['joins']
@@ -137,7 +161,8 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
     if compile_constraints:
         for loops in adjusted.values():
             for events in events_by_site(trips, loops).values():
-                covers.update((cover, -1) for cover in interval_covers(events, *ready_span, offpeak_wait))
+                for start, end, wait in windows:
+                    covers.update((cover, -1) for cover in interval_covers(events, start, end, wait))
                 for phase_index, (_, start) in enumerate(PHASES):
                     covers.update((cover, phase_index) for cover in interval_covers(events, start, start + 120, 30))
     # Inherited engineering comparison ceiling, NOT a caller-approved preference:
@@ -209,6 +234,7 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
     matrix = csc_matrix((data, (rows, cols)), shape=(len(lower), n + len(PHASES)))
     costs = np.array([raw[t['loop']]['distance_m'] / 1000 for t in trips] + [0.] * len(PHASES))
     return dict(family=family, offpeak_wait=offpeak_wait, trips=trips, adjusted=adjusted,
+                offpeak_windows=windows,
                 ready_span=tuple(ready_span), pm_arrivals=tuple(pm_arrivals),
                 constraints_compiled=compile_constraints, timing_grid=grid,
                 anchors=anchors, wait_ceiling=wait_ceiling, matrix=matrix, costs=costs,
@@ -235,7 +261,7 @@ def verify(problem, trips, phases, fleet_bound):
             raise ValueError('selected trips omit declared service sites')
         for opportunities in available.values():
             times = [t for _, t in opportunities]
-            if uncovered_intervals(times, *problem['ready_span'], problem['offpeak_wait']):
+            if any(uncovered_intervals(times, start, end, wait) for start, end, wait in service_windows(problem)):
                 raise ValueError('off-peak continuous verification failure')
             for phase in phases:
                 if uncovered_intervals(times, phase['start_min'], phase['end_min'], 30):
@@ -270,6 +296,7 @@ def solve(problem, fleet_bound, time_limit=30, fixed_peak_starts=None):
                   bounds=Bounds(0, variable_upper), constraints=LinearConstraint(problem['matrix'], problem['lower'], upper),
                   options={'time_limit': time_limit, 'mip_rel_gap': 0})
     result = {'family_id': problem['family']['name'], 'offpeak_wait_comparison_min': problem['offpeak_wait'],
+              'offpeak_wait_windows_comparison': service_windows(problem),
               'ready_span_comparison_min': list(problem['ready_span']),
               'timing_grid_comparison': [list(pair) for pair in problem['timing_grid']],
               'declared_pm_rail_arrival_targets_min': list(problem['pm_arrivals']),

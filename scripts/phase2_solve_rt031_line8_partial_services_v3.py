@@ -19,7 +19,7 @@ from scripts.phase2_audit_rt031_line8_robustness_cost_v3 import digest
 from scripts.phase2_compare_rt031_line8_evening_reallocation_v3 import BASE, FLAGS, EXPECTED, load_sources, ordered
 from scripts.phase2_compare_rt031_line8_shorter_span_v3 import SPANS
 from scripts.phase2_solve_rt031_line8_joint_evening_v3 import (
-    PHASES, family_inputs, prepare, verify, events_by_site,
+    PHASES, family_inputs, prepare, verify, events_by_site, service_windows,
 )
 from scripts.phase2_audit_rt031_line8_passenger_peaks_v3 import uncovered_intervals
 from scripts.phase2_solve_rt031_line8_flexible_peaks_v3 import interval_covers
@@ -38,7 +38,7 @@ def missing_cuts(problem, selected_trips, phases, candidates, phase_scoped=False
         selected = events_by_site(selected_trips, loops)
         for site_direction, all_events in candidates[key].items():
             times = [t for _, t in selected.get(site_direction, [])]
-            windows = [(*problem['ready_span'], problem['offpeak_wait'], -1)]
+            windows = [(*window, -1) for window in service_windows(problem)]
             windows.extend((p['start_min'], p['end_min'], 30, PHASES.index((p['peak'], p['start_min']))) for p in phases)
             for start, end, wait, phase_index in windows:
                 for left, right in uncovered_intervals(times, start, end, wait):
@@ -80,6 +80,8 @@ def checkpoint_signature(problem, flexible_peaks, reference_phases):
               'span': problem['ready_span'], 'offpeak': problem['offpeak_wait'], 'anchors': problem['anchors'],
               'wait_ceiling': problem['wait_ceiling'], 'fleet': 4, 'flexible': flexible_peaks,
               'phase_domain': PHASES if flexible_peaks else reference_phases}
+    if service_windows(problem) != [(*problem['ready_span'], problem['offpeak_wait'])]:
+        domain['offpeak_windows'] = service_windows(problem)
     return hashlib.sha256(json.dumps(domain, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
@@ -141,8 +143,9 @@ def solve_lazy(problem, reference_case, time_limit=240, iteration_limit=60, flex
         for (sid, direction), events in first_events.items():
             if direction != 'from_fs':
                 continue
-            for cover in interval_covers(events, *problem['ready_span'], problem['offpeak_wait']):
-                cuts.add((cover, -1) if flexible_peaks else cover)
+            for start, end, wait in service_windows(problem):
+                for cover in interval_covers(events, start, end, wait):
+                    cuts.add((cover, -1) if flexible_peaks else cover)
             allowed = PHASES if flexible_peaks else [(p['peak'], p['start_min']) for p in phases]
             for phase in allowed:
                 for cover in interval_covers(events, phase[1], phase[1] + 120, 30):
