@@ -1,5 +1,7 @@
 # Linea 8 — un solo orario di progetto sulla geometria confermata
 
+**Confronto storico a 34 corse. La base di lavoro corrente è la [proposta a 31 corse, con lo specifico lieve sforamento accettato dal committente](RT031_LINEA8_ORARIO_31_CORSE_V3.md). I risultati sotto restano evidenza del confronto precedente, non il budget attualmente proposto.**
+
 **Geometria confermata dal committente. Orario proposto per chiudere la progettazione temporale, non ancora approvato per l’esercizio.**
 
 ## La proposta

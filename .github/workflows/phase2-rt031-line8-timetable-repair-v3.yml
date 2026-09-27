@@ -4,6 +4,11 @@ on:
   push:
     branches: [codex/rt031-decision-convergence]
     paths:
+      - config/rt031_31_trip_service_authorisation_v3.json
+      - scripts/phase2_close_rt031_line8_31_trips_v3.py
+      - scripts/phase2_export_rt031_line8_31_trips_v3.py
+      - tests/test_phase2_rt031_line8_31_trips_v3.py
+      - docs/RT031_LINEA8_ORARIO_31_CORSE_V3.md
       - config/rt031_geometry_confirmation_and_timetable_closure_v3.json
       - scripts/phase2_refresh_rt031_s8_service_date_v3.py
       - scripts/phase2_close_rt031_line8_fixed_geometry_timetable_v3.py
@@ -84,6 +89,11 @@ on:
       - .github/workflows/phase2-rt031-line8-timetable-repair-v3.yml
   pull_request:
     paths:
+      - config/rt031_31_trip_service_authorisation_v3.json
+      - scripts/phase2_close_rt031_line8_31_trips_v3.py
+      - scripts/phase2_export_rt031_line8_31_trips_v3.py
+      - tests/test_phase2_rt031_line8_31_trips_v3.py
+      - docs/RT031_LINEA8_ORARIO_31_CORSE_V3.md
       - config/rt031_geometry_confirmation_and_timetable_closure_v3.json
       - scripts/phase2_refresh_rt031_s8_service_date_v3.py
       - scripts/phase2_close_rt031_line8_fixed_geometry_timetable_v3.py
@@ -197,6 +207,7 @@ jobs:
           python -m unittest discover -s tests -p test_phase2_rt031_line8_deep_offpeak_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_best_practices_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_working_timetable_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_31_trips_v3.py
       - name: Independently reproduce relaxed wing infeasibility
         run: |
           set -euo pipefail

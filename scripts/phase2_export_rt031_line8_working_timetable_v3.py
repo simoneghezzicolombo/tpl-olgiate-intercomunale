@@ -38,6 +38,7 @@ def connection_ledger(r,rail,p):
 def report(r,connections):
     west=[t for t in r['trips'] if t['loop']=='west_B'];east=[t for t in r['trips'] if t['loop']=='east_A']
     lines=['# Linea 8 — un solo orario di progetto sulla geometria confermata','',
+           '**Confronto storico a 34 corse. La base di lavoro corrente è la [proposta a 31 corse, con lo specifico lieve sforamento accettato dal committente](RT031_LINEA8_ORARIO_31_CORSE_V3.md). I risultati sotto restano evidenza del confronto precedente, non il budget attualmente proposto.**','',
            '**Geometria confermata dal committente. Orario proposto per chiudere la progettazione temporale, non ancora approvato per l’esercizio.**','',
            '## La proposta','',
            '- Stessi due percorsi completi e stessi 28 siti. Nessuna nuova variante o esclusione territoriale.',
