@@ -1,0 +1,56 @@
+# Linea 8 — corse parziali senza eliminare siti
+
+**Le corse corte esaminate non risolvono il divario da 111.419 km.** Abbiamo ampliato il dominio a 64 cammini e 10.560 partenze possibili, mantenendo H30/H60, tutti i 28 siti e gli obiettivi ferroviari. Con le punte del riferimento il minimo rimane **143.929,084 km/anno**. Liberando le fasi delle punte, il minimo esatto non è ancora trovato, ma un limite inferiore di **131.307,066 km** esclude già i 111.419 nel dominio ampliato.
+
+Non sono stati rimossi territori, giorni di servizio o requisiti di frequenza. Non è stata selezionata una rete; nessun risultato intermedio incompleto è presentato come orario utilizzabile.
+
+## Che cosa è stato aggiunto
+
+Partendo dalle sequenze originali nelle quattro direzioni, il generatore prova tutti i prefissi e suffissi propri della sequenza delle identità non locali: serve la prima oppure l'ultima parte dell'ala e rientra a FS attraverso un cammino del grafo. Sono **96 richieste**, che con le quattro ali complete producono **64 geometrie distinte**: 31 ovest e 33 est. Le duplicazioni fisiche non diventano candidati diversi.
+
+I percorsi aggiunti vanno da circa 1,719 a 13,990 km. Olgiate sud per l'ovest e San Zeno/Via Cantù per l'est sono mantenuti all'inizio e alla fine della corsa; il circuito soltanto locale ha una sola visita sufficiente ai due versi di viaggio. Le altre occorrenze dei siti originari fisicamente incontrate vengono registrate. Nessuna fermata nuova inventata e nessun ritorno intermedio nascosto a FS.
+
+Ogni cammino è verificato per continuità, distanze, tempi e svolte **via-node rappresentate**. Sono controllate anche tutte le giunzioni fra corse a FS. Questo NON autorizza inversioni sul posto, manovre autobus, paline o restrizioni dipendenti dall'intera storia del percorso: la percorribilità resta condizionale, come per il riferimento.
+
+Il dominio non comprende ogni sottoinsieme, ordine di visita, percorso stradale o schema di servizio possibile. Le corse locali e corte sono alternative da inserire nell'orario, non linee aggiuntive approvate.
+
+## Il controllo che impedisce falsi risparmi
+
+Una corsa che tocca soltanto San Zeno **non soddisfa il collegamento al treno per Brivio, Calco o Arlate**. Il modello ora espone **297 vincoli ferroviari per sito**: 27 siti non-FS × cinque obiettivi AM e sei PM. Ogni collegamento deve esistere su una singola corsa che serve realmente quel sito. Nessuna continuità passeggeri dedotta dal fatto che sia lo stesso veicolo; nessun trasferimento aggiunto implicitamente.
+
+H30 e H60 vengono ricontrollati continuamente per ogni sito e nei due versi da/per FS, attraverso tutti i nove scenari di marcia/sosta. Per i due siti locali, verso FS vale soltanto l'ultima occorrenza, evitando di spacciare il passaggio prima del giro lungo per collegamento breve.
+
+Come prima: 260 giorni identici ipotizzati, disponibilità passeggeri 06:30–19:40, quattro mezzi nominali nel confronto, km di servizio senza deposito/riposizionamenti. Le punte durano due ore ciascuna. Treni congelati al 3 settembre 2026, non orario attuale certificato; il treno delle 20:32 non rientra nella fascia corta. Il tetto di attesa AM rimane quello del riferimento completo.
+
+## Esito e grado di certezza
+
+| Confronto | Limite inferiore annuo | Orario completo verificato | Minimo esatto dimostrato? |
+|---|---:|---:|---|
+| Punte 06:55–08:55 / 16:55–18:55 | 143.929,084 km | 143.929,084 km | Sì, in questo dominio |
+| Tutte le 49 combinazioni di fasi ammesse | 131.307,066 km | 143.929,084 km | No |
+
+Le fasi libere iniziano fra 06:30–07:00 e 16:30–17:00, su griglia di cinque minuti. Nessuna è scelta come preferenza normativa.
+
+Il secondo confronto si è fermato al limite di calcolo dichiarato. L'intervallo **131.307–143.929** non è una banda d'incertezza approvata: distingue un limite matematico inferiore dal costo di un testimone fattibile. Non prova che i risparmi siano zero con fasi libere; prova che i 111.419 non sono raggiungibili in quel dominio. I limiti numerici possono diventare più stretti proseguendo il calcolo.
+
+Il testimone verificato rimane quello precedente: **20 corse ovest B + 20 est A**, nessuna corsa parziale aggiunta, quattro mezzi nominali e fino a sei nella griglia di stress. Tutti i 28 siti conservati. I viaggi lunghi di alcuni altri siti non sono risolti da questa verifica e le percentuali pedonali potenziali non diventano domanda o garanzie di servizio autorizzato.
+
+## Come è verificata la prova
+
+Per evitare un modello iniziale enorme, si aggiungono vincoli necessari nei punti in cui una soluzione provvisoria lascia un'attesa scoperta. Un risultato provvisorio con lacune non è mai un orario accettato. Con fasi libere, ogni vincolo H30 è condizionato alla propria fase: non si impone per errore contemporaneamente H30 a tutte le fasi.
+
+L'ottimalità viene dichiarata soltanto quando il limite inferiore del problema rilassato raggiunge il costo di un orario già ricontrollato integralmente, oppure quando l'ottimo rilassato supera quel ricontrollo. Il riferimento completo rimane disponibile come testimone anche in caso di timeout. La flotta viene ricontrollata con copertura dei turni-veicolo; non equivale a turni del personale o continuità passeggeri certificati.
+
+## Conseguenza progettuale
+
+Questo ampliamento **non fornisce la proposta finale richiesta**. Esclude un'altra scorciatoia contabile: sostituire alcune corse complete con i ritorni anticipati esaminati, contando come servite fermate saltate.
+
+Non è giustificato continuare a promettere 111.419 su questa famiglia semplicemente modificando i minuti o aggiungendo altre combinazioni delle stesse corse. Un ulteriore miglioramento sostanziale richiede altri ordini/collegamenti fisici oppure una rinuncia esplicita a un requisito; nessuna delle due cose è già dimostrata o adottata qui. Non è una prova globale di impossibilità dell'obiettivo.
+
+![Varianti corte esaminate, non rete proposta](../outputs/phase2/rt031_line8_local_shortcuts_v3/partial_services_domain.png)
+
+[Mappa del percorso completo del testimone rimasto invariato](../outputs/phase2/rt031_line8_local_shortcuts_v3/robustness_cost_diagnostic.png) · [Esito macchina](../outputs/phase2/rt031_line8_local_shortcuts_v3/partial_services_findings.json) · [Tutti i cammini GeoJSON](../outputs/phase2/rt031_line8_local_shortcuts_v3/partial_services_pool.geojson) · [Orario e prova a fasi fissate](../outputs/phase2/rt031_line8_local_shortcuts_v3/partial_services_timetable.json) · [Ricerca con fasi libere](../outputs/phase2/rt031_line8_local_shortcuts_v3/partial_services_flexible_peaks.json)
+
+`network_selected=false`, `primary_selection_authorised=false`, `runner_up_selection_authorised=false`. Budget decisionale, aumento approvato e banda d'incertezza restano non dichiarati; `total_operating_km=null`, `actual_timetable_certified=false`.
+
+Riproduzione: generatore `phase2_probe_rt031_line8_partial_services_v3` con il grafo congelato; solver `phase2_solve_rt031_line8_partial_services_v3`, anche con `--flexible_peaks --time_limit 300`; export `phase2_export_rt031_line8_partial_services_v3`. I risultati a timeout possono cambiare fra solver/macchine: non si richiede un limite inferiore identico, ma validità e verifica del testimone.

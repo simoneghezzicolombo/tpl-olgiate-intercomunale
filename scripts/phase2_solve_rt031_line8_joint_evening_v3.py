@@ -77,7 +77,14 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
     if not pm_arrivals or len(set(pm_arrivals)) != len(pm_arrivals):
         raise ValueError('missing or duplicate declared PM anchors')
     raw, joins = family['loops'], family['joins']
-    if set(raw) != {'west_A', 'west_B', 'east_A', 'east_B'} or any(
+    core_patterns = {'west_A', 'west_B', 'east_A', 'east_B'}
+    extended = set(raw) != core_patterns
+    if extended and (not core_patterns <= set(raw)
+                     or any(not p.startswith(('west_', 'east_')) for p in raw)
+                     or family.get('rail_anchor_scope') != 'each_declared_site'
+                     or not family['all_patterns_fast_local']):
+        raise ValueError('extended patterns require explicit per-site rail anchors and fast locals')
+    if not core_patterns <= set(raw) or any(
             joins.get(a + '>' + b) is not True for a in raw for b in raw):
         raise ValueError('occupation formulation requires every represented FS join')
     actual_sites = {e['stop_place_id'] for loop in raw.values() for e in loop['events']}
@@ -130,6 +137,16 @@ def prepare(family, offpeak_wait, compile_constraints=True, ready_span=(390, 124
                              and (family['all_patterns_fast_local'] or trip['loop'] == rest)
                              and 3 <= trip['departure_min'] - arrival <= 8)
             anchors.append({'wing': wing, 'kind': 'rail_to_bus', 'rail_min': arrival, 'eligible': eligible})
+    if family.get('rail_anchor_scope') == 'each_declared_site':
+        pattern_sites = {p: {e['stop_place_id'] for e in loop['events']} for p, loop in raw.items()}
+        site_anchors = []
+        for anchor in anchors:
+            wing_sites = set.union(*(s for p, s in pattern_sites.items()
+                                    if p in core_patterns and p.startswith(anchor['wing'])))
+            for sid in sorted(wing_sites):
+                site_anchors.append({**anchor, 'stop_place_id': sid,
+                                     'eligible': tuple(i for i in anchor['eligible'] if sid in pattern_sites[trips[i]['loop']])})
+        anchors = site_anchors
     if any(not a['eligible'] for a in anchors):
         raise ValueError('empty rail anchor domain; do not relax silently')
     rows, cols, data, lower, upper = [], [], [], [], []

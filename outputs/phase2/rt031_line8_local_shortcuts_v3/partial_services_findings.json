@@ -1,0 +1,45 @@
+{
+  "actual_timetable_certified": false,
+  "approved_uplift_percent": null,
+  "comparisons": [
+    {
+      "annual_service_km_lower_bound": 143929.08351602653,
+      "comparison": "fixed_peaks",
+      "minimum_proven": true,
+      "reference_111419_excluded_in_declared_domain": true,
+      "verified_witness_annual_service_km": 143929.08351602656,
+      "verified_witness_partial_trip_count": 0,
+      "witness_patterns_used": {
+        "east_A": 20,
+        "west_B": 20
+      }
+    },
+    {
+      "annual_service_km_lower_bound": 131307.0655530799,
+      "comparison": "flexible_peaks",
+      "minimum_proven": false,
+      "reference_111419_excluded_in_declared_domain": true,
+      "verified_witness_annual_service_km": 143929.08351602656,
+      "verified_witness_partial_trip_count": 0,
+      "witness_patterns_used": {
+        "east_A": 20,
+        "west_B": 20
+      }
+    }
+  ],
+  "contract": "RT031_LINE8_PARTIAL_SERVICES_FINDINGS_V3",
+  "decision_budget_km": null,
+  "network_selected": false,
+  "pattern_count": 64,
+  "primary_selection_authorised": false,
+  "reference_site_count": 28,
+  "requested_road_variants": 96,
+  "runner_up_selection_authorised": false,
+  "source_sha256_normalized_newlines": {
+    "fixed": "644175594cc55cc1f356dd6f80696cdabffbe0e2be7404a2742e017d89b757bd",
+    "flexible": "624851de8249696aee1e075b875bdbce0a2e89c0768a37d9c741a02044c5fa4f",
+    "pool": "19315a79e51afa5a987fa78964e02ba4b9cb63bbcd4f20102c3b7508fafff0ab"
+  },
+  "total_operating_km": null,
+  "uncertainty_band_min": null
+}
