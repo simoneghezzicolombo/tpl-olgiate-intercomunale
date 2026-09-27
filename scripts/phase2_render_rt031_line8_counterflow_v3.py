@@ -12,7 +12,7 @@ from scripts.phase2_export_rt031_line8_inclusive_shape_v3 import NORTH
 from scripts.phase2_probe_rt031_line8_local_counterflow_v3 import inputs, BASE
 
 
-def render(graph_dir, output, patterns=None, title=None, show_baseline=True):
+def render(graph_dir, output, patterns=None, title=None, show_baseline=True, pattern_labels=None):
     paths=inputs(graph_dir)
     shape=json.loads((BASE/'local_counterflow.geojson').read_text(encoding='utf-8'))
     audit=json.loads((BASE/'local_counterflow.json').read_text(encoding='utf-8'))
@@ -28,6 +28,8 @@ def render(graph_dir, output, patterns=None, title=None, show_baseline=True):
         lines=[f for f in lines if f['properties']['pattern'] in patterns]
         if {f['properties']['pattern'] for f in lines}!=set(patterns):
             raise ValueError('requested patterns missing from frozen shape')
+    if pattern_labels is not None and set(pattern_labels) != {f['properties']['pattern'] for f in lines}:
+        raise ValueError('pattern labels do not match displayed geometry')
     base=[f for f in shape['features'] if f['geometry']['type']=='LineString' and f['properties']['case']=='baseline']
     if not show_baseline:
         base=[]
@@ -46,8 +48,8 @@ def render(graph_dir, output, patterns=None, title=None, show_baseline=True):
         for f in lines:
             p=f['properties']['pattern']; west=p.startswith('west'); morning=p in ('west_A','east_B')
             ax.plot(*zip(*f['geometry']['coordinates']),color='#087e8b' if west else '#aa3c13',
-                    lw=1.8,ls='-' if patterns is not None or morning else '--',
-                    label=(f'{"Ovest" if west else "Est"} {p[-1]}: intera giornata' if patterns is not None
+                    lw=1.8,ls='-' if (patterns is not None and pattern_labels is None) or morning else '--',
+                    label=(pattern_labels[p] if pattern_labels is not None else f'{"Ovest" if west else "Est"} {p[-1]}: intera giornata' if patterns is not None
                            else f'{"Ovest" if west else "Est"}: {"mattina" if morning else "resto"}'),zorder=3)
         for f in points:
             x,y=f['geometry']['coordinates']; sid=f['properties']['site_id']
