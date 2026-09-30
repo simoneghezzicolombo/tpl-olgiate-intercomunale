@@ -7,10 +7,12 @@
 > Il primo audit costruisce esempi a 16 giri, tutti i treni-obiettivo e H30 sulle corse
 > ferroviarie di punta, ma nell'esempio prima ovest lascia **08:30–12:05 e 12:05–15:40**
 > senza partenze del giro: **215 minuti, non accettati**.
-> Un secondo confronto a **16 giri** porta l'intervallo massimo a **120 minuti**,
-> mantenendo H30 nelle punte; richiede però inizio della garanzia alle **07:00**,
-> H90/H120 anche fuori dalla sola finestra 10–16 e la sostituzione di **due coincidenze-obiettivo**
-> dell'ala percorsa seconda. Entrambe le scelte est/ovest sono esaminate, **nessuna approvata**.
+> Il confronto migliorato a **16 giri** porta l'intervallo massimo a **115 minuti**,
+> mantenendo H30 sulle corse abbinate ai treni centrali di punta: garanzia dalle **06:45**
+> se parte prima l'ovest o dalle **06:50** se parte prima l'est. Richiede però H115 anche
+> dopo la punta mattutina e la sostituzione di **due coincidenze-obiettivo** dell'ala
+> percorsa seconda. Nel dominio verificato, 06:30/H120 e 06:45–06:50/H110 falliscono.
+> Entrambe le precedenze est/ovest sono esaminate, **nessuna approvata**.
 > Con i vecchi limiti centrali e tutti i vecchi treni servono almeno 18 giri nel dominio;
 > questo non autorizza ad aumentare il conteggio scelto. [Scelta registrata](config/rt031_16_full_trips_authority_v3.json).
 >

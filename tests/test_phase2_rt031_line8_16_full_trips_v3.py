@@ -99,6 +99,29 @@ class SixteenFullTripsTests(unittest.TestCase):
         self.assertFalse(self.r['staggered_comparisons_adopted'])
         self.assertFalse(self.r['staggered_ready_start_07_accepted'])
 
+    def test_refined_115_minute_examples_and_finite_lower_bounds(self):
+        cases = self.r['refined_115_minute_diagnostics']
+        self.assertEqual(len(cases), 2)
+        self.assertEqual(len(self.r['shifted_start_0630_cap120_all_14_offsets_infeasible']), 14)
+        self.assertEqual(len(self.r['shifted_cap110_all_14_offsets_infeasible']), 14)
+        self.assertTrue(all(c['infeasibility_proven'] for c in
+                            self.r['shifted_start_0630_cap120_all_14_offsets_infeasible'] +
+                            self.r['shifted_cap110_all_14_offsets_infeasible']))
+        self.assertEqual({c['first_wing']: c['ready_service_start_min_not_adopted'] for c in cases},
+                         {'west_B': 405, 'east_A': 410})
+        for c in cases:
+            delayed = 'east' if c['first_wing'] == 'west_B' else 'west'
+            q, replacements = staggered_rail_inputs(self.p, delayed)
+            self.assertEqual(c['rail_target_substitutions_not_adopted'], replacements)
+            self.assertEqual(c['verification'], verify(q, self.loops, c))
+            self.assertEqual(c['verification']['maximum_consecutive_opportunity_gap_min'], 115)
+            self.assertEqual(len(c['verification']['rail_bindings']), 308)
+            self.assertEqual(c['full_trip_count'], 16)
+            self.assertEqual(len(c['full_trip_stop_event_ledger_nominal']), 16)
+            self.assertFalse(c['original_22_train_targets_all_retained'])
+            self.assertEqual(c['annual_service_km'], self.r['annual_service_km'])
+        self.assertFalse(self.r['refined_diagnostics_adopted'])
+
     def test_both_roots_210_infeasible_215_constructive_independent_rerun(self):
         for first, midpoint in [('west_B', 60), ('east_A', 55)]:
             no = solve_case(self.p, self.loops, first, midpoint, self.p['wait_ceiling'], 8, 210, 16)
@@ -139,6 +162,7 @@ class SixteenFullTripsTests(unittest.TestCase):
         for key in ('annual_calendar_adopted', 'geometry_changed', 'detailed_timetable_adopted',
                     'h30_phase_changes_adopted', 'new_fleet_increase_accepted',
                     'staggered_comparisons_adopted', 'staggered_ready_start_07_accepted',
+                    'refined_diagnostics_adopted',
                     'physical_passenger_continuity_certified', 'operating_plan_adopted',
                     'network_selected', 'primary_selection_authorised', 'runner_up_selection_authorised'):
             self.assertFalse(self.r[key], key)

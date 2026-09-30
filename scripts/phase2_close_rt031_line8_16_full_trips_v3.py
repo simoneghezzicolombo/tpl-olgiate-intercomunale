@@ -42,6 +42,11 @@ def domain_inputs(p, loops, first, midpoint, offpeak='inherited'):
 
 
 def ready_windows(row, offpeak):
+    if offpeak in ('start_0645_cap115_diagnostic', 'start_0650_cap115_diagnostic',
+                   'start_0645_cap110_diagnostic', 'start_0650_cap110_diagnostic'):
+        start = 405 if '0645' in offpeak else 410
+        cap = 110 if 'cap110' in offpeak else 115
+        return [(start, 1180, cap), (start, 420, 60), (1135, 1180, 60)]
     if offpeak == 'start_07_staggered_diagnostic':
         return [(420, 1180, 155 if row['wing'] == 'west_B' else 120),
                 (420, 450, 60), (1135, 1180, 60)]
@@ -368,6 +373,33 @@ def build():
         c['new_22_train_target_bindings_verified'] = True
         c['ready_service_start_min_not_adopted'] = 420
         staggered.append(c)
+    refined = []
+    early_start_failures = []
+    tighter_gap_failures = []
+    for first, midpoint, delayed, start in [('west_B', 60, 'east', 405),
+                                             ('east_A', 55, 'west', 410)]:
+        q, replacements = staggered_rail_inputs(p, delayed)
+        minimum = 5*math.ceil((adjusted_loops(loops, 1.1, 1)[first]['road_minutes']+1)/5)
+        for offset in range(minimum, minimum+31, 5):
+            c = solve_case(q, loops, first, offset, p['wait_ceiling'], 8, 120, 16)
+            c['case_id'] = f'{first}_M{offset}_shifted_0630_cap120'
+            early_start_failures.append(c)
+            c = solve_case(q, loops, first, offset, p['wait_ceiling'], 8,
+                           f"start_{'0645' if start == 405 else '0650'}_cap110_diagnostic", 16)
+            c['case_id'] = f'{first}_M{offset}_shifted_cap110'
+            tighter_gap_failures.append(c)
+        c = solve_case(q, loops, first, midpoint, p['wait_ceiling'], 8,
+                       f"start_{'0645' if start == 405 else '0650'}_cap115_diagnostic", 16)
+        if not c['witness_found'] or c['verification']['maximum_consecutive_opportunity_gap_min'] != 115:
+            raise ValueError('declared 115-minute staggered comparison lacks a witness')
+        c['case_id'] = f'{first}_M{midpoint}_shifted_start{start}_cap115'
+        c['rail_target_substitutions_not_adopted'] = replacements
+        c['original_22_train_targets_all_retained'] = False
+        c['new_22_train_target_bindings_verified'] = True
+        c['ready_service_start_min_not_adopted'] = start
+        refined.append(c)
+    if not all(c['infeasibility_proven'] for c in early_start_failures+tighter_gap_failures):
+        raise ValueError('claimed finite-domain infeasibility did not reproduce')
     return {'contract': 'RT031_16_COMPLETE_TRIPS_TIMING_AUDIT_V3',
             'authority_source': str(AUTH.relative_to(ROOT)).replace('\\', '/'),
             'authority_sha256': digest(AUTH), 'parent_sources': source_fingerprints(p, loops),
@@ -380,6 +412,10 @@ def build():
             'comparisons_mix_different_roots_in_one_timetable': False,
             'cases': cases,
             'staggered_120_minute_diagnostics': staggered,
+            'refined_115_minute_diagnostics': refined,
+            'shifted_start_0630_cap120_all_14_offsets_infeasible': early_start_failures,
+            'shifted_cap110_all_14_offsets_infeasible': tighter_gap_failures,
+            'refined_diagnostics_adopted': False,
             'staggered_comparisons_adopted': False,
             'staggered_ready_start_07_accepted': False,
             'original_rail_targets_and_wait_bounds_retained_in_42_base_cases': True,
@@ -426,7 +462,50 @@ def report(r):
         'di ripartenza intermedia da FS ciascuno, partenze ogni cinque minuti. '
         'I 14 test a 16 giri e limite di 210 minuti sono infeasibili; alcuni test a 215 passano. '
         'Il limite riguarda questo dominio, non ogni possibile orario, capolinea o regolazione.', '',
-        '## Un confronto più utile entro 16 giri', '',
+        '## Miglioramento del confronto a 16 giri: 115 minuti', '',
+        '**Due orari diagnostici mantengono i 16 giri completi, le 29 fermate di progetto e le '
+        'sequenze H30 sui cinque treni centrali di punta per ciascuna ala; il massimo intervallo '
+        'tra partenze scende a 115 minuti.** La copertura garantita comincia alle **06:45** '
+        'se parte prima l’ala ovest, alle **06:50** se parte prima l’est: non alle 07:00 del '
+        'precedente confronto. La prima corsa da FS parte prima, perché deve attraversare '
+        'entrambe le ali. Restano le due sostituzioni di treni-obiettivo nella seconda ala; '
+        'non sono né cancellazioni di treni reali né scelte già accettate.', '',
+        '| Prima ala del giro unico | Copertura garantita da | Prima/ultima partenza FS | '
+        'Prosecuzione intermedia FS | Massimo intervallo | Sosta intermedia nominale | '
+        'Mezzi nominali / massimo nei 27 scenari |',
+        '|---|---|---|---:|---:|---:|---:|']
+    for c in r['refined_115_minute_diagnostics']:
+        v = c['verification']
+        nominal = next(x for x in v['all_27_resource_cases'] if
+                       (x['moving_multiplier'], x['dwell_min'], x['terminal_recovery_min']) == (1.1, .5, 10))
+        worst = max(x['minimum_vehicle_count_conditional'] for x in v['all_27_resource_cases'])
+        lines.append(f"| {'Ovest' if c['first_wing'] == 'west_B' else 'Est'} | "
+                     f"{clock(c['ready_service_start_min_not_adopted'])} | "
+                     f"{clock(v['first_full_departure_min'])} / {clock(v['last_full_departure_min'])} | "
+                     f"+{c['midpoint_departure_offset_min']} min | "
+                     f"{v['maximum_consecutive_opportunity_gap_min']} min | "
+                     f"{v['nominal_intermediate_fs_wait_min']:.2f} min | "
+                     f"{nominal['minimum_vehicle_count_conditional']} / {worst} |")
+    west, east = r['refined_115_minute_diagnostics']
+    lines += ['', 'Partenze dei **16 giri completi da Olgiate FS**, non orario adottato. '
+              'Ogni giro torna a FS a metà e prosegue nell’altra ala, con la sosta intermedia '
+              'contata nel viaggio:', '',
+              '| Giro | Prima ovest, FS | Prima est, FS |', '|---:|---|---|']
+    for i, (w, e) in enumerate(zip(west['full_trip_departures_min'], east['full_trip_departures_min']), 1):
+        lines.append(f'| {i} | {clock(w)} | {clock(e)} |')
+    lines += ['',
+        'I 22 obiettivi ala/treno restano 22, ma due cambiano rispetto ai precedenti: nella seconda '
+        'ala 07:26 → 09:56 verso Milano e 16:32 → 19:02 da Milano. Restano 308 controlli '
+        'sito/treno per ciascun esempio; non viene inferita domanda passeggeri. '
+        'Nel dominio di sette offset intermedi per ciascuna delle due precedenze e partenze '
+        'ogni cinque minuti, **nessun test con copertura dalle 06:30 e limite 120 minuti riesce**; '
+        'con le coperture 06:45/06:50 **nessun test con limite 110 minuti riesce**. '
+        'Queste sono prove finite nel dominio dichiarato, non impossibilità universali.', '',
+        '**Resta una rinuncia reale:** H115 appare già dopo la punta mattutina e quindi non '
+        'rispetta H60 fuori dalla sola morbida pesante 10–16. Né il primo ramo né le due '
+        'sostituzioni ferroviarie né questi intervalli sono autorizzati. La continuità di '
+        'veicolo e passeggeri, le paline e il fabbisogno di flotta restano condizionali.', '',
+        '## Confronto precedente a 120 minuti, conservato per tracciabilità', '',
         '**Due ulteriori orari diagnostici mantengono 16 giri e riducono il massimo intervallo '
         'fra partenze a 120 minuti, senza togliere siti di progetto o cambiare percorso.** '
         'Non sono automaticamente accettati: iniziano la finestra di servizio garantita alle '
@@ -498,10 +577,12 @@ def report(r):
     lines += ['', '## Cosa è chiuso e cosa no', '',
         '- **Chiusi come scelte di progetto:** 16 giri completi, stesso percorso, geometria e scelte fermate.',
         '- **Non chiusi:** un orario utile che rispetti insieme le esigenze; né i 215 minuti con tutti i vecchi treni '
-        'né la finestra 07:00 e i due nuovi obiettivi ferroviari delle alternative a 120 minuti sono autorizzati.',
+        'né le alternative migliorate a 115 minuti con copertura 06:45/06:50 e due obiettivi ferroviari cambiati '
+        'sono autorizzati.',
         '- Il confronto esplicita la scelta ancora necessaria: quali primi treni/prime ore garantire in ciascuna '
         'ala e quale intervallo è tollerabile già dopo la punta mattutina. Se non è accettabile nessuna delle '
-        'due alternative, il conteggio di 16 giri non ha ancora un orario conclusivo nel dominio esaminato. '
+        'due alternative migliorate a 115 minuti, il conteggio di 16 giri non ha ancora un orario conclusivo '
+        'nel dominio esaminato. '
         'Non si eliminano di nascosto treni, H30, territori o chilometri.',
         '- Restano aperti manovre, paline, tempi osservati, blocchi completi, continuità fra giri successivi, '
         'calendario e costi extra-servizio. Nessuna approvazione operativa o PRIMARY/RUNNER-UP.', '',
