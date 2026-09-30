@@ -122,6 +122,16 @@ class SixteenFullTripsTests(unittest.TestCase):
             self.assertEqual(c['annual_service_km'], self.r['annual_service_km'])
         self.assertFalse(self.r['refined_diagnostics_adopted'])
 
+    def test_h60_shoulders_h120_core_requires_eighteen_complete_trips_in_domain(self):
+        cases = self.r['shifted_h60_shoulders_h120_core_all_14_minima']
+        self.assertEqual(len(cases), 14)
+        self.assertTrue(all(c['minimum_proven'] for c in cases))
+        self.assertEqual(min(c['full_trip_count'] for c in cases), 18)
+        self.assertEqual(self.r['minimum_full_trips_with_shifted_rail_h60_shoulders_h120_core'], 18)
+        self.assertAlmostEqual(self.r['minimum_annual_service_km_at_260_assumed_days_h60_shoulders_h120_core'],
+                               129536.1751644239)
+        self.assertFalse(self.r['eighteen_full_trips_adopted'])
+
     def test_both_roots_210_infeasible_215_constructive_independent_rerun(self):
         for first, midpoint in [('west_B', 60), ('east_A', 55)]:
             no = solve_case(self.p, self.loops, first, midpoint, self.p['wait_ceiling'], 8, 210, 16)
@@ -163,6 +173,7 @@ class SixteenFullTripsTests(unittest.TestCase):
                     'h30_phase_changes_adopted', 'new_fleet_increase_accepted',
                     'staggered_comparisons_adopted', 'staggered_ready_start_07_accepted',
                     'refined_diagnostics_adopted',
+                    'eighteen_full_trips_adopted',
                     'physical_passenger_continuity_certified', 'operating_plan_adopted',
                     'network_selected', 'primary_selection_authorised', 'runner_up_selection_authorised'):
             self.assertFalse(self.r[key], key)
@@ -173,6 +184,10 @@ class SixteenFullTripsTests(unittest.TestCase):
         status = json.loads((BASE/'proposal_readiness.json').read_text(encoding='utf-8'))
         self.assertEqual(status['current_caller_service_authority'], 'config/rt031_16_full_trips_authority_v3.json')
         self.assertIsNone(status['current_design_proposal'])
+        row = next(x for x in status['requirements'] if
+                   x['requirement'] == 'caller_16_complete_trips_with_peak_and_rail_service')
+        self.assertEqual(row['minimum_full_trips_with_shifted_rail_h60_shoulders_h120_core'], 18)
+        self.assertFalse(row['eighteen_full_trips_adopted'])
         self.assertEqual(DOC.read_text(encoding='utf-8'), report(self.r))
         self.assertIn('non è stato accettato', report(self.r))
 

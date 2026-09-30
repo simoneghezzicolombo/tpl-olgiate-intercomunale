@@ -42,6 +42,9 @@ def domain_inputs(p, loops, first, midpoint, offpeak='inherited'):
 
 
 def ready_windows(row, offpeak):
+    if offpeak in ('start_0645_h60_shoulders_h120_core', 'start_0650_h60_shoulders_h120_core'):
+        start = 405 if '0645' in offpeak else 410
+        return [(start, 600, 60), (600, 960, 120), (960, 1180, 60)]
     if offpeak in ('start_0645_cap115_diagnostic', 'start_0650_cap115_diagnostic',
                    'start_0645_cap110_diagnostic', 'start_0650_cap110_diagnostic'):
         start = 405 if '0645' in offpeak else 410
@@ -376,6 +379,7 @@ def build():
     refined = []
     early_start_failures = []
     tighter_gap_failures = []
+    h60_shoulder_minima = []
     for first, midpoint, delayed, start in [('west_B', 60, 'east', 405),
                                              ('east_A', 55, 'west', 410)]:
         q, replacements = staggered_rail_inputs(p, delayed)
@@ -388,6 +392,10 @@ def build():
                            f"start_{'0645' if start == 405 else '0650'}_cap110_diagnostic", 16)
             c['case_id'] = f'{first}_M{offset}_shifted_cap110'
             tighter_gap_failures.append(c)
+            c = solve_case(q, loops, first, offset, p['wait_ceiling'], 8,
+                           f"start_{'0645' if start == 405 else '0650'}_h60_shoulders_h120_core")
+            c['case_id'] = f'{first}_M{offset}_shifted_h60_shoulders_h120_core'
+            h60_shoulder_minima.append(c)
         c = solve_case(q, loops, first, midpoint, p['wait_ceiling'], 8,
                        f"start_{'0645' if start == 405 else '0650'}_cap115_diagnostic", 16)
         if not c['witness_found'] or c['verification']['maximum_consecutive_opportunity_gap_min'] != 115:
@@ -400,6 +408,9 @@ def build():
         refined.append(c)
     if not all(c['infeasibility_proven'] for c in early_start_failures+tighter_gap_failures):
         raise ValueError('claimed finite-domain infeasibility did not reproduce')
+    if (not all(c['minimum_proven'] for c in h60_shoulder_minima)
+            or min(c['full_trip_count'] for c in h60_shoulder_minima) != 18):
+        raise ValueError('H60 shoulder trip-count lower bound did not reproduce')
     return {'contract': 'RT031_16_COMPLETE_TRIPS_TIMING_AUDIT_V3',
             'authority_source': str(AUTH.relative_to(ROOT)).replace('\\', '/'),
             'authority_sha256': digest(AUTH), 'parent_sources': source_fingerprints(p, loops),
@@ -415,6 +426,11 @@ def build():
             'refined_115_minute_diagnostics': refined,
             'shifted_start_0630_cap120_all_14_offsets_infeasible': early_start_failures,
             'shifted_cap110_all_14_offsets_infeasible': tighter_gap_failures,
+            'shifted_h60_shoulders_h120_core_all_14_minima': h60_shoulder_minima,
+            'minimum_full_trips_with_shifted_rail_h60_shoulders_h120_core': 18,
+            'minimum_annual_service_km_at_260_assumed_days_h60_shoulders_h120_core':
+                18*sum(l['distance_m'] for l in loops.values())/1000*260,
+            'eighteen_full_trips_adopted': False,
             'refined_diagnostics_adopted': False,
             'staggered_comparisons_adopted': False,
             'staggered_ready_start_07_accepted': False,
@@ -505,6 +521,13 @@ def report(r):
         'rispetta H60 fuori dalla sola morbida pesante 10–16. Né il primo ramo né le due '
         'sostituzioni ferroviarie né questi intervalli sono autorizzati. La continuità di '
         'veicolo e passeggeri, le paline e il fabbisogno di flotta restano condizionali.', '',
+        '**Quanto costa conservare H60 fuori 10–16?** Anche usando i due obiettivi ferroviari '
+        'sostituiti nella seconda ala, e consentendo H120 fra le 10 e le 16, il minimo esatto '
+        'nei 14 offset del dominio è **18 giri completi**. A 260 giorni ipotizzati sono '
+        '**129.536,175 km/anno**, circa **+16,26%** rispetto a 111.419: un confronto, non '
+        'una proposta di aumento. Perciò i 16 giri scelti e la combinazione H60 nelle spalle '
+        '+ H120 solo nella morbida pesante non coesistono in questo dominio. Il risultato non '
+        'dimostra impossibilità su ogni possibile regolazione stradale o orario continuo.', '',
         '## Confronto precedente a 120 minuti, conservato per tracciabilità', '',
         '**Due ulteriori orari diagnostici mantengono 16 giri e riducono il massimo intervallo '
         'fra partenze a 120 minuti, senza togliere siti di progetto o cambiare percorso.** '
@@ -575,7 +598,8 @@ def report(r):
         lines += ['', 'Sequenze H30 massimali alla partenza del giro: '+', '.join(
             f"{clock(bank[0])}–{clock(bank[-1])}" for bank in v['maximal_regular_h30_root_departure_sequences'])+'.']
     lines += ['', '## Cosa è chiuso e cosa no', '',
-        '- **Chiusi come scelte di progetto:** 16 giri completi, stesso percorso, geometria e scelte fermate.',
+        '- **Chiusi come scelte di progetto:** 16 giri completi, stesso percorso, geometria e scelte fermate. '
+        'I 18 giri del confronto H60/H120 non sono adottati.',
         '- **Non chiusi:** un orario utile che rispetti insieme le esigenze; né i 215 minuti con tutti i vecchi treni '
         'né le alternative migliorate a 115 minuti con copertura 06:45/06:50 e due obiettivi ferroviari cambiati '
         'sono autorizzati.',

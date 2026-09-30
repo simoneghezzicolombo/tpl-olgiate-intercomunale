@@ -50,6 +50,8 @@ I 22 obiettivi ala/treno restano 22, ma due cambiano rispetto ai precedenti: nel
 
 **Resta una rinuncia reale:** H115 appare già dopo la punta mattutina e quindi non rispetta H60 fuori dalla sola morbida pesante 10–16. Né il primo ramo né le due sostituzioni ferroviarie né questi intervalli sono autorizzati. La continuità di veicolo e passeggeri, le paline e il fabbisogno di flotta restano condizionali.
 
+**Quanto costa conservare H60 fuori 10–16?** Anche usando i due obiettivi ferroviari sostituiti nella seconda ala, e consentendo H120 fra le 10 e le 16, il minimo esatto nei 14 offset del dominio è **18 giri completi**. A 260 giorni ipotizzati sono **129.536,175 km/anno**, circa **+16,26%** rispetto a 111.419: un confronto, non una proposta di aumento. Perciò i 16 giri scelti e la combinazione H60 nelle spalle + H120 solo nella morbida pesante non coesistono in questo dominio. Il risultato non dimostra impossibilità su ogni possibile regolazione stradale o orario continuo.
+
 ## Confronto precedente a 120 minuti, conservato per tracciabilità
 
 **Due ulteriori orari diagnostici mantengono 16 giri e riducono il massimo intervallo fra partenze a 120 minuti, senza togliere siti di progetto o cambiare percorso.** Non sono automaticamente accettati: iniziano la finestra di servizio garantita alle **07:00 anziché 06:30**, portano l’H90/H120 già dalle **08:30–08:35** in alcune ore, e sostituiscono **due precisi treni-obiettivo dell’ala che parte seconda**. Non sono soppressioni dei treni reali: la connessione diretta e breve a quei due treni non è più garantita nel confronto. Tutti i nuovi treni-obiettivo esistono nel GTFS datato.
@@ -127,7 +129,7 @@ Sequenze H30 massimali alla partenza del giro: 05:35–08:35, 15:40–18:40.
 
 ## Cosa è chiuso e cosa no
 
-- **Chiusi come scelte di progetto:** 16 giri completi, stesso percorso, geometria e scelte fermate.
+- **Chiusi come scelte di progetto:** 16 giri completi, stesso percorso, geometria e scelte fermate. I 18 giri del confronto H60/H120 non sono adottati.
 - **Non chiusi:** un orario utile che rispetti insieme le esigenze; né i 215 minuti con tutti i vecchi treni né le alternative migliorate a 115 minuti con copertura 06:45/06:50 e due obiettivi ferroviari cambiati sono autorizzati.
 - Il confronto esplicita la scelta ancora necessaria: quali primi treni/prime ore garantire in ciascuna ala e quale intervallo è tollerabile già dopo la punta mattutina. Se non è accettabile nessuna delle due alternative migliorate a 115 minuti, il conteggio di 16 giri non ha ancora un orario conclusivo nel dominio esaminato. Non si eliminano di nascosto treni, H30, territori o chilometri.
 - Restano aperti manovre, paline, tempi osservati, blocchi completi, continuità fra giri successivi, calendario e costi extra-servizio. Nessuna approvazione operativa o PRIMARY/RUNNER-UP.

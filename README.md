@@ -14,7 +14,10 @@
 > percorsa seconda. Nel dominio verificato, 06:30/H120 e 06:45–06:50/H110 falliscono.
 > Entrambe le precedenze est/ovest sono esaminate, **nessuna approvata**.
 > Con i vecchi limiti centrali e tutti i vecchi treni servono almeno 18 giri nel dominio;
-> questo non autorizza ad aumentare il conteggio scelto. [Scelta registrata](config/rt031_16_full_trips_authority_v3.json).
+> anche con i due treni-obiettivo sostituiti, H60 fuori 10–16 e H120 dentro 10–16
+> richiedono almeno **18 giri completi** nei 14 casi esaminati, pari a circa
+> **129.536 km/anno** sui 260 giorni ipotizzati. Il confronto **non autorizza**
+> ad aumentare il conteggio scelto. [Scelta registrata](config/rt031_16_full_trips_authority_v3.json).
 >
 > **Contratto del percorso: [stesso otto completo per ogni corsa](docs/RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md).**
 > Una sola linea: ogni corsa commerciale percorre entrambe le ali; FS è anche fermata
