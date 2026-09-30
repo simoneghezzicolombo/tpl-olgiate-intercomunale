@@ -12,6 +12,10 @@ on:
       - tests/test_phase2_rt031_line8_full_trip_vehicles_v3.py
       - docs/RT031_LINEA8_MEZZI_GIRI_COMPLETI_V3.md
       - outputs/phase2/rt031_line8_local_shortcuts_v3/uniform_16_full_trip_vehicle_blocks.json
+      - scripts/phase2_probe_rt031_line8_variable_fs_hold_v3.py
+      - tests/test_phase2_rt031_line8_variable_fs_hold_v3.py
+      - docs/RT031_LINEA8_SOSTA_FS_VARIABILE_E_MANOVRE_V3.md
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/variable_fs_hold_16_full_trips.json.gz
       - config/rt031_uniform_complete_line_authority_v3.json
       - scripts/phase2_rebuild_rt031_uniform_complete_line_v3.py
       - tests/test_phase2_rt031_uniform_complete_line_v3.py
@@ -119,6 +123,10 @@ on:
       - tests/test_phase2_rt031_line8_full_trip_vehicles_v3.py
       - docs/RT031_LINEA8_MEZZI_GIRI_COMPLETI_V3.md
       - outputs/phase2/rt031_line8_local_shortcuts_v3/uniform_16_full_trip_vehicle_blocks.json
+      - scripts/phase2_probe_rt031_line8_variable_fs_hold_v3.py
+      - tests/test_phase2_rt031_line8_variable_fs_hold_v3.py
+      - docs/RT031_LINEA8_SOSTA_FS_VARIABILE_E_MANOVRE_V3.md
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/variable_fs_hold_16_full_trips.json.gz
       - config/rt031_uniform_complete_line_authority_v3.json
       - scripts/phase2_rebuild_rt031_uniform_complete_line_v3.py
       - tests/test_phase2_rt031_uniform_complete_line_v3.py
@@ -234,6 +242,7 @@ jobs:
         run: |
           python -m unittest discover -s tests -p test_phase2_rt031_line8_16_full_trips_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_full_trip_vehicles_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_variable_fs_hold_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_uniform_complete_line_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_through_service_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_stop_plan_v3.py
@@ -262,6 +271,11 @@ jobs:
           set -euo pipefail
           python -m scripts.phase2_audit_rt031_line8_full_trip_vehicles_v3 --output /tmp/rt031-full-trip-vehicles.json
           cmp /tmp/rt031-full-trip-vehicles.json outputs/phase2/rt031_line8_local_shortcuts_v3/uniform_16_full_trip_vehicle_blocks.json
+      - name: Reproduce variable-FS-hold feasibility frontier
+        run: |
+          set -euo pipefail
+          python -m scripts.phase2_probe_rt031_line8_variable_fs_hold_v3 --time-limit 60 --output /tmp/rt031-variable-fs-hold.json.gz
+          python -c "import gzip,json; a=json.loads(gzip.decompress(open('/tmp/rt031-variable-fs-hold.json.gz','rb').read())); b=json.loads(gzip.decompress(open('outputs/phase2/rt031_line8_local_shortcuts_v3/variable_fs_hold_16_full_trips.json.gz','rb').read())); p=lambda x:[(c['case_id'],c['solver_status'],c['witness_found']) for c in x['cases']]; assert p(a)==p(b); assert a['six_reverse_edge_manoeuvres_all_bus_authorisation_missing']"
       - name: Independently reproduce relaxed wing infeasibility
         run: |
           set -euo pipefail
