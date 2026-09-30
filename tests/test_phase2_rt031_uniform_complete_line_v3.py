@@ -24,9 +24,9 @@ class UniformCompleteLineTests(unittest.TestCase):
         self.assertFalse(self.r['earlier_31_wing_trip_plan_is_final_proposal'])
         readiness=json.loads((BASE/'proposal_readiness.json').read_text(encoding='utf-8'))
         self.assertIsNone(readiness['current_design_proposal'])
-        self.assertEqual(readiness['current_caller_service_authority'],
+        self.assertEqual(readiness['uniform_route_intent_authority'],
                          'config/rt031_uniform_complete_line_authority_v3.json')
-        self.assertEqual(readiness['current_uniform_route_comparison'],OUTPUT.name)
+        self.assertEqual(readiness['previous_uniform_route_comparison'],OUTPUT.name)
 
     def test_full_path_is_exact_concatenation_not_a_renamed_single_wing(self):
         expected=sum(l['distance_m'] for l in self.loops.values())/1000

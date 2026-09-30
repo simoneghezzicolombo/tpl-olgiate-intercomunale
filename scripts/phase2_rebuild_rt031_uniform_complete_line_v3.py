@@ -221,6 +221,9 @@ def build():
 
 def report(r):
     lines=['# Linea 8 — ripartenza corretta: ogni corsa percorre tutto l’otto','',
+        '**Aggiornamento successivo:** il committente ha scelto 16 giri completi al giorno. '
+        'Questo documento resta il confronto che precede la scelta; '
+        '[audit dei 16 giri e dei buchi d’orario](RT031_LINEA8_16_GIRI_COMPLETI_V3.md).', '',
         '**Il chiarimento del committente sostituisce l’impostazione a corse d’ala indipendenti.** '
         'Una sola linea, **stesso percorso completo per ogni corsa commerciale**, entrambe le ali, '
         'nessuna variante pubblica limitata a FS. La stazione è anche fermata intermedia con permanenza '

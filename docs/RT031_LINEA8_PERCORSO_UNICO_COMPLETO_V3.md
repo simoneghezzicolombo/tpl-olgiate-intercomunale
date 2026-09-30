@@ -1,5 +1,7 @@
 # Linea 8 — ripartenza corretta: ogni corsa percorre tutto l’otto
 
+**Aggiornamento successivo:** il committente ha scelto 16 giri completi al giorno. Questo documento resta il confronto che precede la scelta; [audit dei 16 giri e dei buchi d’orario](RT031_LINEA8_16_GIRI_COMPLETI_V3.md).
+
 **Il chiarimento del committente sostituisce l’impostazione a corse d’ala indipendenti.** Una sola linea, **stesso percorso completo per ogni corsa commerciale**, entrambe le ali, nessuna variante pubblica limitata a FS. La stazione è anche fermata intermedia con permanenza a bordo prevista, non un cambio obbligatorio per passare nell’altra ala.
 
 La precedente proposta da **31 giri d’ala** non viene più presentata come soluzione finale. Non viene nemmeno trasformata in 31 giri completi: sarebbero circa 223.090 km/anno. I test precedenti restano prove del loro dominio, non prove che fosse soddisfatta questa richiesta.

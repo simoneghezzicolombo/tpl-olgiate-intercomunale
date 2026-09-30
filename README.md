@@ -1,7 +1,20 @@
 # Progetto Linea 8 Olgiate Molgora
 ## Rete TPL Circolare a Doppio Verso (Modello Merate D201/D202) Integrata con il Nodo Ferroviario S8
 
-> **Contratto corrente (2026-09-27): [Linea 8, stesso percorso completo per ogni corsa](docs/RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md).**
+> **Scelta corrente (2026-09-27): [Linea 8, 16 giri completi al giorno](docs/RT031_LINEA8_16_GIRI_COMPLETI_V3.md).**
+> Il committente ha scelto **16 corse complete**, **115.143,267 km di servizio/anno**
+> su 260 giorni ipotizzati: **+3.724,267 km (+3,34%)**. Non è ancora un orario approvato.
+> Il primo audit costruisce esempi a 16 giri, tutti i treni-obiettivo e H30 sulle corse
+> ferroviarie di punta, ma nell'esempio prima ovest lascia **08:30–12:05 e 12:05–15:40**
+> senza partenze del giro: **215 minuti, non accettati**.
+> Un secondo confronto a **16 giri** porta l'intervallo massimo a **120 minuti**,
+> mantenendo H30 nelle punte; richiede però inizio della garanzia alle **07:00**,
+> H90/H120 anche fuori dalla sola finestra 10–16 e la sostituzione di **due coincidenze-obiettivo**
+> dell'ala percorsa seconda. Entrambe le scelte est/ovest sono esaminate, **nessuna approvata**.
+> Con i vecchi limiti centrali e tutti i vecchi treni servono almeno 18 giri nel dominio;
+> questo non autorizza ad aumentare il conteggio scelto. [Scelta registrata](config/rt031_16_full_trips_authority_v3.json).
+>
+> **Contratto del percorso: [stesso otto completo per ogni corsa](docs/RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md).**
 > Una sola linea: ogni corsa commerciale percorre entrambe le ali; FS è anche fermata
 > intermedia, senza cambio obbligatorio. Nessuna corsa pubblica limitata alla singola ala.
 > La precedente proposta da **31 corse d'ala è superata come soluzione finale**;
@@ -9,10 +22,9 @@
 > Geometria confermata e **29 siti di progetto**: aggiunta Arlate/Via Nuova Provinciale
 > accolta, N0655 sul cavalcavia di Via Indipendenza esclusa senza spostamenti automatici.
 > Olgiate sud e San Zeno restano inclusi. Non sono paline autorizzate.
-> Il giro completo è 27,679 km: 15 giri/giorno sono 107.947 km/anno su 260 giorni ipotizzati,
-> **solo aritmetica, non un orario verificato**. Il primo confronto che conserva tutte le
+> Il giro completo è 27,679 km. Il precedente confronto che conserva tutte le
 > condizioni temporali ereditate richiede almeno 20 giri (143.929 km) nel dominio esaminato:
-> non è un minimo globale né un aumento adottato. Si riesaminano quelle condizioni,
+> è diagnostica storica, non un minimo globale né un aumento adottato. Si riesaminano quelle condizioni,
 > senza rinunciare automaticamente a H30 in punta, ferrovia o utilità intercomunale.
 > Calendario, costi complessivi, flotta, manovre e fermate restano da validare.
 > [Contratto corretto](config/rt031_uniform_complete_line_authority_v3.json) ·
