@@ -3,7 +3,7 @@ import json
 import unittest
 
 from scripts.phase2_close_rt031_line8_16_full_trips_v3 import (
-    AUTH, DOC, BASE, authority, read_result, inputs, source_fingerprints,
+    AUTH, DOC, BASE, FREE_ORDER, authority, read_result, inputs, source_fingerprints,
     digest, solve_case, verify, report, timing_offsets, staggered_rail_inputs)
 
 
@@ -132,6 +132,19 @@ class SixteenFullTripsTests(unittest.TestCase):
                                129536.1751644239)
         self.assertFalse(self.r['eighteen_full_trips_adopted'])
 
+    def test_road_reordering_cannot_buy_eighteen_trips_at_sixteen_trip_production(self):
+        audit = self.r['road_length_budget_audit']
+        self.assertEqual(audit['source_sha256_normalized_newlines'], digest(FREE_ORDER))
+        self.assertEqual(audit['reference_site_count_before_on_path_N1212_addition'], 28)
+        self.assertEqual(audit['current_design_site_count_including_fs'], 29)
+        self.assertAlmostEqual(audit['current_complete_route_km'], 27.678669906928)
+        self.assertAlmostEqual(audit['maximum_complete_route_km_for_18_trips_at_current_16_trip_annual_production'],
+                               24.60326213949)
+        self.assertAlmostEqual(audit['required_saving_km_per_complete_route'], 3.07540776744)
+        self.assertAlmostEqual(audit['required_saving_fraction_of_current_route'], 1/9)
+        self.assertFalse(audit['can_reach_18_trips_at_current_production_by_interior_reordering_only'])
+        self.assertFalse(audit['route_shortening_adopted'])
+
     def test_both_roots_210_infeasible_215_constructive_independent_rerun(self):
         for first, midpoint in [('west_B', 60), ('east_A', 55)]:
             no = solve_case(self.p, self.loops, first, midpoint, self.p['wait_ceiling'], 8, 210, 16)
@@ -188,6 +201,9 @@ class SixteenFullTripsTests(unittest.TestCase):
                    x['requirement'] == 'caller_16_complete_trips_with_peak_and_rail_service')
         self.assertEqual(row['minimum_full_trips_with_shifted_rail_h60_shoulders_h120_core'], 18)
         self.assertFalse(row['eighteen_full_trips_adopted'])
+        self.assertAlmostEqual(row['required_reduction_km_per_full_route'],
+                               self.r['road_length_budget_audit']['required_saving_km_per_complete_route'])
+        self.assertFalse(row['route_shortening_adopted'])
         self.assertEqual(DOC.read_text(encoding='utf-8'), report(self.r))
         self.assertIn('non è stato accettato', report(self.r))
 

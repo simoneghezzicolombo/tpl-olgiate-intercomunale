@@ -18,6 +18,10 @@
 > richiedono almeno **18 giri completi** nei 14 casi esaminati, pari a circa
 > **129.536 km/anno** sui 260 giorni ipotizzati. Il confronto **non autorizza**
 > ad aumentare il conteggio scelto. [Scelta registrata](config/rt031_16_full_trips_authority_v3.json).
+> Per 18 giri agli stessi 115.143 km/anno del confronto a 16 occorrerebbe
+> accorciare ogni giro di **3,075 km (11,11%)**. La [prova di ordine libero](docs/RT031_LINEA8_ORDINE_LIBERO_FERMATE_V3.md)
+> certifica invece zero risparmio nel dominio con tutti i siti mantenuti ed estremi
+> fissati: permutare le fermate interne non basta. Non esclude altri grafi o estremi.
 >
 > **Contratto del percorso: [stesso otto completo per ogni corsa](docs/RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md).**
 > Una sola linea: ogni corsa commerciale percorre entrambe le ali; FS è anche fermata

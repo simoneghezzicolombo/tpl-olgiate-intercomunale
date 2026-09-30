@@ -23,6 +23,7 @@ from scripts.phase2_audit_rt031_line8_dwell_sensitivity_v3 import adjusted_loops
 AUTH = ROOT / 'config/rt031_16_full_trips_authority_v3.json'
 OUTPUT = BASE / 'uniform_16_full_trips.json.gz'
 DOC = ROOT / 'docs/RT031_LINEA8_16_GIRI_COMPLETI_V3.md'
+FREE_ORDER = BASE / 'free_order_road_comparison.json'
 
 
 def domain_inputs(p, loops, first, midpoint, offpeak='inherited'):
@@ -411,6 +412,39 @@ def build():
     if (not all(c['minimum_proven'] for c in h60_shoulder_minima)
             or min(c['full_trip_count'] for c in h60_shoulder_minima) != 18):
         raise ValueError('H60 shoulder trip-count lower bound did not reproduce')
+    free_order = json.loads(FREE_ORDER.read_text(encoding='utf-8'))
+    certified = {row['reference_pattern']: row for row in free_order['audits']
+                 if row['reference_pattern'] in loops and
+                 row['minimum_distance_proven_in_represented_fixed_boundary_domain']}
+    if set(certified) != set(loops) or len(free_order['reference_site_ids']) != 28:
+        raise ValueError('retained-site free-order proof missing or scope changed')
+    for pattern, loop in loops.items():
+        if abs(certified[pattern]['distance_m']-loop['distance_m']) > 1e-6:
+            raise ValueError('fixed-site road minimum no longer matches 29-site design path')
+    current_full_km = sum(l['distance_m'] for l in loops.values())/1000
+    max_full_km_at_18_same_production = km/(18*260)
+    road_length_audit = {
+        'source': str(FREE_ORDER.relative_to(ROOT)).replace('\\', '/'),
+        'source_sha256_normalized_newlines': digest(FREE_ORDER),
+        'reference_site_count_before_on_path_N1212_addition': len(free_order['reference_site_ids']),
+        'current_design_site_count_including_fs': 29,
+        'same_road_path_with_N1212_on_path': True,
+        'fixed_boundary_all_retained_site_free_order_minima_km':
+            {k: certified[k]['distance_m']/1000 for k in sorted(certified)},
+        'current_complete_route_km': current_full_km,
+        'maximum_complete_route_km_for_18_trips_at_current_16_trip_annual_production':
+            max_full_km_at_18_same_production,
+        'required_saving_km_per_complete_route': current_full_km-max_full_km_at_18_same_production,
+        'required_saving_fraction_of_current_route':
+            (current_full_km-max_full_km_at_18_same_production)/current_full_km,
+        'free_interior_stop_reordering_saving_km_in_fixed_boundary_domain': 0.0,
+        'can_reach_18_trips_at_current_production_by_interior_reordering_only': False,
+        'domain': 'Frozen graph, represented via-node restrictions, fixed FS-to-first and last-to-FS '
+                  'boundary paths, all 28 prior site identities retained. N1212 is an added '
+                  'on-path event with no route-distance change. Does not certify full-history '
+                  'restrictions, bus manoeuvres, alternate boundary legs or another street graph.',
+        'route_shortening_adopted': False,
+    }
     return {'contract': 'RT031_16_COMPLETE_TRIPS_TIMING_AUDIT_V3',
             'authority_source': str(AUTH.relative_to(ROOT)).replace('\\', '/'),
             'authority_sha256': digest(AUTH), 'parent_sources': source_fingerprints(p, loops),
@@ -431,6 +465,7 @@ def build():
             'minimum_annual_service_km_at_260_assumed_days_h60_shoulders_h120_core':
                 18*sum(l['distance_m'] for l in loops.values())/1000*260,
             'eighteen_full_trips_adopted': False,
+            'road_length_budget_audit': road_length_audit,
             'refined_diagnostics_adopted': False,
             'staggered_comparisons_adopted': False,
             'staggered_ready_start_07_accepted': False,
@@ -528,6 +563,15 @@ def report(r):
         'una proposta di aumento. Perciò i 16 giri scelti e la combinazione H60 nelle spalle '
         '+ H120 solo nella morbida pesante non coesistono in questo dominio. Il risultato non '
         'dimostra impossibilità su ogni possibile regolazione stradale o orario continuo.', '',
+        'Per far rientrare **18 giri** negli stessi 115.143,267 km/anno ipotizzati per 16, '
+        'il giro dovrebbe scendere da **27,679 a 24,603 km**: **3,075 km in meno '
+        '(11,11%)** a ogni giro. L’audit stradale preesistente con tutti i siti mantenuti '
+        'e ordine interno libero trova invece esattamente gli stessi 27,679 km come minimo '
+        'nelle due ali, a estremi fissati; la nuova fermata N1212 è già sul percorso e non '
+        'cambia i km. Quindi una semplice permutazione delle fermate interne **non finanzia** '
+        'il passaggio a 18 giri in quel dominio. Non è un minimo globale di un altro grafo, '
+        'di nuovi capolinea o di fermate spostate; nessuna geometria viene riaperta o adottata. '
+        '[Prova stradale precedente](RT031_LINEA8_ORDINE_LIBERO_FERMATE_V3.md).', '',
         '## Confronto precedente a 120 minuti, conservato per tracciabilità', '',
         '**Due ulteriori orari diagnostici mantengono 16 giri e riducono il massimo intervallo '
         'fra partenze a 120 minuti, senza togliere siti di progetto o cambiare percorso.** '
