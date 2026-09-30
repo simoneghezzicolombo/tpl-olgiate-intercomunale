@@ -220,7 +220,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.13'
       - run: python -m pip install 'numpy>=2,<3' 'pandas>=2.2,<4' 'scipy>=1.13,<2' 'shapely>=2,<3'
       - name: Regression tests and constructive compromise
         run: |
