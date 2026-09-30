@@ -89,6 +89,11 @@ on:
       - outputs/phase2/rt031_line8_local_shortcuts_v3/west_full_retention.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.geojson
+      - scripts/phase2_probe_rt031_line8_free_boundaries_v3.py
+      - scripts/phase2_render_rt031_line8_free_boundaries_v3.py
+      - tests/test_phase2_rt031_line8_free_boundaries_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/free_boundary_road_comparison.*
+      - docs/RT031_LINEA8_ACCESSI_LIBERI_29_SITI_V3.md
       - .github/workflows/phase2-rt031-line8-local-shortcuts-v3.yml
   pull_request:
     paths:
@@ -177,6 +182,11 @@ on:
       - outputs/phase2/rt031_line8_local_shortcuts_v3/west_full_retention.geojson
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.json
       - outputs/phase2/rt031_line8_local_shortcuts_v3/via_como_proximity.geojson
+      - scripts/phase2_probe_rt031_line8_free_boundaries_v3.py
+      - scripts/phase2_render_rt031_line8_free_boundaries_v3.py
+      - tests/test_phase2_rt031_line8_free_boundaries_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/free_boundary_road_comparison.*
+      - docs/RT031_LINEA8_ACCESSI_LIBERI_29_SITI_V3.md
       - .github/workflows/phase2-rt031-line8-local-shortcuts-v3.yml
 permissions:
   contents: read
@@ -209,6 +219,7 @@ jobs:
           python -m unittest discover -s tests -p test_phase2_rt031_line8_dwell_sensitivity_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_joint_phases_v3.py
           python -m unittest discover -s tests -p test_phase2_rt031_line8_passenger_peaks_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_free_boundaries_v3.py
       - name: Verify and fetch pinned road and pedestrian evidence
         env:
           GH_TOKEN: ${{ github.token }}
@@ -223,6 +234,17 @@ jobs:
           gh run download 34030321683 -n phase2-rt022-minimum-backbones-v3-real -D /tmp/rt031/rt022
           gh run download 34134177590 -n rt031-successor-via-way-relevance-v3 -D /tmp/rt031/successor
           gh run download 34039162932 -n rt028-final-stop-pedestrian-accessibility-substrate-v3 -D /tmp/rt031/rt028
+      - name: Reproduce 29-site free-boundary distance and event audit
+        run: |
+          set -euo pipefail
+          PYTHONPATH=.:src:scripts python -m scripts.phase2_probe_rt031_line8_free_boundaries_v3 \
+            --graph_dir /tmp/rt031 \
+            --output /tmp/rt031/free-boundary.json --geojson /tmp/rt031/free-boundary.geojson
+          cmp /tmp/rt031/free-boundary.json outputs/phase2/rt031_line8_local_shortcuts_v3/free_boundary_road_comparison.json
+          cmp /tmp/rt031/free-boundary.geojson outputs/phase2/rt031_line8_local_shortcuts_v3/free_boundary_road_comparison.geojson
+          PYTHONPATH=.:src:scripts python -m scripts.phase2_render_rt031_line8_free_boundaries_v3 \
+            --graph_dir /tmp/rt031 --output /tmp/rt031/free-boundary.png
+          test -s /tmp/rt031/free-boundary.png
       - name: Reproduce counterflow road comparison and geometry byte for byte
         run: |
           set -euo pipefail
