@@ -407,6 +407,13 @@ def report(r):
         'di un budget complessivo, di più mezzi o dell’esercizio.', '',
         'Restano 29 siti di progetto: Arlate/Via Nuova Provinciale inclusa, aggiunta N0655 sul cavalcavia '
         'esclusa; Olgiate sud e San Zeno/Via Cantù mantenuti. Nessuna corsa limitata a un’ala.', '',
+        '![Tracciato unico confermato della Linea 8: entrambe le ali sono percorse in ognuno dei 16 giri; '
+        '29 siti di progetto](../outputs/phase2/rt031_line8_local_shortcuts_v3/linea8_16_giri_tracciato.png)', '',
+        'La mappa unisce la geometria stradale già confermata alla nuova fermata di progetto N1212 ad Arlate. '
+        'I punti non certificano posizione o autorizzazione fisica delle paline. I colori distinguono le ali '
+        'del medesimo giro, **non due linee**; la precedenza di percorrenza resta da scegliere. '
+        'Rigenerazione della mappa interattiva: '
+        '`python scripts/phase2_render_rt031_16_route_inline_v3.py --output <percorso-html>`.', '',
         '## Risultato concreto e limite da non nascondere', '',
         '**Esistono esempi a 16 giri che conservano tutti i treni-obiettivo e vere sequenze H30, '
         'ma nel confronto lasciano due intervalli di 215 minuti (3 ore e 35): '

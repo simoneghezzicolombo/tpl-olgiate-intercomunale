@@ -2,7 +2,7 @@
 
 **Scelta del committente: 16 corse complete al giorno, tutte sullo stesso otto.** Con geometria invariata sono **115.143,267 km di servizio/anno** su 260 giorni ipotizzati: **+3.724,267 km (+3,34%)** sul riferimento di 111.419. Non è approvazione del calendario, di un budget complessivo, di più mezzi o dell’esercizio.
 
-Restano 29 siti di progetto: Arlate/Via Nuova Provinciale inclusa, aggiunta N0655 sul cavalcavia esclusa; Olgiate sud e San Zeno/Via Cantù mantenuti. Nessuna corsa limitata a un'ala.
+Restano 29 siti di progetto: Arlate/Via Nuova Provinciale inclusa, aggiunta N0655 sul cavalcavia esclusa; Olgiate sud e San Zeno/Via Cantù mantenuti. Nessuna corsa limitata a un’ala.
 
 ![Tracciato unico confermato della Linea 8: entrambe le ali sono percorse in ognuno dei 16 giri; 29 siti di progetto](../outputs/phase2/rt031_line8_local_shortcuts_v3/linea8_16_giri_tracciato.png)
 
