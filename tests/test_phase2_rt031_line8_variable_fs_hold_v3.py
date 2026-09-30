@@ -44,6 +44,17 @@ class VariableFsHoldTests(unittest.TestCase):
                              feasible['full_trips']), 80)
         self.assertGreater(feasible['maximum_intermediate_fs_onboard_wait_nominal_min'], 39)
 
+    def test_frequency_only_does_not_mean_rail_usefulness(self):
+        east = solve(self.p, self.loops, 'east_A', False, 60, 30,
+                     anchor_policy='max_supported')
+        west = solve(self.p, self.loops, 'west_B', False, 60, 30,
+                     anchor_policy='h30_unbound')
+        self.assertEqual(east['solver_status'], 0)
+        self.assertEqual(east['original_train_targets_bound_count'], 10)
+        self.assertEqual(len(east['peak_banks_without_rail_binding']), 4)
+        self.assertFalse(east['original_22_train_targets_all_bound'])
+        self.assertTrue(west['infeasibility_proven'])
+
     def test_published_frontier_remains_non_decisional(self):
         result = json.loads(gzip.decompress(OUTPUT.read_bytes()))
         self.assertEqual(result['contract'],
@@ -68,6 +79,10 @@ class VariableFsHoldTests(unittest.TestCase):
                             ['infeasibility_proven'])
             self.assertTrue(by_id[prefix+'18_shoulder60_maxmidall_minhold']
                             ['witness_found'])
+        self.assertEqual(by_id['east_A_16_shoulder60_max_supported']
+                         ['original_train_targets_bound_count'], 10)
+        self.assertTrue(by_id['west_B_16_shoulder60_h30_unbound']
+                        ['infeasibility_proven'])
 
 
 if __name__ == '__main__':

@@ -79,9 +79,15 @@ def ordered_stop_ledger(loops, first, selected):
 
 
 def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
-          full_trip_count=16, minimize_hold=False):
+          full_trip_count=16, minimize_hold=False, anchor_policy='fixed_22'):
     """One fixed complete-path orientation; only intermediate FS hold varies."""
     second = next(k for k in loops if k != first)
+    if anchor_policy not in ('fixed_22', 'h30_unbound', 'max_supported'):
+        raise ValueError('unknown rail-anchor policy')
+    if shifted and anchor_policy != 'fixed_22':
+        raise ValueError('cannot shift targets when rail anchors are unbound')
+    if minimize_hold and anchor_policy == 'max_supported':
+        raise ValueError('separate rail-coverage and holding objectives')
     if not all(p['family']['joins'].get(k) is True for k in (first+'>'+second, second+'>'+first)):
         raise ValueError('unrepresented full-trip join')
     if shifted:
@@ -109,7 +115,8 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
     pairs = [(t, t+m, m) for t in first_times for m in mid_offsets]
     pair_col = {(t, u): nx+i for i, (t, u, _) in enumerate(pairs)}
     assignments = []
-    targets = sorted({(a0['wing'], a0['kind'], a0['rail_min']) for a0 in p['anchors']})
+    targets = (sorted({(a0['wing'], a0['kind'], a0['rail_min']) for a0 in p['anchors']})
+               if anchor_policy != 'h30_unbound' else [])
     for wing_prefix, kind, minute in targets:
         wing = next(w for w in (first, second) if w.startswith(wing_prefix))
         eligible = []
@@ -121,14 +128,22 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
                 valid = 3 <= t-minute <= 8
             if valid:
                 eligible.append(t)
-        if not eligible:
+        if not eligible and anchor_policy == 'fixed_22':
             return {'solver_status': 2, 'infeasibility_proven': True,
                     'reason': 'empty rail eligibility', 'empty_target': [wing_prefix, kind, minute]}
         assignments.append({'wing': wing, 'kind': kind, 'rail_min': minute,
                             'eligible': eligible})
     aa = [(r, t) for r, row in enumerate(assignments) for t in row['eligible']]
     aa_col = {(r, t): nx+len(pairs)+i for i, (r, t) in enumerate(aa)}
-    n = nx+len(pairs)+len(aa)
+    banks = []
+    if anchor_policy in ('h30_unbound', 'max_supported'):
+        for wing in (first, second):
+            for peak, start_lo, start_hi in (('AM', 330, 450), ('PM', 930, 1050)):
+                for start in range(start_lo, start_hi+1, 5):
+                    if all(start+30*k in times[wing] for k in range(5)):
+                        banks.append((wing, peak, start))
+    bank_col = {bank: nx+len(pairs)+len(aa)+i for i, bank in enumerate(banks)}
+    n = nx+len(pairs)+len(aa)+len(banks)
     rr, cc, vv, lower, upper = [], [], [], [], []
 
     def row(entries, lo, hi):
@@ -159,7 +174,8 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
                             row([(i, 1) for i in cover], 1, np.inf)
 
     for r, target in enumerate(assignments):
-        row([(aa_col[r, t], 1) for t in target['eligible']], 1, 1)
+        row([(aa_col[r, t], 1) for t in target['eligible']],
+            1 if anchor_policy == 'fixed_22' else 0, 1)
         for t in target['eligible']:
             row([(aa_col[r, t], 1), (ix[target['wing'], t], -1)], -np.inf, 0)
     for wing in (first, second):
@@ -167,18 +183,29 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
             core = sorted([r for r, a0 in enumerate(assignments)
                            if a0['wing'] == wing and a0['kind'] == kind],
                           key=lambda r: assignments[r]['rail_min'])[:5]
-            for before, after in zip(core, core[1:]):
-                entries = [(aa_col[r, t], t*(1 if r == after else -1))
-                           for r in (before, after) for t in assignments[r]['eligible']]
-                row(entries, 30, 30)
+            if anchor_policy == 'fixed_22':
+                for before, after in zip(core, core[1:]):
+                    entries = [(aa_col[r, t], t*(1 if r == after else -1))
+                               for r in (before, after) for t in assignments[r]['eligible']]
+                    row(entries, 30, 30)
             for t in times[wing]:
                 same = [aa_col[r, t] for r, a0 in enumerate(assignments)
                         if a0['wing'] == wing and a0['kind'] == kind and t in a0['eligible']]
                 if same:
                     row([(j, 1) for j in same], -np.inf, 1)
+    for wing in (first, second):
+        for peak in ('AM', 'PM'):
+            selected_banks = [bank for bank in banks if bank[:2] == (wing, peak)]
+            if selected_banks:
+                row([(bank_col[bank], 1) for bank in selected_banks], 1, 1)
+                for bank in selected_banks:
+                    for k in range(5):
+                        row([(ix[wing, bank[2]+30*k], 1),
+                             (bank_col[bank], -1)], 0, np.inf)
     matrix = csc_matrix((vv, (rr, cc)), shape=(len(lower), n))
     pair_costs = [m if minimize_hold else 0 for _, _, m in pairs]
-    answer = milp(np.r_[np.zeros(nx), pair_costs, np.zeros(len(aa))],
+    assignment_costs = [-1 if anchor_policy == 'max_supported' else 0]*len(aa)
+    answer = milp(np.r_[np.zeros(nx), pair_costs, assignment_costs, np.zeros(len(banks))],
                   integrality=np.ones(n), bounds=Bounds(0, 1),
                   constraints=LinearConstraint(matrix, lower, upper),
                   options={'time_limit': time_limit, 'mip_rel_gap': 0})
@@ -187,6 +214,7 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
               'shoulder_headway_cap_min': shoulder, 'core_headway_cap_min': 120,
               'ready_start_min': start, 'candidate_mid_offsets_min': mid_offsets,
               'five_minute_grid': True, 'full_trip_count': full_trip_count,
+              'anchor_policy': anchor_policy,
               'intermediate_holding_minimized': minimize_hold,
               'solver_status': int(answer.status), 'solver_message': str(answer.message),
               'infeasibility_proven': answer.status == 2, 'witness_found': answer.x is not None}
@@ -212,8 +240,14 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
     chosen = [{'wing': assignments[r]['wing'], 'kind': assignments[r]['kind'],
                'rail_min': assignments[r]['rail_min'], 'wing_fs_departure_min': t}
               for i, (r, t) in enumerate(aa) if answer.x[nx+len(pairs)+i] > .5]
-    if len(chosen) != len(targets):
+    if anchor_policy == 'fixed_22' and len(chosen) != len(targets):
         raise ValueError('rail target witness verification failed')
+    chosen_banks = [{'wing': wing, 'peak': peak, 'start_min': start,
+                     'departures_min': [start+30*k for k in range(5)]}
+                    for bank, col in bank_col.items() if answer.x[col] > .5
+                    for wing, peak, start in [bank]]
+    if anchor_policy != 'fixed_22' and len(chosen_banks) != 4:
+        raise ValueError('missing full H30 banks')
     vehicle_cases = []
     for (moving, dwell), scenario in offsets.items():
         for recovery in (5, 10, 15):
@@ -232,6 +266,14 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
     nominal_first = offsets[1.1, .5][first]['road_minutes']
     nominal_second = offsets[1.1, .5][second]['road_minutes']
     result.update(full_trips=selected, rail_assignments=chosen,
+                  peak_banks_without_rail_binding=chosen_banks,
+                  original_22_train_targets_all_bound=(len(chosen) == 22),
+                  original_train_targets_bound_count=len(chosen),
+                  original_train_targets_unbound=[
+                      {'wing': wing, 'kind': kind, 'rail_min': minute}
+                      for wing, kind, minute in targets
+                      if not any(a['wing'].startswith(wing) and a['kind'] == kind
+                                 and a['rail_min'] == minute for a in chosen)],
                   ordered_stop_event_ledger_nominal=(
                       ordered_stop_ledger(loops, first, selected)
                       if full_trip_count == 16 else None),
@@ -281,6 +323,18 @@ def build(time_limit=90):
             case['comparison_trip_count_not_adopted'] = count != 16
             cases.append(case)
             print(case['case_id'], case['solver_status'], case['witness_found'], flush=True)
+        # Deliberately drop exact train bindings while retaining a two-hour
+        # H30 bank on each wing/peak, then maximise the number of ORIGINAL
+        # dated targets that still bind. This is a cardinality bound, not a
+        # passenger-utility weight or a selected replacement train set.
+        for policy in ('h30_unbound', 'max_supported'):
+            case = solve(p, loops, first, False, 60, time_limit,
+                         anchor_policy=policy)
+            case['case_id'] = f'{first}_16_shoulder60_{policy}'
+            case['rail_objective_relaxed_not_adopted'] = True
+            cases.append(case)
+            print(case['case_id'], case['solver_status'], case['witness_found'],
+                  case.get('original_train_targets_bound_count'), flush=True)
     manoeuvres = json.loads(gzip.decompress(MANOEUVRES.read_bytes()))['manoeuvres']
     if len(manoeuvres) != 6 or any(m['bus_manoeuvre_authorised'] for m in manoeuvres):
         raise ValueError('source physical manoeuvre status drift')
@@ -314,8 +368,12 @@ def build(time_limit=90):
                      'five-minute grid, root FS starts 05:00-19:40, per-trip intermediate '
                      'FS departure offset in seven five-minute values from stress-feasible '
                      'minimum through +30. Ready-time windows 06:45 or 06:50-19:40; '
-                     'H120 10-16, tested H60/H90/H95/H120 shoulders. Five core target-bound '
-                     'trips H30 in each wing. 17/18-trip cases are non-adopted comparisons. '
+                     'H120 10-16, tested H60/H90/H95/H120 shoulders. In fixed_22 cases '
+                     'five core target-bound trips are H30 in each wing. Rail-relaxed '
+                     'diagnostics instead enforce explicit five-trip H30 banks per wing/peak '
+                     'with starts 05:30-07:30 AM and 15:30-17:30 PM, then count original '
+                     'dated targets without weighting or replacing them. 17/18-trip cases '
+                     'are non-adopted comparisons. '
                      'This is not a continuous-time or physical bus-operation proof.',
             'decision_budget_km': None, 'uncertainty_band_min': None,
             'annual_calendar_adopted': False,
