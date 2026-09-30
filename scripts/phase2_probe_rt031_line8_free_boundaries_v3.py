@@ -38,8 +38,12 @@ def directional_access(events, site_id):
 def build(graph_dir):
     paths = inputs(graph_dir)
     pinned = json.loads((BASE / 'free_order_road_comparison.json').read_text(encoding='utf-8'))
-    actual_hashes = {k: digest(p, k.endswith('normalized_newlines')) for k, p in paths.items()}
-    if actual_hashes != pinned['road_source_sha256']:
+    normalized_keys = {'candidates_normalized_newlines', 'wings', 'timetable'}
+    actual_hashes = {k: digest(p, k in normalized_keys) for k, p in paths.items()}
+    expected_hashes = {**pinned['road_source_sha256'],
+                       **{k: pinned['source_sha256_normalized_newlines'][k]
+                          for k in ('wings', 'timetable')}}
+    if actual_hashes != expected_hashes:
         raise ValueError('road evidence differs from pinned free-order audit')
     edges, nodes, rules, attachments = build_graph(paths)
     fs = attachments[FS]['graph_node_id']

@@ -42,6 +42,10 @@ class CommittedBoundaryAuditTest(unittest.TestCase):
         self.assertAlmostEqual(a['distance_margin_to_target_m'], 85.914852105, places=3)
         self.assertEqual([x['required_site_count'] for x in a['audits']], [15, 13])
         self.assertIn(ARLATE_NEW, a['audits'][1]['required_site_ids'])
+        pinned = json.loads((BASE / 'free_order_road_comparison.json').read_text(encoding='utf-8'))
+        for key in ('wings', 'timetable'):
+            self.assertEqual(a['road_source_sha256'][key],
+                             pinned['source_sha256_normalized_newlines'][key])
 
     def test_service_non_equivalence_fails_closed(self):
         a = self.audit
