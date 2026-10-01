@@ -20,7 +20,8 @@ OUTPUT = BASE/'no_reverse_omission_walking.json'
 ARLATE = 'PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64'
 
 
-def build(graph_dir, walk_dir):
+def walking_context(graph_dir, walk_dir):
+    """Reproduce the historic substrate before adding the explicit hypotheses."""
     paths = inputs(graph_dir)
     paths.update(matrix=walk_dir/'output/rt028_population_unit_stop_walk_matrix_v3.csv',
         pedestrian_osm=walk_dir/'input/rt028_osm_pedestrian_snapshot_v3.osm',
@@ -31,7 +32,6 @@ def build(graph_dir, walk_dir):
     sites = {r['site_id']:{'node':r['graph_node_id']} for r in register['register'] if r['site_id']!=ARLATE}
     _, original_baseline, _, context = load_access(paths, sites, include_context=True)
     _, nodes, _, _ = build_graph(paths)
-    road = json.loads(gzip.decompress(ROAD.read_bytes()))
     calco = next(c for c in json.loads(gzip.decompress(CALCO.read_bytes()))['cases'] if c['reachable'])
     graph = context['graph']; units = context['units']; snaps = context['snap_map']
     arlate_node = 'n:534398.29:5063851.64'
@@ -41,7 +41,6 @@ def build(graph_dir, walk_dir):
     calco_times, _ = pedestrian_time(graph, snaps, units,
         float(nodes[calco_node]['lat']), float(nodes[calco_node]['lon']))
     substrate = context['substrate']
-    comparison_ids = {e['stop_place_id'] for l in road['loops'].values() for e in l['events']}|{FS}
 
     def access(served_ids):
         matrix_ids = sorted(served_ids-{VIRTUAL,NORTH,ARLATE,'FROZEN::300634'})
@@ -55,6 +54,13 @@ def build(graph_dir, walk_dir):
                     context['core'] if code=='TOTAL' else context['core'] & (context['codes']==code)))
                 for limit in (5,8,10)} for code in ('TOTAL',*MUNICIPALITY_NAMES)}
 
+    return access, original_baseline, paths
+
+
+def build(graph_dir, walk_dir):
+    access, original_baseline, paths = walking_context(graph_dir, walk_dir)
+    road = json.loads(gzip.decompress(ROAD.read_bytes()))
+    comparison_ids = {e['stop_place_id'] for l in road['loops'].values() for e in l['events']}|{FS}
     baseline = access(comparison_ids)
     cases = []
     for c in road['single_inventory_omission_comparisons_not_adopted']:

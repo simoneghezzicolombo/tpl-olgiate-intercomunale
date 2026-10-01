@@ -1,5 +1,7 @@
 # Linea 8 — esito del confronto conclusivo circoscritto
 
+Aggiornamento successivo: il [confronto esaustivo dei piccoli tagli](RT031_LINEA8_ESITO_TAGLI_E_17_GIRI_V3.md) chiude 326 casi a ordine conservato e quantifica testimoni H60 a 17 giri, senza adottare esclusioni o più produzione. Gli esiti negativi/irrisolti sotto descritti riguardano soltanto il precedente pool a 29/28 siti.
+
 ## Conclusione verificabile, senza una falsa selezione finale
 
 **Non è stata trovata una proposta che soddisfi contemporaneamente tutti gli obiettivi nel dominio qui verificato.** Il confronto dei due versi richiesto è stato eseguito, non rinviato. Non autorizza a dichiarare impossibile ogni Linea 8, a scegliere H70, a togliere Hoè o a scegliere PRIMARY. La proposta pubblica non è ancora pronta: chiamarla finale nasconderebbe conflitti sostanziali.

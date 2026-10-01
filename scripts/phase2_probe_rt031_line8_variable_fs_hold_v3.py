@@ -117,7 +117,7 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
         raise ValueError('cannot shift targets when rail anchors are unbound')
     if required_train_bank_start is not None and anchor_policy != 'flexible_real_trains':
         raise ValueError('required real-train bank needs flexible real trains')
-    if minimize_hold and anchor_policy in ('max_supported', 'flexible_real_trains'):
+    if minimize_hold and anchor_policy == 'max_supported':
         raise ValueError('separate rail-coverage and holding objectives')
     original_p = p
     original_targets = {(a0['wing'], a0['kind'], a0['rail_min']) for a0 in p['anchors']}
@@ -300,6 +300,8 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
                 row(difference+[(col, 2000)], -np.inf, 2030)
                 row(difference+[(col, -2000)], -1970, np.inf)
     matrix = csc_matrix((vv, (rr, cc)), shape=(len(lower), n))
+    # Flexible-real-trains fixes exactly 20 assignments/four H30 banks. Its
+    # cardinality is not traded against holding by this diagnostic objective.
     pair_costs = [m if minimize_hold else 0 for _, _, m in pairs]
     assignment_costs = [-1 if anchor_policy == 'max_supported' else 0]*len(aa)
     answer = milp(np.r_[np.zeros(nx), pair_costs, assignment_costs,
@@ -318,6 +320,8 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
               'intermediate_holding_minimized': minimize_hold,
               'solver_status': int(answer.status), 'solver_message': str(answer.message),
               'infeasibility_proven': answer.status == 2, 'witness_found': answer.x is not None}
+    if minimize_hold:
+        result['holding_objective_proven_optimal'] = answer.status == 0
     if answer.x is None:
         return result
     if max(abs(answer.x-np.rint(answer.x))) > 1e-6:
