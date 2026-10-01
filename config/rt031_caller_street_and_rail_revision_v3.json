@@ -1,0 +1,52 @@
+{
+  "contract": "RT031_CALLER_STREET_AND_RAIL_REVISION_V3",
+  "source": "User message of 2026-10-01 with three map screenshots; not a physical survey",
+  "baseline": "outputs/phase2/rt031_line8_local_shortcuts_v3/conditional_proposal_17_trips.json",
+  "baseline_not_selected": true,
+  "caller_update_2026_10_01": {
+    "adopted_development_street_exclusions": ["Via Mirasole", "Via Cartiglio", "Via Tessitura"],
+    "piazza_san_zenone_retained": true,
+    "santa_maria_calco_exchange_authorised_for_development": true,
+    "bidirectional_h30_action_deferred_by_caller": true,
+    "next_stage_after_geometry": "Audit all railway services calling at Olgiate, both directions and both transfer flows; do not equate the S8-only frozen subset with all trains"
+  },
+  "street_comparisons": [
+    {"id": "south_without_mirasole", "avoid_exact_osm_names": ["Via Mirasole"], "requested_corridor": "Roundabout then Via Aldo Moro", "corridor_certified": false},
+    {"id": "north_without_square", "avoid_exact_osm_names": ["Piazza San Zenone"], "retain_requirement": "San Zeno/Via Cantu, distinct outbound and inbound service events"},
+    {"id": "east_without_side_streets", "avoid_exact_osm_names": ["Via Cartiglio", "Via Tessitura"], "requested_corridor": "Main road rather than narrow secondary roads; additional distance acceptable in principle", "corridor_certified": false}
+  ],
+  "stop_exchange": {
+    "status": "EXCHANGE_AUTHORISED_FOR_DEVELOPMENT_EXACT_POINT_PENDING",
+    "removal_candidates": ["FROZEN::300782", "ASF::SANTA_MARIA_HOE_VIA_COMO"],
+    "addition_area": "Calco built-up area along actual revised path",
+    "candidate_position_selected": false,
+    "measure": "Recompute joint municipal 5/8/10-minute walking coverage and individual losses; stop count alone is not equivalence"
+  },
+  "rail_audit": {
+    "required_directions": ["MILANO", "LECCO"],
+    "required_interchanges": ["BUS_TO_RAIL", "RAIL_TO_BUS"],
+    "required_service_scope": "ALL_TRAINS_CALLING_AT_OLGIATE_NOT_ONLY_S8",
+    "evening_returns_explicitly_required": true,
+    "current_official_timetable_verified": false,
+    "source_for_comparison": "outputs/phase2/s8_events.csv",
+    "source_is_frozen_not_current": true
+  },
+  "bidirectional_peak_service": {
+    "status": "DEFERRED_BY_CALLER_NO_BIDIRECTIONAL_SERVICE_ACTION",
+    "meaning": "User expected H30 in both clockwise and counterclockwise service directions, not merely outbound and inbound FS journeys on one circuit",
+    "baseline_provides_this": false,
+    "reverse_geometry_certified": false,
+    "same_edge_list_reversed_is_not_certification": true,
+    "additional_service_or_cost_adopted": false
+  },
+  "fs_holding": {
+    "status": "ACCEPTABLE_IN_PRINCIPLE_NOT_UNBOUNDED",
+    "numeric_maximum_declared": null,
+    "onboard_continuity_still_requires_verification": true
+  },
+  "decision_budget_km": null,
+  "uncertainty_band_min": null,
+  "network_selected": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false
+}
