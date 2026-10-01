@@ -1,0 +1,300 @@
+"""Caller-confirmed design handoff, without promoting model evidence to operation.
+
+Preserves the preceding review artifact. No new search, weights or selection.
+"""
+import copy
+import hashlib
+import json
+from fractions import Fraction
+from pathlib import Path
+
+from scripts.phase2_package_rt031_current_16_trip_proposal_v3 import (
+    BASE, DESIGN, RAIL, SOURCE, build as review_build,
+)
+
+ROOT = Path(__file__).resolve().parents[1]
+AUTHORITY = ROOT / 'config/rt031_design_timetable_confirmation_20261001_v3.json'
+GEO = DESIGN.with_suffix('.geojson')
+OUTPUT = BASE / 'caller_confirmed_design_handoff_20261001.json'
+BRIEF = ROOT / 'docs/RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md'
+MUNICIPALITIES = {
+    '97010': 'Brivio', '97012': 'Calco', '97058': 'Olgiate Molgora',
+    '97074': 'Santa Maria Hoè', '97092': 'La Valletta Brianza', 'TOTAL': 'Totale',
+}
+
+
+def canonical_sha256(value):
+    return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True,
+                                     separators=(',', ':')).encode('utf-8')).hexdigest()
+
+
+def validate_authority(authority, sources):
+    expected = authority['source_canonical_sha256']
+    if set(expected) != set(sources):
+        raise ValueError('Authority source set mismatch')
+    for name, value in sources.items():
+        if canonical_sha256(value) != expected[name]:
+            raise ValueError(f'Caller-confirmed source drift: {name}')
+    schedule = sources[SOURCE.name]
+    pairs = [[t['first_fs_min'], t['second_fs_min']] for t in schedule['full_trips']]
+    if pairs != authority['full_trip_fs_departure_pairs_min']:
+        raise ValueError('Exact caller-confirmed departure pairs changed')
+    if schedule['ready_windows_min'] != authority['ready_windows_min']:
+        raise ValueError('Caller-confirmed readiness windows changed')
+    if not all(authority[k] for k in ('caller_confirmed_design_timetable_basis',
+                                     'transition_extension_adopted_for_design',
+                                     'exact_peak_phases_adopted_for_design',
+                                     'all_trips_same_complete_path',
+                                     'bidirectional_h30_action_deferred')):
+        raise ValueError('Missing design-only confirmation')
+    if (authority['full_commercial_trips_per_day'] != 16 or
+            authority['design_site_count_including_fs'] != 27 or
+            authority['ordered_nonhub_events_per_trip'] != 28 or
+            authority['public_route_name'] != 'Linea 8' or
+            authority['public_wing_sequence'] != ['east_A', 'west_B'] or
+            authority['short_turn_public_trips_allowed']):
+        raise ValueError('Confirmed complete-line scope mismatch')
+    for key in ('annual_calendar_adopted', 'public_operating_timetable_authorised',
+                'physical_boarding_authorised', 'physical_passenger_continuity_certified',
+                'fleet_or_operator_availability_certified', 'funding_secured',
+                'network_selected', 'primary_selection_authorised', 'runner_up_selection_authorised'):
+        if authority[key] is not False:
+            raise ValueError(f'Design confirmation cannot certify {key}')
+    for key in ('decision_budget_km', 'uncertainty_band_min'):
+        if authority[key] is not None:
+            raise ValueError(f'No new Decision Contract input authorised: {key}')
+
+
+def stop_register(proposal, geo):
+    features = [f for f in geo['features'] if f['properties'].get('role') == 'DESIGN_SITE']
+    ids = [f['properties']['site_id'] for f in features]
+    if len(ids) != 27 or len(set(ids)) != 27:
+        raise ValueError('Expected 27 distinct design sites including FS')
+    trips = proposal['ordered_stop_event_ledger_nominal']
+    sequences = []
+    for trip in trips:
+        events = [e for e in trip['events'] if e['role'] == 'DESIGN_STOP_OCCURRENCE']
+        if len(events) != 28 or len({e['occurrence_id'] for e in events}) != 28:
+            raise ValueError('Expected 28 explicit nonhub occurrences per complete trip')
+        sequences.append([(e['occurrence_id'], e['site_id'], e['wing'], e['full_path_edge_index']) for e in events])
+        if any(e['board_event_min'] < e['alight_event_min'] for e in events):
+            raise ValueError('Boarding/alighting event order violated')
+    if len(trips) != 16 or any(s != sequences[0] for s in sequences[1:]):
+        raise ValueError('Complete trips have different service-event sequences')
+    register = []
+    for feature in features:
+        p = feature['properties']; sid = p['site_id']
+        occurrences = []
+        for occurrence in p['ordered_occurrences']:
+            oid = occurrence['occurrence_id']
+            matches = [[e for e in t['events'] if e.get('occurrence_id') == oid] for t in trips]
+            if any(len(m) != 1 or m[0]['site_id'] != sid for m in matches):
+                raise ValueError('GeoJSON occurrence does not match every timetable trip')
+            events = [m[0] for m in matches]
+            order = next(i for i, item in enumerate(sequences[0], 1) if item[0] == oid)
+            ti = 0
+            later_fs = next(e for e in trips[ti]['events']
+                            if e['role'] in ('INTERMEDIATE_FS_STAY_ONBOARD_DESIGN', 'FULL_TRIP_END_FS')
+                            and e['arrival_min'] >= events[ti]['board_event_min'])
+            wing_start = trips[ti]['first_fs_min'] if occurrence['wing'] == 'east_A' else trips[ti]['second_fs_min']
+            occurrences.append(dict(
+                **occurrence, ordered_nonhub_event_number=order,
+                full_path_edge_index=events[0]['full_path_edge_index'],
+                first_board_event_min=min(e['board_event_min'] for e in events),
+                last_board_event_min=max(e['board_event_min'] for e in events),
+                first_alight_event_min=min(e['alight_event_min'] for e in events),
+                last_alight_event_min=max(e['alight_event_min'] for e in events),
+                nominal_fs_to_occurrence_in_vehicle_min=events[0]['alight_event_min']-wing_start,
+                nominal_occurrence_to_next_fs_in_vehicle_min=later_fs['arrival_min']-events[0]['board_event_min'],
+                physical_boarding_authorised=False,
+            ))
+        if p['kind'] != 'INVENTORY_HUB' and not occurrences:
+            raise ValueError('Served nonhub identity without a service occurrence')
+        register.append(dict(site_id=sid, name=p['name'], kind=p['kind'],
+                             coordinates_lon_lat=feature['geometry']['coordinates'],
+                             proposed_new_site=p['kind'].startswith('PROPOSED_'),
+                             physical_boarding_authorised=False, physical_platform_count=None,
+                             ordered_occurrences=occurrences,
+                             hub_service_roles=['FULL_TRIP_START_FS', 'INTERMEDIATE_FS_STAY_ONBOARD_DESIGN',
+                                                'FULL_TRIP_END_FS'] if p['kind'] == 'INVENTORY_HUB' else []))
+    if sum(len(s['ordered_occurrences']) for s in register) != 28:
+        raise ValueError('Occurrence register and timetable disagree')
+    return sorted(register, key=lambda s: min([o['ordered_nonhub_event_number'] for o in s['ordered_occurrences']] or [0]))
+
+
+def build():
+    authority = json.loads(AUTHORITY.read_text(encoding='utf-8'))
+    sources = {p.name: json.loads(p.read_text(encoding='utf-8')) for p in (SOURCE, DESIGN, RAIL, GEO)}
+    validate_authority(authority, sources)
+    result = copy.deepcopy(review_build())  # Revalidates the actual schedule, not just its hash.
+    result.update(
+        contract='RT031_CALLER_CONFIRMED_LINE8_DESIGN_HANDOFF_V3',
+        status='DESIGN_BASIS_CONFIRMED_OPERATIONAL_REVIEW_PENDING',
+        recorded_on=authority['recorded_on'],
+        caller_confirmed_design_timetable_basis=True,
+        detailed_timetable_adopted_for_design=True,
+        transition_extension_adopted_for_design=True,
+        exact_peak_phases_adopted_for_design=True,
+        exact_peak_phases_require_caller_confirmation=False,
+        public_operating_timetable_authorised=False,
+        full_history_road_legality_certified=False,
+        physical_platform_count=None,
+        annual_full_operating_cost=None,
+        funding_secured=False,
+        preceding_review_artifact='current_16_trip_proposal_for_caller_review.json',
+        authority_source=str(AUTHORITY.relative_to(ROOT)).replace('\\', '/'),
+        authority_canonical_sha256=canonical_sha256(authority),
+        source_canonical_sha256=authority['source_canonical_sha256'],
+        adopted_scope='DESIGN_ONLY_NOT_PUBLIC_OPERATION_NOT_TOURNAMENT_SELECTION',
+        semantics='One caller-confirmed design basis. Exact full-route service events and train flows retained; unsupported metrics remain null. No global optimum, empirical reliability, physical stop, annual calendar, operating or funding approval is inferred.',
+    )
+    # The old unqualified fields remain explicitly non-operational, not stealth authority.
+    result['unqualified_adoption_flags_semantics'] = 'detailed_timetable_adopted and transition_extension_adopted remain false for unqualified/public operating adoption; explicit *_for_design fields record the caller confirmation.'
+    for row in result['requirements_readiness']:
+        if row['input'] in ('h30_peak_banks', 'offpeak_transition'):
+            row['state'] = 'CALLER_CONFIRMED_DESIGN_ONLY'
+            row['source'] = result['authority_source']
+            row['upstream_evidence'] = SOURCE.name
+        if row['input'] == 'offpeak_transition':
+            row['semantics'] = 'Caller-confirmed design readiness cap 120 min 10:00-16:20; cap60 on shoulders. Not exact H120 bus departures throughout that window or physical reliability.'
+    result['design_stop_register'] = stop_register(result, sources[GEO.name])
+    result['proposed_new_design_site_count'] = sum(s['proposed_new_site'] for s in result['design_stop_register'])
+    result['inventory_design_site_count_including_fs'] = 27-result['proposed_new_design_site_count']
+    result['coverage_percent'] = {code: {m: 100*float(Fraction(v)) for m, v in values.items()}
+                                  for code, values in result['coverage_fraction'].items()}
+    result['coverage_semantics'] = 'Potential walking-network population coverage at 5/8/10 min on frozen substrate; not observed passengers, route-downscaled municipal OD, certified accessible paths or time-of-day utility.'
+    result['locality_claims_not_certified'] = ['Monticello/Mondonico', 'Calco alta/Cornello', 'Cassina',
+                                            'Crescenzaga', 'Oratorio/Casa di Comunità', 'Entire Olgiate south neighbourhood']
+    result['remaining_external_validations'] = [
+        dict(id='ROAD_AND_STOPS', owner='Operator and road/stop authorities',
+             required_evidence='Bus suitability, full-history restrictions, all junction/FS manoeuvres, boarding sides, stop areas and safe accessible paths; check all 27 sites including four proposed sites.',
+             close_when='Signed route/stop assessment identifies authorised directional occurrences; unresolved or incompatible movements keep operational readiness false.'),
+        dict(id='TIMING_AND_CONTINUITY', owner='Operator',
+             required_evidence='Measured runtimes/dwell by period, FS stay-onboard passenger permission, recovery, vehicle blocks and duty/depot/deadhead plan; physical transfer walk time.',
+             close_when='An executable full-trip timetable and resourcing plan supports this design; any required service change is disclosed for caller acceptance, not silently substituted.'),
+        dict(id='CALENDAR_AND_FULL_COST', owner='Agency and operator, with caller calendar choice',
+             required_evidence='Annual service dates, weekend/holiday/school scope, service and noncommercial km, fleet and staff cost, procurement/funding requirements.',
+             close_when='Agreed calendar and full-cost estimate reconcile commercial production and resources; 260 comparison days are not automatically adopted.'),
+    ]
+    result['best_practice_current_assessment'] = [
+        dict(id='BP-01', state='DESIGN_MODEL_CHECKED', finding='16 full trips; phased H30 peak banks; precise first/last occurrence events and offpeak readiness caps reported, not universal H30.'),
+        dict(id='BP-02', state='PARTIAL_UNWEIGHTED_ONLY', finding='Occurrence-level in-vehicle times and transfer waits; no passenger OD or demand-weighted GJT certified.'),
+        dict(id='BP-03', state='COMPROMISE_EXPLICIT', finding='Clockface 30-minute banks, irregular offpeak departures; no all-day clockface claim.'),
+        dict(id='BP-04', state='DATED_ALL_RAIL_DIAGNOSTIC', finding='All 74 calls and 296 wing/train/flow combinations disclosed, not all short-wait connections protected.'),
+        dict(id='BP-05', state='EXTERNAL_VALIDATION_REQUIRED', finding='9 deterministic moving/dwell cases, 27 with recovery; conditional 3/4 vehicles, not empirical reliability or available fleet.'),
+        dict(id='BP-06', state='LIMITS_RETAINED', finding='Fast separate local occurrences; long reverse journeys elsewhere remain, not cured by timetable shifts.'),
+        dict(id='BP-07', state='DESIGN_EXCHANGE_CONFIRMED_FIELD_PENDING', finding='Alpino removed, Santa Maria retained, Calco Municipio added; 27 sites are not certified platforms.'),
+        dict(id='BP-08', state='DESIGN_CONFIRMED_OPERATION_PENDING', finding='One Linea8 with identical complete east→west sequence every trip; FS remain-onboard permission pending.'),
+        dict(id='BP-09', state='HISTORICAL_SEARCH_NOT_GLOBAL_OPTIMUM', finding='Caller-confirmed design basis, not a tournament winner; no weighted retention or fabricated passengers affected.'),
+        dict(id='BP-10', state='SPATIAL_POTENTIAL_ONLY', finding='Five municipality percentages disclosed; temporal equity, missing locality crosswalks and passenger utility not certified.'),
+        dict(id='BP-11', state='FIVE_MUNICIPALITIES_MODELLED', finding='Intermunicipal fixed path and rail axes retained; broader destination demand is not inferred.'),
+        dict(id='BP-12', state='EXTERNAL_VALIDATION_REQUIRED', finding='Olgiate south and San Zeno separate; an occurrence does not certify whole neighbourhood coverage, safe walking or inclusive access.'),
+    ]
+    result['requirements_readiness'].extend([
+        dict(input='physical_route_stops_accessibility', state='EXTERNAL_VALIDATION_REQUIRED', source=GEO.name,
+             semantics='Coordinates and graph events are design hypotheses, not authorised bus-accessible platforms or full-history legal movements.'),
+        dict(input='passenger_continuity_and_vehicle_blocks', state='EXTERNAL_VALIDATION_REQUIRED', source=SOURCE.name,
+             semantics='Intended remain-onboard full trips; physical carrier alone does not certify service continuation or passenger permission.'),
+        dict(input='locality_to_stop_crosswalk', state='NOT_CERTIFIED_FOR_ALL_DESIRED_LOCALITIES',
+             source='docs/RT031_LINEA8_DOSSIER_UNICO_ISTRUTTORIO_V3.md', semantics='No named settlement is declared served from proximity alone.'),
+    ])
+    result['commercial_km_per_comparison_day'] = result['full_trip_count']*result['complete_path_distance_m']/1000
+    result['annual_production_formula'] = '16 * complete_path_distance_m / 1000 * actual_adopted_service_day_count; add separately any noncommercial km'
+    return result
+
+
+def clock(minute):
+    seconds = round(minute*60)
+    return f'{seconds//3600:02d}:{seconds//60%60:02d}:{seconds%60:02d}'
+
+
+def render_brief(r):
+    def italian(value, decimals=2):
+        return f'{value:,.{decimals}f}'.replace(',', '_').replace('.', ',').replace('_', '.')
+    lines = [
+        '# Linea 8 — proposta unica consolidata, 1 ottobre 2026', '',
+        '## La proposta da verificare con Agenzia e operatore', '',
+        '**Base progettuale e orario confermati dal committente.** Non è un servizio autorizzato né una selezione PRIMARY: questa è la proposta unica su cui chiedere verifica operativa, senza riaprire la ricerca o sostituire tacitamente percorso e corse.', '',
+        f'Una Linea 8, **16 giri completi/giorno**, stesso percorso a otto di **{italian(r["complete_path_distance_m"]/1000,3)} km** a ogni corsa. FS → est → FS intermedia → ovest → FS finale. Est/ovest sono sequenze della stessa corsa, non due linee. Permanenza a bordo a FS progettata, ancora da autorizzare.', '',
+        f'**27 siti di progetto inclusa FS: {r["inventory_design_site_count_including_fs"]} derivati dall’inventario e {r["proposed_new_design_site_count"]} proposti nuovi.** Le occorrenze non-FS sono 28: Olgiate sud e San Zeno ricorrono due volte, in eventi distinti. Il numero di paline fisiche non è ancora certificato. Una corrispondenza con l’inventario non autorizza automaticamente l’accosto scelto.', '',
+        'Confermati: niente Via Mirasole/Cartiglio/Tessitura nel modello, Piazza San Zenone mantenuta, Santa Maria Hoè mantenuta, Via Como/Alpino esclusa e Calco Centro–Municipio aggiunta in Via Italia senza nuovo percorso di marcia. H30 anche nel senso inverso resta rinviato.', '',
+        '## Orario di progetto: una riga = un giro completo', '',
+        '| Giro | FS → est | FS intermedia → ovest | Rientro FS nominale |',
+        '|---:|---|---|---|',
+    ]
+    for i, (trip, ledger) in enumerate(zip(r['full_trips'], r['ordered_stop_event_ledger_nominal']), 1):
+        end = next(e['arrival_min'] for e in ledger['events'] if e['role'] == 'FULL_TRIP_END_FS')
+        lines.append(f'| {i} | {clock(trip["first_fs_min"])[:5]} | {clock(trip["second_fs_min"])[:5]} | {clock(end)} |')
+    lines.extend(['', 'Secondi di rientro e tempi di fermata sono risultati nominali ingegneristici, non precisione promessa al pubblico. Prima/ultima corsa per ciascuna occorrenza sono nel registro macchina, non automaticamente 06:05–21:08 per tutta la linea.', '',
+                  '**Punte H30 sfalsate confermate come base:** est AM 06:05–08:05, ovest AM 07:00–09:00; est PM 16:40–18:40, ovest PM 17:35–19:35. Non H30 simultaneo 07–09/17–19 ovunque, né H30 nei due sensi di percorrenza.', '',
+                  '**Morbida confermata nel modello fino alle 16:20:** cap di attesa 120 minuti 10:00–16:20; cap60 nelle spalle 06:50–10:00 e 16:20–19:40, verificati sugli eventi direzionali pertinenti negli scenari ereditati. Non è l’affermazione che tutti i distanziamenti siano esattamente H60/H120. Le partenze concrete della tabella prevalgono sullo slogan.', '',
+                  '## Fermate: registro dei siti, in ordine del primo incontro', '',
+                  '| # | Sito di progetto | Origine | Eventi non-FS nel giro |', '|---:|---|---|---:|'])
+    for i, site in enumerate(r['design_stop_register'], 1):
+        state = 'Nuovo, da validare' if site['proposed_new_site'] else 'Inventario, accosto da validare'
+        lines.append(f'| {i} | {site["name"]} | {state} | {len(site["ordered_occurrences"])} |')
+    lines.extend(['', 'FS ha tre ruoli di servizio — partenza, passaggio intermedio e arrivo finale — non zero passaggi. Coordinate, archi entranti/uscenti, occorrenze e orari distinti sono nel JSON e nel GeoJSON.', '',
+                  '## Copertura potenziale: tutti e cinque i comuni', '',
+                  '| Comune | Entro 5 min a piedi | Entro 8 min | Entro 10 min |', '|---|---:|---:|---:|'])
+    for code, name in MUNICIPALITIES.items():
+        p = r['coverage_percent'][code]
+        lines.append(f'| {name} | {italian(p["5"])}% | {italian(p["8"])}% | {italian(p["10"])}% |')
+    lines.extend(['', 'Popolazione potenzialmente raggiunta sul substrato pedonale congelato: non passeggeri previsti, non domanda OD downscalata, non certificazione di percorsi sicuri/accessibili. Rispetto al riferimento precedente allo scambio, Calco guadagna circa 14,15/15,17/8,92 punti percentuali; Santa Maria perde 2,84 punti a 5 minuti e La Valletta 0,21, senza perdite a 8/10 minuti. Brivio e Olgiate invariati nello scambio.', '',
+                  'Monticello/Mondonico, Calco alta/Cornello, Cassina, Crescenzaga, oratorio/Casa di Comunità e l’intero quartiere Olgiate sud **non sono dichiarati tutti serviti**: manca la certificazione località→fermata/accesso. Olgiate sud e San Zeno sono esigenze distinte e hanno eventi separati, non una garanzia estesa ai rispettivi quartieri.', '',
+                  '## Treni, tempi di viaggio e limiti che restano', '',
+                  'Registro del 1 ottobre: **74 chiamate ferroviarie**, entrambe le direttrici Milano/Lecco e entrambi i flussi di interscambio; **296 combinazioni ala/treno/flusso** nel JSON. GTFS ufficiale riconciliato con il quadro RFI vigente, non dati in tempo reale o promessa di servire ogni treno. [Quadro e fonti](RT031_LINEA8_QUADRO_FERROVIARIO_2026_10_01.md).', '',
+                  'I quattro gruppi H30 supportano cinque treni consecutivi per ciascun flusso di punta: est→Milano 06:56–08:56, ovest→Milano 07:56–09:56; da Milano→est arrivi 16:32–18:32 e da Milano→ovest 17:32–19:32. Il 16:32 ha anche bus ovest 16:35. Trasferimento pedonale di 3 minuti ancora da misurare.', '',
+                  '**19/22 vecchi obiettivi compatibili con eventi distinti.** Restano: ovest→Milano 07:26 senza arrivo utile; est→Milano 09:26 raggiungibile ma circa 40 minuti di attesa; arrivo da Milano 17:02→ovest con 33 minuti di attesa. Anche il 16:02 richiede 38 minuti verso est e 33 verso ovest. Non sono problemi risolti né probabilità di ritardo stimate.', '',
+                  f'Sosta FS nominale **{italian(r["nominal_intermediate_fs_hold_range_min"][0])}–{italian(r["nominal_intermediate_fs_hold_range_min"][1])} min**, fino a {italian(r["engineering_intermediate_fs_hold_range_min"][1])} min negli stress. I viaggi lunghi altrove restano: l’orario non rende diretta una tratta circuitale. Il registro seguente rende espliciti i due tempi per ogni evento, non solo il più favorevole.', '',
+                  '| Evento non-FS | Sito | Sequenza | FS → evento, min | Evento → prossima FS, min |', '|---:|---|---|---:|---:|'])
+    occurrences = sorted([(o, s['name']) for s in r['design_stop_register'] for o in s['ordered_occurrences']], key=lambda x: x[0]['ordered_nonhub_event_number'])
+    for o, name in occurrences:
+        lines.append(f'| {o["ordered_nonhub_event_number"]} | {name} | {o["wing"]} | {italian(o["nominal_fs_to_occurrence_in_vehicle_min"])} | {italian(o["nominal_occurrence_to_next_fs_in_vehicle_min"])} |')
+    lines.extend(['', 'Tempi a bordo nominali, senza cammino/attesa iniziale o treno. Ogni riga riguarda una precisa occorrenza; un evento veloce non garantisce viaggi veloci da un altro evento dello stesso sito. Prosecuzioni intercomunali possono includere la sosta FS: ledger completo disponibile, senza utilità OD inventata.', '',
+                  '## Produzione e risorse: numeri non da confondere', '',
+                  f'- Commerciale per giorno di confronto: **{italian(r["commercial_km_per_comparison_day"],3)} km**.',
+                  f'- A 260 giorni, solo confronto: **{italian(r["annual_service_km_260_day_comparison"],3)} km/anno**, **+{italian(r["difference_vs_111419_reference_km"],3)} km / +{italian(r["difference_vs_111419_reference_percent"])}%** rispetto al riferimento 111.419.',
+                  '- Il calendario annuale non è adottato. La formula è 433,976 km × giorni effettivi, più km non commerciali separati. Nessun fine settimana, festività o costo di flotta è incluso tacitamente.',
+                  '- Fabbisogno ingegneristico condizionale: 3 mezzi in 2 casi e 4 in 25 dei 27 casi. Non disponibilità mezzi, turni reali o costo operativo approvati.',
+                  '- Tetto decisionale e banda di incertezza non dichiarati; nessuna probabilità empirica di coincidenza e nessuna GJT pesata costruita artificialmente.', '',
+                  '## Best practices: verifica aggiornata, non conformità generica', '',
+                  '| Principio | Stato su questa precisa proposta |', '|---|---|'])
+    italian_findings = [
+        'Frequenza/durata: punte sfalsate e orari per evento; non H30 ovunque.',
+        'Viaggio completo: tempi e attese separati; GJT pesata non disponibile.',
+        'Memorabilità: punte regolari, morbida con partenze non tutte cadenzate.',
+        'Ferrovia: tutte le chiamate e i flussi auditati; non tutte le coincidenze utili.',
+        'Affidabilità: stress deterministici, non osservazioni; esercizio da validare.',
+        'Direttezza: eventi locali rapidi ma viaggi lunghi residui mostrati sopra.',
+        'Fermate: scambio Santa Maria–Calco chiuso nel progetto, accosti da validare.',
+        'Semplicità: una sola linea e percorso completo sempre; permanenza FS da autorizzare.',
+        'Continuità: esperienza storica conservata, nessuna prova di ottimo globale.',
+        'Equità/domanda: copertura per comune, non domanda o utilità temporale certificata.',
+        'Area funzionale: cinque comuni e ferrovia, non servizio del solo Olgiate.',
+        'Inclusione: sud e San Zeno distinti; quartieri/accessi sicuri ancora da verificare.',
+    ]
+    for item, finding in zip(r['best_practice_current_assessment'], italian_findings):
+        lines.append(f'| {item["id"]} | {finding} |')
+    lines.extend(['', 'Riferimenti: [principi storici](PHASE2_TRANSIT_BEST_PRACTICES.md), [precedente audit, con numeri storici da non trapiantare](RT031_LINEA8_VERIFICA_BEST_PRACTICES_V3.md). La conferma di progetto non rende automaticamente soddisfatto un principio privo di prove.', '',
+                  '## Tre verifiche per la consegna operativa', '',
+                  '1. **Percorso e fermate — operatore/enti stradali:** sopralluogo e prova con bus, manovre e restrizioni a storia completa, accosti e lati, attraversamenti e accessibilità dei 27 siti. In particolare i quattro nuovi punti e FS.',
+                  '2. **Tempi, continuità e turni — operatore:** tempi misurati per fascia, sosta/recupero, permanenza passeggeri a bordo, trasferimento pedonale reale, disponibilità e blocchi mezzi, deposito e km a vuoto. Un cambio necessario va esplicitato e accettato, non chiamato ancora lo stesso orario.',
+                  '3. **Calendario e costo completo — Agenzia/operatore con scelta del committente:** quali giorni, weekend/festività, produzione commerciale e non, flotta/personale e copertura finanziaria. Il +1,27% vale solo nello scenario a 260 giorni.', '',
+                  '**Questa chiude la base progettuale, non certifica l’esercizio.** Nessuna email inviata, nessuna nuova variante selezionata. Se una verifica fisica fallisce si corregge il punto documentato, senza ricominciare indiscriminatamente il progetto.', '',
+                  '## Pacchetto autorevole', '',
+                  '- [Conferma del committente, limiti e hash delle fonti](../config/rt031_design_timetable_confirmation_20261001_v3.json).',
+                  '- [Dossier macchina: orario, registro fermate/eventi, treni, copertura, requisiti e verifiche](../outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_design_handoff_20261001.json).',
+                  '- [Tracciato stradale e coordinate attuali](../outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson).',
+                  '- [Scheda precedente di proposta: conservata come stato storico](RT031_LINEA8_PROPOSTA_ORARIO_16_GIRI_V3.md).', '',
+                  '`detailed_timetable_adopted_for_design=true`; `public_operating_timetable_authorised=false`; `network_selected=false`; `primary_selection_authorised=false`; `runner_up_selection_authorised=false`; `decision_budget_km=null`; `uncertainty_band_min=null`.', ''])
+    return '\n'.join(lines)
+
+
+if __name__ == '__main__':
+    result = build()
+    OUTPUT.write_text(json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2)+'\n', encoding='utf-8')
+    BRIEF.write_text(render_brief(result), encoding='utf-8')
+    print(json.dumps(dict(status=result['status'], trips=result['full_trip_count'],
+                         sites=len(result['design_stop_register']), new_sites=result['proposed_new_design_site_count'],
+                         nonhub_events=sum(len(s['ordered_occurrences']) for s in result['design_stop_register']),
+                         operational_approval=result['public_operating_timetable_authorised']), ensure_ascii=False))

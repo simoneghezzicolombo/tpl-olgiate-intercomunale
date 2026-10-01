@@ -1,5 +1,7 @@
 # Linea 8: una proposta concreta a 16 giri da approvare come base
 
+**Aggiornamento 1 ottobre 2026:** il successivo «ok andiamo avanti, verso la chiusura» conferma questa base di progetto, incluse transizione alle 16:20 e fasi sfalsate. Vedi la [proposta unica consolidata](RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md) e il nuovo contratto di conferma. La richiesta di conferma e i flag sottostanti sono conservati come stato storico precedente; non richiedono una seconda approvazione. Nessuna autorizzazione di esercizio, calendario o selezione è inferita.
+
 ## Risultato
 
 Sul tracciato Santa Maria–Calco confermato esiste un **testimone verificato a 16 giri completi**, con **27 siti di progetto**, quattro gruppi H30 ferroviari e cap H60 nelle spalle. **112.833,793 km/anno nel confronto a 260 giorni**, cioè **+1.414,793 km / +1,27%** rispetto a 111.419. Nessun diciassettesimo giro, nessuna corsa corta, nessuna seconda linea, nessun nuovo servizio inverso.

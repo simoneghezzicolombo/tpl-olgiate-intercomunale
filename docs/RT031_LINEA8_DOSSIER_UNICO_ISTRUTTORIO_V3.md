@@ -1,5 +1,7 @@
 # Linea 8 — dossier unico istruttorio, non raccomandazione finale
 
+**Versione corrente, 1 ottobre 2026:** [proposta unica consolidata a 27 siti e 16 giri, base di progetto confermata](RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md). Il presente dossier conserva numeri e limiti del confronto storico a 28 siti; non va usato come orario o produzione corrente.
+
 **Confronto successivo richiesto sui due versi:** [esito circoscritto e distinzione fra prove negative e casi irrisolti](RT031_LINEA8_ESITO_CONFRONTO_CONCLUSIVO_V3.md). Non è stata trovata una nuova proposta conforme; nessuna variante diagnostica diventa automaticamente la rete finale.
 
 **Ulteriore confronto concluso:** [326 piccoli tagli e testimoni H60 a 17 giri](RT031_LINEA8_ESITO_TAGLI_E_17_GIRI_V3.md). Nuove esclusioni e più corse non sono adottate; il dossier sottostante resta quello della precedente ipotesi a 28 punti.

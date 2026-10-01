@@ -1,6 +1,6 @@
 # Linea 8: quadro ferroviario verificato e lavoro residuo sull'orario
 
-**Aggiornamento successivo:** disponibile [una proposta verificata a 16 giri](RT031_LINEA8_PROPOSTA_ORARIO_16_GIRI_V3.md), 112.834 km/anno nel confronto a 260 giorni, con transizione della morbida fino alle 16:20 da confermare dal chiamante. Il confronto da 17 giri sotto resta una diagnosi storica, non l'orario della nuova scheda.
+**Aggiornamento successivo:** disponibile la [proposta unica consolidata a 16 giri](RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md), 112.834 km/anno nel confronto a 260 giorni. Il chiamante ha confermato la base di progetto con transizione della morbida fino alle 16:20 e fasi H30 sfalsate; esercizio e calendario non sono approvati. Il confronto da 17 giri sotto resta una diagnosi storica, non l'orario corrente.
 
 ## Questione territoriale chiusa per il progetto
 

@@ -1,7 +1,24 @@
 # Progetto Linea 8 Olgiate Molgora
-## Rete TPL Circolare a Doppio Verso (Modello Merate D201/D202) Integrata con il Nodo Ferroviario S8
+## Proposta intercomunale a percorso unico integrata con il nodo ferroviario
 
-> **Scelta corrente (2026-09-27): [Linea 8, 16 giri completi al giorno](docs/RT031_LINEA8_16_GIRI_COMPLETI_V3.md).**
+> **Base progettuale corrente (2026-10-01): [proposta unica Linea 8 consolidata](docs/RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md).**
+> Una sola linea, **16 giri completi**, stesso otto est→FS→ovest ogni corsa:
+> **27,124 km/giro, 27 siti di progetto inclusa FS, 4 nuovi punti proposti**.
+> Orario di progetto confermato con punte H30 sfalsate e transizione della morbida
+> fino alle 16:20; ultima partenza FS 19:40, rientro nominale circa 21:08.
+> **112.833,793 km commerciali nel confronto a 260 giorni: +1,27% su 111.419**.
+> Non sono un calendario, una flotta, paline, finanziamenti o esercizio approvati.
+> Il doppio verso H30 resta rinviato. Tutti i flussi ferroviari e i limiti sono esposti.
+> [Autorità della conferma](config/rt031_design_timetable_confirmation_20261001_v3.json) ·
+> [Dossier macchina, registro siti/eventi e readiness](outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_design_handoff_20261001.json) ·
+> [Tracciato attuale](outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson).
+> Restano tre verifiche esterne: percorso/accosti, tempi/continuità/turni, calendario/costo completo.
+> `network_selected=false`; PRIMARY e RUNNER-UP non autorizzati;
+> `decision_budget_km=null`, `uncertainty_band_min=null`.
+
+### Cronologia precedente — non usare questi numeri come stato corrente
+
+> **Scelta storica (2026-09-27): [Linea 8, 16 giri completi al giorno](docs/RT031_LINEA8_16_GIRI_COMPLETI_V3.md).**
 > Il committente ha scelto **16 corse complete**, **115.143,267 km di servizio/anno**
 > su 260 giorni ipotizzati: **+3.724,267 km (+3,34%)**. Non è ancora un orario approvato.
 > Il primo audit costruisce esempi a 16 giri, tutti i treni-obiettivo e H30 sulle corse
@@ -51,7 +68,7 @@
 > Una [mappa dell'esperienza pregressa](docs/RT031_PRIOR_WORK_EVIDENCE_MAP.md)
 > collega questi filoni e indica quali risultati sono tuttora riutilizzabili.
 
-Benvenuto nel repository del progetto **Linea 8 Olgiate Molgora**. Questo workspace raccoglie dati quantitativi, modelli di simulazione di esercizio, bilanci chilometrici, analisi territoriale WorldPop e dashboard. Il concept originario prevedeva la trasformazione delle linee **D184** e **D185** in una rete circolare a forma di **otto a doppio verso**, centrata sulla **stazione ferroviaria di Olgiate-Calco-Brivio**. Per lo stato corrente fa fede il contratto di percorso unico completo sopra: la geometria è conservata, l'orario è da ricostruire; i numeri storici sotto non sono prestazioni certificate.
+Benvenuto nel repository del progetto **Linea 8 Olgiate Molgora**. Questo workspace raccoglie dati quantitativi, modelli di simulazione di esercizio, bilanci chilometrici, analisi territoriale WorldPop e dashboard. Il concept originario prevedeva la trasformazione delle linee **D184** e **D185** in una rete circolare a forma di **otto a doppio verso**, centrata sulla **stazione ferroviaria di Olgiate-Calco-Brivio**. Per lo stato corrente fa fede la proposta consolidata del 1 ottobre sopra: geometria e orario sono confermati come base di progetto, non come esercizio autorizzato; i numeri storici sotto non sono prestazioni certificate.
 
 ---
 
