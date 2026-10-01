@@ -6,6 +6,9 @@ on:
     paths:
       - scripts/phase2_probe_rt031_line8_manoeuvre_cycles_v3.py
       - tests/test_phase2_rt031_line8_manoeuvre_cycles_v3.py
+      - scripts/phase2_probe_rt031_line8_calco_through_path_v3.py
+      - tests/test_phase2_rt031_line8_calco_through_path_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/calco_through_path.*
       - outputs/phase2/rt031_line8_local_shortcuts_v3/manoeuvre_return_cycles.*
       - outputs/phase2/rt031_line8_local_shortcuts_v3/variable_fs_hold_16_full_trips.json.gz
       - .github/workflows/phase2-rt031-line8-manoeuvre-cycles-v3.yml
@@ -25,7 +28,7 @@ jobs:
           python-version: '3.13'
       - run: python -m pip install -r requirements.txt
       - name: Unit and published-contract checks
-        run: python -m unittest tests.test_phase2_rt031_line8_manoeuvre_cycles_v3 -q
+        run: python -m unittest tests.test_phase2_rt031_line8_manoeuvre_cycles_v3 tests.test_phase2_rt031_line8_calco_through_path_v3 -q
       - name: Retrieve pinned road evidence
         run: |
           gh run download 33975545284 -n rt017-final-certified-evidence-v3 -D /tmp/rt031/rt017
@@ -36,3 +39,28 @@ jobs:
           python -m scripts.phase2_probe_rt031_line8_manoeuvre_cycles_v3 --graph_dir /tmp/rt031
           git diff --exit-code -- outputs/phase2/rt031_line8_local_shortcuts_v3/manoeuvre_return_cycles.json outputs/phase2/rt031_line8_local_shortcuts_v3/manoeuvre_return_cycles.geojson
           test -s outputs/phase2/rt031_line8_local_shortcuts_v3/manoeuvre_return_cycles.png
+      - name: Reproduce Calco hypotheses and fixed-order road minimum
+        run: |
+          python -m scripts.phase2_probe_rt031_line8_calco_through_path_v3 --graph_dir /tmp/rt031 --output /tmp/calco.json.gz --geojson /tmp/calco.geojson
+          cmp /tmp/calco.geojson outputs/phase2/rt031_line8_local_shortcuts_v3/calco_through_path.geojson
+          python - <<'PY'
+          import gzip,json
+          def read(path):
+              return json.loads(gzip.decompress(open(path,'rb').read()))
+          def projection(result):
+              rows=[]
+              for c in result['cases']:
+                  row=[c['candidate_service_node'],c['original_calco_incoming_edge_required'],c['reachable']]
+                  if c['reachable']:
+                      w=c['whole_wing_fixed_order_without_reversals']
+                      row.extend([c['edge_ids'],w['reachable'],round(w['distance_m'],6),
+                          {k:l['edge_ids'] for k,l in w['loops'].items()},
+                          c['timetable_comparison']['solver_status'],
+                          w['timetable_comparison']['solver_status'],
+                          w['timetable_comparison']['witness_found'],
+                          [(t['shoulder_headway_cap_min'],t['solver_status'],t['witness_found'])
+                           for t in w['reduced_trip_count_comparisons_not_adopted']]])
+                  rows.append(row)
+              return rows
+          assert projection(read('/tmp/calco.json.gz'))==projection(read('outputs/phase2/rt031_line8_local_shortcuts_v3/calco_through_path.json.gz'))
+          PY
