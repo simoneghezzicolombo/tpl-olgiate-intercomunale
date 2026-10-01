@@ -1,0 +1,4334 @@
+{
+  "additional_geometry_raw_sha256": {
+    "outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson": "91905a63eecca6c8173b64a07b9a8533751bb01db71227d9de15279858839eb9",
+    "outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.json": "d17bf0cd45d6fdd48f2bc0854ff09a7360d8e31a2b63e8001a985f1a55ea0648"
+  },
+  "all_service_events_authorised": false,
+  "changes_requiring_recheck": [
+    "path/stop position or side: km, pedestrian coverage, times and train flows",
+    "runtime/dwell/recovery: FS holds, all service-event times, train flows, occupation and duties",
+    "vehicle carrier or passenger permission: service continuity, transfer semantics and journeys",
+    "calendar/Saturday: dated annual production, duty quantities and complete cost"
+  ],
+  "closed_with_model_evidence": [
+    "Caller-confirmed same complete route and 16 trip timetable",
+    "27 design sites, 28 ordered non-FS occurrences",
+    "Dated weekday national-holiday arithmetic",
+    "Explicit minimal vehicle blocks in all 27 inherited scenarios"
+  ],
+  "closure_items": [
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": true,
+      "close_when": "Prova/sopralluogo sul percorso con tipo e ingombri del bus; svolte, accessi e restrizioni dipendenti dalla storia. Esito specifico sugli 85,68 m service a Scarpone.",
+      "evidence_refs": [],
+      "id": "ROADS",
+      "owner": "Operatore ed enti stradali",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Percorso completo e Scarpone"
+    },
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": true,
+      "close_when": "Riscontri per i 31 contesti: 28 occorrenze e tre ruoli FS, con palina/lato/coordinate, permessi e accessi sicuri. San Zeno e Olgiate sud hanno ciascuno due righe indipendenti.",
+      "evidence_refs": [],
+      "id": "STOP_EVENTS",
+      "owner": "Operatore e autorità fermate",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Accosti per ogni evento"
+    },
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": true,
+      "close_when": "Tempi di marcia e dwell osservati per fascia; recuperi e blocchi eseguibili per i 16 giri. Campione e limiti dichiarati; lo stress non diventa probabilità.",
+      "evidence_refs": [],
+      "id": "RUNTIME",
+      "owner": "Operatore",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Tempi misurati e orario eseguibile"
+    },
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": true,
+      "close_when": "Stesso mezzo e diritto dei passeggeri di restare a bordo alla FS intermedia confermati separatamente; eventuale cambio/discesa modifica il servizio e va accettato.",
+      "evidence_refs": [],
+      "id": "FS_CONTINUITY",
+      "owner": "Operatore",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Continuità passeggeri a FS"
+    },
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": true,
+      "close_when": "Misura dei percorsi nei due versi e accessibilità; riesame dell’ipotesi di 3 minuti senza scegliere una banda decisionale.",
+      "evidence_refs": [],
+      "id": "FS_TRANSFER",
+      "owner": "Operatore/Agenzia",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Cammino bus–binari"
+    },
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": true,
+      "close_when": "Disponibilità reale nelle punte, tipo di bus, turni autista e piano deposito. Valutare i gap senza chiamarli disponibilità certificata per altre linee.",
+      "evidence_refs": [],
+      "id": "FLEET_DUTIES",
+      "owner": "Operatore",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Mezzi, autisti e deposito"
+    },
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": true,
+      "close_when": "Posizionamenti da deposito e tra servizi, con quantità separate dai 110.229,936 km della base commerciale.",
+      "evidence_refs": [],
+      "id": "NONCOMMERCIAL",
+      "owner": "Operatore",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Km e ore non commerciali"
+    },
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": true,
+      "close_when": "Regola esplicita per patroni/eccezioni sulla linea intercomunale; elenco datato oppure attestazione che non si applicano. Nessuna esclusione dedotta dal solo patrono.",
+      "evidence_refs": [],
+      "id": "LOCAL_CALENDAR",
+      "owner": "Agenzia/operatore",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Eccezioni locali 2027"
+    },
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": true,
+      "close_when": "Inventari di tutte le chiamate, arrivi/partenze e calendari per le date di esercizio coperte dalle pubblicazioni; ricontrollo di tutti i flussi, inclusi casi deboli. Una verifica parziale dichiara il periodo, non tutto l’anno.",
+      "evidence_refs": [],
+      "id": "RAIL_2027",
+      "owner": "Fonte ferroviaria ufficiale e operatore/Agenzia",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Treni validi per il 2027"
+    },
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": true,
+      "close_when": "Costo completo per base feriale, personale/mezzi/lavori e km a vuoto; produzione D184/D185 contrattualizzata e risorse realmente riorganizzabili, senza doppio conteggio di tariffa/km e costo/ora.",
+      "evidence_refs": [],
+      "id": "FULL_COST_FUNDING",
+      "owner": "Operatore/Agenzia",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Preventivo e risorse effettive"
+    },
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": false,
+      "close_when": "Calendario e orario utili espliciti, poi scelta del committente. I conteggi 2/4/6/8/16 non sono orari né raccomandazioni. Senza scelta, totale completo della linea resta null.",
+      "evidence_refs": [],
+      "id": "SATURDAY",
+      "owner": "Committente, dopo confronto di servizio e costo",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Sabato separato"
+    },
+    {
+      "assessed_on": null,
+      "blocking_weekday_operational_claim": false,
+      "close_when": "Conservare le percentuali come copertura potenziale; non dichiarare tutte le frazioni o tutto Olgiate sud serviti. Identificare luoghi/perimetri e accessi prima di estendere la promessa.",
+      "evidence_refs": [],
+      "id": "LOCALITY_CLAIMS",
+      "owner": "Committente ed enti/operatore per accessi",
+      "reviewed_by": null,
+      "status": "PENDING_EXTERNAL_EVIDENCE",
+      "title": "Promesse territoriali"
+    }
+  ],
+  "complete_annual_operating_calendar_adopted": false,
+  "contract": "RT031_FIXED_WEEKDAY_PROPOSAL_OPERATING_CLOSURE_WORKING_PACK_V3",
+  "decision_budget_km": null,
+  "demand_weighted_gjt_improvement_min": null,
+  "design_manifest_sha256": "946282f0788ef72c65827527945c12550afa07e3ad46c49f73ffb388473f8bb0",
+  "directional_service_event_forms": [
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4044416,
+        45.7291436
+      ],
+      "event_id": "FS::FULL_TRIP_START_FS",
+      "evidence_refs": [],
+      "name": "Olgiate-Calco-Brivio FS",
+      "nominal_event_times_by_full_trip": [
+        {
+          "time_min": 365
+        },
+        {
+          "time_min": 395
+        },
+        {
+          "time_min": 425
+        },
+        {
+          "time_min": 455
+        },
+        {
+          "time_min": 485
+        },
+        {
+          "time_min": 540
+        },
+        {
+          "time_min": 600
+        },
+        {
+          "time_min": 715
+        },
+        {
+          "time_min": 820
+        },
+        {
+          "time_min": 940
+        },
+        {
+          "time_min": 1000
+        },
+        {
+          "time_min": 1030
+        },
+        {
+          "time_min": 1060
+        },
+        {
+          "time_min": 1090
+        },
+        {
+          "time_min": 1120
+        },
+        {
+          "time_min": 1180
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 1,
+      "path_context": {
+        "fs_role": "FULL_TRIP_START_FS"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "FROZEN::L00407",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4072469,
+        45.735645
+      ],
+      "event_id": "east_A:41:PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+      "evidence_refs": [],
+      "name": "San Zeno/Via Cantu",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 367.54358307332456,
+          "board_event_min": 368.04358307332456
+        },
+        {
+          "alight_event_min": 397.54358307332456,
+          "board_event_min": 398.04358307332456
+        },
+        {
+          "alight_event_min": 427.54358307332456,
+          "board_event_min": 428.04358307332456
+        },
+        {
+          "alight_event_min": 457.54358307332456,
+          "board_event_min": 458.04358307332456
+        },
+        {
+          "alight_event_min": 487.54358307332456,
+          "board_event_min": 488.04358307332456
+        },
+        {
+          "alight_event_min": 542.5435830733246,
+          "board_event_min": 543.0435830733246
+        },
+        {
+          "alight_event_min": 602.5435830733246,
+          "board_event_min": 603.0435830733246
+        },
+        {
+          "alight_event_min": 717.5435830733246,
+          "board_event_min": 718.0435830733246
+        },
+        {
+          "alight_event_min": 822.5435830733246,
+          "board_event_min": 823.0435830733246
+        },
+        {
+          "alight_event_min": 942.5435830733246,
+          "board_event_min": 943.0435830733246
+        },
+        {
+          "alight_event_min": 1002.5435830733246,
+          "board_event_min": 1003.0435830733246
+        },
+        {
+          "alight_event_min": 1032.5435830733245,
+          "board_event_min": 1033.0435830733245
+        },
+        {
+          "alight_event_min": 1062.5435830733245,
+          "board_event_min": 1063.0435830733245
+        },
+        {
+          "alight_event_min": 1092.5435830733245,
+          "board_event_min": 1093.0435830733245
+        },
+        {
+          "alight_event_min": 1122.5435830733245,
+          "board_event_min": 1123.0435830733245
+        },
+        {
+          "alight_event_min": 1182.5435830733245,
+          "board_event_min": 1183.0435830733245
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 2,
+      "path_context": {
+        "full_path_edge_index": 41,
+        "incoming_edge": "osm:581532442:11:F",
+        "ordered_nonhub_event_number": 1,
+        "outgoing_edge": "osm:581532442:12:F",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": true,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4195097,
+        45.7363679
+      ],
+      "event_id": "east_A:149:FROZEN::300956",
+      "evidence_refs": [],
+      "name": "Calco - via nazionale (peugeot)",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 371.951472645685,
+          "board_event_min": 372.451472645685
+        },
+        {
+          "alight_event_min": 401.951472645685,
+          "board_event_min": 402.451472645685
+        },
+        {
+          "alight_event_min": 431.951472645685,
+          "board_event_min": 432.451472645685
+        },
+        {
+          "alight_event_min": 461.951472645685,
+          "board_event_min": 462.451472645685
+        },
+        {
+          "alight_event_min": 491.951472645685,
+          "board_event_min": 492.451472645685
+        },
+        {
+          "alight_event_min": 546.951472645685,
+          "board_event_min": 547.451472645685
+        },
+        {
+          "alight_event_min": 606.951472645685,
+          "board_event_min": 607.451472645685
+        },
+        {
+          "alight_event_min": 721.951472645685,
+          "board_event_min": 722.451472645685
+        },
+        {
+          "alight_event_min": 826.951472645685,
+          "board_event_min": 827.451472645685
+        },
+        {
+          "alight_event_min": 946.951472645685,
+          "board_event_min": 947.451472645685
+        },
+        {
+          "alight_event_min": 1006.951472645685,
+          "board_event_min": 1007.451472645685
+        },
+        {
+          "alight_event_min": 1036.951472645685,
+          "board_event_min": 1037.451472645685
+        },
+        {
+          "alight_event_min": 1066.951472645685,
+          "board_event_min": 1067.451472645685
+        },
+        {
+          "alight_event_min": 1096.951472645685,
+          "board_event_min": 1097.451472645685
+        },
+        {
+          "alight_event_min": 1126.951472645685,
+          "board_event_min": 1127.451472645685
+        },
+        {
+          "alight_event_min": 1186.951472645685,
+          "board_event_min": 1187.451472645685
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 3,
+      "path_context": {
+        "full_path_edge_index": 149,
+        "incoming_edge": "osm:770646446:0:R",
+        "ordered_nonhub_event_number": 2,
+        "outgoing_edge": "osm:770646447:0:R",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "FROZEN::300956",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4230221,
+        45.7405348
+      ],
+      "event_id": "east_A:158:FROZEN::300086",
+      "evidence_refs": [],
+      "name": "Brivio - beverate (cariplo)",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 373.4081413174203,
+          "board_event_min": 373.9081413174203
+        },
+        {
+          "alight_event_min": 403.4081413174203,
+          "board_event_min": 403.9081413174203
+        },
+        {
+          "alight_event_min": 433.4081413174203,
+          "board_event_min": 433.9081413174203
+        },
+        {
+          "alight_event_min": 463.4081413174203,
+          "board_event_min": 463.9081413174203
+        },
+        {
+          "alight_event_min": 493.4081413174203,
+          "board_event_min": 493.9081413174203
+        },
+        {
+          "alight_event_min": 548.4081413174202,
+          "board_event_min": 548.9081413174202
+        },
+        {
+          "alight_event_min": 608.4081413174202,
+          "board_event_min": 608.9081413174202
+        },
+        {
+          "alight_event_min": 723.4081413174202,
+          "board_event_min": 723.9081413174202
+        },
+        {
+          "alight_event_min": 828.4081413174202,
+          "board_event_min": 828.9081413174202
+        },
+        {
+          "alight_event_min": 948.4081413174202,
+          "board_event_min": 948.9081413174202
+        },
+        {
+          "alight_event_min": 1008.4081413174202,
+          "board_event_min": 1008.9081413174202
+        },
+        {
+          "alight_event_min": 1038.4081413174204,
+          "board_event_min": 1038.9081413174204
+        },
+        {
+          "alight_event_min": 1068.4081413174204,
+          "board_event_min": 1068.9081413174204
+        },
+        {
+          "alight_event_min": 1098.4081413174204,
+          "board_event_min": 1098.9081413174204
+        },
+        {
+          "alight_event_min": 1128.4081413174204,
+          "board_event_min": 1128.9081413174204
+        },
+        {
+          "alight_event_min": 1188.4081413174204,
+          "board_event_min": 1188.9081413174204
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 4,
+      "path_context": {
+        "full_path_edge_index": 158,
+        "incoming_edge": "osm:573427526:6:R",
+        "ordered_nonhub_event_number": 3,
+        "outgoing_edge": "osm:573427526:5:R",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "FROZEN::300086",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4279322,
+        45.7373752
+      ],
+      "event_id": "east_A:189:FROZEN::300398",
+      "evidence_refs": [],
+      "name": "Brivio - beverate (paese)",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 375.35497397917305,
+          "board_event_min": 375.85497397917305
+        },
+        {
+          "alight_event_min": 405.35497397917305,
+          "board_event_min": 405.85497397917305
+        },
+        {
+          "alight_event_min": 435.35497397917305,
+          "board_event_min": 435.85497397917305
+        },
+        {
+          "alight_event_min": 465.35497397917305,
+          "board_event_min": 465.85497397917305
+        },
+        {
+          "alight_event_min": 495.35497397917305,
+          "board_event_min": 495.85497397917305
+        },
+        {
+          "alight_event_min": 550.354973979173,
+          "board_event_min": 550.854973979173
+        },
+        {
+          "alight_event_min": 610.354973979173,
+          "board_event_min": 610.854973979173
+        },
+        {
+          "alight_event_min": 725.354973979173,
+          "board_event_min": 725.854973979173
+        },
+        {
+          "alight_event_min": 830.354973979173,
+          "board_event_min": 830.854973979173
+        },
+        {
+          "alight_event_min": 950.354973979173,
+          "board_event_min": 950.854973979173
+        },
+        {
+          "alight_event_min": 1010.354973979173,
+          "board_event_min": 1010.854973979173
+        },
+        {
+          "alight_event_min": 1040.354973979173,
+          "board_event_min": 1040.854973979173
+        },
+        {
+          "alight_event_min": 1070.354973979173,
+          "board_event_min": 1070.854973979173
+        },
+        {
+          "alight_event_min": 1100.354973979173,
+          "board_event_min": 1100.854973979173
+        },
+        {
+          "alight_event_min": 1130.354973979173,
+          "board_event_min": 1130.854973979173
+        },
+        {
+          "alight_event_min": 1190.354973979173,
+          "board_event_min": 1190.854973979173
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 5,
+      "path_context": {
+        "full_path_edge_index": 189,
+        "incoming_edge": "osm:223276924:3:R",
+        "ordered_nonhub_event_number": 4,
+        "outgoing_edge": "osm:223276924:2:R",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "FROZEN::300398",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4268913,
+        45.7347557
+      ],
+      "event_id": "east_A:209:FROZEN::300487",
+      "evidence_refs": [],
+      "name": "Brivio - beverate (quattro strade)",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 376.8267821353832,
+          "board_event_min": 377.3267821353832
+        },
+        {
+          "alight_event_min": 406.8267821353832,
+          "board_event_min": 407.3267821353832
+        },
+        {
+          "alight_event_min": 436.8267821353832,
+          "board_event_min": 437.3267821353832
+        },
+        {
+          "alight_event_min": 466.8267821353832,
+          "board_event_min": 467.3267821353832
+        },
+        {
+          "alight_event_min": 496.8267821353832,
+          "board_event_min": 497.3267821353832
+        },
+        {
+          "alight_event_min": 551.8267821353833,
+          "board_event_min": 552.3267821353833
+        },
+        {
+          "alight_event_min": 611.8267821353833,
+          "board_event_min": 612.3267821353833
+        },
+        {
+          "alight_event_min": 726.8267821353833,
+          "board_event_min": 727.3267821353833
+        },
+        {
+          "alight_event_min": 831.8267821353833,
+          "board_event_min": 832.3267821353833
+        },
+        {
+          "alight_event_min": 951.8267821353833,
+          "board_event_min": 952.3267821353833
+        },
+        {
+          "alight_event_min": 1011.8267821353833,
+          "board_event_min": 1012.3267821353833
+        },
+        {
+          "alight_event_min": 1041.8267821353832,
+          "board_event_min": 1042.3267821353832
+        },
+        {
+          "alight_event_min": 1071.8267821353832,
+          "board_event_min": 1072.3267821353832
+        },
+        {
+          "alight_event_min": 1101.8267821353832,
+          "board_event_min": 1102.3267821353832
+        },
+        {
+          "alight_event_min": 1131.8267821353832,
+          "board_event_min": 1132.3267821353832
+        },
+        {
+          "alight_event_min": 1191.8267821353832,
+          "board_event_min": 1192.3267821353832
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 6,
+      "path_context": {
+        "full_path_edge_index": 209,
+        "incoming_edge": "osm:246831878:0:R",
+        "ordered_nonhub_event_number": 5,
+        "outgoing_edge": "osm:246831884:0:F",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "FROZEN::300487",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4360517,
+        45.7368611
+      ],
+      "event_id": "east_A:245:ASF::VACCAREZZA_CARTELLO_PAESE",
+      "evidence_refs": [],
+      "name": "Brivio - Vaccarezza",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 378.76236565006883,
+          "board_event_min": 379.26236565006883
+        },
+        {
+          "alight_event_min": 408.76236565006883,
+          "board_event_min": 409.26236565006883
+        },
+        {
+          "alight_event_min": 438.76236565006883,
+          "board_event_min": 439.26236565006883
+        },
+        {
+          "alight_event_min": 468.76236565006883,
+          "board_event_min": 469.26236565006883
+        },
+        {
+          "alight_event_min": 498.76236565006883,
+          "board_event_min": 499.26236565006883
+        },
+        {
+          "alight_event_min": 553.7623656500688,
+          "board_event_min": 554.2623656500688
+        },
+        {
+          "alight_event_min": 613.7623656500688,
+          "board_event_min": 614.2623656500688
+        },
+        {
+          "alight_event_min": 728.7623656500688,
+          "board_event_min": 729.2623656500688
+        },
+        {
+          "alight_event_min": 833.7623656500688,
+          "board_event_min": 834.2623656500688
+        },
+        {
+          "alight_event_min": 953.7623656500688,
+          "board_event_min": 954.2623656500688
+        },
+        {
+          "alight_event_min": 1013.7623656500688,
+          "board_event_min": 1014.2623656500688
+        },
+        {
+          "alight_event_min": 1043.762365650069,
+          "board_event_min": 1044.262365650069
+        },
+        {
+          "alight_event_min": 1073.762365650069,
+          "board_event_min": 1074.262365650069
+        },
+        {
+          "alight_event_min": 1103.762365650069,
+          "board_event_min": 1104.262365650069
+        },
+        {
+          "alight_event_min": 1133.762365650069,
+          "board_event_min": 1134.262365650069
+        },
+        {
+          "alight_event_min": 1193.762365650069,
+          "board_event_min": 1194.262365650069
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 7,
+      "path_context": {
+        "full_path_edge_index": 245,
+        "incoming_edge": "osm:1299498892:10:R",
+        "ordered_nonhub_event_number": 6,
+        "outgoing_edge": "osm:1299498892:9:R",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::VACCAREZZA_CARTELLO_PAESE",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4394378,
+        45.7424545
+      ],
+      "event_id": "east_A:261:ASF::BRIVIO_BAR_CRISTALLO",
+      "evidence_refs": [],
+      "name": "Brivio - Via Como (pizzeria / Bar Cristallo)",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 380.878460060811,
+          "board_event_min": 381.378460060811
+        },
+        {
+          "alight_event_min": 410.878460060811,
+          "board_event_min": 411.378460060811
+        },
+        {
+          "alight_event_min": 440.878460060811,
+          "board_event_min": 441.378460060811
+        },
+        {
+          "alight_event_min": 470.878460060811,
+          "board_event_min": 471.378460060811
+        },
+        {
+          "alight_event_min": 500.878460060811,
+          "board_event_min": 501.378460060811
+        },
+        {
+          "alight_event_min": 555.878460060811,
+          "board_event_min": 556.378460060811
+        },
+        {
+          "alight_event_min": 615.878460060811,
+          "board_event_min": 616.378460060811
+        },
+        {
+          "alight_event_min": 730.878460060811,
+          "board_event_min": 731.378460060811
+        },
+        {
+          "alight_event_min": 835.878460060811,
+          "board_event_min": 836.378460060811
+        },
+        {
+          "alight_event_min": 955.878460060811,
+          "board_event_min": 956.378460060811
+        },
+        {
+          "alight_event_min": 1015.878460060811,
+          "board_event_min": 1016.378460060811
+        },
+        {
+          "alight_event_min": 1045.878460060811,
+          "board_event_min": 1046.378460060811
+        },
+        {
+          "alight_event_min": 1075.878460060811,
+          "board_event_min": 1076.378460060811
+        },
+        {
+          "alight_event_min": 1105.878460060811,
+          "board_event_min": 1106.378460060811
+        },
+        {
+          "alight_event_min": 1135.878460060811,
+          "board_event_min": 1136.378460060811
+        },
+        {
+          "alight_event_min": 1195.878460060811,
+          "board_event_min": 1196.378460060811
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 8,
+      "path_context": {
+        "full_path_edge_index": 261,
+        "incoming_edge": "osm:432726938:10:R",
+        "ordered_nonhub_event_number": 7,
+        "outgoing_edge": "osm:432726938:9:R",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::BRIVIO_BAR_CRISTALLO",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4457787,
+        45.7413298
+      ],
+      "event_id": "east_A:299:FROZEN::300063",
+      "evidence_refs": [],
+      "name": "Brivio - Via Bergamo (Scuola Materna)",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 383.2935091791825,
+          "board_event_min": 383.7935091791825
+        },
+        {
+          "alight_event_min": 413.2935091791825,
+          "board_event_min": 413.7935091791825
+        },
+        {
+          "alight_event_min": 443.2935091791825,
+          "board_event_min": 443.7935091791825
+        },
+        {
+          "alight_event_min": 473.2935091791825,
+          "board_event_min": 473.7935091791825
+        },
+        {
+          "alight_event_min": 503.2935091791825,
+          "board_event_min": 503.7935091791825
+        },
+        {
+          "alight_event_min": 558.2935091791825,
+          "board_event_min": 558.7935091791825
+        },
+        {
+          "alight_event_min": 618.2935091791825,
+          "board_event_min": 618.7935091791825
+        },
+        {
+          "alight_event_min": 733.2935091791825,
+          "board_event_min": 733.7935091791825
+        },
+        {
+          "alight_event_min": 838.2935091791825,
+          "board_event_min": 838.7935091791825
+        },
+        {
+          "alight_event_min": 958.2935091791825,
+          "board_event_min": 958.7935091791825
+        },
+        {
+          "alight_event_min": 1018.2935091791825,
+          "board_event_min": 1018.7935091791825
+        },
+        {
+          "alight_event_min": 1048.2935091791824,
+          "board_event_min": 1048.7935091791824
+        },
+        {
+          "alight_event_min": 1078.2935091791824,
+          "board_event_min": 1078.7935091791824
+        },
+        {
+          "alight_event_min": 1108.2935091791824,
+          "board_event_min": 1108.7935091791824
+        },
+        {
+          "alight_event_min": 1138.2935091791824,
+          "board_event_min": 1138.7935091791824
+        },
+        {
+          "alight_event_min": 1198.2935091791824,
+          "board_event_min": 1198.7935091791824
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 9,
+      "path_context": {
+        "full_path_edge_index": 299,
+        "incoming_edge": "osm:606283358:3:R",
+        "ordered_nonhub_event_number": 8,
+        "outgoing_edge": "osm:606283358:2:R",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "FROZEN::300063",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4420708,
+        45.7273652
+      ],
+      "event_id": "east_A:420:PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+      "evidence_refs": [],
+      "name": "Arlate — ipotesi N1212",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 387.18792624190974,
+          "board_event_min": 387.68792624190974
+        },
+        {
+          "alight_event_min": 417.18792624190974,
+          "board_event_min": 417.68792624190974
+        },
+        {
+          "alight_event_min": 447.18792624190974,
+          "board_event_min": 447.68792624190974
+        },
+        {
+          "alight_event_min": 477.18792624190974,
+          "board_event_min": 477.68792624190974
+        },
+        {
+          "alight_event_min": 507.18792624190974,
+          "board_event_min": 507.68792624190974
+        },
+        {
+          "alight_event_min": 562.1879262419097,
+          "board_event_min": 562.6879262419097
+        },
+        {
+          "alight_event_min": 622.1879262419097,
+          "board_event_min": 622.6879262419097
+        },
+        {
+          "alight_event_min": 737.1879262419097,
+          "board_event_min": 737.6879262419097
+        },
+        {
+          "alight_event_min": 842.1879262419097,
+          "board_event_min": 842.6879262419097
+        },
+        {
+          "alight_event_min": 962.1879262419097,
+          "board_event_min": 962.6879262419097
+        },
+        {
+          "alight_event_min": 1022.1879262419097,
+          "board_event_min": 1022.6879262419097
+        },
+        {
+          "alight_event_min": 1052.1879262419097,
+          "board_event_min": 1052.6879262419097
+        },
+        {
+          "alight_event_min": 1082.1879262419097,
+          "board_event_min": 1082.6879262419097
+        },
+        {
+          "alight_event_min": 1112.1879262419097,
+          "board_event_min": 1112.6879262419097
+        },
+        {
+          "alight_event_min": 1142.1879262419097,
+          "board_event_min": 1142.6879262419097
+        },
+        {
+          "alight_event_min": 1202.1879262419097,
+          "board_event_min": 1202.6879262419097
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 10,
+      "path_context": {
+        "full_path_edge_index": 420,
+        "incoming_edge": "osm:578724692:7:F",
+        "ordered_nonhub_event_number": 9,
+        "outgoing_edge": "osm:223263774:0:F",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": true,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4365393,
+        45.7274594
+      ],
+      "event_id": "east_A:428:ASF::ARLATE_CANTINA_PIROVANO",
+      "evidence_refs": [],
+      "name": "Arlate - Cantina Pirovano",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 388.9215458885178,
+          "board_event_min": 389.4215458885178
+        },
+        {
+          "alight_event_min": 418.9215458885178,
+          "board_event_min": 419.4215458885178
+        },
+        {
+          "alight_event_min": 448.9215458885178,
+          "board_event_min": 449.4215458885178
+        },
+        {
+          "alight_event_min": 478.9215458885178,
+          "board_event_min": 479.4215458885178
+        },
+        {
+          "alight_event_min": 508.9215458885178,
+          "board_event_min": 509.4215458885178
+        },
+        {
+          "alight_event_min": 563.9215458885178,
+          "board_event_min": 564.4215458885178
+        },
+        {
+          "alight_event_min": 623.9215458885178,
+          "board_event_min": 624.4215458885178
+        },
+        {
+          "alight_event_min": 738.9215458885178,
+          "board_event_min": 739.4215458885178
+        },
+        {
+          "alight_event_min": 843.9215458885178,
+          "board_event_min": 844.4215458885178
+        },
+        {
+          "alight_event_min": 963.9215458885178,
+          "board_event_min": 964.4215458885178
+        },
+        {
+          "alight_event_min": 1023.9215458885178,
+          "board_event_min": 1024.4215458885178
+        },
+        {
+          "alight_event_min": 1053.9215458885178,
+          "board_event_min": 1054.4215458885178
+        },
+        {
+          "alight_event_min": 1083.9215458885178,
+          "board_event_min": 1084.4215458885178
+        },
+        {
+          "alight_event_min": 1113.9215458885178,
+          "board_event_min": 1114.4215458885178
+        },
+        {
+          "alight_event_min": 1143.9215458885178,
+          "board_event_min": 1144.4215458885178
+        },
+        {
+          "alight_event_min": 1203.9215458885178,
+          "board_event_min": 1204.4215458885178
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 11,
+      "path_context": {
+        "full_path_edge_index": 428,
+        "incoming_edge": "osm:432726032:23:R",
+        "ordered_nonhub_event_number": 10,
+        "outgoing_edge": "osm:432726032:22:R",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::ARLATE_CANTINA_PIROVANO",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.422115,
+        45.7326151
+      ],
+      "event_id": "east_A:453:ASF::ARLATE_B_VIO_BRIVIO_MADONNINA",
+      "evidence_refs": [],
+      "name": "Arlate - B.vio Brivio - Madonnina",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 392.8017700809248,
+          "board_event_min": 393.3017700809248
+        },
+        {
+          "alight_event_min": 422.8017700809248,
+          "board_event_min": 423.3017700809248
+        },
+        {
+          "alight_event_min": 452.8017700809248,
+          "board_event_min": 453.3017700809248
+        },
+        {
+          "alight_event_min": 482.8017700809248,
+          "board_event_min": 483.3017700809248
+        },
+        {
+          "alight_event_min": 512.8017700809248,
+          "board_event_min": 513.3017700809248
+        },
+        {
+          "alight_event_min": 567.8017700809248,
+          "board_event_min": 568.3017700809248
+        },
+        {
+          "alight_event_min": 627.8017700809248,
+          "board_event_min": 628.3017700809248
+        },
+        {
+          "alight_event_min": 742.8017700809248,
+          "board_event_min": 743.3017700809248
+        },
+        {
+          "alight_event_min": 847.8017700809248,
+          "board_event_min": 848.3017700809248
+        },
+        {
+          "alight_event_min": 967.8017700809248,
+          "board_event_min": 968.3017700809248
+        },
+        {
+          "alight_event_min": 1027.8017700809248,
+          "board_event_min": 1028.3017700809248
+        },
+        {
+          "alight_event_min": 1057.8017700809248,
+          "board_event_min": 1058.3017700809248
+        },
+        {
+          "alight_event_min": 1087.8017700809248,
+          "board_event_min": 1088.3017700809248
+        },
+        {
+          "alight_event_min": 1117.8017700809248,
+          "board_event_min": 1118.3017700809248
+        },
+        {
+          "alight_event_min": 1147.8017700809248,
+          "board_event_min": 1148.3017700809248
+        },
+        {
+          "alight_event_min": 1207.8017700809248,
+          "board_event_min": 1208.3017700809248
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 12,
+      "path_context": {
+        "full_path_edge_index": 453,
+        "incoming_edge": "osm:432726031:0:R",
+        "ordered_nonhub_event_number": 11,
+        "outgoing_edge": "osm:42440419:0:R",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::ARLATE_B_VIO_BRIVIO_MADONNINA",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4180371,
+        45.7250958
+      ],
+      "event_id": "east_A:520:RT031::CALCO_CENTRE::n:532529.50:5063589.46",
+      "evidence_refs": [],
+      "name": "Calco Centro – Municipio",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 395.5642331097583,
+          "board_event_min": 396.0642331097583
+        },
+        {
+          "alight_event_min": 425.5642331097583,
+          "board_event_min": 426.0642331097583
+        },
+        {
+          "alight_event_min": 455.5642331097583,
+          "board_event_min": 456.0642331097583
+        },
+        {
+          "alight_event_min": 485.5642331097583,
+          "board_event_min": 486.0642331097583
+        },
+        {
+          "alight_event_min": 515.5642331097583,
+          "board_event_min": 516.0642331097583
+        },
+        {
+          "alight_event_min": 570.5642331097583,
+          "board_event_min": 571.0642331097583
+        },
+        {
+          "alight_event_min": 630.5642331097583,
+          "board_event_min": 631.0642331097583
+        },
+        {
+          "alight_event_min": 745.5642331097583,
+          "board_event_min": 746.0642331097583
+        },
+        {
+          "alight_event_min": 850.5642331097583,
+          "board_event_min": 851.0642331097583
+        },
+        {
+          "alight_event_min": 970.5642331097583,
+          "board_event_min": 971.0642331097583
+        },
+        {
+          "alight_event_min": 1030.5642331097583,
+          "board_event_min": 1031.0642331097583
+        },
+        {
+          "alight_event_min": 1060.5642331097583,
+          "board_event_min": 1061.0642331097583
+        },
+        {
+          "alight_event_min": 1090.5642331097583,
+          "board_event_min": 1091.0642331097583
+        },
+        {
+          "alight_event_min": 1120.5642331097583,
+          "board_event_min": 1121.0642331097583
+        },
+        {
+          "alight_event_min": 1150.5642331097583,
+          "board_event_min": 1151.0642331097583
+        },
+        {
+          "alight_event_min": 1210.5642331097583,
+          "board_event_min": 1211.0642331097583
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 13,
+      "path_context": {
+        "full_path_edge_index": 520,
+        "incoming_edge": "osm:42223868:16:F",
+        "ordered_nonhub_event_number": 12,
+        "outgoing_edge": "osm:42223868:17:F",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": true,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "RT031::CALCO_CENTRE::n:532529.50:5063589.46",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4100623,
+        45.724981
+      ],
+      "event_id": "east_A:565:ASF::CALCO_VIA_GARIBALDI",
+      "evidence_refs": [],
+      "name": "Calco - Via Virgilio",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 397.3148686908224,
+          "board_event_min": 397.8148686908224
+        },
+        {
+          "alight_event_min": 427.3148686908224,
+          "board_event_min": 427.8148686908224
+        },
+        {
+          "alight_event_min": 457.3148686908224,
+          "board_event_min": 457.8148686908224
+        },
+        {
+          "alight_event_min": 487.3148686908224,
+          "board_event_min": 487.8148686908224
+        },
+        {
+          "alight_event_min": 517.3148686908223,
+          "board_event_min": 517.8148686908223
+        },
+        {
+          "alight_event_min": 572.3148686908223,
+          "board_event_min": 572.8148686908223
+        },
+        {
+          "alight_event_min": 632.3148686908223,
+          "board_event_min": 632.8148686908223
+        },
+        {
+          "alight_event_min": 747.3148686908223,
+          "board_event_min": 747.8148686908223
+        },
+        {
+          "alight_event_min": 852.3148686908223,
+          "board_event_min": 852.8148686908223
+        },
+        {
+          "alight_event_min": 972.3148686908223,
+          "board_event_min": 972.8148686908223
+        },
+        {
+          "alight_event_min": 1032.3148686908223,
+          "board_event_min": 1032.8148686908223
+        },
+        {
+          "alight_event_min": 1062.3148686908223,
+          "board_event_min": 1062.8148686908223
+        },
+        {
+          "alight_event_min": 1092.3148686908223,
+          "board_event_min": 1092.8148686908223
+        },
+        {
+          "alight_event_min": 1122.3148686908223,
+          "board_event_min": 1122.8148686908223
+        },
+        {
+          "alight_event_min": 1152.3148686908223,
+          "board_event_min": 1152.8148686908223
+        },
+        {
+          "alight_event_min": 1212.3148686908223,
+          "board_event_min": 1212.8148686908223
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 14,
+      "path_context": {
+        "full_path_edge_index": 565,
+        "incoming_edge": "osm:432566878:12:F",
+        "ordered_nonhub_event_number": 13,
+        "outgoing_edge": "osm:432566878:13:F",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::CALCO_VIA_GARIBALDI",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4072469,
+        45.735645
+      ],
+      "event_id": "east_A:652:PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+      "evidence_refs": [],
+      "name": "San Zeno/Via Cantu",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 402.3688345372414,
+          "board_event_min": 402.8688345372414
+        },
+        {
+          "alight_event_min": 432.3688345372414,
+          "board_event_min": 432.8688345372414
+        },
+        {
+          "alight_event_min": 462.3688345372414,
+          "board_event_min": 462.8688345372414
+        },
+        {
+          "alight_event_min": 492.3688345372414,
+          "board_event_min": 492.8688345372414
+        },
+        {
+          "alight_event_min": 522.3688345372414,
+          "board_event_min": 522.8688345372414
+        },
+        {
+          "alight_event_min": 577.3688345372414,
+          "board_event_min": 577.8688345372414
+        },
+        {
+          "alight_event_min": 637.3688345372414,
+          "board_event_min": 637.8688345372414
+        },
+        {
+          "alight_event_min": 752.3688345372414,
+          "board_event_min": 752.8688345372414
+        },
+        {
+          "alight_event_min": 857.3688345372414,
+          "board_event_min": 857.8688345372414
+        },
+        {
+          "alight_event_min": 977.3688345372414,
+          "board_event_min": 977.8688345372414
+        },
+        {
+          "alight_event_min": 1037.3688345372414,
+          "board_event_min": 1037.8688345372414
+        },
+        {
+          "alight_event_min": 1067.3688345372414,
+          "board_event_min": 1067.8688345372414
+        },
+        {
+          "alight_event_min": 1097.3688345372414,
+          "board_event_min": 1097.8688345372414
+        },
+        {
+          "alight_event_min": 1127.3688345372414,
+          "board_event_min": 1127.8688345372414
+        },
+        {
+          "alight_event_min": 1157.3688345372414,
+          "board_event_min": 1157.8688345372414
+        },
+        {
+          "alight_event_min": 1217.3688345372414,
+          "board_event_min": 1217.8688345372414
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 15,
+      "path_context": {
+        "full_path_edge_index": 652,
+        "incoming_edge": "osm:581532442:11:F",
+        "ordered_nonhub_event_number": 14,
+        "outgoing_edge": "osm:581532442:12:F",
+        "wing": "east_A"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": true,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4044416,
+        45.7291436
+      ],
+      "event_id": "FS::INTERMEDIATE_FS_STAY_ONBOARD_DESIGN",
+      "evidence_refs": [],
+      "name": "Olgiate-Calco-Brivio FS",
+      "nominal_event_times_by_full_trip": [
+        {
+          "arrival_min": 405.7765936278996,
+          "departure_min": 420
+        },
+        {
+          "arrival_min": 435.7765936278996,
+          "departure_min": 450
+        },
+        {
+          "arrival_min": 465.7765936278996,
+          "departure_min": 480
+        },
+        {
+          "arrival_min": 495.7765936278996,
+          "departure_min": 510
+        },
+        {
+          "arrival_min": 525.7765936278996,
+          "departure_min": 540
+        },
+        {
+          "arrival_min": 580.7765936278996,
+          "departure_min": 595
+        },
+        {
+          "arrival_min": 640.7765936278996,
+          "departure_min": 650
+        },
+        {
+          "arrival_min": 755.7765936278996,
+          "departure_min": 770
+        },
+        {
+          "arrival_min": 860.7765936278996,
+          "departure_min": 875
+        },
+        {
+          "arrival_min": 980.7765936278996,
+          "departure_min": 995
+        },
+        {
+          "arrival_min": 1040.7765936278995,
+          "departure_min": 1055
+        },
+        {
+          "arrival_min": 1070.7765936278995,
+          "departure_min": 1085
+        },
+        {
+          "arrival_min": 1100.7765936278995,
+          "departure_min": 1115
+        },
+        {
+          "arrival_min": 1130.7765936278995,
+          "departure_min": 1145
+        },
+        {
+          "arrival_min": 1160.7765936278995,
+          "departure_min": 1175
+        },
+        {
+          "arrival_min": 1220.7765936278995,
+          "departure_min": 1230
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 16,
+      "path_context": {
+        "fs_role": "INTERMEDIATE_FS_STAY_ONBOARD_DESIGN"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "FROZEN::L00407",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.397265069842808,
+        45.72130999924538
+      ],
+      "event_id": "west_B:86:RT031::P2V2S_0031_PROJECTED_ROAD_POINT",
+      "evidence_refs": [],
+      "name": "Olgiate sud",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 424.3160452715435,
+          "board_event_min": 424.8160452715435
+        },
+        {
+          "alight_event_min": 454.3160452715435,
+          "board_event_min": 454.8160452715435
+        },
+        {
+          "alight_event_min": 484.3160452715435,
+          "board_event_min": 484.8160452715435
+        },
+        {
+          "alight_event_min": 514.3160452715435,
+          "board_event_min": 514.8160452715435
+        },
+        {
+          "alight_event_min": 544.3160452715435,
+          "board_event_min": 544.8160452715435
+        },
+        {
+          "alight_event_min": 599.3160452715435,
+          "board_event_min": 599.8160452715435
+        },
+        {
+          "alight_event_min": 654.3160452715435,
+          "board_event_min": 654.8160452715435
+        },
+        {
+          "alight_event_min": 774.3160452715435,
+          "board_event_min": 774.8160452715435
+        },
+        {
+          "alight_event_min": 879.3160452715435,
+          "board_event_min": 879.8160452715435
+        },
+        {
+          "alight_event_min": 999.3160452715435,
+          "board_event_min": 999.8160452715435
+        },
+        {
+          "alight_event_min": 1059.3160452715435,
+          "board_event_min": 1059.8160452715435
+        },
+        {
+          "alight_event_min": 1089.3160452715435,
+          "board_event_min": 1089.8160452715435
+        },
+        {
+          "alight_event_min": 1119.3160452715435,
+          "board_event_min": 1119.8160452715435
+        },
+        {
+          "alight_event_min": 1149.3160452715435,
+          "board_event_min": 1149.8160452715435
+        },
+        {
+          "alight_event_min": 1179.3160452715435,
+          "board_event_min": 1179.8160452715435
+        },
+        {
+          "alight_event_min": 1234.3160452715435,
+          "board_event_min": 1234.8160452715435
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 17,
+      "path_context": {
+        "full_path_edge_index": 804,
+        "incoming_edge": "osm:40627763:11:F::IN",
+        "ordered_nonhub_event_number": 15,
+        "outgoing_edge": "osm:40627763:11:F::OUT",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": true,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "RT031::P2V2S_0031_PROJECTED_ROAD_POINT",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.3899992,
+        45.7312545
+      ],
+      "event_id": "west_B:188:ASF::OLGIATE_MOLGORA_SCARPONE",
+      "evidence_refs": [],
+      "name": "Olgiate Molgora - Scarpone",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 428.4429238567114,
+          "board_event_min": 428.9429238567114
+        },
+        {
+          "alight_event_min": 458.4429238567114,
+          "board_event_min": 458.9429238567114
+        },
+        {
+          "alight_event_min": 488.4429238567114,
+          "board_event_min": 488.9429238567114
+        },
+        {
+          "alight_event_min": 518.4429238567113,
+          "board_event_min": 518.9429238567113
+        },
+        {
+          "alight_event_min": 548.4429238567113,
+          "board_event_min": 548.9429238567113
+        },
+        {
+          "alight_event_min": 603.4429238567113,
+          "board_event_min": 603.9429238567113
+        },
+        {
+          "alight_event_min": 658.4429238567113,
+          "board_event_min": 658.9429238567113
+        },
+        {
+          "alight_event_min": 778.4429238567113,
+          "board_event_min": 778.9429238567113
+        },
+        {
+          "alight_event_min": 883.4429238567113,
+          "board_event_min": 883.9429238567113
+        },
+        {
+          "alight_event_min": 1003.4429238567113,
+          "board_event_min": 1003.9429238567113
+        },
+        {
+          "alight_event_min": 1063.4429238567113,
+          "board_event_min": 1063.9429238567113
+        },
+        {
+          "alight_event_min": 1093.4429238567113,
+          "board_event_min": 1093.9429238567113
+        },
+        {
+          "alight_event_min": 1123.4429238567113,
+          "board_event_min": 1123.9429238567113
+        },
+        {
+          "alight_event_min": 1153.4429238567113,
+          "board_event_min": 1153.9429238567113
+        },
+        {
+          "alight_event_min": 1183.4429238567113,
+          "board_event_min": 1183.9429238567113
+        },
+        {
+          "alight_event_min": 1238.4429238567113,
+          "board_event_min": 1238.9429238567113
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 18,
+      "path_context": {
+        "full_path_edge_index": 906,
+        "incoming_edge": "osm:1207059930:0:R",
+        "ordered_nonhub_event_number": 16,
+        "outgoing_edge": "osm:1207059929:2:R",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::OLGIATE_MOLGORA_SCARPONE",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.3823684,
+        45.734853
+      ],
+      "event_id": "west_B:237:ASF::ROVAGNATE_FRAZIONE_ALDUNO",
+      "evidence_refs": [],
+      "name": "Santa Maria Hoè - Alduno",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 430.25263516785617,
+          "board_event_min": 430.75263516785617
+        },
+        {
+          "alight_event_min": 460.25263516785617,
+          "board_event_min": 460.75263516785617
+        },
+        {
+          "alight_event_min": 490.25263516785617,
+          "board_event_min": 490.75263516785617
+        },
+        {
+          "alight_event_min": 520.2526351678562,
+          "board_event_min": 520.7526351678562
+        },
+        {
+          "alight_event_min": 550.2526351678562,
+          "board_event_min": 550.7526351678562
+        },
+        {
+          "alight_event_min": 605.2526351678562,
+          "board_event_min": 605.7526351678562
+        },
+        {
+          "alight_event_min": 660.2526351678562,
+          "board_event_min": 660.7526351678562
+        },
+        {
+          "alight_event_min": 780.2526351678562,
+          "board_event_min": 780.7526351678562
+        },
+        {
+          "alight_event_min": 885.2526351678562,
+          "board_event_min": 885.7526351678562
+        },
+        {
+          "alight_event_min": 1005.2526351678562,
+          "board_event_min": 1005.7526351678562
+        },
+        {
+          "alight_event_min": 1065.2526351678562,
+          "board_event_min": 1065.7526351678562
+        },
+        {
+          "alight_event_min": 1095.2526351678562,
+          "board_event_min": 1095.7526351678562
+        },
+        {
+          "alight_event_min": 1125.2526351678562,
+          "board_event_min": 1125.7526351678562
+        },
+        {
+          "alight_event_min": 1155.2526351678562,
+          "board_event_min": 1155.7526351678562
+        },
+        {
+          "alight_event_min": 1185.2526351678562,
+          "board_event_min": 1185.7526351678562
+        },
+        {
+          "alight_event_min": 1240.2526351678562,
+          "board_event_min": 1240.7526351678562
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 19,
+      "path_context": {
+        "full_path_edge_index": 955,
+        "incoming_edge": "osm:523336575:23:F",
+        "ordered_nonhub_event_number": 17,
+        "outgoing_edge": "osm:523336575:24:F",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::ROVAGNATE_FRAZIONE_ALDUNO",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.3744957,
+        45.7372068
+      ],
+      "event_id": "west_B:293:ASF::ROVAGNATE_STRADA_STATALE_AGIP",
+      "evidence_refs": [],
+      "name": "Rovagnate - Statale / AGIP",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 431.90133426089244,
+          "board_event_min": 432.40133426089244
+        },
+        {
+          "alight_event_min": 461.90133426089244,
+          "board_event_min": 462.40133426089244
+        },
+        {
+          "alight_event_min": 491.90133426089244,
+          "board_event_min": 492.40133426089244
+        },
+        {
+          "alight_event_min": 521.9013342608924,
+          "board_event_min": 522.4013342608924
+        },
+        {
+          "alight_event_min": 551.9013342608924,
+          "board_event_min": 552.4013342608924
+        },
+        {
+          "alight_event_min": 606.9013342608924,
+          "board_event_min": 607.4013342608924
+        },
+        {
+          "alight_event_min": 661.9013342608924,
+          "board_event_min": 662.4013342608924
+        },
+        {
+          "alight_event_min": 781.9013342608924,
+          "board_event_min": 782.4013342608924
+        },
+        {
+          "alight_event_min": 886.9013342608924,
+          "board_event_min": 887.4013342608924
+        },
+        {
+          "alight_event_min": 1006.9013342608924,
+          "board_event_min": 1007.4013342608924
+        },
+        {
+          "alight_event_min": 1066.9013342608926,
+          "board_event_min": 1067.4013342608926
+        },
+        {
+          "alight_event_min": 1096.9013342608926,
+          "board_event_min": 1097.4013342608926
+        },
+        {
+          "alight_event_min": 1126.9013342608926,
+          "board_event_min": 1127.4013342608926
+        },
+        {
+          "alight_event_min": 1156.9013342608926,
+          "board_event_min": 1157.4013342608926
+        },
+        {
+          "alight_event_min": 1186.9013342608926,
+          "board_event_min": 1187.4013342608926
+        },
+        {
+          "alight_event_min": 1241.9013342608926,
+          "board_event_min": 1242.4013342608926
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 20,
+      "path_context": {
+        "full_path_edge_index": 1011,
+        "incoming_edge": "osm:143945595:3:F",
+        "ordered_nonhub_event_number": 18,
+        "outgoing_edge": "osm:143945595:4:F",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::ROVAGNATE_STRADA_STATALE_AGIP",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.3699695,
+        45.7371576
+      ],
+      "event_id": "west_B:297:ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA",
+      "evidence_refs": [],
+      "name": "Rovagnate - Statale / Via Lombardia",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 432.9825001336272,
+          "board_event_min": 433.4825001336272
+        },
+        {
+          "alight_event_min": 462.9825001336272,
+          "board_event_min": 463.4825001336272
+        },
+        {
+          "alight_event_min": 492.9825001336272,
+          "board_event_min": 493.4825001336272
+        },
+        {
+          "alight_event_min": 522.9825001336272,
+          "board_event_min": 523.4825001336272
+        },
+        {
+          "alight_event_min": 552.9825001336272,
+          "board_event_min": 553.4825001336272
+        },
+        {
+          "alight_event_min": 607.9825001336272,
+          "board_event_min": 608.4825001336272
+        },
+        {
+          "alight_event_min": 662.9825001336272,
+          "board_event_min": 663.4825001336272
+        },
+        {
+          "alight_event_min": 782.9825001336272,
+          "board_event_min": 783.4825001336272
+        },
+        {
+          "alight_event_min": 887.9825001336272,
+          "board_event_min": 888.4825001336272
+        },
+        {
+          "alight_event_min": 1007.9825001336272,
+          "board_event_min": 1008.4825001336272
+        },
+        {
+          "alight_event_min": 1067.9825001336271,
+          "board_event_min": 1068.4825001336271
+        },
+        {
+          "alight_event_min": 1097.9825001336271,
+          "board_event_min": 1098.4825001336271
+        },
+        {
+          "alight_event_min": 1127.9825001336271,
+          "board_event_min": 1128.4825001336271
+        },
+        {
+          "alight_event_min": 1157.9825001336271,
+          "board_event_min": 1158.4825001336271
+        },
+        {
+          "alight_event_min": 1187.9825001336271,
+          "board_event_min": 1188.4825001336271
+        },
+        {
+          "alight_event_min": 1242.9825001336271,
+          "board_event_min": 1243.4825001336271
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 21,
+      "path_context": {
+        "full_path_edge_index": 1015,
+        "incoming_edge": "osm:143945595:7:F",
+        "ordered_nonhub_event_number": 19,
+        "outgoing_edge": "osm:143945595:8:F",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.3624119,
+        45.7386406
+      ],
+      "event_id": "west_B:315:ASF::PEREGO_VIA_STATALE_79",
+      "evidence_refs": [],
+      "name": "Perego - Statale / Via S. Caterina",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 434.502144511107,
+          "board_event_min": 435.002144511107
+        },
+        {
+          "alight_event_min": 464.502144511107,
+          "board_event_min": 465.002144511107
+        },
+        {
+          "alight_event_min": 494.502144511107,
+          "board_event_min": 495.002144511107
+        },
+        {
+          "alight_event_min": 524.502144511107,
+          "board_event_min": 525.002144511107
+        },
+        {
+          "alight_event_min": 554.502144511107,
+          "board_event_min": 555.002144511107
+        },
+        {
+          "alight_event_min": 609.502144511107,
+          "board_event_min": 610.002144511107
+        },
+        {
+          "alight_event_min": 664.502144511107,
+          "board_event_min": 665.002144511107
+        },
+        {
+          "alight_event_min": 784.502144511107,
+          "board_event_min": 785.002144511107
+        },
+        {
+          "alight_event_min": 889.502144511107,
+          "board_event_min": 890.002144511107
+        },
+        {
+          "alight_event_min": 1009.502144511107,
+          "board_event_min": 1010.002144511107
+        },
+        {
+          "alight_event_min": 1069.502144511107,
+          "board_event_min": 1070.002144511107
+        },
+        {
+          "alight_event_min": 1099.502144511107,
+          "board_event_min": 1100.002144511107
+        },
+        {
+          "alight_event_min": 1129.502144511107,
+          "board_event_min": 1130.002144511107
+        },
+        {
+          "alight_event_min": 1159.502144511107,
+          "board_event_min": 1160.002144511107
+        },
+        {
+          "alight_event_min": 1189.502144511107,
+          "board_event_min": 1190.002144511107
+        },
+        {
+          "alight_event_min": 1244.502144511107,
+          "board_event_min": 1245.002144511107
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 22,
+      "path_context": {
+        "full_path_edge_index": 1033,
+        "incoming_edge": "osm:143945595:25:F",
+        "ordered_nonhub_event_number": 20,
+        "outgoing_edge": "osm:143945595:26:F",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::PEREGO_VIA_STATALE_79",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.3646719,
+        45.7397699
+      ],
+      "event_id": "west_B:333:FROZEN::300879",
+      "evidence_refs": [],
+      "name": "Rovagnate - vinicola ghezzi",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 435.6491575338882,
+          "board_event_min": 436.1491575338882
+        },
+        {
+          "alight_event_min": 465.6491575338882,
+          "board_event_min": 466.1491575338882
+        },
+        {
+          "alight_event_min": 495.6491575338882,
+          "board_event_min": 496.1491575338882
+        },
+        {
+          "alight_event_min": 525.6491575338882,
+          "board_event_min": 526.1491575338882
+        },
+        {
+          "alight_event_min": 555.6491575338882,
+          "board_event_min": 556.1491575338882
+        },
+        {
+          "alight_event_min": 610.6491575338882,
+          "board_event_min": 611.1491575338882
+        },
+        {
+          "alight_event_min": 665.6491575338882,
+          "board_event_min": 666.1491575338882
+        },
+        {
+          "alight_event_min": 785.6491575338882,
+          "board_event_min": 786.1491575338882
+        },
+        {
+          "alight_event_min": 890.6491575338882,
+          "board_event_min": 891.1491575338882
+        },
+        {
+          "alight_event_min": 1010.6491575338882,
+          "board_event_min": 1011.1491575338882
+        },
+        {
+          "alight_event_min": 1070.6491575338882,
+          "board_event_min": 1071.1491575338882
+        },
+        {
+          "alight_event_min": 1100.6491575338882,
+          "board_event_min": 1101.1491575338882
+        },
+        {
+          "alight_event_min": 1130.6491575338882,
+          "board_event_min": 1131.1491575338882
+        },
+        {
+          "alight_event_min": 1160.6491575338882,
+          "board_event_min": 1161.1491575338882
+        },
+        {
+          "alight_event_min": 1190.6491575338882,
+          "board_event_min": 1191.1491575338882
+        },
+        {
+          "alight_event_min": 1245.6491575338882,
+          "board_event_min": 1246.1491575338882
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 23,
+      "path_context": {
+        "full_path_edge_index": 1051,
+        "incoming_edge": "osm:198176816:3:R",
+        "ordered_nonhub_event_number": 21,
+        "outgoing_edge": "osm:198176816:2:R",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "FROZEN::300879",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.3737127,
+        45.7442826
+      ],
+      "event_id": "west_B:435:FROZEN::300782",
+      "evidence_refs": [],
+      "name": "S.Maria Hoe'",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 439.81710927497517,
+          "board_event_min": 440.31710927497517
+        },
+        {
+          "alight_event_min": 469.81710927497517,
+          "board_event_min": 470.31710927497517
+        },
+        {
+          "alight_event_min": 499.81710927497517,
+          "board_event_min": 500.31710927497517
+        },
+        {
+          "alight_event_min": 529.8171092749751,
+          "board_event_min": 530.3171092749751
+        },
+        {
+          "alight_event_min": 559.8171092749751,
+          "board_event_min": 560.3171092749751
+        },
+        {
+          "alight_event_min": 614.8171092749751,
+          "board_event_min": 615.3171092749751
+        },
+        {
+          "alight_event_min": 669.8171092749751,
+          "board_event_min": 670.3171092749751
+        },
+        {
+          "alight_event_min": 789.8171092749751,
+          "board_event_min": 790.3171092749751
+        },
+        {
+          "alight_event_min": 894.8171092749751,
+          "board_event_min": 895.3171092749751
+        },
+        {
+          "alight_event_min": 1014.8171092749751,
+          "board_event_min": 1015.3171092749751
+        },
+        {
+          "alight_event_min": 1074.817109274975,
+          "board_event_min": 1075.317109274975
+        },
+        {
+          "alight_event_min": 1104.817109274975,
+          "board_event_min": 1105.317109274975
+        },
+        {
+          "alight_event_min": 1134.817109274975,
+          "board_event_min": 1135.317109274975
+        },
+        {
+          "alight_event_min": 1164.817109274975,
+          "board_event_min": 1165.317109274975
+        },
+        {
+          "alight_event_min": 1194.817109274975,
+          "board_event_min": 1195.317109274975
+        },
+        {
+          "alight_event_min": 1249.817109274975,
+          "board_event_min": 1250.317109274975
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 24,
+      "path_context": {
+        "full_path_edge_index": 1153,
+        "incoming_edge": "osm:194077343:42:F",
+        "ordered_nonhub_event_number": 22,
+        "outgoing_edge": "osm:194077343:43:F",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "FROZEN::300782",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.3783572,
+        45.7426297
+      ],
+      "event_id": "west_B:459:FROZEN::300805",
+      "evidence_refs": [],
+      "name": "Santa Maria Hoè - Tremonte / Via Trento",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 441.2638459882368,
+          "board_event_min": 441.7638459882368
+        },
+        {
+          "alight_event_min": 471.2638459882368,
+          "board_event_min": 471.7638459882368
+        },
+        {
+          "alight_event_min": 501.2638459882368,
+          "board_event_min": 501.7638459882368
+        },
+        {
+          "alight_event_min": 531.2638459882368,
+          "board_event_min": 531.7638459882368
+        },
+        {
+          "alight_event_min": 561.2638459882368,
+          "board_event_min": 561.7638459882368
+        },
+        {
+          "alight_event_min": 616.2638459882368,
+          "board_event_min": 616.7638459882368
+        },
+        {
+          "alight_event_min": 671.2638459882368,
+          "board_event_min": 671.7638459882368
+        },
+        {
+          "alight_event_min": 791.2638459882368,
+          "board_event_min": 791.7638459882368
+        },
+        {
+          "alight_event_min": 896.2638459882368,
+          "board_event_min": 896.7638459882368
+        },
+        {
+          "alight_event_min": 1016.2638459882368,
+          "board_event_min": 1016.7638459882368
+        },
+        {
+          "alight_event_min": 1076.2638459882369,
+          "board_event_min": 1076.7638459882369
+        },
+        {
+          "alight_event_min": 1106.2638459882369,
+          "board_event_min": 1106.7638459882369
+        },
+        {
+          "alight_event_min": 1136.2638459882369,
+          "board_event_min": 1136.7638459882369
+        },
+        {
+          "alight_event_min": 1166.2638459882369,
+          "board_event_min": 1166.7638459882369
+        },
+        {
+          "alight_event_min": 1196.2638459882369,
+          "board_event_min": 1196.7638459882369
+        },
+        {
+          "alight_event_min": 1251.2638459882369,
+          "board_event_min": 1251.7638459882369
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 25,
+      "path_context": {
+        "full_path_edge_index": 1177,
+        "incoming_edge": "osm:194077343:66:F",
+        "ordered_nonhub_event_number": 23,
+        "outgoing_edge": "osm:194077343:67:F",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "FROZEN::300805",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.3805787,
+        45.7412051
+      ],
+      "event_id": "west_B:472:ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII",
+      "evidence_refs": [],
+      "name": "Santa Maria Hoè - Via Giovanni XXIII / Tremonte-Via Leopardi",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 442.3023243203559,
+          "board_event_min": 442.8023243203559
+        },
+        {
+          "alight_event_min": 472.3023243203559,
+          "board_event_min": 472.8023243203559
+        },
+        {
+          "alight_event_min": 502.3023243203559,
+          "board_event_min": 502.8023243203559
+        },
+        {
+          "alight_event_min": 532.302324320356,
+          "board_event_min": 532.802324320356
+        },
+        {
+          "alight_event_min": 562.302324320356,
+          "board_event_min": 562.802324320356
+        },
+        {
+          "alight_event_min": 617.302324320356,
+          "board_event_min": 617.802324320356
+        },
+        {
+          "alight_event_min": 672.302324320356,
+          "board_event_min": 672.802324320356
+        },
+        {
+          "alight_event_min": 792.302324320356,
+          "board_event_min": 792.802324320356
+        },
+        {
+          "alight_event_min": 897.302324320356,
+          "board_event_min": 897.802324320356
+        },
+        {
+          "alight_event_min": 1017.302324320356,
+          "board_event_min": 1017.802324320356
+        },
+        {
+          "alight_event_min": 1077.3023243203559,
+          "board_event_min": 1077.8023243203559
+        },
+        {
+          "alight_event_min": 1107.3023243203559,
+          "board_event_min": 1107.8023243203559
+        },
+        {
+          "alight_event_min": 1137.3023243203559,
+          "board_event_min": 1137.8023243203559
+        },
+        {
+          "alight_event_min": 1167.3023243203559,
+          "board_event_min": 1167.8023243203559
+        },
+        {
+          "alight_event_min": 1197.3023243203559,
+          "board_event_min": 1197.8023243203559
+        },
+        {
+          "alight_event_min": 1252.3023243203559,
+          "board_event_min": 1252.8023243203559
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 26,
+      "path_context": {
+        "full_path_edge_index": 1190,
+        "incoming_edge": "osm:194077343:79:F",
+        "ordered_nonhub_event_number": 24,
+        "outgoing_edge": "osm:194077343:80:F",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.387759,
+        45.738234
+      ],
+      "event_id": "west_B:490:ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO",
+      "evidence_refs": [],
+      "name": "S. Maria Hoè - S.P. 58 ang. Via Cenisio",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 444.2398774368343,
+          "board_event_min": 444.7398774368343
+        },
+        {
+          "alight_event_min": 474.2398774368343,
+          "board_event_min": 474.7398774368343
+        },
+        {
+          "alight_event_min": 504.2398774368343,
+          "board_event_min": 504.7398774368343
+        },
+        {
+          "alight_event_min": 534.2398774368344,
+          "board_event_min": 534.7398774368344
+        },
+        {
+          "alight_event_min": 564.2398774368344,
+          "board_event_min": 564.7398774368344
+        },
+        {
+          "alight_event_min": 619.2398774368344,
+          "board_event_min": 619.7398774368344
+        },
+        {
+          "alight_event_min": 674.2398774368344,
+          "board_event_min": 674.7398774368344
+        },
+        {
+          "alight_event_min": 794.2398774368344,
+          "board_event_min": 794.7398774368344
+        },
+        {
+          "alight_event_min": 899.2398774368344,
+          "board_event_min": 899.7398774368344
+        },
+        {
+          "alight_event_min": 1019.2398774368344,
+          "board_event_min": 1019.7398774368344
+        },
+        {
+          "alight_event_min": 1079.2398774368344,
+          "board_event_min": 1079.7398774368344
+        },
+        {
+          "alight_event_min": 1109.2398774368344,
+          "board_event_min": 1109.7398774368344
+        },
+        {
+          "alight_event_min": 1139.2398774368344,
+          "board_event_min": 1139.7398774368344
+        },
+        {
+          "alight_event_min": 1169.2398774368344,
+          "board_event_min": 1169.7398774368344
+        },
+        {
+          "alight_event_min": 1199.2398774368344,
+          "board_event_min": 1199.7398774368344
+        },
+        {
+          "alight_event_min": 1254.2398774368344,
+          "board_event_min": 1254.7398774368344
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 27,
+      "path_context": {
+        "full_path_edge_index": 1208,
+        "incoming_edge": "osm:193977005:5:F",
+        "ordered_nonhub_event_number": 25,
+        "outgoing_edge": "osm:193977005:6:F",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.3909148,
+        45.7317985
+      ],
+      "event_id": "west_B:539:ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE",
+      "evidence_refs": [],
+      "name": "Olgiate Molgora - Via Della Salute",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 446.844183471796,
+          "board_event_min": 447.344183471796
+        },
+        {
+          "alight_event_min": 476.844183471796,
+          "board_event_min": 477.344183471796
+        },
+        {
+          "alight_event_min": 506.844183471796,
+          "board_event_min": 507.344183471796
+        },
+        {
+          "alight_event_min": 536.844183471796,
+          "board_event_min": 537.344183471796
+        },
+        {
+          "alight_event_min": 566.844183471796,
+          "board_event_min": 567.344183471796
+        },
+        {
+          "alight_event_min": 621.844183471796,
+          "board_event_min": 622.344183471796
+        },
+        {
+          "alight_event_min": 676.844183471796,
+          "board_event_min": 677.344183471796
+        },
+        {
+          "alight_event_min": 796.844183471796,
+          "board_event_min": 797.344183471796
+        },
+        {
+          "alight_event_min": 901.844183471796,
+          "board_event_min": 902.344183471796
+        },
+        {
+          "alight_event_min": 1021.844183471796,
+          "board_event_min": 1022.344183471796
+        },
+        {
+          "alight_event_min": 1081.844183471796,
+          "board_event_min": 1082.344183471796
+        },
+        {
+          "alight_event_min": 1111.844183471796,
+          "board_event_min": 1112.344183471796
+        },
+        {
+          "alight_event_min": 1141.844183471796,
+          "board_event_min": 1142.344183471796
+        },
+        {
+          "alight_event_min": 1171.844183471796,
+          "board_event_min": 1172.344183471796
+        },
+        {
+          "alight_event_min": 1201.844183471796,
+          "board_event_min": 1202.344183471796
+        },
+        {
+          "alight_event_min": 1256.844183471796,
+          "board_event_min": 1257.344183471796
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 28,
+      "path_context": {
+        "full_path_edge_index": 1257,
+        "incoming_edge": "osm:523338067:9:F",
+        "ordered_nonhub_event_number": 26,
+        "outgoing_edge": "osm:523338067:10:F",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4002741,
+        45.7287569
+      ],
+      "event_id": "west_B:584:ASF::OLGIATE_MOLGORA_VIA_STATALE",
+      "evidence_refs": [],
+      "name": "Olgiate Molgora - Via Statale",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 448.854321384509,
+          "board_event_min": 449.354321384509
+        },
+        {
+          "alight_event_min": 478.854321384509,
+          "board_event_min": 479.354321384509
+        },
+        {
+          "alight_event_min": 508.854321384509,
+          "board_event_min": 509.354321384509
+        },
+        {
+          "alight_event_min": 538.854321384509,
+          "board_event_min": 539.354321384509
+        },
+        {
+          "alight_event_min": 568.854321384509,
+          "board_event_min": 569.354321384509
+        },
+        {
+          "alight_event_min": 623.854321384509,
+          "board_event_min": 624.354321384509
+        },
+        {
+          "alight_event_min": 678.854321384509,
+          "board_event_min": 679.354321384509
+        },
+        {
+          "alight_event_min": 798.854321384509,
+          "board_event_min": 799.354321384509
+        },
+        {
+          "alight_event_min": 903.854321384509,
+          "board_event_min": 904.354321384509
+        },
+        {
+          "alight_event_min": 1023.8543213845089,
+          "board_event_min": 1024.354321384509
+        },
+        {
+          "alight_event_min": 1083.854321384509,
+          "board_event_min": 1084.354321384509
+        },
+        {
+          "alight_event_min": 1113.854321384509,
+          "board_event_min": 1114.354321384509
+        },
+        {
+          "alight_event_min": 1143.854321384509,
+          "board_event_min": 1144.354321384509
+        },
+        {
+          "alight_event_min": 1173.854321384509,
+          "board_event_min": 1174.354321384509
+        },
+        {
+          "alight_event_min": 1203.854321384509,
+          "board_event_min": 1204.354321384509
+        },
+        {
+          "alight_event_min": 1258.854321384509,
+          "board_event_min": 1259.354321384509
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 29,
+      "path_context": {
+        "full_path_edge_index": 1302,
+        "incoming_edge": "osm:48540240:5:R",
+        "ordered_nonhub_event_number": 27,
+        "outgoing_edge": "osm:48540240:4:R",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "ASF::OLGIATE_MOLGORA_VIA_STATALE",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.397265069842808,
+        45.72130999924538
+      ],
+      "event_id": "west_B:639:RT031::P2V2S_0031_PROJECTED_ROAD_POINT",
+      "evidence_refs": [],
+      "name": "Olgiate sud",
+      "nominal_event_times_by_full_trip": [
+        {
+          "alight_event_min": 453.19318120293843,
+          "board_event_min": 453.69318120293843
+        },
+        {
+          "alight_event_min": 483.19318120293843,
+          "board_event_min": 483.69318120293843
+        },
+        {
+          "alight_event_min": 513.1931812029384,
+          "board_event_min": 513.6931812029384
+        },
+        {
+          "alight_event_min": 543.1931812029384,
+          "board_event_min": 543.6931812029384
+        },
+        {
+          "alight_event_min": 573.1931812029384,
+          "board_event_min": 573.6931812029384
+        },
+        {
+          "alight_event_min": 628.1931812029384,
+          "board_event_min": 628.6931812029384
+        },
+        {
+          "alight_event_min": 683.1931812029384,
+          "board_event_min": 683.6931812029384
+        },
+        {
+          "alight_event_min": 803.1931812029384,
+          "board_event_min": 803.6931812029384
+        },
+        {
+          "alight_event_min": 908.1931812029384,
+          "board_event_min": 908.6931812029384
+        },
+        {
+          "alight_event_min": 1028.1931812029384,
+          "board_event_min": 1028.6931812029384
+        },
+        {
+          "alight_event_min": 1088.1931812029384,
+          "board_event_min": 1088.6931812029384
+        },
+        {
+          "alight_event_min": 1118.1931812029384,
+          "board_event_min": 1118.6931812029384
+        },
+        {
+          "alight_event_min": 1148.1931812029384,
+          "board_event_min": 1148.6931812029384
+        },
+        {
+          "alight_event_min": 1178.1931812029384,
+          "board_event_min": 1178.6931812029384
+        },
+        {
+          "alight_event_min": 1208.1931812029384,
+          "board_event_min": 1208.6931812029384
+        },
+        {
+          "alight_event_min": 1263.1931812029384,
+          "board_event_min": 1263.6931812029384
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 30,
+      "path_context": {
+        "full_path_edge_index": 1357,
+        "incoming_edge": "osm:40627763:11:F::IN",
+        "ordered_nonhub_event_number": 28,
+        "outgoing_edge": "osm:40627763:11:F::OUT",
+        "wing": "west_B"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": true,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "RT031::P2V2S_0031_PROJECTED_ROAD_POINT",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    },
+    {
+      "actual_platform_coordinates_lon_lat": null,
+      "actual_platform_id": null,
+      "alighting_permission": null,
+      "assessed_on": null,
+      "boarding_permission": null,
+      "bus_kerb_and_swept_path_approved": null,
+      "design_coordinates_lon_lat": [
+        9.4044416,
+        45.7291436
+      ],
+      "event_id": "FS::FULL_TRIP_END_FS",
+      "evidence_refs": [],
+      "name": "Olgiate-Calco-Brivio FS",
+      "nominal_event_times_by_full_trip": [
+        {
+          "arrival_min": 458.3027038045449
+        },
+        {
+          "arrival_min": 488.3027038045449
+        },
+        {
+          "arrival_min": 518.3027038045449
+        },
+        {
+          "arrival_min": 548.3027038045449
+        },
+        {
+          "arrival_min": 578.3027038045449
+        },
+        {
+          "arrival_min": 633.3027038045449
+        },
+        {
+          "arrival_min": 688.3027038045449
+        },
+        {
+          "arrival_min": 808.3027038045449
+        },
+        {
+          "arrival_min": 913.3027038045449
+        },
+        {
+          "arrival_min": 1033.3027038045448
+        },
+        {
+          "arrival_min": 1093.3027038045448
+        },
+        {
+          "arrival_min": 1123.3027038045448
+        },
+        {
+          "arrival_min": 1153.3027038045448
+        },
+        {
+          "arrival_min": 1183.3027038045448
+        },
+        {
+          "arrival_min": 1213.3027038045448
+        },
+        {
+          "arrival_min": 1268.3027038045448
+        }
+      ],
+      "observed_boarding_side": null,
+      "ordered_event_number": 31,
+      "path_context": {
+        "fs_role": "FULL_TRIP_END_FS"
+      },
+      "physical_service_event_authorised": false,
+      "proposed_new_site": false,
+      "required_works": null,
+      "reviewed_by": null,
+      "site_id": "FROZEN::L00407",
+      "status": "PENDING_OPERATOR_AND_STOP_AUTHORITY",
+      "waiting_area_and_crossing_accessibility_approved": null
+    }
+  ],
+  "funding_secured": false,
+  "missed_connection_probability": null,
+  "network_selected": false,
+  "physical_operation_ready": false,
+  "primary_selection_authorised": false,
+  "rail_review": {
+    "caution": "RFI search and rendered page returned different 2025/2026 periods. Neither establishes 2027 validity. Existing dated rail cache remains unchanged; no future timetable is inferred.",
+    "certified_upstream_service_date": "2026-10-01",
+    "checked_on": "2026-10-02",
+    "claims_all_2027_timetables_globally_unpublished": false,
+    "review_result": "NO_2027_COVERAGE_ESTABLISHED_IN_REVIEWED_SOURCES",
+    "reviewed_official_pages": [
+      "https://www.trenord.it/linee-e-orari/circolazione/orario-ferroviario/",
+      "https://prm.rfi.it/qo_prm/QO_Partenze_SiPMR.aspx?Id=1805&alle=07.59&dalle=07.00&guid=&lin=&ora=07.00"
+    ],
+    "upstream_reported_rfi_validity": [
+      "2026-06-14",
+      "2026-12-12"
+    ],
+    "whole_2027_connections_certified": false
+  },
+  "recorded_on": "2026-10-02",
+  "road_priority_details": [
+    {
+      "bus_suitability_certified": false,
+      "edge_ids": [
+        "osm:1207059930:7:R",
+        "osm:1207059930:6:R",
+        "osm:1207059930:5:R",
+        "osm:1207059930:4:R",
+        "osm:1207059930:3:R",
+        "osm:1207059930:2:R",
+        "osm:1207059930:1:R",
+        "osm:1207059930:0:R",
+        "osm:1207059929:2:R",
+        "osm:1207059929:1:R",
+        "osm:1207059929:0:R"
+      ],
+      "end_lon_lat": [
+        9.3898446,
+        45.7313737
+      ],
+      "first_edge_index_zero_based": 180,
+      "last_edge_index_zero_based": 190,
+      "length_m": 85.67715325957566,
+      "osm_way_ids": [
+        "1207059929",
+        "1207059930"
+      ],
+      "service_events_within_run": [
+        {
+          "name": "Olgiate Molgora - Scarpone",
+          "occurrence_id": "west_B:188:ASF::OLGIATE_MOLGORA_SCARPONE",
+          "path_node_index": 188,
+          "site_id": "ASF::OLGIATE_MOLGORA_SCARPONE"
+        }
+      ],
+      "start_lon_lat": [
+        9.3907839,
+        45.7310473
+      ],
+      "wing": "west_B"
+    }
+  ],
+  "runner_up_selection_authorised": false,
+  "saturday_scope": {
+    "annual_km_increment_for_one_full_trip_each_saturday": 1356.175394003372,
+    "at_most_full_trips_in_remaining_arithmetic_margin": 43,
+    "caller_selection": null,
+    "complete_line_annual_commercial_km": null,
+    "count_only_sensitivities": [
+      {
+        "additional_commercial_km": 2712.350788006744,
+        "additional_complete_trips": 100,
+        "delta_vs_reference_percent": 1.3671697040907205,
+        "departure_times_selected": false,
+        "h30_peak_promise_inferable": false,
+        "hypothetical_full_trips_per_nonholiday_saturday": 2,
+        "nonholiday_saturdays": 50,
+        "policy_adopted": false,
+        "timetable_feasibility_certified": false,
+        "weekday_base_plus_saturday_commercial_km": 112942.28681260084
+      },
+      {
+        "additional_commercial_km": 5424.701576013488,
+        "additional_complete_trips": 200,
+        "delta_vs_reference_percent": 3.801539773833529,
+        "departure_times_selected": false,
+        "h30_peak_promise_inferable": false,
+        "hypothetical_full_trips_per_nonholiday_saturday": 4,
+        "nonholiday_saturdays": 50,
+        "policy_adopted": false,
+        "timetable_feasibility_certified": false,
+        "weekday_base_plus_saturday_commercial_km": 115654.63760060757
+      },
+      {
+        "additional_commercial_km": 8137.052364020233,
+        "additional_complete_trips": 300,
+        "delta_vs_reference_percent": 6.235909843576337,
+        "departure_times_selected": false,
+        "h30_peak_promise_inferable": false,
+        "hypothetical_full_trips_per_nonholiday_saturday": 6,
+        "nonholiday_saturdays": 50,
+        "policy_adopted": false,
+        "timetable_feasibility_certified": false,
+        "weekday_base_plus_saturday_commercial_km": 118366.98838861432
+      },
+      {
+        "additional_commercial_km": 10849.403152026976,
+        "additional_complete_trips": 400,
+        "delta_vs_reference_percent": 8.670279913319145,
+        "departure_times_selected": false,
+        "h30_peak_promise_inferable": false,
+        "hypothetical_full_trips_per_nonholiday_saturday": 8,
+        "nonholiday_saturdays": 50,
+        "policy_adopted": false,
+        "timetable_feasibility_certified": false,
+        "weekday_base_plus_saturday_commercial_km": 121079.33917662107
+      },
+      {
+        "additional_commercial_km": 21698.806304053953,
+        "additional_complete_trips": 800,
+        "delta_vs_reference_percent": 18.4077601922904,
+        "departure_times_selected": false,
+        "h30_peak_promise_inferable": false,
+        "hypothetical_full_trips_per_nonholiday_saturday": 16,
+        "nonholiday_saturdays": 50,
+        "policy_adopted": false,
+        "timetable_feasibility_certified": false,
+        "weekday_base_plus_saturday_commercial_km": 131928.74232864805
+      }
+    ],
+    "delta_vs_published_reference_km": 167.1114185974584,
+    "exact_departures": null,
+    "nonholiday_saturday_count": 50,
+    "policy": "SEPARATE_ASSESSMENT_NOT_CANCELLED_OR_ADOPTED",
+    "useful_saturday_service_certified": false,
+    "weekday_plus_one_trip_each_saturday_km": 111586.11141859746
+  },
+  "semantics": "Fixed-design quantities and finite evidence requests. No external reply, price, physical platform, calendar exception, service preference or operating approval is manufactured. Saturday is outside this weekday quotation component, not assumed absent from the eventual line.",
+  "source_canonical_sha256": {
+    "outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_design_handoff_20261001.json": "a9f489ce87f3ea8b2d17be61c4c99bf67237d7d2645a325cc8a4b59cf9b3e9b1",
+    "outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_route_fieldwork_20261001.json": "79dd39d07643737d93b2ac14cc8c35986826c45d24a2e5fc160d007736b5a55a",
+    "outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_vehicle_blocks_accounting_20261001.json": "c484e52a9669d02f21f958892b60dced45f0f0be1c8fcb9fedaf04e866145ab2",
+    "outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_weekday_calendar_2027.json": "c4632b1008ecb6b940cb7f659ff8ddf734167ddfa950ffd4b82f53a2af83162c"
+  },
+  "uncertainty_band_min": null,
+  "weekday_bill_of_quantities": {
+    "actual_dedicated_fleet_count": null,
+    "annual_noncommercial_km": null,
+    "capital_works_cost_eur": null,
+    "commercial_km": 110229.93602459409,
+    "commercial_km_per_complete_trip": 27.123507880067443,
+    "days_before_local_exceptions": 254,
+    "full_commercial_trips": 4064,
+    "funding_amount_eur": null,
+    "is_complete_line_annual_total": false,
+    "nominal": {
+      "blocks": [
+        {
+          "actual_vehicle_id": null,
+          "complete_trip_numbers": [
+            1,
+            5,
+            9,
+            13
+          ],
+          "driver_duties": null,
+          "first_start_min": 365,
+          "first_to_last_block_span_hours": 13.305045063409079,
+          "full_trip_service_hours": 6.2201802536363235,
+          "last_release_min": 1163.3027038045448,
+          "model_vehicle_id": "B1",
+          "occupation_hours_including_terminal_recovery": 6.88684692030299,
+          "uncommitted_gaps_after_recovery": [
+            {
+              "after_full_trip": 1,
+              "before_full_trip": 5,
+              "begin_min": 468.3027038045449,
+              "duration_min": 16.697296195455124,
+              "end_min": 485,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 5,
+              "before_full_trip": 9,
+              "begin_min": 588.3027038045449,
+              "duration_min": 231.69729619545512,
+              "end_min": 820,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 9,
+              "before_full_trip": 13,
+              "begin_min": 923.3027038045449,
+              "duration_min": 136.69729619545512,
+              "end_min": 1060,
+              "other_work_or_depot_travel_authorised": false
+            }
+          ]
+        },
+        {
+          "actual_vehicle_id": null,
+          "complete_trip_numbers": [
+            2,
+            6,
+            10,
+            14
+          ],
+          "driver_duties": null,
+          "first_start_min": 395,
+          "first_to_last_block_span_hours": 13.305045063409079,
+          "full_trip_service_hours": 6.220180253636321,
+          "last_release_min": 1193.3027038045448,
+          "model_vehicle_id": "B2",
+          "occupation_hours_including_terminal_recovery": 6.886846920302988,
+          "uncommitted_gaps_after_recovery": [
+            {
+              "after_full_trip": 2,
+              "before_full_trip": 6,
+              "begin_min": 498.3027038045449,
+              "duration_min": 41.697296195455124,
+              "end_min": 540,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 6,
+              "before_full_trip": 10,
+              "begin_min": 643.3027038045449,
+              "duration_min": 296.6972961954551,
+              "end_min": 940,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 10,
+              "before_full_trip": 14,
+              "begin_min": 1043.3027038045448,
+              "duration_min": 46.69729619545524,
+              "end_min": 1090,
+              "other_work_or_depot_travel_authorised": false
+            }
+          ]
+        },
+        {
+          "actual_vehicle_id": null,
+          "complete_trip_numbers": [
+            3,
+            7,
+            11,
+            15
+          ],
+          "driver_duties": null,
+          "first_start_min": 425,
+          "first_to_last_block_span_hours": 13.305045063409079,
+          "full_trip_service_hours": 6.136846920302988,
+          "last_release_min": 1223.3027038045448,
+          "model_vehicle_id": "B3",
+          "occupation_hours_including_terminal_recovery": 6.803513586969655,
+          "uncommitted_gaps_after_recovery": [
+            {
+              "after_full_trip": 3,
+              "before_full_trip": 7,
+              "begin_min": 528.3027038045449,
+              "duration_min": 71.69729619545512,
+              "end_min": 600,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 7,
+              "before_full_trip": 11,
+              "begin_min": 698.3027038045449,
+              "duration_min": 301.6972961954551,
+              "end_min": 1000,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 11,
+              "before_full_trip": 15,
+              "begin_min": 1103.3027038045448,
+              "duration_min": 16.697296195455237,
+              "end_min": 1120,
+              "other_work_or_depot_travel_authorised": false
+            }
+          ]
+        },
+        {
+          "actual_vehicle_id": null,
+          "complete_trip_numbers": [
+            4,
+            8,
+            12,
+            16
+          ],
+          "driver_duties": null,
+          "first_start_min": 455,
+          "first_to_last_block_span_hours": 13.721711730075747,
+          "full_trip_service_hours": 6.136846920302988,
+          "last_release_min": 1278.3027038045448,
+          "model_vehicle_id": "B4",
+          "occupation_hours_including_terminal_recovery": 6.803513586969655,
+          "uncommitted_gaps_after_recovery": [
+            {
+              "after_full_trip": 4,
+              "before_full_trip": 8,
+              "begin_min": 558.3027038045449,
+              "duration_min": 156.69729619545512,
+              "end_min": 715,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 8,
+              "before_full_trip": 12,
+              "begin_min": 818.3027038045449,
+              "duration_min": 211.69729619545512,
+              "end_min": 1030,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 12,
+              "before_full_trip": 16,
+              "begin_min": 1133.3027038045448,
+              "duration_min": 46.69729619545524,
+              "end_min": 1180,
+              "other_work_or_depot_travel_authorised": false
+            }
+          ]
+        }
+      ],
+      "concurrent_vehicle_occupation": [
+        {
+          "begin_min": 365,
+          "end_min": 395,
+          "occupied_full_trip_numbers": [
+            1
+          ],
+          "occupied_vehicle_count": 1
+        },
+        {
+          "begin_min": 395,
+          "end_min": 425,
+          "occupied_full_trip_numbers": [
+            1,
+            2
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 425,
+          "end_min": 455,
+          "occupied_full_trip_numbers": [
+            1,
+            2,
+            3
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 455,
+          "end_min": 468.3027038045449,
+          "occupied_full_trip_numbers": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 468.3027038045449,
+          "end_min": 485,
+          "occupied_full_trip_numbers": [
+            2,
+            3,
+            4
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 485,
+          "end_min": 498.3027038045449,
+          "occupied_full_trip_numbers": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 498.3027038045449,
+          "end_min": 528.3027038045449,
+          "occupied_full_trip_numbers": [
+            3,
+            4,
+            5
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 528.3027038045449,
+          "end_min": 540,
+          "occupied_full_trip_numbers": [
+            4,
+            5
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 540,
+          "end_min": 558.3027038045449,
+          "occupied_full_trip_numbers": [
+            4,
+            5,
+            6
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 558.3027038045449,
+          "end_min": 588.3027038045449,
+          "occupied_full_trip_numbers": [
+            5,
+            6
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 588.3027038045449,
+          "end_min": 600,
+          "occupied_full_trip_numbers": [
+            6
+          ],
+          "occupied_vehicle_count": 1
+        },
+        {
+          "begin_min": 600,
+          "end_min": 643.3027038045449,
+          "occupied_full_trip_numbers": [
+            6,
+            7
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 643.3027038045449,
+          "end_min": 698.3027038045449,
+          "occupied_full_trip_numbers": [
+            7
+          ],
+          "occupied_vehicle_count": 1
+        },
+        {
+          "begin_min": 698.3027038045449,
+          "end_min": 715,
+          "occupied_full_trip_numbers": [],
+          "occupied_vehicle_count": 0
+        },
+        {
+          "begin_min": 715,
+          "end_min": 818.3027038045449,
+          "occupied_full_trip_numbers": [
+            8
+          ],
+          "occupied_vehicle_count": 1
+        },
+        {
+          "begin_min": 818.3027038045449,
+          "end_min": 820,
+          "occupied_full_trip_numbers": [],
+          "occupied_vehicle_count": 0
+        },
+        {
+          "begin_min": 820,
+          "end_min": 923.3027038045449,
+          "occupied_full_trip_numbers": [
+            9
+          ],
+          "occupied_vehicle_count": 1
+        },
+        {
+          "begin_min": 923.3027038045449,
+          "end_min": 940,
+          "occupied_full_trip_numbers": [],
+          "occupied_vehicle_count": 0
+        },
+        {
+          "begin_min": 940,
+          "end_min": 1000,
+          "occupied_full_trip_numbers": [
+            10
+          ],
+          "occupied_vehicle_count": 1
+        },
+        {
+          "begin_min": 1000,
+          "end_min": 1030,
+          "occupied_full_trip_numbers": [
+            10,
+            11
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 1030,
+          "end_min": 1043.3027038045448,
+          "occupied_full_trip_numbers": [
+            10,
+            11,
+            12
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 1043.3027038045448,
+          "end_min": 1060,
+          "occupied_full_trip_numbers": [
+            11,
+            12
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 1060,
+          "end_min": 1090,
+          "occupied_full_trip_numbers": [
+            11,
+            12,
+            13
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 1090,
+          "end_min": 1103.3027038045448,
+          "occupied_full_trip_numbers": [
+            11,
+            12,
+            13,
+            14
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 1103.3027038045448,
+          "end_min": 1120,
+          "occupied_full_trip_numbers": [
+            12,
+            13,
+            14
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 1120,
+          "end_min": 1133.3027038045448,
+          "occupied_full_trip_numbers": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 1133.3027038045448,
+          "end_min": 1163.3027038045448,
+          "occupied_full_trip_numbers": [
+            13,
+            14,
+            15
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 1163.3027038045448,
+          "end_min": 1180,
+          "occupied_full_trip_numbers": [
+            14,
+            15
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 1180,
+          "end_min": 1193.3027038045448,
+          "occupied_full_trip_numbers": [
+            14,
+            15,
+            16
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 1193.3027038045448,
+          "end_min": 1223.3027038045448,
+          "occupied_full_trip_numbers": [
+            15,
+            16
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 1223.3027038045448,
+          "end_min": 1278.3027038045448,
+          "occupied_full_trip_numbers": [
+            16
+          ],
+          "occupied_vehicle_count": 1
+        }
+      ],
+      "cost_eur": null,
+      "daily_complete_trip_service_hours": 24.71405434787862,
+      "daily_sum_first_to_last_block_spans_hours": 53.636846920302986,
+      "daily_vehicle_occupation_hours_including_terminal_recovery": 27.380721014545287,
+      "dwell_min": 0.5,
+      "fleet_availability_certified": false,
+      "four_vehicle_occupation_windows": [
+        {
+          "begin_min": 455,
+          "end_min": 468.3027038045449,
+          "occupied_full_trip_numbers": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 485,
+          "end_min": 498.3027038045449,
+          "occupied_full_trip_numbers": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 1090,
+          "end_min": 1103.3027038045448,
+          "occupied_full_trip_numbers": [
+            11,
+            12,
+            13,
+            14
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 1120,
+          "end_min": 1133.3027038045448,
+          "occupied_full_trip_numbers": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "occupied_vehicle_count": 4
+        }
+      ],
+      "gaps_are_certified_redeployment": false,
+      "hours_are_driver_duties": false,
+      "maximum_simultaneously_occupied_model_vehicles": 4,
+      "moving_multiplier": 1.1,
+      "semantics": "Conditional vehicle occupation, including recovery once per complete trip. Block spans are not payable driver shifts. Gaps exclude recovery but not unmodelled depot, positioning, pauses or other-service obligations.",
+      "terminal_recovery_min": 10,
+      "weekday_annual_complete_trip_service_hours": 6277.369804361169,
+      "weekday_annual_vehicle_occupation_hours": 6954.703137694503,
+      "weekday_days_before_local_exceptions": 254
+    },
+    "operating_cost_eur": null,
+    "payable_driver_hours": null,
+    "reference_is_secured_funding": false,
+    "reference_published_pdb_km": 111419,
+    "service_year": 2027,
+    "slower_dwell_recovery": {
+      "blocks": [
+        {
+          "actual_vehicle_id": null,
+          "complete_trip_numbers": [
+            1,
+            5,
+            9,
+            13
+          ],
+          "driver_duties": null,
+          "first_start_min": 365,
+          "first_to_last_block_span_hours": 13.50504506340908,
+          "full_trip_service_hours": 6.686846920302989,
+          "last_release_min": 1175.3027038045448,
+          "model_vehicle_id": "B1",
+          "occupation_hours_including_terminal_recovery": 7.686846920302989,
+          "uncommitted_gaps_after_recovery": [
+            {
+              "after_full_trip": 1,
+              "before_full_trip": 5,
+              "begin_min": 480.3027038045449,
+              "duration_min": 4.697296195455124,
+              "end_min": 485,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 5,
+              "before_full_trip": 9,
+              "begin_min": 600.3027038045449,
+              "duration_min": 219.69729619545512,
+              "end_min": 820,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 9,
+              "before_full_trip": 13,
+              "begin_min": 935.3027038045449,
+              "duration_min": 124.69729619545512,
+              "end_min": 1060,
+              "other_work_or_depot_travel_authorised": false
+            }
+          ]
+        },
+        {
+          "actual_vehicle_id": null,
+          "complete_trip_numbers": [
+            2,
+            6,
+            10,
+            14
+          ],
+          "driver_duties": null,
+          "first_start_min": 395,
+          "first_to_last_block_span_hours": 13.50504506340908,
+          "full_trip_service_hours": 6.686846920302988,
+          "last_release_min": 1205.3027038045448,
+          "model_vehicle_id": "B2",
+          "occupation_hours_including_terminal_recovery": 7.686846920302988,
+          "uncommitted_gaps_after_recovery": [
+            {
+              "after_full_trip": 2,
+              "before_full_trip": 6,
+              "begin_min": 510.3027038045449,
+              "duration_min": 29.697296195455124,
+              "end_min": 540,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 6,
+              "before_full_trip": 10,
+              "begin_min": 655.3027038045449,
+              "duration_min": 284.6972961954551,
+              "end_min": 940,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 10,
+              "before_full_trip": 14,
+              "begin_min": 1055.3027038045448,
+              "duration_min": 34.69729619545524,
+              "end_min": 1090,
+              "other_work_or_depot_travel_authorised": false
+            }
+          ]
+        },
+        {
+          "actual_vehicle_id": null,
+          "complete_trip_numbers": [
+            3,
+            7,
+            11,
+            15
+          ],
+          "driver_duties": null,
+          "first_start_min": 425,
+          "first_to_last_block_span_hours": 13.50504506340908,
+          "full_trip_service_hours": 6.603513586969655,
+          "last_release_min": 1235.3027038045448,
+          "model_vehicle_id": "B3",
+          "occupation_hours_including_terminal_recovery": 7.603513586969655,
+          "uncommitted_gaps_after_recovery": [
+            {
+              "after_full_trip": 3,
+              "before_full_trip": 7,
+              "begin_min": 540.3027038045449,
+              "duration_min": 59.697296195455124,
+              "end_min": 600,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 7,
+              "before_full_trip": 11,
+              "begin_min": 710.3027038045449,
+              "duration_min": 289.6972961954551,
+              "end_min": 1000,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 11,
+              "before_full_trip": 15,
+              "begin_min": 1115.3027038045448,
+              "duration_min": 4.6972961954552375,
+              "end_min": 1120,
+              "other_work_or_depot_travel_authorised": false
+            }
+          ]
+        },
+        {
+          "actual_vehicle_id": null,
+          "complete_trip_numbers": [
+            4,
+            8,
+            12,
+            16
+          ],
+          "driver_duties": null,
+          "first_start_min": 455,
+          "first_to_last_block_span_hours": 13.921711730075746,
+          "full_trip_service_hours": 6.603513586969655,
+          "last_release_min": 1290.3027038045448,
+          "model_vehicle_id": "B4",
+          "occupation_hours_including_terminal_recovery": 7.603513586969655,
+          "uncommitted_gaps_after_recovery": [
+            {
+              "after_full_trip": 4,
+              "before_full_trip": 8,
+              "begin_min": 570.3027038045449,
+              "duration_min": 144.69729619545512,
+              "end_min": 715,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 8,
+              "before_full_trip": 12,
+              "begin_min": 830.3027038045449,
+              "duration_min": 199.69729619545512,
+              "end_min": 1030,
+              "other_work_or_depot_travel_authorised": false
+            },
+            {
+              "after_full_trip": 12,
+              "before_full_trip": 16,
+              "begin_min": 1145.3027038045448,
+              "duration_min": 34.69729619545524,
+              "end_min": 1180,
+              "other_work_or_depot_travel_authorised": false
+            }
+          ]
+        }
+      ],
+      "concurrent_vehicle_occupation": [
+        {
+          "begin_min": 365,
+          "end_min": 395,
+          "occupied_full_trip_numbers": [
+            1
+          ],
+          "occupied_vehicle_count": 1
+        },
+        {
+          "begin_min": 395,
+          "end_min": 425,
+          "occupied_full_trip_numbers": [
+            1,
+            2
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 425,
+          "end_min": 455,
+          "occupied_full_trip_numbers": [
+            1,
+            2,
+            3
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 455,
+          "end_min": 480.3027038045449,
+          "occupied_full_trip_numbers": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 480.3027038045449,
+          "end_min": 485,
+          "occupied_full_trip_numbers": [
+            2,
+            3,
+            4
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 485,
+          "end_min": 510.3027038045449,
+          "occupied_full_trip_numbers": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 510.3027038045449,
+          "end_min": 540,
+          "occupied_full_trip_numbers": [
+            3,
+            4,
+            5
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 540,
+          "end_min": 540.3027038045449,
+          "occupied_full_trip_numbers": [
+            3,
+            4,
+            5,
+            6
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 540.3027038045449,
+          "end_min": 570.3027038045449,
+          "occupied_full_trip_numbers": [
+            4,
+            5,
+            6
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 570.3027038045449,
+          "end_min": 600,
+          "occupied_full_trip_numbers": [
+            5,
+            6
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 600,
+          "end_min": 600.3027038045449,
+          "occupied_full_trip_numbers": [
+            5,
+            6,
+            7
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 600.3027038045449,
+          "end_min": 655.3027038045449,
+          "occupied_full_trip_numbers": [
+            6,
+            7
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 655.3027038045449,
+          "end_min": 710.3027038045449,
+          "occupied_full_trip_numbers": [
+            7
+          ],
+          "occupied_vehicle_count": 1
+        },
+        {
+          "begin_min": 710.3027038045449,
+          "end_min": 715,
+          "occupied_full_trip_numbers": [],
+          "occupied_vehicle_count": 0
+        },
+        {
+          "begin_min": 715,
+          "end_min": 820,
+          "occupied_full_trip_numbers": [
+            8
+          ],
+          "occupied_vehicle_count": 1
+        },
+        {
+          "begin_min": 820,
+          "end_min": 830.3027038045449,
+          "occupied_full_trip_numbers": [
+            8,
+            9
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 830.3027038045449,
+          "end_min": 935.3027038045449,
+          "occupied_full_trip_numbers": [
+            9
+          ],
+          "occupied_vehicle_count": 1
+        },
+        {
+          "begin_min": 935.3027038045449,
+          "end_min": 940,
+          "occupied_full_trip_numbers": [],
+          "occupied_vehicle_count": 0
+        },
+        {
+          "begin_min": 940,
+          "end_min": 1000,
+          "occupied_full_trip_numbers": [
+            10
+          ],
+          "occupied_vehicle_count": 1
+        },
+        {
+          "begin_min": 1000,
+          "end_min": 1030,
+          "occupied_full_trip_numbers": [
+            10,
+            11
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 1030,
+          "end_min": 1055.3027038045448,
+          "occupied_full_trip_numbers": [
+            10,
+            11,
+            12
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 1055.3027038045448,
+          "end_min": 1060,
+          "occupied_full_trip_numbers": [
+            11,
+            12
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 1060,
+          "end_min": 1090,
+          "occupied_full_trip_numbers": [
+            11,
+            12,
+            13
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 1090,
+          "end_min": 1115.3027038045448,
+          "occupied_full_trip_numbers": [
+            11,
+            12,
+            13,
+            14
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 1115.3027038045448,
+          "end_min": 1120,
+          "occupied_full_trip_numbers": [
+            12,
+            13,
+            14
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 1120,
+          "end_min": 1145.3027038045448,
+          "occupied_full_trip_numbers": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 1145.3027038045448,
+          "end_min": 1175.3027038045448,
+          "occupied_full_trip_numbers": [
+            13,
+            14,
+            15
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 1175.3027038045448,
+          "end_min": 1180,
+          "occupied_full_trip_numbers": [
+            14,
+            15
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 1180,
+          "end_min": 1205.3027038045448,
+          "occupied_full_trip_numbers": [
+            14,
+            15,
+            16
+          ],
+          "occupied_vehicle_count": 3
+        },
+        {
+          "begin_min": 1205.3027038045448,
+          "end_min": 1235.3027038045448,
+          "occupied_full_trip_numbers": [
+            15,
+            16
+          ],
+          "occupied_vehicle_count": 2
+        },
+        {
+          "begin_min": 1235.3027038045448,
+          "end_min": 1290.3027038045448,
+          "occupied_full_trip_numbers": [
+            16
+          ],
+          "occupied_vehicle_count": 1
+        }
+      ],
+      "cost_eur": null,
+      "daily_complete_trip_service_hours": 26.580721014545286,
+      "daily_sum_first_to_last_block_spans_hours": 54.43684692030298,
+      "daily_vehicle_occupation_hours_including_terminal_recovery": 30.580721014545286,
+      "dwell_min": 1.0,
+      "fleet_availability_certified": false,
+      "four_vehicle_occupation_windows": [
+        {
+          "begin_min": 455,
+          "end_min": 480.3027038045449,
+          "occupied_full_trip_numbers": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 485,
+          "end_min": 510.3027038045449,
+          "occupied_full_trip_numbers": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 540,
+          "end_min": 540.3027038045449,
+          "occupied_full_trip_numbers": [
+            3,
+            4,
+            5,
+            6
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 1090,
+          "end_min": 1115.3027038045448,
+          "occupied_full_trip_numbers": [
+            11,
+            12,
+            13,
+            14
+          ],
+          "occupied_vehicle_count": 4
+        },
+        {
+          "begin_min": 1120,
+          "end_min": 1145.3027038045448,
+          "occupied_full_trip_numbers": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "occupied_vehicle_count": 4
+        }
+      ],
+      "gaps_are_certified_redeployment": false,
+      "hours_are_driver_duties": false,
+      "maximum_simultaneously_occupied_model_vehicles": 4,
+      "moving_multiplier": 1.1,
+      "semantics": "Conditional vehicle occupation, including recovery once per complete trip. Block spans are not payable driver shifts. Gaps exclude recovery but not unmodelled depot, positioning, pauses or other-service obligations.",
+      "terminal_recovery_min": 15,
+      "weekday_annual_complete_trip_service_hours": 6751.503137694503,
+      "weekday_annual_vehicle_occupation_hours": 7767.503137694503,
+      "weekday_days_before_local_exceptions": 254
+    }
+  }
+}

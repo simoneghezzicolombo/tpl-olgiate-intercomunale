@@ -218,6 +218,7 @@ def render_brief(r):
     lines = [
         '# Linea 8 — proposta unica consolidata, 1 ottobre 2026', '',
         'Aggiornamento delle evidenze del 2 ottobre: blocchi completi dei mezzi, fonte primaria del calendario e accesso da quattro punti OSM. Percorso e orario confermati restano invariati.', '',
+        'Disponibile la [distinta per chiudere sopralluogo e preventivo](RT031_LINEA8_CHIUSURA_VERIFICHE_2026_10_02.md): quantità feriali, ore di modello distinte dai turni, gap dopo recupero e 31 schede per evento. Non contiene risposte esterne o approvazioni simulate.', '',
         f'**Base feriale 2027 ora dichiarata:** 16 giri lunedì-venerdì, esclusi festivi nazionali, **{weekday["weekday_base_day_count_before_local_exceptions"]} giornate / {italian(weekday["weekday_base_commercial_km"],3)} km commerciali** ({italian(weekday["weekday_base_delta_vs_reference_percent"])}% sul riferimento 111.419). Il sabato è da valutare separatamente, non cancellato. Il totale annuo completo non è ancora definito. [Conferma, tutte le date e limiti](RT031_LINEA8_CALENDARIO_FERIALE_2027_V3.md). Eventuali eccezioni locali restano da verificare.', '',
         '## La proposta da verificare con Agenzia e operatore', '',
         '**Base progettuale e orario confermati dal committente.** Non è un servizio autorizzato né una selezione PRIMARY: questa è la proposta unica su cui chiedere verifica operativa, senza riaprire la ricerca o sostituire tacitamente percorso e corse.', '',
