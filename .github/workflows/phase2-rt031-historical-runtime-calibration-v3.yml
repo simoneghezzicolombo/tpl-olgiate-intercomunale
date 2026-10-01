@@ -1,0 +1,48 @@
+name: RT031 historical runtime calibration V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - src/phase2_rt031_historical_runtime_calibration_v3.py
+      - scripts/phase2_build_rt031_historical_runtime_calibration_v3.py
+      - tests/test_phase2_rt031_historical_runtime_calibration_v3.py
+      - .github/workflows/phase2-rt031-historical-runtime-calibration-v3.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  historical-calibration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: .:src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install pytest
+      - run: python -m pytest tests/test_phase2_rt031_historical_runtime_calibration_v3.py -q
+      - name: Acquire pinned typed shortlist
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/typed
+          gh api repos/${{ github.repository }}/actions/artifacts/10389064542/zip > /tmp/typed.zip
+          echo '9bb4f4ebaebcb00bc0c51065fbc8eb604d0c8e0715b6e531d0a8f26396cf3c31  /tmp/typed.zip' | sha256sum -c
+          unzip -q /tmp/typed.zip -d /tmp/typed
+      - name: Build twice and compare every byte
+        run: |
+          typed=$(find /tmp/typed -name frequent_access_typed_shortlist.json | head -1)
+          for out in /tmp/calibration-a /tmp/calibration-b; do
+            python scripts/phase2_build_rt031_historical_runtime_calibration_v3.py \
+              --typed-full "$typed" --gtfs-dir data/raw/gtfs/agency_arriva \
+              --output-dir "$out"
+          done
+          diff -r /tmp/calibration-a /tmp/calibration-b
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-historical-scheduled-runtime-calibration-v3
+          path: /tmp/calibration-a/
+          if-no-files-found: error

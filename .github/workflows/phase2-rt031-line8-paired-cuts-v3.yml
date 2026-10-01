@@ -1,0 +1,67 @@
+name: RT031 Linea 8 paired cuts and timetable closure V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - scripts/phase2_probe_rt031_line8_paired_cuts_v3.py
+      - scripts/phase2_measure_rt031_line8_omission_walk_v3.py
+      - scripts/phase2_probe_rt031_line8_variable_fs_hold_v3.py
+      - scripts/phase2_close_rt031_line8_maximum_hold_v3.py
+      - scripts/phase2_package_rt031_line8_conditional_proposal_v3.py
+      - tests/test_phase2_rt031_line8_paired_cuts_v3.py
+      - tests/test_phase2_rt031_line8_maximum_hold_v3.py
+      - tests/test_phase2_rt031_line8_conditional_proposal_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/paired_cuts_fixed_order*
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/paired_cuts_maximum_hold_closure.json.gz
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/conditional_proposal_17_trips*
+      - .github/workflows/phase2-rt031-line8-paired-cuts-v3.yml
+permissions:
+  contents: read
+jobs:
+  paired-cuts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: .:src:scripts
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r requirements.txt
+      - name: Retrieve frozen road and walking evidence
+        run: |
+          gh run download 33975545284 -n rt017-final-certified-evidence-v3 -D /tmp/rt031/rt017
+          gh run download 34030321683 -n phase2-rt022-minimum-backbones-v3-real -D /tmp/rt031/rt022
+          gh run download 34134177590 -n rt031-successor-via-way-relevance-v3 -D /tmp/rt031/successor
+          gh run download 34039162932 -n rt028-final-stop-pedestrian-accessibility-substrate-v3 -D /tmp/rt031/rt028
+      - name: Reproduce all 326 joint cuts and conditional municipal losses
+        run: |
+          cp outputs/phase2/rt031_line8_local_shortcuts_v3/paired_cuts_fixed_order.json.gz /tmp/paired.expected.json.gz
+          python -m scripts.phase2_probe_rt031_line8_paired_cuts_v3 --graph_dir /tmp/rt031 --walk_dir /tmp/rt031/rt028
+          python - <<'PY'
+          import gzip,json
+          from scripts.phase2_probe_rt031_line8_paired_cuts_v3 import OUTPUT
+          a=json.loads(gzip.decompress(open('/tmp/paired.expected.json.gz','rb').read()))
+          b=json.loads(gzip.decompress(OUTPUT.read_bytes()))
+          def geometric(c):
+              return c['case_id'],c['reachable'],c.get('potential_walking_access_fraction'),c.get('potential_walking_access_loss_percentage_points'),[(w,l['edge_ids'],[(e['stop_place_id'],e['path_node_index']) for e in l['events']]) for w,l in c.get('loops',{}).items()]
+          assert list(map(geometric,a['cases']))==list(map(geometric,b['cases']))
+          assert a['unweighted_km_municipal_walk_frontier_case_ids']==b['unweighted_km_municipal_walk_frontier_case_ids']
+          PY
+      - name: Verify all small-km H60 cases and explicit extra-trip comparisons
+        run: |
+          python -m scripts.phase2_probe_rt031_line8_paired_cuts_v3 --timetable --time-limit 60
+          python -m scripts.phase2_probe_rt031_line8_paired_cuts_v3 --trip-count-comparison --time-limit 60
+          python -m scripts.phase2_probe_rt031_line8_paired_cuts_v3 --render
+          python -m unittest tests.test_phase2_rt031_line8_paired_cuts_v3 tests.test_phase2_rt031_line8_no_reverse_orders_v3 -q
+      - name: Close maximum onboard holding without changing the service rules
+        run: |
+          python -m scripts.phase2_close_rt031_line8_maximum_hold_v3 --time-limit 60
+          python -m unittest tests.test_phase2_rt031_line8_maximum_hold_v3 -q
+      - name: Build the single conditional delivery packet, not a primary selection
+        run: |
+          python -m scripts.phase2_package_rt031_line8_conditional_proposal_v3
+          python -m unittest tests.test_phase2_rt031_line8_conditional_proposal_v3 -q

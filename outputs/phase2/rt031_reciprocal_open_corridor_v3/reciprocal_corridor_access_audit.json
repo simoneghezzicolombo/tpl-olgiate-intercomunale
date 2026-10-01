@@ -1,0 +1,204 @@
+{
+  "candidate_coverage_semantics": "POTENTIAL_IF_STOPS_BECOME_PUBLICLY_SERVED",
+  "comparison": {
+    "baseline_no_worse_than_candidate_all_six_count": 22220,
+    "broad_replacement_case_established": false,
+    "candidate_componentwise_maxima": {
+      "potential_core_share_10min": "38084132476690963817/91656000000000003782",
+      "potential_core_share_5min": "96367819819880760079/458280000000000018910",
+      "potential_core_share_8min": "32375340199630065443/91656000000000003782",
+      "potential_worst_municipality_share_10min": "4011787578461266903/46560000000000001020",
+      "potential_worst_municipality_share_5min": "239033620477809427/9312000000000000204",
+      "potential_worst_municipality_share_8min": "2864254641510899837/46560000000000001020"
+    },
+    "candidate_count": 22220,
+    "candidate_no_worse_than_baseline_all_six_count": 0,
+    "candidate_strictly_broadly_superior_count": 0,
+    "status": "NO_BROAD_ACCESS_REPLACEMENT_CASE_IN_SUPPLIED_POOL"
+  },
+  "conclusion": "BOUNDED_RECIPROCAL_CORRIDOR_POOL_DOES_NOT_ESTABLISH_REPLACEMENT",
+  "conditional_broad_access_case_count": 0,
+  "contract": "RT031_RECIPROCAL_OPEN_CORRIDOR_ACCESS_FEASIBILITY_V3",
+  "current_exact_identity_subset": {
+    "mapped_stop_place_ids": [
+      "FROZEN::300063",
+      "FROZEN::300086",
+      "FROZEN::300398",
+      "FROZEN::300487",
+      "FROZEN::300634",
+      "FROZEN::300782",
+      "FROZEN::300805",
+      "FROZEN::300873",
+      "FROZEN::300879",
+      "FROZEN::300956",
+      "FROZEN::L00407"
+    ],
+    "mapped_v4_physical_cluster_count": 11,
+    "mapping_method": "EXACT_SOURCE_NATIVE_ID_INTERSECTION_ONLY",
+    "mapping_rows": [
+      {
+        "official_source_ids": [
+          "300063"
+        ],
+        "stop_place_id": "FROZEN::300063",
+        "v4_physical_stop_cluster_id": "EX_002"
+      },
+      {
+        "official_source_ids": [
+          "300086",
+          "L00086"
+        ],
+        "stop_place_id": "FROZEN::300086",
+        "v4_physical_stop_cluster_id": "EX_003"
+      },
+      {
+        "official_source_ids": [
+          "300398",
+          "L00398"
+        ],
+        "stop_place_id": "FROZEN::300398",
+        "v4_physical_stop_cluster_id": "EX_008"
+      },
+      {
+        "official_source_ids": [
+          "300487",
+          "L00487"
+        ],
+        "stop_place_id": "FROZEN::300487",
+        "v4_physical_stop_cluster_id": "EX_012"
+      },
+      {
+        "official_source_ids": [
+          "300634"
+        ],
+        "stop_place_id": "FROZEN::300634",
+        "v4_physical_stop_cluster_id": "EX_016"
+      },
+      {
+        "official_source_ids": [
+          "300782",
+          "L00782"
+        ],
+        "stop_place_id": "FROZEN::300782",
+        "v4_physical_stop_cluster_id": "EX_022"
+      },
+      {
+        "official_source_ids": [
+          "300805",
+          "L00904"
+        ],
+        "stop_place_id": "FROZEN::300805",
+        "v4_physical_stop_cluster_id": "EX_025"
+      },
+      {
+        "official_source_ids": [
+          "300873",
+          "L00873"
+        ],
+        "stop_place_id": "FROZEN::300873",
+        "v4_physical_stop_cluster_id": "EX_028"
+      },
+      {
+        "official_source_ids": [
+          "300879",
+          "L00879"
+        ],
+        "stop_place_id": "FROZEN::300879",
+        "v4_physical_stop_cluster_id": "EX_030"
+      },
+      {
+        "official_source_ids": [
+          "300956"
+        ],
+        "stop_place_id": "FROZEN::300956",
+        "v4_physical_stop_cluster_id": "EX_035"
+      },
+      {
+        "official_source_ids": [
+          "L00407"
+        ],
+        "stop_place_id": "FROZEN::L00407",
+        "v4_physical_stop_cluster_id": "EX_039"
+      }
+    ],
+    "v4_official_stop_id_count": 70
+  },
+  "current_exact_threshold_ratios": {
+    "potential_core_share_10min": "223501457913245879869/458280000000000018910",
+    "potential_core_share_5min": "99618954331605517243/458280000000000018910",
+    "potential_core_share_8min": "88742867342458492579/229140000000000009455",
+    "potential_worst_municipality_share_10min": "37568267043616875563/109200000000000006740",
+    "potential_worst_municipality_share_5min": "385520627664794046/5460000000000000337",
+    "potential_worst_municipality_share_8min": "4568761040159178139/21840000000000001348"
+  },
+  "input_sha256": {
+    "corridors": "7798f41b238dc818c76f4a440b4fc16203f4bb1e710f40394816399b39adf76c",
+    "edges": "466f562f95805cb194cc079c3829d5abcd54a431653cce5364538869909dff19",
+    "final_stops": "53af82ccfc398719781faf526d482431d2258bd637a74349222e0c4967642076",
+    "occurrences": "124494b69713a7fe1792d241415d3437d2e87414752eb74603e5ec6aaf8bda37",
+    "patterns": "44fd5d95717ea99d8bee205fa1949c978b44074af4134420ac59bc8a0769684e",
+    "rules": "954865ad8972bd20d819e3eb6c4d548102609a4de07b7006ac7e42a61e14ed3a",
+    "v4_clusters_logical": "b9690e2814d93c62f26b104cd5713cb097ac64898b8d0c53bfbf64afff0404c9",
+    "v4_validation_logical": "4308b5c5dcce7f58d598c891442f877b60aee09f9eac62fcf56b29ede1208306",
+    "via_way": "14e39b47c09c4afe0d26d13b7369b906299db15d14690ba0e5d06e11b2fd7b7c",
+    "walk_matrix": "a47bbce413d056db185180173ab2f05dce0463cb626a2c81f4aff64de91b50c1"
+  },
+  "network_selected": false,
+  "output_sha256": {
+    "conditional_broad_access_reciprocal_corridors.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "reciprocal_corridor_dimension_comparison.csv": "114c5d7845fb1214b556ac0c98cf6e96e34859dda1f36b252417a45c560c2b89"
+  },
+  "primary_selection_authorised": false,
+  "public_service_assigned": false,
+  "reciprocal_envelope": {
+    "considered_reciprocal_path_pairs": 5412651,
+    "cross_direction_transfer_inferred": false,
+    "directional_stop_occurrence_guaranteed": false,
+    "feasible_reciprocal_path_pairs": 5412651,
+    "network_selected": false,
+    "ordered_service_event_guaranteed": false,
+    "public_service_assigned": false,
+    "reciprocal_endpoint_pair_count": 398,
+    "shared_budget_m": "13391.70673076923076923076923",
+    "stop_identity_availability_only": true,
+    "terminus_passenger_continuity_inferred": false,
+    "terminus_vehicle_continuity_inferred": false,
+    "unique_availability_set_count": 22220
+  },
+  "restriction_composition_semantics": {
+    "every_retained_witness_full_history_replayed": true,
+    "full_ordered_realization_witness_retained": true,
+    "new_carrier_or_uncertified_restriction_domain_covered": false,
+    "search_state_quotient_basis": "CERTIFIED_HISTORY_LOCALITY_FOR_FROZEN_RT023_ATOMIC_DOMAIN_ONLY"
+  },
+  "runner_up_selection_authorised": false,
+  "search": {
+    "closed_paths_excluded": true,
+    "contract": "RT031_BUDGETED_OPEN_PHYSICAL_PATH_SEARCH_V3",
+    "distance_budget_m": "13391.70673076923076923076923",
+    "execution_expansion_limit": 250000,
+    "exhaustive": false,
+    "expanded_states": 250000,
+    "full_ordered_realization_witness_retained": true,
+    "named_endpoint_forced": false,
+    "open_path_count": 71339,
+    "pending_heap_entries": 750628,
+    "production_search_pass": false,
+    "public_service_assigned": false,
+    "restriction_state_equivalence_basis": "CALLER_CERTIFIED_HISTORY_LOCALITY_FOR_THE_FROZEN_RT023_ATOMIC_DOMAIN",
+    "retained_label_count": 1000628,
+    "status": "RESOURCE_LIMIT_INCOMPLETE"
+  },
+  "status": "NO_BROAD_ACCESS_RECIPROCAL_CORRIDOR_IN_BOUNDED_POOL",
+  "stop_guarantee_semantics": {
+    "directional_occurrence_guaranteed": false,
+    "ordered_service_event_guaranteed": false,
+    "passenger_journey_guaranteed": false,
+    "stop_identity_availability_only": true
+  },
+  "terminus_passenger_continuity_inferred": false,
+  "terminus_vehicle_continuity_inferred": false,
+  "uncertainty_band_applied": false,
+  "unique_availability_set_count": 22220,
+  "weighted_score": false
+}

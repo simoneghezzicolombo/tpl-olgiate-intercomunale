@@ -1,0 +1,291 @@
+name: RT031 Linea 8 timetable repair V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - config/rt031_16_full_trips_authority_v3.json
+      - scripts/phase2_close_rt031_line8_16_full_trips_v3.py
+      - tests/test_phase2_rt031_line8_16_full_trips_v3.py
+      - docs/RT031_LINEA8_16_GIRI_COMPLETI_V3.md
+      - scripts/phase2_audit_rt031_line8_full_trip_vehicles_v3.py
+      - tests/test_phase2_rt031_line8_full_trip_vehicles_v3.py
+      - docs/RT031_LINEA8_MEZZI_GIRI_COMPLETI_V3.md
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/uniform_16_full_trip_vehicle_blocks.json
+      - scripts/phase2_probe_rt031_line8_variable_fs_hold_v3.py
+      - tests/test_phase2_rt031_line8_variable_fs_hold_v3.py
+      - docs/RT031_LINEA8_SOSTA_FS_VARIABILE_E_MANOVRE_V3.md
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/variable_fs_hold_16_full_trips.json.gz
+      - config/rt031_uniform_complete_line_authority_v3.json
+      - scripts/phase2_rebuild_rt031_uniform_complete_line_v3.py
+      - tests/test_phase2_rt031_uniform_complete_line_v3.py
+      - docs/RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md
+      - config/rt031_stop_choices_and_through_line_v3.json
+      - scripts/phase2_audit_rt031_line8_through_service_v3.py
+      - tests/test_phase2_rt031_line8_through_service_v3.py
+      - docs/RT031_LINEA8_CONTINUITA_INTERCOMUNALE_V3.md
+      - scripts/phase2_audit_rt031_line8_stop_plan_v3.py
+      - scripts/phase2_export_rt031_line8_stop_plan_v3.py
+      - scripts/templates/rt031-stop-plan-map.html
+      - tests/test_phase2_rt031_line8_stop_plan_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/*.json.gz
+      - docs/RT031_LINEA8_PIANO_FERMATE_E_MANOVRE_V3.md
+      - config/rt031_31_trip_service_authorisation_v3.json
+      - scripts/phase2_close_rt031_line8_31_trips_v3.py
+      - scripts/phase2_export_rt031_line8_31_trips_v3.py
+      - tests/test_phase2_rt031_line8_31_trips_v3.py
+      - docs/RT031_LINEA8_ORARIO_31_CORSE_V3.md
+      - config/rt031_geometry_confirmation_and_timetable_closure_v3.json
+      - scripts/phase2_refresh_rt031_s8_service_date_v3.py
+      - scripts/phase2_close_rt031_line8_fixed_geometry_timetable_v3.py
+      - scripts/phase2_export_rt031_line8_working_timetable_v3.py
+      - tests/test_phase2_rt031_line8_working_timetable_v3.py
+      - docs/RT031_LINEA8_ORARIO_DI_PROGETTO_V3.md
+      - scripts/phase2_audit_rt031_line8_best_practices_v3.py
+      - tests/test_phase2_rt031_line8_best_practices_v3.py
+      - docs/RT031_LINEA8_VERIFICA_BEST_PRACTICES_V3.md
+      - docs/PHASE2_TRANSIT_BEST_PRACTICES.md
+      - docs/RT031_PRIOR_WORK_EVIDENCE_MAP.md
+      - config/rt031_requirements_audit_v3.json
+      - scripts/phase2_compare_rt031_line8_deep_offpeak_v3.py
+      - scripts/phase2_export_rt031_line8_deep_offpeak_v3.py
+      - tests/test_phase2_rt031_line8_deep_offpeak_v3.py
+      - docs/RT031_LINEA8_MORBIDA_CENTRALE_V3.md
+      - scripts/phase2_probe_rt031_line8_multistop_recovery_v3.py
+      - scripts/phase2_check_rt031_line8_multistop_recovery_v3.py
+      - scripts/phase2_export_rt031_line8_multistop_recovery_v3.py
+      - tests/test_phase2_rt031_line8_multistop_recovery_v3.py
+      - docs/RT031_LINEA8_RECUPERO_COPERTURA_MULTIFERMATA_V3.md
+      - scripts/phase2_compare_rt031_line8_mixed_local_v3.py
+      - tests/test_phase2_rt031_line8_mixed_local_v3.py
+      - docs/RT031_LINEA8_COMBINAZIONE_SERVIZI_LOCALI_V3.md
+      - scripts/phase2_probe_rt031_line8_free_orders_v3.py
+      - scripts/phase2_export_rt031_line8_free_orders_v3.py
+      - tests/test_phase2_rt031_line8_free_orders_v3.py
+      - docs/RT031_LINEA8_ORDINE_LIBERO_FERMATE_V3.md
+      - scripts/phase2_probe_rt031_line8_partial_services_v3.py
+      - scripts/phase2_solve_rt031_line8_partial_services_v3.py
+      - scripts/phase2_export_rt031_line8_partial_services_v3.py
+      - scripts/phase2_export_rt031_line8_partial_phase_closure_v3.py
+      - tests/test_phase2_rt031_line8_partial_services_v3.py
+      - scripts/phase2_audit_rt031_line8_robustness_cost_v3.py
+      - tests/test_phase2_rt031_line8_robustness_cost_v3.py
+      - scripts/phase2_bound_rt031_line8_combined_edits_v3.py
+      - scripts/phase2_bound_rt031_line8_combined_timing_v3.py
+      - scripts/phase2_check_rt031_line8_combined_edits_v3.py
+      - scripts/phase2_export_rt031_line8_combined_edits_v3.py
+      - tests/test_phase2_rt031_line8_combined_edits_v3.py
+      - docs/RT031_LINEA8_ESITO_TAGLI_COMBINATI_V3.md
+      - scripts/phase2_probe_rt031_line8_stop_relocation_v3.py
+      - scripts/phase2_check_rt031_line8_relocation_timetable_v3.py
+      - scripts/phase2_export_rt031_line8_stop_relocation_v3.py
+      - scripts/phase2_probe_rt031_line8_retention_tradeoffs_v3.py
+      - tests/test_phase2_rt031_line8_stop_relocation_v3.py
+      - docs/RT031_LINEA8_SPOSTAMENTO_FERMATE_E_SCORCIATOIE_V3.md
+      - scripts/phase2_compare_rt031_line8_peak_directions_v3.py
+      - scripts/phase2_export_rt031_line8_peak_directions_v3.py
+      - scripts/phase2_render_rt031_line8_counterflow_v3.py
+      - tests/test_phase2_rt031_line8_peak_directions_v3.py
+      - docs/RT031_LINEA8_DIREZIONI_NELLE_PUNTE_V3.md
+      - scripts/phase2_audit_rt031_line8_site_rides_v3.py
+      - tests/test_phase2_rt031_line8_site_rides_v3.py
+      - docs/RT031_LINEA8_TEMPI_PER_SITO_V3.md
+      - scripts/phase2_compare_rt031_line8_shorter_span_v3.py
+      - tests/test_phase2_rt031_line8_shorter_span_v3.py
+      - scripts/phase2_solve_rt031_line8_joint_evening_v3.py
+      - scripts/phase2_export_rt031_line8_joint_evening_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/*.geojson
+      - tests/test_phase2_rt031_line8_joint_evening_v3.py
+      - scripts/phase2_audit_rt031_line8_evening_peak_closure_v3.py
+      - tests/test_phase2_rt031_line8_evening_peak_closure_v3.py
+      - scripts/phase2_compare_rt031_line8_evening_reallocation_v3.py
+      - tests/test_phase2_rt031_line8_evening_reallocation_v3.py
+      - scripts/phase2_retime_rt031_line8_peak_direction_v3.py
+      - tests/test_phase2_rt031_line8_retiming_v3.py
+      - scripts/phase2_build_rt031_line8_peak_direction_v3.py
+      - tests/test_phase2_rt031_line8_peak_direction_v3.py
+      - scripts/phase2_solve_rt031_line8_flexible_peaks_v3.py
+      - scripts/phase2_build_rt031_line8_regular_compromise_v3.py
+      - scripts/phase2_close_rt031_line8_timetable_repair_v3.py
+      - tests/test_phase2_rt031_line8_timetable_repair_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/*.json
+      - outputs/phase2/s8_events.csv
+      - outputs/phase2/s8_interchange_contract.json
+      - config/phase2_final_policy_contract_v3.json
+      - .github/workflows/phase2-rt031-line8-timetable-repair-v3.yml
+  pull_request:
+    paths:
+      - config/rt031_16_full_trips_authority_v3.json
+      - scripts/phase2_close_rt031_line8_16_full_trips_v3.py
+      - tests/test_phase2_rt031_line8_16_full_trips_v3.py
+      - docs/RT031_LINEA8_16_GIRI_COMPLETI_V3.md
+      - scripts/phase2_audit_rt031_line8_full_trip_vehicles_v3.py
+      - tests/test_phase2_rt031_line8_full_trip_vehicles_v3.py
+      - docs/RT031_LINEA8_MEZZI_GIRI_COMPLETI_V3.md
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/uniform_16_full_trip_vehicle_blocks.json
+      - scripts/phase2_probe_rt031_line8_variable_fs_hold_v3.py
+      - tests/test_phase2_rt031_line8_variable_fs_hold_v3.py
+      - docs/RT031_LINEA8_SOSTA_FS_VARIABILE_E_MANOVRE_V3.md
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/variable_fs_hold_16_full_trips.json.gz
+      - config/rt031_uniform_complete_line_authority_v3.json
+      - scripts/phase2_rebuild_rt031_uniform_complete_line_v3.py
+      - tests/test_phase2_rt031_uniform_complete_line_v3.py
+      - docs/RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md
+      - config/rt031_stop_choices_and_through_line_v3.json
+      - scripts/phase2_audit_rt031_line8_through_service_v3.py
+      - tests/test_phase2_rt031_line8_through_service_v3.py
+      - docs/RT031_LINEA8_CONTINUITA_INTERCOMUNALE_V3.md
+      - scripts/phase2_audit_rt031_line8_stop_plan_v3.py
+      - scripts/phase2_export_rt031_line8_stop_plan_v3.py
+      - scripts/templates/rt031-stop-plan-map.html
+      - tests/test_phase2_rt031_line8_stop_plan_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/*.json.gz
+      - docs/RT031_LINEA8_PIANO_FERMATE_E_MANOVRE_V3.md
+      - config/rt031_31_trip_service_authorisation_v3.json
+      - scripts/phase2_close_rt031_line8_31_trips_v3.py
+      - scripts/phase2_export_rt031_line8_31_trips_v3.py
+      - tests/test_phase2_rt031_line8_31_trips_v3.py
+      - docs/RT031_LINEA8_ORARIO_31_CORSE_V3.md
+      - config/rt031_geometry_confirmation_and_timetable_closure_v3.json
+      - scripts/phase2_refresh_rt031_s8_service_date_v3.py
+      - scripts/phase2_close_rt031_line8_fixed_geometry_timetable_v3.py
+      - scripts/phase2_export_rt031_line8_working_timetable_v3.py
+      - tests/test_phase2_rt031_line8_working_timetable_v3.py
+      - docs/RT031_LINEA8_ORARIO_DI_PROGETTO_V3.md
+      - scripts/phase2_audit_rt031_line8_best_practices_v3.py
+      - tests/test_phase2_rt031_line8_best_practices_v3.py
+      - docs/RT031_LINEA8_VERIFICA_BEST_PRACTICES_V3.md
+      - docs/PHASE2_TRANSIT_BEST_PRACTICES.md
+      - docs/RT031_PRIOR_WORK_EVIDENCE_MAP.md
+      - config/rt031_requirements_audit_v3.json
+      - scripts/phase2_compare_rt031_line8_deep_offpeak_v3.py
+      - scripts/phase2_export_rt031_line8_deep_offpeak_v3.py
+      - tests/test_phase2_rt031_line8_deep_offpeak_v3.py
+      - docs/RT031_LINEA8_MORBIDA_CENTRALE_V3.md
+      - scripts/phase2_probe_rt031_line8_multistop_recovery_v3.py
+      - scripts/phase2_check_rt031_line8_multistop_recovery_v3.py
+      - scripts/phase2_export_rt031_line8_multistop_recovery_v3.py
+      - tests/test_phase2_rt031_line8_multistop_recovery_v3.py
+      - docs/RT031_LINEA8_RECUPERO_COPERTURA_MULTIFERMATA_V3.md
+      - scripts/phase2_compare_rt031_line8_mixed_local_v3.py
+      - tests/test_phase2_rt031_line8_mixed_local_v3.py
+      - docs/RT031_LINEA8_COMBINAZIONE_SERVIZI_LOCALI_V3.md
+      - scripts/phase2_probe_rt031_line8_free_orders_v3.py
+      - scripts/phase2_export_rt031_line8_free_orders_v3.py
+      - tests/test_phase2_rt031_line8_free_orders_v3.py
+      - docs/RT031_LINEA8_ORDINE_LIBERO_FERMATE_V3.md
+      - scripts/phase2_probe_rt031_line8_partial_services_v3.py
+      - scripts/phase2_solve_rt031_line8_partial_services_v3.py
+      - scripts/phase2_export_rt031_line8_partial_services_v3.py
+      - scripts/phase2_export_rt031_line8_partial_phase_closure_v3.py
+      - tests/test_phase2_rt031_line8_partial_services_v3.py
+      - scripts/phase2_audit_rt031_line8_robustness_cost_v3.py
+      - tests/test_phase2_rt031_line8_robustness_cost_v3.py
+      - scripts/phase2_bound_rt031_line8_combined_edits_v3.py
+      - scripts/phase2_bound_rt031_line8_combined_timing_v3.py
+      - scripts/phase2_check_rt031_line8_combined_edits_v3.py
+      - scripts/phase2_export_rt031_line8_combined_edits_v3.py
+      - tests/test_phase2_rt031_line8_combined_edits_v3.py
+      - docs/RT031_LINEA8_ESITO_TAGLI_COMBINATI_V3.md
+      - scripts/phase2_probe_rt031_line8_stop_relocation_v3.py
+      - scripts/phase2_check_rt031_line8_relocation_timetable_v3.py
+      - scripts/phase2_export_rt031_line8_stop_relocation_v3.py
+      - scripts/phase2_probe_rt031_line8_retention_tradeoffs_v3.py
+      - tests/test_phase2_rt031_line8_stop_relocation_v3.py
+      - docs/RT031_LINEA8_SPOSTAMENTO_FERMATE_E_SCORCIATOIE_V3.md
+      - scripts/phase2_compare_rt031_line8_peak_directions_v3.py
+      - scripts/phase2_export_rt031_line8_peak_directions_v3.py
+      - scripts/phase2_render_rt031_line8_counterflow_v3.py
+      - tests/test_phase2_rt031_line8_peak_directions_v3.py
+      - docs/RT031_LINEA8_DIREZIONI_NELLE_PUNTE_V3.md
+      - scripts/phase2_audit_rt031_line8_site_rides_v3.py
+      - tests/test_phase2_rt031_line8_site_rides_v3.py
+      - docs/RT031_LINEA8_TEMPI_PER_SITO_V3.md
+      - scripts/phase2_compare_rt031_line8_shorter_span_v3.py
+      - tests/test_phase2_rt031_line8_shorter_span_v3.py
+      - scripts/phase2_solve_rt031_line8_joint_evening_v3.py
+      - scripts/phase2_export_rt031_line8_joint_evening_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/*.geojson
+      - tests/test_phase2_rt031_line8_joint_evening_v3.py
+      - scripts/phase2_audit_rt031_line8_evening_peak_closure_v3.py
+      - tests/test_phase2_rt031_line8_evening_peak_closure_v3.py
+      - scripts/phase2_compare_rt031_line8_evening_reallocation_v3.py
+      - tests/test_phase2_rt031_line8_evening_reallocation_v3.py
+      - scripts/phase2_retime_rt031_line8_peak_direction_v3.py
+      - tests/test_phase2_rt031_line8_retiming_v3.py
+      - scripts/phase2_build_rt031_line8_peak_direction_v3.py
+      - tests/test_phase2_rt031_line8_peak_direction_v3.py
+      - scripts/phase2_solve_rt031_line8_flexible_peaks_v3.py
+      - scripts/phase2_build_rt031_line8_regular_compromise_v3.py
+      - scripts/phase2_close_rt031_line8_timetable_repair_v3.py
+      - tests/test_phase2_rt031_line8_timetable_repair_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/*.json
+      - outputs/phase2/s8_events.csv
+      - outputs/phase2/s8_interchange_contract.json
+      - config/phase2_final_policy_contract_v3.json
+      - .github/workflows/phase2-rt031-line8-timetable-repair-v3.yml
+permissions:
+  contents: read
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      PYTHONPATH: .:src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install 'numpy>=2,<3' 'pandas>=2.2,<4' 'scipy>=1.13,<2' 'shapely>=2,<3'
+      - name: Regression tests and constructive compromise
+        run: |
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_16_full_trips_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_full_trip_vehicles_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_variable_fs_hold_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_uniform_complete_line_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_through_service_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_stop_plan_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_timetable_repair_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_peak_direction_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_retiming_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_evening_reallocation_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_evening_peak_closure_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_joint_evening_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_shorter_span_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_site_rides_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_peak_directions_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_stop_relocation_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_combined_edits_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_robustness_cost_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_partial_services_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_free_orders_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_mixed_local_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_multistop_recovery_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_deep_offpeak_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_best_practices_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_working_timetable_v3.py
+          python -m unittest discover -s tests -p test_phase2_rt031_line8_31_trips_v3.py
+      - name: Reproduce one-line full-trip vehicle assignments
+        run: |
+          set -euo pipefail
+          python -m scripts.phase2_audit_rt031_line8_full_trip_vehicles_v3 --output /tmp/rt031-full-trip-vehicles.json
+          cmp /tmp/rt031-full-trip-vehicles.json outputs/phase2/rt031_line8_local_shortcuts_v3/uniform_16_full_trip_vehicle_blocks.json
+      - name: Reproduce variable-FS-hold feasibility frontier
+        run: |
+          set -euo pipefail
+          python -m scripts.phase2_probe_rt031_line8_variable_fs_hold_v3 --time-limit 60 --output /tmp/rt031-variable-fs-hold.json.gz
+          python -c "import gzip,json; a=json.loads(gzip.decompress(open('/tmp/rt031-variable-fs-hold.json.gz','rb').read())); b=json.loads(gzip.decompress(open('outputs/phase2/rt031_line8_local_shortcuts_v3/variable_fs_hold_16_full_trips.json.gz','rb').read())); p=lambda x:[(c['case_id'],c['solver_status'],c['witness_found']) for c in x['cases']]; assert p(a)==p(b); assert a['six_reverse_edge_manoeuvres_all_bus_authorisation_missing']"
+      - name: Independently reproduce relaxed wing infeasibility
+        run: |
+          set -euo pipefail
+          for wing in west east; do
+            python -m scripts.phase2_solve_rt031_line8_flexible_peaks_v3 \
+              --source outputs/phase2/rt031_line8_local_shortcuts_v3/independent_wings.json \
+              --output /tmp/rt031-repair-$wing.json --fixed_counts --wing "$wing"
+          done
+          python -m scripts.phase2_close_rt031_line8_timetable_repair_v3 \
+            --wings outputs/phase2/rt031_line8_local_shortcuts_v3/independent_wings.json \
+            --west /tmp/rt031-repair-west.json --east /tmp/rt031-repair-east.json \
+            --policy config/phase2_final_policy_contract_v3.json --output /tmp/rt031-repair-floor.json
+          python -c "import json; a=json.load(open('/tmp/rt031-repair-floor.json')); assert a['status']=='REFERENCE_CAP_EXCLUDED_IN_DECLARED_FINITE_DOMAIN'; assert abs(a['annual_service_km_lower_bound']-114741.185305)<0.001"

@@ -1,0 +1,27 @@
+scope,metric,v3,v4,notes
+GLOBAL,pdf_timing_rows,51,NOT_STOP_UNIVERSE,V4 retires PDF timing rows as the geographic stop universe
+GLOBAL,localized_pdf_rows,15,NOT_APPLICABLE,V4 uses official GTFS route-stop identities
+GLOBAL,unresolved_pdf_rows,36,NOT_APPLICABLE,V4 does not force timing-row geolocation
+GLOBAL,route_specific_stop_records,,72,frozen official GTFS extract
+GLOBAL,unique_official_stop_ids,,70,official GTFS D184/D185
+GLOBAL,physical_stop_clusters,9,44,deterministic strong-evidence clustering
+GLOBAL,physical_clusters_with_certified_phase2_catchment,9,28,only these feed coverage
+GLOBAL,official_stops_without_coordinates,,0,no coordinates invented
+GLOBAL,coverage_5m_share,0.127457042234924,0.401865445353887,same frozen population units and certified walking catchments
+GLOBAL,coverage_8m_share,0.263994528193149,0.608886829528026,same frozen population units and certified walking catchments
+GLOBAL,coverage_10m_share,0.340187333098434,0.687306074917515,same frozen population units and certified walking catchments
+Brivio,coverage_5m_share,0.249175969268244,0.620678994586857,frozen located-building population denominator
+Brivio,coverage_8m_share,0.424513744935724,0.900864204650122,frozen located-building population denominator
+Brivio,coverage_10m_share,0.480279476494078,0.951953085043640,frozen located-building population denominator
+Calco,coverage_5m_share,0.000000000000000,0.267561121120095,frozen located-building population denominator
+Calco,coverage_8m_share,0.000000000000000,0.496327242120031,frozen located-building population denominator
+Calco,coverage_10m_share,0.000000000000000,0.524594894759812,frozen located-building population denominator
+La Valletta Brianza,coverage_5m_share,0.149146807043824,0.438261684846087,frozen located-building population denominator
+La Valletta Brianza,coverage_8m_share,0.363325884245838,0.564824503948261,frozen located-building population denominator
+La Valletta Brianza,coverage_10m_share,0.484399704403713,0.639647436800180,frozen located-building population denominator
+Olgiate Molgora,coverage_5m_share,0.065959873295328,0.207753490908726,frozen located-building population denominator
+Olgiate Molgora,coverage_8m_share,0.178359795425028,0.438135723357085,frozen located-building population denominator
+Olgiate Molgora,coverage_10m_share,0.278043143042341,0.598904278066521,frozen located-building population denominator
+Santa Maria Hoè,coverage_5m_share,0.346577110187313,0.806623399322066,frozen located-building population denominator
+Santa Maria Hoè,coverage_8m_share,0.659422570166657,0.915244392388249,frozen located-building population denominator
+Santa Maria Hoè,coverage_10m_share,0.805336994150537,0.940003803963088,frozen located-building population denominator

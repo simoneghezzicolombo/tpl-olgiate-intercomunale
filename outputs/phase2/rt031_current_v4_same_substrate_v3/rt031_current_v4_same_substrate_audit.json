@@ -1,0 +1,163 @@
+{
+  "baseline_no_worse_than_candidate_all_six_count": 173427,
+  "broad_replacement_case_established": false,
+  "candidate_componentwise_maxima": {
+    "potential_core_share_10min": "196899965466886889979/458280000000000018910",
+    "potential_core_share_5min": "107428618132125699109/458280000000000018910",
+    "potential_core_share_8min": "171345705176252251833/458280000000000018910",
+    "potential_worst_municipality_share_10min": "2641674681573853325/10553333333333333888",
+    "potential_worst_municipality_share_5min": "1601701989767517807/15520000000000000340",
+    "potential_worst_municipality_share_8min": "8269104535126133947/42213333333333335552"
+  },
+  "candidate_count": 173663,
+  "candidate_coverage_semantics": "POTENTIAL_IF_STOPS_BECOME_PUBLICLY_SERVED",
+  "candidate_no_worse_than_baseline_all_six_count": 0,
+  "candidate_public_service_inferred": false,
+  "candidate_strictly_broadly_superior_count": 0,
+  "candidate_universe": "ALL_173663_UNIQUE_AVAILABILITY_SETS_IN_PINNED_RT031_ONE_TWO_MOVEMENT_POOL",
+  "conclusion": "THE_SUPPLIED_ONE_TWO_MOVEMENT_POOL_DOES_NOT_ESTABLISH_A_BROAD_ACCESS_REPLACEMENT_CASE_AGAINST_THE_EXACT_ID_CURRENT_STRUCTURAL_SUBSET",
+  "contract": "RT031_CURRENT_V4_SAME_SUBSTRATE_STRUCTURAL_ACCESS_AUDIT_V3",
+  "current_comparator_semantics": "D184_D185_V4_STRUCTURAL_PHYSICAL_STOP_SUBSET_MAPPED_BY_EXACT_OFFICIAL_ID;_ROUTE_LEVEL_CURRENT_ACTIVATION_NOT_STOP_LEVEL_OPERATION_SNAPSHOT",
+  "current_service_baseline_complete": false,
+  "current_stop_level_activation_inferred": false,
+  "display_baseline_threshold_shares": {
+    "potential_core_share_10min": 0.4876962946522778,
+    "potential_core_share_5min": 0.21737574044602756,
+    "potential_core_share_8min": 0.38728666903403375,
+    "potential_worst_municipality_share_10min": 0.344031749483671,
+    "potential_worst_municipality_share_5min": 0.07060817356498059,
+    "potential_worst_municipality_share_8min": 0.20919235531864366
+  },
+  "exact_baseline_threshold_ratios": {
+    "potential_core_share_10min": "223501457913245879869/458280000000000018910",
+    "potential_core_share_5min": "99618954331605517243/458280000000000018910",
+    "potential_core_share_8min": "88742867342458492579/229140000000000009455",
+    "potential_worst_municipality_share_10min": "37568267043616875563/109200000000000006740",
+    "potential_worst_municipality_share_5min": "385520627664794046/5460000000000000337",
+    "potential_worst_municipality_share_8min": "4568761040159178139/21840000000000001348"
+  },
+  "general_rt031_search_complete": false,
+  "input_sha256": {
+    "candidate_availability_comparison": "de59464e060d8cac32bebeaa86d120ac8c7081b8f4651b4027a010dc729a541d",
+    "final_stops": "53af82ccfc398719781faf526d482431d2258bd637a74349222e0c4967642076",
+    "v4_clusters_logical": "b9690e2814d93c62f26b104cd5713cb097ac64898b8d0c53bfbf64afff0404c9",
+    "v4_validation_logical": "4308b5c5dcce7f58d598c891442f877b60aee09f9eac62fcf56b29ede1208306",
+    "walk_matrix": "a47bbce413d056db185180173ab2f05dce0463cb626a2c81f4aff64de91b50c1"
+  },
+  "mapping": {
+    "mapped_stop_place_ids": [
+      "FROZEN::300063",
+      "FROZEN::300086",
+      "FROZEN::300398",
+      "FROZEN::300487",
+      "FROZEN::300634",
+      "FROZEN::300782",
+      "FROZEN::300805",
+      "FROZEN::300873",
+      "FROZEN::300879",
+      "FROZEN::300956",
+      "FROZEN::L00407"
+    ],
+    "mapped_v4_physical_cluster_count": 11,
+    "mapping_method": "EXACT_SOURCE_NATIVE_ID_INTERSECTION_ONLY",
+    "mapping_rows": [
+      {
+        "official_source_ids": [
+          "300063"
+        ],
+        "stop_place_id": "FROZEN::300063",
+        "v4_physical_stop_cluster_id": "EX_002"
+      },
+      {
+        "official_source_ids": [
+          "300086",
+          "L00086"
+        ],
+        "stop_place_id": "FROZEN::300086",
+        "v4_physical_stop_cluster_id": "EX_003"
+      },
+      {
+        "official_source_ids": [
+          "300398",
+          "L00398"
+        ],
+        "stop_place_id": "FROZEN::300398",
+        "v4_physical_stop_cluster_id": "EX_008"
+      },
+      {
+        "official_source_ids": [
+          "300487",
+          "L00487"
+        ],
+        "stop_place_id": "FROZEN::300487",
+        "v4_physical_stop_cluster_id": "EX_012"
+      },
+      {
+        "official_source_ids": [
+          "300634"
+        ],
+        "stop_place_id": "FROZEN::300634",
+        "v4_physical_stop_cluster_id": "EX_016"
+      },
+      {
+        "official_source_ids": [
+          "300782",
+          "L00782"
+        ],
+        "stop_place_id": "FROZEN::300782",
+        "v4_physical_stop_cluster_id": "EX_022"
+      },
+      {
+        "official_source_ids": [
+          "300805",
+          "L00904"
+        ],
+        "stop_place_id": "FROZEN::300805",
+        "v4_physical_stop_cluster_id": "EX_025"
+      },
+      {
+        "official_source_ids": [
+          "300873",
+          "L00873"
+        ],
+        "stop_place_id": "FROZEN::300873",
+        "v4_physical_stop_cluster_id": "EX_028"
+      },
+      {
+        "official_source_ids": [
+          "300879",
+          "L00879"
+        ],
+        "stop_place_id": "FROZEN::300879",
+        "v4_physical_stop_cluster_id": "EX_030"
+      },
+      {
+        "official_source_ids": [
+          "300956"
+        ],
+        "stop_place_id": "FROZEN::300956",
+        "v4_physical_stop_cluster_id": "EX_035"
+      },
+      {
+        "official_source_ids": [
+          "L00407"
+        ],
+        "stop_place_id": "FROZEN::L00407",
+        "v4_physical_stop_cluster_id": "EX_039"
+      }
+    ],
+    "v4_official_stop_id_count": 70
+  },
+  "network_selected": false,
+  "output_sha256": {
+    "rt031_vs_current_v4_same_substrate_dimensions.csv": "e44a41be33c2ffb5e8674086a3bb12a582bdf1054e4e5e006852904387986bca"
+  },
+  "population_or_walking_substrate_cross_version_comparison_used": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false,
+  "same_rt028_population_and_walk_matrix_used": true,
+  "scope_rejection": "SUPPLIED_POOL_ONLY_NOT_ALL_POSSIBLE_NETWORKS",
+  "status": "NO_BROAD_ACCESS_REPLACEMENT_CASE_IN_SUPPLIED_POOL",
+  "tolerance_or_uncertainty_band_applied": false,
+  "weighted_score": false
+}

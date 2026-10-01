@@ -1,0 +1,176 @@
+{
+  "candidate_coverage_semantics": "POTENTIAL_IF_STOPS_BECOME_PUBLICLY_SERVED",
+  "comparison": {
+    "baseline_no_worse_than_candidate_all_six_count": 707549,
+    "broad_replacement_case_established": false,
+    "candidate_componentwise_maxima": {
+      "potential_core_share_10min": "118418558193645614528/229140000000000009455",
+      "potential_core_share_5min": "12551252978930537713/45828000000000001891",
+      "potential_core_share_8min": "202263837089297339107/458280000000000018910",
+      "potential_worst_municipality_share_10min": "8415971304875236075/31660000000000001664",
+      "potential_worst_municipality_share_5min": "2183755026205786739/21106666666666667776",
+      "potential_worst_municipality_share_8min": "17355473558859863908/87140000000000000959"
+    },
+    "candidate_count": 727514,
+    "candidate_no_worse_than_baseline_all_six_count": 0,
+    "candidate_strictly_broadly_superior_count": 0,
+    "status": "NO_BROAD_ACCESS_REPLACEMENT_CASE_IN_SUPPLIED_POOL"
+  },
+  "conclusion": "EXPANDED_POOL_STILL_DOES_NOT_ESTABLISH_BROAD_ACCESS_REPLACEMENT",
+  "conditional_broad_access_case_count": 0,
+  "contract": "RT031_EXPANDED_POOL_CURRENT_V4_SAME_SUBSTRATE_FEASIBILITY_V3",
+  "current_exact_identity_subset": {
+    "mapped_stop_place_ids": [
+      "FROZEN::300063",
+      "FROZEN::300086",
+      "FROZEN::300398",
+      "FROZEN::300487",
+      "FROZEN::300634",
+      "FROZEN::300782",
+      "FROZEN::300805",
+      "FROZEN::300873",
+      "FROZEN::300879",
+      "FROZEN::300956",
+      "FROZEN::L00407"
+    ],
+    "mapped_v4_physical_cluster_count": 11,
+    "mapping_method": "EXACT_SOURCE_NATIVE_ID_INTERSECTION_ONLY",
+    "mapping_rows": [
+      {
+        "official_source_ids": [
+          "300063"
+        ],
+        "stop_place_id": "FROZEN::300063",
+        "v4_physical_stop_cluster_id": "EX_002"
+      },
+      {
+        "official_source_ids": [
+          "300086",
+          "L00086"
+        ],
+        "stop_place_id": "FROZEN::300086",
+        "v4_physical_stop_cluster_id": "EX_003"
+      },
+      {
+        "official_source_ids": [
+          "300398",
+          "L00398"
+        ],
+        "stop_place_id": "FROZEN::300398",
+        "v4_physical_stop_cluster_id": "EX_008"
+      },
+      {
+        "official_source_ids": [
+          "300487",
+          "L00487"
+        ],
+        "stop_place_id": "FROZEN::300487",
+        "v4_physical_stop_cluster_id": "EX_012"
+      },
+      {
+        "official_source_ids": [
+          "300634"
+        ],
+        "stop_place_id": "FROZEN::300634",
+        "v4_physical_stop_cluster_id": "EX_016"
+      },
+      {
+        "official_source_ids": [
+          "300782",
+          "L00782"
+        ],
+        "stop_place_id": "FROZEN::300782",
+        "v4_physical_stop_cluster_id": "EX_022"
+      },
+      {
+        "official_source_ids": [
+          "300805",
+          "L00904"
+        ],
+        "stop_place_id": "FROZEN::300805",
+        "v4_physical_stop_cluster_id": "EX_025"
+      },
+      {
+        "official_source_ids": [
+          "300873",
+          "L00873"
+        ],
+        "stop_place_id": "FROZEN::300873",
+        "v4_physical_stop_cluster_id": "EX_028"
+      },
+      {
+        "official_source_ids": [
+          "300879",
+          "L00879"
+        ],
+        "stop_place_id": "FROZEN::300879",
+        "v4_physical_stop_cluster_id": "EX_030"
+      },
+      {
+        "official_source_ids": [
+          "300956"
+        ],
+        "stop_place_id": "FROZEN::300956",
+        "v4_physical_stop_cluster_id": "EX_035"
+      },
+      {
+        "official_source_ids": [
+          "L00407"
+        ],
+        "stop_place_id": "FROZEN::L00407",
+        "v4_physical_stop_cluster_id": "EX_039"
+      }
+    ],
+    "v4_official_stop_id_count": 70
+  },
+  "current_exact_threshold_ratios": {
+    "potential_core_share_10min": "223501457913245879869/458280000000000018910",
+    "potential_core_share_5min": "99618954331605517243/458280000000000018910",
+    "potential_core_share_8min": "88742867342458492579/229140000000000009455",
+    "potential_worst_municipality_share_10min": "37568267043616875563/109200000000000006740",
+    "potential_worst_municipality_share_5min": "385520627664794046/5460000000000000337",
+    "potential_worst_municipality_share_8min": "4568761040159178139/21840000000000001348"
+  },
+  "input_sha256": {
+    "expanded_pool": "273109c45f899cb3c3170bd272a2d8e6aa00d4cb4e3a747caf3205e786cd5703",
+    "final_stops": "53af82ccfc398719781faf526d482431d2258bd637a74349222e0c4967642076",
+    "v4_clusters_logical": "b9690e2814d93c62f26b104cd5713cb097ac64898b8d0c53bfbf64afff0404c9",
+    "v4_validation_logical": "4308b5c5dcce7f58d598c891442f877b60aee09f9eac62fcf56b29ede1208306",
+    "walk_matrix": "a47bbce413d056db185180173ab2f05dce0463cb626a2c81f4aff64de91b50c1"
+  },
+  "network_selected": false,
+  "output_sha256": {
+    "conditional_broad_access_cases.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "expanded_pool_componentwise_comparison.csv": "4ebe9f1aae31858dcca69b9d84c1820b5ac022ba5c2880277fd524b934eb6c5d"
+  },
+  "portfolio_envelope": {
+    "considered_by_movement_count": {
+      "1": 1742,
+      "2": 1516411
+    },
+    "feasible_by_movement_count": {
+      "1": 1742,
+      "2": 1516411
+    },
+    "full_portfolio_table_retained": false,
+    "general_multimovement_search_complete": false,
+    "minimum_witness_identity_retained": true,
+    "passenger_service_assigned": false,
+    "pool_size": 1742,
+    "service_equivalence_claimed": false,
+    "within_pool_enumeration_complete": true
+  },
+  "primary_selection_authorised": false,
+  "public_service_assigned": false,
+  "runner_up_selection_authorised": false,
+  "scope": "SUPPLIED_ONE_MILLION_STATE_POOL_SINGLETONS_AND_DISTINCT_PAIRS_ONLY",
+  "source_expanded_states": 1000000,
+  "source_pending_heap_entries": 2864434,
+  "source_search_exhaustive": false,
+  "source_search_status": "RESOURCE_LIMIT_INCOMPLETE",
+  "source_walk_count": 1742,
+  "status": "NO_BROAD_ACCESS_REPLACEMENT_CASE_IN_EXPANDED_INCOMPLETE_POOL",
+  "uncertainty_band_applied": false,
+  "unique_availability_set_count": 727514,
+  "weighted_score": false
+}

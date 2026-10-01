@@ -1,0 +1,88 @@
+name: RT031 full municipal 18h phase surface V4
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - scripts/phase2_build_rt031_full_18h_surface_v4.py
+      - tests/test_phase2_rt031_full_18h_surface_v4.py
+      - .github/workflows/phase2-rt031-full-municipal-18h-surface-v4.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  shard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+    env:
+      PYTHONPATH: .:src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install pytest
+      - run: python -m pytest tests/test_phase2_rt031_full_18h_surface_v4.py -q
+      - name: Acquire pinned complete typed frontier
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/typed
+          gh api repos/${{ github.repository }}/actions/artifacts/10438835538/zip > /tmp/typed.zip
+          echo 'a5c61c01934890c4a7a06a0bbc24c7e56ff477bb4efa7da8084c21a18c74cca6  /tmp/typed.zip' | sha256sum -c
+          unzip -q /tmp/typed.zip -d /tmp/typed
+          echo 'd2d27d1c5fb4f1faaeaa4d911735daab57c64dd3a173c2e887c500027cb9f60f  /tmp/typed/municipal_frontier_typed_binding_v4_audit.json' | sha256sum -c
+      - name: Evaluate one shard twice
+        run: |
+          for out in /tmp/shard-a /tmp/shard-b; do
+            python scripts/phase2_build_rt031_full_18h_surface_v4.py shard \
+              --typed-audit /tmp/typed/municipal_frontier_typed_binding_v4_audit.json \
+              --s8-events outputs/phase2/s8_events.csv \
+              --sensitivity config/phase2_s8_phasing_sensitivity_v2.json \
+              --shard-index ${{ matrix.shard }} --output-dir "$out"
+          done
+          diff -r /tmp/shard-a /tmp/shard-b
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-full-18h-shard-${{ matrix.shard }}
+          path: /tmp/shard-a/
+          if-no-files-found: error
+  aggregate:
+    needs: shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: .:src
+    steps:
+      - uses: actions/checkout@v4
+      - name: Acquire pinned complete typed frontier
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/typed
+          gh api repos/${{ github.repository }}/actions/artifacts/10438835538/zip > /tmp/typed.zip
+          echo 'a5c61c01934890c4a7a06a0bbc24c7e56ff477bb4efa7da8084c21a18c74cca6  /tmp/typed.zip' | sha256sum -c
+          unzip -q /tmp/typed.zip -d /tmp/typed
+          echo 'd2d27d1c5fb4f1faaeaa4d911735daab57c64dd3a173c2e887c500027cb9f60f  /tmp/typed/municipal_frontier_typed_binding_v4_audit.json' | sha256sum -c
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: rt031-full-18h-shard-*
+          path: /tmp/shards
+          merge-multiple: true
+      - name: Verify full coverage and aggregate twice
+        run: |
+          for out in /tmp/full-a /tmp/full-b; do
+            python scripts/phase2_build_rt031_full_18h_surface_v4.py aggregate \
+              --typed-audit /tmp/typed/municipal_frontier_typed_binding_v4_audit.json \
+              --shard-dir /tmp/shards --output-dir "$out"
+          done
+          diff -r /tmp/full-a /tmp/full-b
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-full-municipal-18h-phase-surface-v4
+          path: /tmp/full-a/
+          if-no-files-found: error

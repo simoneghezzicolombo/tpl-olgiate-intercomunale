@@ -51,7 +51,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install pytest pandas
+      - run: python -m pip install -r requirements.txt
       - name: Controlled adversarial and macro regression tests
         env:
           PYTHONPATH: .:src

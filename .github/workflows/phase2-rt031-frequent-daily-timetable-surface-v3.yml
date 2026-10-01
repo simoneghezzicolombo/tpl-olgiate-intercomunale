@@ -1,0 +1,57 @@
+name: RT031 frequent daily timetable surface V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - src/phase2_rt031_daily_timetable_surface_v3.py
+      - scripts/phase2_build_rt031_daily_timetable_surface_v3.py
+      - tests/test_phase2_rt031_daily_timetable_surface_v3.py
+      - .github/workflows/phase2-rt031-frequent-daily-timetable-surface-v3.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  daily-timetable-surface:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      PYTHONPATH: .:src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install pytest
+      - run: >-
+          python -m pytest
+          tests/test_phase2_rt031_daily_timetable_surface_v3.py
+          tests/test_phase2_exact_timetable_optimizer_v2.py -q
+      - name: Acquire pinned typed shortlist and phase frontier
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/typed /tmp/phase
+          gh api repos/${{ github.repository }}/actions/artifacts/10389064542/zip > /tmp/typed.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/10389741861/zip > /tmp/phase.zip
+          echo '9bb4f4ebaebcb00bc0c51065fbc8eb604d0c8e0715b6e531d0a8f26396cf3c31  /tmp/typed.zip' | sha256sum -c
+          echo 'ac3511be2545286064964d7fd58e746c1f0f7171fb95009d1baf0a9f7d5d9801  /tmp/phase.zip' | sha256sum -c
+          unzip -q /tmp/typed.zip -d /tmp/typed
+          unzip -q /tmp/phase.zip -d /tmp/phase
+      - name: Build twice and compare every byte
+        run: |
+          typed=$(find /tmp/typed -name frequent_access_typed_shortlist_audit.json | head -1)
+          phase=$(find /tmp/phase -name rt031_frequent_hub_phase_frontier_v3.json | head -1)
+          for out in /tmp/daily-a /tmp/daily-b; do
+            python scripts/phase2_build_rt031_daily_timetable_surface_v3.py \
+              --typed-audit "$typed" --phase-frontier "$phase" \
+              --s8-events outputs/phase2/s8_events.csv \
+              --sensitivity config/phase2_s8_phasing_sensitivity_v2.json \
+              --output-dir "$out"
+          done
+          diff -r /tmp/daily-a /tmp/daily-b
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-frequent-daily-timetable-robust-surface-v3
+          path: /tmp/daily-a/
+          if-no-files-found: error

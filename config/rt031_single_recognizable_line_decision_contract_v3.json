@@ -1,0 +1,44 @@
+{
+  "contract": "RT031_SINGLE_RECOGNIZABLE_PUBLIC_LINE_DECISION_CONTRACT_V3",
+  "status": "CALLER_DECLARED_NORMATIVE_REQUIREMENT",
+  "single_public_line_required": true,
+  "required_public_route_identity_count": 1,
+  "physical_movement_count_is_public_line_count": false,
+  "vehicle_count_is_public_line_count": false,
+  "directional_patterns_within_one_public_line_allowed": true,
+  "minimum_certified_state": [
+    "public_route_identity",
+    "directional_occurrence_identity",
+    "ordered_service_event_identity",
+    "passenger_service_continuity_state",
+    "vehicle_carrier_identity_kept_separate"
+  ],
+  "recognizability_fail_closed_conditions": [
+    "MORE_THAN_ONE_PUBLIC_ROUTE_IDENTITY",
+    "INDEPENDENT_COMPONENTS_MERELY_RELABELLED_AS_ONE_LINE",
+    "VEHICLE_CONTINUITY_USED_AS_PASSENGER_SERVICE_CONTINUITY",
+    "STOP_IDENTITY_USED_AS_ORDERED_SERVICE_EVENT_GUARANTEE"
+  ],
+  "current_stop_retention": {
+    "role": "PARETO_PREFERENCE_NOT_ADMISSIBILITY_CONSTRAINT",
+    "weight": null,
+    "semantics": "EXACT_STOP_IDENTITY_SHARE_ONLY_UNTIL_DIRECTIONAL_ORDERED_BINDING"
+  },
+  "olgiate_fs": {
+    "role": "REQUIRED_LINE_SERVICE_NODE",
+    "stop_place_id": "FROZEN::L00407"
+  },
+  "caller_declared_service_context": {
+    "uniform_headway_min": 30,
+    "span_minutes": 600,
+    "span_hours": 10,
+    "annual_service_days": 260,
+    "annual_service_days_semantics": "DESIGN_ASSUMPTION_NOT_CALLER_SELECTION"
+  },
+  "decision_budget_km": null,
+  "uncertainty_band_min": null,
+  "weighted_score": false,
+  "network_selected": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false
+}

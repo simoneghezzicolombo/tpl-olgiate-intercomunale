@@ -1,0 +1,59 @@
+name: RT031 inclusive Linea 8 shape V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - scripts/phase2_export_rt031_line8_inclusive_shape_v3.py
+      - tests/test_phase2_rt031_line8_inclusive_shape_v3.py
+      - outputs/phase2/rt031_line8_inclusive_shape_v3/line8_inclusive_model.geojson
+      - .github/workflows/phase2-rt031-line8-inclusive-shape-v3.yml
+  pull_request:
+    paths:
+      - scripts/phase2_export_rt031_line8_inclusive_shape_v3.py
+      - tests/test_phase2_rt031_line8_inclusive_shape_v3.py
+      - outputs/phase2/rt031_line8_inclusive_shape_v3/line8_inclusive_model.geojson
+      - .github/workflows/phase2-rt031-line8-inclusive-shape-v3.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  shape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Check committed GeoJSON contract
+        run: python -m unittest discover -s tests -p test_phase2_rt031_line8_inclusive_shape_v3.py
+      - name: Verify and fetch pinned route evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REPO="${{ github.repository }}"
+          test "$(gh api "repos/$REPO/actions/artifacts/9972204236" --jq .digest)" = 'sha256:e0b71f6fd673345c3bc0bf8e32ecf66b7f620e27802f1eb5b24690a8295c8225'
+          test "$(gh api "repos/$REPO/actions/artifacts/9988386073" --jq .digest)" = 'sha256:1cab2e18eec4920cbdb348d0d9cd224c7516f8d62bc63b0eacf2a91f6fb134d7'
+          test "$(gh api "repos/$REPO/actions/artifacts/10023387513" --jq .digest)" = 'sha256:1603606d02a170567c1d423b7689b7044933fff6490caeaf848ae0ca0f2d77d0'
+          gh run download 33975545284 -n rt017-final-certified-evidence-v3 -D /tmp/rt031/rt017
+          gh run download 34030321683 -n phase2-rt022-minimum-backbones-v3-real -D /tmp/rt031/rt022
+          gh run download 34134177590 -n rt031-successor-via-way-relevance-v3 -D /tmp/rt031/successor
+      - name: Reproduce ordered paths byte for byte
+        run: |
+          set -euo pipefail
+          python -m scripts.phase2_export_rt031_line8_inclusive_shape_v3 \
+            --edges /tmp/rt031/rt017/frozen_graph_edges.csv.gz \
+            --nodes /tmp/rt031/rt017/frozen_graph_nodes.csv.gz \
+            --rules /tmp/rt031/rt017/frozen_turn_rules.csv.gz \
+            --attachments /tmp/rt031/rt022/stop_attachments.csv \
+            --successor /tmp/rt031/successor/rt031-successor-via-way-relevance.json \
+            --candidates_normalized_newlines outputs/phase2/stop_universe_v2/proposed_stop_candidates.csv \
+            --anchor data/phase2/frozen_gate_d/source/structural_anchor_evidence.csv \
+            --road_screen outputs/phase2/rt031_unique_line_road_screen_v3/screen.json \
+            --repair outputs/phase2/rt031_current_stop_repair_v3/road_options.json \
+            --output /tmp/rt031/shape.geojson
+          cmp /tmp/rt031/shape.geojson outputs/phase2/rt031_line8_inclusive_shape_v3/line8_inclusive_model.geojson

@@ -1,11 +1,61 @@
 # Progetto Linea 8 Olgiate Molgora
 ## Rete TPL Circolare a Doppio Verso (Modello Merate D201/D202) Integrata con il Nodo Ferroviario S8
 
-Benvenuto nel repository del progetto **Linea 8 Olgiate Molgora**. Questo workspace raccoglie tutti i dati quantitativi, i modelli di simulazione di esercizio, i bilanci chilometrici, l'analisi territoriale WorldPop e la dashboard interattiva per la trasformazione delle attuali linee radiali frammentate **D184** e **D185** in una **rete circolare continua a forma di "8"**, operante in **entrambi i versi di marcia (orario e antiorario)** e incernierata sulla **stazione ferroviaria di Olgiate-Calco-Brivio**.
+> **Scelta corrente (2026-09-27): [Linea 8, 16 giri completi al giorno](docs/RT031_LINEA8_16_GIRI_COMPLETI_V3.md).**
+> Il committente ha scelto **16 corse complete**, **115.143,267 km di servizio/anno**
+> su 260 giorni ipotizzati: **+3.724,267 km (+3,34%)**. Non è ancora un orario approvato.
+> Il primo audit costruisce esempi a 16 giri, tutti i treni-obiettivo e H30 sulle corse
+> ferroviarie di punta, ma nell'esempio prima ovest lascia **08:30–12:05 e 12:05–15:40**
+> senza partenze del giro: **215 minuti, non accettati**.
+> Il confronto migliorato a **16 giri** porta l'intervallo massimo a **115 minuti**,
+> mantenendo H30 sulle corse abbinate ai treni centrali di punta: garanzia dalle **06:45**
+> se parte prima l'ovest o dalle **06:50** se parte prima l'est. Richiede però H115 anche
+> dopo la punta mattutina e la sostituzione di **due coincidenze-obiettivo** dell'ala
+> percorsa seconda. Nel dominio verificato, 06:30/H120 e 06:45–06:50/H110 falliscono.
+> Entrambe le precedenze est/ovest sono esaminate, **nessuna approvata**.
+> Con i vecchi limiti centrali e tutti i vecchi treni servono almeno 18 giri nel dominio;
+> anche con i due treni-obiettivo sostituiti, H60 fuori 10–16 e H120 dentro 10–16
+> richiedono almeno **18 giri completi** nei 14 casi esaminati, pari a circa
+> **129.536 km/anno** sui 260 giorni ipotizzati. Il confronto **non autorizza**
+> ad aumentare il conteggio scelto. [Scelta registrata](config/rt031_16_full_trips_authority_v3.json).
+> Per 18 giri agli stessi 115.143 km/anno del confronto a 16 occorrerebbe
+> accorciare ogni giro di **3,075 km (11,11%)**. La [prova di ordine libero](docs/RT031_LINEA8_ORDINE_LIBERO_FERMATE_V3.md)
+> certifica invece zero risparmio nel dominio con tutti i siti mantenuti ed estremi
+> fissati: permutare le fermate interne non basta. Non esclude altri grafi o estremi.
+>
+> **Contratto del percorso: [stesso otto completo per ogni corsa](docs/RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md).**
+> Una sola linea: ogni corsa commerciale percorre entrambe le ali; FS è anche fermata
+> intermedia, senza cambio obbligatorio. Nessuna corsa pubblica limitata alla singola ala.
+> La precedente proposta da **31 corse d'ala è superata come soluzione finale**;
+> non diventa automaticamente una proposta da 31 giri completi.
+> Geometria confermata e **29 siti di progetto**: aggiunta Arlate/Via Nuova Provinciale
+> accolta, N0655 sul cavalcavia di Via Indipendenza esclusa senza spostamenti automatici.
+> Olgiate sud e San Zeno restano inclusi. Non sono paline autorizzate.
+> Il giro completo è 27,679 km. Il precedente confronto che conserva tutte le
+> condizioni temporali ereditate richiede almeno 20 giri (143.929 km) nel dominio esaminato:
+> è diagnostica storica, non un minimo globale né un aumento adottato. Si riesaminano quelle condizioni,
+> senza rinunciare automaticamente a H30 in punta, ferrovia o utilità intercomunale.
+> Calendario, costi complessivi, flotta, manovre e fermate restano da validare.
+> [Contratto corretto](config/rt031_uniform_complete_line_authority_v3.json) ·
+> [Stato completo e confronti storici](docs/RT031_LINEA8_SCHEDA_CONCLUSIVA_DI_AVANZAMENTO_V3.md) ·
+> [Piano fermate storico e sei manovre da verificare](docs/RT031_LINEA8_PIANO_FERMATE_E_MANOVRE_V3.md).
+>
+> **Evidenze storiche.** La figura 8 a doppio verso era il concetto originario;
+> il servizio passeggeri nei due sensi non implica due percorsi opposti a ogni ora. Le stime
+> iniziali di 55 minuti/ciclo, 5 minuti di margine, 112.261 km/anno e
+> coincidenze «perfette» riportate sotto sono **ipotesi storiche**, non
+> prestazioni certificate della proposta attuale. Per i criteri di progetto
+> usare [Transit best practices](docs/PHASE2_TRANSIT_BEST_PRACTICES.md);
+> per il limite delle conclusioni iniziali vedere [Gate F](docs/GATE_F_PASS.md);
+> per il precedente confronto territoriale vedere il [rapporto Arlate–Rovagnate](docs/RT031_ARLATE_ROVAGNATE_TRADEOFF_V3.md).
+> Una [mappa dell'esperienza pregressa](docs/RT031_PRIOR_WORK_EVIDENCE_MAP.md)
+> collega questi filoni e indica quali risultati sono tuttora riutilizzabili.
+
+Benvenuto nel repository del progetto **Linea 8 Olgiate Molgora**. Questo workspace raccoglie dati quantitativi, modelli di simulazione di esercizio, bilanci chilometrici, analisi territoriale WorldPop e dashboard. Il concept originario prevedeva la trasformazione delle linee **D184** e **D185** in una rete circolare a forma di **otto a doppio verso**, centrata sulla **stazione ferroviaria di Olgiate-Calco-Brivio**. Per lo stato corrente fa fede il contratto di percorso unico completo sopra: la geometria è conservata, l'orario è da ricostruire; i numeri storici sotto non sono prestazioni certificate.
 
 ---
 
-## 📊 I Numeri Chiave dello Studio
+## 📊 Numeri del concept originario (non una raccomandazione certificata)
 
 1. **Popolazione del Bacino Core (5 Comuni, ISTAT 2025)**:
    - **La Valletta Brianza + Santa Maria Hoè**: $6.765 \text{ residenti}$ ($29,5\%$)

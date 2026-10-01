@@ -1,0 +1,7 @@
+dimension,current_share,reciprocal_pool_maximum_share,reciprocal_minus_current_percentage_points
+potential_core_share_5min,0.217375740446028,0.210281530548749,-0.709420990
+potential_core_share_8min,0.387286669034034,0.353226632185891,-3.406003685
+potential_core_share_10min,0.487696294652278,0.415511613824419,-7.218468083
+potential_worst_municipality_share_5min,0.070608173564981,0.025669418006638,-4.493875556
+potential_worst_municipality_share_8min,0.209192355318644,0.061517496596024,-14.767485872
+potential_worst_municipality_share_10min,0.344031749483671,0.086163822561453,-25.786792692

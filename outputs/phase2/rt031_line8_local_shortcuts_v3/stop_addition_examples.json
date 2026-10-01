@@ -1,0 +1,4139 @@
+{
+  "examples": [
+    {
+      "added_events_by_pattern": {
+        "east_A": [],
+        "west_B": [
+          {
+            "boarding_authorised": false,
+            "incoming_edge": "osm:172860451:7:F",
+            "name": "Ipotesi aggiuntiva n:531392.69:5063340.44",
+            "occurrence_id": "west_B:62:PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44",
+            "offset_from_wing_origin_min": 2.1062270120708355,
+            "outgoing_edge": "osm:172860451:8:F",
+            "passenger_continuity_certified": false,
+            "path_node_index": 62,
+            "site_status": "NEW_ON_PATH_SITE_NOT_APPROVED",
+            "stop_place_id": "PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44"
+          },
+          {
+            "boarding_authorised": false,
+            "incoming_edge": "osm:172860451:8:R",
+            "name": "Ipotesi aggiuntiva n:531392.69:5063340.44",
+            "occurrence_id": "west_B:750:PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44",
+            "offset_from_wing_origin_min": 28.37542949671325,
+            "outgoing_edge": "osm:172860451:7:R",
+            "passenger_continuity_certified": false,
+            "path_node_index": 750,
+            "site_status": "NEW_ON_PATH_SITE_NOT_APPROVED",
+            "stop_place_id": "PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44"
+          }
+        ]
+      },
+      "boarding_authorised": false,
+      "candidate_ids": [
+        "N0655"
+      ],
+      "conditional_scenarios": [
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              3,
+              6,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              1,
+              4,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              2,
+              5,
+              8,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ],
+            [
+              20,
+              23,
+              28
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 5,
+          "moving_multiplier": 0.9,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              6,
+              12,
+              15,
+              19,
+              23,
+              27
+            ],
+            [
+              1,
+              5,
+              9,
+              14,
+              20,
+              26
+            ],
+            [
+              2,
+              8,
+              22,
+              28
+            ],
+            [
+              3,
+              7,
+              11,
+              17,
+              21,
+              25,
+              29
+            ],
+            [
+              4,
+              10,
+              13,
+              16,
+              18,
+              24,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 5,
+          "moving_multiplier": 1.0,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              6,
+              12,
+              15,
+              19,
+              23,
+              27
+            ],
+            [
+              1,
+              5,
+              9,
+              14,
+              20,
+              26
+            ],
+            [
+              2,
+              8,
+              22,
+              28
+            ],
+            [
+              3,
+              7,
+              11,
+              17,
+              21,
+              25,
+              29
+            ],
+            [
+              4,
+              10,
+              13,
+              16,
+              18,
+              24,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 5,
+          "moving_multiplier": 1.1,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              6,
+              12,
+              15,
+              19,
+              23,
+              27
+            ],
+            [
+              1,
+              5,
+              9,
+              14,
+              20,
+              26
+            ],
+            [
+              2,
+              8,
+              22,
+              28
+            ],
+            [
+              3,
+              7,
+              11,
+              17,
+              21,
+              25,
+              29
+            ],
+            [
+              4,
+              10,
+              13,
+              16,
+              18,
+              24,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 6,
+          "moving_multiplier": 1.1,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              7,
+              21,
+              28
+            ],
+            [
+              1,
+              6,
+              22,
+              27
+            ],
+            [
+              2,
+              9,
+              13,
+              15,
+              18,
+              23,
+              30
+            ],
+            [
+              3,
+              8,
+              20,
+              25
+            ],
+            [
+              4,
+              11,
+              16,
+              17,
+              24,
+              29
+            ],
+            [
+              5,
+              10,
+              12,
+              14,
+              19,
+              26
+            ]
+          ]
+        }
+      ],
+      "timing": {
+        "extra_nominal_running_and_dwell_min": {
+          "east_A": 0.0,
+          "west_B": 1.0
+        },
+        "extra_stress_running_and_dwell_min": {
+          "east_A": 0.0,
+          "west_B": 2.0
+        },
+        "failed_rail_targets": [],
+        "failure_counts": {},
+        "fixed_31_timetable_pass": true,
+        "new_site_nominal_rides": [
+          {
+            "from_fs_alighting_occurrence_id": "west_B:62:PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44",
+            "from_fs_min": 2.3168497132779193,
+            "pattern": "west_B",
+            "site_id": "PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44",
+            "to_fs_boarding_occurrence_id": "west_B:750:PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44",
+            "to_fs_min": 2.1765259561931884
+          }
+        ],
+        "nominal_vehicle_count": 4,
+        "per_site_rail_check_count": 308,
+        "physical_boarding_certified": false,
+        "retiming_attempted": false,
+        "smallest_AM_residual_min_after_3min_transfer": 1.6105015974222354
+      }
+    },
+    {
+      "added_events_by_pattern": {
+        "east_A": [
+          {
+            "boarding_authorised": false,
+            "incoming_edge": "osm:578724692:7:F",
+            "name": "Ipotesi aggiuntiva n:534398.29:5063851.64",
+            "occurrence_id": "east_A:446:PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+            "offset_from_wing_origin_min": 16.289628294629757,
+            "outgoing_edge": "osm:223263774:0:F",
+            "passenger_continuity_certified": false,
+            "path_node_index": 446,
+            "site_status": "NEW_ON_PATH_SITE_NOT_APPROVED",
+            "stop_place_id": "PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64"
+          }
+        ],
+        "west_B": []
+      },
+      "boarding_authorised": false,
+      "candidate_ids": [
+        "N1212"
+      ],
+      "conditional_scenarios": [
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              3,
+              6,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              1,
+              4,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              2,
+              5,
+              8,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ],
+            [
+              20,
+              23,
+              28
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              4,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              5,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              6,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              7,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 5,
+          "moving_multiplier": 1.0,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              6,
+              12,
+              15,
+              19,
+              23,
+              27
+            ],
+            [
+              1,
+              5,
+              9,
+              14,
+              20,
+              26
+            ],
+            [
+              2,
+              8,
+              22,
+              28
+            ],
+            [
+              3,
+              7,
+              11,
+              17,
+              21,
+              25,
+              29
+            ],
+            [
+              4,
+              10,
+              13,
+              16,
+              18,
+              24,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              4,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              5,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              6,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              7,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              4,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              5,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              6,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              7,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 6,
+          "moving_multiplier": 1.1,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              10,
+              12,
+              14,
+              19,
+              26
+            ],
+            [
+              1,
+              6,
+              11,
+              16,
+              17,
+              24,
+              29
+            ],
+            [
+              2,
+              7,
+              21,
+              28
+            ],
+            [
+              3,
+              8,
+              20,
+              25
+            ],
+            [
+              4,
+              9,
+              13,
+              15,
+              18,
+              23,
+              30
+            ],
+            [
+              22,
+              27
+            ]
+          ]
+        }
+      ],
+      "timing": {
+        "extra_nominal_running_and_dwell_min": {
+          "east_A": 0.5,
+          "west_B": 0.0
+        },
+        "extra_stress_running_and_dwell_min": {
+          "east_A": 1.0,
+          "west_B": 0.0
+        },
+        "failed_rail_targets": [],
+        "failure_counts": {},
+        "fixed_31_timetable_pass": true,
+        "new_site_nominal_rides": [
+          {
+            "from_fs_alighting_occurrence_id": "east_A:446:PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+            "from_fs_min": 21.918591124092735,
+            "pattern": "east_A",
+            "site_id": "PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+            "to_fs_boarding_occurrence_id": "east_A:446:PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+            "to_fs_min": 17.740782934863496
+          }
+        ],
+        "nominal_vehicle_count": 4,
+        "per_site_rail_check_count": 308,
+        "physical_boarding_certified": false,
+        "retiming_attempted": false,
+        "smallest_AM_residual_min_after_3min_transfer": 0.8406259410437684
+      }
+    },
+    {
+      "added_events_by_pattern": {
+        "east_A": [
+          {
+            "boarding_authorised": false,
+            "incoming_edge": "osm:578724692:7:F",
+            "name": "Ipotesi aggiuntiva n:534398.29:5063851.64",
+            "occurrence_id": "east_A:446:PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+            "offset_from_wing_origin_min": 16.289628294629757,
+            "outgoing_edge": "osm:223263774:0:F",
+            "passenger_continuity_certified": false,
+            "path_node_index": 446,
+            "site_status": "NEW_ON_PATH_SITE_NOT_APPROVED",
+            "stop_place_id": "PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64"
+          }
+        ],
+        "west_B": [
+          {
+            "boarding_authorised": false,
+            "incoming_edge": "osm:172860451:7:F",
+            "name": "Ipotesi aggiuntiva n:531392.69:5063340.44",
+            "occurrence_id": "west_B:62:PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44",
+            "offset_from_wing_origin_min": 2.1062270120708355,
+            "outgoing_edge": "osm:172860451:8:F",
+            "passenger_continuity_certified": false,
+            "path_node_index": 62,
+            "site_status": "NEW_ON_PATH_SITE_NOT_APPROVED",
+            "stop_place_id": "PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44"
+          },
+          {
+            "boarding_authorised": false,
+            "incoming_edge": "osm:172860451:8:R",
+            "name": "Ipotesi aggiuntiva n:531392.69:5063340.44",
+            "occurrence_id": "west_B:750:PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44",
+            "offset_from_wing_origin_min": 28.37542949671325,
+            "outgoing_edge": "osm:172860451:7:R",
+            "passenger_continuity_certified": false,
+            "path_node_index": 750,
+            "site_status": "NEW_ON_PATH_SITE_NOT_APPROVED",
+            "stop_place_id": "PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44"
+          }
+        ]
+      },
+      "boarding_authorised": false,
+      "candidate_ids": [
+        "N0655",
+        "N1212"
+      ],
+      "conditional_scenarios": [
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              3,
+              6,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              1,
+              4,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              2,
+              5,
+              8,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ],
+            [
+              20,
+              23,
+              28
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 0.9,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 5,
+          "moving_multiplier": 0.9,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              6,
+              12,
+              15,
+              19,
+              23,
+              27
+            ],
+            [
+              1,
+              5,
+              9,
+              14,
+              20,
+              26
+            ],
+            [
+              2,
+              8,
+              22,
+              28
+            ],
+            [
+              3,
+              7,
+              11,
+              17,
+              21,
+              25,
+              29
+            ],
+            [
+              4,
+              10,
+              13,
+              16,
+              18,
+              24,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.0,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 5,
+          "moving_multiplier": 1.0,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              6,
+              12,
+              15,
+              19,
+              23,
+              27
+            ],
+            [
+              1,
+              5,
+              9,
+              14,
+              20,
+              26
+            ],
+            [
+              2,
+              8,
+              22,
+              28
+            ],
+            [
+              3,
+              7,
+              11,
+              17,
+              21,
+              25,
+              29
+            ],
+            [
+              4,
+              10,
+              13,
+              16,
+              18,
+              24,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 0.5,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              4,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              5,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              6,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              7,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 5,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 4,
+          "moving_multiplier": 1.1,
+          "recovery_min": 5,
+          "trip_index_blocks": [
+            [
+              0,
+              5,
+              8,
+              20,
+              23,
+              28
+            ],
+            [
+              1,
+              4,
+              9,
+              15,
+              18,
+              21,
+              26,
+              29
+            ],
+            [
+              2,
+              7,
+              10,
+              12,
+              13,
+              14,
+              19,
+              24,
+              27
+            ],
+            [
+              3,
+              6,
+              11,
+              16,
+              17,
+              22,
+              25,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 10,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 5,
+          "moving_multiplier": 1.1,
+          "recovery_min": 10,
+          "trip_index_blocks": [
+            [
+              0,
+              6,
+              12,
+              15,
+              19,
+              23,
+              27
+            ],
+            [
+              1,
+              5,
+              9,
+              14,
+              20,
+              26
+            ],
+            [
+              2,
+              8,
+              22,
+              28
+            ],
+            [
+              3,
+              7,
+              11,
+              17,
+              21,
+              25,
+              29
+            ],
+            [
+              4,
+              10,
+              13,
+              16,
+              18,
+              24,
+              30
+            ]
+          ]
+        },
+        {
+          "allowance_per_wing_trip_min": 15,
+          "dwell_min": 1.0,
+          "minimum_vehicle_count_conditional": 6,
+          "moving_multiplier": 1.1,
+          "recovery_min": 15,
+          "trip_index_blocks": [
+            [
+              0,
+              7,
+              21,
+              28
+            ],
+            [
+              1,
+              6,
+              22,
+              27
+            ],
+            [
+              2,
+              9,
+              13,
+              15,
+              18,
+              23,
+              30
+            ],
+            [
+              3,
+              8,
+              20,
+              25
+            ],
+            [
+              4,
+              11,
+              16,
+              17,
+              24,
+              29
+            ],
+            [
+              5,
+              10,
+              12,
+              14,
+              19,
+              26
+            ]
+          ]
+        }
+      ],
+      "timing": {
+        "extra_nominal_running_and_dwell_min": {
+          "east_A": 0.5,
+          "west_B": 1.0
+        },
+        "extra_stress_running_and_dwell_min": {
+          "east_A": 1.0,
+          "west_B": 2.0
+        },
+        "failed_rail_targets": [],
+        "failure_counts": {},
+        "fixed_31_timetable_pass": true,
+        "new_site_nominal_rides": [
+          {
+            "from_fs_alighting_occurrence_id": "west_B:62:PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44",
+            "from_fs_min": 2.3168497132779193,
+            "pattern": "west_B",
+            "site_id": "PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44",
+            "to_fs_boarding_occurrence_id": "west_B:750:PROXY::RT031_ADDITIONAL::n:531392.69:5063340.44",
+            "to_fs_min": 2.1765259561931884
+          },
+          {
+            "from_fs_alighting_occurrence_id": "east_A:446:PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+            "from_fs_min": 21.918591124092735,
+            "pattern": "east_A",
+            "site_id": "PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+            "to_fs_boarding_occurrence_id": "east_A:446:PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+            "to_fs_min": 17.740782934863496
+          }
+        ],
+        "nominal_vehicle_count": 4,
+        "per_site_rail_check_count": 319,
+        "physical_boarding_certified": false,
+        "retiming_attempted": false,
+        "smallest_AM_residual_min_after_3min_transfer": 0.8406259410437684
+      }
+    }
+  ],
+  "road_and_walk_source_sha256": {
+    "attachments": "30d64ff20e9b89c31f7878c415dd4c6bb5a0d10f51b24d041e4deb4d57e6571b",
+    "edges": "eb7b3a85b07c6f399b657d18121fec8160252372606c55e6fe4e6c975c35ef31",
+    "matrix": "a47bbce413d056db185180173ab2f05dce0463cb626a2c81f4aff64de91b50c1",
+    "nodes": "1814a55909b66ff25a6d91502f40e2e037f2e46eef3edf4d4d9e9f5fae1d8dde",
+    "pedestrian_osm": "896f192bbb481f0c07cdc5d695424bf29de85f89ac33ea72986a06e521b424cd",
+    "rules": "954865ad8972bd20d819e3eb6c4d548102609a4de07b7006ac7e42a61e14ed3a"
+  },
+  "scope": "Illustrative points only. Replay against pinned base loops; no new service selection or physical approval.",
+  "selected_stop_additions": [],
+  "source_sha256_normalized_newlines": {
+    "authority31": "5470da59eb3d8213d21bc78f1ab9ed7449d11a7154c62062207fd7ad43030a7e",
+    "counterflow": "17186e1e666c99c2830303048e4a242f523267ac4942c16c572085de780a734f",
+    "geometry_confirmation": "aa6983fc75888db909391673f7aa4e03db0cccb4107e1a994b8ed731818aac46",
+    "timetable": "9bc4a396004cd831f7c6cf2da192c02c264bf92d707fde96ac175e5a9e2897a5"
+  }
+}

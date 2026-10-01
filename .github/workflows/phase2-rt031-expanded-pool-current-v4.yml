@@ -1,0 +1,60 @@
+name: RT031 expanded pool versus current V4
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - src/phase2_rt031_movement_portfolios_v3.py
+      - src/phase2_rt031_current_baseline_comparison_v3.py
+      - scripts/phase2_screen_rt031_expanded_pool_against_current_v4.py
+      - scripts/phase2_compare_rt031_with_current_baseline_v4.py
+      - tests/test_phase2_rt031_movement_portfolios_v3.py
+      - tests/test_phase2_rt031_current_baseline_comparison_v3.py
+      - .github/workflows/phase2-rt031-expanded-pool-current-v4.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  expanded-pool-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      PYTHONPATH: .:src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install numpy pandas pytest
+      - run: >-
+          python -m pytest tests/test_phase2_rt031_movement_portfolios_v3.py
+          tests/test_phase2_rt031_current_baseline_comparison_v3.py -q
+      - name: Acquire pinned enlarged pool and RT028 substrate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/expanded /tmp/walk
+          gh api repos/${{ github.repository }}/actions/artifacts/10354879891/zip > /tmp/expanded.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/9991182904/zip > /tmp/walk.zip
+          echo '53b400b11a6db457037a531d612d3abf99147d7a3162573d11149f432131bd87  /tmp/expanded.zip' | sha256sum -c
+          echo 'e1ca83699593dd9e605d2870667da1b4dfc6068436a0c3116faf8587901b2e28  /tmp/walk.zip' | sha256sum -c
+          unzip -q /tmp/expanded.zip -d /tmp/expanded
+          unzip -q /tmp/walk.zip -d /tmp/walk
+      - name: Compare complete supplied pair domain twice
+        run: |
+          pool=$(find /tmp/expanded -name physical_walk_search.json | head -1)
+          walk=$(find /tmp/walk -name rt028_population_unit_stop_walk_matrix_v3.csv | head -1)
+          stops=$(find /tmp/walk -name frozen_final_stops.csv | head -1)
+          for out in /tmp/comparison-a /tmp/comparison-b; do
+            python scripts/phase2_screen_rt031_expanded_pool_against_current_v4.py \
+              --pool "$pool" --walk-matrix "$walk" --final-stops "$stops" \
+              --v4-clusters outputs/phase2/current_service_access_baseline_v4/current_service_physical_stop_clusters_v4.csv \
+              --v4-validation outputs/phase2/current_service_access_baseline_v4/current_service_access_baseline_v4_validation.json \
+              --output-dir "$out"
+          done
+          diff -r /tmp/comparison-a /tmp/comparison-b
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-expanded-pool-current-v4-comparison-v3
+          path: /tmp/comparison-a/
+          if-no-files-found: error

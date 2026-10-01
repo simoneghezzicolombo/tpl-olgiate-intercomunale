@@ -1,0 +1,81 @@
+name: RT031 network-connected max-3 exact frontier V3
+
+on:
+  push:
+    branches:
+      - codex/rt031-decision-convergence
+    paths:
+      - 'src/phase2_rt031_network_connected_portfolios_v3.py'
+      - 'src/phase2_rt031_data_guided_portfolios_v3.py'
+      - 'scripts/phase2_compare_rt031_movement_portfolios_v3.py'
+      - 'scripts/phase2_build_rt031_network_connected_frontier_v3.py'
+      - 'scripts/phase2_build_rt031_network_connected_max3_frontier_v3.py'
+      - 'tests/test_phase2_rt031_network_connected_portfolios_v3.py'
+      - 'tests/test_phase2_rt031_network_connected_max3_frontier_v3.py'
+      - '.github/workflows/phase2-rt031-network-connected-max3-frontier-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  PYTHONPATH: .:src
+
+jobs:
+  max3-exact-frontier:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install numpy pandas pytest
+      - run: |
+          python -m pytest \
+            tests/test_phase2_rt031_network_connected_portfolios_v3.py \
+            tests/test_phase2_rt031_network_connected_max3_frontier_v3.py -q
+      - name: Acquire pinned physical pools and walking substrate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/hub /tmp/generic /tmp/walk
+          gh api repos/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/artifacts/10368324023/zip > /tmp/hub.zip
+          gh api repos/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/artifacts/10354879891/zip > /tmp/generic.zip
+          gh api repos/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/artifacts/9991182904/zip > /tmp/walk.zip
+          echo 'dedf6d067af0188dde13c3041c482dd5551e23b9d4551cf757c7a137590dcf6b  /tmp/hub.zip' | sha256sum -c
+          echo '53b400b11a6db457037a531d612d3abf99147d7a3162573d11149f432131bd87  /tmp/generic.zip' | sha256sum -c
+          echo 'e1ca83699593dd9e605d2870667da1b4dfc6068436a0c3116faf8587901b2e28  /tmp/walk.zip' | sha256sum -c
+          unzip -q /tmp/hub.zip -d /tmp/hub
+          unzip -q /tmp/generic.zip -d /tmp/generic
+          unzip -q /tmp/walk.zip -d /tmp/walk
+      - name: Rebuild certified max-2 reference once
+        run: |
+          walk=$(find /tmp/walk -name rt028_population_unit_stop_walk_matrix_v3.csv | head -1)
+          python scripts/phase2_build_rt031_network_connected_frontier_v3.py \
+            --hub-pool /tmp/hub/physical_walk_search.json \
+            --generic-pool /tmp/generic/physical_walk_search.json \
+            --walk-matrix "$walk" \
+            --current-audit outputs/phase2/rt031_current_exact_target_cover_v3/current_exact_target_cover_audit.json \
+            --policy config/phase2_final_policy_contract_v3.json \
+            --output-dir /tmp/max2 --max-movements 2
+      - name: Build exact max-3 frontier twice and compare every byte
+        run: |
+          walk=$(find /tmp/walk -name rt028_population_unit_stop_walk_matrix_v3.csv | head -1)
+          for out in /tmp/max3-a /tmp/max3-b; do
+            python scripts/phase2_build_rt031_network_connected_max3_frontier_v3.py \
+              --hub-pool /tmp/hub/physical_walk_search.json \
+              --generic-pool /tmp/generic/physical_walk_search.json \
+              --walk-matrix "$walk" \
+              --current-audit outputs/phase2/rt031_current_exact_target_cover_v3/current_exact_target_cover_audit.json \
+              --policy config/phase2_final_policy_contract_v3.json \
+              --max2-frontier /tmp/max2/rt031_network_connected_frontier_v3.json \
+              --output-dir "$out" --max-movements 3
+          done
+          diff -r /tmp/max3-a /tmp/max3-b
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rt031-network-connected-max3-exact-frontier-v3
+          path: /tmp/max3-a/
+          if-no-files-found: error

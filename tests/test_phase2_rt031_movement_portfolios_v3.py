@@ -1,6 +1,6 @@
 from decimal import Decimal
 import pytest
-from src.phase2_rt031_movement_portfolios_v3 import enumerate_portfolios
+from src.phase2_rt031_movement_portfolios_v3 import enumerate_availability_envelope, enumerate_portfolios
 
 
 def walk(sid, stops, cost):
@@ -52,6 +52,18 @@ def test_independent_bruteforce_small_pool():
         if cost <= 7:
             expected[tuple(r['stop_set_id'] for r in picked)] = cost
     assert {tuple(r['source_walk_ids']): Decimal(r['distance_m']) for r in result['portfolios']} == expected
+
+
+def test_streamed_envelope_matches_full_enumeration_without_full_table():
+    rows = [walk('a', ['A'], 2), walk('b', ['B'], 3), walk('c', ['A', 'B'], 5),
+            walk('d', ['C'], 9)]
+    full = enumerate_portfolios(rows, distance_budget_m=5)
+    streamed = enumerate_availability_envelope(rows, distance_budget_m=5)
+    assert streamed['availability_summaries'] == full['availability_summaries']
+    assert streamed['considered_by_movement_count'] == full['considered_by_movement_count']
+    assert streamed['feasible_by_movement_count'] == {1: 3, 2: 1}
+    assert streamed['full_portfolio_table_retained'] is False
+    assert streamed['minimum_witness_identity_retained'] is True
 
 
 def test_duplicate_source_and_stop_fail_closed():

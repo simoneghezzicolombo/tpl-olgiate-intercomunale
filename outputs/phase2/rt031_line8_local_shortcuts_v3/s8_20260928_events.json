@@ -1,0 +1,1449 @@
+{
+  "annual_calendar_certified": false,
+  "contract": "RT031_S8_CURRENT_DATED_EVENT_REFRESH_V3",
+  "direction_method": "DOWNSTREAM_ENDPOINT_STOP_SEQUENCE_NOT_TRAIN_NUMBER",
+  "empirical_connection_probability": null,
+  "events": [
+    {
+      "arrival_min": 325.0,
+      "arrival_time": "05:25:00",
+      "departure_min": 326.0,
+      "departure_time": "05:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124817-2026-09-15-2026-10-09",
+      "trip_id": "124817-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24817"
+    },
+    {
+      "arrival_min": 355.0,
+      "arrival_time": "05:55:00",
+      "departure_min": 356.0,
+      "departure_time": "05:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124819-2026-09-15-2026-10-09",
+      "trip_id": "124819-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24819"
+    },
+    {
+      "arrival_min": 362.0,
+      "arrival_time": "06:02:00",
+      "departure_min": 363.0,
+      "departure_time": "06:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124814-2026-09-15-2026-10-09",
+      "trip_id": "124814-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24814"
+    },
+    {
+      "arrival_min": 385.0,
+      "arrival_time": "06:25:00",
+      "departure_min": 386.0,
+      "departure_time": "06:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124821-2026-09-15-2026-10-09",
+      "trip_id": "124821-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24821"
+    },
+    {
+      "arrival_min": 392.0,
+      "arrival_time": "06:32:00",
+      "departure_min": 393.0,
+      "departure_time": "06:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124816-2026-09-15-2026-10-09",
+      "trip_id": "124816-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24816"
+    },
+    {
+      "arrival_min": 415.0,
+      "arrival_time": "06:55:00",
+      "departure_min": 416.0,
+      "departure_time": "06:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124823-2026-09-15-2026-10-09",
+      "trip_id": "124823-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24823"
+    },
+    {
+      "arrival_min": 422.0,
+      "arrival_time": "07:02:00",
+      "departure_min": 423.0,
+      "departure_time": "07:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124818-2026-09-15-2026-10-09",
+      "trip_id": "124818-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24818"
+    },
+    {
+      "arrival_min": 445.0,
+      "arrival_time": "07:25:00",
+      "departure_min": 446.0,
+      "departure_time": "07:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124825-2026-09-15-2026-10-09",
+      "trip_id": "124825-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24825"
+    },
+    {
+      "arrival_min": 452.0,
+      "arrival_time": "07:32:00",
+      "departure_min": 453.0,
+      "departure_time": "07:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124820-2026-09-15-2026-10-09",
+      "trip_id": "124820-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24820"
+    },
+    {
+      "arrival_min": 475.0,
+      "arrival_time": "07:55:00",
+      "departure_min": 476.0,
+      "departure_time": "07:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124827-2026-09-15-2026-10-09",
+      "trip_id": "124827-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24827"
+    },
+    {
+      "arrival_min": 482.0,
+      "arrival_time": "08:02:00",
+      "departure_min": 483.0,
+      "departure_time": "08:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124822-2026-09-15-2026-10-09",
+      "trip_id": "124822-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24822"
+    },
+    {
+      "arrival_min": 505.0,
+      "arrival_time": "08:25:00",
+      "departure_min": 506.0,
+      "departure_time": "08:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124829-2026-09-15-2026-10-09",
+      "trip_id": "124829-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24829"
+    },
+    {
+      "arrival_min": 512.0,
+      "arrival_time": "08:32:00",
+      "departure_min": 513.0,
+      "departure_time": "08:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124824-2026-09-15-2026-10-09",
+      "trip_id": "124824-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24824"
+    },
+    {
+      "arrival_min": 535.0,
+      "arrival_time": "08:55:00",
+      "departure_min": 536.0,
+      "departure_time": "08:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124831-2026-09-15-2026-10-09",
+      "trip_id": "124831-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24831"
+    },
+    {
+      "arrival_min": 542.0,
+      "arrival_time": "09:02:00",
+      "departure_min": 543.0,
+      "departure_time": "09:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124826-2026-09-15-2026-10-09",
+      "trip_id": "124826-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24826"
+    },
+    {
+      "arrival_min": 565.0,
+      "arrival_time": "09:25:00",
+      "departure_min": 566.0,
+      "departure_time": "09:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124833-2026-09-15-2026-10-09",
+      "trip_id": "124833-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24833"
+    },
+    {
+      "arrival_min": 572.0,
+      "arrival_time": "09:32:00",
+      "departure_min": 573.0,
+      "departure_time": "09:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124828-2026-09-15-2026-10-09",
+      "trip_id": "124828-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24828"
+    },
+    {
+      "arrival_min": 595.0,
+      "arrival_time": "09:55:00",
+      "departure_min": 596.0,
+      "departure_time": "09:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124835-2026-09-15-2026-10-09",
+      "trip_id": "124835-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24835"
+    },
+    {
+      "arrival_min": 602.0,
+      "arrival_time": "10:02:00",
+      "departure_min": 603.0,
+      "departure_time": "10:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124830-2026-09-15-2026-10-09",
+      "trip_id": "124830-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24830"
+    },
+    {
+      "arrival_min": 625.0,
+      "arrival_time": "10:25:00",
+      "departure_min": 626.0,
+      "departure_time": "10:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124837-2026-09-15-2026-10-09",
+      "trip_id": "124837-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24837"
+    },
+    {
+      "arrival_min": 632.0,
+      "arrival_time": "10:32:00",
+      "departure_min": 633.0,
+      "departure_time": "10:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124832-2026-09-15-2026-10-09",
+      "trip_id": "124832-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24832"
+    },
+    {
+      "arrival_min": 655.0,
+      "arrival_time": "10:55:00",
+      "departure_min": 656.0,
+      "departure_time": "10:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124839-2026-09-15-2026-10-09",
+      "trip_id": "124839-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24839"
+    },
+    {
+      "arrival_min": 662.0,
+      "arrival_time": "11:02:00",
+      "departure_min": 663.0,
+      "departure_time": "11:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124834-2026-09-15-2026-10-09",
+      "trip_id": "124834-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24834"
+    },
+    {
+      "arrival_min": 685.0,
+      "arrival_time": "11:25:00",
+      "departure_min": 686.0,
+      "departure_time": "11:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124841-2026-09-15-2026-10-09",
+      "trip_id": "124841-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24841"
+    },
+    {
+      "arrival_min": 692.0,
+      "arrival_time": "11:32:00",
+      "departure_min": 693.0,
+      "departure_time": "11:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124836-2026-09-15-2026-10-09",
+      "trip_id": "124836-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24836"
+    },
+    {
+      "arrival_min": 715.0,
+      "arrival_time": "11:55:00",
+      "departure_min": 716.0,
+      "departure_time": "11:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124843-2026-09-15-2026-10-09",
+      "trip_id": "124843-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24843"
+    },
+    {
+      "arrival_min": 722.0,
+      "arrival_time": "12:02:00",
+      "departure_min": 723.0,
+      "departure_time": "12:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124838-2026-09-15-2026-10-09",
+      "trip_id": "124838-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24838"
+    },
+    {
+      "arrival_min": 745.0,
+      "arrival_time": "12:25:00",
+      "departure_min": 746.0,
+      "departure_time": "12:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124845-2026-09-15-2026-10-09",
+      "trip_id": "124845-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24845"
+    },
+    {
+      "arrival_min": 752.0,
+      "arrival_time": "12:32:00",
+      "departure_min": 753.0,
+      "departure_time": "12:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124840-2026-09-15-2026-10-09",
+      "trip_id": "124840-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24840"
+    },
+    {
+      "arrival_min": 775.0,
+      "arrival_time": "12:55:00",
+      "departure_min": 776.0,
+      "departure_time": "12:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124847-2026-09-15-2026-10-09",
+      "trip_id": "124847-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24847"
+    },
+    {
+      "arrival_min": 782.0,
+      "arrival_time": "13:02:00",
+      "departure_min": 783.0,
+      "departure_time": "13:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124842-2026-09-15-2026-10-09",
+      "trip_id": "124842-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24842"
+    },
+    {
+      "arrival_min": 805.0,
+      "arrival_time": "13:25:00",
+      "departure_min": 806.0,
+      "departure_time": "13:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124849-2026-09-15-2026-10-09",
+      "trip_id": "124849-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24849"
+    },
+    {
+      "arrival_min": 812.0,
+      "arrival_time": "13:32:00",
+      "departure_min": 813.0,
+      "departure_time": "13:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124844-2026-09-15-2026-10-09",
+      "trip_id": "124844-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24844"
+    },
+    {
+      "arrival_min": 835.0,
+      "arrival_time": "13:55:00",
+      "departure_min": 836.0,
+      "departure_time": "13:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124851-2026-09-15-2026-10-09",
+      "trip_id": "124851-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24851"
+    },
+    {
+      "arrival_min": 842.0,
+      "arrival_time": "14:02:00",
+      "departure_min": 843.0,
+      "departure_time": "14:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124846-2026-09-15-2026-10-09",
+      "trip_id": "124846-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24846"
+    },
+    {
+      "arrival_min": 865.0,
+      "arrival_time": "14:25:00",
+      "departure_min": 866.0,
+      "departure_time": "14:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124853-2026-09-15-2026-10-09",
+      "trip_id": "124853-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24853"
+    },
+    {
+      "arrival_min": 872.0,
+      "arrival_time": "14:32:00",
+      "departure_min": 873.0,
+      "departure_time": "14:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124848-2026-09-15-2026-10-09",
+      "trip_id": "124848-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24848"
+    },
+    {
+      "arrival_min": 895.0,
+      "arrival_time": "14:55:00",
+      "departure_min": 896.0,
+      "departure_time": "14:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124855-2026-09-15-2026-10-09",
+      "trip_id": "124855-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24855"
+    },
+    {
+      "arrival_min": 902.0,
+      "arrival_time": "15:02:00",
+      "departure_min": 903.0,
+      "departure_time": "15:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124850-2026-09-15-2026-10-09",
+      "trip_id": "124850-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24850"
+    },
+    {
+      "arrival_min": 925.0,
+      "arrival_time": "15:25:00",
+      "departure_min": 926.0,
+      "departure_time": "15:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124857-2026-09-15-2026-10-09",
+      "trip_id": "124857-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24857"
+    },
+    {
+      "arrival_min": 932.0,
+      "arrival_time": "15:32:00",
+      "departure_min": 933.0,
+      "departure_time": "15:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124852-2026-09-15-2026-10-09",
+      "trip_id": "124852-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24852"
+    },
+    {
+      "arrival_min": 955.0,
+      "arrival_time": "15:55:00",
+      "departure_min": 956.0,
+      "departure_time": "15:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124859-2026-09-15-2026-10-09",
+      "trip_id": "124859-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24859"
+    },
+    {
+      "arrival_min": 962.0,
+      "arrival_time": "16:02:00",
+      "departure_min": 963.0,
+      "departure_time": "16:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124854-2026-09-15-2026-10-09",
+      "trip_id": "124854-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24854"
+    },
+    {
+      "arrival_min": 985.0,
+      "arrival_time": "16:25:00",
+      "departure_min": 986.0,
+      "departure_time": "16:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124861-2026-09-15-2026-10-09",
+      "trip_id": "124861-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24861"
+    },
+    {
+      "arrival_min": 992.0,
+      "arrival_time": "16:32:00",
+      "departure_min": 993.0,
+      "departure_time": "16:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124856-2026-09-15-2026-10-09",
+      "trip_id": "124856-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24856"
+    },
+    {
+      "arrival_min": 1015.0,
+      "arrival_time": "16:55:00",
+      "departure_min": 1016.0,
+      "departure_time": "16:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124863-2026-09-15-2026-10-09",
+      "trip_id": "124863-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24863"
+    },
+    {
+      "arrival_min": 1022.0,
+      "arrival_time": "17:02:00",
+      "departure_min": 1023.0,
+      "departure_time": "17:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124858-2026-09-15-2026-10-09",
+      "trip_id": "124858-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24858"
+    },
+    {
+      "arrival_min": 1045.0,
+      "arrival_time": "17:25:00",
+      "departure_min": 1046.0,
+      "departure_time": "17:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124865-2026-09-15-2026-10-09",
+      "trip_id": "124865-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24865"
+    },
+    {
+      "arrival_min": 1052.0,
+      "arrival_time": "17:32:00",
+      "departure_min": 1053.0,
+      "departure_time": "17:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124860-2026-09-15-2026-10-09",
+      "trip_id": "124860-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24860"
+    },
+    {
+      "arrival_min": 1075.0,
+      "arrival_time": "17:55:00",
+      "departure_min": 1076.0,
+      "departure_time": "17:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124867-2026-09-15-2026-10-09",
+      "trip_id": "124867-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24867"
+    },
+    {
+      "arrival_min": 1082.0,
+      "arrival_time": "18:02:00",
+      "departure_min": 1083.0,
+      "departure_time": "18:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124862-2026-09-15-2026-10-09",
+      "trip_id": "124862-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24862"
+    },
+    {
+      "arrival_min": 1105.0,
+      "arrival_time": "18:25:00",
+      "departure_min": 1106.0,
+      "departure_time": "18:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124869-2026-09-15-2026-10-09",
+      "trip_id": "124869-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24869"
+    },
+    {
+      "arrival_min": 1112.0,
+      "arrival_time": "18:32:00",
+      "departure_min": 1113.0,
+      "departure_time": "18:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124864-2026-09-15-2026-10-09",
+      "trip_id": "124864-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24864"
+    },
+    {
+      "arrival_min": 1135.0,
+      "arrival_time": "18:55:00",
+      "departure_min": 1136.0,
+      "departure_time": "18:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124871-2026-09-15-2026-10-09",
+      "trip_id": "124871-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24871"
+    },
+    {
+      "arrival_min": 1142.0,
+      "arrival_time": "19:02:00",
+      "departure_min": 1143.0,
+      "departure_time": "19:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124866-2026-09-15-2026-10-09",
+      "trip_id": "124866-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24866"
+    },
+    {
+      "arrival_min": 1165.0,
+      "arrival_time": "19:25:00",
+      "departure_min": 1166.0,
+      "departure_time": "19:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124873-2026-09-15-2026-10-09",
+      "trip_id": "124873-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24873"
+    },
+    {
+      "arrival_min": 1172.0,
+      "arrival_time": "19:32:00",
+      "departure_min": 1173.0,
+      "departure_time": "19:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124868-2026-09-15-2026-10-09",
+      "trip_id": "124868-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24868"
+    },
+    {
+      "arrival_min": 1195.0,
+      "arrival_time": "19:55:00",
+      "departure_min": 1196.0,
+      "departure_time": "19:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124875-2026-09-15-2026-10-09",
+      "trip_id": "124875-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24875"
+    },
+    {
+      "arrival_min": 1202.0,
+      "arrival_time": "20:02:00",
+      "departure_min": 1203.0,
+      "departure_time": "20:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124870-2026-09-15-2026-10-09",
+      "trip_id": "124870-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24870"
+    },
+    {
+      "arrival_min": 1225.0,
+      "arrival_time": "20:25:00",
+      "departure_min": 1226.0,
+      "departure_time": "20:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124877-2026-09-15-2026-10-09",
+      "trip_id": "124877-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24877"
+    },
+    {
+      "arrival_min": 1232.0,
+      "arrival_time": "20:32:00",
+      "departure_min": 1233.0,
+      "departure_time": "20:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124872-2026-09-15-2026-10-09",
+      "trip_id": "124872-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24872"
+    },
+    {
+      "arrival_min": 1255.0,
+      "arrival_time": "20:55:00",
+      "departure_min": 1256.0,
+      "departure_time": "20:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124879-2026-09-15-2026-10-09",
+      "trip_id": "124879-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24879"
+    },
+    {
+      "arrival_min": 1262.0,
+      "arrival_time": "21:02:00",
+      "departure_min": 1263.0,
+      "departure_time": "21:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124874-2026-09-15-2026-10-09",
+      "trip_id": "124874-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24874"
+    },
+    {
+      "arrival_min": 1285.0,
+      "arrival_time": "21:25:00",
+      "departure_min": 1286.0,
+      "departure_time": "21:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124881-2026-09-15-2026-10-09",
+      "trip_id": "124881-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24881"
+    },
+    {
+      "arrival_min": 1292.0,
+      "arrival_time": "21:32:00",
+      "departure_min": 1293.0,
+      "departure_time": "21:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124876-2026-09-15-2026-10-09",
+      "trip_id": "124876-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24876"
+    },
+    {
+      "arrival_min": 1315.0,
+      "arrival_time": "21:55:00",
+      "departure_min": 1316.0,
+      "departure_time": "21:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124883-2026-09-15-2026-10-09",
+      "trip_id": "124883-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24883"
+    },
+    {
+      "arrival_min": 1322.0,
+      "arrival_time": "22:02:00",
+      "departure_min": 1323.0,
+      "departure_time": "22:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124878-2026-09-15-2026-10-09",
+      "trip_id": "124878-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24878"
+    },
+    {
+      "arrival_min": 1345.0,
+      "arrival_time": "22:25:00",
+      "departure_min": 1346.0,
+      "departure_time": "22:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124885-2026-09-15-2026-10-09",
+      "trip_id": "124885-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24885"
+    },
+    {
+      "arrival_min": 1352.0,
+      "arrival_time": "22:32:00",
+      "departure_min": 1353.0,
+      "departure_time": "22:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124880-2026-09-15-2026-10-09",
+      "trip_id": "124880-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24880"
+    },
+    {
+      "arrival_min": 1375.0,
+      "arrival_time": "22:55:00",
+      "departure_min": 1376.0,
+      "departure_time": "22:56:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124887-2026-09-15-2026-10-09",
+      "trip_id": "124887-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24887"
+    },
+    {
+      "arrival_min": 1382.0,
+      "arrival_time": "23:02:00",
+      "departure_min": 1383.0,
+      "departure_time": "23:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124882-2026-09-15-2026-10-09",
+      "trip_id": "124882-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24882"
+    },
+    {
+      "arrival_min": 1405.0,
+      "arrival_time": "23:25:00",
+      "departure_min": 1406.0,
+      "departure_time": "23:26:00",
+      "direction": "MILANO",
+      "downstream_stop_ids": [
+        "S01513",
+        "S01512",
+        "S01511",
+        "S01510",
+        "S01322",
+        "S01325",
+        "S01326",
+        "S01645"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124889-2026-09-15-2026-10-09",
+      "trip_id": "124889-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24889"
+    },
+    {
+      "arrival_min": 1412.0,
+      "arrival_time": "23:32:00",
+      "departure_min": 1413.0,
+      "departure_time": "23:33:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124884-2026-09-15-2026-10-09",
+      "trip_id": "124884-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24884"
+    },
+    {
+      "arrival_min": 1442.0,
+      "arrival_time": "24:02:00",
+      "departure_min": 1443.0,
+      "departure_time": "24:03:00",
+      "direction": "LECCO",
+      "downstream_stop_ids": [
+        "S01515",
+        "S01524",
+        "S01522",
+        "S01520"
+      ],
+      "service_date": "2026-09-28",
+      "service_id": "124886-2026-09-15-2026-10-09",
+      "trip_id": "124886-2026-09-15-2026-10-09",
+      "trip_short_name": "S8 - 24886"
+    }
+  ],
+  "official_gtfs_sha256": "b4296f145b42ccb35c26085470ff4b3fd5dffe533251c0aab312312a73820ad6",
+  "retrieved_on": "2026-09-27",
+  "reuses_legacy_trip_ids": false,
+  "same_station_clock_signature_as_20260903": true,
+  "semantics": "Dated scheduled events from officially downloaded GTFS. Calendar dates applied and directions inferred from downstream endpoints. Same zip may contain several validity periods: archive age is not trip expiry. No actual on-time probability, live cancellation check, annual calendar adoption or future-year applicability.",
+  "service_date": "2026-09-28",
+  "source_url": "https://dati.lombardia.it/download/3z4k-mxz9/application%2Fzip",
+  "station_stop_id": "S01514",
+  "weekday_checks": [
+    {
+      "event_count": 74,
+      "same_station_clock_signature_as_reference_day": true,
+      "service_date": "2026-09-28"
+    },
+    {
+      "event_count": 74,
+      "same_station_clock_signature_as_reference_day": true,
+      "service_date": "2026-09-29"
+    },
+    {
+      "event_count": 74,
+      "same_station_clock_signature_as_reference_day": true,
+      "service_date": "2026-09-30"
+    },
+    {
+      "event_count": 74,
+      "same_station_clock_signature_as_reference_day": true,
+      "service_date": "2026-10-01"
+    },
+    {
+      "event_count": 74,
+      "same_station_clock_signature_as_reference_day": true,
+      "service_date": "2026-10-02"
+    }
+  ]
+}

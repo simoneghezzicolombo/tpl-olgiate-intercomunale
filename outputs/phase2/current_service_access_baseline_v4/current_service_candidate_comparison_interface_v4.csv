@@ -1,0 +1,22 @@
+scope,metric,CURRENT_D184_D185_V4,PRIMARY,RUNNER_UP,selection_status
+GLOBAL,coverage_5m_share,0.401865445353887,,,NOT_SELECTED
+GLOBAL,coverage_8m_share,0.608886829528026,,,NOT_SELECTED
+GLOBAL,coverage_10m_share,0.687306074917515,,,NOT_SELECTED
+Brivio,coverage_5m_share,0.620678994586857,,,NOT_SELECTED
+Brivio,coverage_8m_share,0.900864204650122,,,NOT_SELECTED
+Brivio,coverage_10m_share,0.951953085043640,,,NOT_SELECTED
+Calco,coverage_5m_share,0.267561121120095,,,NOT_SELECTED
+Calco,coverage_8m_share,0.496327242120031,,,NOT_SELECTED
+Calco,coverage_10m_share,0.524594894759812,,,NOT_SELECTED
+La Valletta Brianza,coverage_5m_share,0.438261684846087,,,NOT_SELECTED
+La Valletta Brianza,coverage_8m_share,0.564824503948261,,,NOT_SELECTED
+La Valletta Brianza,coverage_10m_share,0.639647436800180,,,NOT_SELECTED
+Olgiate Molgora,coverage_5m_share,0.207753490908726,,,NOT_SELECTED
+Olgiate Molgora,coverage_8m_share,0.438135723357085,,,NOT_SELECTED
+Olgiate Molgora,coverage_10m_share,0.598904278066521,,,NOT_SELECTED
+Santa Maria Hoè,coverage_5m_share,0.806623399322066,,,NOT_SELECTED
+Santa Maria Hoè,coverage_8m_share,0.915244392388249,,,NOT_SELECTED
+Santa Maria Hoè,coverage_10m_share,0.940003803963088,,,NOT_SELECTED
+GLOBAL,worst_municipality_5m_share,0.207753490908726,,,NOT_SELECTED
+GLOBAL,worst_municipality_8m_share,0.438135723357085,,,NOT_SELECTED
+GLOBAL,worst_municipality_10m_share,0.524594894759812,,,NOT_SELECTED

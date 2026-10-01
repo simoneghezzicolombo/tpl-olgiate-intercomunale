@@ -1,0 +1,39 @@
+name: RT031 Linea 8 conditional service envelope V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - scripts/phase2_screen_rt031_line8_service_envelope_v3.py
+      - outputs/phase2/rt031_line8_service_envelope_v3/envelope.json
+      - outputs/phase2/rt031_current_stop_repair_v3/road_options.json
+      - config/phase2_final_policy_contract_v3.json
+      - .github/workflows/phase2-rt031-line8-service-envelope-v3.yml
+  pull_request:
+    paths:
+      - scripts/phase2_screen_rt031_line8_service_envelope_v3.py
+      - outputs/phase2/rt031_line8_service_envelope_v3/envelope.json
+      - outputs/phase2/rt031_current_stop_repair_v3/road_options.json
+      - config/phase2_final_policy_contract_v3.json
+      - .github/workflows/phase2-rt031-line8-service-envelope-v3.yml
+permissions:
+  contents: read
+jobs:
+  arithmetic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Reproduce envelope twice
+        run: |
+          set -euo pipefail
+          for replica in a b; do
+            python -m scripts.phase2_screen_rt031_line8_service_envelope_v3 \
+              --policy config/phase2_final_policy_contract_v3.json \
+              --repair outputs/phase2/rt031_current_stop_repair_v3/road_options.json \
+              --output "/tmp/rt031-envelope-$replica.json"
+          done
+          cmp /tmp/rt031-envelope-a.json /tmp/rt031-envelope-b.json
+          cmp /tmp/rt031-envelope-a.json outputs/phase2/rt031_line8_service_envelope_v3/envelope.json
