@@ -1,5 +1,7 @@
 # Linea 8 — chiusura del confronto sui piccoli tagli
 
+Consegna consolidata: [scheda unica condizionata con i 27 siti, orario completo e prime/ultime opportunità per sito](RT031_LINEA8_SCHEDA_UNICA_CONDIZIONATA_V3.md). Non sostituisce l'autorità vigente a 16 giri e non seleziona una rete.
+
 ## Risultato, non selezione
 
 Il confronto è stato completato: **326 configurazioni**, tutte le omissioni di zero, una o due delle 25 identità di inventario ammesse al test. Restano protetti FS, le due occorrenze di Olgiate sud, le due di San Zeno/Via Cantù e l'aggiunta Arlate N1212. Ogni corsa mantiene entrambe le ali e lo stesso ordine delle fermate rimaste. Non vengono inventati vincoli territoriali, soglie accettabili di perdita o pesi di utilità.
