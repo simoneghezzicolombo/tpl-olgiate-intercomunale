@@ -1,5 +1,7 @@
 # Linea 8: quadro ferroviario verificato e lavoro residuo sull'orario
 
+**Aggiornamento successivo:** disponibile [una proposta verificata a 16 giri](RT031_LINEA8_PROPOSTA_ORARIO_16_GIRI_V3.md), 112.834 km/anno nel confronto a 260 giorni, con transizione della morbida fino alle 16:20 da confermare dal chiamante. Il confronto da 17 giri sotto resta una diagnosi storica, non l'orario della nuova scheda.
+
 ## Questione territoriale chiusa per il progetto
 
 Il chiamante ha accettato **Calco Centro – Municipio in Via Italia**, al punto `45.7250958, 9.4180371`: si mantiene Santa Maria Hoè e si omette Via Como/Alpino. Una sola nuova fermata Calco, non dieci alternative simultanee. Inserita una sola occorrenza esplicita nel percorso est, tra gli archi effettivi del grafo.

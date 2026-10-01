@@ -1,0 +1,77 @@
+{
+  "all_rail_calls_audited_count": 74,
+  "all_rail_connections_guaranteed": false,
+  "anchor_policy": "flexible_real_trains",
+  "calendar_adopted": false,
+  "candidate_mid_offsets_min": [
+    50,
+    55
+  ],
+  "complete_path_distance_m": 27123.507880067442,
+  "contract": "RT031_CURRENT_FIXED_DESIGN_16_TRIP_CLOSURE_DIAGNOSTIC_V3",
+  "core_headway_cap_min": 120,
+  "decision_budget_km": null,
+  "demand_weighted_gjt_improvement_min": null,
+  "departure_step_min": 5,
+  "detailed_timetable_adopted": false,
+  "distinct_design_site_count": 27,
+  "first_wing": "east_A",
+  "five_minute_grid": true,
+  "full_trip_count": 16,
+  "grid_infeasibility_not_continuous_time_proof": true,
+  "infeasibility_proven": true,
+  "inherited_am_residual_wait_ceiling_min": 27.81542053670794,
+  "inherited_nine_engineering_cases_not_empirical_uncertainty": true,
+  "inherited_pm_train_to_bus_window_min": [
+    3,
+    8
+  ],
+  "inherited_ready_windows_min": [
+    [
+      410,
+      600,
+      60
+    ],
+    [
+      600,
+      960,
+      120
+    ],
+    [
+      960,
+      1180,
+      60
+    ]
+  ],
+  "inherited_transfer_walk_assumption_min": 3,
+  "intermediate_holding_minimized": false,
+  "legacy_binding_scope": "Five consecutive actual MILANO departures AM and five consecutive arrivals from MILANO PM per wing. Historical diagnostic policy, NOT proof of all-direction guarantees or caller adoption of these exact banks.",
+  "missed_connection_probability": null,
+  "network_selected": false,
+  "primary_selection_authorised": false,
+  "public_route_name": "Linea 8",
+  "public_wing_sequence": [
+    "east_A",
+    "west_B"
+  ],
+  "ready_start_min": 410,
+  "ready_windows_are_comparison_not_new_caller_authority": true,
+  "required_full_trip_count": 16,
+  "required_train_bank_start_not_adopted": null,
+  "runner_up_selection_authorised": false,
+  "second_wing": "west_B",
+  "service_date": "2026-10-01",
+  "shifted_rail_targets": false,
+  "shoulder_headway_cap_min": 60,
+  "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+  "solver_status": 2,
+  "source_sha256": {
+    "config\\rt031_16_full_trips_authority_v3.json": "5d5615c8cf1470995ff5f6e6bb2fbe5ec8c15b586247a923860764edbe36aec3",
+    "outputs\\phase2\\rt031_line8_local_shortcuts_v3\\all_station_rail_20261001.json": "570016e59da17f6367b384650d64556fa1b627243b06188933ec567664fb01d8",
+    "outputs\\phase2\\rt031_line8_local_shortcuts_v3\\calco_centre_adopted_design.json": "d17bf0cd45d6fdd48f2bc0854ff09a7360d8e31a2b63e8001a985f1a55ea0648"
+  },
+  "target_substitutions_not_adopted": [],
+  "uncertainty_band_min": null,
+  "vehicle_cap_conditional_not_adopted": null,
+  "witness_found": false
+}

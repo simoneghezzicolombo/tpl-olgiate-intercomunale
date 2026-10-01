@@ -10,6 +10,10 @@ import heapq
 import json
 import math
 from collections import defaultdict
+from pathlib import Path
+import sys
+
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
 
 import numpy as np
 from scipy.optimize import Bounds, LinearConstraint, milp
@@ -69,10 +73,28 @@ def original_target_compatibility(p, offsets, selected_times):
         (compatible if eligible else missing).append(item)
     reused = [(a['wing'], a['kind'], t)
               for a in compatible for t in a['eligible_wing_fs_departures_min']]
-    if len(reused) != len(set(reused)):
-        raise ValueError('one wing event reused for distinct original target trains')
+    # Eligibility is not an assignment. Wider diagnostic wait windows may
+    # make one event eligible for several trains. Report that overlap and
+    # compute a distinct-event matching; never count it as simultaneous proof.
+    matched={}
+    def augment(index,seen):
+        a=compatible[index]
+        for t in a['eligible_wing_fs_departures_min']:
+            event=(a['wing'],a['kind'],t)
+            if event in seen: continue
+            seen.add(event)
+            if event not in matched or augment(matched[event],seen):
+                matched[event]=index
+                return True
+        return False
+    for index in range(len(compatible)):
+        augment(index,set())
     return {'compatible_count': len(compatible), 'compatible': compatible,
-            'missing': missing}
+            'missing': missing,
+            'eligibility_overlaps_present':len(reused)!=len(set(reused)),
+            'distinct_event_matching_count':len(matched),
+            'all_potentially_compatible_targets_have_distinct_events':len(matched)==len(compatible),
+            'compatible_count_semantics':'Individual eligible targets, not a simultaneous assignment count'}
 
 
 def ordered_stop_ledger(loops, first, selected):
@@ -107,9 +129,14 @@ def ordered_stop_ledger(loops, first, selected):
 
 def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
           full_trip_count=16, minimize_hold=False, anchor_policy='fixed_22',
-          required_train_bank_start=None, vehicle_cap=None, minimize_max_hold=False):
+          required_train_bank_start=None, vehicle_cap=None, minimize_max_hold=False,
+          departure_step_min=5, pm_transfer_ceiling_min=8, ready_windows_override=None):
     """One fixed complete-path orientation; only intermediate FS hold varies."""
     second = next(k for k in loops if k != first)
+    if departure_step_min not in (1,5):
+        raise ValueError('unsupported departure grid')
+    if not math.isfinite(pm_transfer_ceiling_min) or pm_transfer_ceiling_min<3:
+        raise ValueError('invalid comparison PM transfer ceiling')
     if anchor_policy not in ('fixed_22', 'h30_unbound', 'max_supported',
                              'flexible_real_trains'):
         raise ValueError('unknown rail-anchor policy')
@@ -133,14 +160,14 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
     if a['full_commercial_trips_per_day_adopted'] != 16:
         raise ValueError('wrong caller trip count')
     offsets = wing_offsets(loops)
-    min_mid = 5 * math.ceil((offsets[1.1, 1.][first]['road_minutes']+1)/5)
-    mid_offsets = list(range(min_mid, min_mid+31, 5))
+    min_mid = departure_step_min * math.ceil((offsets[1.1, 1.][first]['road_minutes']+1)/departure_step_min)
+    mid_offsets = list(range(min_mid, min_mid+31, departure_step_min))
     if max_mid is not None:
         mid_offsets = [m for m in mid_offsets if m <= max_mid]
     if not mid_offsets:
         raise ValueError('no stress-feasible intermediate FS hold')
-    first_times = list(range(300, 1181, 5))
-    second_times = list(range(300+min_mid, 1181+mid_offsets[-1], 5))
+    first_times = list(range(300, 1181, departure_step_min))
+    second_times = list(range(300+min_mid, 1181+mid_offsets[-1], departure_step_min))
     times = {first: first_times, second: second_times}
     ix = {(first, t): i for i, t in enumerate(first_times)}
     ix.update({(second, t): len(first_times)+i for i, t in enumerate(second_times)})
@@ -175,7 +202,7 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
                 waits = [minute-t-g[wing]['road_minutes']-3 for g in offsets.values()]
                 valid = min(waits) >= -1e-8 and max(waits) <= p['wait_ceiling']+1e-8
             else:
-                valid = 3 <= t-minute <= 8
+                valid = 3 <= t-minute <= pm_transfer_ceiling_min
             if valid:
                 eligible.append(t)
         if not eligible and anchor_policy == 'fixed_22':
@@ -235,14 +262,23 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
             row(concurrent, -np.inf, vehicle_cap)
 
     start = 405 if first == 'west_B' else 410
+    declared_windows=windows(start,shoulder) if ready_windows_override is None else ready_windows_override
+    if any(len(w)!=3 or not all(math.isfinite(float(v)) for v in w) or w[0]>=w[1] or w[2]<=0 for w in declared_windows):
+        raise ValueError('invalid comparison ready windows')
+    ready_covers=set()
     for scenario in offsets.values():
         for wing in (first, second):
             for site in scenario[wing]['sites'].values():
                 for direction in ('to_fs', 'from_fs'):
                     events = [(ix[wing, t], t+site[direction]) for t in times[wing]]
-                    for lo, hi, wait in windows(start, shoulder):
+                    for lo, hi, wait in declared_windows:
                         for cover in interval_covers(events, lo, hi, wait):
-                            row([(i, 1) for i in cover], 1, np.inf)
+                            # Identical binary cover inequalities across sites,
+                            # directions/scenarios are mathematically identical.
+                            # Retain each once; no passenger case is dropped.
+                            if departure_step_min==5 or cover not in ready_covers:
+                                ready_covers.add(cover)
+                                row([(i, 1) for i in cover], 1, np.inf)
 
     for r, target in enumerate(assignments):
         row([(aa_col[r, t], 1) for t in target['eligible']],
@@ -326,8 +362,10 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
     result = {'first_wing': first, 'second_wing': second, 'shifted_rail_targets': shifted,
               'target_substitutions_not_adopted': substitutions,
               'shoulder_headway_cap_min': shoulder, 'core_headway_cap_min': 120,
+              'ready_windows_min':declared_windows,
               'ready_start_min': start, 'candidate_mid_offsets_min': mid_offsets,
-              'five_minute_grid': True, 'full_trip_count': full_trip_count,
+              'five_minute_grid': departure_step_min==5, 'departure_step_min': departure_step_min, 'full_trip_count': full_trip_count,
+              'pm_transfer_ceiling_min_comparison_not_adopted':pm_transfer_ceiling_min,
               'anchor_policy': anchor_policy,
               'vehicle_cap_conditional_not_adopted': vehicle_cap,
               'required_train_bank_start_not_adopted': required_train_bank_start,
@@ -359,7 +397,7 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
             for site in scenario[wing]['sites'].values():
                 for direction in ('to_fs', 'from_fs'):
                     values = [t+site[direction] for t in selected_times[wing]]
-                    for lo, hi, wait in windows(start, shoulder):
+                    for lo, hi, wait in declared_windows:
                         if uncovered_intervals(values, lo, hi, wait):
                             raise ValueError('site ready-time witness verification failed')
     chosen = [{'wing': assignments[r]['wing'], 'kind': assignments[r]['kind'],
