@@ -106,6 +106,7 @@ def build():
 
 def document(r):
     lines=['# Linea 8 — dossier unico istruttorio, non raccomandazione finale','',
+        '**Confronto successivo richiesto sui due versi:** [esito circoscritto e distinzione fra prove negative e casi irrisolti](RT031_LINEA8_ESITO_CONFRONTO_CONCLUSIVO_V3.md). Non è stata trovata una nuova proposta conforme; nessuna variante diagnostica diventa automaticamente la rete finale.','',
         'Un solo documento riunisce la variante a ordine conservato: **28 siti di progetto inclusa FS, 16 giri completi, 116.412 km/anno su 260 giorni ipotizzati**. Non sono 28 paline certificate. Hoè è esclusa soltanto in questo confronto; nessuna scelta finale è adottata.','',
         '![Tracciato](../outputs/phase2/rt031_line8_local_shortcuts_v3/no_reverse_hoe_omission.png)','',
         '## Tutti i punti di servizio','',
