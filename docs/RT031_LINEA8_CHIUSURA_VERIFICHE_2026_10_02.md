@@ -107,7 +107,7 @@ Per il 2027 serviranno pubblicazioni valide per le date considerate, con arrivi 
 
 ## Conclusione operativa
 
-**La progettazione della base feriale è chiusa; le prove esterne no.** La prossima azione utile è acquisire sopralluogo/prova con bus e preventivo su questa precisa distinta. Una criticità localizzata comporta una correzione esplicita e il ricalcolo delle parti collegate, non una ripartenza indiscriminata.
+**La base feriale è fissata; il rafforzamento tecnico e le prove esterne sono ancora aperti.** Il committente vuole una proposta solida e implementabile prima del confronto con l’azienda. Questa distinta raccoglie le quantità e le verifiche residue: non conclude la progettazione interna. L’[audit interno dei margini](../outputs/phase2/rt031_line8_local_shortcuts_v3/internal_transfer_margin_audit_20261002.json) identifica fragilità e confronti d’orario non adottati. Una criticità localizzata comporta una correzione esplicita e il ricalcolo delle parti collegate.
 
 [Pacchetto macchina e schede da copiare per i riscontri](../outputs/phase2/rt031_line8_local_shortcuts_v3/operating_closure_working_pack_20261002.json) · [Dossier unico](RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md) · [Scheda Agenzia/operatore](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md)
 
