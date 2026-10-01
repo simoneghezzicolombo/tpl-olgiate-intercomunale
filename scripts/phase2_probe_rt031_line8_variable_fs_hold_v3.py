@@ -48,6 +48,33 @@ def windows(start, shoulder):
     return [(start, 600, shoulder), (600, 960, 120), (960, 1180, shoulder)]
 
 
+def original_target_compatibility(p, offsets, selected_times):
+    compatible = []
+    missing = []
+    for wing_prefix, kind, minute in sorted({
+            (a['wing'], a['kind'], a['rail_min']) for a in p['anchors']}):
+        wing = next(w for w in selected_times if w.startswith(wing_prefix))
+        eligible = []
+        for t in selected_times[wing]:
+            if kind == 'bus_to_rail':
+                waits = [minute-t-g[wing]['road_minutes']-3
+                         for g in offsets.values()]
+                ok = min(waits) >= -1e-8 and max(waits) <= p['wait_ceiling']+1e-8
+            else:
+                ok = 3 <= t-minute <= 8
+            if ok:
+                eligible.append(t)
+        item = {'wing': wing_prefix, 'kind': kind, 'rail_min': minute,
+                'eligible_wing_fs_departures_min': eligible}
+        (compatible if eligible else missing).append(item)
+    reused = [(a['wing'], a['kind'], t)
+              for a in compatible for t in a['eligible_wing_fs_departures_min']]
+    if len(reused) != len(set(reused)):
+        raise ValueError('one wing event reused for distinct original target trains')
+    return {'compatible_count': len(compatible), 'compatible': compatible,
+            'missing': missing}
+
+
 def ordered_stop_ledger(loops, first, selected):
     second = next(k for k in loops if k != first)
     adjusted = adjusted_loops(loops, 1.1, .5)
@@ -79,15 +106,21 @@ def ordered_stop_ledger(loops, first, selected):
 
 
 def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
-          full_trip_count=16, minimize_hold=False, anchor_policy='fixed_22'):
+          full_trip_count=16, minimize_hold=False, anchor_policy='fixed_22',
+          required_train_bank_start=None, vehicle_cap=None):
     """One fixed complete-path orientation; only intermediate FS hold varies."""
     second = next(k for k in loops if k != first)
-    if anchor_policy not in ('fixed_22', 'h30_unbound', 'max_supported'):
+    if anchor_policy not in ('fixed_22', 'h30_unbound', 'max_supported',
+                             'flexible_real_trains'):
         raise ValueError('unknown rail-anchor policy')
     if shifted and anchor_policy != 'fixed_22':
         raise ValueError('cannot shift targets when rail anchors are unbound')
-    if minimize_hold and anchor_policy == 'max_supported':
+    if required_train_bank_start is not None and anchor_policy != 'flexible_real_trains':
+        raise ValueError('required real-train bank needs flexible real trains')
+    if minimize_hold and anchor_policy in ('max_supported', 'flexible_real_trains'):
         raise ValueError('separate rail-coverage and holding objectives')
+    original_p = p
+    original_targets = {(a0['wing'], a0['kind'], a0['rail_min']) for a0 in p['anchors']}
     if not all(p['family']['joins'].get(k) is True for k in (first+'>'+second, second+'>'+first)):
         raise ValueError('unrepresented full-trip join')
     if shifted:
@@ -115,8 +148,23 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
     pairs = [(t, t+m, m) for t in first_times for m in mid_offsets]
     pair_col = {(t, u): nx+i for i, (t, u, _) in enumerate(pairs)}
     assignments = []
-    targets = (sorted({(a0['wing'], a0['kind'], a0['rail_min']) for a0 in p['anchors']})
-               if anchor_policy != 'h30_unbound' else [])
+    if anchor_policy == 'flexible_real_trains':
+        morning = sorted({int(e['departure_min']) for e in p['rail']['events']
+                          if e['direction'] == 'MILANO' and
+                          416 <= e['departure_min'] <= 596})
+        evening = sorted({int(e['arrival_min']) for e in p['rail']['events']
+                          if e['direction'] == 'LECCO' and
+                          962 <= e['arrival_min'] <= 1172})
+        if morning != list(range(416, 597, 30)) or evening != list(range(962, 1173, 30)):
+            raise ValueError('dated real-train candidate bank drift')
+        targets = sorted((wing, kind, minute)
+                         for wing in ('west', 'east')
+                         for kind, minutes in (('bus_to_rail', morning),
+                                               ('rail_to_bus', evening))
+                         for minute in minutes)
+    else:
+        targets = (sorted({(a0['wing'], a0['kind'], a0['rail_min']) for a0 in p['anchors']})
+                   if anchor_policy != 'h30_unbound' else [])
     for wing_prefix, kind, minute in targets:
         wing = next(w for w in (first, second) if w.startswith(wing_prefix))
         eligible = []
@@ -143,7 +191,18 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
                     if all(start+30*k in times[wing] for k in range(5)):
                         banks.append((wing, peak, start))
     bank_col = {bank: nx+len(pairs)+len(aa)+i for i, bank in enumerate(banks)}
-    n = nx+len(pairs)+len(aa)+len(banks)
+    train_banks = []
+    if anchor_policy == 'flexible_real_trains':
+        for wing in (first, second):
+            for kind in ('bus_to_rail', 'rail_to_bus'):
+                group = [r for r, a0 in enumerate(assignments)
+                         if a0['wing'] == wing and a0['kind'] == kind]
+                group.sort(key=lambda r: assignments[r]['rail_min'])
+                for start in range(len(group)-4):
+                    train_banks.append((wing, kind, tuple(group[start:start+5])))
+    train_bank_col = {bank: nx+len(pairs)+len(aa)+len(banks)+i
+                      for i, bank in enumerate(train_banks)}
+    n = nx+len(pairs)+len(aa)+len(banks)+len(train_banks)
     rr, cc, vv, lower, upper = [], [], [], [], []
 
     def row(entries, lo, hi):
@@ -162,6 +221,16 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
     for u in second_times:
         row([(j, 1) for j in by_second[u]]+[(ix[second, u], -1)], 0, 0)
     row([(ix[first, t], 1) for t in first_times], full_trip_count, full_trip_count)
+    if vehicle_cap is not None:
+        # For intervals sharing the same FS terminal, maximum concurrent
+        # vehicle occupation occurs immediately after a first-FS departure.
+        # The slowest common scenario and largest recovery dominate the other
+        # 26 cases; this is conditional engineering, not fleet approval.
+        stress_end_offset = offsets[1.1, 1.][second]['road_minutes']+15
+        for instant in first_times:
+            concurrent = [(pair_col[t, u], 1) for t, u, _ in pairs
+                          if t <= instant < u+stress_end_offset-1e-8]
+            row(concurrent, -np.inf, vehicle_cap)
 
     start = 405 if first == 'west_B' else 410
     for scenario in offsets.values():
@@ -202,10 +271,39 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
                     for k in range(5):
                         row([(ix[wing, bank[2]+30*k], 1),
                              (bank_col[bank], -1)], 0, np.inf)
+    if anchor_policy == 'flexible_real_trains':
+        for wing in (first, second):
+            for kind in ('bus_to_rail', 'rail_to_bus'):
+                group = [bank for bank in train_banks if bank[:2] == (wing, kind)]
+                row([(train_bank_col[bank], 1) for bank in group], 1, 1)
+        if required_train_bank_start is not None:
+            wing_prefix, kind, minute = required_train_bank_start
+            forced = [bank for bank in train_banks
+                      if bank[0].startswith(wing_prefix) and bank[1] == kind
+                      and assignments[bank[2][0]]['rail_min'] == minute]
+            if len(forced) != 1:
+                raise ValueError('requested real-train bank is not in declared window')
+            row([(train_bank_col[forced[0]], 1)], 1, 1)
+        for r, target in enumerate(assignments):
+            choices = [bank for bank in train_banks if r in bank[2]]
+            row([(aa_col[r, t], 1) for t in target['eligible']]+
+                [(train_bank_col[bank], -1) for bank in choices], -np.inf, 0)
+        for bank in train_banks:
+            col = train_bank_col[bank]
+            for r in bank[2]:
+                row([(aa_col[r, t], 1) for t in assignments[r]['eligible']]+
+                    [(col, -1)], 0, np.inf)
+            for before, after in zip(bank[2], bank[2][1:]):
+                difference = [(aa_col[r, t], t*(1 if r == after else -1))
+                              for r in (before, after)
+                              for t in assignments[r]['eligible']]
+                row(difference+[(col, 2000)], -np.inf, 2030)
+                row(difference+[(col, -2000)], -1970, np.inf)
     matrix = csc_matrix((vv, (rr, cc)), shape=(len(lower), n))
     pair_costs = [m if minimize_hold else 0 for _, _, m in pairs]
     assignment_costs = [-1 if anchor_policy == 'max_supported' else 0]*len(aa)
-    answer = milp(np.r_[np.zeros(nx), pair_costs, assignment_costs, np.zeros(len(banks))],
+    answer = milp(np.r_[np.zeros(nx), pair_costs, assignment_costs,
+                         np.zeros(len(banks)+len(train_banks))],
                   integrality=np.ones(n), bounds=Bounds(0, 1),
                   constraints=LinearConstraint(matrix, lower, upper),
                   options={'time_limit': time_limit, 'mip_rel_gap': 0})
@@ -215,6 +313,8 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
               'ready_start_min': start, 'candidate_mid_offsets_min': mid_offsets,
               'five_minute_grid': True, 'full_trip_count': full_trip_count,
               'anchor_policy': anchor_policy,
+              'vehicle_cap_conditional_not_adopted': vehicle_cap,
+              'required_train_bank_start_not_adopted': required_train_bank_start,
               'intermediate_holding_minimized': minimize_hold,
               'solver_status': int(answer.status), 'solver_message': str(answer.message),
               'infeasibility_proven': answer.status == 2, 'witness_found': answer.x is not None}
@@ -229,6 +329,8 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
         raise ValueError('incomplete or overlapping full trips')
     selected_times = {first: [q['first_fs_min'] for q in selected],
                       second: sorted(q['second_fs_min'] for q in selected)}
+    original_compatibility = original_target_compatibility(
+        original_p, offsets, selected_times)
     for scenario in offsets.values():
         for wing in (first, second):
             for site in scenario[wing]['sites'].values():
@@ -247,7 +349,24 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
                     for bank, col in bank_col.items() if answer.x[col] > .5
                     for wing, peak, start in [bank]]
     if anchor_policy != 'fixed_22' and len(chosen_banks) != 4:
-        raise ValueError('missing full H30 banks')
+        if anchor_policy != 'flexible_real_trains':
+            raise ValueError('missing full H30 banks')
+    chosen_train_banks = [
+        {'wing': wing, 'kind': kind,
+         'rail_minutes': [assignments[r]['rail_min'] for r in group],
+         'bus_departures_min': [next(a['wing_fs_departure_min'] for a in chosen
+                                     if a['wing'] == wing and a['kind'] == kind
+                                     and a['rail_min'] == assignments[r]['rail_min'])
+                                for r in group]}
+        for bank, col in train_bank_col.items() if answer.x[col] > .5
+        for wing, kind, group in [bank]]
+    if anchor_policy == 'flexible_real_trains':
+        if len(chosen_train_banks) != 4 or len(chosen) != 20:
+            raise ValueError('incomplete real-train H30 banks')
+        if any(any(b-a != 30 for a, b in zip(bank['bus_departures_min'],
+                                              bank['bus_departures_min'][1:]))
+               for bank in chosen_train_banks):
+            raise ValueError('real-train H30 bank has non-H30 bus departures')
     vehicle_cases = []
     for (moving, dwell), scenario in offsets.items():
         for recovery in (5, 10, 15):
@@ -265,15 +384,21 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
                                   'minimum_vehicle_count_conditional': maximum})
     nominal_first = offsets[1.1, .5][first]['road_minutes']
     nominal_second = offsets[1.1, .5][second]['road_minutes']
+    original_chosen = [a for a in chosen
+                       if (a['wing'].split('_')[0], a['kind'], a['rail_min'])
+                       in original_targets]
     result.update(full_trips=selected, rail_assignments=chosen,
                   peak_banks_without_rail_binding=chosen_banks,
-                  original_22_train_targets_all_bound=(len(chosen) == 22),
-                  original_train_targets_bound_count=len(chosen),
+                  selected_real_train_banks_not_adopted=chosen_train_banks,
+                  original_22_target_compatibility_full_timetable=
+                      original_compatibility,
+                  original_22_train_targets_all_bound=(len(original_chosen) == 22),
+                  original_train_targets_bound_count=len(original_chosen),
                   original_train_targets_unbound=[
                       {'wing': wing, 'kind': kind, 'rail_min': minute}
-                      for wing, kind, minute in targets
+                      for wing, kind, minute in sorted(original_targets)
                       if not any(a['wing'].startswith(wing) and a['kind'] == kind
-                                 and a['rail_min'] == minute for a in chosen)],
+                                 and a['rail_min'] == minute for a in original_chosen)],
                   ordered_stop_event_ledger_nominal=(
                       ordered_stop_ledger(loops, first, selected)
                       if full_trip_count == 16 else None),
@@ -335,6 +460,30 @@ def build(time_limit=90):
             cases.append(case)
             print(case['case_id'], case['solver_status'], case['witness_found'],
                   case.get('original_train_targets_bound_count'), flush=True)
+    real_train_comparisons = [
+        ('west_B', 60, 85, None, None),
+        ('west_B', 70, 55, None, None),
+        ('west_B', 70, 60, None, None),
+        ('west_B', 70, 85, 4, None),
+        ('east_A', 60, 80, None, None),
+        ('east_A', 65, 55, None, None),
+        ('east_A', 65, 70, None, None),
+        ('east_A', 70, 50, None, None),
+        ('east_A', 70, 55, 4, None),
+        ('east_A', 70, 80, None, ('west', 'bus_to_rail', 416)),
+    ]
+    for first, shoulder, max_mid, vehicle_cap, forced_train in real_train_comparisons:
+        case = solve(p, loops, first, False, shoulder, time_limit,
+                     max_mid=max_mid, anchor_policy='flexible_real_trains',
+                     vehicle_cap=vehicle_cap,
+                     required_train_bank_start=forced_train)
+        forced_label = 'west0656' if forced_train else 'free'
+        case['case_id'] = (f'{first}_realtrains_16_shoulder{shoulder}_'
+                           f'maxmid{max_mid}_fleet{vehicle_cap or "free"}_'
+                           f'{forced_label}')
+        case['candidate_orientations_selected'] = False
+        cases.append(case)
+        print(case['case_id'], case['solver_status'], case['witness_found'], flush=True)
     manoeuvres = json.loads(gzip.decompress(MANOEUVRES.read_bytes()))['manoeuvres']
     if len(manoeuvres) != 6 or any(m['bus_manoeuvre_authorised'] for m in manoeuvres):
         raise ValueError('source physical manoeuvre status drift')
@@ -364,15 +513,25 @@ def build(time_limit=90):
             'six_reverse_edge_manoeuvres_all_bus_authorisation_missing': True,
             'manoeuvre_ids_requiring_vehicle_sweep': [m['id'] for m in manoeuvres],
             'local_fast_directional_passages_nominal': local_fast_passages,
+            'engineering_validation_priority_case_id':
+                'west_B_realtrains_16_shoulder70_maxmid60_fleetfree_free',
+            'engineering_validation_priority_not_network_selection': True,
             'scope': 'Same 27.679 km full road path and 29 design sites in each trip; 16 trips, '
                      'five-minute grid, root FS starts 05:00-19:40, per-trip intermediate '
                      'FS departure offset in seven five-minute values from stress-feasible '
                      'minimum through +30. Ready-time windows 06:45 or 06:50-19:40; '
-                     'H120 10-16, tested H60/H90/H95/H120 shoulders. In fixed_22 cases '
+                     'H120 10-16, tested H60/H65/H70/H90/H95/H120 shoulders. These '
+                     'are ready-time opportunity waiting limits, not a cap on every '
+                     'consecutive departure gap across a window boundary. In fixed_22 cases '
                      'five core target-bound trips are H30 in each wing. Rail-relaxed '
                      'diagnostics instead enforce explicit five-trip H30 banks per wing/peak '
                      'with starts 05:30-07:30 AM and 15:30-17:30 PM, then count original '
-                     'dated targets without weighting or replacing them. 17/18-trip cases '
+                     'dated targets without weighting or replacing them. Flexible-real-train '
+                     'cases choose five consecutive actual dated trains per wing and per peak '
+                     'from 06:56-09:56 Milan departures and 16:02-19:32 inbound arrivals; '
+                     'their selection is diagnostic, not a demand-derived train preference. '
+                     'A four-vehicle cap tests only common deterministic worst stress. '
+                     '17/18-trip cases '
                      'are non-adopted comparisons. '
                      'This is not a continuous-time or physical bus-operation proof.',
             'decision_budget_km': None, 'uncertainty_band_min': None,

@@ -1,6 +1,7 @@
 import unittest
 import json
 import gzip
+from collections import Counter
 
 from scripts.phase2_probe_rt031_line8_variable_fs_hold_v3 import OUTPUT, solve
 from scripts.phase2_rebuild_rt031_uniform_complete_line_v3 import inputs
@@ -55,6 +56,21 @@ class VariableFsHoldTests(unittest.TestCase):
         self.assertFalse(east['original_22_train_targets_all_bound'])
         self.assertTrue(west['infeasibility_proven'])
 
+    def test_real_train_proposal_keeps_local_occurrences_and_stress_visible(self):
+        candidate = solve(self.p, self.loops, 'west_B', False, 70, 30,
+                          max_mid=60, anchor_policy='flexible_real_trains')
+        self.assertTrue(candidate['witness_found'])
+        self.assertEqual(len(candidate['selected_real_train_banks_not_adopted']), 4)
+        self.assertEqual(len(candidate['rail_assignments']), 20)
+        self.assertEqual(candidate['original_22_target_compatibility_full_timetable']
+                         ['compatible_count'], 18)
+        self.assertLess(candidate['maximum_intermediate_fs_onboard_wait_nominal_min'], 19)
+        self.assertEqual(Counter(x['minimum_vehicle_count_conditional'] for x in
+                                 candidate['vehicle_cases_conditional']), {4: 26, 5: 1})
+        self.assertEqual(candidate['full_trips'][0]['first_fs_min'], 360)
+        self.assertEqual(candidate['full_trips'][-1]['second_fs_min'], 1235)
+        self.assertEqual(len(candidate['ordered_stop_event_ledger_nominal']), 16)
+
     def test_published_frontier_remains_non_decisional(self):
         result = json.loads(gzip.decompress(OUTPUT.read_bytes()))
         self.assertEqual(result['contract'],
@@ -83,6 +99,14 @@ class VariableFsHoldTests(unittest.TestCase):
                          ['original_train_targets_bound_count'], 10)
         self.assertTrue(by_id['west_B_16_shoulder60_h30_unbound']
                         ['infeasibility_proven'])
+        proposal = by_id['west_B_realtrains_16_shoulder70_maxmid60_fleetfree_free']
+        self.assertTrue(proposal['witness_found'])
+        self.assertEqual(proposal['original_22_target_compatibility_full_timetable']
+                         ['compatible_count'], 18)
+        self.assertTrue(by_id['west_B_realtrains_16_shoulder70_maxmid85_fleet4_free']
+                        ['infeasibility_proven'])
+        self.assertTrue(by_id['east_A_realtrains_16_shoulder70_maxmid55_fleet4_free']
+                        ['witness_found'])
 
 
 if __name__ == '__main__':
