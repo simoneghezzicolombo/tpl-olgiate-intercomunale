@@ -6,12 +6,15 @@
 > **27,124 km/giro, 27 siti di progetto inclusa FS, 4 nuovi punti proposti**.
 > Orario di progetto confermato con punte H30 sfalsate e transizione della morbida
 > fino alle 16:20; ultima partenza FS 19:40, rientro nominale circa 21:08.
-> **112.833,793 km commerciali nel confronto a 260 giorni: +1,27% su 111.419**.
-> Aggiornamento evidenze 2026-10-02: con **303 giorni identici** la sensibilità sale
-> a **131.494,766 km (+18,02%)**. 303 è il conteggio dei giorni attivi di progetto PdB,
-> non un calendario attuale datato; 260 è un’ipotesi. Non è certificato un piccolo sforamento annuo generale.
-> Non sono un calendario, una flotta, paline, finanziamenti o esercizio approvati.
+> **Calendario feriale dichiarato (2026-10-02): anno 2027, 16 giri lunedì–venerdì, esclusi festivi.**
+> Base dopo i festivi nazionali: **254 giornate, 110.229,936 km commerciali (-1,07% su 111.419)**,
+> prima di eventuali eccezioni locali da verificare. Il sabato resta separato e non selezionato:
+> **il totale annuo completo della linea è ancora da definire**. Nessuna chiusura scolastica o di agosto aggiunta.
+> [Conferma, tutte le date, fonti e sensibilità del sabato](docs/RT031_LINEA8_CALENDARIO_FERIALE_2027_V3.md).
+> I confronti 260 giorni/+1,27% e 303/+18,02% restano sensibilità storiche, non il calendario corrente.
+> Non sono un calendario operativo completo, una flotta o paline autorizzate, né finanziamenti garantiti.
 > Il doppio verso H30 resta rinviato. Tutti i flussi ferroviari e i limiti sono esposti.
+> Le coincidenze verificate il 1 ottobre 2026 **non certificano i treni 2027**.
 > [Autorità della conferma](config/rt031_design_timetable_confirmation_20261001_v3.json) ·
 > [Dossier macchina, registro siti/eventi e readiness](outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_design_handoff_20261001.json) ·
 > [Tracciato attuale](outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson).

@@ -1,5 +1,7 @@
 # Linea 8 — mezzi e calendario della proposta confermata
 
+I blocchi mezzi restano validi per lo stesso giorno di progetto. I confronti 260/303 sotto sono precedenti alla dichiarazione della [base feriale datata 2027](RT031_LINEA8_CALENDARIO_FERIALE_2027_V3.md): 254 giornate dopo i festivi nazionali, 110.229,936 km della sola base, sabato ancora da valutare. Non usare i confronti storici come calendario corrente.
+
 Sono stati assegnati i 16 giri completi a mezzi di modello per tutti i 27 scenari ereditati. Il minimo condizionale è 4 nel nominale e nel caso con sosta/recupero maggiori: 25 casi richiedono 4 mezzi, due casi 3. Non sono turni autista o disponibilità reale della flotta.
 
 | Mezzo di modello | Giri completi assegnati, nominale e stress mostrato |

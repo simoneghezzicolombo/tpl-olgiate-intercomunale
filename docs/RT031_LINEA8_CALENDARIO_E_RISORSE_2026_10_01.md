@@ -1,5 +1,7 @@
 # Linea 8 - calendario e risorse, 1 ottobre 2026
 
+**Aggiornamento del 2 ottobre:** questa nota conserva la prova primaria PdB e i confronti 260/303. La successiva [base feriale dichiarata per il 2027](RT031_LINEA8_CALENDARIO_FERIALE_2027_V3.md) comprende 254 giornate dopo i festivi nazionali e 110.229,936 km commerciali; sabato ed eccezioni locali restano da chiudere. I confronti seguenti non sono il nuovo calendario.
+
 **Il riferimento di 111.419 km è ricostruibile dalla fonte primaria. Il calendario effettivo annuo resta da dichiarare.** Nel Programma di Bacino D184 e D185 hanno 303 giorni con sei coppie/giorno di progetto nelle categorie feriali e sabato. Applicare il giorno di progetto confermato della Linea 8 a quel numero di giorni comporterebbe **131.494,766 km commerciali/anno, +18,02%** sul riferimento. Il confronto a 260 giorni rimane **112.833,793 km, +1,27%**: il numero di giorni cambia materialmente il risultato.
 
 Fonte: Programma di Bacino rev. 7.2, **Scheda ambito: Meratese**, fogli D184 e D185, posizioni PDF **7 e 8** (indici da zero **6 e 7**), verificati anche visivamente. :codex-file-citation{path="D:/tpl-olgiate-intercomunale/data/raw/pdb/PdB_Allegato3.4_Meratese.pdf" purpose="source"} Il [registro dell'evidenza](../config/rt031_pdb_calendar_reference_evidence_20261001_v3.json) riporta l'URL ufficiale, le celle trascritte, SHA256 `e0657cb4e8a078ddf99f28e1ebbde4a67ee36bb9b7a92fcd488e2539a948079a` e le formule.

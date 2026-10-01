@@ -1,0 +1,3065 @@
+{
+  "actual_d184_d185_annual_calendar_certified": false,
+  "annual_noncommercial_km": null,
+  "arithmetic_margin_vs_reference_km": 1189.0639754059084,
+  "authority_canonical_sha256": "1bf634e1a19b3573b9c2f92f63db821ed663bcd31b34a28747b28d849fad36e7",
+  "authority_source": "config\\rt031_weekday_calendar_2027_authority_v3.json",
+  "complete_annual_operating_calendar_adopted": false,
+  "complete_line_annual_commercial_km": null,
+  "complete_trip_commercial_km": 27.123507880067443,
+  "contract": "RT031_CALLER_CONFIRMED_2027_WEEKDAY_BASE_MATERIALISATION_V3",
+  "date_ledger": [
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-01",
+      "national_holiday_name": "Capodanno",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-02",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-03",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-04",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-05",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-06",
+      "national_holiday_name": "Epifania",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-07",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-08",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-09",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-10",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-11",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-12",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-13",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-14",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-15",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-16",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-17",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-18",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-19",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-20",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-21",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-22",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-23",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-24",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-25",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-26",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-27",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-28",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-01-29",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-30",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-01-31",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-01",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-02",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-03",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-04",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-05",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-02-06",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-02-07",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-08",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-09",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-10",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-11",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-12",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-02-13",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-02-14",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-15",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-16",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-17",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-18",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-19",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-02-20",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-02-21",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-22",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-23",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-24",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-25",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-02-26",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-02-27",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-02-28",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-01",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-02",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-03",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-04",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-05",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-03-06",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-03-07",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-08",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-09",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-10",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-11",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-12",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-03-13",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-03-14",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-15",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-16",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-17",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-18",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-19",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-03-20",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-03-21",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-22",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-23",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-24",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-25",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-26",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-03-27",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-03-28",
+      "national_holiday_name": "Pasqua",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-03-29",
+      "national_holiday_name": "Lunedì dell'Angelo",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-30",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-03-31",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-01",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-02",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-04-03",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-04-04",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-05",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-06",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-07",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-08",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-09",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-04-10",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-04-11",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-12",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-13",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-14",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-15",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-16",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-04-17",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-04-18",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-19",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-20",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-21",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-22",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-23",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-04-24",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-04-25",
+      "national_holiday_name": "Liberazione",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-26",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-27",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-28",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-29",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-04-30",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-05-01",
+      "national_holiday_name": "Festa del lavoro",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-05-02",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-03",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-04",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-05",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-06",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-07",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-05-08",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-05-09",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-10",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-11",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-12",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-13",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-14",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-05-15",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-05-16",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-17",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-18",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-19",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-20",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-21",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-05-22",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-05-23",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-24",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-25",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-26",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-27",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-28",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-05-29",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-05-30",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-05-31",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-01",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-06-02",
+      "national_holiday_name": "Festa della Repubblica",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-03",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-04",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-06-05",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-06-06",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-07",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-08",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-09",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-10",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-11",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-06-12",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-06-13",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-14",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-15",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-16",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-17",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-18",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-06-19",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-06-20",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-21",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-22",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-23",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-24",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-25",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-06-26",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-06-27",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-28",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-29",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-06-30",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-01",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-02",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-07-03",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-07-04",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-05",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-06",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-07",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-08",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-09",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-07-10",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-07-11",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-12",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-13",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-14",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-15",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-16",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-07-17",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-07-18",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-19",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-20",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-21",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-22",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-23",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-07-24",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-07-25",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-26",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-27",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-28",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-29",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-07-30",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-07-31",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-08-01",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-02",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-03",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-04",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-05",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-06",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-08-07",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-08-08",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-09",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-10",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-11",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-12",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-13",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-08-14",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-08-15",
+      "national_holiday_name": "Assunzione",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-16",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-17",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-18",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-19",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-20",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-08-21",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-08-22",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-23",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-24",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-25",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-26",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-27",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-08-28",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-08-29",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-30",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-08-31",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-01",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-02",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-03",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-09-04",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-09-05",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-06",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-07",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-08",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-09",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-10",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-09-11",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-09-12",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-13",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-14",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-15",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-16",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-17",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-09-18",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-09-19",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-20",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-21",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-22",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-23",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-24",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-09-25",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-09-26",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-27",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-28",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-29",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-09-30",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-01",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-10-02",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-10-03",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-10-04",
+      "national_holiday_name": "San Francesco d'Assisi",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-05",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-06",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-07",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-08",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-10-09",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-10-10",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-11",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-12",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-13",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-14",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-15",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-10-16",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-10-17",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-18",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-19",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-20",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-21",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-22",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-10-23",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-10-24",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-25",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-26",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-27",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-28",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-10-29",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-10-30",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-10-31",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-11-01",
+      "national_holiday_name": "Ognissanti",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-02",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-03",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-04",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-05",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-11-06",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-11-07",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-08",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-09",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-10",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-11",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-12",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-11-13",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-11-14",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-15",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-16",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-17",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-18",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-19",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-11-20",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-11-21",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-22",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-23",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-24",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-25",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-26",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-11-27",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-11-28",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-29",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-11-30",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-01",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-02",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-03",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-12-04",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-12-05",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-06",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-07",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-12-08",
+      "national_holiday_name": "Immacolata Concezione",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-09",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-10",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-12-11",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-12-12",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-13",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-14",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-15",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-16",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-17",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-12-18",
+      "national_holiday_name": null,
+      "state": "SATURDAY_PENDING_SEPARATE_ASSESSMENT",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-12-19",
+      "national_holiday_name": null,
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-20",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-21",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-22",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-23",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-24",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-12-25",
+      "national_holiday_name": "Natale",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 6
+    },
+    {
+      "complete_line_day_trip_count": null,
+      "date": "2027-12-26",
+      "national_holiday_name": "Santo Stefano",
+      "state": "OUTSIDE_DECLARED_WEEKDAY_BASE",
+      "weekday_component_complete_trips": 0,
+      "weekday_iso_number": 7
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-27",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 1
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-28",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 2
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-29",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 3
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-30",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 4
+    },
+    {
+      "complete_line_day_trip_count": 16,
+      "date": "2027-12-31",
+      "national_holiday_name": null,
+      "state": "DECLARED_WEEKDAY_BASE_BEFORE_LOCAL_EXCEPTION_VALIDATION",
+      "weekday_component_complete_trips": 16,
+      "weekday_iso_number": 5
+    }
+  ],
+  "decision_budget_km": null,
+  "demand_weighted_gjt_improvement_min": null,
+  "excluded_weekday_national_holiday_dates": [
+    "2027-01-01",
+    "2027-01-06",
+    "2027-03-29",
+    "2027-06-02",
+    "2027-10-04",
+    "2027-11-01",
+    "2027-12-08"
+  ],
+  "extra_trip_capacity_is_service_recommendation": false,
+  "full_annual_operating_cost": null,
+  "full_trips_per_weekday": 16,
+  "funding_secured": false,
+  "local_exception_policy_certified": false,
+  "local_patronal_or_other_extra_exclusions": null,
+  "missed_connection_probability": null,
+  "monthly_weekday_base_day_counts": {
+    "2027-01": 19,
+    "2027-02": 20,
+    "2027-03": 22,
+    "2027-04": 22,
+    "2027-05": 21,
+    "2027-06": 21,
+    "2027-07": 22,
+    "2027-08": 22,
+    "2027-09": 22,
+    "2027-10": 20,
+    "2027-11": 21,
+    "2027-12": 22
+  },
+  "national_holiday_base_materialised": true,
+  "network_selected": false,
+  "observed_runtime_for_2027_certified": false,
+  "physical_boarding_authorised": false,
+  "primary_selection_authorised": false,
+  "public_operating_timetable_authorised": false,
+  "rail_connections_for_2027_certified": false,
+  "rail_reference_service_date": "2026-10-01",
+  "recorded_on": "2026-10-02",
+  "reference_funding_transfer_certified": false,
+  "reference_published_pdb_annual_km": 111419,
+  "remaining_external_inputs": [
+    "Local patronal/exception treatment for the complete five-municipality route; no extra closures invented.",
+    "2027 dated rail timetable and transfers: October 2026 connection evidence cannot be certified for another year.",
+    "Saturday policy and exact full-trip timetable, separately caller-declared and verified.",
+    "Bus-accessible road/stops, passenger continuity, measured times, available fleet, driver/depot/deadhead plan and full costs/funding."
+  ],
+  "runner_up_selection_authorised": false,
+  "same_complete_route_for_each_trip": true,
+  "saturday_nonholiday_date_count": 50,
+  "saturday_sensitivity_count_only": [
+    {
+      "additional_commercial_km": 2712.350788006744,
+      "additional_complete_trips": 100,
+      "delta_vs_reference_percent": 1.3671697040907205,
+      "departure_times_selected": false,
+      "h30_peak_promise_inferable": false,
+      "hypothetical_full_trips_per_nonholiday_saturday": 2,
+      "nonholiday_saturdays": 50,
+      "policy_adopted": false,
+      "timetable_feasibility_certified": false,
+      "weekday_base_plus_saturday_commercial_km": 112942.28681260084
+    },
+    {
+      "additional_commercial_km": 5424.701576013488,
+      "additional_complete_trips": 200,
+      "delta_vs_reference_percent": 3.801539773833529,
+      "departure_times_selected": false,
+      "h30_peak_promise_inferable": false,
+      "hypothetical_full_trips_per_nonholiday_saturday": 4,
+      "nonholiday_saturdays": 50,
+      "policy_adopted": false,
+      "timetable_feasibility_certified": false,
+      "weekday_base_plus_saturday_commercial_km": 115654.63760060757
+    },
+    {
+      "additional_commercial_km": 8137.052364020233,
+      "additional_complete_trips": 300,
+      "delta_vs_reference_percent": 6.235909843576337,
+      "departure_times_selected": false,
+      "h30_peak_promise_inferable": false,
+      "hypothetical_full_trips_per_nonholiday_saturday": 6,
+      "nonholiday_saturdays": 50,
+      "policy_adopted": false,
+      "timetable_feasibility_certified": false,
+      "weekday_base_plus_saturday_commercial_km": 118366.98838861432
+    },
+    {
+      "additional_commercial_km": 10849.403152026976,
+      "additional_complete_trips": 400,
+      "delta_vs_reference_percent": 8.670279913319145,
+      "departure_times_selected": false,
+      "h30_peak_promise_inferable": false,
+      "hypothetical_full_trips_per_nonholiday_saturday": 8,
+      "nonholiday_saturdays": 50,
+      "policy_adopted": false,
+      "timetable_feasibility_certified": false,
+      "weekday_base_plus_saturday_commercial_km": 121079.33917662107
+    },
+    {
+      "additional_commercial_km": 21698.806304053953,
+      "additional_complete_trips": 800,
+      "delta_vs_reference_percent": 18.4077601922904,
+      "departure_times_selected": false,
+      "h30_peak_promise_inferable": false,
+      "hypothetical_full_trips_per_nonholiday_saturday": 16,
+      "nonholiday_saturdays": 50,
+      "policy_adopted": false,
+      "timetable_feasibility_certified": false,
+      "weekday_base_plus_saturday_commercial_km": 131928.74232864805
+    }
+  ],
+  "saturday_service_policy_adopted": false,
+  "saturday_trip_count": null,
+  "semantics": "Dated 2027 weekday design component, with national holidays known as of 2026-10-02. No school-vacation cuts, inferred patronal exclusions or Saturday policy. Weekday production is not the complete-line annual total or funding proof. Saturday rows are arithmetic only, not adopted or event-checked timetables.",
+  "service_year": 2027,
+  "source_canonical_sha256": {
+    "caller_confirmed_design_handoff_20261001.json": "a9f489ce87f3ea8b2d17be61c4c99bf67237d7d2645a325cc8a4b59cf9b3e9b1",
+    "rt031_design_timetable_confirmation_20261001_v3.json": "99a14aa95950ab454c6e7f13cabafd48c55826e18af2501a7d0c0323078e7598",
+    "rt031_pdb_calendar_reference_evidence_20261001_v3.json": "3fbaa9f6fd9e22efb837292f54c53aa7c37a1dea07d5f13f7b53ca33c640c04f"
+  },
+  "uncertainty_band_min": null,
+  "weekday_base_commercial_km": 110229.93602459409,
+  "weekday_base_complete_trip_count": 4064,
+  "weekday_base_day_count_before_local_exceptions": 254,
+  "weekday_base_delta_vs_reference_km": -1189.0639754059084,
+  "weekday_base_delta_vs_reference_percent": -1.067200365652099,
+  "weekday_calendar_declared_for_design": true,
+  "weekdays_before_national_holiday_exclusions": 261,
+  "whole_extra_complete_trips_within_reference": 43
+}

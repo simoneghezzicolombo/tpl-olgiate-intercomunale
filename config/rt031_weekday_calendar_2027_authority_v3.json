@@ -1,0 +1,59 @@
+{
+  "contract": "RT031_CALLER_DECLARED_WEEKDAY_CALENDAR_2027_V3",
+  "recorded_on": "2026-10-02",
+  "caller_evidence": {
+    "calendar_reply_verbatim": "Sì: 16 giri lunedì–venerdì; sabato da valutare separatamente",
+    "service_year_reply_verbatim": "2027",
+    "question_scope": "16 complete trips Monday to Friday, excluding holidays; Saturday assessed separately. A dated 2027 design calendar, not operating/funding authorisation."
+  },
+  "parent_authority": "config/rt031_design_timetable_confirmation_20261001_v3.json",
+  "amends_only": ["design_service_year", "weekday_calendar_component"],
+  "service_year": 2027,
+  "weekday_iso_numbers": [1, 2, 3, 4, 5],
+  "full_trips_per_weekday": 16,
+  "all_trips_same_complete_path": true,
+  "weekday_calendar_declared_for_design": true,
+  "national_holidays_excluded_from_weekday_base": true,
+  "school_vacation_or_bridge_day_cuts_authorised": false,
+  "saturday_policy": "TO_BE_ASSESSED_SEPARATELY_NOT_CANCELLED_OR_SELECTED",
+  "saturday_trips_per_day": null,
+  "local_patronal_or_other_extra_exclusions": null,
+  "local_exception_policy_certified": false,
+  "complete_annual_operating_calendar_adopted": false,
+  "public_operating_timetable_authorised": false,
+  "funding_secured": false,
+  "network_selected": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false,
+  "decision_budget_km": null,
+  "uncertainty_band_min": null,
+  "source_canonical_sha256": {
+    "rt031_design_timetable_confirmation_20261001_v3.json": "99a14aa95950ab454c6e7f13cabafd48c55826e18af2501a7d0c0323078e7598",
+    "rt031_pdb_calendar_reference_evidence_20261001_v3.json": "3fbaa9f6fd9e22efb837292f54c53aa7c37a1dea07d5f13f7b53ca33c640c04f",
+    "caller_confirmed_design_handoff_20261001.json": "a9f489ce87f3ea8b2d17be61c4c99bf67237d7d2645a325cc8a4b59cf9b3e9b1"
+  },
+  "holiday_evidence_as_of": "2026-10-02",
+  "holiday_sources": [
+    {"id": "GOVERNMENT_HOLIDAY_LIST", "url": "https://presidenza.governo.it/ufficio_cerimoniale/cerimoniale/giornate.html", "semantics": "General national holiday list; its older classification of 4 October must be updated using Law 151/2025, not copied unchanged. Local patronal treatment for a multi-municipality bus service remains unresolved."},
+    {"id": "L151_2025", "url": "https://www.gazzettaufficiale.it/eli/id/2025/10/10/25G00153/sg", "semantics": "4 October is a national holiday from 1 January 2026."},
+    {"id": "DPR792_1985", "url": "https://www.gazzettaufficiale.it/eli/id/1985/12/31/085U0792/sg", "semantics": "National religious holidays; 29 June is specific to Rome and is not excluded from this network's base."},
+    {"id": "L336_2000", "url": "https://www.gazzettaufficiale.it/eli/id/2000/11/22/000G0390/sg", "semantics": "Restoration of 2 June as a public holiday."},
+    {"id": "L54_1977", "url": "https://www.gazzettaufficiale.it/eli/id/1977/03/07/077U0054/sg", "semantics": "Suppressed older civil holidays are not copied from the original 1949 list; later restorations are applied separately."},
+    {"id": "OFFICIAL_EASTER_DATE_2027", "url": "https://usrfvg.gov.it/it/home/menu/notizie/article/Calendario-scolastico-regionale-a.s.-2026-2027.-Delibera-della-Giunta-regionale-n.-424-del-27-marzo-2026./", "semantics": "Official corroboration of Easter Monday 29 March 2027 only. No regional or school closure from this source is applied to the bus calendar."}
+  ],
+  "national_holiday_dates_2027": [
+    {"date": "2027-01-01", "name": "Capodanno"},
+    {"date": "2027-01-06", "name": "Epifania"},
+    {"date": "2027-03-28", "name": "Pasqua"},
+    {"date": "2027-03-29", "name": "Lunedì dell'Angelo"},
+    {"date": "2027-04-25", "name": "Liberazione"},
+    {"date": "2027-05-01", "name": "Festa del lavoro"},
+    {"date": "2027-06-02", "name": "Festa della Repubblica"},
+    {"date": "2027-08-15", "name": "Assunzione"},
+    {"date": "2027-10-04", "name": "San Francesco d'Assisi"},
+    {"date": "2027-11-01", "name": "Ognissanti"},
+    {"date": "2027-12-08", "name": "Immacolata Concezione"},
+    {"date": "2027-12-25", "name": "Natale"},
+    {"date": "2027-12-26", "name": "Santo Stefano"}
+  ]
+}
