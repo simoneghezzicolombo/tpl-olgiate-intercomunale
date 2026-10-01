@@ -1,5 +1,7 @@
 # Linea 8 — confronto concreto con la sola fermata Hoè esclusa
 
+**Verifica successiva dell'orario:** [H60/H65, flotta e obiettivi ferroviari mancanti](RT031_LINEA8_CHIUSURA_ORARIO_ORDINE_CONSERVATO_V3.md). Il confronto da 16 giri resta H70 nelle spalle; H60 ha un testimone a 18 giri e 130.963 km, non adottato.
+
 Il confronto progettualmente più prudente è **116.411,944 km/anno** su 260 giorni ipotizzati: conserva l'ordine di servizio del riferimento senza inversioni e **nessun tempo nominale FS↔fermata rimasta peggiora**. È **+4,48%** rispetto a 111.419 e circa 1.269 km sopra lo scenario da 115.143,267 già accettato: questo aumento ulteriore non è approvato. Mantiene 16 giri completi della stessa linea, H30 agganciato ai gruppi ferroviari del dataset e 28 siti di progetto inclusa FS, incluse le due occorrenze utili di Olgiate sud e San Zeno e Arlate N1212. Esclude soltanto `FROZEN::300873`, la fermata **Hoè**, e mantiene l'ipotesi di accosto Calco a 19 metri. La scelta non è adottata: la perdita territoriale va valutata esplicitamente.
 
 Il minimo di distanza con ordine interno libero arriva a **115.130,637 km/anno** (+3,33%), ma peggiora alcuni viaggi fino a circa 19 minuti. Non viene raccomandato automaticamente per il solo rispetto del confronto chilometrico. Spendere 1.281,306 km/anno in più permette, in questi due testimoni, di conservare l'ordine e i tempi di accesso del riferimento.

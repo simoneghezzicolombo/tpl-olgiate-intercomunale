@@ -7,7 +7,10 @@ on:
       - scripts/phase2_probe_rt031_line8_order_neighbourhood_v3.py
       - scripts/phase2_probe_rt031_line8_no_reverse_all_orders_v3.py
       - scripts/phase2_measure_rt031_line8_omission_walk_v3.py
+      - scripts/phase2_close_rt031_line8_fixed_order_timetable_v3.py
       - tests/test_phase2_rt031_line8_no_reverse_orders_v3.py
+      - tests/test_phase2_rt031_line8_fixed_order_timetable_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/hoe_fixed_order_timetable_closure.json.gz
       - outputs/phase2/rt031_line8_local_shortcuts_v3/no_reverse_*
       - outputs/phase2/rt031_line8_local_shortcuts_v3/order_neighbourhood.json.gz
       - .github/workflows/phase2-rt031-line8-order-walk-v3.yml
@@ -53,3 +56,7 @@ jobs:
           assert a['hoe_fixed_event_order_comparison_not_adopted']==b['hoe_fixed_event_order_comparison_not_adopted']
           PY
           python -m unittest tests.test_phase2_rt031_line8_no_reverse_orders_v3 -q
+      - name: Reproduce bounded fixed-order timetable closure
+        run: |
+          python -m scripts.phase2_close_rt031_line8_fixed_order_timetable_v3 --time-limit 90
+          python -m unittest tests.test_phase2_rt031_line8_fixed_order_timetable_v3 -q
