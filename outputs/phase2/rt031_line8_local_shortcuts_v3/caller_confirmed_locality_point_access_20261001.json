@@ -1,0 +1,2265 @@
+{
+  "accessible_pedestrian_paths_certified": false,
+  "assumptions": {
+    "endpoint_connectors": "RT028_BARRIER_AWARE_NODE_SNAP",
+    "graph_directionality_preserved": true,
+    "inventory_current_walk_min_and_old_node_ids_reused": false,
+    "locality_point_snap_recomputed_on_RT028": true,
+    "max_connector_m": 90.0,
+    "walk_metres_per_min": 80.0
+  },
+  "contract": "RT031_CONFIRMED_LOCALITY_POINT_ACCESS_AUDIT_V3",
+  "design_reference_date": "2026-10-01",
+  "design_site_count_including_fs": 27,
+  "full_trip_count": 16,
+  "locality_service_certified": false,
+  "network_selected": false,
+  "new_service_policy_adopted": false,
+  "passenger_od_downscaled": false,
+  "pedestrian_graph_digest": "aaad8a16e4c3715161cce6f686acccbf29e4e9def57424e8ad02594c9a69f1f4",
+  "pedestrian_snapshot_sha256": "896f192bbb481f0c07cdc5d695424bf29de85f89ac33ea72986a06e521b424cd",
+  "pedestrian_source": {
+    "acquisition_reference": ".github/workflows/phase2-rt031-south-olgiate-provisional-area-v3.yml",
+    "license": "ODbL 1.0",
+    "overpass_endpoint": "https://overpass-api.de/api/interpreter",
+    "pinned_github_artifact_id": 9991182904,
+    "pinned_zip_sha256": "e1ca83699593dd9e605d2870667da1b4dfc6068436a0c3116faf8587901b2e28",
+    "provider": "OpenStreetMap contributors / Overpass",
+    "query_sha256": "aad1dbc5a9ddf5efc953322eaae7232c618518996b2c5e8bb4f411a0ed011b61",
+    "snapshot_timestamp": "2026-09-06T12:00:00Z"
+  },
+  "physical_boarding_authorised": false,
+  "points": [
+    {
+      "all_design_site_pairs": [
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Arlate - B.vio Brivio - Madonnina",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3022.3012083752774,
+          "point_to_site_walk_min": 38.22052566257531,
+          "site_id": "ASF::ARLATE_B_VIO_BRIVIO_MADONNINA",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1141498402",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3022.3012083752774,
+          "site_to_point_walk_min": 38.22052566257531,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Arlate - Cantina Pirovano",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4300.50647408603,
+          "point_to_site_walk_min": 54.198091483959715,
+          "site_id": "ASF::ARLATE_CANTINA_PIROVANO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807659",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4300.50647408603,
+          "site_to_point_walk_min": 54.198091483959715,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Via Como (pizzeria / Bar Cristallo)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4576.007644053223,
+          "point_to_site_walk_min": 57.64185610854963,
+          "site_id": "ASF::BRIVIO_BAR_CRISTALLO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2324562549",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4576.007644053223,
+          "site_to_point_walk_min": 57.64185610854963,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Calco - Via Virgilio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2907.4186048305514,
+          "point_to_site_walk_min": 36.784493118266234,
+          "site_id": "ASF::CALCO_VIA_GARIBALDI",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "13324620708",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2907.4186048305514,
+          "site_to_point_walk_min": 36.784493118266234,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Scarpone",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1575.7047146193481,
+          "point_to_site_walk_min": 20.138069490626194,
+          "site_id": "ASF::OLGIATE_MOLGORA_SCARPONE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "11184847169",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1575.7047146193481,
+          "site_to_point_walk_min": 20.138069490626194,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Via Della Salute",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1429.9724332267522,
+          "point_to_site_walk_min": 18.316415973218746,
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "13672153325",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1429.9724332267522,
+          "site_to_point_walk_min": 18.316415973218746,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Via Statale",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2282.6189887539986,
+          "point_to_site_walk_min": 28.97449791730933,
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_STATALE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "3070065625",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2282.6189887539986,
+          "site_to_point_walk_min": 28.97449791730933,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Perego - Statale / Via S. Caterina",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3397.282804190074,
+          "point_to_site_walk_min": 42.907795610260266,
+          "site_id": "ASF::PEREGO_VIA_STATALE_79",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "597454513",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3397.282804190074,
+          "site_to_point_walk_min": 42.907795610260266,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Alduno",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1750.2071039302266,
+          "point_to_site_walk_min": 22.319349357012175,
+          "site_id": "ASF::ROVAGNATE_FRAZIONE_ALDUNO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2291566759",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1750.2071039302266,
+          "site_to_point_walk_min": 22.319349357012175,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - Statale / Via Lombardia",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2780.6372671323556,
+          "point_to_site_walk_min": 35.19972639703879,
+          "site_id": "ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1262272520",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2780.6372671323556,
+          "site_to_point_walk_min": 35.19972639703879,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - Statale / AGIP",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2429.276154677476,
+          "point_to_site_walk_min": 30.807712491352788,
+          "site_id": "ASF::ROVAGNATE_STRADA_STATALE_AGIP",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553404719",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2429.276154677476,
+          "site_to_point_walk_min": 30.807712491352788,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Via Giovanni XXIII / Tremonte-Via Leopardi",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1519.0309679236063,
+          "point_to_site_walk_min": 19.429647656929422,
+          "site_id": "ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044848798",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1519.0309679236063,
+          "site_to_point_walk_min": 19.429647656929422,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "S. Maria Hoè - S.P. 58 ang. Via Cenisio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 866.6247928237906,
+          "point_to_site_walk_min": 11.274570468181725,
+          "site_id": "ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044848604",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 866.6247928237906,
+          "site_to_point_walk_min": 11.274570468181725,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Vaccarezza",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3895.9802926741213,
+          "point_to_site_walk_min": 49.14151421631086,
+          "site_id": "ASF::VACCAREZZA_CARTELLO_PAESE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553331577",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3895.9802926741213,
+          "site_to_point_walk_min": 49.14151421631086,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Via Bergamo (Scuola Materna)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4923.189981617506,
+          "point_to_site_walk_min": 61.981635328103174,
+          "site_id": "FROZEN::300063",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553331613",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4923.189981617506,
+          "site_to_point_walk_min": 61.981635328103174,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (cariplo)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2985.3533617673315,
+          "point_to_site_walk_min": 37.75867757997598,
+          "site_id": "FROZEN::300086",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321918944",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2985.3533617673315,
+          "site_to_point_walk_min": 37.75867757997598,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (paese)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3427.9671504298067,
+          "point_to_site_walk_min": 43.29134993825693,
+          "site_id": "FROZEN::300398",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321918825",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3427.9671504298067,
+          "site_to_point_walk_min": 43.29134993825693,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (quattro strade)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3069.2988612630234,
+          "point_to_site_walk_min": 38.807996323672135,
+          "site_id": "FROZEN::300487",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807788",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3069.2988612630234,
+          "site_to_point_walk_min": 38.807996323672135,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "S.Maria Hoe'",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2193.1913651646414,
+          "point_to_site_walk_min": 27.856652622442358,
+          "site_id": "FROZEN::300782",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1142971802",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2193.1913651646414,
+          "site_to_point_walk_min": 27.856652622442358,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Tremonte / Via Trento",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1763.5690280333336,
+          "point_to_site_walk_min": 22.486373408301013,
+          "site_id": "FROZEN::300805",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044849029",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1763.5690280333336,
+          "site_to_point_walk_min": 22.486373408301013,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - vinicola ghezzi",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3213.985567812563,
+          "point_to_site_walk_min": 40.616580155541385,
+          "site_id": "FROZEN::300879",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2043527907",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3213.985567812563,
+          "site_to_point_walk_min": 40.616580155541385,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Calco - via nazionale (peugeot)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2467.9045039416756,
+          "point_to_site_walk_min": 31.290566857155284,
+          "site_id": "FROZEN::300956",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807841",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2467.9045039416756,
+          "site_to_point_walk_min": 31.290566857155284,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_HUB",
+          "name": "Olgiate-Calco-Brivio FS",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2157.0185883010777,
+          "point_to_site_walk_min": 27.40449291164781,
+          "site_id": "FROZEN::L00407",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1847848088",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2157.0185883010777,
+          "site_to_point_walk_min": 27.40449291164781,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_ARLATE_N1212",
+          "name": "Arlate — ipotesi N1212",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4766.8654842230235,
+          "point_to_site_walk_min": 60.027579110672136,
+          "site_id": "PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807658",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4766.8654842230235,
+          "site_to_point_walk_min": 60.027579110672136,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_LOCAL_SITE",
+          "name": "San Zeno/Via Cantu",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1544.6709059620232,
+          "point_to_site_walk_min": 19.75014688240963,
+          "site_id": "PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "616648921",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1544.6709059620232,
+          "site_to_point_walk_min": 19.75014688240963,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_CALCO_SITE",
+          "name": "Calco Centro – Municipio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3492.287763787706,
+          "point_to_site_walk_min": 44.09535760523066,
+          "site_id": "RT031::CALCO_CENTRE::n:532529.50:5063589.46",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "526117725",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3492.287763787706,
+          "site_to_point_walk_min": 44.09535760523066,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_LOCAL_SITE",
+          "name": "Olgiate sud",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2978.3351261628227,
+          "point_to_site_walk_min": 37.914820249549976,
+          "site_id": "RT031::P2V2S_0031_PROJECTED_ROAD_POINT",
+          "site_snap": {
+            "connector_distance_m": 19.50964917042781,
+            "node_id": "493476689",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2978.3351261628227,
+          "site_to_point_walk_min": 37.914820249549976,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        }
+      ],
+      "anchor_id": "OSM_POINT_1144810206",
+      "closest_nonhub_site_diagnostic": {
+        "kind": "INVENTORY_SITE",
+        "name": "S. Maria Hoè - S.P. 58 ang. Via Cenisio",
+        "occurrences": [
+          {
+            "first_alight_event_min": 444.2398774368343,
+            "first_board_event_min": 444.7398774368343,
+            "last_alight_event_min": 1254.2398774368344,
+            "last_board_event_min": 1254.7398774368344,
+            "nominal_bus_from_fs_plus_point_walk_min": 35.51444790501604,
+            "nominal_fs_to_site_in_vehicle_min": 24.23987743683432,
+            "nominal_site_to_next_fs_in_vehicle_min": 13.562826367710556,
+            "occurrence_id": "west_B:490:ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO",
+            "ordered_nonhub_event_number": 25,
+            "physical_boarding_authorised": false,
+            "point_walk_plus_nominal_bus_to_fs_min": 24.83739683589228,
+            "wing": "west_B"
+          }
+        ],
+        "physical_boarding_authorised": false,
+        "point_to_site_network_m": 866.6247928237906,
+        "point_to_site_walk_min": 11.274570468181725,
+        "scheduled_best_journey_claim": false,
+        "selection_rule": "MINIMUM_MODELED_POINT_TO_NONHUB_SITE_WALK_ONLY",
+        "site_id": "ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO",
+        "site_snap": {
+          "connector_distance_m": 0.0,
+          "node_id": "2044848604",
+          "reason": null,
+          "status": "REACHABLE"
+        },
+        "site_to_point_network_m": 866.6247928237906,
+        "site_to_point_walk_min": 11.274570468181725,
+        "status": "REACHABLE_BOTH_DIRECTIONS"
+      },
+      "coordinates_lon_lat": [
+        9.3962025,
+        45.7419344
+      ],
+      "direct_point_to_fs_walk": {
+        "kind": "INVENTORY_HUB",
+        "name": "Olgiate-Calco-Brivio FS",
+        "physical_boarding_authorised": false,
+        "point_to_site_network_m": 2157.0185883010777,
+        "point_to_site_walk_min": 27.40449291164781,
+        "site_id": "FROZEN::L00407",
+        "site_snap": {
+          "connector_distance_m": 0.0,
+          "node_id": "1847848088",
+          "reason": null,
+          "status": "REACHABLE"
+        },
+        "site_to_point_network_m": 2157.0185883010777,
+        "site_to_point_walk_min": 27.40449291164781,
+        "status": "REACHABLE_BOTH_DIRECTIONS"
+      },
+      "local_passenger_demand_observed": false,
+      "locality_to_stop_physical_access_certified": false,
+      "name": "Mondonico",
+      "point_snap": {
+        "connector_distance_m": 35.34084463074737,
+        "node_id": "2044698588",
+        "reason": null,
+        "status": "REACHABLE"
+      },
+      "source_epistemic_status": "FACT_OSM_OBSERVATION",
+      "whole_locality_coverage_certified": false
+    },
+    {
+      "all_design_site_pairs": [
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Arlate - B.vio Brivio - Madonnina",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3109.4303305977755,
+          "point_to_site_walk_min": 39.13688674666135,
+          "site_id": "ASF::ARLATE_B_VIO_BRIVIO_MADONNINA",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1141498402",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3109.4303305977755,
+          "site_to_point_walk_min": 39.13688674666135,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Arlate - Cantina Pirovano",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4387.635596308528,
+          "point_to_site_walk_min": 55.11445256804575,
+          "site_id": "ASF::ARLATE_CANTINA_PIROVANO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807659",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4387.635596308528,
+          "site_to_point_walk_min": 55.11445256804575,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Via Como (pizzeria / Bar Cristallo)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4716.362209139586,
+          "point_to_site_walk_min": 59.22353522843398,
+          "site_id": "ASF::BRIVIO_BAR_CRISTALLO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2324562549",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4716.362209139586,
+          "site_to_point_walk_min": 59.22353522843398,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Calco - Via Virgilio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2079.4915962425825,
+          "point_to_site_walk_min": 26.26265256722143,
+          "site_id": "ASF::CALCO_VIA_GARIBALDI",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "13324620708",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2079.4915962425825,
+          "site_to_point_walk_min": 26.26265256722143,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Scarpone",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 700.099048144812,
+          "point_to_site_walk_min": 9.020245715999302,
+          "site_id": "ASF::OLGIATE_MOLGORA_SCARPONE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "11184847169",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 700.099048144812,
+          "site_to_point_walk_min": 9.020245715999302,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Via Della Salute",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 554.3667667522157,
+          "point_to_site_walk_min": 7.198592198591848,
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "13672153325",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 554.3667667522157,
+          "site_to_point_walk_min": 7.198592198591848,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Via Statale",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1169.5148267708173,
+          "point_to_site_walk_min": 14.887942948824369,
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_STATALE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "3070065625",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1169.5148267708173,
+          "site_to_point_walk_min": 14.887942948824369,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Perego - Statale / Via S. Caterina",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2536.588124523679,
+          "point_to_site_walk_min": 31.97635917073514,
+          "site_id": "ASF::PEREGO_VIA_STATALE_79",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "597454513",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2536.588124523679,
+          "site_to_point_walk_min": 31.97635917073514,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Alduno",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 889.5124242638329,
+          "point_to_site_walk_min": 11.387912917487064,
+          "site_id": "ASF::ROVAGNATE_FRAZIONE_ALDUNO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2291566759",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 889.5124242638329,
+          "site_to_point_walk_min": 11.387912917487064,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - Statale / Via Lombardia",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1919.942587465961,
+          "point_to_site_walk_min": 24.268289957513666,
+          "site_id": "ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1262272520",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1919.942587465961,
+          "site_to_point_walk_min": 24.268289957513666,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - Statale / AGIP",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1568.5814750110812,
+          "point_to_site_walk_min": 19.876276051827666,
+          "site_id": "ASF::ROVAGNATE_STRADA_STATALE_AGIP",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553404719",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1568.5814750110812,
+          "site_to_point_walk_min": 19.876276051827666,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Via Giovanni XXIII / Tremonte-Via Leopardi",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1286.8685466604334,
+          "point_to_site_walk_min": 16.35486444744457,
+          "site_id": "ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044848798",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1286.8685466604334,
+          "site_to_point_walk_min": 16.35486444744457,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "S. Maria Hoè - S.P. 58 ang. Via Cenisio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 634.4623715606177,
+          "point_to_site_walk_min": 8.199787258696874,
+          "site_id": "ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044848604",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 634.4623715606177,
+          "site_to_point_walk_min": 8.199787258696874,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Vaccarezza",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4036.334857760484,
+          "point_to_site_walk_min": 50.723193336195195,
+          "site_id": "ASF::VACCAREZZA_CARTELLO_PAESE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553331577",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4036.334857760484,
+          "site_to_point_walk_min": 50.723193336195195,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Via Bergamo (Scuola Materna)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 5063.544546703869,
+          "point_to_site_walk_min": 63.56331444798751,
+          "site_id": "FROZEN::300063",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553331613",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 5063.544546703869,
+          "site_to_point_walk_min": 63.56331444798751,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (cariplo)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3125.7079268536936,
+          "point_to_site_walk_min": 39.34035669986032,
+          "site_id": "FROZEN::300086",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321918944",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3125.7079268536936,
+          "site_to_point_walk_min": 39.34035669986032,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (paese)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3568.3217155161688,
+          "point_to_site_walk_min": 44.873029058141256,
+          "site_id": "FROZEN::300398",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321918825",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3568.3217155161688,
+          "site_to_point_walk_min": 44.873029058141256,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (quattro strade)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3209.6534263493854,
+          "point_to_site_walk_min": 40.38967544355647,
+          "site_id": "FROZEN::300487",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807788",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3209.6534263493854,
+          "site_to_point_walk_min": 40.38967544355647,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "S.Maria Hoe'",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1961.0289439014684,
+          "point_to_site_walk_min": 24.78186941295751,
+          "site_id": "FROZEN::300782",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1142971802",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1961.0289439014684,
+          "site_to_point_walk_min": 24.78186941295751,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Tremonte / Via Trento",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1531.4066067701608,
+          "point_to_site_walk_min": 19.411590198816164,
+          "site_id": "FROZEN::300805",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044849029",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1531.4066067701608,
+          "site_to_point_walk_min": 19.411590198816164,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - vinicola ghezzi",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2408.983019654497,
+          "point_to_site_walk_min": 30.381295359870364,
+          "site_id": "FROZEN::300879",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2043527907",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2408.983019654497,
+          "site_to_point_walk_min": 30.381295359870364,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Calco - via nazionale (peugeot)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2608.2590690280376,
+          "point_to_site_walk_min": 32.87224597703962,
+          "site_id": "FROZEN::300956",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807841",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2608.2590690280376,
+          "site_to_point_walk_min": 32.87224597703962,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_HUB",
+          "name": "Olgiate-Calco-Brivio FS",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1422.2975864623581,
+          "point_to_site_walk_min": 18.04772744496863,
+          "site_id": "FROZEN::L00407",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1847848088",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1422.2975864623581,
+          "site_to_point_walk_min": 18.04772744496863,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_ARLATE_N1212",
+          "name": "Arlate — ipotesi N1212",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4853.994606445522,
+          "point_to_site_walk_min": 60.94394019475817,
+          "site_id": "PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807658",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4853.994606445522,
+          "site_to_point_walk_min": 60.94394019475817,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_LOCAL_SITE",
+          "name": "San Zeno/Via Cantu",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1568.9615003521494,
+          "point_to_site_walk_min": 19.88102636859102,
+          "site_id": "PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "616648921",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1568.9615003521494,
+          "site_to_point_walk_min": 19.88102636859102,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_CALCO_SITE",
+          "name": "Calco Centro – Municipio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2720.1393920571622,
+          "point_to_site_walk_min": 34.270750014903676,
+          "site_id": "RT031::CALCO_CENTRE::n:532529.50:5063589.46",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "526117725",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2720.1393920571622,
+          "site_to_point_walk_min": 34.270750014903676,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_LOCAL_SITE",
+          "name": "Olgiate sud",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2102.7294596882866,
+          "point_to_site_walk_min": 26.796996474923084,
+          "site_id": "RT031::P2V2S_0031_PROJECTED_ROAD_POINT",
+          "site_snap": {
+            "connector_distance_m": 19.50964917042781,
+            "node_id": "493476689",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2102.7294596882866,
+          "site_to_point_walk_min": 26.796996474923084,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        }
+      ],
+      "anchor_id": "OSM_POINT_2101450267",
+      "closest_nonhub_site_diagnostic": {
+        "kind": "INVENTORY_SITE",
+        "name": "Olgiate Molgora - Via Della Salute",
+        "occurrences": [
+          {
+            "first_alight_event_min": 446.844183471796,
+            "first_board_event_min": 447.344183471796,
+            "last_alight_event_min": 1256.844183471796,
+            "last_board_event_min": 1257.344183471796,
+            "nominal_bus_from_fs_plus_point_walk_min": 34.04277567038783,
+            "nominal_fs_to_site_in_vehicle_min": 26.844183471795986,
+            "nominal_site_to_next_fs_in_vehicle_min": 10.95852033274889,
+            "occurrence_id": "west_B:539:ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE",
+            "ordered_nonhub_event_number": 26,
+            "physical_boarding_authorised": false,
+            "point_walk_plus_nominal_bus_to_fs_min": 18.157112531340736,
+            "wing": "west_B"
+          }
+        ],
+        "physical_boarding_authorised": false,
+        "point_to_site_network_m": 554.3667667522157,
+        "point_to_site_walk_min": 7.198592198591848,
+        "scheduled_best_journey_claim": false,
+        "selection_rule": "MINIMUM_MODELED_POINT_TO_NONHUB_SITE_WALK_ONLY",
+        "site_id": "ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE",
+        "site_snap": {
+          "connector_distance_m": 0.0,
+          "node_id": "13672153325",
+          "reason": null,
+          "status": "REACHABLE"
+        },
+        "site_to_point_network_m": 554.3667667522157,
+        "site_to_point_walk_min": 7.198592198591848,
+        "status": "REACHABLE_BOTH_DIRECTIONS"
+      },
+      "coordinates_lon_lat": [
+        9.3920896,
+        45.7346613
+      ],
+      "direct_point_to_fs_walk": {
+        "kind": "INVENTORY_HUB",
+        "name": "Olgiate-Calco-Brivio FS",
+        "physical_boarding_authorised": false,
+        "point_to_site_network_m": 1422.2975864623581,
+        "point_to_site_walk_min": 18.04772744496863,
+        "site_id": "FROZEN::L00407",
+        "site_snap": {
+          "connector_distance_m": 0.0,
+          "node_id": "1847848088",
+          "reason": null,
+          "status": "REACHABLE"
+        },
+        "site_to_point_network_m": 1422.2975864623581,
+        "site_to_point_walk_min": 18.04772744496863,
+        "status": "REACHABLE_BOTH_DIRECTIONS"
+      },
+      "local_passenger_demand_observed": false,
+      "locality_to_stop_physical_access_certified": false,
+      "name": "Monticello",
+      "point_snap": {
+        "connector_distance_m": 21.520609135132165,
+        "node_id": "2027973374",
+        "reason": null,
+        "status": "REACHABLE"
+      },
+      "source_epistemic_status": "FACT_OSM_OBSERVATION",
+      "whole_locality_coverage_certified": false
+    },
+    {
+      "all_design_site_pairs": [
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Arlate - B.vio Brivio - Madonnina",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1449.9782344031382,
+          "point_to_site_walk_min": 18.37777249682676,
+          "site_id": "ASF::ARLATE_B_VIO_BRIVIO_MADONNINA",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1141498402",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1449.9782344031382,
+          "site_to_point_walk_min": 18.37777249682676,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Arlate - Cantina Pirovano",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1567.4266831837383,
+          "point_to_site_walk_min": 19.845878106584262,
+          "site_id": "ASF::ARLATE_CANTINA_PIROVANO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807659",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1567.4266831837383,
+          "site_to_point_walk_min": 19.845878106584262,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Via Como (pizzeria / Bar Cristallo)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3410.620838208414,
+          "point_to_site_walk_min": 42.88580504439271,
+          "site_id": "ASF::BRIVIO_BAR_CRISTALLO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2324562549",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3410.620838208414,
+          "site_to_point_walk_min": 42.88580504439271,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Calco - Via Virgilio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1535.9514522709896,
+          "point_to_site_walk_min": 19.452437720174906,
+          "site_id": "ASF::CALCO_VIA_GARIBALDI",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "13324620708",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1535.9514522709896,
+          "site_to_point_walk_min": 19.452437720174906,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Scarpone",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3328.1430129332794,
+          "point_to_site_walk_min": 41.85483222845353,
+          "site_id": "ASF::OLGIATE_MOLGORA_SCARPONE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "11184847169",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3328.1430129332794,
+          "site_to_point_walk_min": 41.85483222845353,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Via Della Salute",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3308.75336464638,
+          "point_to_site_walk_min": 41.61246162486729,
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "13672153325",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3308.75336464638,
+          "site_to_point_walk_min": 41.61246162486729,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Via Statale",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2445.9282217427553,
+          "point_to_site_walk_min": 30.82714733857198,
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_STATALE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "3070065625",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2445.9282217427553,
+          "site_to_point_walk_min": 30.82714733857198,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Perego - Statale / Via S. Caterina",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 5712.24903472792,
+          "point_to_site_walk_min": 71.65615750088654,
+          "site_id": "ASF::PEREGO_VIA_STATALE_79",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "597454513",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 5712.24903472792,
+          "site_to_point_walk_min": 71.65615750088654,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Alduno",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4065.1733344680747,
+          "point_to_site_walk_min": 51.06771124763847,
+          "site_id": "ASF::ROVAGNATE_FRAZIONE_ALDUNO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2291566759",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4065.1733344680747,
+          "site_to_point_walk_min": 51.06771124763847,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - Statale / Via Lombardia",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 5095.6034976702,
+          "point_to_site_walk_min": 63.948088287665044,
+          "site_id": "ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1262272520",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 5095.6034976702,
+          "site_to_point_walk_min": 63.948088287665044,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - Statale / AGIP",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4744.2423852153215,
+          "point_to_site_walk_min": 59.55607438197906,
+          "site_id": "ASF::ROVAGNATE_STRADA_STATALE_AGIP",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553404719",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4744.2423852153215,
+          "site_to_point_walk_min": 59.55607438197906,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Via Giovanni XXIII / Tremonte-Via Leopardi",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4775.653735927696,
+          "point_to_site_walk_min": 59.94871626588374,
+          "site_id": "ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044848798",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4775.653735927696,
+          "site_to_point_walk_min": 59.94871626588374,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "S. Maria Hoè - S.P. 58 ang. Via Cenisio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4123.247560827879,
+          "point_to_site_walk_min": 51.79363907713603,
+          "site_id": "ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044848604",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4123.247560827879,
+          "site_to_point_walk_min": 51.79363907713603,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Vaccarezza",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2730.5934868293116,
+          "point_to_site_walk_min": 34.38546315215393,
+          "site_id": "ASF::VACCAREZZA_CARTELLO_PAESE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553331577",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2730.5934868293116,
+          "site_to_point_walk_min": 34.38546315215393,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Via Bergamo (Scuola Materna)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3703.05609595443,
+          "point_to_site_walk_min": 46.54124576621791,
+          "site_id": "FROZEN::300063",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553331613",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3703.05609595443,
+          "site_to_point_walk_min": 46.54124576621791,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (cariplo)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2697.037127067538,
+          "point_to_site_walk_min": 33.966008655131766,
+          "site_id": "FROZEN::300086",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321918944",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2697.037127067538,
+          "site_to_point_walk_min": 33.966008655131766,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (paese)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2331.6751199543137,
+          "point_to_site_walk_min": 29.398983566216458,
+          "site_id": "FROZEN::300398",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321918825",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2331.6751199543137,
+          "site_to_point_walk_min": 29.398983566216458,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (quattro strade)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1963.6497431396551,
+          "point_to_site_walk_min": 24.798666356033223,
+          "site_id": "FROZEN::300487",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807788",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1963.6497431396551,
+          "site_to_point_walk_min": 24.798666356033223,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "S.Maria Hoe'",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 5449.81413316873,
+          "point_to_site_walk_min": 68.37572123139667,
+          "site_id": "FROZEN::300782",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1142971802",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 5449.81413316873,
+          "site_to_point_walk_min": 68.37572123139667,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Tremonte / Via Trento",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 5020.191796037423,
+          "point_to_site_walk_min": 63.00544201725533,
+          "site_id": "FROZEN::300805",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044849029",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 5020.191796037423,
+          "site_to_point_walk_min": 63.00544201725533,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - vinicola ghezzi",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 5584.643929858737,
+          "point_to_site_walk_min": 70.06109369002175,
+          "site_id": "FROZEN::300879",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2043527907",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 5584.643929858737,
+          "site_to_point_walk_min": 70.06109369002175,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Calco - via nazionale (peugeot)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2129.806083164079,
+          "point_to_site_walk_min": 26.875620606338526,
+          "site_id": "FROZEN::300956",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807841",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2129.806083164079,
+          "site_to_point_walk_min": 26.875620606338526,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_HUB",
+          "name": "Olgiate-Calco-Brivio FS",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2243.007347064109,
+          "point_to_site_walk_min": 28.2906364050889,
+          "site_id": "FROZEN::L00407",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1847848088",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2243.007347064109,
+          "site_to_point_walk_min": 28.2906364050889,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_ARLATE_N1212",
+          "name": "Arlate — ipotesi N1212",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2033.7856933207308,
+          "point_to_site_walk_min": 25.675365733296672,
+          "site_id": "PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807658",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2033.7856933207308,
+          "site_to_point_walk_min": 25.675365733296672,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_LOCAL_SITE",
+          "name": "San Zeno/Via Cantu",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2813.1188430261354,
+          "point_to_site_walk_min": 35.41703010461423,
+          "site_id": "PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "616648921",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2813.1188430261354,
+          "site_to_point_walk_min": 35.41703010461423,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_CALCO_SITE",
+          "name": "Calco Centro – Municipio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 893.4364159804223,
+          "point_to_site_walk_min": 11.420999766542815,
+          "site_id": "RT031::CALCO_CENTRE::n:532529.50:5063589.46",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "526117725",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 893.4364159804223,
+          "site_to_point_walk_min": 11.420999766542815,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_LOCAL_SITE",
+          "name": "Olgiate sud",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3010.1998923432343,
+          "point_to_site_walk_min": 38.12441383570831,
+          "site_id": "RT031::P2V2S_0031_PROJECTED_ROAD_POINT",
+          "site_snap": {
+            "connector_distance_m": 19.50964917042781,
+            "node_id": "493476689",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3010.1998923432343,
+          "site_to_point_walk_min": 38.12441383570831,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        }
+      ],
+      "anchor_id": "OSM_POINT_6647016663",
+      "closest_nonhub_site_diagnostic": {
+        "kind": "PROPOSED_CALCO_SITE",
+        "name": "Calco Centro – Municipio",
+        "occurrences": [
+          {
+            "first_alight_event_min": 395.5642331097583,
+            "first_board_event_min": 396.0642331097583,
+            "last_alight_event_min": 1210.5642331097583,
+            "last_board_event_min": 1211.0642331097583,
+            "nominal_bus_from_fs_plus_point_walk_min": 41.98523287630109,
+            "nominal_fs_to_site_in_vehicle_min": 30.564233109758277,
+            "nominal_site_to_next_fs_in_vehicle_min": 9.712360518141338,
+            "occurrence_id": "east_A:520:RT031::CALCO_CENTRE::n:532529.50:5063589.46",
+            "ordered_nonhub_event_number": 12,
+            "physical_boarding_authorised": false,
+            "point_walk_plus_nominal_bus_to_fs_min": 21.13336028468415,
+            "wing": "east_A"
+          }
+        ],
+        "physical_boarding_authorised": false,
+        "point_to_site_network_m": 893.4364159804223,
+        "point_to_site_walk_min": 11.420999766542815,
+        "scheduled_best_journey_claim": false,
+        "selection_rule": "MINIMUM_MODELED_POINT_TO_NONHUB_SITE_WALK_ONLY",
+        "site_id": "RT031::CALCO_CENTRE::n:532529.50:5063589.46",
+        "site_snap": {
+          "connector_distance_m": 0.0,
+          "node_id": "526117725",
+          "reason": null,
+          "status": "REACHABLE"
+        },
+        "site_to_point_network_m": 893.4364159804223,
+        "site_to_point_walk_min": 11.420999766542815,
+        "status": "REACHABLE_BOTH_DIRECTIONS"
+      },
+      "coordinates_lon_lat": [
+        9.4268562,
+        45.7247416
+      ],
+      "direct_point_to_fs_walk": {
+        "kind": "INVENTORY_HUB",
+        "name": "Olgiate-Calco-Brivio FS",
+        "physical_boarding_authorised": false,
+        "point_to_site_network_m": 2243.007347064109,
+        "point_to_site_walk_min": 28.2906364050889,
+        "site_id": "FROZEN::L00407",
+        "site_snap": {
+          "connector_distance_m": 0.0,
+          "node_id": "1847848088",
+          "reason": null,
+          "status": "REACHABLE"
+        },
+        "site_to_point_network_m": 2243.007347064109,
+        "site_to_point_walk_min": 28.2906364050889,
+        "status": "REACHABLE_BOTH_DIRECTIONS"
+      },
+      "local_passenger_demand_observed": false,
+      "locality_to_stop_physical_access_certified": false,
+      "name": "Calco Superiore",
+      "point_snap": {
+        "connector_distance_m": 20.243565343002803,
+        "node_id": "8932221798",
+        "reason": null,
+        "status": "REACHABLE"
+      },
+      "source_epistemic_status": "FACT_OSM_OBSERVATION",
+      "whole_locality_coverage_certified": false
+    },
+    {
+      "all_design_site_pairs": [
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Arlate - B.vio Brivio - Madonnina",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 5141.193725318403,
+          "point_to_site_walk_min": 64.68499504758105,
+          "site_id": "ASF::ARLATE_B_VIO_BRIVIO_MADONNINA",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1141498402",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 5141.193725318403,
+          "site_to_point_walk_min": 64.68499504758105,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Arlate - Cantina Pirovano",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 6419.398991029156,
+          "point_to_site_walk_min": 80.66256086896547,
+          "site_id": "ASF::ARLATE_CANTINA_PIROVANO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807659",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 6419.398991029156,
+          "site_to_point_walk_min": 80.66256086896547,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Via Como (pizzeria / Bar Cristallo)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 6825.759541589279,
+          "point_to_site_walk_min": 85.74206775096701,
+          "site_id": "ASF::BRIVIO_BAR_CRISTALLO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2324562549",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 6825.759541589279,
+          "site_to_point_walk_min": 85.74206775096701,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Calco - Via Virgilio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3749.4267501906816,
+          "point_to_site_walk_min": 47.28790785848453,
+          "site_id": "ASF::CALCO_VIA_GARIBALDI",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "13324620708",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3749.4267501906816,
+          "site_to_point_walk_min": 47.28790785848453,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Scarpone",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2032.4054264727647,
+          "point_to_site_walk_min": 25.825141312010572,
+          "site_id": "ASF::OLGIATE_MOLGORA_SCARPONE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "11184847169",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2032.4054264727647,
+          "site_to_point_walk_min": 25.825141312010572,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Via Della Salute",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2118.1690108145226,
+          "point_to_site_walk_min": 26.897186116282548,
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "13672153325",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2118.1690108145226,
+          "site_to_point_walk_min": 26.897186116282548,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Olgiate Molgora - Via Statale",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2839.449980718916,
+          "point_to_site_walk_min": 35.91319824008746,
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_STATALE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "3070065625",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2839.449980718916,
+          "site_to_point_walk_min": 35.91319824008746,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Perego - Statale / Via S. Caterina",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1679.4857934935546,
+          "point_to_site_walk_min": 21.41364589977045,
+          "site_id": "ASF::PEREGO_VIA_STATALE_79",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "597454513",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1679.4857934935546,
+          "site_to_point_walk_min": 21.41364589977045,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Alduno",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1505.209462550397,
+          "point_to_site_walk_min": 19.23519176298098,
+          "site_id": "ASF::ROVAGNATE_FRAZIONE_ALDUNO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2291566759",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1505.209462550397,
+          "site_to_point_walk_min": 19.23519176298098,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - Statale / Via Lombardia",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1062.8402564358353,
+          "point_to_site_walk_min": 13.705576686548957,
+          "site_id": "ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1262272520",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1062.8402564358353,
+          "site_to_point_walk_min": 13.705576686548957,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - Statale / AGIP",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1414.201368890715,
+          "point_to_site_walk_min": 18.097590592234955,
+          "site_id": "ASF::ROVAGNATE_STRADA_STATALE_AGIP",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553404719",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1414.201368890715,
+          "site_to_point_walk_min": 18.097590592234955,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Via Giovanni XXIII / Tremonte-Via Leopardi",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2518.131085513855,
+          "point_to_site_walk_min": 31.8967120500242,
+          "site_id": "ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044848798",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2518.131085513855,
+          "site_to_point_walk_min": 31.8967120500242,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "S. Maria Hoè - S.P. 58 ang. Via Cenisio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2546.103249689132,
+          "point_to_site_walk_min": 32.24636410221517,
+          "site_id": "ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044848604",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2546.103249689132,
+          "site_to_point_walk_min": 32.24636410221517,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Vaccarezza",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 6145.7321902101785,
+          "point_to_site_walk_min": 77.24172585872824,
+          "site_id": "ASF::VACCAREZZA_CARTELLO_PAESE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553331577",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 6145.7321902101785,
+          "site_to_point_walk_min": 77.24172585872824,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - Via Bergamo (Scuola Materna)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 7172.941879153564,
+          "point_to_site_walk_min": 90.08184697052056,
+          "site_id": "FROZEN::300063",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "553331613",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 7172.941879153564,
+          "site_to_point_walk_min": 90.08184697052056,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (cariplo)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 5235.105259303394,
+          "point_to_site_walk_min": 65.85888922239344,
+          "site_id": "FROZEN::300086",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321918944",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 5235.105259303394,
+          "site_to_point_walk_min": 65.85888922239344,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (paese)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 5677.7190479658675,
+          "point_to_site_walk_min": 71.39156158067436,
+          "site_id": "FROZEN::300398",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321918825",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 5677.7190479658675,
+          "site_to_point_walk_min": 71.39156158067436,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Brivio - beverate (quattro strade)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 5319.050758799084,
+          "point_to_site_walk_min": 66.90820796608958,
+          "site_id": "FROZEN::300487",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807788",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 5319.050758799084,
+          "site_to_point_walk_min": 66.90820796608958,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "S.Maria Hoe'",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2235.1919739623004,
+          "point_to_site_walk_min": 28.359973155629767,
+          "site_id": "FROZEN::300782",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1142971802",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2235.1919739623004,
+          "site_to_point_walk_min": 28.359973155629767,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Santa Maria Hoè - Tremonte / Via Trento",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2364.868585834828,
+          "point_to_site_walk_min": 29.980930804036365,
+          "site_id": "FROZEN::300805",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2044849029",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2364.868585834828,
+          "site_to_point_walk_min": 29.980930804036365,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Rovagnate - vinicola ghezzi",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 1664.730803590231,
+          "point_to_site_walk_min": 21.229208525978905,
+          "site_id": "FROZEN::300879",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2043527907",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 1664.730803590231,
+          "site_to_point_walk_min": 21.229208525978905,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_SITE",
+          "name": "Calco - via nazionale (peugeot)",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4717.656401477739,
+          "point_to_site_walk_min": 59.390778499572754,
+          "site_id": "FROZEN::300956",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807841",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4717.656401477739,
+          "site_to_point_walk_min": 59.390778499572754,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "INVENTORY_HUB",
+          "name": "Olgiate-Calco-Brivio FS",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3331.167823974337,
+          "point_to_site_walk_min": 42.05967128078022,
+          "site_id": "FROZEN::L00407",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "1847848088",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3331.167823974337,
+          "site_to_point_walk_min": 42.05967128078022,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_ARLATE_N1212",
+          "name": "Arlate — ipotesi N1212",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 6885.758001166149,
+          "point_to_site_walk_min": 86.49204849567789,
+          "site_id": "PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "2321807658",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 6885.758001166149,
+          "site_to_point_walk_min": 86.49204849567789,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_LOCAL_SITE",
+          "name": "San Zeno/Via Cantu",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 3678.358832801853,
+          "point_to_site_walk_min": 46.39955889112418,
+          "site_id": "PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "616648921",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 3678.358832801853,
+          "site_to_point_walk_min": 46.39955889112418,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_CALCO_SITE",
+          "name": "Calco Centro – Municipio",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 4391.941786481249,
+          "point_to_site_walk_min": 55.31934581211664,
+          "site_id": "RT031::CALCO_CENTRE::n:532529.50:5063589.46",
+          "site_snap": {
+            "connector_distance_m": 0.0,
+            "node_id": "526117725",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 4391.941786481249,
+          "site_to_point_walk_min": 55.31934581211664,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        },
+        {
+          "kind": "PROPOSED_LOCAL_SITE",
+          "name": "Olgiate sud",
+          "physical_boarding_authorised": false,
+          "point_to_site_network_m": 2985.09419922483,
+          "point_to_site_walk_min": 37.977621586041735,
+          "site_id": "RT031::P2V2S_0031_PROJECTED_ROAD_POINT",
+          "site_snap": {
+            "connector_distance_m": 19.50964917042781,
+            "node_id": "493476689",
+            "reason": null,
+            "status": "REACHABLE"
+          },
+          "site_to_point_network_m": 2985.09419922483,
+          "site_to_point_walk_min": 37.977621586041735,
+          "status": "REACHABLE_BOTH_DIRECTIONS"
+        }
+      ],
+      "anchor_id": "OSM_POINT_2101402496",
+      "closest_nonhub_site_diagnostic": {
+        "kind": "INVENTORY_SITE",
+        "name": "Rovagnate - Statale / Via Lombardia",
+        "occurrences": [
+          {
+            "first_alight_event_min": 432.9825001336272,
+            "first_board_event_min": 433.4825001336272,
+            "last_alight_event_min": 1242.9825001336271,
+            "last_board_event_min": 1243.4825001336271,
+            "nominal_bus_from_fs_plus_point_walk_min": 26.688076820176143,
+            "nominal_fs_to_site_in_vehicle_min": 12.982500133627184,
+            "nominal_site_to_next_fs_in_vehicle_min": 24.820203670917692,
+            "occurrence_id": "west_B:297:ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA",
+            "ordered_nonhub_event_number": 19,
+            "physical_boarding_authorised": false,
+            "point_walk_plus_nominal_bus_to_fs_min": 38.52578035746665,
+            "wing": "west_B"
+          }
+        ],
+        "physical_boarding_authorised": false,
+        "point_to_site_network_m": 1062.8402564358353,
+        "point_to_site_walk_min": 13.705576686548957,
+        "scheduled_best_journey_claim": false,
+        "selection_rule": "MINIMUM_MODELED_POINT_TO_NONHUB_SITE_WALK_ONLY",
+        "site_id": "ASF::ROVAGNATE_SS_ANG_V_LOMBARDIA",
+        "site_snap": {
+          "connector_distance_m": 0.0,
+          "node_id": "1262272520",
+          "reason": null,
+          "status": "REACHABLE"
+        },
+        "site_to_point_network_m": 1062.8402564358353,
+        "site_to_point_walk_min": 13.705576686548957,
+        "status": "REACHABLE_BOTH_DIRECTIONS"
+      },
+      "coordinates_lon_lat": [
+        9.3723062,
+        45.7333404
+      ],
+      "direct_point_to_fs_walk": {
+        "kind": "INVENTORY_HUB",
+        "name": "Olgiate-Calco-Brivio FS",
+        "physical_boarding_authorised": false,
+        "point_to_site_network_m": 3331.167823974337,
+        "point_to_site_walk_min": 42.05967128078022,
+        "site_id": "FROZEN::L00407",
+        "site_snap": {
+          "connector_distance_m": 0.0,
+          "node_id": "1847848088",
+          "reason": null,
+          "status": "REACHABLE"
+        },
+        "site_to_point_network_m": 3331.167823974337,
+        "site_to_point_walk_min": 42.05967128078022,
+        "status": "REACHABLE_BOTH_DIRECTIONS"
+      },
+      "local_passenger_demand_observed": false,
+      "locality_to_stop_physical_access_certified": false,
+      "name": "Crescenzaga",
+      "point_snap": {
+        "connector_distance_m": 33.60587848808128,
+        "node_id": "13152765210",
+        "reason": null,
+        "status": "REACHABLE"
+      },
+      "source_epistemic_status": "FACT_OSM_OBSERVATION",
+      "whole_locality_coverage_certified": false
+    }
+  ],
+  "provenance": {
+    "anchors": {
+      "newline_normalized": true,
+      "source_path": "outputs\\phase2\\stop_universe_v2\\settlement_destination_anchors.csv"
+    },
+    "config\\rt031_caller_locality_itinerary_preference_v3.json": {
+      "newline_normalized": true,
+      "source_path": "config\\rt031_caller_locality_itinerary_preference_v3.json"
+    },
+    "geo": {
+      "newline_normalized": true,
+      "source_path": "outputs\\phase2\\rt031_line8_local_shortcuts_v3\\calco_centre_adopted_design.geojson"
+    },
+    "handoff": {
+      "newline_normalized": true,
+      "source_path": "outputs\\phase2\\rt031_line8_local_shortcuts_v3\\caller_confirmed_design_handoff_20261001.json"
+    },
+    "locality_preference": {
+      "newline_normalized": true,
+      "source_path": "config\\rt031_caller_locality_itinerary_preference_v3.json"
+    },
+    "outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/arriva_unresolved_official_stop_places_gpt_v4.csv": {
+      "newline_normalized": true,
+      "source_path": "outputs\\phase2\\network_design_method_audit_v3\\master_stop_inventory_gpt_v3\\arriva_unresolved_official_stop_places_gpt_v4.csv"
+    },
+    "outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/existing_stop_places_operational_gpt_v5.csv": {
+      "newline_normalized": true,
+      "source_path": "outputs\\phase2\\network_design_method_audit_v3\\master_stop_inventory_gpt_v3\\existing_stop_places_operational_gpt_v5.csv"
+    },
+    "outputs\\phase2\\rt031_line8_local_shortcuts_v3\\caller_confirmed_design_handoff_20261001.json": {
+      "newline_normalized": true,
+      "source_path": "outputs\\phase2\\rt031_line8_local_shortcuts_v3\\caller_confirmed_design_handoff_20261001.json"
+    },
+    "pedestrian_osm": {
+      "newline_normalized": false,
+      "source_path": "rt028_osm_pedestrian_snapshot_v3.osm"
+    },
+    "raw_points": {
+      "newline_normalized": true,
+      "source_path": "data\\raw\\osm\\osm_points_core.geojson"
+    }
+  },
+  "recorded_on": "2026-10-02",
+  "remaining_locality_readiness": [
+    {
+      "additional_point_calculation_supported": false,
+      "place": "Calco Cornello",
+      "source": "outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/arriva_unresolved_official_stop_places_gpt_v4.csv",
+      "source_identity": "AXW013 / AR148_004",
+      "state": "OFFICIAL_STOP_EXISTS_EXACT_COORDINATE_UNRESOLVED"
+    },
+    {
+      "additional_point_calculation_supported": false,
+      "note": "Cassina Fra Martino OSM_POINT_1620729043 is not assumed to be the caller place.",
+      "place": "Cassina",
+      "source": "config\\rt031_caller_locality_itinerary_preference_v3.json",
+      "source_identity": null,
+      "state": "CALLER_PLACE_IDENTITY_AMBIGUOUS"
+    },
+    {
+      "additional_point_calculation_supported": false,
+      "place": "Oratorio Olgiate",
+      "source": "config\\rt031_caller_locality_itinerary_preference_v3.json",
+      "source_identity": null,
+      "state": "EXACT_VENUE_IDENTITY_UNRESOLVED"
+    },
+    {
+      "additional_point_calculation_supported": true,
+      "note": "45.7221313,9.3979736 from special-service inventory; point walk can be computed separately.",
+      "place": "Casa di Comunità Olgiate",
+      "source": "outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/existing_stop_places_operational_gpt_v5.csv",
+      "source_identity": "SPECIAL::CASA_DI_COMUNITA_OLGIATE",
+      "state": "LOCATED_SPECIAL_SERVICE_STOP_NOT_ORDINARY_LINE_BINDING"
+    },
+    {
+      "authoritative_area_calculation_supported": false,
+      "note": "Existing inner/outer envelopes are sensitivities; the actual design site is not a whole-area certificate.",
+      "place": "Olgiate sud entire caller neighbourhood",
+      "source": "config\\rt031_caller_locality_itinerary_preference_v3.json",
+      "source_identity": "CALLER_ANNOTATED_MAP_2026_09_24",
+      "state": "CALLER_BOUNDARY_NOT_GEOREFERENCED"
+    },
+    {
+      "additional_point_calculation_supported": true,
+      "note": "Distinct from the southern Canova–San Zeno neighbourhood.",
+      "place": "San Zeno / Via Cantù north",
+      "source": "outputs\\phase2\\rt031_line8_local_shortcuts_v3\\caller_confirmed_design_handoff_20261001.json",
+      "source_identity": "PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+      "state": "DESIGN_ROAD_POINT_AND_ORDERED_EVENTS_PHYSICAL_ACCESS_UNVERIFIED"
+    }
+  ],
+  "scheduled_total_journey_time_certified": false,
+  "semantics": "Point-label walking to actual design coordinates, with endpoint connectors. Nominal bus legs use exact ordered design occurrences. Walk+bus sums exclude readiness wait, train transfer, timetable waiting and empirical delays; they are not total scheduled journey time, GJT or observed demand.",
+  "source_sha256": {
+    "anchors": "6ce1073dc7c30ca51a7ed584f6655ad525d99ca0c68dd2dabe2ea30304d7d3c4",
+    "config\\rt031_caller_locality_itinerary_preference_v3.json": "bb69fbc7de18ddc77cf561b9ce80bb66f2460842c72983e9fdd73b3259db07ad",
+    "geo": "47148a1aa91c1e290084718f93da47b23bb4e05f90e07a1d1af6412f590fe4e3",
+    "handoff": "2dc2299112211694433b5d637ef97183e9c15e0e2f5719b1ad4c5aa6f2f51a3c",
+    "locality_preference": "bb69fbc7de18ddc77cf561b9ce80bb66f2460842c72983e9fdd73b3259db07ad",
+    "outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/arriva_unresolved_official_stop_places_gpt_v4.csv": "b387d7cee7729b036bf89c3d8fcbac79634a8a7c3705a1e7bb5816a36b97f177",
+    "outputs/phase2/network_design_method_audit_v3/master_stop_inventory_gpt_v3/existing_stop_places_operational_gpt_v5.csv": "53af82ccfc398719781faf526d482431d2258bd637a74349222e0c4967642076",
+    "outputs\\phase2\\rt031_line8_local_shortcuts_v3\\caller_confirmed_design_handoff_20261001.json": "2dc2299112211694433b5d637ef97183e9c15e0e2f5719b1ad4c5aa6f2f51a3c",
+    "pedestrian_osm": "896f192bbb481f0c07cdc5d695424bf29de85f89ac33ea72986a06e521b424cd",
+    "raw_points": "897b8351af5fcf9b7fab9187b43adbe9bc043a635a035e9aa54c4a59ff1fb004"
+  },
+  "status": "DERIVED_POINT_DIAGNOSTIC_NOT_WHOLE_LOCALITY_SERVICE_CERTIFICATION",
+  "whole_locality_coverage_certified": false
+}

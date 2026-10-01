@@ -1,0 +1,103 @@
+{
+  "contract": "RT031_PDB_CALENDAR_REFERENCE_EVIDENCE_V3",
+  "recorded_on": "2026-10-01",
+  "status": "SOURCE_GROUNDED_PLANNING_REFERENCE_NOT_ADOPTED_SERVICE_CALENDAR",
+  "scope": "Independent evidence and arithmetic for the existing confirmed 16-full-trip design. This record does not amend its authorities, select a calendar, approve funding or establish actual annual current-service production.",
+  "primary_source": {
+    "title": "Programma di Bacino, revisione 7.2, Allegato 3.4 - Scheda ambito: Meratese",
+    "local_path": "data/raw/pdb/PdB_Allegato3.4_Meratese.pdf",
+    "official_url": "https://www.tplcomoleccovarese.it/atpcolc/images/Programma%20di%20Bacino/Rev7.2/Allegato3.4_PdB_SchedaAmbito_Meratese.pdf",
+    "sha256": "e0657cb4e8a078ddf99f28e1ebbde4a67ee36bb9b7a92fcd488e2539a948079a",
+    "manifest_path": "data/manifest.csv",
+    "manifest_reference_year": "2025",
+    "manifest_access_date": "2026-09-03",
+    "epistemic_status": "FACT_PRIMARY_PLANNING_DOCUMENT_SNAPSHOT",
+    "inspection": "Complete relevant PDF pages extracted and visually inspected; page numbers below refer to PDF position, not a printed page label.",
+    "route_pages": [
+      {"route_id": "D184", "pdf_page_number_one_based": 7, "pdf_page_index_zero_based": 6},
+      {"route_id": "D185", "pdf_page_number_one_based": 8, "pdf_page_index_zero_based": 7}
+    ]
+  },
+  "published_route_totals_bus_km_per_year": [
+    {"route_id": "D184", "name_as_published": "Olgiate Molgora - Ravellino", "peak": 15264, "offpeak": 37296, "published_total": 52560},
+    {"route_id": "D185", "name_as_published": "Olgiate Molgora - Caprino B.", "peak": 19144, "offpeak": 39714, "published_total": 58859}
+  ],
+  "combined_reference": {
+    "formula": "52560 + 58859",
+    "published_total_sum_bus_km_per_year": 111419,
+    "published_peak_component_sum_bus_km_per_year": 34408,
+    "published_offpeak_component_sum_bus_km_per_year": 77010,
+    "meaning": "Sum of the two published PdB route production totals. Includes both peak and offpeak production and the named complete route scope. It is a planning production reference, not proof of currently financed, measured or freely transferable production.",
+    "precision_findings": [
+      "D185 displayed components: 19144 + 39714 = 58858, while its published total is 58859; the source displays a 1 km discrepancy.",
+      "D184 displayed day-type production cells sum to 37297, while its published offpeak total is 37296; the source displays a 1 km discrepancy.",
+      "Retain published route totals for the inherited 111419 reference. Do not infer unrounded values or silently repair the primary document."
+    ]
+  },
+  "day_type_table_shared_by_d184_d185": {
+    "source_row_names": ["Giorni", "Coppie/giorno di progetto", "Produzione [bus km/anno]"],
+    "epistemic_status": "FACT_PDB_PLANNING_DAY_TYPE_COUNTS_NOT_DATED_ACTUAL_SERVICE_CALENDAR",
+    "rows": [
+      {"label": "Feriale invernale", "days": 187, "project_pairs_per_day": 6, "d184_displayed_production_bus_km_per_year": 23018, "d185_displayed_production_bus_km_per_year": 24510},
+      {"label": "Sabato invernale", "days": 39, "project_pairs_per_day": 6, "d184_displayed_production_bus_km_per_year": 4801, "d185_displayed_production_bus_km_per_year": 5112},
+      {"label": "Festivo invernale", "days": 46, "project_pairs_per_day": 0, "d184_displayed_production_bus_km_per_year": 0, "d185_displayed_production_bus_km_per_year": 0},
+      {"label": "Feriale estivo no agosto", "days": 45, "project_pairs_per_day": 6, "d184_displayed_production_bus_km_per_year": 5539, "d185_displayed_production_bus_km_per_year": 5898},
+      {"label": "Sabato estivo no agosto", "days": 9, "project_pairs_per_day": 6, "d184_displayed_production_bus_km_per_year": 1108, "d185_displayed_production_bus_km_per_year": 1180},
+      {"label": "Feriale agosto", "days": 19, "project_pairs_per_day": 6, "d184_displayed_production_bus_km_per_year": 2339, "d185_displayed_production_bus_km_per_year": 2490},
+      {"label": "Sabato agosto", "days": 4, "project_pairs_per_day": 6, "d184_displayed_production_bus_km_per_year": 492, "d185_displayed_production_bus_km_per_year": 524},
+      {"label": "Festivo estivo", "days": 14, "project_pairs_per_day": 0, "d184_displayed_production_bus_km_per_year": 0, "d185_displayed_production_bus_km_per_year": 0}
+    ],
+    "ordinary_project_service_day_sum_formula": "187 + 39 + 45 + 9 + 19 + 4",
+    "ordinary_project_service_days": 303,
+    "feriale_category_days": 251,
+    "saturday_category_days": 52,
+    "festive_category_days_with_zero_project_pairs": 60,
+    "all_displayed_day_type_counts_sum": 363,
+    "limitations": "The table supplies aggregate planning day types, not actual dated operations or a complete dated 2026 calendar. The 363 total must not be filled to 365 with invented dates. Six project pairs on historical route sheets do not establish 16 current Linea 8 full trips on any date."
+  },
+  "existing_official_gtfs_calendar_evidence": {
+    "feed_info_path": "data/raw/gtfs/agency_arriva/feed_info.txt",
+    "feed_start_date": "20260101",
+    "feed_end_date": "20260608",
+    "calendar_path": "data/raw/gtfs/agency_arriva/calendar.txt",
+    "calendar_sha256": "0a67d1c1805fe50d6d1bf99dd5563dd28aa0899b043b49ba85872aef9b92244a",
+    "calendar_data_rows": 0,
+    "calendar_dates_path": "data/raw/gtfs/agency_arriva/calendar_dates.txt",
+    "calendar_dates_sha256": "83271ec153a8593561d7ad99505efb7d324023e01ee6675d11f45842c96ec78d",
+    "relevant_d184_d185_service_ids": 11,
+    "relevant_d184_d185_first_active_date": "20260102",
+    "relevant_d184_d185_last_active_date": "20260608",
+    "relevant_exception_types": [1],
+    "epistemic_status": "FACT_OFFICIAL_FEED_PARTIAL_DATED_COVERAGE_NOT_FULL_ANNUAL_CURRENT_CALENDAR",
+    "limitation": "This frozen winter feed can establish the dates it publishes; it does not certify the remaining months, actual operated service or a current annual calendar. The current-service PDF reconstruction explicitly does not infer annual service days: docs/PHASE2_CURRENT_SERVICE_STOP_TIMETABLE.md."
+  },
+  "current_confirmed_design_arithmetic": {
+    "source_path": "outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_design_handoff_20261001.json",
+    "source_sha256": "a497564b789c81e29428fa8393c814e0d080f681d4b149379937202701f25525",
+    "source_canonical_sha256": "a9f489ce87f3ea8b2d17be61c4c99bf67237d7d2645a325cc8a4b59cf9b3e9b1",
+    "authority_path": "config/rt031_design_timetable_confirmation_20261001_v3.json",
+    "complete_path_distance_m": 27123.507880067442,
+    "full_trips_per_identical_day": 16,
+    "commercial_km_per_identical_day": 433.9761260810791,
+    "identical_day_formula": "annual_commercial_km = 16 * 27123.507880067442 / 1000 * actual_adopted_service_day_count",
+    "mixed_day_type_formula": "annual_commercial_km = sum(day_type_count * day_type_full_trip_count * complete_path_distance_m / 1000); add separately any changed paths, partial trips and noncommercial km",
+    "scenario_status": "ARITHMETIC_ONLY_NO_CALENDAR_ADOPTED",
+    "scenarios": [
+      {"days": 260, "basis": "Inherited comparison assumption; original design grid calls it IDEALISED_5_DAY_52_WEEK, not a dated calendar", "commercial_km": 112833.79278108056, "delta_vs_111419_km": 1414.7927810805559, "delta_vs_111419_percent": 1.2697949013009913},
+      {"days": 303, "basis": "Sensitivity: apply current identical 16-trip day to the count of PdB ordinary project day types", "commercial_km": 131494.76620256697, "delta_vs_111419_km": 20075.76620256697, "delta_vs_111419_percent": 18.01826098113155}
+    ],
+    "difference_303_minus_260_commercial_km": 18660.9734214864,
+    "calendar_adopted": false,
+    "weekend_or_holiday_loss_inferable": false,
+    "noncommercial_km_included": false,
+    "full_operating_cost_certified": false,
+    "reference_funding_transfer_certified": false
+  },
+  "remaining_information": [
+    "A dated calendar and declared service year, with school/non-school periods, Saturdays, Sundays, holidays and exceptions.",
+    "Trip count and any distinct paths for each adopted day type; confirmation whether 16 identical full trips apply to each operating date.",
+    "Operator/Agency confirmation of actual D184/D185 annual contracted and operated commercial production and the amount available for reorganisation, including treatment of peak/school and external route tails.",
+    "Depot, positioning and other noncommercial km; vehicle/driver plans, full operating cost and financial coverage."
+  ],
+  "decisions_made_by_this_record": []
+}

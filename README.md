@@ -7,6 +7,9 @@
 > Orario di progetto confermato con punte H30 sfalsate e transizione della morbida
 > fino alle 16:20; ultima partenza FS 19:40, rientro nominale circa 21:08.
 > **112.833,793 km commerciali nel confronto a 260 giorni: +1,27% su 111.419**.
+> Aggiornamento evidenze 2026-10-02: con **303 giorni identici** la sensibilità sale
+> a **131.494,766 km (+18,02%)**. 303 è il conteggio dei giorni attivi di progetto PdB,
+> non un calendario attuale datato; 260 è un’ipotesi. Non è certificato un piccolo sforamento annuo generale.
 > Non sono un calendario, una flotta, paline, finanziamenti o esercizio approvati.
 > Il doppio verso H30 resta rinviato. Tutti i flussi ferroviari e i limiti sono esposti.
 > [Autorità della conferma](config/rt031_design_timetable_confirmation_20261001_v3.json) ·
@@ -14,6 +17,9 @@
 > [Tracciato attuale](outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson).
 > Restano tre verifiche esterne: percorso/accosti, tempi/continuità/turni, calendario/costo completo.
 > [Scheda operativa e correzione delle sei vecchie manovre](docs/RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md).
+> [Blocchi completi: quattro mezzi nel nominale e stress mostrato](docs/RT031_LINEA8_MEZZI_E_CALENDARIO_2026_10_01.md) ·
+> [Fonte primaria e limiti del calendario](docs/RT031_LINEA8_CALENDARIO_E_RISORSE_2026_10_01.md) ·
+> [Accesso dai quattro punti di località, non copertura delle intere frazioni](docs/RT031_LINEA8_LOCALITA_PUNTI_2026_10_01.md).
 > `network_selected=false`; PRIMARY e RUNNER-UP non autorizzati;
 > `decision_budget_km=null`, `uncertainty_band_min=null`.
 

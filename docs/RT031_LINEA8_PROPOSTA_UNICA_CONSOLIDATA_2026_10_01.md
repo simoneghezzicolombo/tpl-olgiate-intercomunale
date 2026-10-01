@@ -1,5 +1,7 @@
 # Linea 8 — proposta unica consolidata, 1 ottobre 2026
 
+Aggiornamento delle evidenze del 2 ottobre: blocchi completi dei mezzi, fonte primaria del calendario e accesso da quattro punti OSM. Percorso e orario confermati restano invariati.
+
 ## La proposta da verificare con Agenzia e operatore
 
 **Base progettuale e orario confermati dal committente.** Non è un servizio autorizzato né una selezione PRIMARY: questa è la proposta unica su cui chiedere verifica operativa, senza riaprire la ricerca o sostituire tacitamente percorso e corse.
@@ -86,6 +88,8 @@ Popolazione potenzialmente raggiunta sul substrato pedonale congelato: non passe
 
 Monticello/Mondonico, Calco alta/Cornello, Cassina, Crescenzaga, oratorio/Casa di Comunità e l’intero quartiere Olgiate sud **non sono dichiarati tutti serviti**: manca la certificazione località→fermata/accesso. Olgiate sud e San Zeno sono esigenze distinte e hanno eventi separati, non una garanzia estesa ai rispettivi quartieri.
 
+L’[audit dei quattro punti OSM](RT031_LINEA8_LOCALITA_PUNTI_2026_10_01.md) misura ora il cammino verso i 27 siti effettivi: minimo dal punto di Mondonico 11,27 min, Monticello 7,20, Calco Superiore 11,42 e Crescenzaga 13,71. Tre punti non sono entro 10 minuti dalla fermata più vicina nel modello. Sono punti di località, non confini o abitanti: nessuna copertura dell’intera frazione è certificata. I tempi bus restano distinti per evento e verso, senza attesa iniziale inclusa.
+
 ## Treni, tempi di viaggio e limiti che restano
 
 Registro del 1 ottobre: **74 chiamate ferroviarie**, entrambe le direttrici Milano/Lecco e entrambi i flussi di interscambio; **296 combinazioni ala/treno/flusso** nel JSON. GTFS ufficiale riconciliato con il quadro RFI vigente, non dati in tempo reale o promessa di servire ogni treno. [Quadro e fonti](RT031_LINEA8_QUADRO_FERROVIARIO_2026_10_01.md).
@@ -133,8 +137,10 @@ Tempi a bordo nominali, senza cammino/attesa iniziale o treno. Ogni riga riguard
 
 - Commerciale per giorno di confronto: **433,976 km**.
 - A 260 giorni, solo confronto: **112.833,793 km/anno**, **+1.414,793 km / +1,27%** rispetto al riferimento 111.419.
+- A **303 giorni identici**, sensibilità al conteggio dei tipi di giornata attivi PdB: **131.494,766 km/anno**, **+18,02%**. I 303 non sono un calendario attuale accertato: [fonte primaria e limiti](RT031_LINEA8_CALENDARIO_E_RISORSE_2026_10_01.md). **Il +1,27% non è una differenza annua generale.**
 - Il calendario annuale non è adottato. La formula è 433,976 km × giorni effettivi, più km non commerciali separati. Nessun fine settimana, festività o costo di flotta è incluso tacitamente.
 - Fabbisogno ingegneristico condizionale: 3 mezzi in 2 casi e 4 in 25 dei 27 casi. Non disponibilità mezzi, turni reali o costo operativo approvati.
+- [Blocchi completi e prova del minimo](RT031_LINEA8_MEZZI_E_CALENDARIO_2026_10_01.md): nel nominale e nel caso con recuperi maggiori B1 esegue i giri 1/5/9/13, B2 2/6/10/14, B3 3/7/11/15 e B4 4/8/12/16. Alle 07:35 quattro giri occupano contemporaneamente quattro mezzi. Ogni giro conserva est e ovest sullo stesso mezzo di modello; l’autorizzazione a restare a bordo e i turni autista reali rimangono aperti.
 - Tetto decisionale e banda di incertezza non dichiarati; nessuna probabilità empirica di coincidenza e nessuna GJT pesata costruita artificialmente.
 
 ## Best practices: verifica aggiornata, non conformità generica
@@ -162,7 +168,7 @@ La [scheda per Agenzia e operatore](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_
 
 1. **Percorso e fermate — operatore/enti stradali:** sopralluogo e prova con bus, manovre e restrizioni a storia completa, accosti e lati, attraversamenti e accessibilità dei 27 siti. In particolare i quattro nuovi punti e FS.
 2. **Tempi, continuità e turni — operatore:** tempi misurati per fascia, sosta/recupero, permanenza passeggeri a bordo, trasferimento pedonale reale, disponibilità e blocchi mezzi, deposito e km a vuoto. Un cambio necessario va esplicitato e accettato, non chiamato ancora lo stesso orario.
-3. **Calendario e costo completo — Agenzia/operatore con scelta del committente:** quali giorni, weekend/festività, produzione commerciale e non, flotta/personale e copertura finanziaria. Il +1,27% vale solo nello scenario a 260 giorni.
+3. **Calendario e costo completo — Agenzia/operatore con scelta del committente:** quali giorni, weekend/festività, produzione commerciale e non, flotta/personale e copertura finanziaria. Il +1,27% vale solo nello scenario a 260 giorni; a 303 giorni identici è +18,02%. Il riferimento 111.419 è produzione PdB pubblicata, non prova di risorse attualmente trasferibili.
 
 **Questa chiude la base progettuale, non certifica l’esercizio.** Nessuna email inviata, nessuna nuova variante selezionata. Se una verifica fisica fallisce si corregge il punto documentato, senza ricominciare indiscriminatamente il progetto.
 
@@ -172,6 +178,9 @@ La [scheda per Agenzia e operatore](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_
 - [Dossier macchina: orario, registro fermate/eventi, treni, copertura, requisiti e verifiche](../outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_design_handoff_20261001.json).
 - [Tracciato stradale e coordinate attuali](../outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson).
 - [Scheda per Agenzia e operatore con audit stradale aggiornato](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md).
+- [Blocchi dei mezzi nei 27 scenari e contabilità annua](../outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_vehicle_blocks_accounting_20261001.json).
+- [Evidenza primaria PdB: produzione, giorni di progetto e limiti del calendario](../config/rt031_pdb_calendar_reference_evidence_20261001_v3.json).
+- [Audit puntuale di accesso alle località, 108 abbinamenti](../outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_locality_point_access_20261001.json).
 - [Scheda precedente di proposta: conservata come stato storico](RT031_LINEA8_PROPOSTA_ORARIO_16_GIRI_V3.md).
 
 `detailed_timetable_adopted_for_design=true`; `public_operating_timetable_authorised=false`; `network_selected=false`; `primary_selection_authorised=false`; `runner_up_selection_authorised=false`; `decision_budget_km=null`; `uncertainty_band_min=null`.
