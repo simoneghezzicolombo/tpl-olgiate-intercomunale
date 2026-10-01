@@ -1,6 +1,8 @@
 # Linea 8 — confronto concreto con la sola fermata Hoè esclusa
 
-Esiste un nuovo **candidato di confronto**, a **115.130,637 km/anno** su 260 giorni ipotizzati, con 16 giri completi della stessa linea, H30 agganciato ai gruppi ferroviari del dataset e 28 siti di progetto inclusa FS. È leggermente sotto i 115.143,267 km dello scenario già accettato e **+3,33%** rispetto a 111.419. Conserva tutti gli altri siti, incluse le due occorrenze utili di Olgiate sud e San Zeno e Arlate N1212. Esclude soltanto `FROZEN::300873`, la fermata **Hoè**, e mantiene l'ipotesi di accosto Calco a 19 metri. La scelta non è adottata: la perdita territoriale va valutata esplicitamente.
+Il confronto progettualmente più prudente è **116.411,944 km/anno** su 260 giorni ipotizzati: conserva l'ordine di servizio del riferimento senza inversioni e **nessun tempo nominale FS↔fermata rimasta peggiora**. È **+4,48%** rispetto a 111.419 e circa 1.269 km sopra lo scenario da 115.143,267 già accettato: questo aumento ulteriore non è approvato. Mantiene 16 giri completi della stessa linea, H30 agganciato ai gruppi ferroviari del dataset e 28 siti di progetto inclusa FS, incluse le due occorrenze utili di Olgiate sud e San Zeno e Arlate N1212. Esclude soltanto `FROZEN::300873`, la fermata **Hoè**, e mantiene l'ipotesi di accosto Calco a 19 metri. La scelta non è adottata: la perdita territoriale va valutata esplicitamente.
+
+Il minimo di distanza con ordine interno libero arriva a **115.130,637 km/anno** (+3,33%), ma peggiora alcuni viaggi fino a circa 19 minuti. Non viene raccomandato automaticamente per il solo rispetto del confronto chilometrico. Spendere 1.281,306 km/anno in più permette, in questi due testimoni, di conservare l'ordine e i tempi di accesso del riferimento.
 
 ![Confronto del tracciato: la deviazione per Hoè precedente è tratteggiata](../outputs/phase2/rt031_line8_local_shortcuts_v3/no_reverse_hoe_omission.png)
 
@@ -31,7 +33,11 @@ Queste percentuali misurano **accesso pedonale potenziale a punti di fermata**, 
 
 ## Tracciato e frequenze
 
-Il percorso minimo di questo confronto è **27,676 km**. Non contiene inversioni immediate nelle ali; manovra a FS, restrizioni dipendenti dalla storia completa e idoneità autobus rimangono da verificare. Le percorrenze locali nominali verso FS restano circa **4,61 minuti da Olgiate sud** e **2,91 da San Zeno**. Nei due casi esistono due eventi di servizio distinti e ordinati, non soltanto l'identità della fermata sulla mappa.
+### Limite decisivo: conservare copertura non conserva tempi di viaggio
+
+La variante da **115.131 km non è pronta per essere raccomandata**. L'ordine minimo in km cambia sensibilmente alcuni viaggi rispetto al riferimento a ordine fisso senza inversioni. Nel modello nominale, Via della Salute → FS passa da **10,14 a 29,42 minuti**; FS → Scarpone da **8,44 a 27,49**; FS → Alduno da **10,25 a 25,68**. Non sono misure empiriche, ma peggioramenti ingegneristici espliciti. La variante a ordine conservato da **116.412 km** elimina questi peggioramenti rispetto al riferimento; non dimostra tuttavia che tutti i viaggi del riferimento siano già soddisfacenti. Le differenze per ogni sito e verso dei due confronti sono incluse nell'artefatto machine-readable. Non viene inventata una soglia di peggioramento accettabile.
+
+Il percorso a ordine conservato è **27,984 km** (il minimo a ordine libero è 27,676). Non contiene inversioni immediate nelle ali; manovra a FS, restrizioni dipendenti dalla storia completa e idoneità autobus rimangono da verificare. Le percorrenze locali nominali verso FS restano circa **4,61 minuti da Olgiate sud** e **2,91 da San Zeno**. Nei due casi esistono due eventi di servizio distinti e ordinati, non soltanto l'identità della fermata sulla mappa.
 
 Il testimone a sosta intermedia contenuta produce:
 
@@ -42,7 +48,7 @@ Il testimone a sosta intermedia contenuta produce:
 | 3 | 07:05 | 08:00 |
 | 4 | 07:35 | 08:30 |
 | 5 | 08:05 | 09:00 |
-| 6 | 09:15 | 10:10 |
+| 6 | 09:15 | 10:05 |
 | 7 | 10:25 | 11:20 |
 | 8 | 12:25 | 13:20 |
 | 9 | 14:25 | 15:20 |
@@ -54,9 +60,9 @@ Il testimone a sosta intermedia contenuta produce:
 | 15 | 18:40 | 19:35 |
 | 16 | 19:40 | 20:30 |
 
-Ultimo rientro nominale circa **21:13**; sosta intermedia massima circa **16,74 minuti**, senza cambio obbligato. H30 sui cinque abbinamenti consecutivi per ogni ala/punta: ovest→Milano 06:56–08:56, est→Milano 07:56–09:56, ovest←Milano 16:32–18:32, est←Milano 17:32–19:32. Il vincolo delle spalle è un'attesa massima di 70 minuti della prossima opportunità utile nelle finestre 06:45–10 e 16–19:40; H120 nella morbida 10–16. Non equivale a H60, né a una promessa di intervallo uniforme a cavallo delle fasce. Non è ancora un orario al pubblico.
+Ultimo rientro nominale circa **21:13**; sosta intermedia massima circa **15,81 minuti**, senza cambio obbligato. H30 sui cinque abbinamenti consecutivi per ogni ala/punta: ovest→Milano 06:56–08:56, est→Milano 07:56–09:56, ovest←Milano 16:32–18:32, est←Milano 17:32–19:32. Il vincolo delle spalle è un'attesa massima di 70 minuti della prossima opportunità utile nelle finestre 06:45–10 e 16–19:40; H120 nella morbida 10–16. Non equivale a H60, né a una promessa di intervallo uniforme a cavallo delle fasce. Non è ancora un orario al pubblico.
 
-Il modello nominale richiede quattro mezzi; nei 27 scenari deterministici risultano 25 casi con quattro, uno con tre e uno con cinque. Restano compatibili 18 dei 22 precedenti obiettivi ferroviari. Questi conteggi non sono una disponibilità di flotta approvata o probabilità di affidabilità.
+Il modello nominale richiede quattro mezzi; i 27 scenari deterministici e gli abbinamenti sono tracciati nell'artefatto. Il nuovo testimone lega 20 abbinamenti nei gruppi ferroviari H30 dichiarati; non lega tutti i 22 obiettivi precedenti (17 legati). Questi conteggi non sono una disponibilità di flotta approvata o probabilità di affidabilità.
 
 ## Perché questo confronto non è una scelta discrezionale già fatta
 
@@ -64,7 +70,7 @@ Le permutazioni adiacenti senza esclusioni risparmiano soltanto 333 km/anno risp
 
 Tutti i casi restano disponibili. La frontiera di confronto usa km e copertura 5/8/10 minuti di ciascuno dei cinque comuni, senza pesi normativi e senza soglia inventata di perdita accettabile. Il minimo di distanza non diventa automaticamente la rete raccomandata. La ricerca mantiene i confini dichiarati: non dimostra un minimo globale fra tutte le geometrie, tutte le posizioni di fermata o tutti gli orari. Una mancata coincidenza nello stress non viene reinterpretata come probabilità empirica.
 
-**Decisione ancora aperta:** il risparmio ottenuto rinunciando al servizio della fermata Hoè giustifica la perdita locale sopra? La conservazione delle fermate è una preferenza, ma qui serve una preferenza esplicita sul compromesso; non basta il dato totale. Nessuna esclusione è approvata automaticamente.
+**Decisione ancora aperta:** l'esclusione di Hoè e il confronto da 116.412 km con ordine conservato sono accettabili? Restano inoltre da chiudere H70 nelle spalle, obiettivi ferroviari sostituiti e verifiche fisiche. Non basta approvare la sola perdita di copertura. Nessuna esclusione, maggiorazione ulteriore o rete è approvata automaticamente.
 
 `network_selected=false`, `primary_selection_authorised=false`, `runner_up_selection_authorised=false`. Calendario operativo, flotta finanziata e totale comprensivo di trasferimenti non commerciali non sono approvati. `decision_budget_km` e `uncertainty_band_min` restano non dichiarati.
 

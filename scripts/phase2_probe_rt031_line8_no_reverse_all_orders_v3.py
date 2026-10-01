@@ -18,7 +18,7 @@ from scripts.phase2_probe_rt031_unique_line_v3 import build_graph
 from scripts.phase2_probe_rt031_line8_free_orders_v3 import EdgeStateClosure, terminal_tour, reversal_indices
 from scripts.phase2_rebuild_rt031_uniform_complete_line_v3 import inputs as service_inputs
 from scripts.phase2_probe_rt031_line8_variable_fs_hold_v3 import solve
-from scripts.phase2_probe_rt031_line8_order_neighbourhood_v3 import access_vector
+from scripts.phase2_probe_rt031_line8_order_neighbourhood_v3 import access_vector, reconstruct
 from src.phase2_rt031_rt017_transition_adapter_v3 import FrozenRT017ViaNodeAdapter
 
 OUTPUT = BASE/'no_reverse_all_orders.json.gz'
@@ -133,17 +133,48 @@ def build(graph_dir):
             revised_loop, proof = optimal_loop(closure, adapter, edges, old, wing, sid)
             revised = {**loops, wing: revised_loop}
             distance = sum(l['distance_m'] for l in revised.values())
+            access = access_vector(revised)
+            baseline_access = access_vector(baseline)
             omissions.append({'omitted_stop_identity':sid, 'wing':wing,
                 'omitted_name':next(e['name'] for e in old['events'] if e['stop_place_id']==sid),
                 'distance_m':distance,'annual_service_km_16_trips_260_days':distance*16*260/1000,
                 'distance_saved_m':total-distance,'all_order_distance_proof':proof,
                 'calco_19m_hypothesis_required':sid!='FROZEN::300634',
-                'coverage_loss_certified':False,'stop_omission_adopted':False,'loops':revised})
+                'coverage_loss_certified':False,'stop_omission_adopted':False,'loops':revised,
+                'access_nominal_by_site':access,
+                'access_delta_min_vs_fixed_order_reference':{
+                    s:{k:access[s][k]-baseline_access[s][k]
+                       for k in ('from_fs_min','to_fs_min')} for s in access},
+                'retained_journey_times_preserved':all(
+                    access[s][k]<=baseline_access[s][k]+1e-9
+                    for s in access for k in ('from_fs_min','to_fs_min'))})
             print('omit',sid,distance*16*260/1000,flush=True)
     shortest_omission = min(omissions,key=lambda c:c['distance_m'])
     shortest_omission['timetable_comparison_not_adopted'] = solve(policy,
         shortest_omission['loops'],'west_B',False,70,60,max_mid=55,
         anchor_policy='flexible_real_trains')
+    # Retain the reference event order rather than buying km with longer journeys.
+    omitted_sid = 'FROZEN::300873'
+    old = baseline['west_B']
+    ordered = sorted([e for e in old['events'] if e['stop_place_id'] != omitted_sid],
+                     key=lambda e:(e['path_node_index'],e['stop_place_id']))
+    calco_event = next(e for e in baseline['east_A']['events'] if e['stop_place_id']=='FROZEN::300634')
+    fixed_loop = reconstruct(old, ordered, edges, adapter, fs,
+        edges[calco_event['incoming_edge']]['v_node_id'], True, 'west_B')
+    fixed_loops = {**baseline, 'west_B':fixed_loop}
+    fixed_access, reference_access = access_vector(fixed_loops), access_vector(baseline)
+    fixed = {'omitted_stop_identity':omitted_sid, 'stop_omission_adopted':False,
+        'event_order_preserved':True,'loops':fixed_loops,
+        'distance_m':sum(l['distance_m'] for l in fixed_loops.values()),
+        'access_nominal_by_site':fixed_access,
+        'access_delta_min_vs_fixed_order_reference':{
+            s:{k:fixed_access[s][k]-reference_access[s][k] for k in fixed_access[s]}
+            for s in fixed_access},
+        'retained_journey_times_preserved':all(fixed_access[s][k]<=reference_access[s][k]+1e-9
+            for s in fixed_access for k in fixed_access[s])}
+    fixed['annual_service_km_16_trips_260_days']=fixed['distance_m']*16*260/1000
+    fixed['timetable_comparison_not_adopted']=solve(policy,fixed_loops,'west_B',False,
+        70,60,max_mid=55,anchor_policy='flexible_real_trains')
     timetable = solve(policy, loops, 'west_B', False, 70, 60, max_mid=60,
                       anchor_policy='flexible_real_trains')
     # This comparison changes only the admitted road orders; all caller inputs
@@ -158,6 +189,7 @@ def build(graph_dir):
         'access_nominal_by_site': access_vector(loops),
         'baseline_access_nominal_by_site': access_vector(baseline),
         'single_inventory_omission_comparisons_not_adopted':omissions,
+        'hoe_omission_fixed_event_order_comparison_not_adopted':fixed,
         'shortest_omission_identity_not_selection':shortest_omission['omitted_stop_identity'],
         'timetable_comparison_not_adopted': timetable,
         'semantics': 'Exact distance minimum over all interior terminal visit orders in each wing, '
@@ -209,12 +241,12 @@ def build(graph_dir):
     fig.tight_layout();fig.savefig(MAP,dpi=150);plt.close(fig)
     # Also show exactly what the low-km omission comparison leaves out.
     fig, ax = plt.subplots(figsize=(10,6))
-    for wing, loop in loops.items():
+    for wing, loop in baseline.items():
         path=loop['edge_ids']
         xy=[coordinates[edges[path[0]]['u_node_id']]]+[
             coordinates[edges[e]['v_node_id']] for e in path]
         ax.plot(*zip(*xy),color='#bbbbbb',lw=1,ls='--')
-    for wing, loop in shortest_omission['loops'].items():
+    for wing, loop in fixed['loops'].items():
         path=loop['edge_ids']
         xy=[coordinates[edges[path[0]]['u_node_id']]]+[
             coordinates[edges[e]['v_node_id']] for e in path]
@@ -229,12 +261,12 @@ def build(graph_dir):
     ax.annotate("Hoè: fermata esclusa in questo confronto",xy,xytext=(7,7),textcoords='offset points',fontsize=8)
     for label,sid in [('Olgiate sud',LOCAL['west_B']),('San Zeno',LOCAL['east_A']),
                       ('Brivio · Via Bergamo','FROZEN::300063'),('Calco: accosto ipotizzato','FROZEN::300634')]:
-        event=next(e for l in shortest_omission['loops'].values() for e in l['events'] if e['stop_place_id']==sid)
+        event=next(e for l in fixed['loops'].values() for e in l['events'] if e['stop_place_id']==sid)
         ax.annotate(label,coordinates[edges[event['incoming_edge']]['v_node_id']],xytext=(5,7),textcoords='offset points',fontsize=8)
     ax.scatter(*coordinates[fs],color='red',zorder=5)
     ax.annotate('Olgiate FS',coordinates[fs],xytext=(5,7),textcoords='offset points')
     ax.set_aspect(1/math.cos(math.radians(45.73)));ax.legend()
-    ax.set_title('Linea 8 · confronto con la sola fermata Hoè esclusa\n28 siti di progetto inclusa FS; tracciato precedente tratteggiato')
+    ax.set_title('Linea 8 · sola Hoè esclusa, ordine di servizio conservato\n28 siti inclusa FS · 116.412 km/anno · riferimento tratteggiato')
     fig.tight_layout();fig.savefig(BASE/'no_reverse_hoe_omission.png',dpi=150);plt.close(fig)
     for wing,loop in shortest_omission['loops'].items():
         path=loop['edge_ids']
@@ -242,6 +274,13 @@ def build(graph_dir):
             coordinates[edges[e]['v_node_id']] for e in path]
         features.append({'type':'Feature','properties':{'wing':wing,
             'omitted_stop_identity':shortest_omission['omitted_stop_identity'],'adopted':False},
+            'geometry':{'type':'LineString','coordinates':xy}})
+    for wing,loop in fixed['loops'].items():
+        path=loop['edge_ids']
+        xy=[coordinates[edges[path[0]]['u_node_id']]]+[
+            coordinates[edges[e]['v_node_id']] for e in path]
+        features.append({'type':'Feature','properties':{'wing':wing,
+            'comparison':'hoe_omission_fixed_event_order','adopted':False},
             'geometry':{'type':'LineString','coordinates':xy}})
     return result, {'type':'FeatureCollection','features':features}
 

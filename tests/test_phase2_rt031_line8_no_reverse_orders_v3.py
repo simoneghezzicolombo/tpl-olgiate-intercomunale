@@ -30,6 +30,14 @@ class NoReverseOrderTests(unittest.TestCase):
         self.assertEqual(len(t['rail_assignments']),20)
         self.assertLess(t['maximum_intermediate_fs_onboard_wait_nominal_min'],17)
         self.assertFalse(shortest['stop_omission_adopted'])
+        self.assertFalse(shortest['retained_journey_times_preserved'])
+        self.assertGreater(max(v['to_fs_min'] for v in
+            shortest['access_delta_min_vs_fixed_order_reference'].values()),19)
+        fixed=result['hoe_omission_fixed_event_order_comparison_not_adopted']
+        self.assertTrue(fixed['retained_journey_times_preserved'])
+        self.assertAlmostEqual(fixed['annual_service_km_16_trips_260_days'],116411.94368431234,places=5)
+        self.assertTrue(fixed['timetable_comparison_not_adopted']['witness_found'])
+        self.assertEqual(len(fixed['timetable_comparison_not_adopted']['full_trips']),16)
         protected={'PROXY::RT031_ADDITIONAL::n:534398.29:5063851.64',
                    'PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE','RT031::P2V2S_0031_PROJECTED_ROAD_POINT'}
         self.assertTrue(all(c['omitted_stop_identity'] not in protected
@@ -51,6 +59,9 @@ class NoReverseOrderTests(unittest.TestCase):
                     self.assertEqual(a,b)
         self.assertFalse(result['network_selected'])
         self.assertFalse(result['physical_walking_accessibility_certified'])
+        fixed=result['hoe_fixed_event_order_comparison_not_adopted']
+        self.assertEqual(fixed['potential_walking_access_fraction'],c['potential_walking_access_fraction'])
+        self.assertTrue(fixed['retained_nominal_fs_journey_times_preserved'])
 
 
 if __name__=='__main__':

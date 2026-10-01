@@ -1,6 +1,6 @@
 # Linea 8 — attraversamento di Calco e percorso senza le sei inversioni intermedie
 
-**Confronto successivo:** la [ricerca degli ordini e della sola esclusione Hoè](RT031_LINEA8_COMPROMESSO_HOE_V3.md) riduce a 121.799 km la soluzione con tutti i siti e trova una variante da 115.131 km con la sola Hoè esclusa. La perdita di copertura di Santa Maria Hoè è misurata e la scelta rimane aperta.
+**Confronto successivo:** la [ricerca degli ordini e della sola esclusione Hoè](RT031_LINEA8_COMPROMESSO_HOE_V3.md) riduce a 121.799 km la soluzione con tutti i siti. Senza Hoè, il minimo da 115.131 km peggiora alcuni viaggi di circa 19 minuti; il confronto da **116.412 km a ordine conservato non peggiora i tempi nominali FS↔siti rimasti**. La perdita di copertura di Santa Maria Hoè è misurata e la scelta rimane aperta.
 
 La ricerca trova una **nuova ipotesi completa di tracciato e orario**: 29 siti di progetto inclusa FS, 16 giri interi sulla medesima linea, due occorrenze direzionali per Olgiate sud e San Zeno, nessuna delle sei inversioni immediate intermedie. A Calco serve un'ipotesi di accosto **18,88 metri dal nodo stradale attuale**, sul nodo `n:532517.86:5064089.42` del ramo di servizio collegato a Via Nazionale. È un'ipotesi di posizione stradale, non uno spostamento di palina autorizzato né una misura della distanza pedonale.
 

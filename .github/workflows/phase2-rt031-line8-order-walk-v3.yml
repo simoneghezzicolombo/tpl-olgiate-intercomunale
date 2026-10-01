@@ -50,5 +50,6 @@ jobs:
           a=json.load(open('/tmp/walk.expected.json'));b=json.load(open(base+'no_reverse_omission_walking.json'))
           assert a['all_29_comparison_sites_access_fraction']==b['all_29_comparison_sites_access_fraction']
           assert a['cases']==b['cases']
+          assert a['hoe_fixed_event_order_comparison_not_adopted']==b['hoe_fixed_event_order_comparison_not_adopted']
           PY
           python -m unittest tests.test_phase2_rt031_line8_no_reverse_orders_v3 -q

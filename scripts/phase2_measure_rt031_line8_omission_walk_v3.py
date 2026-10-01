@@ -74,6 +74,8 @@ def build(graph_dir, walk_dir):
          any(Fraction(other['potential_walking_access_fraction'][code][limit]) > Fraction(c['potential_walking_access_fraction'][code][limit])
             for code in MUNICIPALITY_NAMES for limit in ('5','8','10')))
         for other in cases)]
+    fixed = road['hoe_omission_fixed_event_order_comparison_not_adopted']
+    hoe_coverage = next(c for c in cases if c['omitted_stop_identity']==fixed['omitted_stop_identity'])
     return {'contract':'RT031_LINE8_NO_REVERSE_SINGLE_OMISSION_CONDITIONAL_WALK_V3',
         'road_source_sha256':hashlib.sha256(ROAD.read_bytes()).hexdigest(),
         'walking_source_sha256':{k:hashlib.sha256(paths[k].read_bytes()).hexdigest()
@@ -82,6 +84,11 @@ def build(graph_dir, walk_dir):
         'original_28_site_reference_access_fraction':original_baseline,
         'all_29_comparison_sites_access_fraction':baseline,'municipality_names':MUNICIPALITY_NAMES,
         'cases':cases,'unweighted_km_municipal_walk_frontier_omission_ids':[c['omitted_stop_identity'] for c in frontier],
+        'hoe_fixed_event_order_comparison_not_adopted':{
+            **hoe_coverage,'annual_service_km_16_trips_260_days':fixed['annual_service_km_16_trips_260_days'],
+            'same_served_points_coverage_independent_of_event_order':True,
+            'retained_nominal_fs_journey_times_preserved':fixed['retained_journey_times_preserved']},
+        'km_walk_frontier_is_not_journey_time_or_service_dominance':True,
         'semantics':'Conditional potential walking coverage of pinned population units, using inventory '
             'points plus unapproved Olgiate south, San Zeno, Arlate and Calco 19m hypotheses. Original '
             '28-site reference reproduced first. All five municipalities reported at 5/8/10 minutes. '

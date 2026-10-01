@@ -1810,6 +1810,80 @@
   ],
   "contract": "RT031_LINE8_NO_REVERSE_SINGLE_OMISSION_CONDITIONAL_WALK_V3",
   "decision_budget_km": null,
+  "hoe_fixed_event_order_comparison_not_adopted": {
+    "annual_service_km_16_trips_260_days": 116411.94368431234,
+    "boarding_authorised": false,
+    "omitted_name": "Hoe'",
+    "omitted_stop_identity": "FROZEN::300873",
+    "potential_walking_access_fraction": {
+      "97010": {
+        "10": "4622596207941687296/5125882352941176527",
+        "5": "46697103793596924294/87140000000000000959",
+        "8": "72592358158254016008/87140000000000000959"
+      },
+      "97012": {
+        "10": "82724056518426152731/109200000000000006740",
+        "5": "34220927516009262359/109200000000000006740",
+        "8": "63984465201111762123/109200000000000006740"
+      },
+      "97058": {
+        "10": "17848368685555619757/21106666666666667776",
+        "5": "51179538605420312525/126640000000000006656",
+        "8": "46340478863683978259/63320000000000003328"
+      },
+      "97074": {
+        "10": "39407063896295831141/42180000000000002515",
+        "5": "27085661349784674498/42180000000000002515",
+        "8": "37372727744152119998/42180000000000002515"
+      },
+      "97092": {
+        "10": "15794607286146156187/23280000000000000510",
+        "5": "1291932747430560323/2821818181818181880",
+        "8": "9367798877171267931/15520000000000000340"
+      },
+      "TOTAL": {
+        "10": "185491948603824505597/229140000000000009455",
+        "5": "40363402386003932867/91656000000000003782",
+        "8": "322837302093913462233/458280000000000018910"
+      }
+    },
+    "potential_walking_access_loss_percentage_points": {
+      "97010": {
+        "10": 0.0,
+        "5": 0.0,
+        "8": 0.0
+      },
+      "97012": {
+        "10": 0.0,
+        "5": 0.0,
+        "8": 0.0
+      },
+      "97058": {
+        "10": 0.0,
+        "5": 0.0,
+        "8": 0.0
+      },
+      "97074": {
+        "10": 2.3237304118728463,
+        "5": 8.668237518266944,
+        "8": 6.2220669120999545
+      },
+      "97092": {
+        "10": 0.0,
+        "5": 0.0,
+        "8": 0.0
+      },
+      "TOTAL": {
+        "10": 0.21387568467486395,
+        "5": 0.7978228561588977,
+        "8": 0.5726778003674088
+      }
+    },
+    "retained_nominal_fs_journey_times_preserved": true,
+    "same_served_points_coverage_independent_of_event_order": true,
+    "stop_omission_adopted": false
+  },
+  "km_walk_frontier_is_not_journey_time_or_service_dominance": true,
   "municipality_names": {
     "97010": "Brivio",
     "97012": "Calco",
@@ -1853,7 +1927,7 @@
   "original_28_site_reference_reproduced": true,
   "physical_walking_accessibility_certified": false,
   "primary_selection_authorised": false,
-  "road_source_sha256": "dc9bd2d178638d9e36a2c0dc53a378a5ea6be431b3ab426bb1bf89cf94a84488",
+  "road_source_sha256": "df5cc806f5cee0049fcb15453160797ca03ef40a85580422799e7450a0b1576a",
   "runner_up_selection_authorised": false,
   "semantics": "Conditional potential walking coverage of pinned population units, using inventory points plus unapproved Olgiate south, San Zeno, Arlate and Calco 19m hypotheses. Original 28-site reference reproduced first. All five municipalities reported at 5/8/10 minutes. Only explicit served events counted; incidental road crossings are not stops. Population weights are geographic coverage counts, not OD/passenger allocation or normative utility weights. Exact rational fractions; loss is percentage points, not percentage change. No acceptable loss threshold, boarding approval, empirical demand or route selection.",
   "uncertainty_band_min": null,
