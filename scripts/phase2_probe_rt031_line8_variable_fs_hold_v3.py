@@ -107,7 +107,7 @@ def ordered_stop_ledger(loops, first, selected):
 
 def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
           full_trip_count=16, minimize_hold=False, anchor_policy='fixed_22',
-          required_train_bank_start=None, vehicle_cap=None):
+          required_train_bank_start=None, vehicle_cap=None, minimize_max_hold=False):
     """One fixed complete-path orientation; only intermediate FS hold varies."""
     second = next(k for k in loops if k != first)
     if anchor_policy not in ('fixed_22', 'h30_unbound', 'max_supported',
@@ -117,7 +117,9 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
         raise ValueError('cannot shift targets when rail anchors are unbound')
     if required_train_bank_start is not None and anchor_policy != 'flexible_real_trains':
         raise ValueError('required real-train bank needs flexible real trains')
-    if minimize_hold and anchor_policy == 'max_supported':
+    if minimize_hold and minimize_max_hold:
+        raise ValueError('choose one holding objective')
+    if (minimize_hold or minimize_max_hold) and anchor_policy == 'max_supported':
         raise ValueError('separate rail-coverage and holding objectives')
     original_p = p
     original_targets = {(a0['wing'], a0['kind'], a0['rail_min']) for a0 in p['anchors']}
@@ -299,14 +301,26 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
                               for t in assignments[r]['eligible']]
                 row(difference+[(col, 2000)], -np.inf, 2030)
                 row(difference+[(col, -2000)], -1970, np.inf)
+    # In a fixed first-wing/scenario, onboard waiting equals offset minus
+    # a constant runtime. Minimise its maximum, not a weighted quality score.
+    hold_col = None
+    if minimize_max_hold:
+        hold_col = n
+        n += 1
+        for t, u, m in pairs:
+            row([(pair_col[t,u],m),(hold_col,-1)],-np.inf,0)
     matrix = csc_matrix((vv, (rr, cc)), shape=(len(lower), n))
     # Flexible-real-trains fixes exactly 20 assignments/four H30 banks. Its
     # cardinality is not traded against holding by this diagnostic objective.
     pair_costs = [m if minimize_hold else 0 for _, _, m in pairs]
     assignment_costs = [-1 if anchor_policy == 'max_supported' else 0]*len(aa)
-    answer = milp(np.r_[np.zeros(nx), pair_costs, assignment_costs,
-                         np.zeros(len(banks)+len(train_banks))],
-                  integrality=np.ones(n), bounds=Bounds(0, 1),
+    costs = np.r_[np.zeros(nx),pair_costs,assignment_costs,
+                  np.zeros(len(banks)+len(train_banks)),[1] if minimize_max_hold else []]
+    upper_bounds = np.ones(n)
+    if minimize_max_hold:
+        upper_bounds[hold_col] = mid_offsets[-1]
+    answer = milp(costs,
+                  integrality=np.ones(n), bounds=Bounds(0, upper_bounds),
                   constraints=LinearConstraint(matrix, lower, upper),
                   options={'time_limit': time_limit, 'mip_rel_gap': 0})
     result = {'first_wing': first, 'second_wing': second, 'shifted_rail_targets': shifted,
@@ -322,6 +336,9 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
               'infeasibility_proven': answer.status == 2, 'witness_found': answer.x is not None}
     if minimize_hold:
         result['holding_objective_proven_optimal'] = answer.status == 0
+    if minimize_max_hold:
+        result.update(maximum_holding_objective_proven_optimal=answer.status==0,
+                      maximum_intermediate_offset_minimized=True)
     if answer.x is None:
         return result
     if max(abs(answer.x-np.rint(answer.x))) > 1e-6:
@@ -331,6 +348,8 @@ def solve(p, loops, first, shifted, shoulder=60, time_limit=90, max_mid=None,
     selected.sort(key=lambda q: q['first_fs_min'])
     if len(selected) != full_trip_count or len({q['second_fs_min'] for q in selected}) != full_trip_count:
         raise ValueError('incomplete or overlapping full trips')
+    if minimize_max_hold and max(q['intermediate_offset_min'] for q in selected)>answer.x[hold_col]+1e-6:
+        raise ValueError('maximum holding witness verification failed')
     selected_times = {first: [q['first_fs_min'] for q in selected],
                       second: sorted(q['second_fs_min'] for q in selected)}
     original_compatibility = original_target_compatibility(

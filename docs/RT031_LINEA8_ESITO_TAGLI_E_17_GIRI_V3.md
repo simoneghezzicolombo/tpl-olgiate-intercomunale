@@ -94,6 +94,16 @@ Il minimo della **somma** delle soste intermedie è provato nel dominio del caso
 
 ## Cosa non è ancora risolto e quale scelta serve
 
+### La sosta peggiore è stata ottimizzata separatamente
+
+Non si assume più che il minimo della somma minimizzi anche la sosta peggiore. Sono stati eseguiti **otto ulteriori test minimax**, sulle stesse quattro geometrie a 17 giri e nelle due sequenze delle ali, senza cambiare coincidenze, scenari o regole di servizio. Cinque hanno optimum provato; tre hanno prova di infeasibilità. Il miglior valore della massima sosta fra questi testimoni è **27,585 minuti nei nove scenari**, 14,993 nel nominale ereditato: appartiene al confronto Hoè + Calco–via Nazionale esclusi, est→ovest. La sequenza ovest→est ha minimo 29,074 nei nove scenari.
+
+Gli altri tre confronti positivi hanno massime minime rispettivamente 30,771 minuti (Hoè + Via Virgilio) e 35,236 minuti (Hoè + S. Maria Hoè oppure Hoè + Via Como/Alpino). Questi sono limiti del dominio circoscritto, non di ogni possibile orario/rete. Minimo della massima sosta non significa selezione normativa del candidato.
+
+L'equivalenza usata è verificabile: a prima ala e scenario fissati, la sosta è `offset della partenza intermedia − runtime della prima ala`. Il runtime è costante per tutte le corse di quel caso; minimizzare l'offset massimo minimizza la sosta massima anche in ciascuno dei nove scenari. **Non sono probabilità osservate né attese reali garantite.** Spostare una partenza non cambia, invece, il tempo di viaggio relativo fermata→FS sul percorso e sugli eventi fissati.
+
+[Otto esiti minimax e stato di chiusura machine-readable](../outputs/phase2/rt031_line8_local_shortcuts_v3/paired_cuts_maximum_hold_closure.json.gz).
+
 Questo risultato **non soddisfa tutto**: cambia i 16 giri adottati, elimina due fermate, supera il confronto economico specifico approvato, sfalsa le punte fra le ali e conserva viaggi lunghi. Ad esempio Scarpone→FS resta circa 30,24 minuti, Beverate/Cariplo→FS circa 31,10 e Peugeot→FS circa 32,56 nel nominale. Nessuna soglia di viaggio accettabile è inventata per dichiararli buoni. Conservare l'ordine migliora o non peggiora i tempi dei punti rimasti rispetto al riferimento, ma non trasforma un viaggio lungo in uno breve.
 
 La decisione successiva non è un altro “avanti” indistinto: **accettare o rifiutare il confronto da 17 giri, circa 120.324 km, con queste due esclusioni e le perdite esplicite**. Se accettato come base di sviluppo, non autorizza comunque selezione PRIMARY/RUNNER-UP, finanziamento o idoneità fisica; le questioni dei tempi lunghi e delle località non associate rimangono nel dossier. Se rifiutato, i testimoni verificati di questa famiglia non possono essere ripresentati come soluzione conforme ai 16 giri.

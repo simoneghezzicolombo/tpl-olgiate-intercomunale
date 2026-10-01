@@ -6,8 +6,12 @@ on:
     paths:
       - scripts/phase2_probe_rt031_line8_paired_cuts_v3.py
       - scripts/phase2_measure_rt031_line8_omission_walk_v3.py
+      - scripts/phase2_probe_rt031_line8_variable_fs_hold_v3.py
+      - scripts/phase2_close_rt031_line8_maximum_hold_v3.py
       - tests/test_phase2_rt031_line8_paired_cuts_v3.py
+      - tests/test_phase2_rt031_line8_maximum_hold_v3.py
       - outputs/phase2/rt031_line8_local_shortcuts_v3/paired_cuts_fixed_order*
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/paired_cuts_maximum_hold_closure.json.gz
       - .github/workflows/phase2-rt031-line8-paired-cuts-v3.yml
 permissions:
   contents: read
@@ -50,3 +54,7 @@ jobs:
           python -m scripts.phase2_probe_rt031_line8_paired_cuts_v3 --trip-count-comparison --time-limit 60
           python -m scripts.phase2_probe_rt031_line8_paired_cuts_v3 --render
           python -m unittest tests.test_phase2_rt031_line8_paired_cuts_v3 tests.test_phase2_rt031_line8_no_reverse_orders_v3 -q
+      - name: Close maximum onboard holding without changing the service rules
+        run: |
+          python -m scripts.phase2_close_rt031_line8_maximum_hold_v3 --time-limit 60
+          python -m unittest tests.test_phase2_rt031_line8_maximum_hold_v3 -q
