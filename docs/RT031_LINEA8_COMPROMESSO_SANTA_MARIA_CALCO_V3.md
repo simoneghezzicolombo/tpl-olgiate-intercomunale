@@ -2,6 +2,12 @@
 
 ## Scelte ricevute dal chiamante
 
+**Aggiornamento successivo del 1 ottobre 2026:** il chiamante ha accettato il punto **Calco Centro – Municipio, Via Italia**, coordinate `45.7250958, 9.4180371`. Il confronto sotto rimane la traccia delle alternative, non viene riscritto retroattivamente come selezione automatica. L'adozione di progetto, con UNA occorrenza ordinata sul percorso est, è in [calco_centre_adopted_design.json](../outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.json) e nel relativo GeoJSON. Sono **27 siti inclusa FS, 28 eventi non-FS**, percorso **27,124 km**. Accosto e palina restano da approvare fisicamente.
+
+Il punto adottato porta la copertura potenziale a 5 minuti di Calco a **41,10%** (+14,15 punti); a 8 minuti a **69,64%**, a 10 minuti a **79,27%**. Perdita a 5 minuti: Santa Maria Hoè **2,84 punti**, La Valletta **0,21 punti**; nessuna perdita a 8/10 minuti. Brivio e Olgiate invariati alle tre soglie. Le percentuali non sono domanda passeggeri.
+
+La ricognizione ferroviaria successiva è documentata in [quadro ferroviario corrente](RT031_LINEA8_QUADRO_FERROVIARIO_2026_10_01.md). Restano falsi tutti i flag di selezione della rete; la sola posizione Calco è adottata come punto di progetto.
+
 Il 1 ottobre 2026 l'utente ha accettato i metri aggiuntivi per evitare Via Mirasole e Via Cartiglio/Tessitura, mantenendo Piazza San Zenone. Ha autorizzato lo scambio Santa Maria–Calco come sviluppo della proposta. Il servizio H30 nei due sensi resta da ricordare, ma la relativa azione è esplicitamente rinviata. Non cambiano numero di corse, calendario o budget dichiarato.
 
 ## Compromesso territoriale calcolato

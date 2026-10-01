@@ -16,10 +16,12 @@
     {"id": "east_without_side_streets", "avoid_exact_osm_names": ["Via Cartiglio", "Via Tessitura"], "requested_corridor": "Main road rather than narrow secondary roads; additional distance acceptable in principle", "corridor_certified": false}
   ],
   "stop_exchange": {
-    "status": "EXCHANGE_AUTHORISED_FOR_DEVELOPMENT_EXACT_POINT_PENDING",
-    "removal_candidates": ["FROZEN::300782", "ASF::SANTA_MARIA_HOE_VIA_COMO"],
+    "status": "EXACT_CALCO_DESIGN_POINT_ADOPTED_PHYSICAL_CHECK_PENDING",
+    "removed_site_id": "ASF::SANTA_MARIA_HOE_VIA_COMO",
+    "retained_site_id": "FROZEN::300782",
+    "adopted_design_authority": "config/rt031_calco_centre_stop_authority_v3.json",
     "addition_area": "Calco built-up area along actual revised path",
-    "candidate_position_selected": false,
+    "candidate_position_selected": true,
     "measure": "Recompute joint municipal 5/8/10-minute walking coverage and individual losses; stop count alone is not equivalence"
   },
   "rail_audit": {
@@ -27,9 +29,12 @@
     "required_interchanges": ["BUS_TO_RAIL", "RAIL_TO_BUS"],
     "required_service_scope": "ALL_TRAINS_CALLING_AT_OLGIATE_NOT_ONLY_S8",
     "evening_returns_explicitly_required": true,
-    "current_official_timetable_verified": false,
-    "source_for_comparison": "outputs/phase2/s8_events.csv",
-    "source_is_frozen_not_current": true
+    "current_official_timetable_verified": true,
+    "verified_service_date": "2026-10-01",
+    "verification_scope": "Scheduled all-route station inventory, exact full-day RFI departure reconciliation and GTFS dated calendars; not live disruptions or annual calendar",
+    "source_for_comparison": "outputs/phase2/rt031_line8_local_shortcuts_v3/all_station_rail_20261001.json",
+    "source_is_frozen_not_current": false,
+    "legacy_frozen_source_preserved": "outputs/phase2/s8_events.csv"
   },
   "bidirectional_peak_service": {
     "status": "DEFERRED_BY_CALLER_NO_BIDIRECTIONAL_SERVICE_ACTION",

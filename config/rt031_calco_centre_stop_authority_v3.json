@@ -1,0 +1,22 @@
+{
+  "contract": "RT031_CALCO_CENTRE_DESIGN_STOP_AUTHORITY_V3",
+  "caller_source": "User accepted Calco Centro–Municipio in Via Italia, then requested continuation with railway timetables, 2026-10-01",
+  "design_position_adopted": true,
+  "site_id": "RT031::CALCO_CENTRE::n:532529.50:5063589.46",
+  "name": "Calco Centro – Municipio",
+  "node_id": "n:532529.50:5063589.46",
+  "coordinates": [9.4180371, 45.7250958],
+  "wing": "east_A",
+  "path_node_index": 520,
+  "removed_site_id": "ASF::SANTA_MARIA_HOE_VIA_COMO",
+  "retained_santa_maria_site_id": "FROZEN::300782",
+  "physical_boarding_authorised": false,
+  "physical_platform_count": null,
+  "field_checks_required": ["Bus accosto and visibility", "Accessible waiting area and crossing", "Driveway and junction interference", "Operator manoeuvre verification"],
+  "bidirectional_h30_action_deferred": true,
+  "network_selected": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false,
+  "decision_budget_km": null,
+  "uncertainty_band_min": null
+}
