@@ -158,6 +158,8 @@ Riferimenti: [principi storici](PHASE2_TRANSIT_BEST_PRACTICES.md), [precedente a
 
 ## Tre verifiche per la consegna operativa
 
+La [scheda per Agenzia e operatore](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md) rende controllabili le richieste sotto. Sul tracciato attuale sono state controllate le transizioni di 1.435 archi diretti: **zero inversioni immediate**. Le sei M1–M6 erano del vecchio percorso. Rimane da verificare fisicamente un tratto di 85,68 m classificato `highway=service` presso Scarpone, oltre a svolte, accosti e restrizioni non certificati.
+
 1. **Percorso e fermate — operatore/enti stradali:** sopralluogo e prova con bus, manovre e restrizioni a storia completa, accosti e lati, attraversamenti e accessibilità dei 27 siti. In particolare i quattro nuovi punti e FS.
 2. **Tempi, continuità e turni — operatore:** tempi misurati per fascia, sosta/recupero, permanenza passeggeri a bordo, trasferimento pedonale reale, disponibilità e blocchi mezzi, deposito e km a vuoto. Un cambio necessario va esplicitato e accettato, non chiamato ancora lo stesso orario.
 3. **Calendario e costo completo — Agenzia/operatore con scelta del committente:** quali giorni, weekend/festività, produzione commerciale e non, flotta/personale e copertura finanziaria. Il +1,27% vale solo nello scenario a 260 giorni.
@@ -169,6 +171,7 @@ Riferimenti: [principi storici](PHASE2_TRANSIT_BEST_PRACTICES.md), [precedente a
 - [Conferma del committente, limiti e hash delle fonti](../config/rt031_design_timetable_confirmation_20261001_v3.json).
 - [Dossier macchina: orario, registro fermate/eventi, treni, copertura, requisiti e verifiche](../outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_design_handoff_20261001.json).
 - [Tracciato stradale e coordinate attuali](../outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson).
+- [Scheda per Agenzia e operatore con audit stradale aggiornato](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md).
 - [Scheda precedente di proposta: conservata come stato storico](RT031_LINEA8_PROPOSTA_ORARIO_16_GIRI_V3.md).
 
 `detailed_timetable_adopted_for_design=true`; `public_operating_timetable_authorised=false`; `network_selected=false`; `primary_selection_authorised=false`; `runner_up_selection_authorised=false`; `decision_budget_km=null`; `uncertainty_band_min=null`.

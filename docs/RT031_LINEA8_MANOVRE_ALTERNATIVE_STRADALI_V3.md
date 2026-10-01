@@ -1,5 +1,7 @@
 # Linea 8 — alternative stradali alle sei inversioni
 
+**Aggiornamento sul percorso confermato il 1 ottobre 2026:** l'[audit della proposta corrente](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md) rileva zero inversioni immediate. Le sei M1–M6 e i costi dei cicli alternativi di questo documento si riferiscono a una geometria storica; non si applicano all'attuale percorso da 27,123508 km.
+
 **Aggiornamento successivo:** il [confronto di attraversamento a Calco](RT031_LINEA8_CALCO_ATTRAVERSAMENTO_V3.md) trova un'ipotesi di accosto a 19 m e ricostruisce l'intero percorso senza le sei inversioni intermedie, a 123.413 km/anno. Il confronto qui sotto mantiene invece rigidamente tutti i punti originali.
 
 La verifica dell'orario a 16 giri è passata in CI (commit `22e2f9a`). La verifica stradale successiva trova **cinque percorsi di ritorno senza inversioni immediate**, mentre **Calco–Via Nazionale (M5) resta irrisolta** nel grafo congelato. Nessuna alternativa è adottata o certificata per un autobus.

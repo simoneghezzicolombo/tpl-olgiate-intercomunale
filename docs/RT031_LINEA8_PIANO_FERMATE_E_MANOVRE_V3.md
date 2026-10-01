@@ -1,5 +1,7 @@
 # Linea 8 — piano fermate e manovre sulla proposta a 31 corse
 
+**Aggiornamento sul percorso confermato il 1 ottobre 2026:** i 27 siti, le 28 occorrenze e l'audit stradale attuali sono nella [scheda di verifica per operatore](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md). Le sei inversioni M1–M6 elencate qui non compaiono più nel percorso corrente e non vanno presentate come criticità o km aggiuntivi della proposta consolidata. Questo documento resta evidenza storica.
+
 **Precisazione sul servizio:** si corregge l’interpretazione della richiesta del committente: ogni corsa sull’intero percorso, come aveva sempre inteso. Il conteggio storico a corse d’ala non è la proposta finale. [Percorso unico completo](RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md). Il registro dei siti e le scelte sulle due aggiunte restano utili; non autorizzano corse parziali.
 
 **Aggiornamento successivo del committente:** N1212 nell’area di Arlate è accolta come fermata di progetto; N0655 in Via Indipendenza è esclusa per la segnalazione del cavalcavia. Non si cerca automaticamente una palina poco prima o dopo. La base corrente diventa **29 siti di progetto**, mentre i 28 qui numerati sono il registro precedente. Olgiate sud e San Zeno rimangono inclusi. [Scelte e continuità intercomunale](RT031_LINEA8_CONTINUITA_INTERCOMUNALE_V3.md). Le comparazioni sotto restano evidenza storica dell’audit, non revocano queste scelte.

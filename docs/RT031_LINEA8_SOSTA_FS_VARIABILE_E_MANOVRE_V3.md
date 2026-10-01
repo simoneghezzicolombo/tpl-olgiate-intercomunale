@@ -1,5 +1,7 @@
 # Linea 8 — proposta istruttoria a 16 giri e verifica delle manovre
 
+**Aggiornamento sul percorso confermato il 1 ottobre 2026:** la [proposta unica attuale](RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md) usa un'altra geometria e un altro orario, con zero inversioni immediate nel controllo del grafo diretto. L'elenco M1–M6 qui sotto e gli orari a 115.143 km/anno sono storici.
+
 ## Esito
 
 **È emersa una proposta concreta da validare, non un esercizio già approvato.** Il medesimo otto di 27,679 km viene percorso **16 volte integralmente**, con tutte le 29 identità di sito e le due occorrenze rapide di Olgiate sud e San Zeno. L'orario istruttorio percorre prima l'ala ovest in ogni giro, serve cinque **treni reali consecutivi** per ala e punta con corse H30, ammette un massimo **H70 nelle spalle** e **H120 solo 10–16**. La sosta intermedia a FS è 13,61–18,61 minuti nominali, senza obbligo di cambio. Sono circa **115.143,267 km/anno** su 260 giorni ipotetici, +3,34% su 111.419. Il modello richiede **quattro mezzi nominali** e cinque soltanto nel più severo dei 27 scenari deterministici di marcia/sosta/recupero. H70, quinto mezzo eventuale, calendario e manovre **non sono approvati**.

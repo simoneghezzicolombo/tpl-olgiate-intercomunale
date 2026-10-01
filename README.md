@@ -13,6 +13,7 @@
 > [Dossier macchina, registro siti/eventi e readiness](outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_design_handoff_20261001.json) ·
 > [Tracciato attuale](outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson).
 > Restano tre verifiche esterne: percorso/accosti, tempi/continuità/turni, calendario/costo completo.
+> [Scheda operativa e correzione delle sei vecchie manovre](docs/RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md).
 > `network_selected=false`; PRIMARY e RUNNER-UP non autorizzati;
 > `decision_budget_km=null`, `uncertainty_band_min=null`.
 
