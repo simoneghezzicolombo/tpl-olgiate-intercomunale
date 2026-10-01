@@ -1,0 +1,970 @@
+{
+  "all_six_replacements_available_in_declared_domain": false,
+  "available_five_cycles_comparison_not_adopted": {
+    "added_distance_m_per_full_trip": 2756.7038854608913,
+    "annual_service_km_16_trips_260_days": 126611.15497633854,
+    "fixed_timetable_intermediate_hold_violations": [],
+    "fixed_timetable_readiness_violations": [
+      {
+        "direction": "to_fs",
+        "dwell_min": 1.0,
+        "moving_multiplier": 1.1,
+        "site_id": "PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+        "uncovered": [
+          [
+            960,
+            962.707892
+          ]
+        ],
+        "window": [
+          960,
+          1180
+        ],
+        "wing": "east_A"
+      }
+    ],
+    "original_rail_target_compatibility_at_unchanged_departures": {
+      "compatible": [
+        {
+          "eligible_wing_fs_departures_min": [
+            420
+          ],
+          "kind": "bus_to_rail",
+          "rail_min": 476,
+          "wing": "east"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            450
+          ],
+          "kind": "bus_to_rail",
+          "rail_min": 506,
+          "wing": "east"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            480
+          ],
+          "kind": "bus_to_rail",
+          "rail_min": 536,
+          "wing": "east"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            510
+          ],
+          "kind": "bus_to_rail",
+          "rail_min": 566,
+          "wing": "east"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            1055
+          ],
+          "kind": "rail_to_bus",
+          "rail_min": 1052,
+          "wing": "east"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            1085
+          ],
+          "kind": "rail_to_bus",
+          "rail_min": 1082,
+          "wing": "east"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            1115
+          ],
+          "kind": "rail_to_bus",
+          "rail_min": 1112,
+          "wing": "east"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            1175
+          ],
+          "kind": "rail_to_bus",
+          "rail_min": 1172,
+          "wing": "east"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            390
+          ],
+          "kind": "bus_to_rail",
+          "rail_min": 446,
+          "wing": "west"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            420
+          ],
+          "kind": "bus_to_rail",
+          "rail_min": 476,
+          "wing": "west"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            450
+          ],
+          "kind": "bus_to_rail",
+          "rail_min": 506,
+          "wing": "west"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            480
+          ],
+          "kind": "bus_to_rail",
+          "rail_min": 536,
+          "wing": "west"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            1000
+          ],
+          "kind": "rail_to_bus",
+          "rail_min": 992,
+          "wing": "west"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            1030
+          ],
+          "kind": "rail_to_bus",
+          "rail_min": 1022,
+          "wing": "west"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            1060
+          ],
+          "kind": "rail_to_bus",
+          "rail_min": 1052,
+          "wing": "west"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            1090
+          ],
+          "kind": "rail_to_bus",
+          "rail_min": 1082,
+          "wing": "west"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            1120
+          ],
+          "kind": "rail_to_bus",
+          "rail_min": 1112,
+          "wing": "west"
+        },
+        {
+          "eligible_wing_fs_departures_min": [
+            1180
+          ],
+          "kind": "rail_to_bus",
+          "rail_min": 1172,
+          "wing": "west"
+        }
+      ],
+      "compatible_count": 18,
+      "missing": [
+        {
+          "eligible_wing_fs_departures_min": [],
+          "kind": "bus_to_rail",
+          "rail_min": 446,
+          "wing": "east"
+        },
+        {
+          "eligible_wing_fs_departures_min": [],
+          "kind": "rail_to_bus",
+          "rail_min": 992,
+          "wing": "east"
+        },
+        {
+          "eligible_wing_fs_departures_min": [],
+          "kind": "rail_to_bus",
+          "rail_min": 1022,
+          "wing": "east"
+        },
+        {
+          "eligible_wing_fs_departures_min": [],
+          "kind": "bus_to_rail",
+          "rail_min": 566,
+          "wing": "west"
+        }
+      ]
+    },
+    "physically_executable": false,
+    "retimed_solution_explored": false,
+    "selected_real_train_binding_violations": [],
+    "unresolved_manoeuvre_ids": [
+      "M5"
+    ],
+    "vehicle_cases_conditional": [
+      {
+        "dwell_min": 0.0,
+        "moving_multiplier": 0.9,
+        "recovery_min": 5,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.0,
+        "moving_multiplier": 0.9,
+        "recovery_min": 10,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.0,
+        "moving_multiplier": 0.9,
+        "recovery_min": 15,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.5,
+        "moving_multiplier": 0.9,
+        "recovery_min": 5,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.5,
+        "moving_multiplier": 0.9,
+        "recovery_min": 10,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.5,
+        "moving_multiplier": 0.9,
+        "recovery_min": 15,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 1.0,
+        "moving_multiplier": 0.9,
+        "recovery_min": 5,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 1.0,
+        "moving_multiplier": 0.9,
+        "recovery_min": 10,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 1.0,
+        "moving_multiplier": 0.9,
+        "recovery_min": 15,
+        "vehicle_count_conditional": 5
+      },
+      {
+        "dwell_min": 0.0,
+        "moving_multiplier": 1.0,
+        "recovery_min": 5,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.0,
+        "moving_multiplier": 1.0,
+        "recovery_min": 10,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.0,
+        "moving_multiplier": 1.0,
+        "recovery_min": 15,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.5,
+        "moving_multiplier": 1.0,
+        "recovery_min": 5,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.5,
+        "moving_multiplier": 1.0,
+        "recovery_min": 10,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.5,
+        "moving_multiplier": 1.0,
+        "recovery_min": 15,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 1.0,
+        "moving_multiplier": 1.0,
+        "recovery_min": 5,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 1.0,
+        "moving_multiplier": 1.0,
+        "recovery_min": 10,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 1.0,
+        "moving_multiplier": 1.0,
+        "recovery_min": 15,
+        "vehicle_count_conditional": 5
+      },
+      {
+        "dwell_min": 0.0,
+        "moving_multiplier": 1.1,
+        "recovery_min": 5,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.0,
+        "moving_multiplier": 1.1,
+        "recovery_min": 10,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.0,
+        "moving_multiplier": 1.1,
+        "recovery_min": 15,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.5,
+        "moving_multiplier": 1.1,
+        "recovery_min": 5,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.5,
+        "moving_multiplier": 1.1,
+        "recovery_min": 10,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 0.5,
+        "moving_multiplier": 1.1,
+        "recovery_min": 15,
+        "vehicle_count_conditional": 5
+      },
+      {
+        "dwell_min": 1.0,
+        "moving_multiplier": 1.1,
+        "recovery_min": 5,
+        "vehicle_count_conditional": 4
+      },
+      {
+        "dwell_min": 1.0,
+        "moving_multiplier": 1.1,
+        "recovery_min": 10,
+        "vehicle_count_conditional": 5
+      },
+      {
+        "dwell_min": 1.0,
+        "moving_multiplier": 1.1,
+        "recovery_min": 15,
+        "vehicle_count_conditional": 5
+      }
+    ]
+  },
+  "cases": [
+    {
+      "added_distance_m": 323.2698763635895,
+      "added_running_minutes_model": 0.8405220032778921,
+      "annual_added_service_km_16_trips_260_days": 1344.8026856725323,
+      "bus_manoeuvre_authorised": false,
+      "coordinates": [
+        9.3678712,
+        45.7486662
+      ],
+      "cycle_bus_suitability_certified": false,
+      "cycle_edge_ids": [
+        "osm:194070239:1:R",
+        "osm:194070238:6:R",
+        "osm:194070238:5:R",
+        "osm:194070238:4:R",
+        "osm:194070238:3:R",
+        "osm:194070238:2:R",
+        "osm:194070238:1:R",
+        "osm:194070238:0:R",
+        "osm:194070228:0:F",
+        "osm:194070228:1:F",
+        "osm:194070228:2:F",
+        "osm:194070228:3:F",
+        "osm:194070228:4:F",
+        "osm:194070228:5:F",
+        "osm:194070228:6:F",
+        "osm:194070228:7:F",
+        "osm:194070228:8:F",
+        "osm:194064843:0:F",
+        "osm:194064843:1:F",
+        "osm:194064843:2:F",
+        "osm:194064843:3:F",
+        "osm:194064843:4:F",
+        "osm:194064843:5:F",
+        "osm:194064843:6:F",
+        "osm:194064843:7:F",
+        "osm:194064843:8:F",
+        "osm:194064843:9:F",
+        "osm:194070234:2:F",
+        "osm:194070234:3:F",
+        "osm:194070239:0:F",
+        "osm:194070239:1:F"
+      ],
+      "evidence": "Immediate reversal of adjacent graph edges; not evidence of a bus-sized turnaround.",
+      "extra_cycle_crossings_are_public_stops": false,
+      "full_history_legality_certified": false,
+      "highway": "tertiary",
+      "id": "M1",
+      "incoming_edge": "osm:194070239:2:R",
+      "node_id": "n:528613.81:5066189.00",
+      "original_ordered_boarding_events_preserved_by_construction": true,
+      "osm_way_id": "194070239",
+      "outgoing_edge": "osm:194070239:2:F",
+      "path_node_index": 476,
+      "pattern": "west_B",
+      "reachable": true,
+      "remaining_immediate_reversal_count_in_wing": 2,
+      "replacement_adopted": false,
+      "represented_via_node_allowed": true,
+      "road_uncertainty_flags": [
+        "missing_maxheight",
+        "missing_maxweight",
+        "missing_maxwidth",
+        "missing_width"
+      ],
+      "shifted_original_events": [
+        {
+          "additional_running_minutes_model": 0.8405220032778921,
+          "occurrence_id": "west_B:520:FROZEN::300782",
+          "site_id": "FROZEN::300782"
+        },
+        {
+          "additional_running_minutes_model": 0.8405220032778921,
+          "occurrence_id": "west_B:529:ASF::SANTA_MARIA_HOE_VIA_COMO",
+          "site_id": "ASF::SANTA_MARIA_HOE_VIA_COMO"
+        },
+        {
+          "additional_running_minutes_model": 0.8405220032778921,
+          "occurrence_id": "west_B:555:FROZEN::300805",
+          "site_id": "FROZEN::300805"
+        },
+        {
+          "additional_running_minutes_model": 0.8405220032778921,
+          "occurrence_id": "west_B:568:ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII",
+          "site_id": "ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII"
+        },
+        {
+          "additional_running_minutes_model": 0.8405220032778921,
+          "occurrence_id": "west_B:586:ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO",
+          "site_id": "ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO"
+        },
+        {
+          "additional_running_minutes_model": 0.8405220032778921,
+          "occurrence_id": "west_B:635:ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE",
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE"
+        },
+        {
+          "additional_running_minutes_model": 0.8405220032778921,
+          "occurrence_id": "west_B:680:ASF::OLGIATE_MOLGORA_VIA_STATALE",
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_STATALE"
+        },
+        {
+          "additional_running_minutes_model": 0.8405220032778921,
+          "occurrence_id": "west_B:731:RT031::P2V2S_0031_PROJECTED_ROAD_POINT",
+          "site_id": "RT031::P2V2S_0031_PROJECTED_ROAD_POINT"
+        }
+      ],
+      "site_numbers": [
+        9
+      ],
+      "status": "FIELD_AND_VEHICLE_SWEEP_CHECK_REQUIRED",
+      "street_name_in_snapshot": "Via Giovanni ventitreesimo"
+    },
+    {
+      "added_distance_m": 531.7670878639693,
+      "added_running_minutes_model": 1.2453803603515037,
+      "annual_added_service_km_16_trips_260_days": 2212.1510855141123,
+      "bus_manoeuvre_authorised": false,
+      "coordinates": [
+        9.3745828,
+        45.7436272
+      ],
+      "cycle_bus_suitability_certified": false,
+      "cycle_edge_ids": [
+        "osm:98812014:1:F",
+        "osm:98812014:2:F",
+        "osm:98812014:3:F",
+        "osm:98812014:4:F",
+        "osm:98812014:5:F",
+        "osm:98812014:6:F",
+        "osm:98812014:7:F",
+        "osm:98812014:8:F",
+        "osm:98812014:9:F",
+        "osm:98812014:10:F",
+        "osm:98812014:11:F",
+        "osm:98812014:12:F",
+        "osm:98812014:13:F",
+        "osm:98812014:14:F",
+        "osm:98812014:15:F",
+        "osm:98812014:16:F",
+        "osm:98812014:17:F",
+        "osm:98812014:18:F",
+        "osm:98812014:19:F",
+        "osm:98812014:20:F",
+        "osm:98812014:21:F",
+        "osm:193695897:0:R",
+        "osm:583201345:0:R",
+        "osm:194059663:0:F",
+        "osm:194059663:1:F",
+        "osm:194059663:2:F",
+        "osm:194059663:3:F",
+        "osm:194059663:4:F",
+        "osm:194059663:5:F",
+        "osm:194059663:6:F",
+        "osm:194059663:7:F",
+        "osm:194059663:8:F",
+        "osm:98812014:8:R",
+        "osm:98812014:7:R",
+        "osm:98812014:6:R",
+        "osm:98812014:5:R",
+        "osm:98812014:4:R",
+        "osm:98812014:3:R",
+        "osm:98812014:2:R",
+        "osm:98812014:1:R"
+      ],
+      "evidence": "Immediate reversal of adjacent graph edges; not evidence of a bus-sized turnaround.",
+      "extra_cycle_crossings_are_public_stops": false,
+      "full_history_legality_certified": false,
+      "highway": "tertiary",
+      "id": "M2",
+      "incoming_edge": "osm:98812014:0:F",
+      "node_id": "n:529138.47:5065631.58",
+      "original_ordered_boarding_events_preserved_by_construction": true,
+      "osm_way_id": "98812014",
+      "outgoing_edge": "osm:98812014:0:R",
+      "path_node_index": 529,
+      "pattern": "west_B",
+      "reachable": true,
+      "remaining_immediate_reversal_count_in_wing": 2,
+      "replacement_adopted": false,
+      "represented_via_node_allowed": true,
+      "road_uncertainty_flags": [
+        "missing_maxheight",
+        "missing_maxweight",
+        "missing_maxwidth",
+        "missing_width"
+      ],
+      "shifted_original_events": [
+        {
+          "additional_running_minutes_model": 1.2453803603515037,
+          "occurrence_id": "west_B:555:FROZEN::300805",
+          "site_id": "FROZEN::300805"
+        },
+        {
+          "additional_running_minutes_model": 1.2453803603515037,
+          "occurrence_id": "west_B:568:ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII",
+          "site_id": "ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII"
+        },
+        {
+          "additional_running_minutes_model": 1.2453803603515037,
+          "occurrence_id": "west_B:586:ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO",
+          "site_id": "ASF::S_MARIA_HOE_S_P_58_ANG_VIA_CENISIO"
+        },
+        {
+          "additional_running_minutes_model": 1.2453803603515037,
+          "occurrence_id": "west_B:635:ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE",
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_DELLA_SALUTE"
+        },
+        {
+          "additional_running_minutes_model": 1.2453803603515037,
+          "occurrence_id": "west_B:680:ASF::OLGIATE_MOLGORA_VIA_STATALE",
+          "site_id": "ASF::OLGIATE_MOLGORA_VIA_STATALE"
+        },
+        {
+          "additional_running_minutes_model": 1.2453803603515037,
+          "occurrence_id": "west_B:731:RT031::P2V2S_0031_PROJECTED_ROAD_POINT",
+          "site_id": "RT031::P2V2S_0031_PROJECTED_ROAD_POINT"
+        }
+      ],
+      "site_numbers": [
+        11
+      ],
+      "status": "FIELD_AND_VEHICLE_SWEEP_CHECK_REQUIRED",
+      "street_name_in_snapshot": "Via Como"
+    },
+    {
+      "added_distance_m": 307.82943872266816,
+      "added_running_minutes_model": 0.791972475814879,
+      "annual_added_service_km_16_trips_260_days": 1280.5704650862995,
+      "bus_manoeuvre_authorised": false,
+      "coordinates": [
+        9.397265069842808,
+        45.72130999924538
+      ],
+      "cycle_bus_suitability_certified": false,
+      "cycle_edge_ids": [
+        "osm:40627763:11:F::OUT",
+        "osm:40627763:12:F",
+        "osm:40627763:13:F",
+        "osm:1148461791:0:F",
+        "osm:1148461791:1:F",
+        "osm:1148461790:22:F",
+        "osm:1148461790:0:F",
+        "osm:1148461790:1:F",
+        "osm:1148461790:2:F",
+        "osm:1148461790:3:F",
+        "osm:1148461790:4:F",
+        "osm:1148461790:5:F",
+        "osm:1148461790:6:F",
+        "osm:1148461790:7:F",
+        "osm:1148461790:8:F",
+        "osm:1148461790:9:F",
+        "osm:1148461790:10:F",
+        "osm:1148461790:11:F",
+        "osm:1148461790:12:F",
+        "osm:1148461790:13:F",
+        "osm:1148461790:14:F",
+        "osm:1148461790:15:F",
+        "osm:1148461790:16:F",
+        "osm:1148461790:17:F",
+        "osm:1148461790:18:F",
+        "osm:1148461792:0:F",
+        "osm:40627763:13:R",
+        "osm:40627763:12:R",
+        "osm:40627763:11:R::IN"
+      ],
+      "evidence": "Immediate reversal of adjacent graph edges; not evidence of a bus-sized turnaround.",
+      "extra_cycle_crossings_are_public_stops": false,
+      "full_history_legality_certified": false,
+      "highway": "residential",
+      "id": "M3",
+      "incoming_edge": "osm:40627763:11:F::IN",
+      "node_id": "RT031::P2V2S_0031_PROJECTED_ROAD_POINT",
+      "original_ordered_boarding_events_preserved_by_construction": true,
+      "osm_way_id": "40627763",
+      "outgoing_edge": "osm:40627763:11:R::OUT",
+      "path_node_index": 731,
+      "pattern": "west_B",
+      "reachable": true,
+      "remaining_immediate_reversal_count_in_wing": 2,
+      "replacement_adopted": false,
+      "represented_via_node_allowed": true,
+      "road_uncertainty_flags": [
+        "missing_lanes",
+        "missing_maxheight",
+        "missing_maxweight",
+        "missing_maxwidth",
+        "missing_width"
+      ],
+      "shifted_original_events": [],
+      "site_numbers": [
+        2
+      ],
+      "status": "FIELD_AND_VEHICLE_SWEEP_CHECK_REQUIRED",
+      "street_name_in_snapshot": "Via Aldo Moro"
+    },
+    {
+      "added_distance_m": 925.7432051925496,
+      "added_running_minutes_model": 2.874200268232978,
+      "annual_added_service_km_16_trips_260_days": 3851.091733601006,
+      "bus_manoeuvre_authorised": false,
+      "coordinates": [
+        9.4198545,
+        45.7321292
+      ],
+      "cycle_bus_suitability_certified": false,
+      "cycle_edge_ids": [
+        "osm:704864565:1:R",
+        "osm:704864565:0:R",
+        "osm:704864566:15:R",
+        "osm:704864566:14:R",
+        "osm:704864566:13:R",
+        "osm:704864566:12:R",
+        "osm:704864566:11:R",
+        "osm:704864566:10:R",
+        "osm:704864566:9:R",
+        "osm:704864566:8:R",
+        "osm:704864566:7:R",
+        "osm:704864566:6:R",
+        "osm:704864566:5:R",
+        "osm:704864566:4:R",
+        "osm:704864566:3:R",
+        "osm:704864566:2:R",
+        "osm:704864566:1:R",
+        "osm:704864566:0:R",
+        "osm:573631275:0:F",
+        "osm:573631275:1:F",
+        "osm:573631275:2:F",
+        "osm:573631275:3:F",
+        "osm:573631275:4:F",
+        "osm:573631275:5:F",
+        "osm:573631275:6:F",
+        "osm:573631275:7:F",
+        "osm:1463993522:23:R",
+        "osm:1463993522:22:R",
+        "osm:1463993522:21:R",
+        "osm:1463993522:20:R",
+        "osm:1463993522:19:R",
+        "osm:1463993522:18:R",
+        "osm:1463993522:17:R",
+        "osm:1463993522:16:R",
+        "osm:1463993522:15:R",
+        "osm:1463993522:14:R",
+        "osm:1463993522:13:R",
+        "osm:1463993522:12:R",
+        "osm:1463993522:11:R",
+        "osm:1463993522:10:R",
+        "osm:1463993522:9:R",
+        "osm:1463993522:8:R",
+        "osm:1463993522:7:R",
+        "osm:1463993522:6:R",
+        "osm:1463993522:5:R",
+        "osm:1463993522:4:R",
+        "osm:1463993520:2:R",
+        "osm:1463993520:1:R",
+        "osm:1463993520:0:R",
+        "osm:1463993521:2:F",
+        "osm:1463993521:3:F",
+        "osm:1463993521:4:F",
+        "osm:1463993522:7:F",
+        "osm:1463993522:8:F",
+        "osm:1463993522:9:F",
+        "osm:1463993522:10:F",
+        "osm:1463993522:11:F",
+        "osm:1463993522:12:F",
+        "osm:1463993522:13:F",
+        "osm:1463993522:14:F",
+        "osm:1463993522:15:F",
+        "osm:1463993522:16:F",
+        "osm:1463993522:17:F",
+        "osm:1463993522:18:F",
+        "osm:1463993522:19:F",
+        "osm:1463993522:20:F",
+        "osm:1463993522:21:F",
+        "osm:1463993522:22:F",
+        "osm:1463993522:23:F",
+        "osm:573631275:7:R",
+        "osm:573631275:6:R",
+        "osm:573631275:5:R",
+        "osm:573631275:4:R",
+        "osm:573631275:3:R",
+        "osm:573631275:2:R",
+        "osm:573631275:1:R",
+        "osm:573631275:0:R",
+        "osm:704864566:0:F",
+        "osm:704864566:1:F",
+        "osm:704864566:2:F",
+        "osm:704864566:3:F",
+        "osm:704864566:4:F",
+        "osm:704864566:5:F",
+        "osm:704864566:6:F",
+        "osm:704864566:7:F",
+        "osm:704864566:8:F",
+        "osm:704864566:9:F",
+        "osm:704864566:10:F",
+        "osm:704864566:11:F",
+        "osm:704864566:12:F",
+        "osm:704864566:13:F",
+        "osm:704864566:14:F",
+        "osm:704864566:15:F",
+        "osm:704864565:0:F",
+        "osm:704864565:1:F"
+      ],
+      "evidence": "Immediate reversal of adjacent graph edges; not evidence of a bus-sized turnaround.",
+      "extra_cycle_crossings_are_public_stops": false,
+      "full_history_legality_certified": false,
+      "highway": "primary",
+      "id": "M4",
+      "incoming_edge": "osm:704864565:2:R",
+      "node_id": "n:532666.82:5064371.62",
+      "original_ordered_boarding_events_preserved_by_construction": true,
+      "osm_way_id": "704864565",
+      "outgoing_edge": "osm:704864565:2:F",
+      "path_node_index": 489,
+      "pattern": "east_A",
+      "reachable": true,
+      "remaining_immediate_reversal_count_in_wing": 2,
+      "replacement_adopted": false,
+      "represented_via_node_allowed": true,
+      "road_uncertainty_flags": [
+        "missing_maxheight",
+        "missing_maxweight",
+        "missing_maxwidth",
+        "missing_width"
+      ],
+      "shifted_original_events": [
+        {
+          "additional_running_minutes_model": 2.874200268232978,
+          "occurrence_id": "east_A:515:FROZEN::300634",
+          "site_id": "FROZEN::300634"
+        },
+        {
+          "additional_running_minutes_model": 2.874200268232978,
+          "occurrence_id": "east_A:588:ASF::CALCO_VIA_GARIBALDI",
+          "site_id": "ASF::CALCO_VIA_GARIBALDI"
+        },
+        {
+          "additional_running_minutes_model": 2.874200268232978,
+          "occurrence_id": "east_A:675:PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+          "site_id": "PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE"
+        }
+      ],
+      "site_numbers": [],
+      "status": "FIELD_AND_VEHICLE_SWEEP_CHECK_REQUIRED",
+      "street_name_in_snapshot": "Via Nazionale"
+    },
+    {
+      "bus_manoeuvre_authorised": false,
+      "coordinates": [
+        9.4176798,
+        45.7296151
+      ],
+      "cycle_bus_suitability_certified": false,
+      "cycle_edge_ids": [],
+      "evidence": "Immediate reversal of adjacent graph edges; not evidence of a bus-sized turnaround.",
+      "extra_cycle_crossings_are_public_stops": false,
+      "full_history_legality_certified": false,
+      "highway": "service",
+      "id": "M5",
+      "incoming_edge": "osm:1465161334:3:R",
+      "node_id": "n:532499.08:5064091.41",
+      "original_ordered_boarding_events_preserved_by_construction": true,
+      "osm_way_id": "1465161334",
+      "outgoing_edge": "osm:1465161334:3:F",
+      "path_node_index": 515,
+      "pattern": "east_A",
+      "reachable": false,
+      "replacement_adopted": false,
+      "represented_via_node_allowed": true,
+      "road_uncertainty_flags": [
+        "missing_lanes",
+        "missing_maxheight",
+        "missing_maxweight",
+        "missing_maxwidth",
+        "missing_width"
+      ],
+      "site_numbers": [
+        27
+      ],
+      "status": "NO_RETURN_CYCLE_IN_DECLARED_GRAPH_DOMAIN",
+      "street_name_in_snapshot": null
+    },
+    {
+      "added_distance_m": 668.0942773181147,
+      "added_running_minutes_model": 1.9257775766808332,
+      "annual_added_service_km_16_trips_260_days": 2779.2721936433572,
+      "bus_manoeuvre_authorised": false,
+      "coordinates": [
+        9.4072469,
+        45.735645
+      ],
+      "cycle_bus_suitability_certified": false,
+      "cycle_edge_ids": [
+        "osm:581532442:12:F",
+        "osm:235445445:11:R",
+        "osm:235445445:10:R",
+        "osm:235445445:9:R",
+        "osm:235445445:8:R",
+        "osm:235445445:7:R",
+        "osm:235445445:6:R",
+        "osm:235445445:5:R",
+        "osm:235445444:11:R",
+        "osm:235445444:10:R",
+        "osm:235445444:9:R",
+        "osm:235445444:8:R",
+        "osm:235445444:7:R",
+        "osm:235445444:6:R",
+        "osm:235445444:5:R",
+        "osm:235445444:4:R",
+        "osm:235445444:3:R",
+        "osm:235445444:2:R",
+        "osm:48540202:6:R",
+        "osm:48540202:5:R",
+        "osm:48540202:4:R",
+        "osm:48540202:3:R",
+        "osm:581532447:0:F",
+        "osm:581532447:1:F",
+        "osm:581532447:2:F",
+        "osm:581532447:3:F",
+        "osm:1463441228:0:F",
+        "osm:1463441228:1:F",
+        "osm:1463441228:2:F",
+        "osm:1463441228:3:F",
+        "osm:1463441227:0:F",
+        "osm:1463441227:1:F",
+        "osm:1463441227:2:F",
+        "osm:1463441227:3:F",
+        "osm:48540202:5:F",
+        "osm:48540202:6:F",
+        "osm:235445444:2:F",
+        "osm:235445444:3:F",
+        "osm:235445444:4:F",
+        "osm:235445444:5:F",
+        "osm:235445444:6:F",
+        "osm:235445444:7:F",
+        "osm:235445444:8:F",
+        "osm:235445444:9:F",
+        "osm:235445444:10:F",
+        "osm:235445444:11:F",
+        "osm:235445445:5:F",
+        "osm:235445445:6:F",
+        "osm:235445445:7:F",
+        "osm:235445445:8:F",
+        "osm:235445445:9:F",
+        "osm:235445445:10:F",
+        "osm:235445445:11:F",
+        "osm:581532442:12:R"
+      ],
+      "evidence": "Immediate reversal of adjacent graph edges; not evidence of a bus-sized turnaround.",
+      "extra_cycle_crossings_are_public_stops": false,
+      "full_history_legality_certified": false,
+      "highway": "residential",
+      "id": "M6",
+      "incoming_edge": "osm:581532442:11:F",
+      "node_id": "n:531683.90:5064757.16",
+      "original_ordered_boarding_events_preserved_by_construction": true,
+      "osm_way_id": "581532442",
+      "outgoing_edge": "osm:581532442:11:R",
+      "path_node_index": 675,
+      "pattern": "east_A",
+      "reachable": true,
+      "remaining_immediate_reversal_count_in_wing": 2,
+      "replacement_adopted": false,
+      "represented_via_node_allowed": true,
+      "road_uncertainty_flags": [
+        "missing_lanes",
+        "missing_maxheight",
+        "missing_maxweight",
+        "missing_maxwidth",
+        "missing_width"
+      ],
+      "shifted_original_events": [],
+      "site_numbers": [
+        17
+      ],
+      "status": "FIELD_AND_VEHICLE_SWEEP_CHECK_REQUIRED",
+      "street_name_in_snapshot": "Via Cesare Cantù"
+    }
+  ],
+  "contract": "RT031_LINE8_LOCAL_MANOEUVRE_RETURN_CYCLES_DIAGNOSTIC_V3",
+  "decision_budget_km": null,
+  "graph_inputs_sha256": {
+    "attachments": "30d64ff20e9b89c31f7878c415dd4c6bb5a0d10f51b24d041e4deb4d57e6571b",
+    "edges": "466f562f95805cb194cc079c3829d5abcd54a431653cce5364538869909dff19",
+    "nodes": "2ab72595b7c52d8a08ccf767a20a9a5fc00b39552b37da01a53f270467a4ca06",
+    "rules": "954865ad8972bd20d819e3eb6c4d548102609a4de07b7006ac7e42a61e14ed3a"
+  },
+  "manoeuvre_source_sha256": "c11a1c7934b4e38937a084d5935caf8943ab8008cd19d235d9bb22b534231972",
+  "network_selected": false,
+  "original_timetable_certified_for_replacements": false,
+  "physical_bus_operation_authorised": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false,
+  "semantics": "Shortest-distance local cycle in frozen directed split-only graph, retaining incoming-edge memory for represented via-node rules. No immediate edge reversal, no internal FS visit; original passenger events retained on original visits before inserted cycles. Extra geometric crossings are not new guaranteed boarding events. Road time excludes new acceleration/braking or stop dwell. This does not certify path-history restrictions, bus swept paths, kerbs, platforms, passenger continuity or a revised timetable.",
+  "source_timetable_case_id": "west_B_realtrains_16_shoulder70_maxmid60_fleetfree_free",
+  "timetable_source_sha256": "c8a1f98022eebbe0bcc2c93623e73e51d8f20004efa491a47a8df12beae776e4",
+  "uncertainty_band_min": null
+}

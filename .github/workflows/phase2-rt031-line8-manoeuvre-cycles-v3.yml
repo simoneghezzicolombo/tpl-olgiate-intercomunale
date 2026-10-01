@@ -1,0 +1,38 @@
+name: RT031 Linea 8 manoeuvre return cycles V3
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rt031-decision-convergence]
+    paths:
+      - scripts/phase2_probe_rt031_line8_manoeuvre_cycles_v3.py
+      - tests/test_phase2_rt031_line8_manoeuvre_cycles_v3.py
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/manoeuvre_return_cycles.*
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/variable_fs_hold_16_full_trips.json.gz
+      - .github/workflows/phase2-rt031-line8-manoeuvre-cycles-v3.yml
+permissions:
+  contents: read
+jobs:
+  return-cycles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      PYTHONPATH: .:src
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r requirements.txt
+      - name: Unit and published-contract checks
+        run: python -m unittest tests.test_phase2_rt031_line8_manoeuvre_cycles_v3 -q
+      - name: Retrieve pinned road evidence
+        run: |
+          gh run download 33975545284 -n rt017-final-certified-evidence-v3 -D /tmp/rt031/rt017
+          gh run download 34030321683 -n phase2-rt022-minimum-backbones-v3-real -D /tmp/rt031/rt022
+          gh run download 34134177590 -n rt031-successor-via-way-relevance-v3 -D /tmp/rt031/successor
+      - name: Reproduce cycle paths, costs and timetable consequences
+        run: |
+          python -m scripts.phase2_probe_rt031_line8_manoeuvre_cycles_v3 --graph_dir /tmp/rt031
+          git diff --exit-code -- outputs/phase2/rt031_line8_local_shortcuts_v3/manoeuvre_return_cycles.json outputs/phase2/rt031_line8_local_shortcuts_v3/manoeuvre_return_cycles.geojson
+          test -s outputs/phase2/rt031_line8_local_shortcuts_v3/manoeuvre_return_cycles.png
