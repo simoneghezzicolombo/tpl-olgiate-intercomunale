@@ -107,7 +107,7 @@ Per il 2027 serviranno pubblicazioni valide per le date considerate, con arrivi 
 
 ## Conclusione operativa
 
-**La base feriale è fissata; la chiusura tecnica generale e le prove esterne sono ancora aperte.** Il committente vuole una proposta solida e implementabile prima del confronto con l’azienda. Questa distinta raccoglie le quantità e le verifiche residue: non conclude la progettazione interna. Il [rafforzamento interno](RT031_LINEA8_RAFFORZAMENTO_INTERNO_2026_10_02.md) ricostruisce eventi, blocchi, copertura e flussi per +2 minuti serali e il bypass Scarpone; mantiene esplicita la fragilità AM. Quei confronti non modificano la base confermata di questa distinta.
+**La base feriale è fissata; la chiusura tecnica generale e le prove esterne sono ancora aperte.** Il committente vuole una proposta solida e implementabile prima del confronto con l’azienda. Questa distinta raccoglie le quantità e le verifiche residue: non conclude la progettazione interna. Il [rafforzamento interno](RT031_LINEA8_RAFFORZAMENTO_INTERNO_2026_10_02.md) ricostruisce eventi, blocchi, copertura e flussi per +2 minuti serali e il bypass Scarpone. L’[audit conclusivo AM](RT031_LINEA8_LIMITE_TEMPO_E_SCELTA_AM_2026_10_02.md) chiude la verifica del minimo sul grafo nel dominio dichiarato e quantifica la scelta ferroviaria residua, non autorizzata. Quei confronti non modificano la base confermata di questa distinta.
 
 [Pacchetto macchina e schede da copiare per i riscontri](../outputs/phase2/rt031_line8_local_shortcuts_v3/operating_closure_working_pack_20261002.json) · [Dossier unico](RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md) · [Scheda Agenzia/operatore](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md)
 

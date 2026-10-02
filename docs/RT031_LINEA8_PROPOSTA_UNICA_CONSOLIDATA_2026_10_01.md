@@ -194,7 +194,9 @@ Sono stati verificati **11 confronti locali di fase**, ricalcolando tutte le 74 
 
 Il bypass Scarpone Via Pilata–rotatoria–Via Como aggiunge 25,84 m/giro e richiede un attacco ipotetico a 17,89 m dal nodo originale: non è la stessa occorrenza fisica certificata per nome. Ricalcolata sul substrato pedonale, la copertura 5/8/10 e le perdite lorde restano invariate. In combinazione con +2 minuti serali: 110.334,948 km feriali 2027, massimo quattro mezzi nei casi ereditati, nessuna precedente compatibilità bus→treno persa; attese da alcuni treni +2 minuti. È un confronto non adottato, non un accosto già sicuro.
 
-Il problema AM è circoscritto: mantenere la stessa corsa per i treni da Milano in arrivo a :02 e verso Milano in partenza a :56, sul percorso est e nel caso più lento con due cammini assunti da 3 minuti, lascia una finestra di fase di soli 13,4 secondi. Una fase bilanciata offre al massimo 6,7 secondi per lato; anticipare non migliora entrambi i flussi. Nessuna soglia di affidabilità è inventata. Le schede per l’operatore non sostituiscono questa criticità ingegneristica.
+Il problema AM è circoscritto: mantenere la stessa corsa per le cinque coppie di treni da Milano in arrivo a :02/:32 e verso Milano in partenza a :26/:56 (54 minuti dopo), sul percorso est e nel caso più lento con due cammini assunti da 3 minuti, lascia una finestra di fase di soli 13,4 secondi. Una fase bilanciata offre al massimo 6,7 secondi per lato; anticipare non migliora entrambi i flussi. Nessuna soglia di affidabilità è inventata. Le schede per l’operatore non sostituiscono questa criticità ingegneristica.
+
+L’[audit conclusivo del tempo minimo e della scelta AM](RT031_LINEA8_LIMITE_TEMPO_E_SCELTA_AM_2026_10_02.md) chiude la verifica sul grafo per questo ordine: due obiettivi × tre livelli di protezione degli arrivi alle fermate. Il percorso più rapido nel proxy aggiunge 41,62 m a Calco e risparmia solo 13,72 secondi nello stress; non viene adottato. Anche questo minimo lascia una finestra comune di appena 27,12 secondi. L’esempio completo est AM −2 minuti, sera +2 e Scarpone conserva 16 giri e 110.334,948 km feriali; aumenta il margine AM verso Milano a 2,223 minuti ma l’attesa dai primi quattro arrivi passa 3→31 minuti e dall’ultimo 3→58. Non è una nuova priorità del committente: serve scelta esplicita o evidenza osservata diversa, non un altro ricalcolo cosmetico.
 
 ## Pacchetto autorevole
 
@@ -206,6 +208,7 @@ Il problema AM è circoscritto: mantenere la stessa corsa per i treni da Milano 
 - [Scheda per Agenzia e operatore con audit stradale aggiornato](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md).
 - [Blocchi dei mezzi nei 27 scenari e contabilità annua](../outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_vehicle_blocks_accounting_20261001.json).
 - [Rafforzamento interno: registri ricostruiti, deviazione Scarpone e limite AM](../outputs/phase2/rt031_line8_local_shortcuts_v3/fixed_design_strengthening_20261002.json).
+- [Audit conclusivo: estremi distanza/tempo, tutte le occorrenze e compromesso AM non adottato](../outputs/phase2/rt031_line8_local_shortcuts_v3/fixed_order_runtime_closure_20261002.json).
 - [Evidenza primaria PdB: produzione, giorni di progetto e limiti del calendario](../config/rt031_pdb_calendar_reference_evidence_20261001_v3.json).
 - [Audit puntuale di accesso alle località, 108 abbinamenti](../outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_locality_point_access_20261001.json).
 - [Scheda precedente di proposta: conservata come stato storico](RT031_LINEA8_PROPOSTA_ORARIO_16_GIRI_V3.md).

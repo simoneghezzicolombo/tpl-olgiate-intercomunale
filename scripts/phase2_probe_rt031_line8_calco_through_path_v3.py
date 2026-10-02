@@ -60,8 +60,14 @@ def local_access(loops):
 
 
 def through_path(edges, adapter, incoming, outgoing, via, forbidden_nodes,
-                 required_via_incoming=None):
-    """Distance-minimum edge-state path with explicit ordered stop-event progress."""
+                 required_via_incoming=None, objective='distance'):
+    """Lexicographic distance/time minimum within represented via-node rules.
+
+    ``minutes`` swaps the two optimisation coordinates, never their physical
+    units in the result. Neither objective certifies full-history legality.
+    """
+    if objective not in ('distance', 'minutes'):
+        raise ValueError('Unsupported through-path objective')
     adjacency = defaultdict(list)
     for eid, edge in sorted(edges.items()):
         if any(not math.isfinite(float(edge[k])) or float(edge[k]) < 0
@@ -74,9 +80,9 @@ def through_path(edges, adapter, incoming, outgoing, via, forbidden_nodes,
     best, previous = {start: (0., 0.)}, {}
     queue = [(0., 0., *start)]
     while queue:
-        distance, minutes, served, last = heapq.heappop(queue)
+        primary, secondary, served, last = heapq.heappop(queue)
         state = (served, last)
-        if best[state] != (distance, minutes):
+        if best[state] != (primary, secondary):
             continue
         if (served == len(checkpoints) and edges[last]['v_node_id'] == target
                 and not reverse(edges[last], edges[outgoing])
@@ -85,6 +91,8 @@ def through_path(edges, adapter, incoming, outgoing, via, forbidden_nodes,
             while cursor != start:
                 path.append(cursor[1]); cursor = previous[cursor]
             path.reverse()
+            distance, minutes = ((primary, secondary) if objective == 'distance'
+                                 else (secondary, primary))
             return {'reachable': True, 'edge_ids': path, 'distance_m': distance,
                     'running_minutes_model': minutes}
         for nxt in adjacency[edges[last]['v_node_id']]:
@@ -99,7 +107,9 @@ def through_path(edges, adapter, incoming, outgoing, via, forbidden_nodes,
                     break
                 progress += 1
             new = (progress, nxt)
-            cost = (distance+float(e['length_m']), minutes+float(e['running_minutes_model']))
+            distance, minutes = float(e['length_m']), float(e['running_minutes_model'])
+            costs = (distance, minutes) if objective == 'distance' else (minutes, distance)
+            cost = (primary+costs[0], secondary+costs[1])
             if cost < best.get(new, (math.inf, math.inf)):
                 best[new], previous[new] = cost, state
                 heapq.heappush(queue, (*cost, *new))
