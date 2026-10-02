@@ -15,6 +15,10 @@ from collections import Counter
 from pathlib import Path
 from typing import Mapping
 
+from src.gate_f_status import _git_object_bytes
+
+ROOT = Path(__file__).resolve().parents[1]
+
 STATUS = "PASS_PHASE2_FINAL_DECISION_SUFFICIENCY_GATE_V3"
 CONTRACT = "PHASE2_FINITE_BLOCKER_CLOSURE_AND_DECISION_PATHWAY_V3"
 ALLOWED_STATES = {
@@ -40,6 +44,23 @@ PATHWAY_FIELDS = [
 
 def read_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def certified_external_bytes(path: Path, cfg: Mapping[str, object], key: str) -> bytes:
+    """Read the pinned Git source, not a fabricated private-cache replacement.
+
+    A supplied cache must match that exact source (text checkout newlines may
+    differ). Only the declared default cache may fall back when absent.
+    """
+    source = cfg['external_sources'][key]
+    blob = _git_object_bytes(ROOT, source['commit'], source['path'])
+    if path.is_file():
+        supplied = path.read_bytes()
+        if supplied.replace(b'\r\n', b'\n') != blob.replace(b'\r\n', b'\n'):
+            raise ValueError(f'Certified external source differs from pinned Git object: {key}')
+    elif path.resolve() != (ROOT/source['materialized_path']).resolve():
+        raise FileNotFoundError(f'Explicit external source path is missing: {path}')
+    return blob
 
 
 def sha256_path(path: Path) -> str:
@@ -72,9 +93,9 @@ def validate_sources(args: argparse.Namespace, cfg: Mapping[str, object]) -> dic
         "codex_redteam": read_json(args.codex_redteam_validation),
         "legacy_contract_audit": read_json(args.legacy_contract_audit),
         "frontier": read_json(args.frontier_validation),
-        "stage_f": read_json(args.stage_f_validation),
-        "current_baseline": read_json(args.current_baseline_validation),
-        "old_vs_new": read_json(args.old_vs_new_validation),
+        "stage_f": json.loads(certified_external_bytes(args.stage_f_validation, cfg, 'stage_f')),
+        "current_baseline": json.loads(certified_external_bytes(args.current_baseline_validation, cfg, 'current_service_baseline_v3')),
+        "old_vs_new": json.loads(certified_external_bytes(args.old_vs_new_validation, cfg, 'stage_e_old_vs_new_audit')),
     }
     n_contexts = int(cfg["expected_plan_context_count"])
 
@@ -370,11 +391,11 @@ def build(args: argparse.Namespace) -> dict[str, object]:
             "legacy_contract_audit_sha256": sha256_path(args.legacy_contract_audit),
             "frontier_validation_sha256": sha256_path(args.frontier_validation),
             "stage_f_source_commit": external["stage_f"]["commit"],
-            "stage_f_validation_sha256": sha256_path(args.stage_f_validation),
+            "stage_f_validation_sha256": hashlib.sha256(certified_external_bytes(args.stage_f_validation, cfg, 'stage_f')).hexdigest(),
             "current_service_baseline_source_commit": external["current_service_baseline_v3"]["commit"],
-            "current_service_baseline_validation_sha256": sha256_path(args.current_baseline_validation),
+            "current_service_baseline_validation_sha256": hashlib.sha256(certified_external_bytes(args.current_baseline_validation, cfg, 'current_service_baseline_v3')).hexdigest(),
             "stage_e_old_vs_new_source_commit": external["stage_e_old_vs_new_audit"]["commit"],
-            "stage_e_old_vs_new_validation_sha256": sha256_path(args.old_vs_new_validation),
+            "stage_e_old_vs_new_validation_sha256": hashlib.sha256(certified_external_bytes(args.old_vs_new_validation, cfg, 'stage_e_old_vs_new_audit')).hexdigest(),
             "blocker_matrix_sha256": sha256_path(matrix_path),
             "pathway_summary_sha256": sha256_path(pathway_path),
         },

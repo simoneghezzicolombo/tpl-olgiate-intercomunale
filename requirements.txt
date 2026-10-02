@@ -8,6 +8,7 @@ networkx>=3.4.0
 matplotlib>=3.10.0
 requests>=2.31.0
 pypdf>=4.0.0
+pdfplumber>=0.11,<1
 pytest>=8.0.0
 osmnx>=2.1.0
 pyogrio>=0.10.0

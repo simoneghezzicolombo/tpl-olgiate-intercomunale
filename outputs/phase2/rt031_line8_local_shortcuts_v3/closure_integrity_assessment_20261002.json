@@ -1,0 +1,246 @@
+{
+  "contract": "RT031_CLOSURE_INTEGRITY_AND_RESIDUAL_ASSESSMENT_V3",
+  "recorded_on": "2026-10-02",
+  "baseline_audit": "fixed_order_runtime_verification_20261002.json",
+  "baseline_source_commit": "3ef5f47",
+  "verification": {
+    "command": "PYTHONPATH=.;src python -m pytest -q -m 'not network' --tb=short",
+    "single_native_python_environment": true,
+    "pdf_tests_included": true,
+    "passed": 1283,
+    "failed": 9,
+    "network_tests_deselected": 3,
+    "subtests_passed": 78,
+    "duration_seconds": 225.46,
+    "initial_failures_resolved": 16,
+    "initial_failure_count": 25,
+    "new_adversarial_checkout_and_source_tests_passed": 6,
+    "final_focused_suite_passed": 127,
+    "final_focused_suite_failed": 0
+  },
+  "initial_failure_resolution": [
+    {
+      "test": "tests/test_audit_provenance.py::test_manifest_integrity",
+      "state": "OPEN_MISSING_LEGACY_INPUTS",
+      "reason": "Certified checkout newline layer repaired; original national WorldPop raster and original Copernicus tile remain absent. Crops are not substituted for originals.",
+      "proof": "scripts/audit_02_real_spatial.py::require_inputs; certified_checkout_bytes_20261002.json"
+    },
+    {
+      "test": "tests/test_audit_provenance.py::test_osm_acquisition_extent_covers_core_boundaries",
+      "state": "OPEN_MISSING_LEGACY_INPUTS",
+      "reason": "The legacy Gate B materialisation or its acquisition metadata is absent. No replacement evidence or simulated PASS is created.",
+      "proof": "scripts/audit_02_real_spatial.py::require_inputs; certified_checkout_bytes_20261002.json"
+    },
+    {
+      "test": "tests/test_gate_b_spatial.py::test_population_cells_are_real_worldpop_and_quadrate_to_posas",
+      "state": "OPEN_MISSING_LEGACY_INPUTS",
+      "reason": "The legacy Gate B materialisation or its acquisition metadata is absent. No replacement evidence or simulated PASS is created.",
+      "proof": "scripts/audit_02_real_spatial.py::require_inputs; certified_checkout_bytes_20261002.json"
+    },
+    {
+      "test": "tests/test_gate_b_spatial.py::test_osm_acquisition_extent_covers_full_municipal_geometry",
+      "state": "OPEN_MISSING_LEGACY_INPUTS",
+      "reason": "The legacy Gate B materialisation or its acquisition metadata is absent. No replacement evidence or simulated PASS is created.",
+      "proof": "scripts/audit_02_real_spatial.py::require_inputs; certified_checkout_bytes_20261002.json"
+    },
+    {
+      "test": "tests/test_gate_b_spatial.py::test_walk_graph_is_real_connected_and_slope_aware",
+      "state": "OPEN_MISSING_LEGACY_INPUTS",
+      "reason": "The legacy Gate B materialisation or its acquisition metadata is absent. No replacement evidence or simulated PASS is created.",
+      "proof": "scripts/audit_02_real_spatial.py::require_inputs; certified_checkout_bytes_20261002.json"
+    },
+    {
+      "test": "tests/test_gate_b_spatial.py::test_gtfs_is_primary_stop_source_and_spot_checks_pass",
+      "state": "OPEN_MISSING_LEGACY_INPUTS",
+      "reason": "The legacy Gate B materialisation or its acquisition metadata is absent. No replacement evidence or simulated PASS is created.",
+      "proof": "scripts/audit_02_real_spatial.py::require_inputs; certified_checkout_bytes_20261002.json"
+    },
+    {
+      "test": "tests/test_gate_b_spatial.py::test_accessibility_outputs_are_complete_and_monotonic",
+      "state": "OPEN_MISSING_LEGACY_INPUTS",
+      "reason": "The legacy Gate B materialisation or its acquisition metadata is absent. No replacement evidence or simulated PASS is created.",
+      "proof": "scripts/audit_02_real_spatial.py::require_inputs; certified_checkout_bytes_20261002.json"
+    },
+    {
+      "test": "tests/test_gate_b_spatial.py::test_gate_b_summary_keeps_epistemic_statuses_separate",
+      "state": "OPEN_MISSING_LEGACY_INPUTS",
+      "reason": "The legacy Gate B materialisation or its acquisition metadata is absent. No replacement evidence or simulated PASS is created.",
+      "proof": "scripts/audit_02_real_spatial.py::require_inputs; certified_checkout_bytes_20261002.json"
+    },
+    {
+      "test": "tests/test_gate_f_status_git_objects.py::test_git_object_evidence_survives_worktree_tampering",
+      "state": "RESOLVED",
+      "reason": "LF-explicit test evidence now hashes the exact Git blob on Windows; production byte validation remains strict.",
+      "proof": "tests/test_gate_f_status_git_objects.py"
+    },
+    {
+      "test": "tests/test_gate_f_status_git_objects.py::test_git_object_missing_commit_fails_closed",
+      "state": "RESOLVED",
+      "reason": "LF-explicit test evidence now hashes the exact Git blob on Windows; production byte validation remains strict.",
+      "proof": "tests/test_gate_f_status_git_objects.py"
+    },
+    {
+      "test": "tests/test_phase2_analysis_envelope.py::test_output_checksum_manifest_reconciles",
+      "state": "RESOLVED",
+      "reason": "Only CRLF checkout drift was repaired to the exact existing Git blob matching the frozen expected digest. Expected hashes and semantic content are unchanged.",
+      "proof": "certified_checkout_bytes_20261002.json"
+    },
+    {
+      "test": "tests/test_phase2_final_decision_sufficiency_gate_v3.py::test_certified_gate_freezes_blocker_universe_and_preserves_contexts",
+      "state": "RESOLVED",
+      "reason": "Exact certified external Git objects replace only absent declared private caches; supplied divergent or explicitly missing sources fail closed. All three source digests match the previous certificate.",
+      "proof": "closure_integrity_decision_sources_20261002/final_decision_sufficiency_gate_v3_validation.json"
+    },
+    {
+      "test": "tests/test_phase2_final_decision_sufficiency_gate_v3.py::test_v3_pathway_has_no_unresolved_technical_data_requirement_but_still_needs_human_contract",
+      "state": "RESOLVED",
+      "reason": "Exact certified external Git objects replace only absent declared private caches; supplied divergent or explicitly missing sources fail closed. All three source digests match the previous certificate.",
+      "proof": "closure_integrity_decision_sources_20261002/final_decision_sufficiency_gate_v3_validation.json"
+    },
+    {
+      "test": "tests/test_phase2_final_decision_sufficiency_gate_v3.py::test_no_missing_semantics_are_manufactured",
+      "state": "RESOLVED",
+      "reason": "Exact certified external Git objects replace only absent declared private caches; supplied divergent or explicitly missing sources fail closed. All three source digests match the previous certificate.",
+      "proof": "closure_integrity_decision_sources_20261002/final_decision_sufficiency_gate_v3_validation.json"
+    },
+    {
+      "test": "tests/test_phase2_final_decision_sufficiency_gate_v3.py::test_blocker_matrix_contains_only_frozen_states_and_no_engineering_authorisation",
+      "state": "RESOLVED",
+      "reason": "Exact certified external Git objects replace only absent declared private caches; supplied divergent or explicitly missing sources fail closed. All three source digests match the previous certificate.",
+      "proof": "closure_integrity_decision_sources_20261002/final_decision_sufficiency_gate_v3_validation.json"
+    },
+    {
+      "test": "tests/test_phase2_final_decision_sufficiency_gate_v3.py::test_full_build_is_byte_deterministic",
+      "state": "RESOLVED",
+      "reason": "Exact certified external Git objects replace only absent declared private caches; supplied divergent or explicitly missing sources fail closed. All three source digests match the previous certificate.",
+      "proof": "closure_integrity_decision_sources_20261002/final_decision_sufficiency_gate_v3_validation.json"
+    },
+    {
+      "test": "tests/test_phase2_final_decision_sufficiency_gate_v3.py::test_validation_json_does_not_authorize_hidden_selection",
+      "state": "RESOLVED",
+      "reason": "Exact certified external Git objects replace only absent declared private caches; supplied divergent or explicitly missing sources fail closed. All three source digests match the previous certificate.",
+      "proof": "closure_integrity_decision_sources_20261002/final_decision_sufficiency_gate_v3_validation.json"
+    },
+    {
+      "test": "tests/test_phase2_frozen_graph.py::test_gate_d_epoch_and_source_checksums_are_frozen",
+      "state": "RESOLVED",
+      "reason": "Only CRLF checkout drift was repaired to the exact existing Git blob matching the frozen expected digest. Expected hashes and semantic content are unchanged.",
+      "proof": "certified_checkout_bytes_20261002.json"
+    },
+    {
+      "test": "tests/test_phase2_redteam_tournament_readiness_rt001_v3.py::test_certified_codex_tournament_chain_passes_fail_closed_redteam",
+      "state": "RESOLVED",
+      "reason": "Two reviewed aggregate-only validators are pinned by full normalized code hashes. Changed or unknown consumers fail closed; reported paths use POSIX form. No membership pruning is authorised.",
+      "proof": "closure_integrity_redteam_20261002/tournament_readiness_redteam_rt001_v3_validation.json; tests/test_phase2_certified_checkout_bytes_v3.py"
+    },
+    {
+      "test": "tests/test_phase2_redteam_tournament_readiness_rt001_v3.py::test_redteam_rebuild_is_byte_deterministic",
+      "state": "RESOLVED",
+      "reason": "Two reviewed aggregate-only validators are pinned by full normalized code hashes. Changed or unknown consumers fail closed; reported paths use POSIX form. No membership pruning is authorised.",
+      "proof": "closure_integrity_redteam_20261002/tournament_readiness_redteam_rt001_v3_validation.json; tests/test_phase2_certified_checkout_bytes_v3.py"
+    },
+    {
+      "test": "tests/test_phase2_redteam_tournament_readiness_rt001_v3.py::test_frontier_consumer_scan_fails_open_world_pruning_path",
+      "state": "RESOLVED",
+      "reason": "Two reviewed aggregate-only validators are pinned by full normalized code hashes. Changed or unknown consumers fail closed; reported paths use POSIX form. No membership pruning is authorised.",
+      "proof": "closure_integrity_redteam_20261002/tournament_readiness_redteam_rt001_v3_validation.json; tests/test_phase2_certified_checkout_bytes_v3.py"
+    },
+    {
+      "test": "tests/test_phase2_rt031_line8_best_practices_v3.py::BestPracticeReadinessTests::test_report_and_non_decisional_semantics",
+      "state": "RESOLVED",
+      "reason": "Generators now preserve the already-published historical/current-design notices; no historical route numbers or manœuvres are promoted into the current design.",
+      "proof": "scripts/phase2_audit_rt031_line8_best_practices_v3.py"
+    },
+    {
+      "test": "tests/test_phase2_rt031_line8_inventory_alternatives_v3.py::InventoryAlternativesTests::test_every_operating_witness_independently_rechecked",
+      "state": "OPEN_UNTRACKED_EXPERIMENT",
+      "reason": "The pre-existing untracked experiment declares all_cases_checked=false; 9 cases checked. It is not adopted or modified.",
+      "proof": "outputs/phase2/rt031_line8_local_shortcuts_v3/inventory_alternatives_timetable.json"
+    },
+    {
+      "test": "tests/test_phase2_rt031_line8_stop_plan_v3.py::StopPlanTests::test_report_reproducible_and_visual_bounded",
+      "state": "RESOLVED",
+      "reason": "Generators now preserve the already-published historical/current-design notices; no historical route numbers or manœuvres are promoted into the current design.",
+      "proof": "scripts/phase2_export_rt031_line8_stop_plan_v3.py"
+    },
+    {
+      "test": "tests/test_phase2_stop_universe.py::test_checksums_cover_every_materialized_output",
+      "state": "RESOLVED",
+      "reason": "Only CRLF checkout drift was repaired to the exact existing Git blob matching the frozen expected digest. Expected hashes and semantic content are unchanged.",
+      "proof": "certified_checkout_bytes_20261002.json"
+    }
+  ],
+  "certified_source_recovery": [
+    {
+      "commit": "746a17c796f8e5fc24a636e47d304cd9293f2a43",
+      "source": "outputs/phase2/stage_f_engineering_robustness_rt001_v3/stage_f_engineering_robustness_rt001_v3_validation.json",
+      "sha256": "0b06b58a58ce2eac74dc97ac2623c16d78ae819eb3020b009b5ad328f875424c",
+      "matches_previous_certificate": true
+    },
+    {
+      "commit": "f2e173d4e2cb9ab7a8e5afca38acee993a328280",
+      "source": "outputs/phase2/current_service_access_baseline_v3/current_service_access_baseline_v3_validation.json",
+      "sha256": "3bf4167637d71cc203191999cdcaf7167698f79ab6e1969e69dbd183889e8342",
+      "matches_previous_certificate": true
+    },
+    {
+      "commit": "b67c5ce0f7a72a4f075d3b5c09d00e917be49545",
+      "source": "outputs/phase2/stage_e_old_vs_new_robustness_audit/stage_e_old_vs_new_robustness_audit_validation.json",
+      "sha256": "cb41cc6fbd00a7b42b2f074f7de7c093da297ac414315beb7384ea2e7abd5ed0",
+      "matches_previous_certificate": true
+    }
+  ],
+  "newline_repair_audit": "certified_checkout_bytes_20261002.json",
+  "newline_only_repaired_file_count": 31,
+  "expected_certified_hashes_modified": false,
+  "semantic_source_content_modified": false,
+  "frozen_certificates_overwritten": false,
+  "missing_originals_relabelled_as_crops": false,
+  "untracked_experiment_modified_or_adopted": false,
+  "tests_skipped_to_hide_missing_evidence": false,
+  "aggregate_validator_exemptions_require_exact_reviewed_code_hash": true,
+  "whole_repository_regression_clean": false,
+  "confirmed_geometry_or_timetable_modified": false,
+  "proposal_full_trips_per_day": 16,
+  "proposal_design_sites": 27,
+  "non_fs_ordered_service_occurrences": 28,
+  "caller_confirmed_weekdays_2027": 254,
+  "caller_confirmed_weekday_commercial_km": 110229.93602459409,
+  "sabato_selected": false,
+  "commercial_km_are_full_operating_cost": false,
+  "remaining_proposal_conditions": [
+    {
+      "id": "AM_RAIL_TRADEOFF",
+      "state": "CALLER_PREFERENCE_OR_MEASURED_RUNTIME_REQUIRED",
+      "semantics": "Confirmed phase retained. No silent priority between departures towards Milano and immediate buses from arriving trains; minus-two example remains diagnostic."
+    },
+    {
+      "id": "PHYSICAL_OPERATING_EVIDENCE",
+      "state": "OPEN_MEASURED_OR_AUTHORISED_EVIDENCE",
+      "semantics": "Full-history restrictions, bus envelope, directional platforms/accessibility, FS on-board continuity, running/transfer times, depot/driver duties and complete cost are not certified by model tests."
+    },
+    {
+      "id": "CALENDAR_AND_RAIL_2027",
+      "state": "PARTIAL_CONFIRMED_CALENDAR_ONLY",
+      "semantics": "Mon-Fri excluding national holidays is caller-confirmed. Applicable 2027 rail schedule, exceptional/local dates and Saturday are not invented."
+    },
+    {
+      "id": "LOCALITY_SERVICE_CLAIMS",
+      "state": "LIMITS_PRESERVED",
+      "semantics": "Point/cell potential accessibility is not passenger ridership, complete fraction coverage, approved pedestrian access or demand-weighted GJT."
+    }
+  ],
+  "actual_operator_implementation_ready": false,
+  "proposal_final_operating_certification_complete": false,
+  "am_phase_change_adopted": false,
+  "runtime_route_change_adopted": false,
+  "normative_rail_priority_adopted": false,
+  "primary_selection_authorised": false,
+  "runner_up_selection_authorised": false,
+  "network_selected": false,
+  "decision_budget_km": null,
+  "uncertainty_band_min": null,
+  "missed_connection_probability": null,
+  "demand_weighted_gjt_improvement_min": null,
+  "semantics": "Sixteen initial regression failures have verified resolutions, not waivers. Remaining failures stay visible. Legacy RT001 blocker closure is not certification of current Linea 8 physical or 2027 operation."
+}

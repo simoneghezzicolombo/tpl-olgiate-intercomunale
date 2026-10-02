@@ -52,6 +52,7 @@ def report(r):
     passing=sum(c['timing']['fixed_31_timetable_pass'] for c in r['single_additions'])
     examples=study_examples(r)
     lines=['# Linea 8 — piano fermate e manovre sulla proposta a 31 corse','',
+           "**Aggiornamento sul percorso confermato il 1 ottobre 2026:** i 27 siti, le 28 occorrenze e l'audit stradale attuali sono nella [scheda di verifica per operatore](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md). Le sei inversioni M1–M6 elencate qui non compaiono più nel percorso corrente e non vanno presentate come criticità o km aggiuntivi della proposta consolidata. Questo documento resta evidenza storica.",'',
            '**Precisazione sul servizio:** si corregge l’interpretazione della richiesta del committente: '
            'ogni corsa sull’intero percorso, come aveva sempre inteso. Il conteggio storico a corse d’ala '
            'non è la proposta finale. [Percorso unico completo](RT031_LINEA8_PERCORSO_UNICO_COMPLETO_V3.md). '

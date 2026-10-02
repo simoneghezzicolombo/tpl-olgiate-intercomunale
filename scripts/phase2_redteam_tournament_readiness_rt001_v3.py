@@ -21,6 +21,14 @@ STATUS = "PASS_PHASE2_CODEX_TOURNAMENT_READINESS_REDTEAM_RT001_V3"
 CONTRACT = "PHASE2_FAIL_CLOSED_CODEX_TOURNAMENT_READINESS_SEMANTIC_REDTEAM_RT001_V3"
 AUDITED_CODEX_HEAD = "58c228ed614b4fb4d43c15a5c8e12e637074c5f2"
 
+# Reviewed aggregate-validation readers, not candidate/membership consumers.
+# Any code change revokes the exemption until reviewed again. Unknown readers
+# remain blocked; no context can be pruned or ranked by this exemption.
+REVIEWED_VALIDATION_ONLY_CONSUMER_SHA256 = {
+    'scripts/phase2_build_final_decision_sufficiency_gate_v3.py': '3dc5c463b1ecf8d54f5093424cce9161da38b71b889ee06a8d2e6d761d4dd4e4',
+    'scripts/phase2_validate_v3_decision_packet_a.py': '9d0da7c7f5f48945fb19aec37db691dfebf60b7d9b40b300fb851b242aa2dfb7',
+}
+
 READINESS_STATUS = "PASS_PHASE2_FINAL_TOURNAMENT_READINESS_AUDIT_RT001_V3"
 CONTRACT_AUDIT_STATUS = "PASS_PHASE2_LEGACY_TOURNAMENT_CONTRACT_AUDIT_RT001_V3"
 FRONTIER_STATUS = "PASS_PHASE2_NON_DECISIONAL_TOURNAMENT_FRONTIER_RT001_V3"
@@ -77,8 +85,9 @@ def verify_hash(actual_path: Path, expected: object, *, label: str) -> None:
 def scan_frontier_consumers(root: Path, redteam_script: Path) -> list[str]:
     """Return executable Python consumers of the non-decisional frontier outputs.
 
-    The frontier producer itself is allowed. Tests/docs/workflows are not scanned
-    because they are validation/documentation surfaces, not downstream execution.
+    The producer and byte-pinned, reviewed aggregate-only validators are allowed.
+    Tests/docs/workflows are not downstream execution. Unknown or changed Python
+    consumers remain fail-closed, including readers of membership columns.
     """
     needles = (
         "non_decisional_pareto_frontier_rt001_v3",
@@ -99,7 +108,12 @@ def scan_frontier_consumers(root: Path, redteam_script: Path) -> list[str]:
                 continue
             text = path.read_text(encoding="utf-8")
             if any(needle in text for needle in needles):
-                consumers.append(str(path.relative_to(root)))
+                relative = path.relative_to(root).as_posix()
+                reviewed = REVIEWED_VALIDATION_ONLY_CONSUMER_SHA256.get(relative)
+                code_hash = hashlib.sha256(path.read_bytes().replace(b'\r\n', b'\n')).hexdigest()
+                if reviewed is not None and code_hash == reviewed:
+                    continue
+                consumers.append(relative)
     return consumers
 
 
@@ -316,7 +330,7 @@ def build(args: argparse.Namespace) -> dict[str, object]:
             "finding_id": "TR-007",
             "status": "PASS",
             "subject": "Downstream pruning/selection consumer",
-            "evidence": "No executable Python consumer of frontier membership/output exists outside the frontier producer in the audited Codex head.",
+            "evidence": "No unreviewed executable consumer exists; two byte-pinned validators read aggregate validation only, never candidate membership for pruning/selection.",
             "semantic_consequence": "The 4,211 dominated contexts are not currently pruned from a downstream tournament.",
         },
     ]
@@ -356,6 +370,7 @@ def build(args: argparse.Namespace) -> dict[str, object]:
         "nonfrontier_pruning_authorized": False,
         "lower_bound_axes_establish_true_system_dominance": False,
         "downstream_frontier_executable_consumer_count": len(consumers),
+        "reviewed_aggregate_validation_consumers_sha256": REVIEWED_VALIDATION_ONLY_CONSUMER_SHA256,
         "input_context_count": len(membership_rows),
         "frontier_context_count": frontier_members,
         "dominated_context_count": dominated_members,

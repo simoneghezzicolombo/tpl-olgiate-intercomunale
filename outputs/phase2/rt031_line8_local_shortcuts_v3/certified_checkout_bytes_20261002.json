@@ -1,0 +1,435 @@
+{
+  "all_certified_hashes_match": false,
+  "contract": "CERTIFIED_CHECKOUT_BYTE_INTEGRITY_AUDIT_V3",
+  "decision_budget_km": null,
+  "expected_hashes_modified": false,
+  "primary_selection_authorised": false,
+  "proposal_implementation_ready": false,
+  "raw_source_evidence_manufactured": false,
+  "repaired_file_count": 31,
+  "rows": [
+    {
+      "actual_sha256_after": "7008e5380b28c865bf2e503b605700700a6d2959925f91fdde2b1435e00033f9",
+      "actual_sha256_before": "1cb8e203c0e9e380ad01e75ea438da4121c54e932b3bc1831b287141b1a8619e",
+      "expected_sha256": "7008e5380b28c865bf2e503b605700700a6d2959925f91fdde2b1435e00033f9",
+      "git_blob_sha256": "7008e5380b28c865bf2e503b605700700a6d2959925f91fdde2b1435e00033f9",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/boundaries/comuni_core_istat_2026.geojson",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "expected_sha256": "a9f9743a08f73e714722ecd54db5e9bb4968bec4a9f88d8f1782c6f7ba1dcea8",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/worldpop/ita_ppp_2020_UNadj.tif",
+      "repaired": false,
+      "state": "MISSING"
+    },
+    {
+      "actual_sha256_before": "a441578ca49c2e55fba8e6c474301cb91e78e3bf6bc0aca97cf425e698ea3db2",
+      "expected_sha256": "a441578ca49c2e55fba8e6c474301cb91e78e3bf6bc0aca97cf425e698ea3db2",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/worldpop/worldpop_core_unadj_raw.tif",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "expected_sha256": "fb357e36d4f0ebea0c96cec7793c686506bb6aaeb34b92d464b46f05889f824d",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/dem/Copernicus_DSM_COG_10_N45_00_E009_00_DEM.tif",
+      "repaired": false,
+      "state": "MISSING"
+    },
+    {
+      "actual_sha256_before": "14bbb5eb6cca940426f27bd65732600f20a911418237e890b3677d6ff8186398",
+      "expected_sha256": "14bbb5eb6cca940426f27bd65732600f20a911418237e890b3677d6ff8186398",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/dem/copernicus_dem_core_raw.tif",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "actual_sha256_after": "7151ef0652b47ea85badf125ef34c33aa9f629c23f60c2dad6dcf70b573ec6a0",
+      "actual_sha256_before": "131cc7e5070aecb7c362eb241c1d3454d72b161a899b5d80ac72f55bb4413075",
+      "expected_sha256": "7151ef0652b47ea85badf125ef34c33aa9f629c23f60c2dad6dcf70b573ec6a0",
+      "git_blob_sha256": "7151ef0652b47ea85badf125ef34c33aa9f629c23f60c2dad6dcf70b573ec6a0",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/od/matrice_pendolarismo_istat_2011_core.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_before": "b4296f145b42ccb35c26085470ff4b3fd5dffe533251c0aab312312a73820ad6",
+      "expected_sha256": "b4296f145b42ccb35c26085470ff4b3fd5dffe533251c0aab312312a73820ad6",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/gtfs/rail_trenord/trenord_gtfs.zip",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "actual_sha256_before": "f890c393b909a40ae9500ab5acba71166cdfc5af3d42be92f55a92d92927553b",
+      "expected_sha256": "f890c393b909a40ae9500ab5acba71166cdfc5af3d42be92f55a92d92927553b",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/gtfs/agency_arriva/GTFS_invernale_2025-2026_-_Arriva_Italia_e_Addabus.zip",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "actual_sha256_before": "f9b902807a2b213caea8e97c7501bdbfcbe1f3fe6d97f21f947ac2ecc6063271",
+      "expected_sha256": "f9b902807a2b213caea8e97c7501bdbfcbe1f3fe6d97f21f947ac2ecc6063271",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/gtfs/agency_lineelecco/GTFS_invernale_2025-2026_Linee_Lecco.zip",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "actual_sha256_after": "cff22a10740b049cd847095748706024821ff47579d6788af54c592f4fbe8582",
+      "actual_sha256_before": "878c1c518d454ac662499b47fdc913264436523cd2f49a3226c03f9d5ea4f73b",
+      "expected_sha256": "cff22a10740b049cd847095748706024821ff47579d6788af54c592f4fbe8582",
+      "git_blob_sha256": "cff22a10740b049cd847095748706024821ff47579d6788af54c592f4fbe8582",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/osm/osm_core_bbox.osm",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "2a1082b10f5a6560bdf69e8dc344541d3a892f751054316ea582fef32fe6b4c4",
+      "actual_sha256_before": "9965baa9bd02a03162cc2261e986f9ee86b85eccfe5936d786af7c1211414631",
+      "expected_sha256": "2a1082b10f5a6560bdf69e8dc344541d3a892f751054316ea582fef32fe6b4c4",
+      "git_blob_sha256": "2a1082b10f5a6560bdf69e8dc344541d3a892f751054316ea582fef32fe6b4c4",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/osm/osm_highways_core.geojson",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "897b8351af5fcf9b7fab9187b43adbe9bc043a635a035e9aa54c4a59ff1fb004",
+      "actual_sha256_before": "f1d568c0f15ef677e92c7fab033750c18cac3151b36d5067756456dec56c5242",
+      "expected_sha256": "897b8351af5fcf9b7fab9187b43adbe9bc043a635a035e9aa54c4a59ff1fb004",
+      "git_blob_sha256": "897b8351af5fcf9b7fab9187b43adbe9bc043a635a035e9aa54c4a59ff1fb004",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/osm/osm_points_core.geojson",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "d850724214ca95d92f5bfcf4f644df636eb1a5b7b9b90acef6ef924b131d84ac",
+      "actual_sha256_before": "464c818c08e73ea06607afc696a34bb940dc6f25010165c6ccfa6ab215bb4748",
+      "expected_sha256": "d850724214ca95d92f5bfcf4f644df636eb1a5b7b9b90acef6ef924b131d84ac",
+      "git_blob_sha256": "d850724214ca95d92f5bfcf4f644df636eb1a5b7b9b90acef6ef924b131d84ac",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/osm/osm_bus_stops_core.json",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "6a4ca856f2b28b0d7ad3b5fa6cc2941f8178bdccc66942008119c1e3a3cc9b9c",
+      "actual_sha256_before": "df5369b5f96d1c245b07db921d2cd364fa8489292dfe8dc217d92d323efd2696",
+      "expected_sha256": "6a4ca856f2b28b0d7ad3b5fa6cc2941f8178bdccc66942008119c1e3a3cc9b9c",
+      "git_blob_sha256": "6a4ca856f2b28b0d7ad3b5fa6cc2941f8178bdccc66942008119c1e3a3cc9b9c",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/osm/osm_pois_core.json",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "3756f20b9b1b9633ee0fc68f1c7a42d9c2d436e181141236675f24de94074132",
+      "actual_sha256_before": "443bb43100ab4d8fdb9c9fd22a10f4c527cab71b6ef0bdc2d97af34574c83bfc",
+      "expected_sha256": "3756f20b9b1b9633ee0fc68f1c7a42d9c2d436e181141236675f24de94074132",
+      "git_blob_sha256": "3756f20b9b1b9633ee0fc68f1c7a42d9c2d436e181141236675f24de94074132",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/istat/POSAS_2025_it_097_Lecco.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "a95725b02855e5aea09da9c73d4565fe1db523df02f606de5618f985b561056b",
+      "actual_sha256_before": "0f66710b0d1b3cc0928e57dfc945df17e84f39a39bc2a461f09dc404bf8e452c",
+      "expected_sha256": "a95725b02855e5aea09da9c73d4565fe1db523df02f606de5618f985b561056b",
+      "git_blob_sha256": "a95725b02855e5aea09da9c73d4565fe1db523df02f606de5618f985b561056b",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/sfr/stazioni_s8_indice_2015_2025.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_before": "aedff739f2e55defac8c4db16aef42ebecedd331817316de03a337123fbd2e48",
+      "expected_sha256": "aedff739f2e55defac8c4db16aef42ebecedd331817316de03a337123fbd2e48",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/pdb/PdB_Como_Lecco_Varese_Relazione_v7.2.pdf",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "actual_sha256_before": "e0657cb4e8a078ddf99f28e1ebbde4a67ee36bb9b7a92fcd488e2539a948079a",
+      "expected_sha256": "e0657cb4e8a078ddf99f28e1ebbde4a67ee36bb9b7a92fcd488e2539a948079a",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/pdb/PdB_Allegato3.4_Meratese.pdf",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "actual_sha256_after": "defa63c8ef3d422017ebe4f5f1c2becc55f62ed76d9a052e167aece688efad3a",
+      "actual_sha256_before": "c9993c1cd0dc6bc5c118eb7dceb07b2c8d2b92683c3e3e857d477f35cfaa2e87",
+      "expected_sha256": "defa63c8ef3d422017ebe4f5f1c2becc55f62ed76d9a052e167aece688efad3a",
+      "git_blob_sha256": "defa63c8ef3d422017ebe4f5f1c2becc55f62ed76d9a052e167aece688efad3a",
+      "ledger": "data/manifest.csv",
+      "path": "data/raw/od/matrice_pendolarismo_istat_2021_core.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_before": "c88dc93badc33c20062837e5a67005e64ef443f7923ea320be6e5b1818717f22",
+      "expected_sha256": "c88dc93badc33c20062837e5a67005e64ef443f7923ea320be6e5b1818717f22",
+      "ledger": "outputs/phase2/analysis_envelope/analysis_envelope_checksums.sha256",
+      "path": "outputs/phase2/analysis_envelope/analysis_envelope.geojson",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "actual_sha256_after": "ee860c9df5e699cf6a2e96579aeba7ecfafc412869c3abc64c24efd85dc7f770",
+      "actual_sha256_before": "3fc40da8f9ccd7daa39637d9847378523291ee4db33c2769fed394045ef182a7",
+      "expected_sha256": "ee860c9df5e699cf6a2e96579aeba7ecfafc412869c3abc64c24efd85dc7f770",
+      "git_blob_sha256": "ee860c9df5e699cf6a2e96579aeba7ecfafc412869c3abc64c24efd85dc7f770",
+      "ledger": "outputs/phase2/analysis_envelope/analysis_envelope_checksums.sha256",
+      "path": "outputs/phase2/analysis_envelope/analysis_envelope_validation.json",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_before": "b81a01025f6ba0f3fe42c08a1385ab1916e0e7ddfe3fbfbfd75d56f74fb6db0f",
+      "expected_sha256": "b81a01025f6ba0f3fe42c08a1385ab1916e0e7ddfe3fbfbfd75d56f74fb6db0f",
+      "ledger": "outputs/phase2/analysis_envelope/analysis_envelope_checksums.sha256",
+      "path": "outputs/phase2/analysis_envelope/buildings_intersected.csv.gz",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "actual_sha256_before": "9a2880658015237d85f3b60a33dc55708fa3492c0e48614557020c00185b2628",
+      "expected_sha256": "9a2880658015237d85f3b60a33dc55708fa3492c0e48614557020c00185b2628",
+      "ledger": "outputs/phase2/analysis_envelope/analysis_envelope_checksums.sha256",
+      "path": "outputs/phase2/analysis_envelope/candidate_envelopes.geojson",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "actual_sha256_before": "0bf993ec18c4597e6883ab1c95685d1b7e98cb10d3d041a2a2e16f1c66105fb2",
+      "expected_sha256": "0bf993ec18c4597e6883ab1c95685d1b7e98cb10d3d041a2a2e16f1c66105fb2",
+      "ledger": "outputs/phase2/analysis_envelope/analysis_envelope_checksums.sha256",
+      "path": "outputs/phase2/analysis_envelope/census_sections_intersected.csv.gz",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "actual_sha256_after": "6c3aacce7838a66fb017679d28409089db385c13e1cd5d001cf7ccfb96a2fc1f",
+      "actual_sha256_before": "42a0b625a12b9ca4003ac9d5bb80f6f6f3fe18696799bf441f117affbfea7542",
+      "expected_sha256": "6c3aacce7838a66fb017679d28409089db385c13e1cd5d001cf7ccfb96a2fc1f",
+      "git_blob_sha256": "6c3aacce7838a66fb017679d28409089db385c13e1cd5d001cf7ccfb96a2fc1f",
+      "ledger": "outputs/phase2/analysis_envelope/analysis_envelope_checksums.sha256",
+      "path": "outputs/phase2/analysis_envelope/edge_effect_audit.json",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "6cd0475ed2aa2fb114f03e4a9cbfc302ed9c886ebec892b86708e653a8aa96ce",
+      "actual_sha256_before": "f7e4925362a20184d7b3a7a86dc562376a200a7cc820c3e52d71e404de94540e",
+      "expected_sha256": "6cd0475ed2aa2fb114f03e4a9cbfc302ed9c886ebec892b86708e653a8aa96ce",
+      "git_blob_sha256": "6cd0475ed2aa2fb114f03e4a9cbfc302ed9c886ebec892b86708e653a8aa96ce",
+      "ledger": "outputs/phase2/analysis_envelope/analysis_envelope_checksums.sha256",
+      "path": "outputs/phase2/analysis_envelope/envelope_rule_comparison.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "c62cc3d239f24ea6d566c1c9bbe4d2cf1cd3c11f8bf1e201004d6a3952fc95f5",
+      "actual_sha256_before": "e29ca3c49aa6c38d9db224664dada5b8992d35be5655f3bf5aa1771137f970ec",
+      "expected_sha256": "c62cc3d239f24ea6d566c1c9bbe4d2cf1cd3c11f8bf1e201004d6a3952fc95f5",
+      "git_blob_sha256": "c62cc3d239f24ea6d566c1c9bbe4d2cf1cd3c11f8bf1e201004d6a3952fc95f5",
+      "ledger": "outputs/phase2/analysis_envelope/analysis_envelope_checksums.sha256",
+      "path": "outputs/phase2/analysis_envelope/municipalities_intersected.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_before": "030d6109dd8f305f4c4c3ba42d8cbb58da27b3804dd2b0e424a0a59262585395",
+      "expected_sha256": "030d6109dd8f305f4c4c3ba42d8cbb58da27b3804dd2b0e424a0a59262585395",
+      "ledger": "outputs/phase2/analysis_envelope/analysis_envelope_checksums.sha256",
+      "path": "outputs/phase2/analysis_envelope/roads_intersected.csv.gz",
+      "repaired": false,
+      "state": "EXACT_HASH_MATCH"
+    },
+    {
+      "actual_sha256_after": "344dc6ca7ad5a0afe6d95648a0fe530b8eeb3385fa1d9a8e9d20f74a3654519c",
+      "actual_sha256_before": "bbfe1bae6544af05d9a97a85532f0e3c62e2c309b5358f699b6edc765cf6f0b5",
+      "expected_sha256": "344dc6ca7ad5a0afe6d95648a0fe530b8eeb3385fa1d9a8e9d20f74a3654519c",
+      "git_blob_sha256": "344dc6ca7ad5a0afe6d95648a0fe530b8eeb3385fa1d9a8e9d20f74a3654519c",
+      "ledger": "outputs/phase2/analysis_envelope/analysis_envelope_checksums.sha256",
+      "path": "outputs/phase2/analysis_envelope/source_cutline_contract.json",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "179f17c42ec81c36eb42476075c253864258d0c83a78ded9ee593946afc6d9fb",
+      "actual_sha256_before": "3db28a9070b25ea6e09256f41c6e2a8171265ec628c7c9d7fedb72d84fd846f5",
+      "expected_sha256": "179f17c42ec81c36eb42476075c253864258d0c83a78ded9ee593946afc6d9fb",
+      "git_blob_sha256": "179f17c42ec81c36eb42476075c253864258d0c83a78ded9ee593946afc6d9fb",
+      "ledger": "outputs/phase2/analysis_envelope/analysis_envelope_checksums.sha256",
+      "path": "outputs/phase2/analysis_envelope/stops_and_anchors_intersected.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "aea65f83ceebe9f19e9f1c3fb6bec7810ed3fcc1c0007f9d88b4772721a60310",
+      "actual_sha256_before": "02204f8bff54ff02d8731155d177f574debd486b8e0005ec0c08d155258f6022",
+      "expected_sha256": "aea65f83ceebe9f19e9f1c3fb6bec7810ed3fcc1c0007f9d88b4772721a60310",
+      "git_blob_sha256": "aea65f83ceebe9f19e9f1c3fb6bec7810ed3fcc1c0007f9d88b4772721a60310",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/accessibility_gap_cells.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "0a1ad98a54c2fd671acacc4b7e33300578a32f08d6c3d351513353b76a6a3df2",
+      "actual_sha256_before": "b8325684e1241b4caf64bfa5f8d9428b42c6bb4e7bacde201eb2a0f496500039",
+      "expected_sha256": "0a1ad98a54c2fd671acacc4b7e33300578a32f08d6c3d351513353b76a6a3df2",
+      "git_blob_sha256": "0a1ad98a54c2fd671acacc4b7e33300578a32f08d6c3d351513353b76a6a3df2",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/accessibility_gap_cells.geojson",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "9e46c8dfcd40d3c0efc52dbeab1767d0bdba5685ca43688eac01075339a86dbd",
+      "actual_sha256_before": "d5c03bf9a6bafe6b979106851c2b1899ddd1d57b63727fcff7bfc089d7957237",
+      "expected_sha256": "9e46c8dfcd40d3c0efc52dbeab1767d0bdba5685ca43688eac01075339a86dbd",
+      "git_blob_sha256": "9e46c8dfcd40d3c0efc52dbeab1767d0bdba5685ca43688eac01075339a86dbd",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/candidate_pruning_audit.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "63187ecd6b8a3ef1b433c55b829c241e2622a0abb3b695afb2733cc470c01071",
+      "actual_sha256_before": "609a9b3029b913d8298f7d56d34d9468b3fd90e0f46a1ce8bb515ad0aa763649",
+      "expected_sha256": "63187ecd6b8a3ef1b433c55b829c241e2622a0abb3b695afb2733cc470c01071",
+      "git_blob_sha256": "63187ecd6b8a3ef1b433c55b829c241e2622a0abb3b695afb2733cc470c01071",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/existing_official_stops.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "9b1fa006c0799761275008368c38835b686f90f74c8fbfeb1489213a60093b4d",
+      "actual_sha256_before": "49a8417bc01949c05c143cf672663cc255fb1fc0bf406ce1ab7fed0ef48a73ea",
+      "expected_sha256": "9b1fa006c0799761275008368c38835b686f90f74c8fbfeb1489213a60093b4d",
+      "git_blob_sha256": "9b1fa006c0799761275008368c38835b686f90f74c8fbfeb1489213a60093b4d",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/existing_official_stops.geojson",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "5b422849d0a464211466d2865898f7e466eab281b1108fc76ca34857cd2b0c25",
+      "actual_sha256_before": "618368b81a6155b09fd4adada3634baf69c2fbd4006498a9291c3e696a1c1189",
+      "expected_sha256": "5b422849d0a464211466d2865898f7e466eab281b1108fc76ca34857cd2b0c25",
+      "git_blob_sha256": "5b422849d0a464211466d2865898f7e466eab281b1108fc76ca34857cd2b0c25",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/existing_stop_catchment_cells_12min.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "01289a31aa40982063eb63831a8ea42b05f0c287e11ecbddfd2a7b78d6487593",
+      "actual_sha256_before": "43620476d240d036c9cf3f097969ed3f226f34c1203994ff8b4b2eb7888f97b7",
+      "expected_sha256": "01289a31aa40982063eb63831a8ea42b05f0c287e11ecbddfd2a7b78d6487593",
+      "git_blob_sha256": "01289a31aa40982063eb63831a8ea42b05f0c287e11ecbddfd2a7b78d6487593",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/existing_stop_catchment_summary.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "612af8f87ab32060fd5e35daefa2a61af0a7b99e88f96923ca20a035f93a11b5",
+      "actual_sha256_before": "15bb42a6296824e6a4a0fedbacd3648516a4b91d2a8b3135bb0b2a3d1a019434",
+      "expected_sha256": "612af8f87ab32060fd5e35daefa2a61af0a7b99e88f96923ca20a035f93a11b5",
+      "git_blob_sha256": "612af8f87ab32060fd5e35daefa2a61af0a7b99e88f96923ca20a035f93a11b5",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/interchange_opportunities.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "5bb469e35abaa9ea277e374d924193ca9e5b312896b06767f2778a079231253b",
+      "actual_sha256_before": "6e1802d2bcaed6f65ac1a79a925efbed3a4ebcf2371c56a25237ca8467ccc19b",
+      "expected_sha256": "5bb469e35abaa9ea277e374d924193ca9e5b312896b06767f2778a079231253b",
+      "git_blob_sha256": "5bb469e35abaa9ea277e374d924193ca9e5b312896b06767f2778a079231253b",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/proposed_stop_candidate_catchment_cells_10min.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "3f67eefb2a31f4f7f1aa0ae2223406fc9e68f961a248ecdcfe39724d8d4600b4",
+      "actual_sha256_before": "4e5c4673abcf6bb59d936974df9f6a8977d30a4226d994b632a292421a5b6866",
+      "expected_sha256": "3f67eefb2a31f4f7f1aa0ae2223406fc9e68f961a248ecdcfe39724d8d4600b4",
+      "git_blob_sha256": "3f67eefb2a31f4f7f1aa0ae2223406fc9e68f961a248ecdcfe39724d8d4600b4",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/proposed_stop_candidates.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "9ff4933503c3e5c02dfc046de90ddfe03a41b38bd5b40ba641494bb05846b9d3",
+      "actual_sha256_before": "e8aedacdd6864d56c9534fc17fc83114c65fc7fd7dbb87b54e2309f15fee59a6",
+      "expected_sha256": "9ff4933503c3e5c02dfc046de90ddfe03a41b38bd5b40ba641494bb05846b9d3",
+      "git_blob_sha256": "9ff4933503c3e5c02dfc046de90ddfe03a41b38bd5b40ba641494bb05846b9d3",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/proposed_stop_candidates.geojson",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "f7a71a670fb61437680260b7b2c7de9898d0b81f0627c30566bcc5cdc795f2e2",
+      "actual_sha256_before": "cab09743cda02d009d29c8bdf5e544c9507587b2d64841b2c4af745ec1f68fa3",
+      "expected_sha256": "f7a71a670fb61437680260b7b2c7de9898d0b81f0627c30566bcc5cdc795f2e2",
+      "git_blob_sha256": "f7a71a670fb61437680260b7b2c7de9898d0b81f0627c30566bcc5cdc795f2e2",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/settlement_destination_anchors.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "3049dc12170c861a51ae20650ef5988d373e26b58d8081c05b9097f4b43c92ae",
+      "actual_sha256_before": "5b0a282b09d01b3d6f0965cc0f100a8babf7756ae92f40386e0add3fd6f00835",
+      "expected_sha256": "3049dc12170c861a51ae20650ef5988d373e26b58d8081c05b9097f4b43c92ae",
+      "git_blob_sha256": "3049dc12170c861a51ae20650ef5988d373e26b58d8081c05b9097f4b43c92ae",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/settlement_destination_anchors.geojson",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "85f0b2528ac582209167edd54df8281de39895987593ed8a09020d72b73e1a03",
+      "actual_sha256_before": "f52a4cb9558f6d0ed972334714e9a82d9825736293a0da03b50e3c2a8d36840a",
+      "expected_sha256": "85f0b2528ac582209167edd54df8281de39895987593ed8a09020d72b73e1a03",
+      "git_blob_sha256": "85f0b2528ac582209167edd54df8281de39895987593ed8a09020d72b73e1a03",
+      "ledger": "outputs/phase2/stop_universe_checksums.sha256",
+      "path": "outputs/phase2/stop_universe_validation.json",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    },
+    {
+      "actual_sha256_after": "c3ab598a43bfb83f31f086d6a14f29d92941969a349ef9087b5e6d87fe10b3d1",
+      "actual_sha256_before": "4067805e4099e9016b8225e290cebc2370673a46d07ec7af6bb516ee8a427aa3",
+      "expected_sha256": "c3ab598a43bfb83f31f086d6a14f29d92941969a349ef9087b5e6d87fe10b3d1",
+      "git_blob_sha256": "c3ab598a43bfb83f31f086d6a14f29d92941969a349ef9087b5e6d87fe10b3d1",
+      "ledger": "tests/test_phase2_frozen_graph.py::EXPECTED_SOURCE_SHA",
+      "path": "data/phase2/frozen_gate_d/source/structural_anchor_evidence.csv",
+      "repaired": true,
+      "state": "CERTIFIED_GIT_CHECKOUT_NEWLINE_DRIFT"
+    }
+  ],
+  "runner_up_selection_authorised": false,
+  "semantic_content_modified": false,
+  "uncertainty_band_min": null
+}

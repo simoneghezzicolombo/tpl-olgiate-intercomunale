@@ -182,6 +182,7 @@ def report(r):
     def number(value):return f'{value:,.3f}'.replace(',','_').replace('.',',').replace('_','.')
     def wing_name(value):return 'ovest' if value=='west' else 'est'
     lines=['# Linea 8 — verifica delle dodici best practice sulla proposta attuale','',
+           '**Aggiornamento 1 ottobre 2026:** la verifica dei dodici principi sulla base ora confermata è nella [proposta unica consolidata](RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md). I numeri e gli orari di questo documento sono storici, non trapiantabili nella nuova proposta a 16 giri.','',
            '## Conclusione','',
            'Il confronto da **122.340 km/anno** non è ancora la proposta finale: mantiene i siti e i controlli del modello, '
            'ma non certifica tutte le qualità del servizio. Il richiamo alle best practice diventa qui una verifica tracciabile, '

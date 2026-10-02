@@ -27,7 +27,8 @@ def _git_repo(tmp_path: Path):
     hashes = {}
     for gate in "ABCDE":
         path = repo / f"gate_{gate.lower()}_pass.md"
-        path.write_text(f"Gate {gate} PASS evidence\n", encoding="utf-8")
+        # Hash the same LF bytes Git stores, independently of Windows I/O.
+        path.write_text(f"Gate {gate} PASS evidence\n", encoding="utf-8", newline="\n")
         hashes[gate] = hashlib.sha256(path.read_bytes()).hexdigest()
     _run(repo, "add", ".")
     _run(repo, "commit", "-m", "test evidence")

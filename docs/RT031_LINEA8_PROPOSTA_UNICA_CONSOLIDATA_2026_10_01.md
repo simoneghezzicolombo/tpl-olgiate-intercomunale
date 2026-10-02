@@ -200,6 +200,7 @@ L’[audit conclusivo del tempo minimo e della scelta AM](RT031_LINEA8_LIMITE_TE
 
 ## Pacchetto autorevole
 
+- [Integrità delle evidenze e residui di chiusura: 16 fallimenti corretti, nove ancora espliciti](RT031_LINEA8_VERIFICA_INTEGRITA_2026_10_02.md).
 - [Conferma del committente, limiti e hash delle fonti](../config/rt031_design_timetable_confirmation_20261001_v3.json).
 - [Amendamento del calendario feriale 2027, senza scelta del sabato](../config/rt031_weekday_calendar_2027_authority_v3.json).
 - [Registro datato 2027 e sensibilità del sabato, senza orari inventati](../outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_weekday_calendar_2027.json).
