@@ -190,7 +190,11 @@ Sono stati verificati **11 confronti locali di fase**, ricalcolando tutte le 74 
 - **Ovest +2 minuti nei giri 9–15:** cap di attesa e H30 conservati; massimo quattro mezzi, nessuna perdita delle precedenti compatibilità bus→treno in tutti i nove casi di marcia/dwell. Margine della banca serale da Milano 0→2 minuti, attese ferroviarie modificate al massimo di +2 minuti. Aumentano le soste e il servizio di **14 minuti/giorno**, non i km; il costo non è invariato per definizione.
 - **Ovest +3 minuti negli stessi giri:** sette precedenti collegamenti bus→treno non sono più compatibili in tutti i nove casi; +5 minuti viola anche un cap di attesa. Il miglioramento di un solo margine non prova la solidità dell’insieme.
 
-**Nessuna fase è selezionata o adottata.** Questi sono confronti circoscritti, non una prova di ottimo o di impossibilità generale. Il registro completo degli eventi di una modifica resta da ricostruire prima di proporla come nuovo orario; la verifica 2027 e la solidità stradale restano distinte. Le schede per l’operatore raccolgono riscontri residui, non sostituiscono questo lavoro interno.
+**Nessuna fase è selezionata o adottata.** Gli undici confronti restano diagnostici. Il successivo [rafforzamento interno](RT031_LINEA8_RAFFORZAMENTO_INTERNO_2026_10_02.md) ha ricostruito tutti gli eventi e i blocchi per la correzione ovest +2 minuti, e per il confronto con bypass Scarpone: 16 giri, nove ledger verificati, 27 blocchi e tutti i flussi ferroviari per ciascun confronto. Nessuna nuova fase è adottata tacitamente; la verifica 2027 e la solidità fisica restano distinte.
+
+Il bypass Scarpone Via Pilata–rotatoria–Via Como aggiunge 25,84 m/giro e richiede un attacco ipotetico a 17,89 m dal nodo originale: non è la stessa occorrenza fisica certificata per nome. Ricalcolata sul substrato pedonale, la copertura 5/8/10 e le perdite lorde restano invariate. In combinazione con +2 minuti serali: 110.334,948 km feriali 2027, massimo quattro mezzi nei casi ereditati, nessuna precedente compatibilità bus→treno persa; attese da alcuni treni +2 minuti. È un confronto non adottato, non un accosto già sicuro.
+
+Il problema AM è circoscritto: mantenere la stessa corsa per i treni da Milano in arrivo a :02 e verso Milano in partenza a :56, sul percorso est e nel caso più lento con due cammini assunti da 3 minuti, lascia una finestra di fase di soli 13,4 secondi. Una fase bilanciata offre al massimo 6,7 secondi per lato; anticipare non migliora entrambi i flussi. Nessuna soglia di affidabilità è inventata. Le schede per l’operatore non sostituiscono questa criticità ingegneristica.
 
 ## Pacchetto autorevole
 
@@ -201,6 +205,7 @@ Sono stati verificati **11 confronti locali di fase**, ricalcolando tutte le 74 
 - [Tracciato stradale e coordinate attuali](../outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson).
 - [Scheda per Agenzia e operatore con audit stradale aggiornato](RT031_LINEA8_SCHEDA_VERIFICA_OPERATORE_2026_10_01.md).
 - [Blocchi dei mezzi nei 27 scenari e contabilità annua](../outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_vehicle_blocks_accounting_20261001.json).
+- [Rafforzamento interno: registri ricostruiti, deviazione Scarpone e limite AM](../outputs/phase2/rt031_line8_local_shortcuts_v3/fixed_design_strengthening_20261002.json).
 - [Evidenza primaria PdB: produzione, giorni di progetto e limiti del calendario](../config/rt031_pdb_calendar_reference_evidence_20261001_v3.json).
 - [Audit puntuale di accesso alle località, 108 abbinamenti](../outputs/phase2/rt031_line8_local_shortcuts_v3/caller_confirmed_locality_point_access_20261001.json).
 - [Scheda precedente di proposta: conservata come stato storico](RT031_LINEA8_PROPOSTA_ORARIO_16_GIRI_V3.md).
