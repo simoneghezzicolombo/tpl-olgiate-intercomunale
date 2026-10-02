@@ -23,6 +23,8 @@
 > [Blocchi completi: quattro mezzi nel nominale e stress mostrato](docs/RT031_LINEA8_MEZZI_E_CALENDARIO_2026_10_01.md) ·
 > [Fonte primaria e limiti del calendario](docs/RT031_LINEA8_CALENDARIO_E_RISORSE_2026_10_01.md) ·
 > [Accesso dai quattro punti di località, non copertura delle intere frazioni](docs/RT031_LINEA8_LOCALITA_PUNTI_2026_10_01.md).
+> [Rafforzamento AM completato](docs/RT031_LINEA8_FASI_AM_COMPLETE_2026_10_02.md): base e +1/+2 ricostruiti con tutti gli eventi, mezzi e flussi;
+> nessuna fase alternativa adottata. I budget treno→bus e bus→treno sono distinti e richiedono misure reali, non la scelta del proxy più favorevole.
 > `network_selected=false`; PRIMARY e RUNNER-UP non autorizzati;
 > `decision_budget_km=null`, `uncertainty_band_min=null`.
 

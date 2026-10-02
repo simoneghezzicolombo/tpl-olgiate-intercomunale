@@ -6,6 +6,7 @@ outputs/phase2/rt031_line8_local_shortcuts_v3/closure_integrity_decision_sources
 outputs/phase2/rt031_line8_local_shortcuts_v3/closure_integrity_decision_sources_20261002/*.json text eol=lf
 outputs/phase2/rt031_line8_local_shortcuts_v3/closure_integrity_redteam_20261002/*.csv text eol=lf
 outputs/phase2/rt031_line8_local_shortcuts_v3/closure_integrity_redteam_20261002/*.json text eol=lf
+outputs/phase2/rt031_line8_local_shortcuts_v3/directional_AM_phase_complete_comparisons_20261002.json text eol=lf
 data/phase2/frozen_gate_d/source/structural_anchor_evidence.csv text eol=lf
 data/raw/boundaries/comuni_core_istat_2026.geojson text eol=lf
 data/raw/istat/POSAS_2025_it_097_Lecco.csv text eol=lf

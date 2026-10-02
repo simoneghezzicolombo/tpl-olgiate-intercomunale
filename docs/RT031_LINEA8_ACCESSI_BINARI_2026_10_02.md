@@ -30,7 +30,7 @@ Per ciascuna delle cinque coppie mattutine il giro est stressato vale 47,7766 mi
 | 06:06, confronto non adottato | 4 min | 2 min 13,4 s |
 | 06:07, confronto non adottato | 5 min | 1 min 13,4 s |
 
-Il budget in uscita è ciò che resta **dopo** il tempo est massimo del modello; una riserva positiva desiderata e la chiusura porte vanno sottratte. Nessuna banda viene scelta. Le partenze +1/+2 sono bilanci temporali locali: non hanno qui una verifica completa di ledger, cap, blocchi e tutti i flussi di un orario modificato, e non sono adottabili da questa tabella.
+Il budget in uscita è ciò che resta **dopo** il tempo est massimo del modello; una riserva positiva desiderata e la chiusura porte vanno sottratte. Nessuna banda viene scelta. Questa tabella è un bilancio locale, non un’approvazione dell’orario. Il successivo [confronto AM completo](RT031_LINEA8_FASI_AM_COMPLETE_2026_10_02.md) ricostruisce ledger, cap, blocchi e tutti i flussi delle ipotesi +1/+2: entrambe rispettano i controlli di corsa completa, ma i trasferimenti reali restano da misurare e nessuna fase è adottata.
 
 Ricontrollati tutti i 296 flussi dell’orario invariato con i due accessi distinti. Anche la sera ovest ha un gap treno→bus di 3 minuti: dal binario 1 il proxy di solo accesso lo eccede, prima di scale/porte. Il dato non è una probabilità e non autorizza automaticamente +2.
 
