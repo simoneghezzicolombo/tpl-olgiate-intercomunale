@@ -64,7 +64,7 @@
     {
       "assessed_on": null,
       "blocking_weekday_operational_claim": true,
-      "close_when": "Misura dei percorsi nei due versi e accessibilità; riesame dell’ipotesi di 3 minuti senza scegliere una banda decisionale.",
+      "close_when": "Misura separata binario 1→bus e bus→binario 2, e dei versi opposti: binario effettivo, scale/percorso accessibile, cammino in banchina, salita/discesa e chiusura porte. Confrontare i budget degli eventi dell’audit accessi binari, non un cammino uniforme di 3 minuti; nessuna banda decisionale scelta.",
       "evidence_refs": [],
       "id": "FS_TRANSFER",
       "owner": "Operatore/Agenzia",

@@ -169,7 +169,7 @@ def pending_items():
         ('FS_CONTINUITY', 'Operatore', 'Continuità passeggeri a FS',
          'Stesso mezzo e diritto dei passeggeri di restare a bordo alla FS intermedia confermati separatamente; eventuale cambio/discesa modifica il servizio e va accettato.', True),
         ('FS_TRANSFER', 'Operatore/Agenzia', 'Cammino bus–binari',
-         'Misura dei percorsi nei due versi e accessibilità; riesame dell’ipotesi di 3 minuti senza scegliere una banda decisionale.', True),
+         'Misura separata binario 1→bus e bus→binario 2, e dei versi opposti: binario effettivo, scale/percorso accessibile, cammino in banchina, salita/discesa e chiusura porte. Confrontare i budget degli eventi dell’audit accessi binari, non un cammino uniforme di 3 minuti; nessuna banda decisionale scelta.', True),
         ('FLEET_DUTIES', 'Operatore', 'Mezzi, autisti e deposito',
          'Disponibilità reale nelle punte, tipo di bus, turni autista e piano deposito. Valutare i gap senza chiamarli disponibilità certificata per altre linee.', True),
         ('NONCOMMERCIAL', 'Operatore', 'Km e ore non commerciali',

@@ -1,0 +1,2593 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.404474168656716,
+            45.7282
+          ],
+          [
+            9.4044329,
+            45.7284212
+          ],
+          [
+            9.4044163,
+            45.7285622
+          ],
+          [
+            9.4044364,
+            45.7287075
+          ],
+          [
+            9.4044584,
+            45.7289781
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "unclassified",
+        "name": "Via San Martino",
+        "osm_way_id": "42281336",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4028,
+            45.72941863803404
+          ],
+          [
+            9.4028464,
+            45.7294515
+          ],
+          [
+            9.402934,
+            45.7295135
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "lanes": "1",
+        "name": "Via Antonio Canova",
+        "oneway": "yes",
+        "osm_way_id": "42282005",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4042201,
+            45.7291853
+          ],
+          [
+            9.4041288,
+            45.7291263
+          ],
+          [
+            9.404059,
+            45.7290715
+          ],
+          [
+            9.4040321,
+            45.7289618
+          ],
+          [
+            9.4039788,
+            45.728673
+          ],
+          [
+            9.4039723,
+            45.7286617
+          ],
+          [
+            9.4039344,
+            45.7285961
+          ],
+          [
+            9.4038915,
+            45.7284013
+          ],
+          [
+            9.403842328919046,
+            45.7282
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "lit": "yes",
+        "name": "Via Ignazio Silone",
+        "osm_way_id": "48540205",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.402934,
+            45.7295135
+          ],
+          [
+            9.4028,
+            45.72957311166204
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "name": "Via Sommi Picenardi",
+        "oneway": "no",
+        "osm_way_id": "48540213",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.402934,
+            45.7295135
+          ],
+          [
+            9.4030815,
+            45.729433
+          ],
+          [
+            9.4031987,
+            45.7293414
+          ],
+          [
+            9.4032351,
+            45.7292938
+          ],
+          [
+            9.4032601,
+            45.7291046
+          ],
+          [
+            9.4032692,
+            45.7290361
+          ],
+          [
+            9.4033229,
+            45.7288226
+          ],
+          [
+            9.4033122,
+            45.7286803
+          ],
+          [
+            9.4034288,
+            45.7284541
+          ],
+          [
+            9.4034691,
+            45.7283716
+          ],
+          [
+            9.4035365,
+            45.7283635
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "name": "Via Roma",
+        "oneway": "yes",
+        "osm_way_id": "48540233",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4035365,
+            45.7283635
+          ],
+          [
+            9.4035594,
+            45.7284565
+          ],
+          [
+            9.4035907,
+            45.7286226
+          ],
+          [
+            9.4036074,
+            45.7287718
+          ],
+          [
+            9.4036157,
+            45.7288708
+          ],
+          [
+            9.4036164,
+            45.7288797
+          ],
+          [
+            9.4035967,
+            45.728922
+          ],
+          [
+            9.4035418,
+            45.728974
+          ],
+          [
+            9.4034946,
+            45.7290361
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "lanes": "1",
+        "name": "Via della Stazione",
+        "oneway": "yes",
+        "osm_way_id": "48540234",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4034946,
+            45.7290361
+          ],
+          [
+            9.4034864,
+            45.7291913
+          ],
+          [
+            9.4034819,
+            45.7292751
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "name": "Piazza Quattro Novembre",
+        "oneway": "yes",
+        "osm_way_id": "48540235",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.403319001947477,
+            45.73
+          ],
+          [
+            9.4032746,
+            45.7298524
+          ],
+          [
+            9.402934,
+            45.7295135
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "name": "Via Fabbricone",
+        "oneway": "yes",
+        "osm_way_id": "48540237",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.403492405957447,
+            45.7282
+          ],
+          [
+            9.403505,
+            45.7282453
+          ],
+          [
+            9.4035365,
+            45.7283635
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "name": "Via della Stazione",
+        "osm_way_id": "48540242",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4034819,
+            45.7292751
+          ],
+          [
+            9.4035168,
+            45.7293979
+          ],
+          [
+            9.4035326,
+            45.7294532
+          ],
+          [
+            9.4035369,
+            45.7294882
+          ],
+          [
+            9.4035471,
+            45.7295704
+          ],
+          [
+            9.403620448356085,
+            45.73
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "lit": "yes",
+        "oneway": "yes",
+        "osm_way_id": "48540243",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4034819,
+            45.7292751
+          ],
+          [
+            9.4034195,
+            45.729418
+          ],
+          [
+            9.403356,
+            45.7296391
+          ],
+          [
+            9.4033396,
+            45.7296961
+          ],
+          [
+            9.4032746,
+            45.7298524
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "name": "Via Stocksmoore",
+        "oneway": "yes",
+        "osm_way_id": "48540245",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4037227,
+            45.7284296
+          ],
+          [
+            9.403685567702606,
+            45.7282
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "electrified": "contact_line",
+        "frequency": "0",
+        "gauge": "1435",
+        "maxspeed": "150",
+        "name": "Ferrovia Milano-Lecco",
+        "operator": "Rete Ferroviaria Italiana",
+        "operator:short": "RFI",
+        "operator:wikidata": "Q1060049",
+        "osm_way_id": "48540255",
+        "passenger_lines": "2",
+        "railway": "rail",
+        "railway:scmt": "yes",
+        "ref": "27",
+        "role": "BASEMAP",
+        "usage": "main",
+        "voltage": "3000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4045494,
+            45.7292095
+          ],
+          [
+            9.4047934,
+            45.7290893
+          ],
+          [
+            9.404887,
+            45.7290394
+          ],
+          [
+            9.4049,
+            45.72902862709163
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "unclassified",
+        "lit": "yes",
+        "name": "Via Enzo Biagi",
+        "osm_way_id": "172860712",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4044416,
+            45.7291436
+          ],
+          [
+            9.404485,
+            45.7291591
+          ],
+          [
+            9.4045217,
+            45.7291815
+          ],
+          [
+            9.4045494,
+            45.7292095
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "junction": "roundabout",
+        "lit": "yes",
+        "name": "Piazza della Repubblica",
+        "osm_way_id": "174035057",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4045203,
+            45.7293675
+          ],
+          [
+            9.4045999,
+            45.7294552
+          ],
+          [
+            9.4046628,
+            45.7295412
+          ],
+          [
+            9.4047384,
+            45.7296672
+          ],
+          [
+            9.404797,
+            45.7297296
+          ],
+          [
+            9.4048273,
+            45.7297407
+          ],
+          [
+            9.4048618,
+            45.7297533
+          ],
+          [
+            9.4049,
+            45.729700748504534
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "service",
+        "lit": "yes",
+        "osm_way_id": "174035058",
+        "role": "BASEMAP",
+        "service": "parking_aisle",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4046628,
+            45.7295412
+          ],
+          [
+            9.4048371,
+            45.7293829
+          ],
+          [
+            9.4049,
+            45.729313844587786
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "service",
+        "lit": "yes",
+        "osm_way_id": "174035061",
+        "role": "BASEMAP",
+        "service": "parking_aisle",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.40409323543586,
+            45.73
+          ],
+          [
+            9.4040766,
+            45.7298898
+          ],
+          [
+            9.4040766,
+            45.7295435
+          ],
+          [
+            9.404087,
+            45.7295114
+          ],
+          [
+            9.4040954,
+            45.7294854
+          ],
+          [
+            9.4041302,
+            45.7294611
+          ],
+          [
+            9.4042845,
+            45.7293983
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "lit": "yes",
+        "name": "Via Aldo Carpi",
+        "osm_way_id": "198162666",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.404738225738921,
+            45.7282
+          ],
+          [
+            9.4048379,
+            45.7282237
+          ],
+          [
+            9.4049,
+            45.72822138843058
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "lanes": "1",
+        "lit": "yes",
+        "name": "Via Ripesecche",
+        "oneway": "yes",
+        "osm_way_id": "235443248",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.403630965274418,
+            45.7282
+          ],
+          [
+            9.4036591,
+            45.7283811
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "electrified": "contact_line",
+        "frequency": "0",
+        "gauge": "1435",
+        "maxspeed": "150",
+        "name": "Ferrovia Milano-Lecco",
+        "operator": "Rete Ferroviaria Italiana",
+        "operator:short": "RFI",
+        "operator:wikidata": "Q1060049",
+        "osm_way_id": "243195573",
+        "passenger_lines": "2",
+        "railway": "rail",
+        "railway:scmt": "yes",
+        "ref": "27",
+        "role": "BASEMAP",
+        "usage": "main",
+        "voltage": "3000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.40384799414025,
+            45.73
+          ],
+          [
+            9.4037661,
+            45.7295055
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "designated",
+        "fixme": "check geometry",
+        "foot": "designated",
+        "highway": "path",
+        "layer": "-1",
+        "osm_way_id": "292913603",
+        "role": "BASEMAP",
+        "segregated": "no",
+        "surface": "paved",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.404025,
+            45.7293623
+          ],
+          [
+            9.4039201,
+            45.7287268
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "designated",
+        "fixme": "check geometry",
+        "foot": "designated",
+        "highway": "path",
+        "layer": "-1",
+        "osm_way_id": "292913604",
+        "role": "BASEMAP",
+        "segregated": "no",
+        "surface": "paved",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4035851,
+            45.7291789
+          ],
+          [
+            9.4036051,
+            45.7293517
+          ],
+          [
+            9.4036415,
+            45.7294005
+          ],
+          [
+            9.4036831,
+            45.7294563
+          ],
+          [
+            9.4037088,
+            45.7295078
+          ],
+          [
+            9.4037239,
+            45.7296097
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "no",
+        "fixme": "check geometry",
+        "foot": "designated",
+        "highway": "footway",
+        "lit": "yes",
+        "osm_way_id": "292913605",
+        "role": "BASEMAP",
+        "segregated": "no",
+        "surface": "paved"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4035772,
+            45.7282098
+          ],
+          [
+            9.4036051,
+            45.7283586
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "steps",
+        "incline": "up",
+        "osm_way_id": "293000239",
+        "role": "BASEMAP",
+        "surface": "paved"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.403647276150627,
+            45.7282
+          ],
+          [
+            9.4035772,
+            45.7282098
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "footway",
+        "layer": "-1",
+        "osm_way_id": "293000240",
+        "role": "BASEMAP",
+        "surface": "paved",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4034288,
+            45.7284541
+          ],
+          [
+            9.4028113,
+            45.7282964
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "lanes": "1",
+        "name": "Vicolo Solferino",
+        "oneway": "no",
+        "osm_way_id": "293000241",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4035594,
+            45.7284565
+          ],
+          [
+            9.4034706,
+            45.7284634
+          ],
+          [
+            9.4034288,
+            45.7284541
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "lanes": "1",
+        "oneway": "yes",
+        "osm_way_id": "293000243",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4037239,
+            45.7296097
+          ],
+          [
+            9.403790432621081,
+            45.73
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "designated",
+        "fixme": "check geometry",
+        "foot": "designated",
+        "highway": "path",
+        "osm_way_id": "293000244",
+        "role": "BASEMAP",
+        "segregated": "no",
+        "surface": "paved"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4036051,
+            45.7283586
+          ],
+          [
+            9.4035794,
+            45.7283623
+          ],
+          [
+            9.4035586,
+            45.7282394
+          ],
+          [
+            9.403505,
+            45.7282453
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "footway",
+        "osm_way_id": "293000246",
+        "role": "BASEMAP",
+        "surface": "paved"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4045999,
+            45.7294552
+          ],
+          [
+            9.404655,
+            45.729436
+          ],
+          [
+            9.404647,
+            45.7293511
+          ],
+          [
+            9.4046646,
+            45.7292706
+          ],
+          [
+            9.4047159,
+            45.7292002
+          ],
+          [
+            9.4048247,
+            45.729141
+          ],
+          [
+            9.4049,
+            45.729103563920454
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "designated",
+        "foot": "designated",
+        "highway": "path",
+        "osm_way_id": "293000662",
+        "role": "BASEMAP",
+        "segregated": "no",
+        "surface": "asphalt",
+        "width": "2.5"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4033601,
+            45.7292003
+          ],
+          [
+            9.4033259,
+            45.7293315
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "steps",
+        "osm_way_id": "302735226",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4033601,
+            45.7292003
+          ],
+          [
+            9.4033244,
+            45.7290863
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "steps",
+        "osm_way_id": "302735227",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4033259,
+            45.7293315
+          ],
+          [
+            9.4032577,
+            45.7293601
+          ],
+          [
+            9.4031987,
+            45.7293414
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "footway",
+        "osm_way_id": "302735228",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4031987,
+            45.7293414
+          ],
+          [
+            9.4031437,
+            45.7293217
+          ],
+          [
+            9.4028464,
+            45.7294515
+          ],
+          [
+            9.4028,
+            45.72949999609857
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "footway",
+        "osm_way_id": "302736407",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4048273,
+            45.7297407
+          ],
+          [
+            9.4048131,
+            45.7298456
+          ],
+          [
+            9.404843467202907,
+            45.73
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "service",
+        "osm_way_id": "374426963",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4032601,
+            45.7291046
+          ],
+          [
+            9.403145,
+            45.729052
+          ],
+          [
+            9.4030459,
+            45.7289964
+          ],
+          [
+            9.4029681,
+            45.7289346
+          ],
+          [
+            9.4029008,
+            45.7288852
+          ],
+          [
+            9.4028318,
+            45.7288482
+          ],
+          [
+            9.4028,
+            45.7288383155416
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "unclassified",
+        "name": "Via Interna",
+        "osm_way_id": "581580996",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4037661,
+            45.7295055
+          ],
+          [
+            9.4039708,
+            45.7294943
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "designated",
+        "fixme": "check geometry",
+        "foot": "designated",
+        "highway": "path",
+        "layer": "-1",
+        "osm_way_id": "784178060",
+        "role": "BASEMAP",
+        "segregated": "no",
+        "surface": "paved",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4043753,
+            45.7294679
+          ],
+          [
+            9.4045999,
+            45.7294552
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "footway",
+        "osm_way_id": "784178061",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4041678,
+            45.7294824
+          ],
+          [
+            9.4040462,
+            45.7294909
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "footway",
+        "layer": "-1",
+        "osm_way_id": "784178064",
+        "role": "BASEMAP",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4039708,
+            45.7294943
+          ],
+          [
+            9.4040462,
+            45.7294909
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "designated",
+        "fixme": "check geometry",
+        "foot": "designated",
+        "highway": "path",
+        "layer": "-1",
+        "osm_way_id": "784178066",
+        "role": "BASEMAP",
+        "segregated": "no",
+        "surface": "paved",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.403356,
+            45.7296391
+          ],
+          [
+            9.4034254,
+            45.7296515
+          ],
+          [
+            9.4034481,
+            45.7295668
+          ],
+          [
+            9.4034973,
+            45.7295575
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "permissive",
+        "highway": "steps",
+        "horse": "no",
+        "osm_way_id": "1193795219",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4036663,
+            45.7295241
+          ],
+          [
+            9.4037661,
+            45.7295055
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "footway",
+        "layer": "-1",
+        "osm_way_id": "1193795220",
+        "role": "BASEMAP",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4034973,
+            45.7295575
+          ],
+          [
+            9.4035915,
+            45.7295398
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "footway",
+        "layer": "-1",
+        "osm_way_id": "1193795221",
+        "role": "BASEMAP",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4035915,
+            45.7295398
+          ],
+          [
+            9.4036663,
+            45.7295241
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "footway",
+        "layer": "-1",
+        "osm_way_id": "1193795222",
+        "role": "BASEMAP",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4033244,
+            45.7290863
+          ],
+          [
+            9.4032601,
+            45.7291046
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "footway": "sidewalk",
+        "highway": "footway",
+        "osm_way_id": "1193795223",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4041773,
+            45.7295354
+          ],
+          [
+            9.4043804,
+            45.7295209
+          ],
+          [
+            9.4043753,
+            45.7294679
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "steps",
+        "osm_way_id": "1193795225",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4043753,
+            45.7294679
+          ],
+          [
+            9.4041983,
+            45.7294811
+          ],
+          [
+            9.404087,
+            45.7295114
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "footway": "sidewalk",
+        "highway": "footway",
+        "osm_way_id": "1193795226",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4041678,
+            45.7294824
+          ],
+          [
+            9.4041773,
+            45.7295354
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "path",
+        "layer": "-1",
+        "osm_way_id": "1193795227",
+        "role": "BASEMAP",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4035365,
+            45.7283635
+          ],
+          [
+            9.4035794,
+            45.7283623
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "footway": "sidewalk",
+        "highway": "footway",
+        "osm_way_id": "1193795228",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4037226,
+            45.7289546
+          ],
+          [
+            9.4036569,
+            45.7289573
+          ],
+          [
+            9.4036157,
+            45.7288708
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "designated",
+        "foot": "designated",
+        "highway": "path",
+        "horse": "no",
+        "motor_vehicle": "no",
+        "osm_way_id": "1193795230",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4036569,
+            45.7289573
+          ],
+          [
+            9.4036677,
+            45.7290217
+          ],
+          [
+            9.4034946,
+            45.7290361
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "designated",
+        "foot": "designated",
+        "highway": "path",
+        "horse": "no",
+        "motor_vehicle": "no",
+        "osm_way_id": "1193795231",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4041302,
+            45.7294611
+          ],
+          [
+            9.40405,
+            45.7293928
+          ],
+          [
+            9.4040223,
+            45.7293938
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "path",
+        "osm_way_id": "1193795232",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4040462,
+            45.7294909
+          ],
+          [
+            9.4040353,
+            45.7294248
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "designated",
+        "fixme": "check geometry",
+        "foot": "designated",
+        "highway": "path",
+        "layer": "-1",
+        "osm_way_id": "1193795233",
+        "role": "BASEMAP",
+        "segregated": "no",
+        "surface": "paved",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4040353,
+            45.7294248
+          ],
+          [
+            9.404025,
+            45.7293623
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "designated",
+        "fixme": "check geometry",
+        "foot": "designated",
+        "highway": "path",
+        "layer": "-1",
+        "osm_way_id": "1193795234",
+        "role": "BASEMAP",
+        "segregated": "no",
+        "surface": "paved",
+        "tunnel": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4039201,
+            45.7287268
+          ],
+          [
+            9.4039201,
+            45.7286683
+          ],
+          [
+            9.4039723,
+            45.7286617
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "designated",
+        "fixme": "check geometry",
+        "foot": "designated",
+        "highway": "path",
+        "osm_way_id": "1193795235",
+        "role": "BASEMAP",
+        "segregated": "no",
+        "surface": "paved"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4039629,
+            45.7294486
+          ],
+          [
+            9.4039708,
+            45.7294943
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "steps",
+        "osm_way_id": "1193795237",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4037586,
+            45.7294614
+          ],
+          [
+            9.4037661,
+            45.7295055
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "handrail": "yes",
+        "highway": "steps",
+        "incline": "down",
+        "osm_way_id": "1193795239",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4043941,
+            45.7291359
+          ],
+          [
+            9.4044584,
+            45.7289781
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "path",
+        "osm_way_id": "1193795240",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4036415,
+            45.7294005
+          ],
+          [
+            9.4037047,
+            45.7293935
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "footway",
+        "osm_way_id": "1193795242",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4037047,
+            45.7293935
+          ],
+          [
+            9.403741,
+            45.7293894
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "handrail": "no",
+        "highway": "steps",
+        "incline": "down",
+        "osm_way_id": "1193795243",
+        "role": "BASEMAP",
+        "surface": "paving_stones"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4040223,
+            45.7293938
+          ],
+          [
+            9.4039739,
+            45.7293958
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "steps",
+        "osm_way_id": "1193795247",
+        "role": "BASEMAP"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4036591,
+            45.7283811
+          ],
+          [
+            9.4037873,
+            45.729183
+          ],
+          [
+            9.403918750821294,
+            45.73
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "electrified": "contact_line",
+        "frequency": "0",
+        "gauge": "1435",
+        "maxspeed": "150",
+        "name": "Ferrovia Milano-Lecco",
+        "operator": "Rete Ferroviaria Italiana",
+        "operator:short": "RFI",
+        "operator:wikidata": "Q1060049",
+        "osm_way_id": "1232695770",
+        "passenger_lines": "2",
+        "railway": "rail",
+        "railway:scmt": "yes",
+        "railway:track_ref": "1",
+        "ref": "27",
+        "role": "BASEMAP",
+        "usage": "main",
+        "voltage": "3000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.403973033925388,
+            45.73
+          ],
+          [
+            9.4038428,
+            45.7291809
+          ],
+          [
+            9.4037227,
+            45.7284296
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "electrified": "contact_line",
+        "frequency": "0",
+        "gauge": "1435",
+        "maxspeed": "150",
+        "name": "Ferrovia Milano-Lecco",
+        "operator": "Rete Ferroviaria Italiana",
+        "operator:short": "RFI",
+        "operator:wikidata": "Q1060049",
+        "osm_way_id": "1232695771",
+        "passenger_lines": "2",
+        "railway": "rail",
+        "railway:scmt": "yes",
+        "railway:track_ref": "2",
+        "ref": "27",
+        "role": "BASEMAP",
+        "usage": "main",
+        "voltage": "3000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4033601,
+            45.7292003
+          ],
+          [
+            9.4034864,
+            45.7291913
+          ],
+          [
+            9.4035851,
+            45.7291789
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "bicycle": "no",
+        "fixme": "check geometry",
+        "foot": "designated",
+        "highway": "footway",
+        "lit": "yes",
+        "osm_way_id": "1456325065",
+        "role": "BASEMAP",
+        "segregated": "no",
+        "surface": "paved"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4042201,
+            45.7291853
+          ],
+          [
+            9.4042557,
+            45.7291621
+          ],
+          [
+            9.4042982,
+            45.7291454
+          ],
+          [
+            9.4043453,
+            45.7291366
+          ],
+          [
+            9.4043941,
+            45.7291359
+          ],
+          [
+            9.4044416,
+            45.7291436
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "junction": "roundabout",
+        "lit": "yes",
+        "name": "Piazza della Repubblica",
+        "osm_way_id": "1505112369",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4045494,
+            45.7292095
+          ],
+          [
+            9.4045691,
+            45.7292495
+          ],
+          [
+            9.4045705,
+            45.7292917
+          ],
+          [
+            9.4045538,
+            45.7293323
+          ],
+          [
+            9.4045203,
+            45.7293675
+          ],
+          [
+            9.4044701,
+            45.7293953
+          ],
+          [
+            9.4044098,
+            45.7294105
+          ],
+          [
+            9.4043457,
+            45.7294116
+          ],
+          [
+            9.4042845,
+            45.7293983
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "junction": "roundabout",
+        "lit": "yes",
+        "name": "Piazza della Repubblica",
+        "osm_way_id": "1505112370",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4042845,
+            45.7293983
+          ],
+          [
+            9.4042358,
+            45.7293744
+          ],
+          [
+            9.4041995,
+            45.7293416
+          ],
+          [
+            9.4041786,
+            45.7293027
+          ],
+          [
+            9.4041752,
+            45.7292613
+          ],
+          [
+            9.4041895,
+            45.7292209
+          ],
+          [
+            9.4042201,
+            45.7291853
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "highway": "residential",
+        "junction": "roundabout",
+        "lit": "yes",
+        "name": "Piazza della Repubblica",
+        "osm_way_id": "1505112371",
+        "role": "BASEMAP",
+        "surface": "asphalt"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4044416,
+            45.7291436
+          ],
+          [
+            9.404485,
+            45.7291591
+          ],
+          [
+            9.4045217,
+            45.7291815
+          ],
+          [
+            9.4045494,
+            45.7292095
+          ],
+          [
+            9.4045691,
+            45.7292495
+          ],
+          [
+            9.4045705,
+            45.7292917
+          ],
+          [
+            9.4045538,
+            45.7293323
+          ],
+          [
+            9.4045203,
+            45.7293675
+          ],
+          [
+            9.4045999,
+            45.7294552
+          ],
+          [
+            9.4043753,
+            45.7294679
+          ],
+          [
+            9.4043804,
+            45.7295209
+          ],
+          [
+            9.4041773,
+            45.7295354
+          ],
+          [
+            9.4041678,
+            45.7294824
+          ],
+          [
+            9.4040462,
+            45.7294909
+          ],
+          [
+            9.4039708,
+            45.7294943
+          ],
+          [
+            9.4037661,
+            45.7295055
+          ],
+          [
+            9.4036663,
+            45.7295241
+          ],
+          [
+            9.4035915,
+            45.7295398
+          ],
+          [
+            9.4034973,
+            45.7295575
+          ],
+          [
+            9.4034481,
+            45.7295668
+          ],
+          [
+            9.4034254,
+            45.7296515
+          ],
+          [
+            9.403356,
+            45.7296391
+          ],
+          [
+            9.4034195,
+            45.729418
+          ],
+          [
+            9.4034819,
+            45.7292751
+          ],
+          [
+            9.4034864,
+            45.7291913
+          ],
+          [
+            9.4035851,
+            45.7291789
+          ],
+          [
+            9.4036051,
+            45.7293517
+          ],
+          [
+            9.4036415,
+            45.7294005
+          ],
+          [
+            9.4037047,
+            45.7293935
+          ],
+          [
+            9.403741,
+            45.7293894
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "contains_steps": true,
+        "distance_m": 250.92180057208333,
+        "flow": "bus_to_platform",
+        "platform": "1",
+        "role": "PLATFORM_APPROACH"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.403741,
+            45.7293894
+          ],
+          [
+            9.4037047,
+            45.7293935
+          ],
+          [
+            9.4036415,
+            45.7294005
+          ],
+          [
+            9.4036051,
+            45.7293517
+          ],
+          [
+            9.4035851,
+            45.7291789
+          ],
+          [
+            9.4034864,
+            45.7291913
+          ],
+          [
+            9.4034819,
+            45.7292751
+          ],
+          [
+            9.4034195,
+            45.729418
+          ],
+          [
+            9.403356,
+            45.7296391
+          ],
+          [
+            9.4034254,
+            45.7296515
+          ],
+          [
+            9.4034481,
+            45.7295668
+          ],
+          [
+            9.4034973,
+            45.7295575
+          ],
+          [
+            9.4035915,
+            45.7295398
+          ],
+          [
+            9.4036663,
+            45.7295241
+          ],
+          [
+            9.4037661,
+            45.7295055
+          ],
+          [
+            9.4039708,
+            45.7294943
+          ],
+          [
+            9.4040462,
+            45.7294909
+          ],
+          [
+            9.4041678,
+            45.7294824
+          ],
+          [
+            9.4041773,
+            45.7295354
+          ],
+          [
+            9.4043804,
+            45.7295209
+          ],
+          [
+            9.4043753,
+            45.7294679
+          ],
+          [
+            9.4045999,
+            45.7294552
+          ],
+          [
+            9.4045203,
+            45.7293675
+          ],
+          [
+            9.4045538,
+            45.7293323
+          ],
+          [
+            9.4045705,
+            45.7292917
+          ],
+          [
+            9.4045691,
+            45.7292495
+          ],
+          [
+            9.4045494,
+            45.7292095
+          ],
+          [
+            9.4045217,
+            45.7291815
+          ],
+          [
+            9.404485,
+            45.7291591
+          ],
+          [
+            9.4044416,
+            45.7291436
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "contains_steps": true,
+        "distance_m": 250.92180057208333,
+        "flow": "platform_to_bus",
+        "platform": "1",
+        "role": "PLATFORM_APPROACH"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              9.4040095,
+              45.7306985
+            ],
+            [
+              9.4039522,
+              45.7307034
+            ],
+            [
+              9.4038503,
+              45.730094
+            ],
+            [
+              9.4037869,
+              45.7296749
+            ],
+            [
+              9.403741,
+              45.7293894
+            ],
+            [
+              9.4037289,
+              45.7293122
+            ],
+            [
+              9.403692,
+              45.7290387
+            ],
+            [
+              9.4036659,
+              45.7288821
+            ],
+            [
+              9.4036632,
+              45.7288044
+            ],
+            [
+              9.4036002,
+              45.7283916
+            ],
+            [
+              9.4036367,
+              45.7283878
+            ],
+            [
+              9.4037158,
+              45.7288779
+            ],
+            [
+              9.4038436,
+              45.7296702
+            ],
+            [
+              9.4040095,
+              45.7306985
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "platform": "1",
+        "role": "PLATFORM"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4044416,
+            45.7291436
+          ],
+          [
+            9.4043941,
+            45.7291359
+          ],
+          [
+            9.4043453,
+            45.7291366
+          ],
+          [
+            9.4042982,
+            45.7291454
+          ],
+          [
+            9.4042557,
+            45.7291621
+          ],
+          [
+            9.4042201,
+            45.7291853
+          ],
+          [
+            9.4041895,
+            45.7292209
+          ],
+          [
+            9.4041752,
+            45.7292613
+          ],
+          [
+            9.4041786,
+            45.7293027
+          ],
+          [
+            9.4041995,
+            45.7293416
+          ],
+          [
+            9.4042358,
+            45.7293744
+          ],
+          [
+            9.4042845,
+            45.7293983
+          ],
+          [
+            9.4041302,
+            45.7294611
+          ],
+          [
+            9.40405,
+            45.7293928
+          ],
+          [
+            9.4040223,
+            45.7293938
+          ],
+          [
+            9.4039739,
+            45.7293958
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "contains_steps": true,
+        "distance_m": 76.22819320666318,
+        "flow": "bus_to_platform",
+        "platform": "2",
+        "role": "PLATFORM_APPROACH"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            9.4039739,
+            45.7293958
+          ],
+          [
+            9.4040223,
+            45.7293938
+          ],
+          [
+            9.40405,
+            45.7293928
+          ],
+          [
+            9.4041302,
+            45.7294611
+          ],
+          [
+            9.4042845,
+            45.7293983
+          ],
+          [
+            9.4042358,
+            45.7293744
+          ],
+          [
+            9.4041995,
+            45.7293416
+          ],
+          [
+            9.4041786,
+            45.7293027
+          ],
+          [
+            9.4041752,
+            45.7292613
+          ],
+          [
+            9.4041895,
+            45.7292209
+          ],
+          [
+            9.4042201,
+            45.7291853
+          ],
+          [
+            9.4042557,
+            45.7291621
+          ],
+          [
+            9.4042982,
+            45.7291454
+          ],
+          [
+            9.4043453,
+            45.7291366
+          ],
+          [
+            9.4043941,
+            45.7291359
+          ],
+          [
+            9.4044416,
+            45.7291436
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "contains_steps": true,
+        "distance_m": 76.22819320666318,
+        "flow": "platform_to_bus",
+        "platform": "2",
+        "role": "PLATFORM_APPROACH"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              9.4041423,
+              45.7306868
+            ],
+            [
+              9.4040984,
+              45.7306912
+            ],
+            [
+              9.4039399,
+              45.7296709
+            ],
+            [
+              9.4038152,
+              45.7288685
+            ],
+            [
+              9.4037477,
+              45.7284337
+            ],
+            [
+              9.4038402,
+              45.7284257
+            ],
+            [
+              9.4039005,
+              45.728863
+            ],
+            [
+              9.4039739,
+              45.7293958
+            ],
+            [
+              9.4040112,
+              45.7296666
+            ],
+            [
+              9.4040139,
+              45.7298735
+            ],
+            [
+              9.4041423,
+              45.7306868
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "platform": "2",
+        "role": "PLATFORM"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          9.4044416,
+          45.7291436
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "physical_platform_authorised": false,
+        "role": "DESIGN_BUS_FS",
+        "site_id": "FROZEN::L00407"
+      },
+      "type": "Feature"
+    }
+  ],
+  "type": "FeatureCollection"
+}
