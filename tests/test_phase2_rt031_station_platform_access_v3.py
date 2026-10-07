@@ -152,13 +152,13 @@ def test_official_access_provision_is_not_a_mapped_or_measured_bus_transfer(save
 
 def test_native_platform_approaches_and_return_witnesses(saved):
     p1, p2 = saved['platforms']['1'], saved['platforms']['2']
-    assert p1['bus_to_platform']['network_distance_m'] == pytest.approx(250.92180057208333)
+    assert p1['bus_to_platform']['network_distance_m'] == pytest.approx(108.15508329875198)
     assert p2['bus_to_platform']['network_distance_m'] == pytest.approx(76.22819320666318)
     for platform in (p1, p2):
         outgoing, incoming = platform['bus_to_platform'], platform['platform_to_bus']
         assert outgoing['path_node_ids'] == incoming['path_node_ids'][::-1]
-        assert outgoing['approach_node_id'] in platform['native_shared_approach_node_ids']
-        assert incoming['approach_node_id'] in platform['native_shared_approach_node_ids']
+        assert outgoing['approach_node_id'] in platform['local_surface_topology']['surface_access_node_ids']
+        assert incoming['approach_node_id'] in platform['local_surface_topology']['surface_access_node_ids']
         for flow in ('bus_to_platform', 'platform_to_bus'):
             path = platform[flow]
             assert path['contains_steps'] and not path['observed_transfer_time']
@@ -178,7 +178,7 @@ def test_budget_reveals_evidence_needed_not_a_silent_phase_choice(saved):
         assert pair['inbound_planned_platform'] == '1' and pair['outbound_planned_platform'] == '2'
         assert pair['assumed_3min_each_side']['interval_width_min'] == pytest.approx(.2234063721)
         approach = pair['platform_approach_only_diagnostic']
-        assert approach['baseline_inbound_residual_min'] < 0
+        assert approach['baseline_inbound_residual_min'] == pytest.approx(1.6480614587655964)
         assert approach['baseline_outbound_residual_min'] > 2
         assert approach['interval_width_min'] > 2 and not approach['phase_selected']
         budgets = pair['measured_transfer_time_budgets']
@@ -193,3 +193,26 @@ def test_budget_reveals_evidence_needed_not_a_silent_phase_choice(saved):
     for key in ('decision_budget_km', 'uncertainty_band_min', 'missed_connection_probability',
                 'demand_weighted_gjt_improvement_min'):
         assert saved[key] is None
+
+
+def test_corrected_path_uses_both_platform_stairs_and_native_underpass(saved):
+    path = saved['platforms']['1']['bus_to_platform']
+    ways = [e['osm_way_id'] for e in path['path_edges']]
+    assert ways[-4:] == ['1232462158', '1193795237', '784178060', '1193795239']
+    assert path['modelled_platform_surface_distance_m'] == pytest.approx(5.9328590550144815)
+    assert path['approach_node_id'] == '11081379902'
+    assert '2964695553' not in saved['platforms']['1']['local_surface_topology']['surface_access_node_ids']
+    previous = saved['superseded_boundary_only_approaches']['1']['bus_to_platform']
+    assert previous['old_boundary_only_network_distance_m'] == pytest.approx(250.92180057208333)
+    assert not previous['used_in_current_transfer_diagnostic']
+    assert not saved['local_platform_area_edges_change_frozen_rt028_graph']
+    assert not saved['geometry_reconstruction_is_observed_transfer_time']
+
+
+def test_corrected_baseline_keeps_five_immediate_inbound_buses_only_in_diagnostic(saved):
+    numbers = {p['arriving_train_number'] for p in saved['paired_AM_directional_envelopes']}
+    rows = [r for r in saved['all_dated_rail_flows_approach_only'] if r['wing']=='east_A' and r['train_number'] in numbers]
+    assert len(rows) == 5
+    assert all(r['rail_to_bus']['wait_from_train_arrival_min'] == 3 for r in rows)
+    assert all(not r['passenger_connection_certified'] for r in rows)
+    assert saved['corrected_on'] == '2026-10-07'

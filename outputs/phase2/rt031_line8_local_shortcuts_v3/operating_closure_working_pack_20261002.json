@@ -64,7 +64,7 @@
     {
       "assessed_on": null,
       "blocking_weekday_operational_claim": true,
-      "close_when": "Misura separata binario 1→bus e bus→binario 2, e dei versi opposti: binario effettivo, scale/percorso accessibile, cammino in banchina, salita/discesa e chiusura porte. Confrontare i budget degli eventi dell’audit accessi binari, non un cammino uniforme di 3 minuti; nessuna banda decisionale scelta.",
+      "close_when": "Misura separata binario 1→bus via scala/sottopasso/binario 2 e bus→binario 2, e dei versi opposti: binario effettivo, scale/percorso accessibile alternativo, cammino in banchina, salita/discesa e chiusura porte. Il giro esterno da 251 m è superato dalla correzione del 7 ottobre. Confrontare i budget degli eventi, non un cammino uniforme di 3 minuti; nessuna banda decisionale scelta.",
       "evidence_refs": [],
       "id": "FS_TRANSFER",
       "owner": "Operatore/Agenzia",

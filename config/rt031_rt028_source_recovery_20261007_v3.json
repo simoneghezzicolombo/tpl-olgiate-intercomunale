@@ -1,0 +1,14 @@
+{
+  "contract": "RT031_PINNED_RT028_SOURCE_RECOVERY_V3",
+  "recovered_on": "2026-10-07",
+  "repository": "simoneghezzicolombo/tpl-olgiate-intercomunale",
+  "github_run_id": 34039162932,
+  "github_artifact_id": 9991182904,
+  "artifact_name": "rt028-final-stop-pedestrian-accessibility-substrate-v3",
+  "source_commit": "10d54e32927701fad93095348de58ce4688fb41e",
+  "durable_local_cache": "cache/rt028-certified-34039162932",
+  "osm_relative_path": "input/rt028_osm_pedestrian_snapshot_v3.osm",
+  "expected_osm_sha256": "896f192bbb481f0c07cdc5d695424bf29de85f89ac33ea72986a06e521b424cd",
+  "original_snapshot_recovered_not_refetched": true,
+  "interpretation": "Recovered the exact certified workflow artifact, verified by SHA256. No refreshed OSM geometry is relabelled as the frozen RT028 snapshot. The cache remains ignored; reproduction requires these original bytes."
+}

@@ -1,0 +1,13 @@
+{
+  "contract": "RT031_STATION_UNDERPASS_CALLER_CORRECTION_V3",
+  "recorded_on": "2026-10-07",
+  "source": "Human caller correction in this conversation",
+  "station": "Olgiate-Calco-Brivio",
+  "reported_path_sequence": ["platform_2", "stairs_down", "underpass", "stairs_up", "platform_1"],
+  "reported_long_external_detour_is_not_required": true,
+  "reported_transfer_minutes": null,
+  "reported_path_coordinates": null,
+  "step_free_access_claimed": false,
+  "timetable_change_authorised": false,
+  "interpretation": "Local knowledge requires auditing the missing internal platform access. It supplies no elapsed time, geometry, empirical delay distribution or permission to adopt another timetable. Geometry and level connectivity must be sourced independently."
+}
