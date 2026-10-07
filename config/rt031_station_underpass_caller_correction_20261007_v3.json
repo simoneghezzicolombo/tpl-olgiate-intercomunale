@@ -5,9 +5,13 @@
   "station": "Olgiate-Calco-Brivio",
   "reported_path_sequence": ["platform_2", "stairs_down", "underpass", "stairs_up", "platform_1"],
   "reported_long_external_detour_is_not_required": true,
+  "caller_confirmed_displayed_path_topology": true,
+  "confirmation_recorded_on": "2026-10-07",
+  "confirmation_basis": "Caller explicitly confirms that the displayed underpass path is correct based on personal local experience.",
+  "confirmation_scope": "Existence and topology of the displayed stairs/underpass route; not a timed survey, geodetic precision, step-free route, train-door position or bus-stop authorisation.",
   "reported_transfer_minutes": null,
   "reported_path_coordinates": null,
   "step_free_access_claimed": false,
   "timetable_change_authorised": false,
-  "interpretation": "Local knowledge requires auditing the missing internal platform access. It supplies no elapsed time, geometry, empirical delay distribution or permission to adopt another timetable. Geometry and level connectivity must be sourced independently."
+  "interpretation": "The caller confirms the recovered route topology based on local experience. Exact geometry remains sourced from frozen OSM with an explicitly inferred inside-platform connector. This supplies no elapsed time, empirical delay distribution, inclusive-access certificate or permission to adopt another timetable."
 }

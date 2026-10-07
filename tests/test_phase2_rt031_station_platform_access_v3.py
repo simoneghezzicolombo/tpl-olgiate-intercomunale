@@ -216,3 +216,13 @@ def test_corrected_baseline_keeps_five_immediate_inbound_buses_only_in_diagnosti
     assert all(r['rail_to_bus']['wait_from_train_arrival_min'] == 3 for r in rows)
     assert all(not r['passenger_connection_certified'] for r in rows)
     assert saved['corrected_on'] == '2026-10-07'
+
+
+def test_human_topology_confirmation_does_not_become_a_timed_or_accessible_transfer(saved):
+    confirmation = saved['caller_underpass_correction']
+    assert confirmation['caller_confirmed_displayed_path_topology']
+    assert confirmation['reported_transfer_minutes'] is None
+    assert confirmation['reported_path_coordinates'] is None
+    assert not confirmation['step_free_access_claimed']
+    assert not saved['observed_transfer_time_available']
+    assert not saved['physical_operation_ready']

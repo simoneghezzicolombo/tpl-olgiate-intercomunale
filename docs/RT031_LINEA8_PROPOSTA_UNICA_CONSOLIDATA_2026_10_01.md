@@ -202,6 +202,14 @@ Il [confronto AM completo corretto](RT031_LINEA8_FASI_AM_COMPLETE_2026_10_02.md)
 
 L’[audit conclusivo del tempo minimo e della scelta AM](RT031_LINEA8_LIMITE_TEMPO_E_SCELTA_AM_2026_10_02.md) chiude la verifica sul grafo per questo ordine: due obiettivi × tre livelli di protezione degli arrivi alle fermate. Il percorso più rapido nel proxy aggiunge 41,62 m a Calco e risparmia solo 13,72 secondi nello stress; non viene adottato. Anche questo minimo lascia una finestra comune di appena 27,12 secondi. L’esempio completo est AM −2 minuti, sera +2 e Scarpone conserva 16 giri e 110.334,948 km feriali; aumenta il margine AM verso Milano a 2,223 minuti ma l’attesa dai primi quattro arrivi passa 3→31 minuti e dall’ultimo 3→58. Non è una nuova priorità del committente: serve scelta esplicita o evidenza osservata diversa, non un altro ricalcolo cosmetico.
 
+## Tre controlli paralleli di chiusura, 7 ottobre
+
+Il riesame separato strada/tempi/risorse conserva la stessa proposta, senza riaprire il dominio. La prova sulle [due restrizioni via-way note](../scripts/phase2_closure_roads_20261007.py) esclude entrambe dal percorso confermato: nessuna delle rispettive from/via/to ways appare nei 1.435 archi. In particolare mancano le to ways vietate, quindi anche una memoria di restrizione ereditata da un precedente posizionamento non può attivare quei due divieti sul giro. Questo non certifica completezza/attualità delle norme, sagoma, accosti o permessi.
+
+Il [controllo dei tempi per ogni giro e blocco](RT031_closure_timing_20261007.md) produce 432 righe: 16 corse × 27 scenari. Separa marcia, dwell, sosta FS e recupero, senza scegliere una riserva; non inventa una scadenza di deposito per gli ultimi impieghi. I [controlli delle risorse](../scripts/phase2_closure_resources_20261007.py) riconciliano occupazione e gap, conteggiano eventuali esclusioni locali una sola volta e mantengono ignoti km a vuoto e costo. I 1.189,064 km di differenza dal riferimento non sono un finanziamento né un budget assegnato ai posizionamenti.
+
+La topologia del sottopasso è ora anche confermata dal committente sulla propria esperienza. Le dodici verifiche residue restano assegnate nella distinta: ciò che richiede misure o attestazioni esterne non viene convertito in PASS dai controlli aritmetici. Nessuna nuova variante o priorità è adottata.
+
 ## Pacchetto autorevole
 
 - [Integrità delle evidenze e residui di chiusura: 16 fallimenti corretti, nove ancora espliciti](RT031_LINEA8_VERIFICA_INTEGRITA_2026_10_02.md).

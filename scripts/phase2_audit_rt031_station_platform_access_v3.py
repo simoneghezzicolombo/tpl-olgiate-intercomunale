@@ -250,6 +250,8 @@ def build(pedestrian_osm, rfi_path=RFI):
     recovery = json.loads(SOURCE_RECOVERY.read_text(encoding='utf-8'))
     if (correction['reported_transfer_minutes'] is not None
             or correction['timetable_change_authorised'] is not False
+            or correction['caller_confirmed_displayed_path_topology'] is not True
+            or correction['step_free_access_claimed'] is not False
             or correction['reported_path_sequence'] != ['platform_2','stairs_down','underpass','stairs_up','platform_1']
             or recovery['expected_osm_sha256'] != OSM_SHA256):
         raise ValueError('Caller path correction cannot fabricate measured time or authority')
@@ -412,6 +414,7 @@ def render_brief(r):
     return '\n'.join([
         '# Linea 8 — accessi distinti ai binari, senza cambiare la proposta', '',
         '**Correzione del 7 ottobre:** recuperata la fonte RT028 originale e incluso il passaggio binario 2 → scala → sottopasso → scala → binario 1 segnalato dal committente. Il precedente giro esterno da 251 m è superato e non viene più usato per le coincidenze. Percorso bus, fermate, 16 giri, calendario feriale 2027 e km restano invariati.', '',
+        'Il committente ha poi confermato esplicitamente il tragitto mostrato, in base alla propria esperienza locale. È un riscontro sulla topologia del percorso, non un cronometraggio, un rilievo delle coordinate o un’approvazione degli accosti/tempi alle porte.', '',
         '## Evidenza recuperata dal quadro ferroviario già salvato', '',
         'Il campo RFI «Binario programmato» è riconciliato per numero treno e partenza con tutte le 74 chiamate del 1 ottobre 2026: Milano binario 2, Lecco binario 1. È un binario di partenza programmato, non quello reale né una certificazione del binario di arrivo o del 2027.', '',
         'L’accosto di progetto FS deriva da L00407, non dal diverso record 300407: la coordinata 45,733710 del vecchio spot-check non è quella usata dalla Linea 8. Non occorre spostare il tracciato per correggere quel confronto.', '',

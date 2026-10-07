@@ -2,6 +2,8 @@
 
 **Correzione del 7 ottobre:** recuperata la fonte RT028 originale e incluso il passaggio binario 2 → scala → sottopasso → scala → binario 1 segnalato dal committente. Il precedente giro esterno da 251 m è superato e non viene più usato per le coincidenze. Percorso bus, fermate, 16 giri, calendario feriale 2027 e km restano invariati.
 
+Il committente ha poi confermato esplicitamente il tragitto mostrato, in base alla propria esperienza locale. È un riscontro sulla topologia del percorso, non un cronometraggio, un rilievo delle coordinate o un’approvazione degli accosti/tempi alle porte.
+
 ## Evidenza recuperata dal quadro ferroviario già salvato
 
 Il campo RFI «Binario programmato» è riconciliato per numero treno e partenza con tutte le 74 chiamate del 1 ottobre 2026: Milano binario 2, Lecco binario 1. È un binario di partenza programmato, non quello reale né una certificazione del binario di arrivo o del 2027.

@@ -12426,8 +12426,12 @@
     }
   ],
   "caller_underpass_correction": {
+    "caller_confirmed_displayed_path_topology": true,
+    "confirmation_basis": "Caller explicitly confirms that the displayed underpass path is correct based on personal local experience.",
+    "confirmation_recorded_on": "2026-10-07",
+    "confirmation_scope": "Existence and topology of the displayed stairs/underpass route; not a timed survey, geodetic precision, step-free route, train-door position or bus-stop authorisation.",
     "contract": "RT031_STATION_UNDERPASS_CALLER_CORRECTION_V3",
-    "interpretation": "Local knowledge requires auditing the missing internal platform access. It supplies no elapsed time, geometry, empirical delay distribution or permission to adopt another timetable. Geometry and level connectivity must be sourced independently.",
+    "interpretation": "The caller confirms the recovered route topology based on local experience. Exact geometry remains sourced from frozen OSM with an explicitly inferred inside-platform connector. This supplies no elapsed time, empirical delay distribution, inclusive-access certificate or permission to adopt another timetable.",
     "recorded_on": "2026-10-07",
     "reported_long_external_detour_is_not_required": true,
     "reported_path_coordinates": null,
@@ -14775,10 +14779,10 @@
     "current_16_trip_timetable_step5_H60_mid55_PM8_AMinherited_flexible_real_trains_core980_eastfree.json": "eb2bc04e1e6839af893f1011ef124fbb2f29103640fe771e28f4448cbc7cdcac",
     "rt031_rt028_source_recovery_20261007_v3.json": "0b28135399a77adad39b6e238ae237d8fa9429e1146277144521ec981fa9add9",
     "rt031_station_accessibility_primary_review_20261002_v3.json": "0b02ce428b806d997247a34bd839a3dc8df9c2ce8fc7e6c1189ae3f8acb7d9b8",
-    "rt031_station_underpass_caller_correction_20261007_v3.json": "73aa563a87d1a522d4c23ca98d7e5791fdbe4c89ba4599a563ddc7388779dde3"
+    "rt031_station_underpass_caller_correction_20261007_v3.json": "c2c5f63378a4134d274cbbab5e8398e02c8a8280087a4aee8b8859131d14ff2d"
   },
   "source_code_sha256": {
-    "phase2_audit_rt031_station_platform_access_v3.py": "b5ed5b217d3e338822a3fb4afbb3b446e1f708f928a11cbe1f4291cf6c20751b",
+    "phase2_audit_rt031_station_platform_access_v3.py": "22bf9119e1265b761d1ab2996cdf49e58323f2a60913f9525cbca0d94074b2a6",
     "phase2_rt031_station_platform_surface_v3.py": "99d340f2f43a5ddf461c196169a275924fa0bdf40eb3d93cc617a1a7ea68298f"
   },
   "source_raw_sha256": {
