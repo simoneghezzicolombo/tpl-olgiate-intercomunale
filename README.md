@@ -193,6 +193,11 @@ Nodo8. La mappa esplorabile tiene distinti Nodo8 e le alternative storiche.
 [Origine, dati e verifiche dell’integrazione](docs/NODO8_INTEGRAZIONE_SCROLLYTELLING_2026_10_08.md).
 Avvio sullo stesso server, percorso `/dietro-l-analisi/`.
 
+**Pubblicazione selettiva:** [politica e procedura](docs/NODO8_PUBBLICAZIONE_FINALE_2026_10_08.md).
+Il workflow Pages distribuisce solo la vetrina e lo scrollytelling con le
+dipendenze esplicite. Gli altri siti/mappe rimangono nel repository ma non
+sono inclusi nell’artifact pubblico.
+
 ### 2. Esecuzione degli Script Python storici
 Puoi eseguire in qualsiasi momento i simulatori da terminale:
 ```bash
