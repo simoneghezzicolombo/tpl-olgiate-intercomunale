@@ -69,10 +69,14 @@ Trasformando i percorsi da "andata e ritorno sulla stessa strada" a veri anelli 
 
 ## 4. Benchmark con la Rete Circolare di Merate
 
+La Revisione 7.2 del PdB 2025 assegna alle schede della nuova rete circolare meratese **125.777,8 bus-km/anno complessivi**: D201 34.946,2, D201 dev 35.405,4 e D202 55.426,2. Il precedente valore di 90.372 km/anno era incompleto perché non conteggiava la variante D201 dev.
+
 | Ente / Sistema | Linee | Km/anno Totali | Modello di Esercizio | Popolazione Bacino |
 | :--- | :--- | :--- | :--- | :--- |
-| **Merate** | D201 + D202 | **90.372 km** | Circolare bidirezionale urbana | ~15.000 ab. |
+| **Merate** | D201 + D201 dev + D202 | **125.778 km** | Circolari locali integrate con Cernusco-Merate FS | ~15.000 ab. |
 | **Olgiate e Comuni Core** | D184 + D185 (Attuale) | **111.419 km** | Radiale rarefatto (6 coppie/gg, buchi di 7h) | 22.914 ab. |
 | **Olgiate Linea 8 (Proposta)** | Linea 8 (Scenario C Ibrido) | **112.261 km** | Circolare a doppio verso (2 bus punta / 1 bus morbida) | 22.914 ab. |
 
-Olgiate dispone già della massa critica chilometrica necessaria per replicare il modello vincente di Merate, senza gravare sulle casse pubbliche.
+Il confronto non implica che i km di Merate siano stati sottratti a una singola linea preesistente. Il nuovo PdB opera dentro una produzione complessiva di bacino ampliata e redistribuita. Dimostra però che l'Agenzia considera tecnicamente e programmatoriamente legittimo concentrare una massa chilometrica di questo ordine su una rete locale circolare integrata con la ferrovia.
+
+Olgiate dispone già di una massa critica chilometrica molto vicina a quella necessaria per replicare il principio di rete adottato a Merate, con la leva aggiuntiva della razionalizzazione inter-bacino D185 oltre Cisano già prevista nei documenti di programmazione.
