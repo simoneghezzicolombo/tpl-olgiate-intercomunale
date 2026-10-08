@@ -62,7 +62,9 @@ overflow orizzontale. La mancanza del JSON della proposta e del runtime WebGL
 I controlli di navigazione sono utilizzabili anche da tastiera; le aree dei
 punti-capitolo sono state aumentate senza cambiare la geometria.
 
-Questa è un’integrazione locale, non un aggiornamento già pubblicato su GitHub
-Pages. Non viene effettuato un push sul ramo di pubblicazione né inviata una
-proposta esterna. La versione pubblica va aggiornata con un passaggio di
-pubblicazione esplicito dopo la verifica della vetrina.
+Successivo aggiornamento dell’8 ottobre, autorizzato dal committente:
+la vetrina e lo scrollytelling sono ora pubblicati insieme tramite un artifact
+selettivo GitHub Pages. Le altre pagine restano in Git ma non sono pubblicate.
+[Procedura e riscontro della pubblicazione](NODO8_PUBBLICAZIONE_FINALE_2026_10_08.md).
+Nessuna proposta è stata inviata all’operatore; la pubblicazione del sito non
+autorizza l’esercizio del servizio.

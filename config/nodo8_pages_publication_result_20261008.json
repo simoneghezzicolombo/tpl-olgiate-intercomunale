@@ -1,0 +1,35 @@
+{
+  "contract": "nodo8_pages_publication_result_v1",
+  "verified_on": "2026-10-08",
+  "site_url": "https://simoneghezzicolombo.github.io/tpl-olgiate-intercomunale/",
+  "pages_build_type": "workflow",
+  "deployed_commit": "c5cd3da2f4416d7c4fa22a87c51e0210dcf8b66c",
+  "source_commit": "b2c2759f85770fac04811b7ca25e7dda11aa3557",
+  "workflow_run_id": 37746851146,
+  "workflow_conclusion": "success",
+  "published_html_pages": ["index.html", "dietro-l-analisi/index.html"],
+  "published_dependency_count": 60,
+  "public_http_checks": {
+    "/": 200,
+    "/dietro-l-analisi/": 200,
+    "/publication-manifest.json": 200,
+    "/outputs/maps/mappa_interattiva_rete_tpl_olgiate.html": 404,
+    "/geo-data.js": 404
+  },
+  "repository_files_deleted": [],
+  "preserved_unselected_repository_paths": 106,
+  "retired_map_still_in_gh_pages": {
+    "path": "outputs/maps/mappa_interattiva_rete_tpl_olgiate.html",
+    "git_blob_sha": "4a118d1adfb4c6992ee353774ac9fb1a8c3d1991"
+  },
+  "browser_checks": {
+    "showcase_site_count": 27,
+    "showcase_trip_count": 16,
+    "scrollytelling_chapter_count": 13,
+    "scrollytelling_nodo8_ready": true
+  },
+  "main_branch_changed": false,
+  "deployment_environment_branch_rules_changed": false,
+  "force_push_used": false,
+  "transit_design_or_operating_authority_changed": false
+}
