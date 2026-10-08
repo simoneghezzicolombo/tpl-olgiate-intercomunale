@@ -87,3 +87,46 @@ Lo **Scenario C** rappresenta la trasposizione ideale del modello Meratese entro
 - Produzione totale: $5.757 \times 19,5 = \mathbf{112.261 \text{ km/anno}}$.
 
 > A fronte di **111.419 km/anno** attualmente assegnati a D184 e D185, lo scostamento è di appena **+842 km all'anno (+0,75%)**, ovvero **perfetta neutralità economica**.
+
+---
+
+## 5. Scenario espansivo: doppio senso continuativo per tutta la giornata
+
+Lo Scenario B va mantenuto anche come **proposta alta da portare al confronto con l'Agenzia TPL**, nel caso emerga spazio per nuova produzione chilometrica. L'obiettivo è avere per tutte le 13 ore di servizio un autobus fisso in senso orario e uno fisso in senso antiorario.
+
+### Chiarimento importante sui cicli
+Nel modello di esercizio 06:30-19:30, con ciclo completo prossimo a 60 minuti:
+- **13 giri/giorno CW**;
+- **13 giri/giorno CCW**;
+- **26 giri complessivi/giorno**, non 38.
+
+Il valore di circa **208 mila km/anno** nasce invece dall'ipotesi di **19 giri al giorno per ciascun senso** (38 complessivi), che non corrisponde al normale doppio senso orario sulle 13 ore di servizio. Rappresenterebbe un'offerta molto più intensa, con un arco di esercizio più lungo oppure frequenze superiori all'orario.
+
+### Sensibilità con tracciato "pulito" preliminare da circa 18,1 km
+Una ricostruzione preliminare del tracciato senza ripetizione dei passaggi locali a Olgiate Sud e San Zeno porta l'ordine di grandezza del giro completo a circa **18,1 km**. Il valore deve essere validato con routing stradale definitivo, verifica della transitabilità bus, raggi di svolta e posizionamento effettivo delle fermate.
+
+Con questa geometria:
+- $26 \times 303 = 7.878$ cicli/anno;
+- $7.878 \times 18,1 = \mathbf{142.592 \text{ bus-km/anno}}$;
+- rispetto ai **111.419 km/anno** oggi assegnati a D184+D185 servirebbero circa **31.173 km/anno aggiuntivi**, pari a circa **+28,0%**;
+- rispetto ai **125.777,8 km/anno** del pacchetto D201 + D201 dev + D202 di Merate, la proposta sarebbe superiore di circa **16.814 km/anno**, pari a circa **+13,4%**.
+
+Questa è quindi la vera soglia di riferimento per una **Linea 8 pienamente bidirezionale per tutta la giornata**: non circa 208 mila km/anno, ma circa **143 mila km/anno** se la geometria da 18,1 km viene confermata.
+
+### Scenario super-intensivo da circa 208 mila km/anno
+Il valore di circa **208.404 km/anno** resta utile come scenario superiore di lungo periodo:
+- 19 giri/giorno CW + 19 giri/giorno CCW;
+- 38 giri complessivi/giorno;
+- $38 \times 303 \times 18,1 \approx 208.404$ bus-km/anno.
+
+Non va però presentato come il costo necessario del semplice doppio senso. È uno scenario di servizio rafforzato, da valutare solo in presenza di domanda e risorse ulteriori.
+
+### Cautele da esplicitare nel confronto con l'Agenzia
+La produzione chilometrica non è l'unico vincolo. La fattibilità dello scenario full richiede anche:
+1. disponibilità continuativa di **2 autobus** e relativi turni di guida per tutta la fascia di esercizio;
+2. verifica che il ciclo reale resti stabilmente entro il modulo dei 60 minuti, includendo fermate, traffico e recupero ritardi;
+3. verifica tecnica del passaggio bus nelle strade locali di San Zeno e Olgiate Sud;
+4. contabilizzazione separata di eventuali corse scolastiche e delle code rurali che si decidesse di mantenere fuori dal core;
+5. definizione del calendario effettivo di esercizio, perché i 303 giorni sono una convenzione di progetto e non sostituiscono il programma d'esercizio definitivo.
+
+Per la negoziazione è quindi opportuno presentare una **scala di scenari**: Scenario C come proposta a quasi saldo chilometrico, Scenario B full bidirezionale come obiettivo espansivo se l'Agenzia dispone di margine e lo scenario da 208 mila km come eventuale sviluppo di lungo periodo.
