@@ -1,6 +1,10 @@
 # Progetto Linea 8 Olgiate Molgora
 ## Proposta intercomunale a percorso unico integrata con il nodo ferroviario
 
+**Vetrina Nodo8 (7 ottobre 2026):** [sito narrativo](index.html), con mappa del tracciato
+confermato, registro dei 27 siti, orario a 16 giri, copertura per comune e compromessi.
+Avvio locale e verifica dei dati sono descritti sotto; non è un servizio già autorizzato.
+
 > **Base progettuale corrente (2026-10-01): [proposta unica Linea 8 consolidata](docs/RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md).**
 > Una sola linea, **16 giri completi**, stesso otto est→FS→ovest ogni corsa:
 > **27,124 km/giro, 27 siti di progetto inclusa FS, 4 nuovi punti proposti**.
@@ -117,9 +121,10 @@ Benvenuto nel repository del progetto **Linea 8 Olgiate Molgora**. Questo worksp
 ```text
 d:\linea_8_olgiate\
 ├── README.md                                 # Questo indice generale
-├── index.html                                # Dashboard interattiva web con mappa SVG animata e simulatore
-├── styles.css                                # Design system moderno (dark/light, glassmorphism, responsive)
-├── app.js                                    # Logica interattiva, calcolo semaforo e generazione orari
+├── index.html                                # Vetrina narrativa Nodo8 della proposta confermata
+├── styles.css                                # Identità Nodo8 e layout responsive
+├── app.js                                    # Mappa stradale, siti/eventi, orario e copertura
+├── assets/nodo8-proposal.json                # Dati di presentazione derivati dalle fonti confermate
 │
 ├── data/                                     # Dati quantitativi e matrici strutturate
 │   ├── demografia_core_istat_2025.csv        # Popolazione 5 comuni ISTAT 2025 e quote di bacino
@@ -152,14 +157,43 @@ d:\linea_8_olgiate\
 
 ## 🚀 Come Utilizzare gli Strumenti
 
-### 1. Dashboard Web Interattiva
-Basta aprire [index.html](file:///d:/linea_8_olgiate/index.html) in un qualsiasi browser moderno per accedere alla suite completa:
-- **Mappa schematica SVG animata**: visualizza i due anelli, le fermate e gli autobus in movimento in Senso Orario (CW) e Antiorario (CCW).
-- **Simulatore in tempo reale**: muovi gli slider di km per ciclo e cicli giornalieri per vedere accendersi il semaforo (Verde, Giallo, Rosso) con il calcolo istantaneo dei km annui.
-- **Valutatore Frazioni**: clicca sui pulsanti di Mondonico, Perego, Arlate, Calco Superiore, San Zeno, Ravellino per visualizzare l'impatto sul tempo di ciclo e la raccomandazione trasportistica.
-- **Quadro Orario & S8 Sync**: tabella partenze con le coincidenze per i treni S8 verso Milano e Lecco.
+### 1. Vetrina narrativa Nodo8
 
-### 2. Esecuzione degli Script Python
+La pagina [index.html](index.html) presenta la base confermata, non gli scenari storici:
+percorso reale a otto, 27 siti, 16 giri completi, punte sfalsate, copertura per comune
+e compromessi espliciti. Nodo8 è un nome di lavoro, non un servizio autorizzato.
+Non genera orari ferroviari, stime di domanda, una graduatoria o finanziamenti.
+
+Servire la cartella via HTTP (l’apertura file:// non consente il caricamento dei dati):
+
+```powershell
+python scripts/build_nodo8_website_data.py --check
+python -m http.server 63442 --bind 127.0.0.1
+```
+
+Aprire http://127.0.0.1:63442/. La mappa usa Leaflet 1.9.4 e tile OpenStreetMap;
+font e libreria vengono caricati da CDN. Senza Leaflet rimane una vista SVG
+geografica delle stesse coordinate, con selezione dei siti tramite elenco.
+Se i dati locali non si caricano, la pagina segnala l’errore senza inventare sostituti.
+
+Rigenerazione dopo una modifica delle fonti confermate:
+
+```powershell
+python scripts/build_nodo8_website_data.py
+python -m pytest tests/test_nodo8_website.py -q
+node --check app.js
+```
+
+L’asset mantiene hash delle tre fonti, identità dei siti, eventi distinti e
+flag di non autorizzazione. La rigenerazione non adotta una nuova variante.
+
+**Scrollytelling separato:** [Dietro l’analisi](dietro-l-analisi/index.html)
+conserva il racconto originale di Tra Paesi e aggiunge i capitoli della proposta
+Nodo8. La mappa esplorabile tiene distinti Nodo8 e le alternative storiche.
+[Origine, dati e verifiche dell’integrazione](docs/NODO8_INTEGRAZIONE_SCROLLYTELLING_2026_10_08.md).
+Avvio sullo stesso server, percorso `/dietro-l-analisi/`.
+
+### 2. Esecuzione degli Script Python storici
 Puoi eseguire in qualsiasi momento i simulatori da terminale:
 ```bash
 # Esegue la simulazione dei 4 scenari di esercizio e aggiorna i JSON
@@ -171,7 +205,7 @@ python scripts/valuta_deviazioni.py
 
 ---
 
-## 🏆 Sintesi delle Scelte Progettuali
+## 🏆 Sintesi storica delle scelte — non la proposta corrente
 
 1. **Perego e Beverate**: incluse d'ufficio a costo zero (già sugli assi centrali SP342 dir e SP72).
 2. **Mondonico e Arlate**: non deviazioni a fondo cieco, ma rami di ritorno che chiudono i due anelli garantendo un rendimento elevatissimo (>300 residenti/minuto) e rispettando il ciclo orario.

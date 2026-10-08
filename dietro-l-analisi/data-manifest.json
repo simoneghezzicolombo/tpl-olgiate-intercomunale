@@ -1,0 +1,76 @@
+{
+  "contract": "PHASE2_ANALYSIS_JOURNEY_VISUAL_ASSETS_V2_SOURCE_CLOSED_RUNTIME",
+  "decision_output": false,
+  "runtime_external_evidence_fetches": 0,
+  "building_artifact_id": 9910900017,
+  "building_artifact_sha256": "4f5f0123ced2b763c2a063258ad724c43ac7f57ede707db3fa76e6a8977688b1",
+  "stop_universe_artifact_id": 9911651930,
+  "stop_universe_artifact_sha256": "25d3dbf52cb428d54a46569b7dbbf9e78dcee6fcf5ee69b9c6e928a367e0a2f9",
+  "frozen_runtime_source_commit": "29203ad64c3e32e6164ef6997933eb5c5ff2d5b1",
+  "frozen_runtime_sources": {
+    "boundaries": {
+      "repo_path": "data/raw/boundaries/comuni_core_istat_2026.geojson",
+      "size_bytes": 79275,
+      "git_blob_sha1": "1d5dcb825b21631f824f53aa5a76cfaf669ce744",
+      "sha256": "7008e5380b28c865bf2e503b605700700a6d2959925f91fdde2b1435e00033f9",
+      "feature_count": 5,
+      "used_in_numeric_decision": false
+    },
+    "gate_d_structural_roads": {
+      "repo_path": "data/phase2/frozen_gate_d/source/osm_gate_d_structural.geojson.gz",
+      "size_bytes": 2270082,
+      "git_blob_sha1": "54594215060b6cbe1cb15cf2d45f994ec85439ab",
+      "gzip_sha256": "001ca3fd752a8fb378d1769e6ec6d9cb49203ee38dbe812106d7cc8aca752620",
+      "geojson_sha256": "9032fa1fa2f8a22fd5cfcf81ad7366269d062cb7c27ffbfd57bfba754a1b51ce",
+      "source_feature_count": 24384,
+      "visual_feature_count": 8582,
+      "visual_bbox_west_south_east_north": [
+        9.32,
+        45.695,
+        9.47,
+        45.765
+      ],
+      "used_in_numeric_decision": false,
+      "epistemic_status": "FROZEN_DERIVATIVE_OF_GATE_D_PASS_VISUAL_SUBSET_ONLY"
+    }
+  },
+  "counts": {
+    "worldpop_cells": 4283,
+    "sections": 229,
+    "dbgt_buildings_with_core_population": 4226,
+    "building_section_pieces": 4348,
+    "proposed_candidates_v2": 155,
+    "official_stop_records_v2": 67,
+    "municipality_boundaries": 5,
+    "gate_d_structural_source_features": 24384,
+    "gate_d_visual_features": 8582
+  },
+  "local_asset_chunks": {
+    "boundaries": [
+      "data-boundaries.geojson.gz.0.b64"
+    ],
+    "roads": [
+      "data-roads.geojson.gz.0.b64",
+      "data-roads.geojson.gz.1.b64",
+      "data-roads.geojson.gz.2.b64",
+      "data-roads.geojson.gz.3.b64",
+      "data-roads.geojson.gz.4.b64"
+    ]
+  },
+  "files": {
+    "data-boundaries.geojson.gz.0.b64": "5784bb4c94fe475b6fe3217097960dd51fa1a98b3517c84328521d21c7a37400",
+    "data-buildings.geojson.gz.0.b64": "83261fe9a661ff9b48a76a82a2cb320dcc6012ee1f905cdcf4f33c3f3ba55272",
+    "data-buildings.geojson.gz.1.b64": "b8d254dec008b1591d31e7e912acde82fea0857c48481cb51869f8ef95dcca3d",
+    "data-buildings.geojson.gz.2.b64": "f0dbce116437e8287a05fd77dd588bdba57eee32412b6901676e0f3634b66d02",
+    "data-buildings.geojson.gz.3.b64": "7f2b7791c7784db3487b6a431d4654d91ea89d35fe0cce530b8ad9f23a8f959a",
+    "data-buildings.geojson.gz.4.b64": "ce72a3b342c1ad29d44cee12fb8b39d71f483364414e5c357aa826be27ec72ad",
+    "data-roads.geojson.gz.0.b64": "2feeafc6598221eb69a3d9ba3590b769b8db12f027e9b4595fc2988fc1a1b92e",
+    "data-roads.geojson.gz.1.b64": "5902d5f395053698814d2c3fe109de877cef3448e3178096e54baa8db3bd961a",
+    "data-roads.geojson.gz.2.b64": "019bd2956cd51d8da61868572a24528ab37c0711a6f2bf381bc576f4c22d0901",
+    "data-roads.geojson.gz.3.b64": "8953d14f6ae3a1d2d0b2202b81c70ef615114b3e1b60f1ebbf741fae6f06f4b1",
+    "data-roads.geojson.gz.4.b64": "fa2471b493a8ca0e6ce4b5c3a4fbfb3c2eb9cfcedc89a50ee8945d02d6ea751b",
+    "data-sections.geojson.gz.0.b64": "c3cb44a0643cd31d40dd648f99e6c41a222d49a325c57a07a147ac14d26c3e34",
+    "data-worldpop.geojson.gz.0.b64": "45eb26eef295bb8914ef5232e4d1fab563f220a04f7d4ec3834a69d3f1e1b8c9",
+    "journey-data.js": "e9c1fc129db6e8b225e6520722d178c3dd4fbfb1488145dcadcea576739eaf7f"
+  }
+}

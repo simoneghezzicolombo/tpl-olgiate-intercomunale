@@ -38,3 +38,14 @@ outputs/phase2/proposed_stop_candidates.geojson text eol=lf
 outputs/phase2/settlement_destination_anchors.csv text eol=lf
 outputs/phase2/settlement_destination_anchors.geojson text eol=lf
 outputs/phase2/stop_universe_validation.json text eol=lf
+
+# Imported journey evidence/vendor bytes are recorded in upstream-import.json.
+# Never rewrite their line endings during checkout (including on Windows).
+dietro-l-analisi/vendor/** -text
+dietro-l-analisi/*.b64 -text
+dietro-l-analisi/*.b64.* -text
+dietro-l-analisi/journey-data.js -text
+dietro-l-analisi/legacy-geo-data.js -text
+dietro-l-analisi/data-manifest.json -text
+dietro-l-analisi/current-routes-kml-exact-provenance.json -text
+dietro-l-analisi/exact-route-lineage.json -text

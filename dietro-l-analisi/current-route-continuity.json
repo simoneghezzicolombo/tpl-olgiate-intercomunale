@@ -1,0 +1,24 @@
+{
+  "contract": "JOURNEY_CURRENT_ROUTE_CONTINUITY_REPAIR_V1",
+  "decision_output": false,
+  "source": "OFFICIAL_FROZEN_GTFS_SHAPES",
+  "display_semantics": "OFFICIAL_GTFS_WITH_GATE_D_ROAD_CONTINUITY_REPAIR_FOR_IMPOSSIBLE_POINT_JUMPS",
+  "threshold_m": 60,
+  "features_affected": 7,
+  "shape_ids": [
+    "+++D84+++31",
+    "+++D84+++41",
+    "+++D84+++71",
+    "+++D84+++81",
+    "+++D84++011",
+    "+++D84++012",
+    "+++E03+++92"
+  ],
+  "method": "Replace only each impossible GTFS chord with a connector following the frozen Gate D bus-eligible road graph; preserve every other official GTFS shape point.",
+  "reference_kml": {
+    "index": "https://www.tplcomoleccovarese.it/atpcolc/zf/index.php/servizi-aggiuntivi/index/index/idtesto/134",
+    "D184": "https://www.tplcomoleccovarese.it/atpcolc/images/Fil%20KML%202025/Urbano%20e%20interurbano%20Lecco/D184.kml",
+    "D185": "https://www.tplcomoleccovarese.it/atpcolc/images/Fil%20KML%202025/Urbano%20e%20interurbano%20Lecco/D185.kml"
+  },
+  "epistemic_note": "The agency KML index is the official visual reference. This repair does not claim byte-for-byte KML equivalence because the direct KML payloads were not available to the build; it removes demonstrably impossible GTFS teleports by following the certified frozen road graph."
+}

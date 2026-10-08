@@ -1,0 +1,160 @@
+{
+  "contract": "nodo8_journey_upstream_import_v1",
+  "upstream_ref_at_import": "origin/gh-pages",
+  "upstream_commit": "104e8f2f0a801cffb15698aa06a8c2bd98c0dc6e",
+  "imported_on": "2026-10-07",
+  "integrated_on": "2026-10-08",
+  "scope": "Historical process assets, not current Nodo8 population or route proof.",
+  "legacy_geo_data_original_path": "geo-data.js",
+  "nodo8_current_source": "../assets/nodo8-proposal.json",
+  "preserved_assets": [
+    {
+      "path": "current-routes-gtfs.geojson.gz.b64.0",
+      "sha256": "33deebd7b84ee47af9cd78c835bc42d9837f44eefb9c4e6bb54a33be123666cf"
+    },
+    {
+      "path": "current-routes-gtfs.geojson.gz.b64.1",
+      "sha256": "d6edbb71b9a428ff2501f8ccb418dfc8f70e205233720df9c7e6c9ef237c03ee"
+    },
+    {
+      "path": "current-routes-kml-exact-provenance.json",
+      "sha256": "5b741afad8fead0a67327d8afc0d2a626d0494d7a758b754c821a56d9eea624d"
+    },
+    {
+      "path": "current-routes-kml-exact.geojson.gz.b64.0",
+      "sha256": "d1cc2828047946132f56c2131ced4113578ac0ce8449a5bc75240c5a58be3dd4"
+    },
+    {
+      "path": "current-routes-kml-exact.geojson.gz.b64.1",
+      "sha256": "7408c7224f66b30fc42d021918aec182c25427881030a808530c36fdfbdbba56"
+    },
+    {
+      "path": "current-stops-gtfs.geojson.gz.b64.0",
+      "sha256": "832f9a6aa50a10e3436b32203a8dac544ce9063c4d86c518bb106cc6453d6f97"
+    },
+    {
+      "path": "data-boundaries.geojson.gz.0.b64",
+      "sha256": "5784bb4c94fe475b6fe3217097960dd51fa1a98b3517c84328521d21c7a37400"
+    },
+    {
+      "path": "data-buildings.geojson.gz.0.b64",
+      "sha256": "83261fe9a661ff9b48a76a82a2cb320dcc6012ee1f905cdcf4f33c3f3ba55272"
+    },
+    {
+      "path": "data-buildings.geojson.gz.1.b64",
+      "sha256": "b8d254dec008b1591d31e7e912acde82fea0857c48481cb51869f8ef95dcca3d"
+    },
+    {
+      "path": "data-buildings.geojson.gz.2.b64",
+      "sha256": "f0dbce116437e8287a05fd77dd588bdba57eee32412b6901676e0f3634b66d02"
+    },
+    {
+      "path": "data-buildings.geojson.gz.3.b64",
+      "sha256": "7f2b7791c7784db3487b6a431d4654d91ea89d35fe0cce530b8ad9f23a8f959a"
+    },
+    {
+      "path": "data-buildings.geojson.gz.4.b64",
+      "sha256": "ce72a3b342c1ad29d44cee12fb8b39d71f483364414e5c357aa826be27ec72ad"
+    },
+    {
+      "path": "data-manifest.json",
+      "sha256": "efe81b994d7efde273e0e75a126de1e3e3eaca4c64c2aeb0e1e1e322ef34bc16"
+    },
+    {
+      "path": "data-roads.geojson.gz.0.b64",
+      "sha256": "2feeafc6598221eb69a3d9ba3590b769b8db12f027e9b4595fc2988fc1a1b92e"
+    },
+    {
+      "path": "data-roads.geojson.gz.1.b64",
+      "sha256": "5902d5f395053698814d2c3fe109de877cef3448e3178096e54baa8db3bd961a"
+    },
+    {
+      "path": "data-roads.geojson.gz.2.b64",
+      "sha256": "019bd2956cd51d8da61868572a24528ab37c0711a6f2bf381bc576f4c22d0901"
+    },
+    {
+      "path": "data-roads.geojson.gz.3.b64",
+      "sha256": "8953d14f6ae3a1d2d0b2202b81c70ef615114b3e1b60f1ebbf741fae6f06f4b1"
+    },
+    {
+      "path": "data-roads.geojson.gz.4.b64",
+      "sha256": "fa2471b493a8ca0e6ce4b5c3a4fbfb3c2eb9cfcedc89a50ee8945d02d6ea751b"
+    },
+    {
+      "path": "data-sections.geojson.gz.0.b64",
+      "sha256": "c3cb44a0643cd31d40dd648f99e6c41a222d49a325c57a07a147ac14d26c3e34"
+    },
+    {
+      "path": "data-worldpop.geojson.gz.0.b64",
+      "sha256": "45eb26eef295bb8914ef5232e4d1fab563f220a04f7d4ec3834a69d3f1e1b8c9"
+    },
+    {
+      "path": "exact-route-lineage.json",
+      "sha256": "778feb7af27e5392f96a77e6030f19d3763296f065c86535a3794586e5b68591"
+    },
+    {
+      "path": "finalist-route-anchors.geojson.gz.b64.0",
+      "sha256": "2ef66dbcec44cf8baf09832996e5a52fef0d04a9cd4b4c411f665f9f21919f0c"
+    },
+    {
+      "path": "finalist-routes-gated.geojson.gz.b64.0",
+      "sha256": "e5516b412e47f99dd37f29a1e8e6a0c5702247613e5bed74c7d3049381437b7a"
+    },
+    {
+      "path": "finalist-routes-gated.geojson.gz.b64.1",
+      "sha256": "34dca481eaf840f48ff35c524e73490bd2b22c418cba1baec5bcb97cad804ef0"
+    },
+    {
+      "path": "finalist-routes-gated.geojson.gz.b64.2",
+      "sha256": "0cbdb9a00469c38a304b43d644d11e337508f8678f55b26596e28ae8985dd9f1"
+    },
+    {
+      "path": "journey-data.js",
+      "sha256": "6a6157db0bb88d8c26424c03a5eeb1384caa9638c5568e4f30b71c2ffaa81fa9"
+    },
+    {
+      "path": "legacy-geo-data.js",
+      "sha256": "9dbe8310469134cff24e8d53d996a53133bddffec666bda8d4ac9067c0092866"
+    },
+    {
+      "path": "vendor/gsap/gsap.min.js",
+      "sha256": "dd7dc87e023b3480f9707296342565ca2e361c8393cabb30f9557e06eb1bed4d"
+    },
+    {
+      "path": "vendor/gsap/ScrollTrigger.min.js",
+      "sha256": "ba6ffe7b85ddcc7b891b91a430f88640dff41017874bceedf071ca156ccccefa"
+    },
+    {
+      "path": "vendor/gsap/SHA256SUMS",
+      "sha256": "62272b76c485a78f5f98ee01cb4e6f4a8e1f548e8a715c601c103480d12bda3a"
+    },
+    {
+      "path": "vendor/maplibre/maplibre-gl-shared.mjs",
+      "sha256": "f7b6e8b23ba5b6515c0113789b7e722b585a5c92d09f9bce7e2fab0cbbeafba8"
+    },
+    {
+      "path": "vendor/maplibre/maplibre-gl-worker.mjs",
+      "sha256": "d333068aa930190be1782cbd44ab586f38f260a7a5a47a96cd525308716b5a91"
+    },
+    {
+      "path": "vendor/maplibre/maplibre-gl.css",
+      "sha256": "8e2dbbab312dc57656fbb76e9fa5308c75c9d7c7ba5808a7d55bcdb64cc813fa"
+    },
+    {
+      "path": "vendor/maplibre/maplibre-gl.mjs",
+      "sha256": "acbcc7899e755673e48ee493873a158d8db38072009a31138f725f42d60cfbe9"
+    },
+    {
+      "path": "vendor/maplibre/SHA256SUMS",
+      "sha256": "ed08067996267b6a30d96b7b120786e471b5eefcf7a5a32bdf69b49915a72d3f"
+    },
+    {
+      "path": "vendor/pako/pako.min.js",
+      "sha256": "c0ca8a09d52a28b918fcbe6e3ca6c9e75668a8628992e7ac9387484209844c56"
+    },
+    {
+      "path": "vendor/pako/SHA256SUMS",
+      "sha256": "0db47181483e24492d85eef596edf603c640c93cc84108af12c0323f2e74a1a4"
+    }
+  ]
+}

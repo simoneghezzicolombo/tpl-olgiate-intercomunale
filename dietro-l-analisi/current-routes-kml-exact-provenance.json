@@ -1,0 +1,26 @@
+{
+  "contract": "CURRENT_SERVICE_KML_GEOMETRY_V1",
+  "route_mapping": {
+    "D84.kml": "D184",
+    "E03.kml": "D185"
+  },
+  "source_files": {
+    "D184": {
+      "uploaded_name": "D84.kml",
+      "sha256": "6cf715a83c1e85e7ebfeecd82b666eee623119e7b37e35875ed0be419fa5523a"
+    },
+    "D185": {
+      "uploaded_name": "E03.kml",
+      "sha256": "10239544443134a10992b938a878ff62a906618f8f7f6babe2a339647f41bfa5"
+    }
+  },
+  "features": {
+    "D184": 7,
+    "D185": 11
+  },
+  "coordinate_counts": {
+    "D184": 2268,
+    "D185": 3618
+  },
+  "semantics": "Current-service line geometry is taken directly from the supplied agency KML LineStrings. No graph reconstruction, snapping, straight-line repair or screen-space offset is applied."
+}
