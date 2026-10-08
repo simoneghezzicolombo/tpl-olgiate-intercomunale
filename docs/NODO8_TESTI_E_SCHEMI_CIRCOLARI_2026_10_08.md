@@ -18,3 +18,7 @@ Proiezione dati confrontata con tutte e quattro le fonti confermate. Asset stori
 Pubblicazione finale limitata alle due pagine e 71 file allowlisted. Le pagine ritirate restano nel repository.
 
 Ultima rifinitura visiva: «Santa Maria Hoè» su due righe, separata da «Perego» nello schema concettuale. Verificato un margine di 45 px tra le due etichette nella vista desktop compatta.
+
+## Pubblicazione verificata
+
+Sorgente finale `035a2419eee4e44d62a9d161467e503fb2e3cb58`, revisione Pages `5093112c78b88915c5e6a4f382cb32a264e7aae4`. Pipeline [37824239649](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/37824239649) completata con successo. Tutti i 71 file pubblici confrontati con gli SHA-256 del manifest; esattamente due pagine HTML. Nel browser pubblico: un favicon, nessun em dash, due cerchi concettuali e nome Santa Maria Hoè su due righe. Anteprima salvata in cache come `nodo8-localita-circolari-published-20261008h.png`.
