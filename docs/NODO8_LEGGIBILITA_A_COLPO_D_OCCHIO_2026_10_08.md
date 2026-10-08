@@ -1,6 +1,6 @@
 # Nodo8: leggibilità a colpo d’occhio
 
-Revisione di presentazione `20261008j`, 8 ottobre 2026.
+Revisione di presentazione `20261008k`, 8 ottobre 2026.
 
 ## Richiesta e confine
 

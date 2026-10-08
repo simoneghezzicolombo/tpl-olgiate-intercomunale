@@ -1,4 +1,4 @@
-import { diagramStops } from "./nodo8-line.mjs?v=20261008j";
+import { diagramStops } from "./nodo8-line.mjs?v=20261008k";
 const ns = "http://www.w3.org/2000/svg";
 const displayText = (value) => String(value).replace(/\u2014/g, ", ");
 const node = (tag, cls, text) => {
@@ -76,7 +76,7 @@ export function updateBusMarker(element, state, { showCarrier = false } = {}) {
   element.setAttribute("aria-label", element.title);
 }
 
-export { mountPlayer } from "./nodo8-player.mjs?v=20261008j";
+export { mountPlayer } from "./nodo8-player.mjs?v=20261008k";
 
 export function mountRoadPreview(line) {
   const host = node("div", "n8-road-preview"),
@@ -494,7 +494,7 @@ function finishDiagram(container, drawing, line, { onSelect, localities }) {
     download.disabled = true;
     try {
       const response = await fetch(
-        new URL("./nodo8-experience.css?v=20261008j", import.meta.url),
+        new URL("./nodo8-experience.css?v=20261008k", import.meta.url),
       );
       if (!response.ok) throw new Error("Diagram styles unavailable");
       const copy = drawing.cloneNode(true),
