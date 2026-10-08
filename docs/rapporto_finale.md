@@ -112,7 +112,41 @@ Tramite la proposta di questionario strutturata (`survey/questionario.md`):
 
 ---
 
-## 2. Matrice di Valutazione Analitica di Tutte le Frazioni
+## 2. Leva negoziale per reperire e riallocare i bus-km
+
+La proposta della Linea 8 non deve essere presentata soltanto come richiesta di un nuovo servizio, ma come **razionalizzazione coerente con indirizzi già formalizzati dalle Agenzie TPL**.
+
+### D185 oltre Cisano: una sovrapposizione già individuata istituzionalmente
+Nel Programma di Bacino Como-Lecco-Varese del 2018, l'intervento **LC-INT-008** relativo alla E03, oggi D185, proponeva di attestare la linea a **Cisano Bergamasco FS**, motivando la scelta con il fatto che il collegamento **Cisano-Celana era già effettuato dalle linee dell'Agenzia di Bergamo**. La scheda quantificava per l'intervento una riduzione di **19,4 vetture-km/giorno** sulla E03.
+
+L'indirizzo non è rimasto isolato. Anche il Programma di Bacino dell'Agenzia di Bergamo individua per la E03 Olgiate-Cisano-Celana-Caprino il **trasferimento di competenza a Bergamo con attestamento a Cisano FS**, prevedendo sul lato bergamasco la B714 Cisano FS-Celana-Cisano FS, con alcune corse per Olgiate Molgora.
+
+Questo crea una leva negoziale concreta: prima di chiedere risorse aggiuntive, va chiesto all'Agenzia Como-Lecco-Varese di **quantificare i bus-km oggi impegnati dalla D185 sulla tratta Cisano-Celana-Caprino e verificare quanti possano essere riallocati al core Olgiate-Calco-Brivio**, coordinando con l'Agenzia di Bergamo la continuità dei collegamenti scolastici e territoriali necessari. Non si assume quindi che tutti questi km siano automaticamente disponibili, ma si richiede di dare attuazione a una razionalizzazione inter-bacino già prevista nei documenti di programmazione.
+
+### Il precedente Merate dimostra che l'Agenzia può creare nuova produzione circolare
+La Revisione 7.2 del Programma di Bacino 2025 ha progettato a Merate un nuovo sistema locale imperniato sulla stazione di Cernusco-Merate, con **D201 Circolare Alta, D201 dev e D202 Circolare Bassa**. Le produzioni programmate sono:
+- D201: **34.946,2 bus-km/anno**;
+- D201 dev, deviazione piscina: **35.405,4 bus-km/anno**;
+- D202: **55.426,2 bus-km/anno**;
+- totale delle tre schede: **125.777,8 bus-km/anno**.
+
+Il dato corregge il precedente benchmark di 90.372 km/anno, che ometteva la D201 dev. La stampa locale ha sintetizzato l'intervento come circa **120.000 km/anno di servizio aggiuntivo** e 20 nuove corse giornaliere.
+
+Questi chilometri si inseriscono in un Programma di Bacino che, rispetto alla produzione 2024, prevede complessivamente **circa 2,4 milioni di bus-km/anno in più** sul bacino Como-Lecco-Varese, a fronte di risorse programmate dal 2026 superiori di circa **2,5 milioni di euro/anno** rispetto al 2024. Non è possibile attribuire documentalmente ogni singolo km della circolare meratese a una specifica fonte o a un taglio di una singola linea precedente, ma il quadro dimostra che il nuovo PdB ha effettivamente ampliato e redistribuito la produzione chilometrica per finanziare nuovi assetti di rete.
+
+### Messaggio negoziale da utilizzare
+La Linea 8 può quindi essere sostenuta su **tre livelli cumulativi**:
+1. **neutralità quasi integrale con D184+D185**, perché lo Scenario 4 richiede 112.261 km/anno contro 111.419 km/anno già assegnati;
+2. **recupero da razionalizzazione inter-bacino della D185 oltre Cisano**, già prevista sia lato Como-Lecco-Varese sia lato Bergamo;
+3. **precedente Merate**, dove il PdB 2025 ha concentrato circa 125.778 bus-km/anno su un nuovo sistema di circolari locali integrate con il nodo ferroviario.
+
+La formulazione politica e tecnica più efficace è quindi: **non chiediamo di inventare chilometri dal nulla; chiediamo di trasformare produzione già esistente, eliminare sovrapposizioni inter-bacino già riconosciute e applicare al nodo di Olgiate-Calco-Brivio lo stesso principio di rete cadenzata e ferroviariamente integrata già adottato per Merate.**
+
+Fonti di riferimento: Programma di Bacino Como-Lecco-Varese, intervento LC-INT-008; Programma di Bacino Agenzia TPL Bergamo, interfaccia con il bacino Como-Lecco-Varese; Programma di Bacino Como-Lecco-Varese Revisione 7.2, Allegato 3.4 Meratese; documentazione della procedura di affidamento dei servizi TPL su gomma.
+
+---
+
+## 3. Matrice di Valutazione Analitica di Tutte le Frazioni
 
 | Località / Frazione | Comune | Residenti Aggiuntivi (8 min) | Minuti Aggiuntivi Ciclo | Rendimento (ab./min) | POI Serviti | Decisione Motivata di Piano |
 | :--- | :--- | :---: | :---: | :---: | :---: | :--- |
