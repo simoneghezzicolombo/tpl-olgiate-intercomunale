@@ -120,7 +120,7 @@ async function withDOM(run) {
 const container = (id) => Object.assign(new Element("div"), { id });
 const drawing = (host) => host.querySelectorAll("svg")[0];
 
-test("circular stop schema preserves all 28 ordered selections and three FS roles", async () => {
+test("circular stop schema shows 26 unique nonhub sites while preserving 28 ordered events and three FS roles", async () => {
   await withDOM(async () => {
     const before = JSON.stringify(data),
       host = container("stops"),
@@ -136,17 +136,32 @@ test("circular stop schema preserves all 28 ordered selections and three FS role
         .filter((e) => e.tagName === "circle").length,
       2,
     );
-    assert.equal(groups.length, 28);
+    assert.equal(groups.length, 26);
+    const representativeEvents = line.trips[0].events.filter(
+      (e) => e.ordinal && ![14, 28].includes(e.ordinal),
+    );
     assert.deepEqual(
       groups.map((g) => g.getAttribute("data-occurrence")),
-      line.trips[0].events.filter((e) => e.ordinal).map((e) => e.occurrenceId),
+      representativeEvents.map((e) => e.occurrenceId),
     );
     assert.deepEqual(
-      groups.map((g) =>
-        Number(g.querySelectorAll(".n8-diagram-number")[0].textContent),
-      ),
+      groups.flatMap((g) => g.getAttribute("data-ordinals").split(" ").map(Number)).sort((a, b) => a - b),
       Array.from({ length: 28 }, (_, i) => i + 1),
     );
+    assert.equal(new Set(groups.map((g) => g.getAttribute("data-site"))).size, 26);
+    const shared = image.querySelectorAll(".n8-diagram-stop--shared");
+    assert.equal(shared.length, 2);
+    assert.deepEqual(shared.map((g) => g.getAttribute("data-ordinals")), ["1 14", "15 28"]);
+    assert.deepEqual(shared.map((g) => g.querySelectorAll(".n8-diagram-number")[0].textContent), ["1·14", "15·28"]);
+    for (const [i, group] of shared.entries()) {
+      const dot = group.querySelectorAll("circle")[0];
+      const name = group.querySelectorAll(".n8-diagram-name")[0];
+      assert.equal(dot.getAttribute("cx"), "600");
+      assert.equal(dot.getAttribute("cy"), i ? "960" : "820");
+      assert.equal(name.getAttribute("x"), "600");
+      assert.equal(name.getAttribute("text-anchor"), "middle");
+      assert.equal(group.getAttribute("data-occurrences").split(" ").length, 2);
+    }
     let prevented = 0;
     for (const group of groups) {
       assert.equal(group.getAttribute("role"), "button");
@@ -165,12 +180,10 @@ test("circular stop schema preserves all 28 ordered selections and three FS role
         },
       });
     }
-    assert.equal(prevented, 56);
+    assert.equal(prevented, 52);
     assert.deepEqual(
       selected,
-      line.trips[0].events
-        .filter((e) => e.ordinal)
-        .flatMap((e) => [e.siteId, e.siteId, e.siteId]),
+      representativeEvents.flatMap((e) => [e.siteId, e.siteId, e.siteId]),
     );
     const list = host.querySelectorAll(".n8-ordered-list")[0];
     assert.equal(list.children.length, 31);

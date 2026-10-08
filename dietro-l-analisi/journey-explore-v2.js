@@ -380,9 +380,9 @@
       <section id="exploreBusPanel" role="tabpanel" aria-labelledby="exploreBusTab"><p class="explore-bus-intro">I quattro bus percorrono la stessa linea. Il numero in movimento cambia con l’orario.</p><button type="button" data-action="four-buses">Vedi i 4 bus · 07:35</button><div id="explorePlayback" data-theme="dark" aria-label="Simulazione dei quattro bus Nodo8"><p role="status">Caricamento dell’orario…</p></div><p id="explorePlaybackUnavailable" hidden role="status">Attiva il livello Nodo8 in «Livelli e confronto» per vedere i bus.</p></section>
       <section id="exploreLayersPanel" role="tabpanel" aria-labelledby="exploreLayersTab" hidden>
       <div class="explore-site-select"><label for="exploreSiteSelect">Vai a una fermata di Nodo8</label><select id="exploreSiteSelect" disabled><option value="">Caricamento delle fermate…</option></select></div>
-      <div class="explore-controls__group"><span>Territorio</span><div class="explore-controls__layers"><button data-layer="worldpop" type="button"><i style="--c:#57d7e8"></i>Popolazione stimata</button><button data-layer="sections" type="button"><i style="--c:#ffb07f"></i>Sezioni ISTAT</button><button data-layer="buildings" type="button"><i style="--c:#55e1bf"></i>Edifici abitati</button></div></div>
-      <div class="explore-controls__group"><span>Accessibilità e ricerca</span><div class="explore-controls__layers"><button data-layer="walk" type="button"><i style="--c:#55e1bf"></i>Cammino</button><button data-layer="roads" type="button"><i style="--c:#57d7e8"></i>Strade del bus</button><button data-layer="candidates" type="button"><i style="--c:#ffd36d"></i>155 punti da valutare</button></div></div>
-      <div class="explore-controls__group"><span>Rete · proposta e storia separate</span><div class="explore-controls__layers"><button data-layer="nodo8" class="is-active" type="button"><i style="--c:#55e1bf"></i>Nodo8</button><button data-layer="current" type="button"><i style="--c:#4ca5ff"></i>D184 / D185 · rete di riferimento</button><button data-layer="proposals" type="button"><i style="--c:#57d7e8"></i>Alternative storiche</button><button data-layer="stops" class="is-active" type="button"><i style="--c:#fff"></i>Fermate</button></div></div>
+      <div class="explore-controls__group"><span>01 · Dove viviamo</span><div class="explore-controls__layers"><button data-layer="worldpop" type="button"><i style="--c:#57d7e8"></i>Abitanti stimati</button><button data-layer="sections" type="button"><i style="--c:#ffb07f"></i>Zone ISTAT</button><button data-layer="buildings" type="button"><i style="--c:#55e1bf"></i>Edifici abitati</button></div></div>
+      <div class="explore-controls__group"><span>02 · Come arriviamo alla fermata</span><div class="explore-controls__layers"><button data-layer="walk" type="button"><i style="--c:#55e1bf"></i>Minuti a piedi</button><button data-layer="roads" type="button"><i style="--c:#57d7e8"></i>Strade del bus</button><button data-layer="candidates" type="button"><i style="--c:#ffd36d"></i>155 punti da valutare</button></div></div>
+      <div class="explore-controls__group"><span>03 · Quale rete guardiamo</span><div class="explore-controls__layers"><button data-layer="nodo8" class="is-active" type="button"><i style="--c:#55e1bf"></i>Nodo8 · proposta</button><button data-layer="current" type="button"><i style="--c:#4ca5ff"></i>D184 / D185</button><button data-layer="proposals" type="button"><i style="--c:#57d7e8"></i>Alternative storiche</button><button data-layer="stops" class="is-active" type="button"><i style="--c:#fff"></i>Fermate</button></div></div>
       </section><div class="explore-controls__footer"><div class="explore-controls__hint">Trascina, zooma e clicca sulla mappa.</div><div class="explore-controls__layers"><button data-action="clear" type="button">Spegni i livelli</button><button data-action="reset" type="button">↺ Vista</button></div></div>`;
     document.body.appendChild(controls);
     const tabs = [...controls.querySelectorAll('[role="tab"]')];
@@ -686,9 +686,9 @@
       return show(
         lngLat,
         card(
-          "Candidate stop · Stop Universe V2",
-          p.id || "candidata",
-          "Punto emerso dai gap di accessibilità su rete bus-eligible. Non è una raccomandazione e resta <strong>FIELD CHECK PENDING</strong>.",
+          "Ricerca storica · possibile fermata",
+          "Un punto da verificare",
+          "Punto nelle zone lontane dalle fermate. Non è una raccomandazione: <strong>serve una verifica sul posto</strong>.",
           [
             `+${fmt(p.gain, 0)} residenti entro 10 min`,
             p.highway || "classe n.d.",
@@ -742,8 +742,8 @@
       return show(
         lngLat,
         card(
-          "Grafo stradale Gate D",
-          p.uncertain ? "Arco con incertezza" : "Arco bus-eligible",
+          "Rete stradale dello studio",
+          p.uncertain ? "Tratto con incertezza" : "Tratto incluso nella rete del bus",
           "Segmento del grafo congelato usato per i percorsi finalisti, con sensi unici, accessi e restrizioni di svolta.",
           [
             p.highway || "classe n.d.",

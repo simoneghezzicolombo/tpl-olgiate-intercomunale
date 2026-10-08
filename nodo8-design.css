@@ -446,13 +446,32 @@ select {
   gap: 28px;
 }
 .benefit-grid article {
-  padding-top: 22px;
-  border-top: 1px solid #afbca8;
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--white);
 }
 .benefit-number {
-  font-size: 11px;
-  color: var(--accent);
-  font-weight: 700;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--soft);
+  color: var(--ink);
+}
+.benefit-number svg {
+  width: 34px;
+  height: 34px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.benefit-icon-dot {
+  fill: var(--accent);
+  stroke: var(--accent);
 }
 .benefit-grid h3 {
   margin: 20px 0 17px;
@@ -992,6 +1011,13 @@ select {
 }
 .diagram-section .n8-diagram-scroll {
   background: var(--white);
+}
+.schedule-section h2 > span {
+  display: block;
+  margin-top: 18px;
+  font-size: clamp(21px, 2.4vw, 31px);
+  line-height: 1.45;
+  letter-spacing: -0.025em;
 }
 .schedule-intro {
   display: grid;
