@@ -14,6 +14,7 @@ import {
   servicePhase,
 } from "../nodo8-line.mjs";
 import { readStopSelection, stopLink } from "../nodo8-stop-times.mjs";
+import { inspectJourney, eventKey } from "../nodo8-journey-inspector.mjs";
 const data = JSON.parse(
   readFileSync(
     new URL("../assets/nodo8-proposal.json", import.meta.url),
@@ -23,6 +24,58 @@ const data = JSON.parse(
 const line = buildLine(data);
 const carrier = (n) =>
   line.vehicles.find((v) => v.blocks.some((t) => t.number === n));
+
+test("journey inspector binds two ordered events in one trip and includes FS hold explicitly", () => {
+  const before = JSON.stringify(data);
+  for (const trip of line.trips) {
+    const journey = inspectJourney(
+      line,
+      trip.number,
+      eventKey(trip.events[1]),
+      eventKey(trip.events[16]),
+    );
+    assert.equal(
+      journey.minutes,
+      trip.events[16].arrival - trip.events[1].departure,
+    );
+    assert.equal(
+      journey.intermediateHoldMinutes,
+      trip.events[15].departure - trip.events[15].arrival,
+    );
+    assert.equal(journey.carrier, carrier(trip.number).id);
+    assert.equal(journey.passengerContinuityAuthorised, false);
+    assert.equal(
+      inspectJourney(
+        line,
+        trip.number,
+        eventKey(trip.events[1]),
+        eventKey(trip.events[14]),
+      ).crossesFS,
+      false,
+    );
+    assert.throws(() =>
+      inspectJourney(
+        line,
+        trip.number,
+        eventKey(trip.events[14]),
+        eventKey(trip.events[1]),
+      ),
+    );
+    assert.throws(() =>
+      inspectJourney(
+        line,
+        trip.number,
+        eventKey(trip.events[1]),
+        eventKey(trip.events[1]),
+      ),
+    );
+  }
+  assert.throws(() => inspectJourney(line, 17, "unknown", "unknown"));
+  assert.throws(() =>
+    inspectJourney(line, 1, "unknown", eventKey(line.trips[0].events[12])),
+  );
+  assert.equal(JSON.stringify(data), before);
+});
 
 test("stop timetables copy all ledger events, including two occurrences and three FS roles", () => {
   const before = JSON.stringify(data);

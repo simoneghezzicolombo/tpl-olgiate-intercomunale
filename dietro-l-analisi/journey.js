@@ -958,8 +958,11 @@
     }
   });
 
-  let pulse = 0;
+  let pulse = 0, pulseFrame = null;
+  const pulseMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   function animate() {
+    pulseFrame = null;
+    if (document.hidden || pulseMotion.matches) return;
     pulse += 0.035;
     if (layersReady) {
       if (map.getLayer("hub-glow"))
@@ -981,9 +984,17 @@
           20 + 10 * (0.5 + 0.5 * Math.sin(pulse * 2)),
         );
     }
-    requestAnimationFrame(animate);
+    pulseFrame = requestAnimationFrame(animate);
   }
   animate();
+  const resumePulse = () => {
+    if (document.hidden || pulseMotion.matches) {
+      if (pulseFrame !== null) cancelAnimationFrame(pulseFrame);
+      pulseFrame = null;
+    } else if (pulseFrame === null) animate();
+  };
+  document.addEventListener("visibilitychange", resumePulse);
+  pulseMotion.addEventListener("change", resumePulse);
 
   document
     .getElementById("restartBtn")

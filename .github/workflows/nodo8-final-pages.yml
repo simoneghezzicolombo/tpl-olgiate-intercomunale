@@ -10,7 +10,9 @@ on:
       - nodo8-*.mjs
       - nodo8-experience.css
       - nodo8-polish.css
+      - nodo8-design.css
       - tests/test_nodo8_playback.mjs
+      - tests/test_nodo8_redesign.py
       - assets/nodo8-proposal.json
       - dietro-l-analisi/**
       - config/nodo8_publication_allowlist.json
@@ -36,6 +38,8 @@ jobs:
       - uses: actions/checkout@v6
       - name: Verify publication boundary
         run: python -m unittest discover -s tests -p test_nodo8_publication.py -v
+      - name: Verify accessible presentation and immutable evidence
+        run: python -m unittest discover -s tests -p test_nodo8_redesign.py -v
       - name: Verify current route projection
         run: node --test tests/test_nodo8_journey.mjs tests/test_nodo8_playback.mjs tests/test_nodo8_map_readiness.mjs
       - name: Build only final-site dependencies

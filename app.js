@@ -1,17 +1,19 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
-import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008e";
+import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008f";
 import {
   renderStopTimes,
   readStopSelection,
   stopLink,
-} from "./nodo8-stop-times.mjs?v=20261008e";
+} from "./nodo8-stop-times.mjs?v=20261008f";
+import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008f";
 import {
   mountPlayer,
   renderDiagram,
   makeBusMarker,
   updateBusMarker,
-} from "./nodo8-experience.mjs?v=20261008e";
+  mountRoadPreview,
+} from "./nodo8-experience.mjs?v=20261008f";
 let activePlayer = null,
   activeMap = null,
   currentLine = null,
@@ -464,8 +466,7 @@ function createMap(data) {
   const busMarkers = new Map();
   if ("ResizeObserver" in window)
     new ResizeObserver(() => {
-      map.invalidateSize();
-      reset();
+      map.invalidateSize({ pan: false });
     }).observe(container);
   return {
     reset,
@@ -597,10 +598,13 @@ async function initProposal() {
     if (!response.ok) throw new Error("HTTP " + response.status);
     const data = await response.json();
     validatePresentationData(data);
-    renderTimetable(data);
-    renderCoverage(data);
     const line = buildLine(data);
     currentLine = line;
+    renderTimetable(data);
+    renderCoverage(data);
+    document
+      .getElementById("heroRoad")
+      .replaceChildren(mountRoadPreview(line).node);
     siteNames = new Map(diagramStops(line).map((e) => [e.siteId, e.display]));
     siteNames.set(
       data.sites.find((s) => s.hub_service_roles.length).site_id,
@@ -614,8 +618,12 @@ async function initProposal() {
       line,
       (state) => {
         map.updateBuses(state);
-        document.getElementById("mapPlaybackClock").textContent =
-          document.querySelector("#routePlayback .n8-clock").textContent;
+        const clockNode = document.getElementById("mapPlaybackClock");
+        const clockText = document.querySelector(
+          "#routePlayback .n8-clock",
+        ).textContent;
+        if (clockNode.textContent !== clockText)
+          clockNode.textContent = clockText;
         const play = document.getElementById("mapPlaybackPlay");
         play.textContent = state.playing ? "Pausa" : "Riproduci";
         play.setAttribute("aria-pressed", String(state.playing));
@@ -704,6 +712,35 @@ async function initProposal() {
         }
       });
     });
+    mountJourneyInspector(
+      document.getElementById("journeyInspector"),
+      line,
+      (trip, minute) => {
+        setExplorer("simulation");
+        activeMap.reset();
+        activePlayer.selectTrip(trip);
+        activePlayer.jump(minute);
+        document
+          .querySelector(".route-explorer")
+          .scrollIntoView({ behavior: "instant", block: "center" });
+      },
+    );
+    const expand = document.getElementById("expandMap"),
+      explorer = document.querySelector(".route-explorer");
+    const expandMap = (wide) => {
+      explorer.classList.toggle("is-wide", wide);
+      expand.setAttribute("aria-expanded", String(wide));
+      expand.textContent = wide ? "Vista compatta" : "Amplia la mappa";
+    };
+    expand.addEventListener("click", () =>
+      expandMap(expand.getAttribute("aria-expanded") !== "true"),
+    );
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && explorer.classList.contains("is-wide")) {
+        expandMap(false);
+        expand.focus();
+      }
+    });
     document.getElementById("resetMap").addEventListener("click", map.reset);
     document
       .getElementById("selectedStopTimes")
@@ -743,6 +780,25 @@ async function initProposal() {
     }
   } catch (error) {
     console.error("Nodo8: caricamento non completato", error);
+    document.getElementById("mapPlaybackClock").textContent = "—:—";
+    document
+      .getElementById("heroRoad")
+      .replaceChildren(
+        element(
+          "p",
+          "map-loading",
+          "Anteprima non caricata. Consulta il tracciato nel documento della proposta.",
+        ),
+      );
+    document
+      .getElementById("journeyResult")
+      .replaceChildren(
+        element(
+          "p",
+          "journey-empty",
+          "Registro non disponibile: nessun viaggio sostitutivo viene generato.",
+        ),
+      );
     document
       .getElementById("routeMap")
       .replaceChildren(
@@ -781,7 +837,7 @@ async function initProposal() {
       );
     document
       .querySelectorAll(
-        "#coverageTime, #scheduleFilter, #resetMap, #stopSearch, [data-stops], .diagram-tabs button, .explorer-tabs button, .map-playback-bar button",
+        "#coverageTime, #scheduleFilter, #resetMap, #expandMap, #stopSearch, [data-stops], .diagram-tabs button, .explorer-tabs button, .map-playback-bar button, .journey-fields select",
       )
       .forEach((control) => {
         control.disabled = true;

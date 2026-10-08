@@ -11,12 +11,14 @@ runtime = [
     "journey-director.js", "journey-lens.js", "journey-lineage.js",
     "journey-current-kml-exact.mjs", "journey-explore-v2.js", "journey-nodo8.mjs",
     "journey-map-ready.mjs",
+    "journey-premium.css",
 ]
 preserved = json.loads((ROOT / BASE / "upstream-import.json").read_text(encoding="utf-8"))["preserved_assets"]
 files = {
     "index.html", "styles.css", "app.js", "assets/nodo8-proposal.json",
     "nodo8-line.mjs", "nodo8-experience.mjs", "nodo8-experience.css",
     "nodo8-player.mjs", "nodo8-polish.css", "nodo8-stop-times.mjs",
+    "nodo8-design.css", "nodo8-journey-inspector.mjs",
     "docs/NODO8_CONFRONTO_D184_D185_E_RECAP_2026_10_07.md",
     "docs/RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md",
     "outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson",

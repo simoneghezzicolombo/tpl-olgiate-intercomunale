@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <meta name="theme-color" content="#07131f" />
+    <meta name="theme-color" content="#153d34" />
     <title>Nodo8 · Dietro l’analisi</title>
     <meta
       name="description"
@@ -17,11 +17,13 @@
     <link rel="stylesheet" href="journey.css" />
     <link rel="stylesheet" href="journey-nodo8.css?v=20261008e" />
     <link rel="stylesheet" href="../nodo8-experience.css?v=20261008e" />
+    <link rel="stylesheet" href="journey-premium.css?v=20261008f" />
   </head>
   <body>
+    <a class="journey-skip" href="#nodo8">Salta alla proposta attuale</a>
     <div id="loader" class="loader" aria-live="polite">
       <div class="loader__mark"></div>
-      <p>Sto preparando i dati e la mappa…</p>
+      <p>Prepariamo il territorio, un livello alla volta.</p>
     </div>
 
     <header class="topbar">
@@ -33,18 +35,18 @@
         <span class="brand__main"
           >nodo<span class="nodo8-brand-eight">8</span></span
         >
-        <span class="brand__sub">Tra Paesi · Dietro l’analisi</span>
+        <span class="brand__sub">Tra Paesi / il progetto</span>
       </a>
       <nav class="nodo8-journey-nav" aria-label="Le pagine di Nodo8">
-        <a href="../index.html#percorso">Percorso</a
-        ><a href="../index.html#schemi">Schemi</a
-        ><a href="#orario-nodo8">Bus e orario</a>
+        <a href="#capitolo-intro" aria-current="page">Il racconto</a>
+        <a href="#nodo8">La sintesi</a>
+        <a href="index.html#esplora-mappa">Esplora la mappa</a>
       </nav>
       <a class="topbar__cta" href="../index.html"
-        >La proposta Nodo8 <span>↗</span></a
+        >Apri la proposta <span>↗</span></a
       >
       <details id="journeyContents" class="journey-contents">
-        <summary>Capitoli</summary>
+        <summary>Indice <span aria-hidden="true">+</span></summary>
         <nav id="journeyContentsList" aria-label="Indice del racconto"></nav>
       </details>
     </header>
@@ -61,46 +63,87 @@
 
       <section
         class="chapter hero is-active"
+        id="capitolo-intro"
         data-scene="intro"
-        data-label="Domanda"
+        data-label="Una domanda locale"
       >
         <div class="copy copy--hero">
-          <p class="eyebrow">01 · Il punto di partenza</p>
-          <h1>
-            La domanda è semplice.<br /><em>Capire la risposta, molto meno.</em>
-          </h1>
+          <p class="eyebrow">Dietro l’analisi · Un racconto in tre atti</p>
+          <h1>Cinque paesi.<br /><em>Una domanda comune.</em></h1>
           <p class="lede">
-            Come si può migliorare il trasporto locale attorno alla stazione di
-            Olgiate-Calco-Brivio? Non basta disegnare due linee: bisogna capire
-            dove vivono le persone, quanto camminano, quali strade può usare un
-            bus e come si incastrano gli orari.
+            Un autobus locale che si riconosce, collega i paesi e aiuta a
+            prendere il treno. Come si passa da questa idea a una proposta
+            concreta? Il territorio e i dati ci mostrano possibilità e limiti.
+          </p>
+          <p class="journey-territory">
+            Olgiate Molgora · Calco · Brivio · Santa Maria Hoè · La Valletta
+            Brianza
           </p>
           <div class="hero-stats">
             <div><strong>5</strong><span>comuni analizzati</span></div>
             <div><strong>22.914</strong><span>residenti</span></div>
             <div><strong>1</strong><span>stazione al centro</span></div>
           </div>
-          <p class="scroll-cue"><span></span> scorri dentro l’analisi</p>
+          <nav class="journey-acts" aria-label="I tre atti del racconto">
+            <a href="#capitolo-grid"
+              ><span>01 — 05</span><strong>Leggere il territorio</strong
+              ><small>Persone, edifici, cammini</small></a
+            >
+            <a href="#capitolo-roads"
+              ><span>06 — 09</span><strong>Mettere alla prova le idee</strong
+              ><small>Strade, rete attuale, alternative</small></a
+            >
+            <a href="#nodo8"
+              ><span>10 — 13</span><strong>Arrivare a Nodo8</strong
+              ><small>Proposta, orario, mappa libera</small></a
+            >
+          </nav>
+          <div class="journey-hero-actions">
+            <a class="decision-cta" href="#capitolo-grid"
+              >Entra nel racconto <span>↓</span></a
+            >
+            <a class="journey-text-link" href="#nodo8"
+              >Vai alla proposta attuale <span>↗</span></a
+            >
+          </div>
           <p class="source-note">
-            Dal processo storico alla base Nodo8 confermata il 1 ottobre, con
-            calendario 2027 e verifiche aggiornate al 7 ottobre 2026.
-            <a href="#nodo8">Vai direttamente a Nodo8 →</a>
+            Le tappe iniziali conservano la ricerca storica. La base Nodo8,
+            confermata il 1 ottobre, ha un calendario 2027 e verifiche
+            aggiornate al 7 ottobre 2026. Ricerca e proposta attuale restano
+            distinte.
           </p>
+        </div>
+        <div class="journey-hero-mark" aria-hidden="true">
+          <svg viewBox="0 0 360 520" fill="none">
+            <path
+              d="M180 260C84 201 30 172 30 109C30 51 86 27 130 52C160 69 180 104 180 139C180 104 200 69 230 52C274 27 330 51 330 109C330 172 276 201 180 260C84 319 30 348 30 411C30 469 86 493 130 468C160 451 180 416 180 381C180 416 200 451 230 468C274 493 330 469 330 411C330 348 276 319 180 260Z"
+              stroke="currentColor"
+              stroke-width="5"
+            />
+            <circle cx="180" cy="260" r="18" fill="currentColor" />
+            <circle cx="61" cy="164" r="7" fill="currentColor" />
+            <circle cx="299" cy="164" r="7" fill="currentColor" />
+            <circle cx="61" cy="356" r="7" fill="currentColor" />
+            <circle cx="299" cy="356" r="7" fill="currentColor" />
+          </svg>
+          <span>Un territorio. Un’idea di connessione.</span>
         </div>
       </section>
 
-      <section class="chapter" data-scene="grid" data-label="Popolazione">
+      <section
+        class="chapter"
+        id="capitolo-grid"
+        data-scene="grid"
+        data-label="Dove viviamo"
+      >
         <div class="copy">
-          <p class="eyebrow">02 · Dove vivono le persone</p>
-          <h2>
-            Partiamo da una mappa della popolazione a
-            <em>quadrati di 100 × 100 metri.</em>
-          </h2>
+          <p class="eyebrow">Atto I / Leggere il territorio <span>02</span></p>
+          <h2>Prima dei percorsi,<br /><em>le persone.</em></h2>
           <p>
-            WorldPop stima quante persone vivono in ogni piccolo quadrato.
-            Abbiamo corretto i totali per farli coincidere con quelli ufficiali
-            ISTAT del 2025. È un buon punto di partenza, ma non dice ancora in
-            quale edificio vivono.
+            Ogni quadrato di 100 × 100 metri contiene una stima dei residenti.
+            La mappa WorldPop viene riallineata ai totali ufficiali ISTAT 2025:
+            è una prima lettura di dove abitiamo, non un conteggio edificio per
+            edificio.
           </p>
           <div class="fact">
             <strong id="worldpopCount">4.283</strong
@@ -112,39 +155,43 @@
         </div>
       </section>
 
-      <section class="chapter" data-scene="sections" data-label="ISTAT">
+      <section
+        class="chapter"
+        id="capitolo-sections"
+        data-scene="sections"
+        data-label="I totali ufficiali"
+      >
         <div class="copy copy--right">
-          <p class="eyebrow">03 · Aggiungiamo i dati ISTAT</p>
-          <h2>
-            Poi dividiamo il territorio nelle
-            <em>aree usate dal censimento.</em>
-          </h2>
+          <p class="eyebrow">Atto I / Leggere il territorio <span>03</span></p>
+          <h2>Più dettaglio.<br /><em>Gli stessi totali.</em></h2>
           <p>
-            ISTAT ci dice quante persone vivono in ogni sezione di censimento.
-            Questo ci permette di distribuire meglio la popolazione dentro
-            ciascun comune senza cambiare i totali ufficiali.
+            Le sezioni di censimento ISTAT ci aiutano a distribuire meglio la
+            popolazione dentro ciascun comune. Il dettaglio cresce, ma il totale
+            ufficiale resta il nostro punto fermo.
           </p>
           <div class="mini-rule">
             <span></span>
             <p>
-              dato ufficiale → passaggio tracciabile → totale finale controllato
+              Dato ufficiale → distribuzione tracciabile → totale controllato
             </p>
           </div>
         </div>
       </section>
 
-      <section class="chapter" data-scene="buildings" data-label="Edifici">
+      <section
+        class="chapter"
+        id="capitolo-buildings"
+        data-scene="buildings"
+        data-label="Gli edifici abitati"
+      >
         <div class="copy">
-          <p class="eyebrow">04 · Arriviamo agli edifici</p>
-          <h2>
-            A questo punto possiamo stimare
-            <em>in quali edifici vivono le persone.</em>
-          </h2>
+          <p class="eyebrow">Atto I / Leggere il territorio <span>04</span></p>
+          <h2>Dai quadrati<br /><em>alle case.</em></h2>
           <p>
-            Usiamo le sagome degli edifici della Regione Lombardia. La
-            popolazione viene distribuita solo negli edifici compatibili con un
-            uso residenziale, tenendo conto della loro dimensione. Capannoni e
-            altri edifici chiaramente non residenziali restano vuoti nel
+            Le sagome degli edifici della Regione Lombardia rendono la mappa più
+            concreta. Distribuiamo i residenti negli edifici compatibili con
+            l’uso residenziale, in base alla dimensione. Capannoni e altri
+            fabbricati chiaramente non residenziali non ricevono abitanti nel
             modello.
           </p>
           <div class="split-stats">
@@ -159,10 +206,9 @@
           <div class="residual">
             <span class="residual__bar"><i></i></span>
             <p>
-              Il modello riesce a localizzare
-              <strong>22.820,84</strong> residenti. I restanti
-              <strong>93,16</strong> non vengono messi a caso in un edificio:
-              restano esplicitamente non localizzati.
+              <strong>22.820,84</strong> residenti vengono localizzati nel
+              modello; <strong>93,16</strong> restano non localizzati. Un limite
+              dichiarato, non riempito con punti inventati.
             </p>
           </div>
           <p class="source-note">
@@ -171,17 +217,19 @@
         </div>
       </section>
 
-      <section class="chapter" data-scene="walk" data-label="A piedi">
+      <section
+        class="chapter"
+        id="capitolo-walk"
+        data-scene="walk"
+        data-label="A piedi alla fermata"
+      >
         <div class="copy copy--right">
-          <p class="eyebrow">05 · Quanto è davvero lontana una fermata</p>
-          <h2>
-            La distanza non si misura in linea retta. Conta
-            <em>il percorso a piedi.</em>
-          </h2>
+          <p class="eyebrow">Atto I / Leggere il territorio <span>05</span></p>
+          <h2>Non un cerchio.<br /><em>Un cammino reale.</em></h2>
           <p>
-            Per ogni zona abitata calcoliamo il tempo necessario per raggiungere
-            una fermata seguendo strade e percorsi reali. Il colore cambia in
-            base ai minuti a piedi dalla fermata più vicina.
+            Una fermata vicina sulla carta può essere lontana a piedi.
+            Calcoliamo il cammino sulla rete pedonale: qui il colore mostra
+            quanti minuti separano una zona abitata dalla fermata più vicina.
           </p>
           <div class="thresholds">
             <span data-min="5">5 min <b>46,98%</b></span>
@@ -197,18 +245,24 @@
         </div>
       </section>
 
-      <section class="chapter" data-scene="roads" data-label="Strade">
+      <section
+        class="chapter"
+        id="capitolo-roads"
+        data-scene="roads"
+        data-label="Le strade del bus"
+      >
         <div class="copy">
-          <p class="eyebrow">06 · Dove può passare davvero un autobus</p>
+          <p class="eyebrow">
+            Atto II / Mettere alla prova le idee <span>06</span>
+          </p>
           <h2>
-            Non tutte le strade sono <em>utilizzabili nello stesso modo.</em>
+            Una linea sulla mappa<br /><em>deve diventare una strada.</em>
           </h2>
           <p>
-            Abbiamo costruito una rete stradale di modello che tiene conto di
-            sensi unici, divieti, svolte e accessi. Le alternative di questa
-            fase sono provate sulla stessa versione della rete. La compatibilità
-            sul grafo non sostituisce la prova con un bus, i permessi o la
-            verifica fisica degli accosti.
+            Sensi unici, divieti, svolte e accessi entrano nella rete stradale
+            di modello. Tutte le alternative di questa fase usano la stessa
+            rete. Ma un percorso compatibile sul grafo non equivale a una strada
+            già verificata con un autobus.
           </p>
           <div class="metric-cascade">
             <div>
@@ -223,44 +277,56 @@
             </div>
           </div>
           <p class="source-note">
-            La rete OSM è stata congelata prima dei confronti. Nessun
-            aggiornamento live durante l’ottimizzazione.
+            Rete OSM congelata prima dei confronti, senza aggiornamenti live.
+            Prova con il bus, permessi e accosti restano verifiche sul campo.
           </p>
         </div>
       </section>
 
-      <section class="chapter" data-scene="baseline" data-label="Oggi">
+      <section
+        class="chapter"
+        id="capitolo-baseline"
+        data-scene="baseline"
+        data-label="La rete di partenza"
+      >
         <div class="copy copy--right">
-          <p class="eyebrow">07 · Prima guardiamo la rete di oggi</p>
-          <h2>D184 e D185 sono <em>il punto di confronto.</em></h2>
+          <p class="eyebrow">
+            Atto II / Mettere alla prova le idee <span>07</span>
+          </p>
+          <h2>Per cambiare,<br /><em>partiamo da oggi.</em></h2>
           <p>
-            La fase storica ha ricostruito percorsi e fermate dalle fonti
-            ufficiali: i tracciati qui mostrati sono i KML forniti, senza
-            sostituirli con un routing inventato. La deviazione temporanea del
-            Ponte di Brivio resta separata. Il confronto aggiornato degli orari
-            invernali 2026/27 è nella vetrina Nodo8.
+            D184 e D185 sono il punto di confronto. Qui vediamo i KML ufficiali
+            della ricostruzione storica, con le fermate da GTFS, senza
+            sostituirli con un percorso inventato. La deviazione temporanea del
+            Ponte di Brivio resta separata.
           </p>
           <div class="legend-inline">
             <span class="blue"></span>D184 <span class="orange"></span>D185
             <span class="white"></span>stazione
           </div>
           <p class="source-note">
-            Percorsi KML ufficiali + fermate e servizio da GTFS ufficiale
+            Percorsi KML e GTFS ufficiali. Il confronto degli orari invernali
+            2026/27 è nella
+            <a href="../index.html#confronto">vetrina Nodo8 ↗</a>.
           </p>
         </div>
       </section>
 
-      <section class="chapter" data-scene="candidates" data-label="Fermate">
+      <section
+        class="chapter"
+        id="capitolo-candidates"
+        data-scene="candidates"
+        data-label="Cercare le fermate"
+      >
         <div class="copy">
-          <p class="eyebrow">08 · Dove avrebbe senso cercare nuove fermate</p>
-          <h2>
-            Partiamo da migliaia di punti e ne teniamo
-            <em>155 da studiare meglio.</em>
-          </h2>
+          <p class="eyebrow">
+            Atto II / Mettere alla prova le idee <span>08</span>
+          </p>
+          <h2>Una fermata in più.<br /><em>Ma dove serve?</em></h2>
           <p>
-            Cerchiamo prima le zone abitate che oggi richiedono troppo cammino.
-            Poi consideriamo solo punti raggiungibili da un bus e scartiamo
-            quelli troppo vicini tra loro o poco utili.
+            Si parte dalle zone abitate con troppo cammino. Si cercano punti
+            raggiungibili da un bus e si riducono vicinanza e sovrapposizioni.
+            Dai 3.858 punti iniziali rimangono 155 luoghi da approfondire.
           </p>
           <div class="funnel" aria-label="Riduzione candidate">
             <div style="--w: 100%">
@@ -282,25 +348,33 @@
             </div>
           </div>
           <p class="source-note">
-            Sono punti da controllare sul posto, non fermate già decise.
+            Ricerca storica: 155 punti da controllare sul posto, non fermate
+            decise e non i quattro nuovi siti di Nodo8.
           </p>
         </div>
       </section>
 
       <section
         class="chapter"
+        id="capitolo-finalists"
         data-scene="finalists"
-        data-label="Ricerca storica"
+        data-label="Le idee precedenti"
       >
         <div class="copy copy--wide">
           <p class="eyebrow">
-            09 · Una tappa della ricerca, non la proposta attuale
+            Atto II / Mettere alla prova le idee <span>09</span>
           </p>
-          <h2>Le quattro alternative di <em>una fase precedente.</em></h2>
+          <span class="journey-evidence-tag"
+            >Archivio della ricerca · non Nodo8</span
+          >
+          <h2>
+            Le alternative insegnano.<br /><em>Non sono la conclusione.</em>
+          </h2>
           <p>
-            Questo passaggio confrontava due durate: 16 ore oppure 18 ore e
-            mezza, con varianti FIG e TWO. È esperienza conservata, non l’elenco
-            delle soluzioni attuali: non descrive Nodo8.
+            Le quattro alternative di una fase precedente confrontavano due
+            durate di servizio, 16 e 18 ore e mezza, con varianti FIG e TWO.
+            Conserviamo questo passaggio per capire il processo: non è la
+            proposta attuale.
           </p>
           <div class="finalist-grid">
             <article>
@@ -321,10 +395,9 @@
             </article>
           </div>
           <p class="insight">
-            In questa diagnostica storica FIG e TWO coincidevano dentro ciascuna
-            durata. La fase successiva ha esplicitato altre esigenze: cinque
-            comuni, Olgiate sud e San Zeno, H30 nelle punte e un percorso unico
-            per tutte le corse.
+            FIG e TWO coincidevano dentro ciascuna durata in questa diagnostica.
+            Dopo, il brief si è precisato: cinque comuni, Olgiate sud e San
+            Zeno, più corse nelle punte e lo stesso percorso per tutte le corse.
           </p>
         </div>
       </section>
@@ -336,30 +409,61 @@
         data-label="Nodo8"
       >
         <div class="copy">
-          <p class="eyebrow">10 · Il compromesso prende un nome</p>
-          <h2>Cinque comuni.<br />Una linea.<br /><em>Nodo8.</em></h2>
+          <p class="eyebrow">Atto III / Arrivare a Nodo8 <span>10</span></p>
+          <span class="journey-evidence-tag journey-evidence-tag--current"
+            >La proposta attuale</span
+          >
+          <h2>Non due linee.<br /><em>Un unico Nodo8.</em></h2>
           <p>
-            Un’identità riconoscibile per muoversi nel territorio, non solo per
-            raggiungere il treno. Tutte le corse percorrono lo stesso otto, con
-            lo stesso bus: da FS a San Zeno, Beverate, Brivio, Arlate e Calco;
-            di nuovo FS, poi Olgiate sud, Rovagnate, Perego e Santa Maria Hoè, e
-            infine FS.
+            Una linea locale riconoscibile, non solo una navetta per il treno.
+            Ogni corsa prevede lo stesso otto completo e la continuità sullo
+            stesso bus. La stazione è il nodo tra le due parti del percorso, non
+            il confine tra due servizi separati.
           </p>
+          <ol
+            class="journey-route-order"
+            aria-label="Ordine delle parti del giro completo"
+          >
+            <li>
+              <span>01</span>
+              <div>
+                <strong>Da Olgiate FS, il primo anello</strong>
+                <p>San Zeno · Beverate · Brivio · Arlate · Calco</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <strong>Di nuovo FS, poi il secondo anello</strong>
+                <p>Olgiate sud · Rovagnate · Perego · Santa Maria Hoè</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <strong>Rientro finale a Olgiate FS</strong>
+                <p>Un giro completo. Lo stesso percorso per tutte le corse.</p>
+              </div>
+            </li>
+          </ol>
           <div class="nodo8-stats">
             <div><strong>27,124</strong><span>km per giro</span></div>
             <div><strong>27</strong><span>siti di progetto</span></div>
             <div><strong>4</strong><span>siti nuovi proposti</span></div>
           </div>
-          <p>
-            Olgiate sud, San Zeno/Via Cantù, Arlate N1212 e Calco
-            Centro–Municipio sono i quattro punti nuovi. Le strade strette
-            segnalate sono state evitate dove concordato; gli accosti restano da
-            verificare.
-          </p>
+          <div class="journey-new-sites">
+            <span>Quattro nuovi punti proposti</span>
+            <ul>
+              <li>Olgiate sud</li>
+              <li>San Zeno / Via Cantù</li>
+              <li>Arlate N1212</li>
+              <li>Calco Centro–Municipio</li>
+            </ul>
+          </div>
           <p class="source-note">
-            Geometria confermata, diversa dalle quattro alternative storiche.
-            Siti ed eventi restano distinti; non sono 27 paline già autorizzate.
-            Nodo8 è un nome di lavoro.
+            Base geometrica confermata dal committente. Siti ed eventi sono
+            distinti: non sono 27 paline autorizzate. Accosti e continuità a
+            bordo vanno validati. Nodo8 è un nome di lavoro.
           </p>
           <p class="nodo8-load-status" role="status">
             Caricamento dei dati della proposta…
@@ -380,43 +484,42 @@
         data-label="Orario Nodo8"
       >
         <div class="copy">
-          <p class="eyebrow">
-            11 · Un servizio leggibile, non una frequenza immaginata
-          </p>
-          <h2>Più corse nelle punte.<br /><em>16 giri completi.</em></h2>
+          <p class="eyebrow">Atto III / Arrivare a Nodo8 <span>11</span></p>
+          <h2>Un orario da capire.<br /><em>Un bus da seguire.</em></h2>
           <p>
-            La base feriale 2027 comprende 254 giornate, lunedì–venerdì esclusi
-            festivi nazionali, prima di eccezioni locali. H30 nelle banche di
-            punta, sfalsate lungo il giro; nella morbida gli intervalli arrivano
-            a 120 minuti.
+            16 giri completi al giorno, dal lunedì al venerdì. Nelle banche di
+            punta si parte ogni 30 minuti; nella morbida gli intervalli arrivano
+            a 120 minuti. Le due partenze da FS appartengono allo stesso giro,
+            con finestre di punta sfalsate.
           </p>
           <div class="nodo8-peak-grid">
             <div>
-              <span>Inizio del giro · FS</span
+              <span>FS · partenza del giro</span
               ><strong>06:05–08:05<br />16:40–18:40</strong
               ><small>ogni 30 minuti</small>
             </div>
             <div>
-              <span>Stesso giro · ripartenza da FS</span
+              <span>FS · ripartenza intermedia</span
               ><strong>07:00–09:00<br />17:35–19:35</strong
               ><small>ogni 30 minuti</small>
             </div>
           </div>
-          <p>
-            Il progetto considera arrivi e partenze ferroviarie verso Milano e
-            Lecco. Le analisi del riferimento 1 ottobre 2026 non garantiscono
-            tutte le coincidenze né i treni 2027. Soste intermedie e viaggi
-            lunghi sono parte del compromesso.
+          <p class="journey-operational-note">
+            <strong>Più frequente in punta non significa H30 ovunque.</strong>
+            Non è un servizio simultaneo nei due sensi opposti. Soste a FS e
+            alcuni viaggi lunghi sono parte del compromesso.
           </p>
           <p class="source-note">
-            Non H30 simultaneo ovunque o nei due sensi opposti. Rientro finale
-            nominale circa 21:08. Permanenza a bordo a FS progettata, da
-            autorizzare; sabato separato.
+            Calendario base 2027: 254 feriali, esclusi festivi nazionali, prima
+            di eccezioni locali; sabato separato. Rientro finale nominale circa
+            21:08. Considerati arrivi e partenze verso Milano e Lecco al
+            riferimento del 1 ottobre 2026: non garanzia di ogni coincidenza né
+            dell’orario ferroviario 2027.
           </p>
           <p class="nodo8-animation-cue">
-            Prova l’orologio sulla mappa: i bus si fermano agli eventi del
-            registro orario e proseguono su tutta la linea. Non sono posizioni
-            live.
+            Premi Riproduci: segui un giro, le fermate e la sosta intermedia a
+            FS. In Esplora puoi vedere i quattro mezzi di modello insieme.
+            Ricostruzione nominale, non posizioni GPS live.
           </p>
           <a class="decision-cta" href="../index.html#orario"
             >Leggi tutti i 16 giri <span>→</span></a
@@ -431,15 +534,13 @@
         data-label="Proposta e limiti"
       >
         <div class="copy copy--final">
-          <p class="eyebrow">
-            12 · Una base progettuale, non un esercizio già approvato
-          </p>
-          <h2>Una proposta concreta.<br /><em>Compromessi in chiaro.</em></h2>
+          <p class="eyebrow">Atto III / Arrivare a Nodo8 <span>12</span></p>
+          <h2>Una base concreta.<br /><em>Niente promesse al buio.</em></h2>
           <p>
-            Più regolarità e nuovi ambiti locali, ma non un miglioramento per
-            ogni viaggio: i primi arrivi D184 da ovest non sono conservati,
-            alcune relazioni sono meno dirette, code esterne e sabato restano
-            fuori dalla base definita.
+            Nodo8 propone un’identità unica, nuovi ambiti locali e un percorso
+            ripetuto. Non migliora ogni viaggio: i primi arrivi D184 da ovest
+            non sono conservati, alcune relazioni sono meno dirette e code
+            esterne e sabato restano fuori dalla base definita.
           </p>
           <div class="nodo8-summary">
             <span
@@ -450,31 +551,65 @@
               substrato RT028</span
             >
           </div>
-          <p>
-            La copertura è una stima, non passeggeri previsti o un guadagno
-            certificato sull’attuale. Il confronto con 111.419 km PdB ha
-            calendario e territorio diversi: non prova neutralità economica o
-            finanziamento.
+          <p class="source-note">
+            La copertura è potenziale, non passeggeri previsti né un guadagno
+            certificato sull’attuale. I 111.419 km PdB hanno territorio e
+            calendario diversi: il confronto non certifica neutralità economica
+            o finanziamento.
           </p>
-          <p>
-            Restano da validare transitabilità e accosti, accessibilità, tempi
-            reali, continuità a bordo, mezzi e turni, treni 2027 e costo
-            completo. La base è confermata dal committente; nessun vincitore
-            automatico, servizio autorizzato o probabilità empirica di
-            coincidenza viene inventato.
+          <div class="journey-validation">
+            <div>
+              <h3>La base è definita</h3>
+              <p>
+                Percorso unico, siti di progetto, registro delle corse e
+                calendario feriale. Confermata dal committente, non selezionata
+                da un vincitore automatico.
+              </p>
+            </div>
+            <div>
+              <h3>L’esercizio va validato</h3>
+              <p>
+                Transito del bus e accosti, accessibilità, tempi reali,
+                continuità a bordo, mezzi e turni, treni 2027 e costo completo.
+                Nessun servizio è già autorizzato.
+              </p>
+            </div>
+          </div>
+          <p class="journey-operational-note">
+            Le verifiche di robustezza non diventano probabilità empiriche di
+            perdere il treno.
           </p>
           <a class="decision-cta" href="../index.html#proposta"
             >Scopri la proposta Nodo8 <span>→</span></a
           >
           <button id="restartBtn" class="restart" type="button">
-            ↺ ricomincia
+            ↺ Torna all’inizio del racconto
           </button>
+          <a class="nodo8-secondary-cta" href="index.html#esplora-mappa"
+            >Oppure entra nella mappa libera ↓</a
+          >
         </div>
       </section>
     </main>
 
+    <footer class="journey-footer">
+      <a class="brand" href="../index.html"
+        ><span class="brand__main"
+          >nodo<span class="nodo8-brand-eight">8</span></span
+        ><span class="brand__sub">Tra Paesi</span></a
+      >
+      <p>Un progetto locale, con i dati e i compromessi in chiaro.</p>
+      <nav aria-label="Approfondimenti del progetto">
+        <a href="../index.html#proposta">La proposta e le verifiche</a
+        ><a href="../index.html#confronto">Confronto con oggi</a
+        ><a href="../assets/nodo8-proposal.json">Dati della vetrina ↗</a>
+      </nav>
+      <small>Proposta di progetto · non orario di servizio in vigore.</small>
+    </footer>
+
     <div id="sceneHud" class="scene-hud" aria-hidden="true">
-      <span id="sceneIndex">01</span><i></i><span id="sceneName">Domanda</span>
+      <span id="sceneIndex">01</span><i></i
+      ><span id="sceneName">Una domanda locale</span>
     </div>
     <aside
       id="journeyPlayback"

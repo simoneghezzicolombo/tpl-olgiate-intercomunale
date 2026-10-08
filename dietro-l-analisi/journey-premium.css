@@ -1,0 +1,1311 @@
+/* Nodo8's public story: three acts, one readable editorial system.
+   Presentation only. Source layers, models and operating assumptions are unchanged. */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --story-forest: #153d34;
+  --story-deep: #102e27;
+  --story-paper: #f5f2e9;
+  --story-muted: #c1cec3;
+  --story-accent: #dd7655;
+  --story-mint: #afd1bc;
+  --story-rule: #d5ded028;
+  --sans: "DM Sans", system-ui, sans-serif;
+  --serif: "Manrope", system-ui, sans-serif;
+  --ink: var(--story-deep);
+  --paper: var(--story-paper);
+}
+
+html {
+  scroll-padding-top: 105px;
+  background: var(--story-deep);
+}
+body {
+  background: var(--story-deep);
+  color: var(--story-paper);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+body[data-scene="intro"] .hub-marker {
+  opacity: 0 !important;
+  visibility: hidden;
+}
+::selection {
+  background: #dd7655;
+  color: #fff;
+}
+a {
+  text-underline-offset: 4px;
+}
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--story-accent);
+  outline-offset: 4px;
+}
+.journey-skip {
+  position: fixed;
+  z-index: 101;
+  top: 12px;
+  left: 18px;
+  padding: 13px 18px;
+  background: var(--story-paper);
+  color: var(--story-deep);
+  border-radius: 6px;
+  transform: translateY(-160%);
+  font-size: 14px;
+}
+.journey-skip:focus {
+  transform: none;
+}
+
+/* A consistent light navigation bar ties the immersive story to the public site. */
+body .topbar {
+  height: 82px;
+  padding: 0 clamp(22px, 4vw, 64px);
+  grid-template-columns: auto 1fr auto auto;
+  gap: 24px;
+  background: #f5f2e9f5;
+  color: var(--story-forest);
+  border-bottom: 1px solid #153d3420;
+  backdrop-filter: blur(16px);
+}
+.topbar .brand {
+  align-items: center;
+  gap: 18px;
+}
+.topbar .brand__main {
+  font:
+    800 31px/1 "Manrope",
+    system-ui,
+    sans-serif;
+  letter-spacing: -1.8px;
+}
+.topbar .brand__sub {
+  color: #5b6f62;
+  font: 500 11px/1.5 var(--sans);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.nodo8-brand-eight {
+  color: var(--story-accent);
+}
+.topbar .nodo8-journey-nav {
+  gap: 25px;
+  font-size: 13px;
+}
+.topbar .nodo8-journey-nav a {
+  color: var(--story-forest);
+  padding: 12px 0;
+}
+.topbar .nodo8-journey-nav a[aria-current] {
+  border-bottom: 2px solid var(--story-accent);
+}
+.topbar .nodo8-journey-nav a:hover {
+  color: #ad5035;
+}
+.topbar .topbar__cta {
+  color: var(--story-paper);
+  background: var(--story-forest);
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 6px;
+  font: 600 13px var(--sans);
+}
+.topbar .topbar__cta:hover {
+  background: #236152;
+  box-shadow: none;
+}
+.topbar .topbar__cta span {
+  margin-left: 13px;
+}
+.journey-contents {
+  color: var(--story-forest);
+  font-size: 13px;
+}
+.journey-contents > summary {
+  display: flex;
+  gap: 19px;
+  align-items: center;
+  min-height: 44px;
+  border: 1px solid #153d3435;
+  border-radius: 6px;
+  background: transparent;
+}
+.journey-contents > summary::-webkit-details-marker {
+  display: none;
+}
+.journey-contents > summary > span {
+  font: 400 21px/1 var(--sans);
+}
+.journey-contents[open] > summary {
+  background: #e6e9dc;
+}
+.journey-contents nav {
+  top: 58px;
+  width: 310px;
+  padding: 10px;
+  background: var(--story-paper);
+  border: 1px solid #153d3430;
+  border-radius: 8px;
+  box-shadow: 0 12px 36px #071b1725;
+}
+.journey-contents nav a {
+  color: var(--story-forest);
+  min-height: 42px;
+  padding: 12px;
+}
+.journey-contents nav a:hover {
+  background: #e6e9dc;
+}
+.progress {
+  top: 81px;
+  height: 3px;
+  background: #153d3420;
+}
+.progress__fill {
+  background: var(--story-accent);
+  box-shadow: none;
+}
+.chapter-rail {
+  right: 20px;
+  gap: 0;
+}
+.rail-dot::before {
+  background: #f5f2e94a;
+}
+.rail-dot.active::before {
+  background: var(--story-accent);
+  box-shadow: 0 0 0 4px #dd765524;
+}
+
+/* The map stays a visual companion rather than competing with readable copy. */
+.map {
+  background: var(--story-deep);
+}
+.maplibregl-canvas {
+  filter: saturate(0.66) contrast(1.02);
+}
+.vignette {
+  background:
+    linear-gradient(90deg, #102e27bf 0%, #102e2710 58%, #102e2730 100%),
+    radial-gradient(ellipse at 62% 42%, transparent 30%, #102e2780 100%);
+}
+.grain {
+  opacity: 0.018;
+}
+main .chapter {
+  min-height: 104svh;
+  padding: 12vh clamp(24px, 5vw, 76px);
+  align-items: center;
+}
+main .chapter .copy {
+  width: min(560px, 44vw);
+  padding: clamp(25px, 3vw, 42px);
+  border: 1px solid #d5ded028;
+  border-radius: 8px;
+  background: #102e27f0;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 40px #051e1925;
+  opacity: 0.88;
+  transform: none;
+  transition:
+    opacity 0.25s,
+    border-color 0.25s;
+}
+main .chapter.is-active .copy {
+  opacity: 1;
+  border-color: #d5ded054;
+}
+main .chapter .copy--right {
+  margin-left: auto;
+}
+main .chapter .eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  color: var(--story-mint);
+  font: 600 10px/1.6 var(--sans);
+  letter-spacing: 0.11em;
+  margin: 0 0 27px;
+}
+main .chapter .eyebrow > span {
+  color: #f5f2e962;
+  font:
+    500 18px/1 "Manrope",
+    system-ui,
+    sans-serif;
+  letter-spacing: 0;
+}
+main h1,
+main h2 {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+main .chapter h2 {
+  font-size: clamp(36px, 3.6vw, 53px);
+  line-height: 1.08;
+}
+main h1 em,
+main h2 em {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--story-mint);
+}
+main .chapter .copy > p:not(.eyebrow, .source-note, .insight, .final-line) {
+  font: 400 16px/1.75 var(--sans);
+  color: #d1dacf;
+  margin-top: 23px;
+}
+main .chapter .source-note {
+  color: #acbdb1;
+  font: 400 12px/1.7 var(--sans);
+  text-transform: none;
+  letter-spacing: 0;
+  border-top: 1px solid var(--story-rule);
+  padding-top: 17px;
+  margin-top: 24px;
+}
+main .chapter .source-note a {
+  color: var(--story-paper);
+}
+
+/* Act I starts with an intentional overview, not a wall of technical caveats. */
+main .chapter.hero {
+  min-height: 112svh;
+  padding-top: 145px;
+  padding-bottom: 95px;
+  align-items: center;
+  overflow: hidden;
+}
+main .chapter .copy--hero {
+  width: min(780px, 66vw);
+  position: relative;
+  z-index: 2;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+main .hero h1 {
+  font-size: clamp(53px, 6vw, 85px);
+  line-height: 1.03;
+}
+main .hero .copy .lede {
+  max-width: 660px;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.55;
+  color: #e2e7dc;
+  margin-top: 26px;
+}
+main .hero .copy .journey-territory {
+  font-size: 12px;
+  color: var(--story-mint);
+  margin-top: 17px;
+}
+.hero-stats {
+  gap: 44px;
+  margin-top: 31px;
+}
+.hero-stats strong {
+  font:
+    600 30px/1.2 "Manrope",
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.055em;
+}
+.hero-stats span {
+  font: 400 12px/1.5 var(--sans);
+  color: #bacabf;
+  letter-spacing: 0;
+  text-transform: none;
+  margin-top: 5px;
+}
+.journey-acts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 37px;
+  border-top: 1px solid #d5ded052;
+  border-bottom: 1px solid #d5ded052;
+}
+.journey-acts a {
+  padding: 18px 16px;
+  text-decoration: none;
+  border-left: 1px solid #d5ded02e;
+}
+.journey-acts a:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.journey-acts span {
+  display: block;
+  font: 500 10px var(--sans);
+  color: var(--story-accent);
+  letter-spacing: 0.08em;
+}
+.journey-acts strong {
+  display: block;
+  margin: 9px 0 4px;
+  font:
+    600 14px/1.45 "Manrope",
+    system-ui,
+    sans-serif;
+}
+.journey-acts small {
+  display: block;
+  font: 400 11px/1.5 var(--sans);
+  color: #bacabf;
+}
+.journey-acts a:hover {
+  background: #f5f2e909;
+}
+.journey-hero-actions {
+  display: flex;
+  gap: 23px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 27px;
+}
+.journey-hero-actions .decision-cta {
+  margin-top: 0;
+}
+.journey-text-link {
+  font-size: 13px;
+  text-decoration: none;
+}
+.journey-text-link span {
+  padding-left: 9px;
+  color: var(--story-accent);
+}
+main .hero .source-note {
+  max-width: 630px;
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 22px;
+  font-size: 11px;
+}
+.journey-hero-mark {
+  position: absolute;
+  top: 26%;
+  right: 8%;
+  width: 28%;
+  max-width: 380px;
+  color: #dd765585;
+  pointer-events: none;
+  z-index: 1;
+}
+.journey-hero-mark svg {
+  display: block;
+  width: 100%;
+}
+.journey-hero-mark > span {
+  display: block;
+  text-align: center;
+  font: 500 10px var(--sans);
+  color: #c1cec381;
+  margin-top: 10px;
+}
+
+/* Honest evidence, formatted as information rather than dashboard noise. */
+.fact {
+  gap: 17px;
+  border-top-color: var(--story-rule);
+}
+.fact strong {
+  font:
+    600 43px/1.2 "Manrope",
+    system-ui,
+    sans-serif;
+  color: var(--story-paper);
+  letter-spacing: -0.055em;
+}
+.fact span {
+  color: var(--story-muted);
+  font-size: 13px;
+}
+.mini-rule p {
+  font: 400 12px/1.6 var(--sans);
+  text-transform: none;
+  color: var(--story-muted);
+}
+.mini-rule span {
+  background: var(--story-accent);
+  flex: 0 0 28px;
+}
+.split-stats {
+  gap: 16px;
+}
+.split-stats > div {
+  background: #f5f2e907;
+  border-color: var(--story-rule);
+  border-radius: 5px;
+  padding: 17px;
+}
+.split-stats strong {
+  font:
+    600 28px/1.3 "Manrope",
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.05em;
+  color: var(--story-paper);
+}
+.split-stats span {
+  display: block;
+  color: var(--story-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+.residual p {
+  font-size: 12px !important;
+  line-height: 1.7;
+  color: var(--story-muted) !important;
+}
+.residual__bar {
+  height: 3px;
+}
+.residual__bar i {
+  background: var(--story-mint);
+}
+.thresholds {
+  gap: 8px;
+}
+.thresholds span {
+  border-radius: 5px;
+  font: 500 12px var(--sans);
+  padding: 15px 9px;
+  color: var(--story-muted);
+}
+.thresholds b {
+  font:
+    600 21px/1.4 "Manrope",
+    system-ui,
+    sans-serif;
+  color: var(--story-paper);
+  margin-top: 8px;
+}
+.metric-cascade {
+  gap: 0;
+}
+.metric-cascade > div {
+  padding: 13px 0;
+  border: 0;
+  border-bottom: 1px solid var(--story-rule);
+  background: none;
+}
+.metric-cascade span {
+  font-size: 12px;
+  color: var(--story-muted);
+}
+.metric-cascade strong {
+  font:
+    500 21px "Manrope",
+    system-ui,
+    sans-serif;
+}
+.legend-inline {
+  font: 500 12px var(--sans);
+  margin-top: 26px;
+}
+.funnel {
+  gap: 9px;
+}
+.funnel div {
+  min-width: 70%;
+  padding: 11px 13px;
+  font: 400 11px/1.5 var(--sans);
+  border-radius: 0 4px 4px 0;
+}
+.funnel b {
+  font:
+    600 14px/1.5 "Manrope",
+    system-ui,
+    sans-serif;
+}
+.funnel .accent {
+  width: 100%;
+}
+.journey-evidence-tag {
+  display: inline-block;
+  margin: -7px 0 23px;
+  border: 1px solid #dd765564;
+  border-radius: 3px;
+  padding: 7px 10px;
+  font: 500 10px/1.4 var(--sans);
+  color: #efb49d;
+}
+.journey-evidence-tag--current {
+  border-color: #afd1bc6b;
+  color: var(--story-mint);
+}
+main .chapter .copy--wide {
+  width: min(850px, 75vw);
+}
+.finalist-grid {
+  gap: 10px;
+}
+.finalist-grid article {
+  border-radius: 5px;
+  background: #f5f2e908;
+}
+.finalist-grid article::before {
+  background: none;
+}
+.finalist-grid span {
+  color: var(--story-mint);
+  font-size: 11px;
+}
+.finalist-grid strong {
+  font:
+    600 28px "Manrope",
+    system-ui,
+    sans-serif;
+}
+.finalist-grid small {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--story-muted);
+  display: block;
+}
+main .chapter .insight {
+  font: 400 14px/1.8 var(--sans) !important;
+  color: #d1dacf !important;
+  border-color: var(--story-accent);
+}
+
+/* Act III has a new visual rhythm: one route, an ordered sequence, a clear calendar. */
+.journey-route-order {
+  list-style: none;
+  margin: 28px 0;
+  padding: 0;
+}
+.journey-route-order li {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  position: relative;
+  padding-bottom: 21px;
+}
+.journey-route-order li:last-child {
+  padding-bottom: 0;
+}
+.journey-route-order li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 31px;
+  bottom: 5px;
+  left: 14px;
+  width: 1px;
+  background: #afd1bc45;
+}
+.journey-route-order li > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 29px;
+  height: 29px;
+  border: 1px solid #afd1bc6b;
+  border-radius: 50%;
+  font: 600 10px var(--sans);
+  color: var(--story-mint);
+}
+.journey-route-order strong {
+  font-size: 14px;
+  font-weight: 600;
+  display: block;
+  line-height: 1.5;
+  margin-top: 3px;
+}
+.journey-route-order p {
+  margin: 5px 0 0;
+  color: var(--story-muted);
+  font: 400 12px/1.7 var(--sans);
+}
+.nodo8-stats {
+  gap: 0;
+  grid-template-columns: 1.35fr 1fr 1fr;
+  border-block: 1px solid var(--story-rule);
+  margin: 27px 0;
+}
+.nodo8-stats > div {
+  padding: 18px 15px;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  border-right: 1px solid var(--story-rule);
+}
+.nodo8-stats > div:first-child {
+  padding-left: 0;
+}
+.nodo8-stats > div:last-child {
+  border-right: 0;
+}
+.nodo8-stats strong {
+  font:
+    600 26px/1.2 "Manrope",
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.05em;
+  color: var(--story-paper);
+}
+.nodo8-stats span {
+  font: 400 11px/1.5 var(--sans);
+  color: var(--story-muted);
+  margin-top: 6px;
+}
+.journey-new-sites > span {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e5eadf;
+}
+.journey-new-sites ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.journey-new-sites li {
+  padding: 7px 10px;
+  border-radius: 4px;
+  font: 400 11px var(--sans);
+  border: 1px solid #afd1bc3d;
+  color: var(--story-mint);
+}
+.nodo8-peak-grid > div {
+  border-radius: 5px;
+  padding: 17px 16px;
+  background: #f5f2e907;
+  border-color: var(--story-rule);
+}
+.nodo8-peak-grid > div:first-child {
+  border-color: #afd1bc55;
+}
+.nodo8-peak-grid strong {
+  font:
+    600 25px/1.4 "Manrope",
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.04em;
+}
+.nodo8-peak-grid > div:first-child strong {
+  color: var(--story-paper);
+}
+.nodo8-peak-grid span,
+.nodo8-peak-grid small {
+  font-size: 11px;
+  color: var(--story-muted);
+}
+main .chapter .journey-operational-note {
+  font-size: 13px !important;
+  line-height: 1.75 !important;
+  padding-left: 14px;
+  border-left: 2px solid var(--story-accent);
+}
+.journey-operational-note strong {
+  color: var(--story-paper);
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+main .chapter .nodo8-animation-cue {
+  font-size: 13px !important;
+  line-height: 1.75;
+  color: var(--story-mint) !important;
+  border-color: var(--story-mint);
+}
+.nodo8-load-status {
+  border-color: var(--story-mint);
+  color: var(--story-muted) !important;
+}
+.decision-cta {
+  padding: 15px 19px;
+  border-radius: 5px;
+  background: var(--story-paper);
+  color: var(--story-forest);
+  font: 600 13px var(--sans);
+  gap: 24px;
+}
+.decision-cta:hover {
+  transform: none;
+  background: #e7ebdc;
+  box-shadow: none;
+}
+.nodo8-secondary-cta {
+  font-size: 12px;
+  color: var(--story-mint);
+  margin-top: 20px;
+}
+main .chapter.finale {
+  text-align: left;
+  justify-content: center;
+}
+main .chapter .copy--final {
+  width: min(880px, 76vw);
+}
+.nodo8-summary {
+  gap: 18px;
+}
+.nodo8-summary > span {
+  border: 0;
+  border-top: 1px solid var(--story-rule);
+  border-bottom: 1px solid var(--story-rule);
+  border-radius: 0;
+  background: none;
+  padding: 22px 0;
+  color: var(--story-muted);
+  font-size: 12px;
+}
+.nodo8-summary strong {
+  font:
+    600 36px/1.2 "Manrope",
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.05em;
+  color: var(--story-paper);
+}
+.journey-validation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+  margin-top: 28px;
+}
+.journey-validation > div {
+  border-top: 2px solid var(--story-mint);
+  padding-top: 16px;
+}
+.journey-validation > div:last-child {
+  border-top-color: var(--story-accent);
+}
+.journey-validation h3 {
+  font:
+    600 17px/1.5 "Manrope",
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.025em;
+  margin: 0 0 10px;
+}
+.journey-validation p {
+  margin: 0;
+  font: 400 13px/1.8 var(--sans);
+  color: var(--story-muted);
+}
+.restart {
+  display: inline-block;
+  margin: 20px 0 0 20px;
+  padding: 12px 0;
+  font: 500 12px var(--sans);
+  color: var(--story-muted);
+}
+
+/* Runtime-injected controls inherit the same palette without changing their behavior. */
+main .chapter .route-controls {
+  background: #173b32;
+  border: 1px solid var(--story-rule);
+  border-radius: 5px;
+  padding: 17px;
+}
+main .chapter .route-controls > p {
+  font-size: 14px;
+}
+.walk-clock.walk-clock,
+.lineage-collapse.lineage-collapse {
+  border-radius: 6px;
+  background: #102e27eb;
+  border-color: var(--story-rule);
+  box-shadow: 0 12px 32px #041e1925;
+}
+.walk-clock small,
+.lineage-collapse__caption {
+  font: 400 10px/1.6 var(--sans) !important;
+  color: var(--story-muted) !important;
+}
+.walk-clock__kicker,
+.lineage-collapse__kicker {
+  color: var(--story-muted) !important;
+  font-size: 9px !important;
+}
+.lineage-collapse__caption {
+  font-size: 10px !important;
+}
+.scene-hud {
+  font: 500 10px var(--sans);
+  text-transform: none;
+  color: var(--story-muted);
+}
+.scene-hud #sceneIndex {
+  color: var(--story-accent);
+}
+.loader {
+  background: var(--story-deep);
+}
+.loader p {
+  font: 400 14px var(--sans);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--story-muted);
+}
+.loader__mark {
+  border-top-color: var(--story-accent);
+}
+#journeyExplorerControls {
+  border-radius: 9px;
+  background: #102e27f5;
+  border-color: #afd1bc45;
+  padding: 20px;
+}
+#journeyExplorerControls .explore-controls__head strong {
+  font:
+    600 19px/1.3 "Manrope",
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.04em;
+}
+#journeyExplorerControls .explore-controls__exit {
+  color: var(--story-paper);
+  font-size: 12px;
+  min-height: 40px;
+  border-radius: 5px;
+}
+#journeyExplorerControls .explore-controls__tabs button {
+  border-radius: 5px;
+}
+#journeyExplorerControls .explore-controls__tabs button[aria-selected="true"] {
+  background: var(--story-paper);
+  color: var(--story-forest);
+}
+#journeyExplorerControls .explore-site-select select {
+  border-radius: 5px;
+}
+main .explore-chapter {
+  min-height: 105svh;
+  padding-top: 130px;
+  padding-bottom: 120px;
+}
+main .chapter .copy--explore {
+  width: min(560px, 44vw);
+  background: #102e27f0;
+}
+main .explore-chapter .explore-key span {
+  font: 400 11px var(--sans);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--story-muted);
+}
+main .explore-chapter .explore-enter {
+  border-radius: 5px;
+  background: var(--story-paper);
+  color: var(--story-forest);
+  border: 0;
+  font-size: 14px;
+  min-height: 49px;
+}
+main .explore-chapter .explore-enter b {
+  color: var(--story-accent);
+}
+main .explore-chapter .explore-enter:hover {
+  background: #e7ebdc;
+  transform: none;
+}
+body[data-scene="explore"] .vignette {
+  background: linear-gradient(90deg, #102e2770, transparent 60%);
+}
+body.is-map-exploring .vignette {
+  background: none;
+}
+.journey-footer {
+  position: relative;
+  z-index: 5;
+  background: var(--story-paper);
+  color: var(--story-forest);
+  padding: 50px clamp(24px, 5vw, 76px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  border-top: 1px solid #153d3420;
+}
+.journey-footer .brand__main {
+  font:
+    800 36px "Manrope",
+    system-ui,
+    sans-serif;
+  letter-spacing: -2px;
+}
+.journey-footer .brand__sub {
+  font: 400 12px var(--sans);
+  letter-spacing: 0;
+  text-transform: none;
+  color: #596e61;
+}
+.journey-footer > p {
+  justify-self: end;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.journey-footer nav {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.journey-footer small {
+  justify-self: end;
+  font-size: 11px;
+  color: #596e61;
+}
+
+@media (max-width: 1100px) {
+  .topbar .brand__sub {
+    display: none;
+  }
+  .topbar .nodo8-journey-nav {
+    gap: 16px;
+    font-size: 12px;
+  }
+  body .topbar {
+    gap: 16px;
+    padding-inline: 24px;
+  }
+  main .chapter .copy {
+    width: min(560px, 49vw);
+  }
+  main .chapter .copy--hero {
+    width: 72vw;
+  }
+  .journey-hero-mark {
+    right: 5%;
+    opacity: 0.7;
+  }
+}
+@media (max-width: 800px) {
+  html {
+    scroll-padding-top: 85px;
+  }
+  body .topbar {
+    height: 70px;
+    padding: 0 17px;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+  }
+  .topbar .brand {
+    gap: 0;
+  }
+  .topbar .brand__main {
+    font-size: 29px;
+  }
+  .topbar .nodo8-journey-nav {
+    display: none;
+  }
+  .topbar .topbar__cta {
+    font-size: 11px;
+    padding: 11px 12px;
+  }
+  .topbar .topbar__cta span {
+    font-size: 12px;
+    margin-left: 5px;
+  }
+  .journey-contents > summary {
+    padding: 10px 12px;
+    font-size: 12px;
+    gap: 9px;
+  }
+  .journey-contents nav {
+    top: 57px;
+    width: min(310px, calc(100vw - 34px));
+  }
+  .progress {
+    top: 69px;
+  }
+  .vignette {
+    background: linear-gradient(180deg, #102e2720, #102e2730 35%, #102e2780);
+  }
+  main .chapter {
+    min-height: auto;
+    padding: 140px 17px 110px;
+  }
+  main .chapter .copy,
+  main .chapter .copy--right,
+  main .chapter .copy--wide,
+  main .chapter .copy--final,
+  main .chapter .copy--explore {
+    width: 100%;
+    margin: 0;
+    padding: 25px;
+    opacity: 1;
+    background: #102e27f5;
+    border-radius: 7px;
+  }
+  main .chapter .copy .eyebrow {
+    font-size: 9px;
+    gap: 10px;
+    margin-bottom: 23px;
+  }
+  main .chapter .copy h2 {
+    font-size: clamp(34px, 8.4vw, 47px);
+    letter-spacing: -0.055em;
+  }
+  main .chapter .copy > p:not(.eyebrow, .source-note, .insight, .final-line) {
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  main .chapter .source-note {
+    font-size: 11px;
+    line-height: 1.75;
+  }
+  main .chapter.hero {
+    min-height: 100svh;
+    padding: 118px 24px 70px;
+  }
+  main .chapter .copy--hero {
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  main .hero h1 {
+    font-size: clamp(46px, 11.5vw, 70px);
+    line-height: 1.05;
+  }
+  main .hero .copy .lede {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+  main .hero .copy .journey-territory {
+    font-size: 11px;
+    line-height: 1.8;
+  }
+  .journey-hero-mark {
+    display: none;
+  }
+  .hero-stats {
+    gap: 23px;
+    justify-content: space-between;
+    margin-top: 27px;
+  }
+  .hero-stats strong {
+    font-size: 26px;
+  }
+  .hero-stats span {
+    font-size: 10px;
+    line-height: 1.5;
+  }
+  .journey-acts {
+    grid-template-columns: 1fr;
+    margin-top: 28px;
+  }
+  .journey-acts a,
+  .journey-acts a:first-child {
+    padding: 14px 0;
+    display: grid;
+    grid-template-columns: 62px 1fr;
+    column-gap: 13px;
+    border-left: 0;
+    border-bottom: 1px solid #d5ded02e;
+  }
+  .journey-acts a:last-child {
+    border-bottom: 0;
+  }
+  .journey-acts span {
+    grid-row: 1 / 3;
+    align-self: center;
+    font-size: 10px;
+  }
+  .journey-acts strong {
+    margin: 0 0 3px;
+    font-size: 13px;
+  }
+  .journey-acts small {
+    font-size: 10px;
+  }
+  .journey-hero-actions {
+    gap: 18px;
+  }
+  .journey-hero-actions .decision-cta {
+    font-size: 12px;
+    padding: 14px 16px;
+  }
+  .journey-text-link {
+    font-size: 12px;
+  }
+  main .hero .source-note {
+    font-size: 10px;
+    line-height: 1.75;
+  }
+  .fact {
+    align-items: center;
+  }
+  .fact strong {
+    font-size: 37px;
+  }
+  .fact span {
+    font-size: 11px;
+  }
+  .split-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+  }
+  .split-stats > div {
+    padding: 13px;
+  }
+  .split-stats strong {
+    font-size: 25px;
+  }
+  .split-stats span {
+    font-size: 11px;
+  }
+  .thresholds {
+    grid-template-columns: 1fr 1fr;
+  }
+  .metric-cascade span {
+    max-width: 68%;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .metric-cascade strong {
+    font-size: 19px;
+  }
+  .funnel div {
+    min-width: 85%;
+    font-size: 10px;
+  }
+  .funnel b {
+    font-size: 13px;
+  }
+  .finalist-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .finalist-grid article {
+    padding: 15px 12px;
+  }
+  .finalist-grid small {
+    font-size: 10px;
+  }
+  .journey-evidence-tag {
+    font-size: 9px;
+  }
+  .journey-route-order strong {
+    font-size: 13px;
+  }
+  .journey-route-order p {
+    font-size: 11px;
+  }
+  .nodo8-stats > div {
+    padding: 15px 10px;
+  }
+  .nodo8-stats strong {
+    font-size: 23px;
+  }
+  .nodo8-stats span {
+    font-size: 10px;
+  }
+  .nodo8-peak-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .nodo8-peak-grid strong {
+    font-size: 27px;
+  }
+  .journey-validation {
+    grid-template-columns: 1fr;
+    gap: 23px;
+  }
+  .nodo8-summary {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .nodo8-summary > span {
+    border-bottom: 0;
+  }
+  .nodo8-summary > span:last-child {
+    border-bottom: 1px solid var(--story-rule);
+  }
+  .nodo8-summary strong {
+    font-size: 33px;
+  }
+  .restart {
+    display: block;
+    margin-left: 0;
+    text-align: left;
+  }
+  .walk-clock.walk-clock {
+    /* The same thresholds remain in the card; no fixed HUD over mobile text. */
+    display: none;
+  }
+  .walk-clock small {
+    display: none;
+  }
+  .lineage-collapse.lineage-collapse {
+    display: none;
+  }
+  .lineage-collapse__caption {
+    display: none;
+  }
+  .journey-playback .n8-player {
+    padding: 16px;
+  }
+  main .explore-chapter {
+    min-height: 100svh;
+    padding: 145px 17px 100px;
+  }
+  #journeyExplorerControls {
+    padding: 16px;
+    right: 10px;
+    left: 10px;
+    max-height: 50dvh;
+  }
+  #journeyExplorerControls .explore-controls__head strong {
+    font-size: 18px;
+  }
+  .journey-footer {
+    grid-template-columns: 1fr;
+    padding: 35px 24px;
+    gap: 18px;
+  }
+  .journey-footer > p,
+  .journey-footer small {
+    justify-self: start;
+  }
+  .journey-footer nav {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+@media (max-width: 370px) {
+  .topbar .topbar__cta {
+    font-size: 10px;
+    padding: 10px;
+  }
+  .topbar .topbar__cta span {
+    display: none;
+  }
+  .journey-contents > summary {
+    padding: 10px;
+    font-size: 11px;
+  }
+  main .chapter .copy {
+    padding: 22px;
+  }
+  .nodo8-stats strong {
+    font-size: 21px;
+  }
+  .hero-stats {
+    gap: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  main .chapter .copy,
+  .decision-cta,
+  .journey-contents,
+  .journey-text-link {
+    transition: none;
+  }
+  .maplibregl-canvas {
+    filter: none;
+  }
+}

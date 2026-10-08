@@ -21,8 +21,8 @@ try {
   // The exploration epilogue must exist before journey.js snapshots the chapter
   // list, otherwise it would not participate in the scroll director.
   await import("./journey-explore-prelude.js?v=20261008d");
-  await import("./journey.js?v=20261008d");
-  await import("./journey-director.js?v=20261008");
+  await import("./journey.js?v=20261008f");
+  await import("./journey-director.js?v=20261008f");
   await import("./journey-lens.js");
 
   // Current-service geometry is taken directly from the supplied official agency
@@ -42,4 +42,4 @@ try {
   document.body.appendChild(notice);
   console.error("Journey runtime unavailable", error);
 }
-await import("./journey-nodo8.mjs?v=20261008e");
+await import("./journey-nodo8.mjs?v=20261008f");
