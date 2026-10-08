@@ -1,0 +1,24 @@
+{
+  "contract": "nodo8_ui_explorer_publication_result_v1",
+  "ui_release": "20261008d",
+  "source_revision": "720b65452b4ba37792a6f208bf346fec239a38a5",
+  "pages_revision": "b0e9aacdf781787b5e848be362274231ceef3f76",
+  "workflow_run_id": 37779725913,
+  "workflow_conclusion": "success",
+  "published_html_pages": ["index.html", "dietro-l-analisi/index.html"],
+  "published_dependency_count": 66,
+  "retired_map_http_status": 404,
+  "repository_files_deleted": [],
+  "local_python_tests_passed": 30,
+  "local_node_tests_passed": 23,
+  "proposal_data_changed": false,
+  "public_browser_explorer_check": {
+    "ready": true,
+    "clock_min": 455,
+    "displayed_carriers": ["B1", "B2", "B3", "B4"],
+    "selection": "all",
+    "horizontal_overflow": false,
+    "console_errors": []
+  },
+  "semantics": "Nominal playback from the unchanged event ledger and full road geometry. Model carrier IDs, not live GPS or acquired vehicle assignments. No transport authority or decision flags changed."
+}
