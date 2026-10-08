@@ -100,3 +100,13 @@ def test_old_autonomous_service_animation_cannot_describe_nodo8():
     assert bootstrap.rindex("journey-explore-prelude.js") < bootstrap.rindex("journey.js")
     assert "journey-nodo8.mjs" in bootstrap
     assert "journey-runtime-unavailable" in bootstrap
+
+
+def test_historical_controls_are_in_flow_and_do_not_call_old_alternatives_final():
+    controls = (JOURNEY / "journey-lineage.js").read_text(encoding="utf-8")
+    assert "Alternative della fase storica · non Nodo8" in controls
+    assert "Le quattro linee finali" not in controls
+    assert "[data-scene=\"baseline\"] .copy" in controls
+    assert "[data-scene=\"finalists\"] .copy" in controls
+    kml = (JOURNEY / "journey-current-kml-exact.mjs").read_text(encoding="utf-8")
+    assert "Tracciati KML ufficiali · fermate da GTFS ufficiale" in kml

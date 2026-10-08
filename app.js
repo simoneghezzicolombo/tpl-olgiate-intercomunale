@@ -1,13 +1,21 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
-import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008d";
+import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008e";
+import {
+  renderStopTimes,
+  readStopSelection,
+  stopLink,
+} from "./nodo8-stop-times.mjs?v=20261008e";
 import {
   mountPlayer,
   renderDiagram,
   makeBusMarker,
   updateBusMarker,
-} from "./nodo8-experience.mjs?v=20261008d";
+} from "./nodo8-experience.mjs?v=20261008e";
 let activePlayer = null,
+  activeMap = null,
+  currentLine = null,
+  selectedSiteId = null,
   setExplorer = () => {},
   siteNames = new Map();
 const displayName = (site) => siteNames.get(site.site_id) || site.name;
@@ -127,6 +135,7 @@ function renderTimetable(data) {
         b.addEventListener("click", () => {
           if (!activePlayer) return;
           setExplorer("simulation");
+          activeMap?.reset();
           activePlayer.selectTrip(trip.number);
           document
             .querySelector(".route-explorer")
@@ -172,6 +181,7 @@ function renderCoverage(data) {
   });
 }
 function showSite(site) {
+  selectedSiteId = site.site_id;
   setExplorer("stops");
   if (activePlayer) {
     activePlayer.pause();
@@ -183,6 +193,10 @@ function showSite(site) {
     button.setAttribute("aria-pressed", String(selected));
   });
   const detail = document.getElementById("stopDetail");
+  detail.dataset.site = site.site_id;
+  const selected = document.getElementById("selectedStopSummary");
+  selected.hidden = false;
+  selected.querySelector("strong").textContent = displayName(site);
   detail.replaceChildren(
     element("h3", "", displayName(site)),
     element(
@@ -219,6 +233,7 @@ function showSite(site) {
       );
       show.type = "button";
       show.addEventListener("click", () => {
+        activeMap?.reset();
         activePlayer.selectTrip(1);
         activePlayer.jump(occurrence.first_alight_event_min);
         setExplorer("simulation");
@@ -255,6 +270,22 @@ function showSite(site) {
       ),
     );
   }
+  renderStopTimes(detail, currentLine, site.site_id, (trip, event) => {
+    activeMap?.reset();
+    setExplorer("simulation");
+    activePlayer.selectTrip(trip);
+    activePlayer.jump(event.arrival);
+    document
+      .querySelector(".route-explorer")
+      .scrollIntoView({ behavior: "instant", block: "center" });
+  });
+  const direct = element(
+    "a",
+    "stop-direct-link",
+    "Link diretto a questa fermata ↗",
+  );
+  direct.href = stopLink(site.site_id);
+  detail.append(direct);
 }
 /* Offline/CDN fallback projects the exact confirmed LineStrings, never schematic routes. */
 function renderFallbackMap(data, onSelect) {
@@ -414,12 +445,21 @@ function createMap(data) {
           : "Sito da inventario · accosto da validare",
       ),
     );
+    const detailsLink = element("button", "trip-preview", "Orari e dettagli ↓");
+    detailsLink.type = "button";
+    detailsLink.addEventListener("click", () => {
+      showSite(site);
+      openStopTimes();
+    });
+    popup.append(detailsLink);
     marker.bindPopup(popup);
     marker.on("click", () => showSite(site));
     markers.set(site.site_id, marker);
   });
-  const reset = () =>
+  const reset = () => {
+    map.closePopup();
     map.fitBounds(bounds, { padding: [25, 25], animate: false });
+  };
   reset();
   const busMarkers = new Map();
   if ("ResizeObserver" in window)
@@ -469,13 +509,31 @@ function createMap(data) {
 function renderStops(data, map) {
   const filter = document.querySelector('[data-stops][aria-pressed="true"]')
     .dataset.stops;
-  const sites = data.sites.filter(
-    (site) =>
-      (filter === "all" || site.proposed_new_site) &&
-      normalise(displayName(site) + " " + site.name).includes(
-        normalise(document.getElementById("stopSearch").value),
-      ),
-  );
+  const sites = data.sites
+    .filter(
+      (site) =>
+        (filter === "all" || site.proposed_new_site) &&
+        normalise(displayName(site) + " " + site.name).includes(
+          normalise(document.getElementById("stopSearch").value),
+        ),
+    )
+    .sort(
+      (a, b) =>
+        (a.hub_service_roles.length
+          ? 0
+          : Math.min(
+              ...a.ordered_occurrences.map(
+                (e) => e.ordered_nonhub_event_number,
+              ),
+            )) -
+        (b.hub_service_roles.length
+          ? 0
+          : Math.min(
+              ...b.ordered_occurrences.map(
+                (e) => e.ordered_nonhub_event_number,
+              ),
+            )),
+    );
   const list = document.getElementById("stopList");
   list.replaceChildren();
   sites.forEach((site) => {
@@ -483,12 +541,20 @@ function renderStops(data, map) {
       button = element("button");
     button.type = "button";
     button.dataset.site = site.site_id;
-    button.setAttribute("aria-pressed", "false");
+    button.setAttribute(
+      "aria-pressed",
+      String(site.site_id === selectedSiteId),
+    );
+    button.classList.toggle("selected", site.site_id === selectedSiteId);
     button.append(
       element(
         "span",
         "stop-index",
-        String(data.sites.indexOf(site) + 1).padStart(2, "0"),
+        site.hub_service_roles.length
+          ? "FS"
+          : site.ordered_occurrences
+              .map((e) => e.ordered_nonhub_event_number)
+              .join(" · "),
       ),
       element("span", "stop-name", displayName(site)),
     );
@@ -534,12 +600,14 @@ async function initProposal() {
     renderTimetable(data);
     renderCoverage(data);
     const line = buildLine(data);
+    currentLine = line;
     siteNames = new Map(diagramStops(line).map((e) => [e.siteId, e.display]));
     siteNames.set(
       data.sites.find((s) => s.hub_service_roles.length).site_id,
       "Olgiate FS",
     );
     const map = createMap(data);
+    activeMap = map;
     renderStops(data, map);
     activePlayer = mountPlayer(
       document.getElementById("routePlayback"),
@@ -638,6 +706,9 @@ async function initProposal() {
     });
     document.getElementById("resetMap").addEventListener("click", map.reset);
     document
+      .getElementById("selectedStopTimes")
+      .addEventListener("click", openStopTimes);
+    document
       .getElementById("scheduleFilter")
       .addEventListener("change", () => renderTimetable(data));
     document
@@ -653,6 +724,23 @@ async function initProposal() {
         renderStops(data, map);
       }),
     );
+    try {
+      const siteId = readStopSelection(line, location.href);
+      if (siteId) {
+        map.focus(line.sites.get(siteId));
+        requestAnimationFrame(openStopTimes);
+      } else if (location.hash) {
+        requestAnimationFrame(() =>
+          document
+            .getElementById(location.hash.slice(1))
+            ?.scrollIntoView({ behavior: "instant", block: "start" }),
+        );
+      }
+    } catch (error) {
+      document
+        .getElementById("stopDetail")
+        .append(element("p", "notice", error.message));
+    }
   } catch (error) {
     console.error("Nodo8: caricamento non completato", error);
     document
@@ -710,6 +798,12 @@ async function initProposal() {
         );
     });
   }
+}
+function openStopTimes() {
+  const detail = document.getElementById("stopDetail");
+  const times = detail.querySelector(".n8-stop-times");
+  if (times) times.open = true;
+  detail.scrollIntoView({ behavior: "instant", block: "start" });
 }
 initScroll();
 initMenu();

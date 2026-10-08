@@ -1,4 +1,4 @@
-import { diagramStops } from "./nodo8-line.mjs?v=20261008d";
+import { diagramStops } from "./nodo8-line.mjs?v=20261008e";
 const ns = "http://www.w3.org/2000/svg";
 const node = (tag, cls, text) => {
   const e = document.createElement(tag);
@@ -64,7 +64,7 @@ export function updateBusMarker(element, state, { showCarrier = false } = {}) {
   element.setAttribute("aria-label", element.title);
 }
 
-export { mountPlayer } from "./nodo8-player.mjs?v=20261008d";
+export { mountPlayer } from "./nodo8-player.mjs?v=20261008e";
 
 export function mountRoadPreview(line) {
   const host = node("div", "n8-road-preview"),

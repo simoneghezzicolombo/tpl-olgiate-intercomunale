@@ -311,6 +311,44 @@ export function adjacentEvent(line, selection, minute, direction) {
     : (events.findLast((e) => e.arrival < minute - 1e-7) ?? events[0]);
 }
 
+/* A stop identity is not a stop occurrence: keep every ledger event as a column. */
+export function siteTimetable(line, siteId) {
+  if (!line.sites.has(siteId)) fail("unknown timetable site");
+  const rows = line.trips.map((trip) => ({
+    trip: trip.number,
+    events: trip.events.filter((event) => event.siteId === siteId),
+  }));
+  const signature = (event) => event.occurrenceId || event.role;
+  const columns = rows[0].events.map((event) => ({
+    key: signature(event),
+    role: event.role,
+    ordinal: event.ordinal,
+  }));
+  if (
+    !columns.length ||
+    rows.some(
+      (row) =>
+        row.events.length !== columns.length ||
+        row.events.some(
+          (event, index) => signature(event) !== columns[index].key,
+        ),
+    )
+  )
+    fail("inconsistent site-event sequence");
+  return { siteId, columns, rows };
+}
+
+export function servicePhase(line, tripNumber, minute) {
+  const { trip } = playbackWindow(line, String(tripNumber));
+  if (!Number.isFinite(minute) || minute < trip.start || minute > trip.end)
+    fail("phase outside passenger trip");
+  if (minute >= trip.end) return 4;
+  if (minute === trip.start) return 0;
+  if (minute < trip.events[15].arrival) return 1;
+  if (minute < trip.events[15].departure) return 2;
+  return 3;
+}
+
 /* Editorial labels only; occurrence identity/order always come from the ledger. */
 const names = [
   "San Zeno / Via Cantù",

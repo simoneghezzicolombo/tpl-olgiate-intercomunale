@@ -119,6 +119,29 @@
   font-size: 11px;
   color: var(--n8-muted);
 }
+.n8-service-phases {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  list-style: none;
+  padding: 0;
+  margin: 19px 0 14px;
+  gap: 3px;
+}
+.n8-service-phases li {
+  border-top: 3px solid var(--n8-line);
+  padding-top: 7px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--n8-muted);
+}
+.n8-service-phases li.is-complete {
+  border-color: var(--n8-ink);
+}
+.n8-service-phases li[aria-current="step"] {
+  border-color: var(--n8-accent);
+  color: var(--n8-ink);
+  font-weight: 700;
+}
 .n8-milestones {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

@@ -1,11 +1,12 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine } from "../nodo8-line.mjs?v=20261008d";
+import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008e";
+import { stopLink } from "../nodo8-stop-times.mjs?v=20261008e";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "../nodo8-experience.mjs?v=20261008d";
+} from "../nodo8-experience.mjs?v=20261008e";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
@@ -133,6 +134,9 @@ async function installNodo8() {
     if (!response.ok) throw new Error("Nodo8 data HTTP " + response.status);
     const data = validateNodo8(await response.json());
     const line = buildLine(data);
+    const siteNames = new Map(
+      diagramStops(line).map((e) => [e.siteId, e.display]),
+    );
     validatedLine = line;
     const features = makeNodo8Features(data);
     const map = await waitForMap();
@@ -272,7 +276,9 @@ async function installNodo8() {
       if (popup) popup.remove();
       const card = document.createElement("div");
       const heading = document.createElement("h3");
-      heading.textContent = site.name;
+      heading.textContent = site.hub_service_roles.length
+        ? "Olgiate FS"
+        : siteNames.get(site.site_id) || site.name;
       const note = document.createElement("p");
       note.textContent = site.proposed_new_site
         ? "Nodo8 · nuovo sito proposto. Accosto da approvare."
@@ -295,6 +301,11 @@ async function installNodo8() {
         ? "Partenza, sosta intermedia e arrivo dello stesso giro; permanenza a bordo progettata, non autorizzata."
         : "Tempi nominali a bordo, senza cammino o attesa iniziale. Eventi diversi non sono viaggi intercambiabili.";
       card.append(limit);
+      const times = document.createElement("a");
+      times.href = stopLink(site.site_id, "../");
+      times.className = "nodo8-stop-link";
+      times.textContent = "Orari di questo sito nella vetrina →";
+      card.append(times);
       popup = new window.maplibregl.Popup({ maxWidth: "340px", offset: 12 })
         .setLngLat(site.coordinates_lon_lat)
         .setDOMContent(card)
@@ -377,6 +388,56 @@ async function installNodo8() {
     const renderScene = () => {
       const scene = document.body.dataset.scene;
       mountExplorerPlayer();
+      const siteSelect = document.getElementById("exploreSiteSelect");
+      if (siteSelect && !siteSelect.dataset.ready) {
+        siteSelect.replaceChildren();
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = "Scegli un sito · 27 posizioni di progetto";
+        siteSelect.append(placeholder);
+        [...line.sites.values()]
+          .sort(
+            (a, b) =>
+              (a.hub_service_roles.length
+                ? 0
+                : Math.min(
+                    ...a.ordered_occurrences.map(
+                      (e) => e.ordered_nonhub_event_number,
+                    ),
+                  )) -
+              (b.hub_service_roles.length
+                ? 0
+                : Math.min(
+                    ...b.ordered_occurrences.map(
+                      (e) => e.ordered_nonhub_event_number,
+                    ),
+                  )),
+          )
+          .forEach((site) => {
+            const option = document.createElement("option");
+            option.value = site.site_id;
+            option.textContent = site.hub_service_roles.length
+              ? "Olgiate FS"
+              : siteNames.get(site.site_id) || site.name;
+            siteSelect.append(option);
+          });
+        siteSelect.disabled = false;
+        siteSelect.dataset.ready = "true";
+        siteSelect.addEventListener("change", () => {
+          const site = line.sites.get(siteSelect.value),
+            explore = window.__analysisJourneyExplore;
+          if (!site || !explore?.isActive()) return;
+          explore.layers.nodo8 = true;
+          explore.layers.stops = true;
+          explore.render();
+          map.flyTo({
+            center: site.coordinates_lon_lat,
+            zoom: 14.5,
+            duration: window.__analysisJourneyReduceMotion ? 0 : 600,
+          });
+          showSite(site.site_id);
+        });
+      }
       if (scene !== "nodo8-time") player.pause();
       player.render();
       if (scene === "explore") {

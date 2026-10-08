@@ -109,6 +109,22 @@ def test_explorer_uses_same_ledger_player_with_four_carrier_overview():
     assert 'id="explorePlayback"' in controls and 'role="tablist"' in controls
     assert "Bus in movimento" in controls and "Livelli e confronto" in controls
     assert "showFourBuses" in controls
+    assert 'id="exploreSiteSelect"' in controls
+    assert 'chapter?.getBoundingClientRect()' in controls
+    assert "siteSelect.append(option)" in module
+
+
+def test_stop_times_and_story_links_reuse_ledger_without_timetable_synthesis():
+    app = (ROOT / "app.js").read_text(encoding="utf-8")
+    view = (ROOT / "nodo8-stop-times.mjs").read_text(encoding="utf-8")
+    story = (ROOT / "dietro-l-analisi/journey-nodo8.mjs").read_text(encoding="utf-8")
+    assert "siteTimetable(line, siteId)" in view
+    assert "clockSeconds(event.arrival)" in view
+    assert "clockSeconds(event.departure)" in view
+    assert "activePlayer.jump(event.arrival)" in app
+    assert 'stopLink(site.site_id, "../")' in story
+    assert "readStopSelection(line, location.href)" in app
+    assert "selectedStopSummary" in (ROOT / "index.html").read_text(encoding="utf-8")
 
 
 def test_timetable_is_copied_not_synthesised():

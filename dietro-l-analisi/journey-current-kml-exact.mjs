@@ -60,6 +60,8 @@ lineage.currentData = currentData;
 lineage.currentSource = 'USER_SUPPLIED_AGENCY_KML_LINESTRINGS_EXACT';
 lineage.currentGeometryContract = 'CURRENT_SERVICE_KML_GEOMETRY_V1';
 lineage.currentRouteGraphReconstruction = false;
+const currentSourceLabel = document.querySelector('.route-controls.current small');
+if (currentSourceLabel) currentSourceLabel.textContent = 'Tracciati KML ufficiali · fermate da GTFS ufficiale. Snapshot, non informazioni live.';
 
 function exactBounds() {
   const bounds = new maplibregl.LngLatBounds();

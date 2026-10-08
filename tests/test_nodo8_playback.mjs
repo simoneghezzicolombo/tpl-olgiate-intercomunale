@@ -10,7 +10,10 @@ import {
   positionBetween,
   diagramStops,
   clockSeconds,
+  siteTimetable,
+  servicePhase,
 } from "../nodo8-line.mjs";
+import { readStopSelection, stopLink } from "../nodo8-stop-times.mjs";
 const data = JSON.parse(
   readFileSync(
     new URL("../assets/nodo8-proposal.json", import.meta.url),
@@ -20,6 +23,62 @@ const data = JSON.parse(
 const line = buildLine(data);
 const carrier = (n) =>
   line.vehicles.find((v) => v.blocks.some((t) => t.number === n));
+
+test("stop timetables copy all ledger events, including two occurrences and three FS roles", () => {
+  const before = JSON.stringify(data);
+  for (const site of line.sites.values()) {
+    const shown = siteTimetable(line, site.site_id);
+    assert.equal(shown.rows.length, 16);
+    shown.rows.forEach((row, index) => {
+      assert.equal(row.trip, index + 1);
+      assert.deepEqual(
+        row.events,
+        line.trips[index].events.filter((e) => e.siteId === site.site_id),
+      );
+    });
+    assert.equal(
+      shown.columns.length,
+      site.hub_service_roles.length ? 3 : site.ordered_occurrences.length,
+    );
+  }
+  const hub = [...line.sites.values()].find((s) => s.hub_service_roles.length);
+  assert.deepEqual(
+    siteTimetable(line, hub.site_id).columns.map((c) => c.role),
+    [
+      "FULL_TRIP_START_FS",
+      "INTERMEDIATE_FS_STAY_ONBOARD_DESIGN",
+      "FULL_TRIP_END_FS",
+    ],
+  );
+  assert.throws(() => siteTimetable(line, "missing"));
+  assert.equal(JSON.stringify(data), before);
+});
+
+test("the progress strip distinguishes passenger start, both loops, FS wait and final arrival", () => {
+  for (const trip of line.trips) {
+    assert.equal(servicePhase(line, trip.number, trip.start), 0);
+    assert.equal(servicePhase(line, trip.number, trip.events[1].arrival), 1);
+    assert.equal(servicePhase(line, trip.number, trip.events[15].arrival), 2);
+    assert.equal(servicePhase(line, trip.number, trip.events[15].departure), 3);
+    assert.equal(servicePhase(line, trip.number, trip.end), 4);
+    assert.throws(() => servicePhase(line, trip.number, trip.end + 1));
+  }
+});
+
+test("stop deep links accept only certified IDs and correctly encode punctuation", () => {
+  for (const site of line.sites.values()) {
+    const url = new URL(stopLink(site.site_id), "https://example.test/tpl/");
+    assert.equal(readStopSelection(line, url.href), site.site_id);
+    assert.equal(url.hash, "#stopDetail");
+  }
+  assert.equal(
+    readStopSelection(line, "https://example.test/?v=20261008e"),
+    null,
+  );
+  assert.throws(() =>
+    readStopSelection(line, "https://example.test/?site=not-certified"),
+  );
+});
 test("one continuous road path retains all vertices and ordered occurrences", () => {
   assert.deepEqual(line.coordinates, [
     ...data.routes.find((r) => r.wing === "east_A").coordinates,
