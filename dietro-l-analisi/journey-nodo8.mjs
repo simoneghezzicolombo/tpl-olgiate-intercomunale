@@ -1,12 +1,12 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008j";
-import { stopLink } from "../nodo8-stop-times.mjs?v=20261008j";
+import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008k";
+import { stopLink } from "../nodo8-stop-times.mjs?v=20261008k";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "../nodo8-experience.mjs?v=20261008j";
+} from "../nodo8-experience.mjs?v=20261008k";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
