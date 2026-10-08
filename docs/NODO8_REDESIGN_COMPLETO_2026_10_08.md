@@ -26,4 +26,12 @@ La continuità fisica del mezzo non certifica la permanenza passeggeri. Copertur
 - Caricamento del JSON bloccato deliberatamente: orologio non inventato (`—:—`), nessuna anteprima o viaggio sostitutivo, selettori disabilitati. Blocco e dimensioni di test rimossi.
 - Pubblicazione limitata alle due pagine finali e 70 dipendenze esplicite. Le pagine ritirate sono conservate in Git e non entrano nell’artefatto Pages.
 
-La verifica di pubblicazione, con revisioni effettive e controlli HTTP, è registrata separatamente dopo il deploy.
+## Verifica pubblica completata
+
+- Sorgente del redesign: `6d2467f30eaef63d424e511ed1489d73e6ba85de`.
+- Revisione Pages: `cfc946ea31b943e7ca8cdf8281cfa42af4a9fc0a`.
+- Pipeline [37790663062](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/37790663062): build e deploy completati con successo.
+- Manifest pubblico della nuova revisione: esattamente due HTML; tutti i 70 file HTTP confrontati con i rispettivi SHA-256, nessuna divergenza.
+- Vecchia mappa `outputs/maps/mappa_interattiva_rete_tpl_olgiate.html`: HTTP 404; sorgente conservata nel commit Pages. Nessun file del repository eliminato.
+- Browser pubblico: nuova vetrina con anteprima del tracciato reale e relazione FS→Calco Centro; Esplora del racconto con B1–B4 alle 07:35 e quattro comandi per seguire i rispettivi giri. Nessun errore console osservato nel racconto.
+- Anteprime locali salvate nella cache: `nodo8-redesign-published-20261008f.png` e `nodo8-story-buses-published-20261008f.png`.
