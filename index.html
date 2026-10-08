@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#153d34" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20261008g" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20261008i" />
     <title>Nodo8: da paese a paese</title>
     <meta
       name="description"
@@ -22,15 +22,15 @@
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
-    <link rel="stylesheet" href="nodo8-experience.css?v=20261008g" />
-    <link rel="stylesheet" href="nodo8-design.css?v=20261008g" />
+    <link rel="stylesheet" href="nodo8-experience.css?v=20261008i" />
+    <link rel="stylesheet" href="nodo8-design.css?v=20261008i" />
     <script
       defer
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
-    <script type="module" src="app.js?v=20261008h"></script>
+    <script type="module" src="app.js?v=20261008i"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Salta al contenuto</a>
@@ -165,8 +165,7 @@
           </div>
           <div class="route-metrics">
             <span><strong>27,124 km</strong> per giro</span
-            ><span><strong>27 siti</strong> inclusa FS</span
-            ><span><strong>28 passaggi</strong> fuori FS</span>
+            ><span><strong>27 fermate</strong> inclusa FS</span>
           </div>
           <div class="map-guide" aria-label="Come usare la mappa">
             <span><b>1</b> Scegli una fermata</span
@@ -305,15 +304,14 @@
             </aside>
           </div>
           <div id="stopDetail" class="stop-detail">
-            <p>Scegli un sito per vedere passaggi e orari.</p>
+            <p>Scegli una fermata per vedere gli orari.</p>
           </div>
           <details class="section-note">
             <summary>Come leggere questa mappa</summary>
             <p>
-              Il tracciato segue le strade della proposta confermata. Passaggio
-              dei bus, punti di salita e accessibilità devono essere approvati.
-              San Zeno e Olgiate sud compaiono due volte nello stesso giro: sono
-              due passaggi per sito, non fermate aggiuntive.
+              Strade, punti di salita e accessibilità devono essere approvati.
+              Il bus torna due volte a San Zeno e Olgiate sud nello stesso giro:
+              sono le stesse fermate, non fermate aggiuntive.
               <a
                 href="outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson"
                 download
@@ -374,7 +372,7 @@
           <details class="section-note">
             <summary>Cosa comprende il tempo</summary>
             <p>
-              Sono tempi di progetto per due passaggi nello stesso giro. Non
+              Sono tempi di progetto tra due fermate dello stesso giro. Non
               includono cammino, attesa prima di salire o ritardi. La permanenza
               a bordo a FS deve essere autorizzata; le coincidenze non sono
               garantite. L’esempio iniziale è FS → Calco Centro, giro 01. Il
@@ -425,8 +423,8 @@
         </div>
         <div id="stopsDiagramPanel" role="tabpanel" aria-labelledby="stopsTab">
           <p class="diagram-hint">
-            28 passaggi fuori FS, in ordine di servizio. Tocca un sito per
-            vederlo sulla mappa.
+            27 fermate, inclusa Olgiate FS. Il bus torna due volte a San Zeno e
+            Olgiate sud. Tocca una fermata per vederlo sulla mappa.
           </p>
           <div id="stopsDiagram"><p>Caricamento dello schema…</p></div>
         </div>
@@ -437,8 +435,8 @@
           hidden
         >
           <p class="diagram-hint">
-            Uno schema dei luoghi, non delle fermate. Per l’ordine dei passaggi,
-            usa la vista «Le fermate».
+            Uno schema dei luoghi, non delle fermate. Per l’ordine delle
+            fermate, usa la vista «Le fermate».
           </p>
           <div id="localitiesDiagram"><p>Caricamento dello schema…</p></div>
         </div>

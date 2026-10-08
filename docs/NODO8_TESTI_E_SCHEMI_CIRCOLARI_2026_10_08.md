@@ -1,5 +1,11 @@
 # Nodo8: testi brevi e schemi circolari
 
+## Correzione richiesta dal committente: release 20261008i
+
+I nomi delle località sono ora centrati dentro i punti circolari stessi, non semplicemente all’interno degli anelli. Ogni nodo ha raggio 82 unità SVG; nomi bianchi centrati e, dove necessario, su due righe. Verificati nel browser tutti gli undici nomi: il rettangolo del testo è contenuto nel relativo punto.
+
+«Fermate» sostituisce «passaggi» nei riepiloghi, negli schemi e nei controlli. Il riepilogo dichiara 27 fermate inclusa FS; San Zeno e Olgiate sud restano due visite allo stesso luogo. «Primo passaggio» e «Secondo passaggio» sono mantenuti nelle sole colonne necessarie a distinguere quelle visite. Numerazione, identità, ordine e dati del registro restano invariati. 40 test Python e 31 test Node verdi.
+
 Release `20261008h`, presentazione soltanto. Percorso, fermate, orari, copertura e autorità del progetto invariati.
 
 - Un solo favicon Nodo8 condiviso dalle due pagine, incluso nell’artefatto pubblico. Rimossa la vecchia icona inserita dinamicamente dal racconto.

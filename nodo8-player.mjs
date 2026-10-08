@@ -5,7 +5,7 @@ import {
   adjacentEvent,
   diagramStops,
   servicePhase,
-} from "./nodo8-line.mjs?v=20261008g";
+} from "./nodo8-line.mjs?v=20261008i";
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -395,7 +395,7 @@ export function mountPlayer(
           : chosen.status === "fs-hold"
             ? `Il bus attende fino alle ${hhmm(chosen.until)} e prosegue sul secondo anello. La continuità a bordo è prevista, da autorizzare.`
             : chosen.status === "stop"
-              ? `Passaggio ${chosen.event.ordinal} di 28 · riparte alle ${clockSeconds(chosen.until)} circa.`
+              ? `Fermata n. ${chosen.event.ordinal} del giro · riparte alle ${clockSeconds(chosen.until)} circa.`
               : `Arrivo previsto alle ${clockSeconds(chosen.until)} circa.`,
       );
     }

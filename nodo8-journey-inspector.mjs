@@ -1,4 +1,4 @@
-import { clockSeconds, diagramStops } from "./nodo8-line.mjs?v=20261008g";
+import { clockSeconds, diagramStops } from "./nodo8-line.mjs?v=20261008i";
 export const eventKey = (event) => event.occurrenceId || event.role;
 
 /* A specific ordered event pair within one certified nominal ledger.
@@ -9,11 +9,11 @@ export function inspectJourney(line, tripNumber, fromKey, toKey) {
   const fromIndex = trip.events.findIndex((e) => eventKey(e) === fromKey);
   const toIndex = trip.events.findIndex((e) => eventKey(e) === toKey);
   if (fromIndex < 0 || toIndex <= fromIndex)
-    throw new Error("Scegli due passaggi in ordine nello stesso giro.");
+    throw new Error("Scegli partenza e arrivo nello stesso giro.");
   const from = trip.events[fromIndex],
     to = trip.events[toIndex];
   if (to.arrival < from.departure)
-    throw new Error("Passaggi non compatibili nel registro.");
+    throw new Error("Fermate non compatibili nello stesso giro.");
   const middle = trip.events[15];
   const crossesFS = fromIndex < 15 && toIndex > 15;
   return {
@@ -46,10 +46,16 @@ export function mountJourneyInspector(container, line, onInspect) {
     event.role === "FULL_TRIP_START_FS"
       ? "Olgiate FS · partenza"
       : event.role === "INTERMEDIATE_FS_STAY_ONBOARD_DESIGN"
-        ? "Olgiate FS · passaggio intermedio"
+        ? "Olgiate FS · sosta intermedia"
         : event.role === "FULL_TRIP_END_FS"
           ? "Olgiate FS · arrivo finale"
-          : `${names.get(event.siteId) || event.name} · passaggio ${event.ordinal}`;
+          : (names.get(event.siteId) || event.name) +
+            (line.sites.get(event.siteId).ordered_occurrences.length > 1
+              ? line.sites.get(event.siteId).ordered_occurrences[0]
+                  .ordered_nonhub_event_number === event.ordinal
+                ? " · prima volta"
+                : " · ritorno"
+              : "");
   const option = (value, text) => {
     const o = make("option", "", text);
     o.value = value;
