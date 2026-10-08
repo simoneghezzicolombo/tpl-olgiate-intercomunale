@@ -1,4 +1,4 @@
-import { clockSeconds, diagramStops } from "./nodo8-line.mjs?v=20261008f";
+import { clockSeconds, diagramStops } from "./nodo8-line.mjs?v=20261008g";
 export const eventKey = (event) => event.occurrenceId || event.role;
 
 /* A specific ordered event pair within one certified nominal ledger.
@@ -74,7 +74,7 @@ export function mountJourneyInspector(container, line, onInspect) {
     );
     const events = template.events.slice(first + 1);
     toSelect.replaceChildren(
-      option("", "Scegli un passaggio successivo…"),
+      option("", "Scegli dove arrivare…"),
       ...events.map((e) => option(eventKey(e), label(e))),
     );
     if (events.some((e) => eventKey(e) === previous)) toSelect.value = previous;
@@ -86,11 +86,7 @@ export function mountJourneyInspector(container, line, onInspect) {
     result.replaceChildren();
     if (!toSelect.value) {
       result.append(
-        make(
-          "p",
-          "journey-empty",
-          "Scegli un passaggio di arrivo successivo alla partenza.",
-        ),
+        make("p", "journey-empty", "Scegli un arrivo dopo la partenza."),
       );
       return;
     }
@@ -107,12 +103,12 @@ export function mountJourneyInspector(container, line, onInspect) {
       const headline = make("div", "journey-time");
       headline.append(
         make("strong", "", minutes),
-        make("span", "", "minuti nominali a bordo"),
+        make("span", "", "minuti a bordo previsti"),
       );
       const endpoints = make("div", "journey-endpoints");
       [
-        [journey.from, "Partenza dal passaggio"],
-        [journey.to, "Arrivo al passaggio"],
+        [journey.from, "Partenza"],
+        [journey.to, "Arrivo"],
       ].forEach(([event, heading]) => {
         const item = make("div");
         item.append(
@@ -132,13 +128,13 @@ export function mountJourneyInspector(container, line, onInspect) {
         "p",
         "journey-explanation",
         journey.crossesFS
-          ? `Include ${new Intl.NumberFormat("it-IT", { maximumFractionDigits: 1 }).format(journey.intermediateHoldMinutes)} minuti di sosta intermedia a FS. Prosecuzione nello stesso mezzo ${journey.carrier} di modello; permanenza a bordo da autorizzare.`
-          : `Due passaggi dello stesso giro, sul mezzo ${journey.carrier} di modello. Non comprende cammino, attesa iniziale o ritardi.`,
+          ? `Compresi ${new Intl.NumberFormat("it-IT", { maximumFractionDigits: 1 }).format(journey.intermediateHoldMinutes)} minuti di sosta a FS. Il progetto prevede lo stesso bus ${journey.carrier}; restare a bordo deve essere autorizzato.`
+          : `Un tratto del giro scelto, sul bus ${journey.carrier} del modello.`,
       );
       const actions = make("div", "journey-inspect-actions");
       [
-        ["Vedi la partenza sulla mappa", journey.from.departure],
-        ["Vedi l’arrivo sulla mappa", journey.to.arrival],
+        ["Partenza sulla mappa", journey.from.departure],
+        ["Arrivo sulla mappa", journey.to.arrival],
       ].forEach(([text, minute]) => {
         const button = make("button", "", text);
         button.type = "button";

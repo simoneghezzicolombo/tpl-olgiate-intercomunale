@@ -29,16 +29,16 @@
     ['02','seed su gap a 8 minuti',1686],
     ['03','seed prima del thinning',1074],
     ['04','candidate prima del pruning finale',292],
-    ['05','candidate finali persistite',155]
+    ['05','punti da verificare',155]
   ];
   const search = document.createElement('div');
   search.className = 'search-compression';
-  search.innerHTML = `<span class="search-compression__kicker">compressione dello spazio di ricerca</span><div class="search-compression__number">3.858</div><div class="search-compression__label">${funnelStages[0][1]}</div><div class="search-compression__stages">${funnelStages.map((s,i)=>`<div class="search-compression__stage${i===0?' is-current':''}" data-i="${i}"><span>${s[0]}</span><i></i><b>${s[2].toLocaleString('it-IT')}</b></div>`).join('')}</div><div class="search-compression__note">La mappa visualizza soltanto le 155 candidate persistite. Per gli stadi scartati mostriamo solo conteggi aggregati: nessuna coordinata viene inventata.</div>`;
+  search.innerHTML = `<span class="search-compression__kicker">Dai punti possibili alle fermate da valutare</span><div class="search-compression__number">3.858</div><div class="search-compression__label">${funnelStages[0][1]}</div><div class="search-compression__stages">${funnelStages.map((s,i)=>`<div class="search-compression__stage${i===0?' is-current':''}" data-i="${i}"><span>${s[0]}</span><i></i><b>${s[2].toLocaleString('it-IT')}</b></div>`).join('')}</div><div class="search-compression__note">La mappa mostra i 155 punti da verificare. Per i passaggi precedenti conosciamo i conteggi, non le posizioni dei punti scartati.</div>`;
   document.body.appendChild(search);
 
   const evidence = document.createElement('div');
   evidence.className = 'evidence-stack';
-    evidence.innerHTML = '<span><b>5</b>comuni core</span><span><b>27</b>siti di progetto</span><span><b>16</b>giri completi</span><span><b>254</b>feriali 2027</span><span class="human"><b>0</b>vincitori automatici</span>';
+    evidence.innerHTML = '<span><b>5</b>comuni</span><span><b>27</b>fermate proposte</span><span><b>16</b>giri completi</span><span><b>254</b>feriali 2027</span><span class="human"><b>0</b>vincitori automatici</span>';
   document.body.appendChild(evidence);
 
   function install() {

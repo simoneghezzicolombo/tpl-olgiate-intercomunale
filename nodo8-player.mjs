@@ -5,7 +5,7 @@ import {
   adjacentEvent,
   diagramStops,
   servicePhase,
-} from "./nodo8-line.mjs?v=20261008f";
+} from "./nodo8-line.mjs?v=20261008g";
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -109,7 +109,7 @@ export function mountPlayer(
     "Ricomincia il giro o la giornata selezionata",
   );
   const clockWrap = el("div", "n8-clock-wrap"),
-    clockCaption = el("span", "n8-clock-caption", "Ora nel modello");
+    clockCaption = el("span", "n8-clock-caption", "Ora simulata");
   clockWrap.append(clockCaption, time);
   top.append(clockWrap, play, reset);
   const rangeLabel = el(
@@ -159,8 +159,8 @@ export function mountPlayer(
   const forward = button("Successiva →", "", () =>
     jump(adjacentEvent(line, selection, minute, 1).arrival),
   );
-  back.setAttribute("aria-label", "Evento di fermata precedente");
-  forward.setAttribute("aria-label", "Evento di fermata successivo");
+  back.setAttribute("aria-label", "Fermata precedente");
+  forward.setAttribute("aria-label", "Fermata successiva");
   steps.append(back, forward);
   const current = el("div", "n8-current-event");
   current.setAttribute("aria-live", "off");
@@ -171,7 +171,7 @@ export function mountPlayer(
   const fleet = el("div", "n8-fleet");
   fleet.setAttribute(
     "aria-label",
-    "Quattro mezzi di modello: seleziona un bus per seguire il giro",
+    "Quattro bus simulati: scegline uno per seguire il giro",
   );
   const fleetHeading = el("div", "n8-fleet-heading"),
     fleetCount = el("strong"),
@@ -200,7 +200,7 @@ export function mountPlayer(
     }),
   );
   const info = el("details", "n8-player-details"),
-    summary = el("summary", "", "Velocità e metodo della simulazione");
+    summary = el("summary", "", "Come funziona l’animazione");
   const speedWrap = el("div", "n8-speed"),
     speedLabel = el("label", "", "Riproduzione accelerata"),
     speedSelect = el("select");
@@ -218,7 +218,7 @@ export function mountPlayer(
     el(
       "p",
       "n8-playback-note",
-      "Ricostruzione nominale, non GPS live. Soste di 30 secondi alle fermate e attesa intermedia a FS dal registro di progetto. Tra fermate il movimento è interpolato per distanza su tutti i vertici del tracciato: velocità, traffico e passeggeri non sono osservati. B1–B4 sono identificativi di modello, non mezzi assegnati. Nella vista giornata sono inclusi 10 minuti di recupero finale, senza inventare corse a vuoto.",
+      "I bus seguono le strade e l’orario del progetto, non dati GPS. Si fermano per 30 secondi a ogni fermata e attendono a FS quanto previsto. Il movimento tra fermate è calcolato in base alla distanza: non misura velocità, traffico o passeggeri reali. B1–B4 sono bus simulati, non mezzi assegnati. La vista giornata comprende 10 minuti di pausa dopo ogni rientro; non ricostruisce gli spostamenti fuori servizio.",
     ),
   );
   const status = el(
@@ -254,7 +254,7 @@ export function mountPlayer(
   container.append(current, fleetHeading, fleet, navigation, status, info);
   info.append(hint);
   if (brief) {
-    summary.textContent = "Fermate, velocità e metodo";
+    summary.textContent = "Altri controlli e come funziona";
     info.append(navigation);
   }
   function changeSelection(value, at = null) {
@@ -279,7 +279,7 @@ export function mountPlayer(
     pause();
     const b = bounds();
     minute = Math.max(b.start, Math.min(b.end, value));
-    status.textContent = "In pausa · evento del registro nominale.";
+    status.textContent = "In pausa · orario del progetto.";
     render();
   }
   function render(force = true) {
@@ -395,8 +395,8 @@ export function mountPlayer(
           : chosen.status === "fs-hold"
             ? `Il bus attende fino alle ${hhmm(chosen.until)} e prosegue sul secondo anello. La continuità a bordo è prevista, da autorizzare.`
             : chosen.status === "stop"
-              ? `Evento ${chosen.event.ordinal} di 28 · sosta nominale di 30 s · ripartenza ${clockSeconds(chosen.until)}.`
-              : `Prossimo evento ${chosen.next.ordinal ?? "FS"} · arrivo nominale ${clockSeconds(chosen.until)}.`,
+              ? `Passaggio ${chosen.event.ordinal} di 28 · riparte alle ${clockSeconds(chosen.until)} circa.`
+              : `Arrivo previsto alle ${clockSeconds(chosen.until)} circa.`,
       );
     }
     if (!b.trip)
@@ -469,7 +469,7 @@ export function mountPlayer(
     previous = null;
     play.textContent = "Pausa";
     play.setAttribute("aria-pressed", "true");
-    status.textContent = `Riproduzione accelerata ×${speed} · orario nominale.`;
+    status.textContent = `Riproduzione ×${speed} · orario del progetto.`;
     render();
     frame = requestAnimationFrame(tick);
   }
@@ -481,7 +481,7 @@ export function mountPlayer(
     speed = Number(speedSelect.value);
     previous = null;
     if (playing)
-      status.textContent = `Riproduzione accelerata ×${speed} · orario nominale.`;
+      status.textContent = `Riproduzione ×${speed} · orario del progetto.`;
   });
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {

@@ -40,12 +40,12 @@
 
   const serviceHud = document.createElement('div');
   serviceHud.className = 'service-clock';
-  serviceHud.innerHTML = '<span class="service-clock__kicker">un’ora tipo · movimento di servizio</span><div class="service-clock__row"><div class="service-clock__minute"><span>:</span><b>00</b></div><div class="service-clock__legend"><span class="s16"><i></i>16 h · due partenze :39</span><span class="s185"><i></i>18,5 h · partenze :03 / :07</span></div></div><div class="service-clock__note">Posizione interpolata lungo la sequenza certificata di anchor. È una rappresentazione del timing, non una traccia GPS del bus.</div>';
+  serviceHud.innerHTML = '<span class="service-clock__kicker">un’ora tipo · movimento di servizio</span><div class="service-clock__row"><div class="service-clock__minute"><span>:</span><b>00</b></div><div class="service-clock__legend"><span class="s16"><i></i>16 h · due partenze :39</span><span class="s185"><i></i>18,5 h · partenze :03 / :07</span></div></div><div class="service-clock__note">Movimento calcolato tra le fermate della fase storica, non una posizione GPS del bus.</div>';
   document.body.appendChild(serviceHud);
 
   const lineageHud = document.createElement('div');
   lineageHud.className = 'lineage-collapse';
-  lineageHud.innerHTML = '<span class="lineage-collapse__kicker">quattro lineage → due servizi visibili</span><div class="lineage-collapse__rows"><div class="lineage-collapse__row" data-row="16"><span class="lineage-pill fig">FIG · 16 h</span><b>stesso servizio</b><span class="lineage-pill two">TWO · 16 h</span></div><div class="lineage-collapse__row" data-row="185"><span class="lineage-pill fig">FIG · 18,5 h</span><b>stesso servizio</b><span class="lineage-pill two">TWO · 18,5 h</span></div></div><div class="lineage-collapse__caption">Nel diagnostic finale, dentro ciascuno span coincidono route pubbliche, anchor e departures.</div>';
+  lineageHud.innerHTML = '<span class="lineage-collapse__kicker">quattro alternative, due risultati</span><div class="lineage-collapse__rows"><div class="lineage-collapse__row" data-row="16"><span class="lineage-pill fig">FIG · 16 h</span><b>stesso servizio</b><span class="lineage-pill two">TWO · 16 h</span></div><div class="lineage-collapse__row" data-row="185"><span class="lineage-pill fig">FIG · 18,5 h</span><b>stesso servizio</b><span class="lineage-pill two">TWO · 18,5 h</span></div></div><div class="lineage-collapse__caption">Nella stessa fascia oraria, le varianti avevano gli stessi percorsi, fermate e partenze.</div>';
   document.body.appendChild(lineageHud);
 
   function routeCoords(route, G) {

@@ -30,6 +30,24 @@ body[data-scene="intro"] .hub-marker {
   opacity: 0 !important;
   visibility: hidden;
 }
+.chapter details.source-note {
+  padding: 10px 0;
+  border-top: 1px solid var(--story-rule);
+  margin-top: 18px;
+}
+.chapter details.source-note > summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 12px 0;
+  color: var(--story-mint);
+  font-weight: 600;
+}
+.chapter details.source-note > summary::marker {
+  color: var(--story-accent);
+}
+.chapter details.source-note p {
+  margin-top: 12px;
+}
 ::selection {
   background: #dd7655;
   color: #fff;

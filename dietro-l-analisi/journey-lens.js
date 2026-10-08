@@ -25,7 +25,7 @@
   const depth = document.createElement('div');
   depth.className = 'depth-stack';
   depth.setAttribute('aria-hidden', 'true');
-  depth.innerHTML = '<span class="depth-stack__kicker">exploded evidence stack · quota visuale</span><div class="depth-stack__axis"><span class="depth-stack__layer" data-layer="grid"><i></i><span>WorldPop 100 m<b>4.283 celle</b></span></span><span class="depth-stack__layer" data-layer="sections"><i></i><span>Sezioni ISTAT<b>229 sezioni</b></span></span><span class="depth-stack__layer" data-layer="buildings"><i></i><span>DBGT edifici<b>4.226 sagome</b></span></span></div>';
+  depth.innerHTML = '<span class="depth-stack__kicker">Le fonti, una sopra l’altra</span><div class="depth-stack__axis"><span class="depth-stack__layer" data-layer="grid"><i></i><span>WorldPop 100 m<b>4.283 celle</b></span></span><span class="depth-stack__layer" data-layer="sections"><i></i><span>Sezioni ISTAT<b>229 sezioni</b></span></span><span class="depth-stack__layer" data-layer="buildings"><i></i><span>DBGT edifici<b>4.226 sagome</b></span></span></div>';
   document.body.appendChild(depth);
 
   const lens = document.createElement('div');
@@ -41,7 +41,7 @@
     const n = Number(value);
     return Number.isFinite(n) ? n.toLocaleString('it-IT', {maximumFractionDigits: digits}) : 'n.d.';
   }
-  function muni(code) { return MUNICIPALITIES[String(code || '').padStart(6, '0')] || String(code || 'territorio core'); }
+  function muni(code) { return MUNICIPALITIES[String(code || '').padStart(6, '0')] || String(code || 'territorio studiato'); }
   function row(label, value, cls = '') { return `<div class="analysis-lens__row"><span>${label}</span><b class="${cls}">${value}</b></div>`; }
 
   function inspect(kind, props, point = {x: 24, y: 110}) {

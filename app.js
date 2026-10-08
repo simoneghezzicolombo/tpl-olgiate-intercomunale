@@ -1,19 +1,19 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
-import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008f";
+import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008g";
 import {
   renderStopTimes,
   readStopSelection,
   stopLink,
-} from "./nodo8-stop-times.mjs?v=20261008f";
-import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008f";
+} from "./nodo8-stop-times.mjs?v=20261008g";
+import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008g";
 import {
   mountPlayer,
   renderDiagram,
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "./nodo8-experience.mjs?v=20261008f";
+} from "./nodo8-experience.mjs?v=20261008g";
 let activePlayer = null,
   activeMap = null,
   currentLine = null,
@@ -205,8 +205,8 @@ function showSite(site) {
       "p",
       "",
       site.proposed_new_site
-        ? "Nuovo sito proposto. Posizione di progetto, non fermata autorizzata."
-        : "Sito derivato dall’inventario. Accosto e lato per questo servizio restano da validare.",
+        ? "Nuova fermata proposta, da approvare."
+        : "Fermata già censita. Punto di salita e lato della strada da verificare per Nodo8.",
     ),
   );
   if (site.hub_service_roles.length) {
@@ -225,7 +225,7 @@ function showSite(site) {
         element(
           "strong",
           "",
-          "Nodo8 · evento " + occurrence.ordered_nonhub_event_number,
+          "Passaggio " + occurrence.ordered_nonhub_event_number,
         ),
       );
       const show = element(
@@ -248,7 +248,7 @@ function showSite(site) {
         element(
           "p",
           "",
-          "Dall’ultima FS → questo evento: " +
+          "Dalla stazione: " +
             formatNumber(
               occurrence.nominal_fs_to_occurrence_in_vehicle_min,
               1,
@@ -268,7 +268,7 @@ function showSite(site) {
       element(
         "p",
         "",
-        "Tempi nominali a bordo, esclusi cammino e attesa iniziale. Eventi diversi dello stesso sito non si combinano in un viaggio garantito.",
+        "Tempi previsti sul bus, senza cammino o attesa. Quando il bus passa due volte, sono momenti diversi dello stesso giro: non si possono combinare in un viaggio garantito.",
       ),
     );
   }
@@ -780,7 +780,7 @@ async function initProposal() {
     }
   } catch (error) {
     console.error("Nodo8: caricamento non completato", error);
-    document.getElementById("mapPlaybackClock").textContent = "—:—";
+    document.getElementById("mapPlaybackClock").textContent = "--:--";
     document
       .getElementById("heroRoad")
       .replaceChildren(
