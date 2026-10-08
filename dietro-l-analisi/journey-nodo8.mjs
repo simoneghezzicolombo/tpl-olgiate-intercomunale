@@ -1,12 +1,12 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008f";
-import { stopLink } from "../nodo8-stop-times.mjs?v=20261008f";
+import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008g";
+import { stopLink } from "../nodo8-stop-times.mjs?v=20261008g";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "../nodo8-experience.mjs?v=20261008f";
+} from "../nodo8-experience.mjs?v=20261008g";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
@@ -281,17 +281,17 @@ async function installNodo8() {
         : siteNames.get(site.site_id) || site.name;
       const note = document.createElement("p");
       note.textContent = site.proposed_new_site
-        ? "Nodo8 · nuovo sito proposto. Accosto da approvare."
-        : "Nodo8 · sito da inventario. Accosto per questo servizio da validare.";
+        ? "Nuova fermata proposta, da approvare."
+        : "Fermata censita. Punto di salita da verificare per Nodo8.";
       card.append(heading, note);
       site.ordered_occurrences.forEach((event) => {
         const line = document.createElement("p");
         line.textContent =
-          "Nodo8 · evento " +
+          "Passaggio " +
           event.ordered_nonhub_event_number +
-          ": FS → evento " +
+          ": dalla stazione " +
           number(event.nominal_fs_to_occurrence_in_vehicle_min) +
-          " min; evento → prossima FS " +
+          " min; alla stazione " +
           number(event.nominal_occurrence_to_next_fs_in_vehicle_min) +
           " min.";
         card.append(line);
@@ -299,12 +299,12 @@ async function installNodo8() {
       const limit = document.createElement("p");
       limit.textContent = site.hub_service_roles.length
         ? "Partenza, sosta intermedia e arrivo dello stesso giro; permanenza a bordo progettata, non autorizzata."
-        : "Tempi nominali a bordo, senza cammino o attesa iniziale. Eventi diversi non sono viaggi intercambiabili.";
+        : "Tempi previsti sul bus, senza cammino o attesa. Passaggi diversi non sono viaggi intercambiabili.";
       card.append(limit);
       const times = document.createElement("a");
       times.href = stopLink(site.site_id, "../");
       times.className = "nodo8-stop-link";
-      times.textContent = "Orari di questo sito nella vetrina →";
+      times.textContent = "Vedi gli orari di questa fermata →";
       card.append(times);
       popup = new window.maplibregl.Popup({ maxWidth: "340px", offset: 12 })
         .setLngLat(site.coordinates_lon_lat)
@@ -393,7 +393,7 @@ async function installNodo8() {
         siteSelect.replaceChildren();
         const placeholder = document.createElement("option");
         placeholder.value = "";
-        placeholder.textContent = "Scegli un sito · 27 posizioni di progetto";
+        placeholder.textContent = "Scegli una delle 27 fermate proposte";
         siteSelect.append(placeholder);
         [...line.sites.values()]
           .sort(

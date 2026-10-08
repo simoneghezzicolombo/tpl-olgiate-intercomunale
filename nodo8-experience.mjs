@@ -1,15 +1,17 @@
-import { diagramStops } from "./nodo8-line.mjs?v=20261008f";
+import { diagramStops } from "./nodo8-line.mjs?v=20261008g";
 const ns = "http://www.w3.org/2000/svg";
+const displayText = (value) => String(value).replace(/\u2014/g, ", ");
 const node = (tag, cls, text) => {
   const e = document.createElement(tag);
   if (cls) e.className = cls;
-  if (text !== undefined) e.textContent = text;
+  if (text !== undefined) e.textContent = displayText(text);
   return e;
 };
 const svg = (tag, attributes = {}, text) => {
   const e = document.createElementNS(ns, tag);
-  for (const [k, v] of Object.entries(attributes)) e.setAttribute(k, v);
-  if (text !== undefined) e.textContent = text;
+  for (const [k, v] of Object.entries(attributes))
+    e.setAttribute(k, k.startsWith("aria-") ? displayText(v) : v);
+  if (text !== undefined) e.textContent = displayText(text);
   return e;
 };
 export function makeBusMarker(id) {
@@ -70,11 +72,11 @@ export function updateBusMarker(element, state, { showCarrier = false } = {}) {
     state.id +
     " · " +
     (state.trip ? "giro " + state.trip + " · " : "") +
-    state.label;
+    displayText(state.label);
   element.setAttribute("aria-label", element.title);
 }
 
-export { mountPlayer } from "./nodo8-player.mjs?v=20261008f";
+export { mountPlayer } from "./nodo8-player.mjs?v=20261008g";
 
 export function mountRoadPreview(line) {
   const host = node("div", "n8-road-preview"),
@@ -175,49 +177,62 @@ export function mountRoadPreview(line) {
   };
 }
 
-function positions(count, upper) {
-  const half = Math.ceil(count / 2),
-    other = count - half;
-  return Array.from({ length: count }, (_, i) => {
-    const outward = i < half,
-      n = outward ? half : other,
-      index = outward ? i : i - half;
-    const t = n > 1 ? index / (n - 1) : 0.5;
-    const y = upper
-      ? outward
-        ? 460 - t * 345
-        : 115 + t * 345
-      : outward
-        ? 685 + t * 345
-        : 1030 - t * 345;
-    const inset = Math.abs(t - 0.5) * 160;
-    const right = upper ? outward : !outward;
-    return { x: right ? 800 - inset : 400 + inset, y, right };
-  });
-}
-function wrapLabel(value) {
-  if (value.length <= 26) return [value];
+function wrapLabel(value, maxLength = 23) {
+  if (value.includes(" / ")) return value.split(" / ");
+  if (value.length <= maxLength) return [value];
   const words = value.split(" ");
   let a = "",
     b = "";
   words.forEach((w) => {
-    if (!b && (a + " " + w).trim().length <= 26) a = (a + " " + w).trim();
+    if (!b && (a + " " + w).trim().length <= maxLength)
+      a = (a + " " + w).trim();
     else b = (b + " " + w).trim();
   });
   return [a, b];
 }
+
+const circlePoint = (cx, cy, radius, degrees) => {
+  const angle = (degrees * Math.PI) / 180;
+  return { x: cx + radius * Math.cos(angle), y: cy + radius * Math.sin(angle) };
+};
+
+function appendCircle(drawing, cx, cy, radius, attributes = {}) {
+  drawing.append(
+    svg("circle", { cx, cy, r: radius, class: "n8-diagram-shadow" }),
+    svg("circle", {
+      cx,
+      cy,
+      r: radius,
+      class: "n8-diagram-line",
+      ...attributes,
+    }),
+  );
+}
+
+function appendArrow(drawing, cx, cy, radius, degrees, clockwise = false) {
+  const { x, y } = circlePoint(cx, cy, radius, degrees);
+  drawing.append(
+    svg("path", {
+      d: "M-8 -7 L2 0 L-8 7",
+      transform: `translate(${x} ${y}) rotate(${degrees + (clockwise ? 90 : -90)})`,
+      class: "n8-diagram-arrow",
+      "data-direction": clockwise ? "clockwise" : "counterclockwise",
+    }),
+  );
+}
+
 export function renderDiagram(
   container,
   line,
   { localities = false, onSelect } = {},
 ) {
   if (localities) return renderLocalityDiagram(container, line);
-  const entries = diagramStops(line, localities),
+  const entries = diagramStops(line),
     id = container.id;
   const drawing = svg("svg", {
-    viewBox: "0 0 1200 1150",
-    class: "n8-diagram",
-    role: onSelect && !localities ? "group" : "img",
+    viewBox: "0 0 1200 1760",
+    class: "n8-diagram n8-diagram--stops",
+    role: onSelect ? "group" : "img",
     "aria-labelledby": id + "-title " + id + "-description",
   });
   drawing.append(
@@ -225,15 +240,13 @@ export function renderDiagram(
       x: 0,
       y: 0,
       width: 1200,
-      height: 1150,
+      height: 1760,
       class: "n8-diagram-paper",
     }),
     svg(
       "title",
       { id: id + "-title" },
-      localities
-        ? "Nodo8 · le località in ordine"
-        : "Nodo8 · schema delle fermate in ordine di servizio",
+      "Nodo8 · tutte le fermate in due anelli circolari",
     ),
     svg(
       "desc",
@@ -248,52 +261,56 @@ export function renderDiagram(
     svg(
       "text",
       { x: 1128, y: 43, "text-anchor": "end", class: "n8-diagram-caption" },
-      localities
-        ? "LE LOCALITÀ, NELL’ORDINE DEL GIRO"
-        : "UN GIRO COMPLETO · 27 SITI · UN’UNICA LINEA",
+      "UN GIRO COMPLETO · 27 FERMATE · UN’UNICA LINEA",
     ),
   );
-  const placed = [],
-    arrows = [];
+  const placed = [];
   [true, false].forEach((upper) => {
     const part = entries.filter((e) => e.ordinal <= 14 === upper),
-      points = positions(part.length, upper);
-    const d = [[600, 575], ...points.map((p) => [p.x, p.y]), [600, 575]]
-      .map(([x, y], i) => (i ? "L" : "M") + x + " " + y)
-      .join(" ");
-    drawing.append(
-      svg("path", { d, class: "n8-diagram-shadow" }),
-      svg("path", { d, class: "n8-diagram-line" }),
-    );
-    const half = Math.ceil(points.length / 2);
-    [points.slice(0, half), points.slice(half)].forEach((side) => {
-      const j = Math.max(1, Math.floor(side.length / 2)),
-        a = side[j - 1],
-        b = side[j];
-      arrows.push([
-        (a.x + b.x) / 2,
-        (a.y + b.y) / 2,
-        (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI,
-      ]);
+      cy = upper ? 460 : 1320;
+    appendCircle(drawing, 600, cy, 360, {
+      "data-loop": upper ? "first" : "second",
     });
-    part.forEach((e, i) => placed.push({ ...e, ...points[i] }));
+    // Seven sites on each side leave room for inward labels at the circle ends.
+    // The ordinal, identity and service order always come from the ledger.
+    part.forEach((e, i) => {
+      const right = i < 7,
+        j = right ? i : i - 7,
+        degrees = upper
+          ? right
+            ? 55 - (110 * j) / 6
+            : -125 - (110 * j) / 6
+          : right
+            ? -55 + (110 * j) / 6
+            : 125 + (110 * j) / 6;
+      placed.push({ ...e, ...circlePoint(600, cy, 360, degrees), right });
+    });
+    [-90, 0, 180].forEach((angle) =>
+      appendArrow(drawing, 600, cy, 360, angle, !upper),
+    );
   });
+  drawing.append(
+    svg("path", {
+      d: "M600 820 V840 M600 940 V960",
+      class: "n8-diagram-line n8-diagram-connector",
+    }),
+  );
   placed.forEach((e) => {
     const isNew = line.sites.get(e.siteId).proposed_new_site;
     const g = svg("g", {
       class: "n8-diagram-stop",
       "data-occurrence": e.occurrenceId,
     });
-    if (onSelect && !localities) {
+    if (onSelect) {
       g.setAttribute("tabindex", "0");
       g.setAttribute("role", "button");
       g.setAttribute(
         "aria-label",
-        "Evento " +
+        "Passaggio " +
           e.ordinal +
           ": " +
-          e.name +
-          (isNew ? ", nuovo sito proposto" : ""),
+          displayText(e.display) +
+          (isNew ? ", nuova fermata proposta" : ""),
       );
       g.addEventListener("click", () => onSelect(line.sites.get(e.siteId)));
       g.addEventListener("keydown", (ev) => {
@@ -303,65 +320,65 @@ export function renderDiagram(
         }
       });
     }
-    const labelX = e.right ? 850 : 350,
-      textAnchor = e.right ? "start" : "end";
+    const labelX = e.x + (e.right ? -32 : 32),
+      textAnchor = e.right ? "end" : "start",
+      labelLines = wrapLabel(e.display),
+      labelY = e.y + 6 - (labelLines.length - 1) * 10;
     g.append(
       svg(
         "title",
         {},
-        e.name + " · " + e.ordinals.map((o) => "evento " + o).join(", "),
+        e.display + " · " + e.ordinals.map((o) => "passaggio " + o).join(", "),
       ),
       svg("line", {
         x1: e.x,
         y1: e.y,
-        x2: e.right ? 832 : 368,
+        x2: labelX + (e.right ? 5 : -5),
         y2: e.y,
         class: "n8-diagram-leader",
       }),
       svg("circle", {
         cx: e.x,
         cy: e.y,
-        r: localities ? 10 : 17,
-        class: isNew && !localities ? "n8-diagram-new" : "n8-diagram-dot",
+        r: 17,
+        class: isNew ? "n8-diagram-new" : "n8-diagram-dot",
       }),
     );
-    if (!localities)
-      g.append(
-        svg(
-          "text",
-          {
-            x: e.x,
-            y: e.y + 5,
-            "text-anchor": "middle",
-            class: "n8-diagram-number",
-          },
-          e.ordinal,
-        ),
-      );
+    g.append(
+      svg(
+        "text",
+        {
+          x: e.x,
+          y: e.y + 5,
+          "text-anchor": "middle",
+          class: "n8-diagram-number",
+        },
+        e.ordinal,
+      ),
+    );
     const text = svg("text", {
       x: labelX,
-      y: e.y - (localities ? 2 : 3),
+      y: labelY,
       "text-anchor": textAnchor,
       class: "n8-diagram-name",
     });
-    wrapLabel(e.display).forEach((t, i) =>
+    labelLines.forEach((t, i) =>
       text.append(svg("tspan", { x: labelX, dy: i ? 20 : 0 }, t)),
     );
     g.append(text);
-    const note = localities
-      ? "passaggi " + e.ordinals.join("–")
-      : e.ordinal === 14 || e.ordinal === 28
-        ? "Nuovo sito · secondo passaggio"
+    const note =
+      e.ordinal === 14 || e.ordinal === 28
+        ? "Proposta · secondo passaggio"
         : isNew
-          ? "Nuovo sito proposto"
+          ? "Nuova fermata proposta"
           : "";
     if (note)
       g.append(
         svg(
           "text",
           {
-            x: labelX,
-            y: e.y + (wrapLabel(e.display).length > 1 ? 35 : 19),
+            x: labelX + (e.right ? -32 : 32),
+            y: labelY + (labelLines.length - 1) * 20 + 18,
             "text-anchor": textAnchor,
             class: "n8-diagram-sub",
           },
@@ -375,7 +392,7 @@ export function renderDiagram(
       "text",
       {
         x: 600,
-        y: 280,
+        y: 448,
         "text-anchor": "middle",
         class: "n8-diagram-loop-title",
       },
@@ -385,7 +402,7 @@ export function renderDiagram(
       "text",
       {
         x: 600,
-        y: 307,
+        y: 475,
         "text-anchor": "middle",
         class: "n8-diagram-loop-note",
       },
@@ -395,7 +412,7 @@ export function renderDiagram(
       "text",
       {
         x: 600,
-        y: 832,
+        y: 1308,
         "text-anchor": "middle",
         class: "n8-diagram-loop-title",
       },
@@ -405,57 +422,45 @@ export function renderDiagram(
       "text",
       {
         x: 600,
-        y: 859,
+        y: 1335,
         "text-anchor": "middle",
         class: "n8-diagram-loop-note",
       },
       "passaggi 15–28",
     ),
     svg("rect", {
-      x: 411,
-      y: 527,
-      width: 378,
-      height: 95,
+      x: 410,
+      y: 840,
+      width: 380,
+      height: 100,
       rx: 24,
       class: "n8-diagram-hub",
     }),
     svg(
       "text",
-      { x: 600, y: 561, "text-anchor": "middle", class: "n8-diagram-hub-name" },
+      { x: 600, y: 876, "text-anchor": "middle", class: "n8-diagram-hub-name" },
       "Olgiate FS",
     ),
     svg(
       "text",
-      { x: 600, y: 587, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
+      { x: 600, y: 903, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
       "PARTENZA · SOSTA INTERMEDIA · ARRIVO",
     ),
     svg(
       "text",
-      { x: 600, y: 608, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
+      { x: 600, y: 922, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
       "stesso bus, prosecuzione da autorizzare",
-    ),
-  );
-  // Arrowheads indicate service order, not an opposite-direction service.
-  arrows.forEach(([x, y, rotate]) =>
-    drawing.append(
-      svg("path", {
-        d: "M-8 -7 L2 0 L-8 7",
-        transform: `translate(${x} ${y}) rotate(${rotate})`,
-        class: "n8-diagram-arrow",
-      }),
     ),
   );
   drawing.append(
     svg(
       "text",
-      { x: 600, y: 1110, "text-anchor": "middle", class: "n8-diagram-caption" },
-      localities
-        ? "Raggruppamenti dei siti di progetto · non tutte le frazioni dei cinque comuni"
-        : "27 siti distinti · 28 eventi fuori FS · FS ha tre ruoli nel giro",
+      { x: 600, y: 1715, "text-anchor": "middle", class: "n8-diagram-caption" },
+      "27 fermate · 28 passaggi fuori FS · partenza, sosta e arrivo a FS",
     ),
     svg(
       "text",
-      { x: 600, y: 1134, "text-anchor": "middle", class: "n8-diagram-caption" },
+      { x: 600, y: 1740, "text-anchor": "middle", class: "n8-diagram-caption" },
       "Schema non geografico · ordine di servizio, non tempi o distanze",
     ),
   );
@@ -480,7 +485,7 @@ function finishDiagram(container, drawing, line, { onSelect, localities }) {
     download.disabled = true;
     try {
       const response = await fetch(
-        new URL("./nodo8-experience.css", import.meta.url),
+        new URL("./nodo8-experience.css?v=20261008g", import.meta.url),
       );
       if (!response.ok) throw new Error("Diagram styles unavailable");
       const copy = drawing.cloneNode(true),
@@ -513,8 +518,8 @@ function finishDiagram(container, drawing, line, { onSelect, localities }) {
   });
   const tools = node("div", "n8-diagram-tools");
   const legend = node("div", "n8-diagram-legend"),
-    regular = node("span", "", "Sito di progetto"),
-    proposed = node("span", "is-new", "Nuovo sito proposto");
+    regular = node("span", "", "Fermata di progetto"),
+    proposed = node("span", "is-new", "Nuova fermata proposta");
   regular.append(node("i"));
   proposed.append(node("i"));
   legend.append(regular, proposed);
@@ -571,10 +576,9 @@ function finishDiagram(container, drawing, line, { onSelect, localities }) {
 }
 
 function renderLocalityDiagram(container, line) {
-  const entries = diagramStops(line, true),
-    id = container.id;
+  const id = container.id;
   const drawing = svg("svg", {
-    viewBox: "0 0 1200 820",
+    viewBox: "0 0 1200 1510",
     class: "n8-diagram n8-diagram--localities",
     role: "img",
     "aria-labelledby": id + "-title " + id + "-description",
@@ -584,28 +588,23 @@ function renderLocalityDiagram(container, line) {
       x: 0,
       y: 0,
       width: 1200,
-      height: 820,
+      height: 1510,
       class: "n8-diagram-paper",
     }),
     svg(
       "title",
       { id: id + "-title" },
-      "Nodo8 · un otto, le località in ordine",
+      "Nodo8 · schema concettuale delle località, due anelli e Olgiate FS",
     ),
     svg(
       "desc",
       { id: id + "-description" },
-      "Un unico giro: Olgiate FS → " +
-        entries
-          .slice(0, 9)
-          .map((e) => e.display)
-          .join(" → ") +
-        " → FS, sosta intermedia → " +
-        entries
-          .slice(9)
-          .map((e) => e.display)
-          .join(" → ") +
-        " → FS. Località e corridoi raggruppati, non tutte le frazioni dei cinque comuni.",
+      "Olgiate FS al centro, un raccordo verso San Zeno e un raccordo verso " +
+        "Canova / Beolco. Il cerchio superiore dispone Beverate, Vaccarezza, " +
+        "Brivio, Arlate e Calco in senso antiorario. Il cerchio inferiore dispone " +
+        "Monticello, Santa Maria Hoè, Perego e Rovagnate. Riferimenti territoriali, " +
+        "non siti di fermata o copertura certificata. La disposizione concettuale " +
+        "non sostituisce l'ordine effettivo dei 28 passaggi nel primo schema e nella sequenza.",
     ),
   );
   drawing.append(
@@ -613,128 +612,91 @@ function renderLocalityDiagram(container, line) {
     svg(
       "text",
       { x: 1138, y: 44, "text-anchor": "end", class: "n8-diagram-caption" },
-      "LO STESSO GIRO, NELLO STESSO ORDINE",
+      "SCHEMA CONCETTUALE · DUE ANELLI, UN NODO",
     ),
   );
-  [245, 575].forEach((cy) => {
-    drawing.append(
-      svg("ellipse", {
-        cx: 285,
-        cy,
-        rx: 165,
-        ry: 165,
-        class: "n8-diagram-shadow",
+  appendCircle(drawing, 600, 360, 280, { "data-loop": "first" });
+  appendCircle(drawing, 600, 1150, 280, { "data-loop": "second" });
+  drawing.append(
+    svg("path", {
+      d: "M600 640 V708 M600 798 V870",
+      class: "n8-diagram-line n8-diagram-connector",
+    }),
+  );
+  const localities = [
+    ["San Zeno", 360, 90],
+    ["Beverate", 360, 30],
+    ["Vaccarezza", 360, -30],
+    ["Brivio", 360, -90],
+    ["Arlate", 360, -150],
+    ["Calco", 360, -210],
+    ["Canova / Beolco", 1150, -90],
+    ["Monticello", 1150, -30],
+    ["Santa Maria Hoè", 1150, 30],
+    ["Perego", 1150, 150],
+    ["Rovagnate", 1150, 210],
+  ];
+  localities.forEach(([name, cy, degrees]) => {
+    const point = circlePoint(600, cy, 280, degrees),
+      label = circlePoint(600, cy, 224, degrees),
+      central = Math.abs(point.x - 600) < 1,
+      right = point.x > 600,
+      textAnchor = central ? "middle" : right ? "end" : "start",
+      lines = name === "Canova / Beolco" ? [name] : wrapLabel(name),
+      group = svg("g", {
+        class: "n8-diagram-locality",
+        "data-locality": name,
+        "data-loop": cy === 360 ? "first" : "second",
       }),
-      svg("ellipse", {
-        cx: 285,
-        cy,
-        rx: 165,
-        ry: 165,
-        class: "n8-diagram-line",
+      text = svg("text", {
+        x: label.x,
+        y: label.y + 7 - (lines.length - 1) * 12,
+        "text-anchor": textAnchor,
+        class: "n8-diagram-name n8-diagram-locality-name",
+      });
+    lines.forEach((value, index) =>
+      text.append(svg("tspan", { x: label.x, dy: index ? 24 : 0 }, value)),
+    );
+    group.append(
+      svg("title", {}, name + " · riferimento territoriale"),
+      svg("circle", {
+        cx: point.x,
+        cy: point.y,
+        r: 10,
+        class: "n8-diagram-dot",
       }),
+      text,
     );
+    drawing.append(group);
   });
-  entries.forEach((e, i) => {
-    const upper = i < 9,
-      j = upper ? i : i - 9,
-      n = upper ? 9 : 12,
-      t = ((j + 1) / (n + 1)) * Math.PI * 2,
-      x = 285 + (upper ? 1 : -1) * 165 * Math.sin(t),
-      y = (upper ? 245 : 575) + (upper ? 1 : -1) * 165 * Math.cos(t);
-    const g = svg("g", {
-      class: "n8-diagram-stop",
-      "data-occurrence": e.occurrenceId,
-    });
-    g.append(
-      svg(
-        "title",
-        {},
-        `${i + 1}. ${e.display} · eventi ${e.ordinals.join(", ")}`,
-      ),
-      svg("circle", { cx: x, cy: y, r: 16, class: "n8-diagram-dot" }),
-      svg(
-        "text",
-        { x, y: y + 5, "text-anchor": "middle", class: "n8-diagram-number" },
-        i + 1,
-      ),
-    );
-    drawing.append(g);
-    const lx = upper ? 555 : 900,
-      ly = upper ? 160 + j * 58 : 154 + j * 49;
-    drawing.append(
-      svg(
-        "text",
-        { x: lx, y: ly, class: "n8-locality-number" },
-        String(i + 1).padStart(2, "0"),
-      ),
-    );
-    const text = svg("text", { x: lx + 38, y: ly, class: "n8-diagram-name" });
-    wrapLabel(e.display).forEach((s, k) =>
-      text.append(svg("tspan", { x: lx + 38, dy: k ? 20 : 0 }, s)),
-    );
-    drawing.append(text);
-  });
+  [60, -60, -180].forEach((degrees) =>
+    appendArrow(drawing, 600, 360, 280, degrees),
+  );
   drawing.append(
     svg("rect", {
-      x: 169,
-      y: 366,
-      width: 232,
-      height: 88,
+      x: 442,
+      y: 708,
+      width: 316,
+      height: 90,
       rx: 20,
       class: "n8-diagram-hub",
     }),
     svg(
       "text",
-      { x: 285, y: 402, "text-anchor": "middle", class: "n8-diagram-hub-name" },
+      { x: 600, y: 748, "text-anchor": "middle", class: "n8-diagram-hub-name" },
       "Olgiate FS",
     ),
     svg(
       "text",
-      { x: 285, y: 428, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
-      "UN BUS · UN GIRO COMPLETO",
+      { x: 600, y: 775, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
+      "PARTENZA · SOSTA INTERMEDIA · ARRIVO",
     ),
   );
   drawing.append(
     svg(
       "text",
-      { x: 555, y: 107, class: "n8-locality-heading" },
-      "Si parte da FS",
-    ),
-    svg(
-      "text",
-      { x: 900, y: 107, class: "n8-locality-heading" },
-      "Dopo la sosta a FS",
-    ),
-    svg(
-      "text",
-      { x: 555, y: 728, class: "n8-locality-heading" },
-      "→ FS · si prosegue",
-    ),
-    svg(
-      "text",
-      { x: 900, y: 760, class: "n8-locality-heading" },
-      "→ FS · arrivo",
-    ),
-  );
-  [
-    [450, 245, -90],
-    [120, 245, 90],
-    [120, 575, 90],
-    [450, 575, -90],
-  ].forEach(([x, y, a]) =>
-    drawing.append(
-      svg("path", {
-        d: "M-8 -7 L2 0 L-8 7",
-        transform: `translate(${x} ${y}) rotate(${a})`,
-        class: "n8-diagram-arrow",
-      }),
-    ),
-  );
-  drawing.append(
-    svg(
-      "text",
-      { x: 600, y: 795, "text-anchor": "middle", class: "n8-diagram-caption" },
-      "Schema non geografico · 21 passaggi raggruppati · le ripetizioni non sono fermate in più",
+      { x: 600, y: 1480, "text-anchor": "middle", class: "n8-diagram-caption" },
+      "Riferimenti territoriali, non fermate: l’ordine effettivo è nello schema completo.",
     ),
   );
   finishDiagram(container, drawing, line, { localities: true });

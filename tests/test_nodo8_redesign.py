@@ -64,6 +64,19 @@ class RedesignRegressionTests(unittest.TestCase):
                     if tag == "button":
                         self.assertEqual(attrs.get("type"), "button", (name, attrs))
 
+    def test_both_pages_use_the_shared_nodo8_favicon_and_no_em_dashes(self):
+        for name, page in self.pages.items():
+            with self.subTest(page=name):
+                icons = [attrs for tag, attrs in page.elements if tag == "link" and attrs.get("rel") == "icon"]
+                self.assertEqual(len(icons), 1)
+                icon_path = ((ROOT / name).parent / urlsplit(icons[0]["href"]).path).resolve()
+                self.assertEqual(icon_path, (ROOT / "favicon.svg").resolve())
+                self.assertEqual(icons[0].get("type"), "image/svg+xml")
+                self.assertNotIn("\u2014", (ROOT / name).read_text(encoding="utf-8"))
+        self.assertIn('viewBox="0 0 64 64"', (ROOT / "favicon.svg").read_text(encoding="utf-8"))
+        bootstrap = (ROOT / "dietro-l-analisi/journey-bootstrap.mjs").read_text(encoding="utf-8")
+        self.assertNotIn('favicon.href = "./favicon.svg"', bootstrap)
+
     def test_local_assets_are_published_and_cross_page_anchors_resolve(self):
         policy = json.loads((ROOT / "config/nodo8_publication_allowlist.json").read_text(encoding="utf-8"))
         included = set(policy["include_files"])

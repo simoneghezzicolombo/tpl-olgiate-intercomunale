@@ -1,4 +1,24 @@
-/* Nodo8 — one coherent editorial system. Old root styles remain in Git, not loaded. */
+/* Nodo8: one coherent editorial system. Old root styles remain in Git, not loaded. */
+details.section-note > summary,
+details.small-copy > summary {
+  cursor: pointer;
+  padding: 12px 0;
+  min-height: 44px;
+  font-weight: 600;
+  list-style-position: inside;
+}
+details.section-note > summary::marker,
+details.small-copy > summary::marker {
+  color: #dd7655;
+}
+details.section-note[open] > summary,
+details.small-copy[open] > summary {
+  padding-bottom: 8px;
+}
+details.section-note p,
+details.small-copy p {
+  margin: 0 0 12px;
+}
 :root {
   --ink: #153d34;
   --muted: #61746a;

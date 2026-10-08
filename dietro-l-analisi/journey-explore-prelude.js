@@ -21,7 +21,7 @@
       <div class="copy copy--explore">
         <p class="eyebrow">13 · Adesso tocca a te</p>
         <h2>Ora puoi <em>esplorare la mappa liberamente.</em></h2>
-        <p>Segui i quattro bus di modello nell’orario di Nodo8: percorrono lo stesso otto, con le fermate e le soste a FS. Puoi scegliere l’ora, riprodurre la giornata oppure seguire un giro completo. È una simulazione nominale, non GPS live.</p><p>In «Livelli e confronto» puoi riaccendere popolazione, ISTAT, edifici, cammini, grafo, candidate e D184/D185. Le alternative precedenti sono separate e spente all’inizio: i dati storici non certificano guadagni di copertura della nuova proposta.</p>
+        <p>Scegli l’ora e segui i quattro bus sul percorso di Nodo8. È l’animazione dell’orario previsto, non una posizione GPS.</p><p>In «Livelli e confronto» trovi i dati sul territorio e la rete attuale. Le alternative precedenti restano separate: non misurano un guadagno di copertura di Nodo8.</p>
         <div class="explore-key" aria-label="Legenda mappa esplorabile">
           <span><i class="explore-key__dot explore-key__dot--population"></i>popolazione</span>
           <span><i class="explore-key__dot explore-key__dot--walk"></i>tempi a piedi</span>

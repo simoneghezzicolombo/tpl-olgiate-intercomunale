@@ -950,6 +950,15 @@
         );
       });
       updateActive(initialIndex >= 0 ? initialIndex : 0);
+      chapters.forEach((chapter) =>
+        chapter
+          .querySelectorAll("details")
+          .forEach((details) =>
+            details.addEventListener("toggle", () =>
+              requestAnimationFrame(() => window.ScrollTrigger?.refresh()),
+            ),
+          ),
+      );
       setTimeout(() => loader.classList.add("hidden"), 380);
     } catch (err) {
       console.error(err);
@@ -958,7 +967,8 @@
     }
   });
 
-  let pulse = 0, pulseFrame = null;
+  let pulse = 0,
+    pulseFrame = null;
   const pulseMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   function animate() {
     pulseFrame = null;

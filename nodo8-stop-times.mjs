@@ -1,4 +1,4 @@
-import { siteTimetable, clockSeconds } from "./nodo8-line.mjs?v=20261008f";
+import { siteTimetable, clockSeconds } from "./nodo8-line.mjs?v=20261008g";
 
 const labels = {
   FULL_TRIP_START_FS: "Partenza FS",
@@ -40,14 +40,14 @@ export function renderStopTimes(
   const note = el(
     "p",
     "n8-stop-times-note",
-    "Base feriale 2027: lunedì–venerdì, esclusi festivi nazionali, prima di eccezioni locali. Orari nominali del progetto, non un orario pubblico autorizzato. Tocca un’ora per vedere quel passaggio sulla mappa.",
+    "Orari del progetto, dal lunedì al venerdì esclusi festivi. Tocca un’ora per vedere il bus sulla mappa. Non è un servizio già attivo; eventuali eccezioni locali sono da definire.",
   );
   const wrap = el("div", "n8-stop-times-scroll");
   wrap.tabIndex = 0;
   wrap.setAttribute("role", "region");
   wrap.setAttribute(
     "aria-label",
-    "Orari nominali della fermata, scorribili se necessario",
+    "Orari previsti della fermata, scorribili se necessario",
   );
   const table = el("table");
   table.append(
@@ -55,8 +55,8 @@ export function renderStopTimes(
       "caption",
       "",
       tableData.columns.length === 1
-        ? "Arrivo e ripartenza dal registro nominale, al secondo circa."
-        : "I passaggi della stessa corsa sono separati: non sono linee diverse o viaggi intercambiabili. Orari al secondo circa.",
+        ? "Arrivo e ripartenza previsti, al secondo circa."
+        : "Lo stesso bus passa più volte: scegli il passaggio che ti serve. Orari previsti, al secondo circa.",
     ),
   );
   const head = el("thead"),
@@ -70,8 +70,8 @@ export function renderStopTimes(
       "",
       labels[column.role] ||
         (tableData.columns.length > 1
-          ? `Passaggio ${index + 1} · evento ${column.ordinal}`
-          : `Evento ${column.ordinal}`),
+          ? `Passaggio ${index + 1} · n. ${column.ordinal}`
+          : `Passaggio ${column.ordinal}`),
     );
     cell.scope = "col";
     heading.append(cell);
@@ -118,7 +118,7 @@ export function renderStopTimes(
     el(
       "p",
       "n8-stop-times-note",
-      "Non include cammino, attesa iniziale, ritardi o una garanzia di coincidenza ferroviaria. Recupero terminale e corse a vuoto non sono passaggi passeggeri.",
+      "Tempi previsti, non misurati. Non includono cammino o ritardi e non garantiscono coincidenze con i treni. Le pause dopo il rientro e gli spostamenti fuori servizio non sono corse passeggeri.",
     ),
   );
   host.append(details);

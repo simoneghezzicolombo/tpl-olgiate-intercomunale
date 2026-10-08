@@ -15,7 +15,7 @@ runtime = [
 ]
 preserved = json.loads((ROOT / BASE / "upstream-import.json").read_text(encoding="utf-8"))["preserved_assets"]
 files = {
-    "index.html", "styles.css", "app.js", "assets/nodo8-proposal.json",
+    "index.html", "favicon.svg", "styles.css", "app.js", "assets/nodo8-proposal.json",
     "nodo8-line.mjs", "nodo8-experience.mjs", "nodo8-experience.css",
     "nodo8-player.mjs", "nodo8-polish.css", "nodo8-stop-times.mjs",
     "nodo8-design.css", "nodo8-journey-inspector.mjs",

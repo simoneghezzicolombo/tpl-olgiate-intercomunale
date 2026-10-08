@@ -601,6 +601,14 @@
   width: 160%;
   min-width: 850px;
 }
+.n8-diagram--stops {
+  min-width: 720px;
+}
+.n8-diagram--localities {
+  min-width: 580px;
+  max-width: 660px;
+  margin-inline: auto;
+}
 .n8-diagram-brand {
   font-family: "Manrope", system-ui, sans-serif;
   font-weight: 800;
@@ -649,6 +657,15 @@
   font-size: 18px;
   font-weight: 600;
   fill: #153d34;
+}
+.n8-diagram-locality-name {
+  font-size: 34px;
+}
+.n8-diagram--localities .n8-diagram-caption {
+  font-size: 21px;
+}
+.n8-diagram--localities .n8-diagram-hub-sub {
+  display: none;
 }
 .n8-diagram-sub {
   font-size: 12px;
