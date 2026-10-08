@@ -282,6 +282,11 @@
       }
       // Honour deep links / restored scroll positions instead of painting intro
       // over a current-proposal chapter after the evidence has finished loading.
+      const anchor = document.getElementById(location.hash.slice(1));
+      if(anchor && chapters.includes(anchor) && performance.getEntriesByType('navigation')[0]?.type !== 'back_forward') {
+        anchor.querySelector('.copy')?.scrollIntoView({behavior:'instant',block:'center'});
+        window.ScrollTrigger?.refresh();
+      }
       const initialIndex = chapters.findIndex(chapter => {
         const rect = chapter.getBoundingClientRect();
         return rect.top <= innerHeight * .55 && rect.bottom >= innerHeight * .45;

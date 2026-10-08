@@ -59,7 +59,7 @@ def test_story_preserves_historical_chapters_and_adds_current_proposal():
         "candidates", "finalists", "nodo8", "nodo8-time", "end"
     ]
     assert "time" not in page.scenes
-    html = (JOURNEY / "index.html").read_text(encoding="utf-8")
+    html = " ".join((JOURNEY / "index.html").read_text(encoding="utf-8").split())
     assert "una fase precedente" in html
     assert "non copertura di Nodo8" in html
     assert "100% delle coincidenze" not in html

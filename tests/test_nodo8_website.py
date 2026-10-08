@@ -56,6 +56,26 @@ def test_sites_and_occurrences_are_not_collapsed():
         assert len({event["occurrence_id"] for event in site["ordered_occurrences"]}) == 2
 
 
+def test_playback_copies_certified_ledger_and_blocks_without_fabricated_observations():
+    data = builder.build_data()
+    assert data["playback"]["ledger"] == read_source("design")["ordered_stop_event_ledger_nominal"]
+    nominal = read_source("blocks")["nominal_case"]
+    assert data["playback"]["vehicles"] == nominal["vehicles"]
+    assert data["playback"]["terminal_recovery_min"] == nominal["terminal_recovery_min"]
+    assert data["playback"]["physical_vehicle_and_passenger_continuity_certified"] is False
+    assert "Distance-proportional" in data["playback"]["interpolation"]
+    assert "not live GPS" in data["playback"]["semantics"]
+
+
+def test_public_schematics_and_animation_are_one_line_not_wing_services():
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    assert "stopsDiagramPanel" in html and "localitiesDiagramPanel" in html
+    assert "routePlayback" in html and "mapPlaybackPlay" in html
+    assert "data-wing=" not in html
+    assert "ALA EST" not in html and "ALA OVEST" not in html
+    assert "FS → est" not in html and "FS intermedia → ovest" not in html
+
+
 def test_timetable_is_copied_not_synthesised():
     data, design = builder.build_data(), read_source("design")
     assert len(data["trips"]) == 16

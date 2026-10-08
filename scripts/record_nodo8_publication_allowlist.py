@@ -14,6 +14,7 @@ runtime = [
 preserved = json.loads((ROOT / BASE / "upstream-import.json").read_text(encoding="utf-8"))["preserved_assets"]
 files = {
     "index.html", "styles.css", "app.js", "assets/nodo8-proposal.json",
+    "nodo8-line.mjs", "nodo8-experience.mjs", "nodo8-experience.css",
     "docs/NODO8_CONFRONTO_D184_D185_E_RECAP_2026_10_07.md",
     "docs/RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md",
     "outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson",

@@ -2,18 +2,44 @@
 html {
   scroll-padding-top: 90px;
 }
-.chapter-rail{gap:4px}
-.rail-dot{width:24px;height:24px;background:transparent;position:relative;box-shadow:none}
-.rail-dot::before{content:"";position:absolute;left:8px;top:8px;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.28)}
-.rail-dot.active{background:transparent;transform:none;box-shadow:none}
-.rail-dot.active::before{background:var(--cyan);box-shadow:0 0 0 5px rgba(87,215,232,.12),0 0 16px rgba(87,215,232,.6)}
+.chapter-rail {
+  gap: 4px;
+}
+.rail-dot {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  position: relative;
+  box-shadow: none;
+}
+.rail-dot::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+}
+.rail-dot.active {
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+.rail-dot.active::before {
+  background: var(--cyan);
+  box-shadow:
+    0 0 0 5px rgba(87, 215, 232, 0.12),
+    0 0 16px rgba(87, 215, 232, 0.6);
+}
 .copy--hero .source-note a {
   display: inline-block;
   margin-top: 12px;
   padding: 11px 15px;
-  border: 1px solid rgba(85, 225, 191, .4);
+  border: 1px solid rgba(85, 225, 191, 0.4);
   border-radius: 8px;
-  background: rgba(6, 18, 28, .7);
+  background: rgba(6, 18, 28, 0.7);
   color: #dffbff;
   text-decoration: none;
 }
@@ -74,10 +100,10 @@ html {
   margin-block: 10px;
 }
 .nodo8-peak-grid > div:first-child {
-  border-color: rgba(231, 118, 82, 0.4);
+  border-color: rgba(85, 225, 191, 0.4);
 }
 .nodo8-peak-grid > div:first-child strong {
-  color: #ffb190;
+  color: #55e1bf;
 }
 .nodo8-summary {
   display: grid;
@@ -155,6 +181,120 @@ body[data-scene="nodo8"] .lineage-collapse {
   }
   .nodo8-chapter .copy h2 {
     font-size: clamp(38px, 11vw, 56px);
+  }
+}
+.nodo8-journey-nav {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  font: 400 11px var(--sans);
+}
+.nodo8-journey-nav a {
+  color: #c7dfd7;
+  text-decoration: none;
+}
+.nodo8-journey-nav a:hover {
+  color: #fff;
+}
+.brand__main {
+  font-family: var(--sans);
+  font-weight: 800 !important;
+  letter-spacing: -1.5px;
+}
+.nodo8-brand-eight {
+  color: #e77652;
+}
+.nodo8-secondary-cta {
+  display: block;
+  color: #a2dbc7;
+  font: 400 11px/1.5 var(--sans);
+  margin-top: 14px;
+}
+.nodo8-animation-cue {
+  color: #a2dbc7;
+  font-size: 11px !important;
+  border-left: 2px solid #55e1bf;
+  padding-left: 12px;
+}
+.journey-playback {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  width: 360px;
+  z-index: 26;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  box-shadow: 0 15px 70px #0006;
+}
+.journey-playback[hidden] {
+  display: none;
+}
+.n8-player-details {
+  margin-top: 10px;
+}
+.n8-player-details summary {
+  font-size: 10px;
+  cursor: pointer;
+}
+.n8-player-details[open] .n8-fleet {
+  margin-top: 12px;
+}
+@media (max-width: 1000px) {
+  .nodo8-journey-nav {
+    gap: 12px;
+  }
+  .journey-playback {
+    width: 330px;
+    right: 16px;
+    bottom: 16px;
+  }
+}
+@media (max-width: 800px) {
+  .nodo8-journey-nav {
+    display: flex;
+    font-size: 9px;
+  }
+  .nodo8-journey-nav a:not(:last-child) {
+    display: none;
+  }
+  .topbar {
+    grid-template-columns: 1fr auto auto;
+    gap: 12px;
+  }
+  .brand {
+    flex-direction: column;
+    gap: 2px;
+    align-items: flex-start;
+  }
+  .brand__sub {
+    font-size: 7px;
+    letter-spacing: 0.06em;
+  }
+  .journey-playback {
+    right: 12px;
+    bottom: 12px;
+    width: calc(100% - 24px);
+    max-height: 50vh;
+    z-index: 26;
+  }
+  .journey-playback .n8-player-title {
+    margin-bottom: 8px;
+  }
+  .journey-playback .n8-range-label {
+    margin-top: 7px;
+  }
+  .journey-playback .n8-player-status {
+    font-size: 9px !important;
+  }
+  .journey-playback .n8-player-details[open] {
+    padding-bottom: 10px;
+  }
+  body.nodo8-playing #orario-nodo8 .copy {
+    opacity: 0;
+    pointer-events: none;
+  }
+  [data-scene="nodo8-time"] .copy {
+    padding-bottom: 20px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

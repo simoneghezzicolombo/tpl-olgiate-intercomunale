@@ -12,6 +12,7 @@ SOURCES = {
     "design": BASE + "caller_confirmed_design_handoff_20261001.json",
     "calendar": BASE + "caller_confirmed_weekday_calendar_2027.json",
     "geometry": BASE + "calco_centre_adopted_design.geojson",
+    "blocks": BASE + "caller_confirmed_vehicle_blocks_accounting_20261001.json",
 }
 ASSET = ROOT / "assets/nodo8-proposal.json"
 
@@ -56,6 +57,29 @@ def build_data(root: Path = ROOT) -> dict:
               "return_fs_min": trip["second_fs_min"] + design["nominal_wing_duration_min"]["west_B"],
               "peak_bank": trip["first_fs_min"] in peak_departures}
              for i, trip in enumerate(design["full_trips"])]
+    route_by_wing = {route["wing"]: route["coordinates"] for route in routes}
+    for site in sites:
+        for event in site["ordered_occurrences"]:
+            if route_by_wing[event["wing"]][event["path_node_index"]] != site["coordinates_lon_lat"]:
+                raise ValueError("Stop occurrence does not match its ordered road vertex.")
+    blocks = loaded["blocks"]
+    nominal = blocks["nominal_case"]
+    if blocks["separate_wing_fleets"] is not False or blocks["same_full_route_for_all_trips"] is not True:
+        raise ValueError("Playback requires the same carrier through the complete trip.")
+    assignments = {}
+    for vehicle in nominal["vehicles"]:
+        if vehicle["same_model_vehicle_through_intermediate_fs"] is not True:
+            raise ValueError("Incomplete carrier continuity in model blocks.")
+        for trip in vehicle["trips"]:
+            number = trip["full_trip_number"]
+            if number in assignments:
+                raise ValueError("Duplicate complete trip assignment.")
+            shown = trips[number - 1]
+            if trip["fs_start_min"] != shown["first_fs_min"] or trip["fs_end_min"] != shown["return_fs_min"]:
+                raise ValueError("Vehicle blocks and confirmed timetable differ.")
+            assignments[number] = vehicle["model_vehicle_id"]
+    if set(assignments) != set(range(1, 17)):
+        raise ValueError("Missing complete trip assignment.")
     return {
         "contract": "nodo8_showcase_v1",
         "brand": {"name": "Nodo8", "official_name": design["public_route_name"], "working_name": True},
@@ -77,6 +101,15 @@ def build_data(root: Path = ROOT) -> dict:
         "coverage": design["coverage_percent"],
         "coverage_semantics": design["coverage_semantics"],
         "trips": trips, "sites": sites, "routes": routes,
+        "playback": {
+            "contract": "nodo8_nominal_event_playback_v1",
+            "semantics": "Nominal design-day reconstruction, not live GPS, observed runtimes, passenger counts or certified fleet availability.",
+            "interpolation": "Distance-proportional motion along every confirmed road vertex between ledger arrivals/departures. No observed within-leg speed profile is available.",
+            "ledger": design["ordered_stop_event_ledger_nominal"],
+            "vehicles": nominal["vehicles"],
+            "terminal_recovery_min": nominal["terminal_recovery_min"],
+            "physical_vehicle_and_passenger_continuity_certified": False,
+        },
     }
 
 
@@ -92,7 +125,7 @@ def main() -> None:
     if args.check:
         if not ASSET.exists() or ASSET.read_text(encoding="utf-8") != expected:
             raise SystemExit("Presentation data stale. Run python scripts/build_nodo8_website_data.py")
-        print("Nodo8 showcase matches all three confirmed sources.")
+        print("Nodo8 showcase matches all four confirmed sources.")
     else:
         ASSET.parent.mkdir(parents=True, exist_ok=True)
         ASSET.write_text(expected, encoding="utf-8", newline="\n")
