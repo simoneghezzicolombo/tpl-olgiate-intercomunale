@@ -38,7 +38,7 @@
 
   const evidence = document.createElement('div');
   evidence.className = 'evidence-stack';
-  evidence.innerHTML = '<span><b>5</b>comuni core</span><span><b>4.226</b>edifici popolati</span><span><b>4.348</b>unità di accessibilità</span><span><b>155</b>candidate persistite</span><span><b>4 → 2</b>lineage → assetti visibili</span><span class="human"><b>0</b>vincitori automatici</span>';
+    evidence.innerHTML = '<span><b>5</b>comuni core</span><span><b>27</b>siti di progetto</span><span><b>16</b>giri completi</span><span><b>254</b>feriali 2027</span><span class="human"><b>0</b>vincitori automatici</span>';
   document.body.appendChild(evidence);
 
   function install() {
@@ -148,10 +148,10 @@
       trigger:endSection,start:'top 80%',end:'bottom 20%',scrub:true,
       onUpdate:self=>{
         if(document.body.dataset.scene!=='end') return;
-        if(map.getLayer('buildings-extrude')) map.setPaintProperty('buildings-extrude','fill-extrusion-opacity',.06+.12*self.progress);
-        if(map.getLayer('candidates')) map.setPaintProperty('candidates','circle-opacity',.02+.08*self.progress);
-        if(map.getLayer('final16')) map.setPaintProperty('final16','line-opacity',.26+.22*self.progress);
-        if(map.getLayer('final185')) map.setPaintProperty('final185','line-opacity',.26+.22*self.progress);
+        if(map.getLayer('buildings-extrude')) map.setPaintProperty('buildings-extrude','fill-extrusion-opacity',0);
+        if(map.getLayer('candidates')) map.setPaintProperty('candidates','circle-opacity',0);
+        if(map.getLayer('final16')) map.setPaintProperty('final16','line-opacity',0);
+        if(map.getLayer('final185')) map.setPaintProperty('final185','line-opacity',0);
         if(map.getLayer('road-network')) map.setPaintProperty('road-network','line-opacity',.03+.07*self.progress);
         map.setBearing(-18+10*self.progress);
       }

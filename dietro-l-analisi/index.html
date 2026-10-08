@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#07131f">
   <title>Dietro l'analisi · Tra Paesi</title>
-  <meta name="description" content="Un viaggio interattivo dentro i dati, i controlli e le scelte che hanno costruito l'analisi della rete locale attorno a Olgiate-Calco-Brivio FS.">
+  <meta name="description" content="Dai dati territoriali alla proposta Nodo8: lo scrollytelling di Tra Paesi racconta il processo, le alternative storiche e il percorso unico per cinque comuni.">
   <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
   <link rel="stylesheet" href="vendor/maplibre/maplibre-gl.css">
   <link rel="stylesheet" href="journey.css">
+  <link rel="stylesheet" href="journey-nodo8.css?v=20261008">
 </head>
 <body>
   <div id="loader" class="loader" aria-live="polite">
@@ -17,7 +18,7 @@
   </div>
 
   <header class="topbar">
-    <a class="brand" href="../index.html" aria-label="Torna a Tra Paesi">
+    <a class="brand" href="../index.html" aria-label="Vai alla proposta Nodo8 di Tra Paesi">
       <span class="brand__main">Tra Paesi</span>
       <span class="brand__sub">Dietro l’analisi</span>
     </a>
@@ -25,7 +26,7 @@
       <span class="live-dot"></span>
       <span>analisi basata sui dati</span>
     </div>
-    <a class="topbar__cta" href="../index.html">Vai al sito principale <span>↗</span></a>
+    <a class="topbar__cta" href="../index.html">La proposta Nodo8 <span>↗</span></a>
   </header>
 
   <div class="progress" aria-hidden="true"><div id="progressFill" class="progress__fill"></div></div>
@@ -47,6 +48,7 @@
           <div><strong>1</strong><span>stazione al centro</span></div>
         </div>
         <p class="scroll-cue"><span></span> scorri dentro l’analisi</p>
+        <p class="source-note">Dal processo storico alla base Nodo8 confermata il 1 ottobre, con calendario 2027 e verifiche aggiornate al 7 ottobre 2026. <a href="#nodo8">Vai direttamente a Nodo8 →</a></p>
       </div>
     </section>
 
@@ -94,7 +96,7 @@
           <span data-min="10">10 min <b>77,56%</b></span>
           <span data-min="12">12 min <b>84,87%</b></span>
         </div>
-        <p class="source-note">Calcolo sulla rete pedonale, non con semplici cerchi attorno alle fermate.</p>
+        <p class="source-note">Risultati della fase storica qui visualizzata, non copertura di Nodo8. Metodo e popolazione non si sovrappongono al confronto RT028 attuale: non sottrarre queste percentuali da quelle della proposta.</p>
       </div>
     </section>
 
@@ -102,7 +104,7 @@
       <div class="copy">
         <p class="eyebrow">06 · Dove può passare davvero un autobus</p>
         <h2>Non tutte le strade sono <em>utilizzabili nello stesso modo.</em></h2>
-        <p>Abbiamo costruito una rete stradale che tiene conto di sensi unici, divieti, svolte e accessi consentiti ai bus. Tutte le alternative vengono provate sulla stessa versione della rete, così il confronto resta coerente.</p>
+        <p>Abbiamo costruito una rete stradale di modello che tiene conto di sensi unici, divieti, svolte e accessi. Le alternative di questa fase sono provate sulla stessa versione della rete. La compatibilità sul grafo non sostituisce la prova con un bus, i permessi o la verifica fisica degli accosti.</p>
         <div class="metric-cascade">
           <div><span>strade OSM considerate</span><strong>24.384</strong></div>
           <div><span>tratti utilizzabili dai bus</span><strong>15.872</strong></div>
@@ -117,7 +119,7 @@
       <div class="copy copy--right">
         <p class="eyebrow">07 · Prima guardiamo la rete di oggi</p>
         <h2>D184 e D185 sono <em>il punto di confronto.</em></h2>
-        <p>Abbiamo ricostruito i percorsi e le fermate delle due linee usando le fonti ufficiali. In questo modo ogni nuova proposta viene confrontata con ciò che esiste davvero oggi. La deviazione temporanea del Ponte di Brivio resta separata dal percorso ordinario.</p>
+        <p>La fase storica ha ricostruito percorsi e fermate dalle fonti ufficiali: i tracciati qui mostrati sono i KML forniti, senza sostituirli con un routing inventato. La deviazione temporanea del Ponte di Brivio resta separata. Il confronto aggiornato degli orari invernali 2026/27 è nella vetrina Nodo8.</p>
         <div class="legend-inline"><span class="blue"></span>D184 <span class="orange"></span>D185 <span class="white"></span>stazione</div>
         <p class="source-note">Percorsi KML ufficiali + fermate e servizio da GTFS ufficiale</p>
       </div>
@@ -139,40 +141,58 @@
       </div>
     </section>
 
-    <section class="chapter" data-scene="finalists" data-label="Alternative">
+    <section class="chapter" data-scene="finalists" data-label="Ricerca storica">
       <div class="copy copy--wide">
-        <p class="eyebrow">09 · Le alternative che superano i filtri</p>
-        <h2>Dopo tutti i controlli restano <em>quattro configurazioni finali.</em></h2>
-        <p>Si dividono in due durate di servizio: 16 ore al giorno oppure 18 ore e mezza. Per ciascuna durata restano due varianti tecniche, chiamate FIG e TWO.</p>
+        <p class="eyebrow">09 · Una tappa della ricerca, non la proposta attuale</p>
+        <h2>Le quattro alternative di <em>una fase precedente.</em></h2>
+        <p>Questo passaggio confrontava due durate: 16 ore oppure 18 ore e mezza, con varianti FIG e TWO. È esperienza conservata, non l’elenco delle soluzioni attuali: non descrive Nodo8.</p>
         <div class="finalist-grid">
           <article><span>16 h</span><strong>FIG</strong><small>06:00–22:00 · ogni 60 min</small></article>
           <article><span>16 h</span><strong>TWO</strong><small>06:00–22:00 · ogni 60 min</small></article>
           <article><span>18,5 h</span><strong>FIG</strong><small>05:30–00:00 · ogni 60 min</small></article>
           <article><span>18,5 h</span><strong>TWO</strong><small>05:30–00:00 · ogni 60 min</small></article>
         </div>
-        <p class="insight">Nei risultati pubblicati, FIG e TWO finiscono per produrre gli stessi percorsi e gli stessi orari all’interno della stessa durata di servizio. Per questo sulla mappa possono sovrapporsi completamente.</p>
+        <p class="insight">In questa diagnostica storica FIG e TWO coincidevano dentro ciascuna durata. La fase successiva ha esplicitato altre esigenze: cinque comuni, Olgiate sud e San Zeno, H30 nelle punte e un percorso unico per tutte le corse.</p>
       </div>
     </section>
 
-    <section class="chapter" data-scene="time" data-label="Orari">
+    <section class="chapter nodo8-chapter" id="nodo8" data-scene="nodo8" data-label="Nodo8">
+      <div class="copy">
+        <p class="eyebrow">10 · Il compromesso prende un nome</p>
+        <h2>Cinque comuni.<br>Una linea.<br><em>Nodo8.</em></h2>
+        <p>Un’identità riconoscibile per muoversi nel territorio, non solo per raggiungere il treno. Tutte le corse percorrono lo stesso otto: FS → est → FS → ovest → FS. Le due ali non sono due linee separate.</p>
+        <div class="nodo8-stats"><div><strong>27,124</strong><span>km per giro</span></div><div><strong>27</strong><span>siti di progetto</span></div><div><strong>4</strong><span>siti nuovi proposti</span></div></div>
+        <p>Olgiate sud, San Zeno/Via Cantù, Arlate N1212 e Calco Centro–Municipio sono i quattro punti nuovi. Le strade strette segnalate sono state evitate dove concordato; gli accosti restano da verificare.</p>
+        <p class="source-note">Geometria confermata, diversa dalle quattro alternative storiche. Siti ed eventi restano distinti; non sono 27 paline già autorizzate. Nodo8 è un nome di lavoro.</p>
+        <p class="nodo8-load-status" role="status">Caricamento dei dati della proposta…</p>
+        <a class="decision-cta" href="../index.html#percorso">Vedi percorso e fermate <span>→</span></a>
+      </div>
+    </section>
+
+    <section class="chapter" id="orario-nodo8" data-scene="nodo8-time" data-label="Orario Nodo8">
       <div class="copy copy--right">
-        <p class="eyebrow">10 · Non conta solo dove passa il bus</p>
-        <h2>Conta anche <em>a che minuto arriva e parte.</em></h2>
-        <p>Nel pacchetto da 16 ore le due linee partono entrambe al minuto :39. In quello da 18 ore e mezza partono ai minuti :03 e :07. Questi minuti cambiano la facilità con cui si riesce a prendere una coincidenza.</p>
-        <div class="clock-compare">
-          <div><span>16 h</span><strong>:39</strong><strong>:39</strong><small>nei test principali: 100% delle coincidenze considerate mantenute</small></div>
-          <div><span>18,5 h</span><strong>:03</strong><strong>:07</strong><small>nel test più severo: 48,57% mantenute</small></div>
+        <p class="eyebrow">11 · Un servizio leggibile, non una frequenza immaginata</p>
+        <h2>Più corse nelle punte.<br><em>16 giri completi.</em></h2>
+        <p>La base feriale 2027 comprende 254 giornate, lunedì–venerdì esclusi festivi nazionali, prima di eccezioni locali. H30 nelle banche di punta, sfalsate tra le ali; nella morbida gli intervalli arrivano a 120 minuti.</p>
+        <div class="nodo8-peak-grid">
+          <div><span>Est · partenze FS</span><strong>06:05–08:05<br>16:40–18:40</strong><small>ogni 30 minuti</small></div>
+          <div><span>Ovest · partenze FS</span><strong>07:00–09:00<br>17:35–19:35</strong><small>ogni 30 minuti</small></div>
         </div>
+        <p>Il progetto considera arrivi e partenze ferroviarie verso Milano e Lecco. Le analisi del riferimento 1 ottobre 2026 non garantiscono tutte le coincidenze né i treni 2027. Soste intermedie e viaggi lunghi sono parte del compromesso.</p>
+        <p class="source-note">Non H30 simultaneo ovunque o nei due sensi opposti. Rientro finale nominale circa 21:08. Permanenza a bordo a FS progettata, da autorizzare; sabato separato.</p>
+        <a class="decision-cta" href="../index.html#orario">Leggi tutti i 16 giri <span>→</span></a>
       </div>
     </section>
 
-    <section class="chapter finale" data-scene="end" data-label="Scelta">
+    <section class="chapter finale" id="proposta-nodo8" data-scene="end" data-label="Proposta e limiti">
       <div class="copy copy--final">
-        <p class="eyebrow">11 · Qui i dati smettono di decidere</p>
-        <h2>L’analisi non sceglie da sola quale rete fare.</h2>
-        <p class="final-line">Serve a rendere la scelta <em>più consapevole.</em></p>
-        <p>Mostra vantaggi, limiti e punti ancora da verificare. La decisione finale resta politica e amministrativa, ma parte da informazioni molto più solide.</p>
-        <a class="decision-cta" href="../index.html">Confronta le alternative <span>→</span></a>
+        <p class="eyebrow">12 · Una base progettuale, non un esercizio già approvato</p>
+        <h2>Una proposta concreta.<br><em>Compromessi in chiaro.</em></h2>
+        <p>Più regolarità e nuovi ambiti locali, ma non un miglioramento per ogni viaggio: i primi arrivi D184 da ovest non sono conservati, alcune relazioni sono meno dirette, code esterne e sabato restano fuori dalla base definita.</p>
+        <div class="nodo8-summary"><span><strong>110.230 km</strong>commerciali feriali 2027, senza sabato o km a vuoto</span><span><strong>81,79%</strong>copertura potenziale entro 10 minuti, sul substrato RT028</span></div>
+        <p>La copertura è una stima, non passeggeri previsti o un guadagno certificato sull’attuale. Il confronto con 111.419 km PdB ha calendario e territorio diversi: non prova neutralità economica o finanziamento.</p>
+        <p>Restano da validare transitabilità e accosti, accessibilità, tempi reali, continuità a bordo, mezzi e turni, treni 2027 e costo completo. La base è confermata dal committente; nessun vincitore automatico, servizio autorizzato o probabilità empirica di coincidenza viene inventato.</p>
+        <a class="decision-cta" href="../index.html#proposta">Scopri la proposta Nodo8 <span>→</span></a>
         <button id="restartBtn" class="restart" type="button">↺ ricomincia</button>
       </div>
     </section>
@@ -185,8 +205,8 @@
   <script src="vendor/gsap/gsap.min.js"></script>
   <script src="vendor/gsap/ScrollTrigger.min.js"></script>
   <script src="vendor/pako/pako.min.js"></script>
-  <script src="../geo-data.js"></script>
+  <script src="legacy-geo-data.js"></script>
   <script src="journey-data.js"></script>
-  <script type="module" src="journey-bootstrap.mjs"></script>
+  <script type="module" src="journey-bootstrap.mjs?v=20261008"></script>
 </body>
 </html>

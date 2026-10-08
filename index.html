@@ -1,276 +1,647 @@
 <!doctype html>
 <html lang="it">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f3ed">
-  <meta name="color-scheme" content="light">
-  <meta name="description" content="Tra Paesi rende leggibile la scelta fra quattro configurazioni di rete locale per Olgiate Molgora, Calco, Brivio, Santa Maria Hoè e La Valletta Brianza.">
-  <meta name="robots" content="noindex,nofollow,noarchive">
-  <title>Tra Paesi · Esploratore della rete locale</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="reading-progress" aria-hidden="true"><i id="readingProgress"></i></div>
-  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
-
-  <header class="site-header" id="siteHeader">
-    <a class="wordmark" href="#top" aria-label="Tra Paesi, torna all'inizio">
-      <span class="wordmark-symbol" aria-hidden="true"><i></i></span>
-      <span>Tra Paesi</span>
-    </a>
-    <nav class="topnav" aria-label="Navigazione principale">
-      <a href="#oggi">Oggi</a>
-      <a href="#scelta">La scelta</a>
-      <a href="#confronta">Confronta</a>
-      <a href="#metodo">Metodo</a>
-    </nav>
-    <span class="status-pill"><span></span> Dati verificati · scelta aperta</span>
-  </header>
-
-  <main id="contenuto">
-    <section class="hero" id="top" data-section="top">
-      <div class="hero-copy reveal">
-        <p class="eyebrow">Esploratore di rete · Phase 2</p>
-        <h1>Una rete locale.<br><em>Quattro modi</em> di farla funzionare.</h1>
-        <p class="hero-lede">Cinque comuni condividono gli stessi spostamenti, ma non partono dallo stesso livello di accesso al trasporto pubblico. Qui la scelta complessa viene scomposta in due domande semplici.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#scelta">Capisci la scelta</a>
-          <a class="text-link" href="#oggi">Prima: da dove partiamo <span aria-hidden="true">↓</span></a>
-        </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#163d33" />
+    <title>Nodo8 — cinque comuni, una linea</title>
+    <meta
+      name="description"
+      content="La proposta Nodo8: un percorso intercomunale a otto, 27 siti di fermata e 16 giri completi. Un trasporto locale più utile e riconoscibile per cinque comuni, da validare per l’esercizio."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="styles.css?v=20261008" />
+    <script
+      defer
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script defer src="app.js?v=20261008"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Salta al contenuto</a>
+    <header class="site-header">
+      <a class="wordmark" href="#inizio" aria-label="Nodo8, torna all’inizio"
+        >nodo<span>8</span><span class="brand-dot" aria-hidden="true"></span
+      ></a>
+      <nav aria-label="Navigazione principale">
+        <a href="#idea">L’idea</a><a href="#percorso">Il percorso</a
+        ><a href="#orario">L’orario</a><a href="#impatto">L’impatto</a>
+        <a href="dietro-l-analisi/">Il processo</a>
+      </nav>
+      <a class="header-cta" href="#proposta"
+        >La proposta <span aria-hidden="true">↗</span></a
+      >
+      <div class="scroll-progress" aria-hidden="true">
+        <span id="scrollProgress"></span>
       </div>
-
-      <div class="hero-visual reveal reveal-delay" id="heroVisual" aria-label="Le due dimensioni che generano le quattro alternative">
-        <div class="hero-visual-sheen" aria-hidden="true"></div>
-        <div class="decision-axis decision-axis-horizontal">
-          <span>Come funziona</span>
-          <strong>Due anelli</strong>
-          <i aria-hidden="true"></i>
-          <strong>Figure-8</strong>
+    </header>
+    <main id="main">
+      <section
+        class="hero section-shell"
+        id="inizio"
+        aria-labelledby="heroTitle"
+      >
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="small-dot"></span> UNA PROPOSTA PER IL NOSTRO
+            TERRITORIO
+          </p>
+          <h1 id="heroTitle">
+            Cinque comuni.<br />Una linea.<br /><span>Più vicini.</span>
+          </h1>
+          <p class="hero-intro">
+            Un autobus che entra nella vita di tutti i giorni. Un percorso
+            riconoscibile, più passaggi nelle punte e la stazione come punto
+            d’incontro, non come unico motivo per muoversi.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-dark" href="#percorso"
+              >Scopri il percorso <span aria-hidden="true">↓</span></a
+            ><a class="text-link" href="#orario">Come funzionerebbe ↗</a>
+          </div>
+          <p class="proposal-label">
+            Nodo8 · una proposta del progetto Tra Paesi<br />Nome di lavoro
+            della Linea 8. Base progettuale confermata, non servizio già attivo.
+          </p>
         </div>
-        <div class="decision-cross" aria-hidden="true">
-          <div class="cross-line cross-line-h"></div>
-          <div class="cross-line cross-line-v"></div>
-          <span class="cross-node n1"><b>16h</b><small>anelli</small></span>
-          <span class="cross-node n2"><b>16h</b><small>figure-8</small></span>
-          <span class="cross-node n3"><b>18h30</b><small>anelli</small></span>
-          <span class="cross-node n4"><b>18h30</b><small>figure-8</small></span>
-          <span class="cross-center"><b>4</b><small>finaliste</small></span>
+        <div
+          class="hero-art"
+          aria-label="Identità grafica: due ali, un unico percorso a otto"
+        >
+          <div class="art-top"><span>IL TERRITORIO, INSIEME.</span></div>
+          <svg class="brand-route" viewBox="0 0 540 560" aria-hidden="true">
+            <defs>
+              <pattern
+                id="heroDots"
+                width="24"
+                height="24"
+                patternUnits="userSpaceOnUse"
+              >
+                <circle cx="2" cy="2" r="1" fill="#163d33" opacity=".13" />
+              </pattern>
+            </defs>
+            <rect width="540" height="560" fill="url(#heroDots)" />
+            <path
+              class="brand-west"
+              d="M270 280 C165 225 120 165 156 105 C198 30 350 30 385 105 C425 175 365 225 270 280"
+            />
+            <path
+              class="brand-east"
+              d="M270 280 C175 330 120 395 157 455 C202 530 350 530 384 455 C422 388 364 332 270 280"
+            />
+            <circle
+              cx="270"
+              cy="280"
+              r="22"
+              fill="#f6f3eb"
+              stroke="#163d33"
+              stroke-width="4"
+            />
+            <circle cx="270" cy="280" r="7" fill="#163d33" />
+            <circle
+              cx="156"
+              cy="105"
+              r="8"
+              fill="#f6f3eb"
+              stroke="#163d33"
+              stroke-width="4"
+            />
+            <circle
+              cx="385"
+              cy="105"
+              r="8"
+              fill="#f6f3eb"
+              stroke="#163d33"
+              stroke-width="4"
+            />
+            <circle
+              cx="157"
+              cy="455"
+              r="8"
+              fill="#f6f3eb"
+              stroke="#e77652"
+              stroke-width="4"
+            />
+            <circle
+              cx="384"
+              cy="455"
+              r="8"
+              fill="#f6f3eb"
+              stroke="#e77652"
+              stroke-width="4"
+            />
+          </svg>
+          <div class="hub-tag">OLGIATE FS <span>il nodo comune</span></div>
+          <div class="art-bottom">
+            <span>Due ali. Stessa linea.</span
+            ><span>Schema di identità,<br />non cartografia.</span>
+          </div>
         </div>
-        <div class="decision-axis decision-axis-vertical">
-          <span>Quanto a lungo</span>
-          <strong>16 ore</strong>
-          <i aria-hidden="true"></i>
-          <strong>18 ore 30</strong>
-        </div>
-        <p class="visual-caption">Le alternative finali sono l'incrocio di queste due scelte. Nessun punteggio nascosto.</p>
+      </section>
+      <div class="municipality-strip" aria-label="I cinque comuni">
+        <span>Olgiate Molgora</span><span>Calco</span><span>Brivio</span
+        ><span>Santa Maria Hoè</span><span>La Valletta Brianza</span>
       </div>
-    </section>
-
-    <section class="context-strip reveal" aria-label="Stato del processo">
-      <div><b>2.633</b><span>configurazioni nel perimetro di budget</span></div>
-      <span class="strip-arrow" aria-hidden="true">→</span>
-      <div><b>776</b><span>robuste</span></div>
-      <span class="strip-arrow" aria-hidden="true">→</span>
-      <div><b>10</b><span>orarie territorialmente giustificate</span></div>
-      <span class="strip-arrow" aria-hidden="true">→</span>
-      <div class="strip-current"><b>4</b><span>finaliste</span></div>
-    </section>
-
-    <section class="section section-baseline" id="oggi" data-section="oggi">
-      <div class="section-intro reveal">
-        <p class="eyebrow">01 · Da dove partiamo</p>
-        <h2>Oggi non partiamo tutti dallo stesso punto.</h2>
-        <p>La rete ordinaria D184 + D185 ha una copertura geografica già alta in alcuni comuni e molto più debole in altri. La baseline V4 ricostruisce l'universo fisico delle fermate ufficiali, non soltanto quelle localizzabili nel vecchio PDF.</p>
-      </div>
-
-      <div class="baseline-layout">
-        <article class="baseline-main reveal">
-          <div class="baseline-head">
+      <section
+        class="section-shell story-section"
+        id="idea"
+        aria-labelledby="ideaTitle"
+      >
+        <div class="section-heading">
+          <p class="eyebrow">01 — PERCHÉ NODO8</p>
+          <h2 id="ideaTitle">
+            Non solo prendere il treno.<br /><span
+              >Prendere parte al territorio.</span
+            >
+          </h2>
+        </div>
+        <div class="story-layout">
+          <p class="large-copy">
+            Andare in centro. Raggiungere un altro paese. Tornare dalla
+            stazione. Il trasporto pubblico può diventare un’opzione locale, non
+            un’eccezione nell’orario.
+          </p>
+          <div>
+            <p>
+              Oggi D184 e D185 collegano il territorio con servizi e calendari
+              differenti. In un feriale scolastico, le partenze da FS possono
+              lasciare intervalli di oltre sei ore. Nodo8 propone un
+              cambiamento: un’unica identità e un percorso completo ripetuto per
+              tutta la giornata.
+            </p>
+            <p>
+              La riconoscibilità nasce da cose concrete: sapere dove passa,
+              trovare più corse nelle punte e conoscere anche gli intervalli più
+              lunghi. Non promettere un autobus ogni mezz’ora quando non c’è.
+            </p>
+          </div>
+        </div>
+        <div class="benefit-grid">
+          <article>
+            <span class="benefit-number">01</span>
+            <h3>Locale, davvero.</h3>
+            <p>
+              Collegare i cinque comuni e dare spazio a Olgiate sud, San Zeno,
+              Arlate e al centro di Calco.
+            </p>
+          </article>
+          <article>
+            <span class="benefit-number">02</span>
+            <h3>Un percorso da ricordare.</h3>
+            <p>
+              Ogni corsa percorre tutto l’otto. Est e ovest sono due parti della
+              stessa linea, non due servizi da decifrare.
+            </p>
+          </article>
+          <article>
+            <span class="benefit-number">03</span>
+            <h3>Più prevedibile.</h3>
+            <p>
+              Passaggi ogni 30 minuti nelle banche di punta. Un orario esplicito
+              nella morbida, con intervalli fino a 120 minuti.
+            </p>
+          </article>
+        </div>
+      </section>
+      <aside
+        class="journey-teaser section-shell"
+        aria-labelledby="journeyTitle"
+      >
+        <div>
+          <p class="eyebrow">TRA PAESI · DIETRO L’ANALISI</p>
+          <h2 id="journeyTitle">Come siamo arrivati fin qui.</h2>
+          <p>
+            Popolazione, cammini, strade, alternative e scelte: segui il
+            processo sulla mappa, un capitolo alla volta.
+          </p>
+        </div>
+        <a class="button button-dark" href="dietro-l-analisi/"
+          >Entra nel racconto <span aria-hidden="true">↗</span></a
+        >
+      </aside>
+      <section class="route-section" id="percorso" aria-labelledby="routeTitle">
+        <div class="section-shell">
+          <div class="section-heading route-heading">
             <div>
-              <span class="micro-label">Popolazione entro una fermata</span>
-              <strong id="globalCoverage">68,7%</strong>
-              <p id="globalCoverageLabel">entro 10 minuti a piedi</p>
+              <p class="eyebrow">02 — UN OTTO, NON DUE LINEE</p>
+              <h2 id="routeTitle">
+                Il percorso che<br /><span>ci tiene insieme.</span>
+              </h2>
             </div>
-            <div class="threshold-switch" role="group" aria-label="Soglia pedonale">
-              <button data-threshold="5" type="button">5 min</button>
-              <button data-threshold="8" type="button">8 min</button>
-              <button class="active" data-threshold="10" type="button">10 min</button>
-              <button data-threshold="12" type="button">12 min</button>
-            </div>
+            <p>
+              Stazione → ala est → stazione → ala ovest → stazione.
+              <strong
+                >Lo stesso percorso completo, per ognuno dei 16 giri.</strong
+              >
+            </p>
           </div>
-
-          <div class="municipality-bars" id="municipalityBars" aria-live="polite"></div>
-          <p class="chart-note">Quote sulla popolazione localizzata del modello. La soglia selezionata cambia il tempo massimo a piedi verso una fermata D184/D185 con catchment certificato.</p>
-        </article>
-
-        <aside class="baseline-story reveal reveal-delay">
-          <p class="micro-label">Il punto non è la media</p>
-          <h3 id="rangeStoryTitle">La distanza tra territori è il problema da vedere.</h3>
-          <p id="rangeStoryBody">A 10 minuti, Brivio e Santa Maria Hoè superano il 94% di copertura, mentre Calco è al 52,5% e Olgiate al 59,9%.</p>
-          <div class="range-visual" aria-label="Intervallo tra il comune meno coperto e quello più coperto">
-            <span class="range-min" id="rangeMin">52,5</span>
-            <div class="range-line"><i id="rangeLine"></i></div>
-            <span class="range-max" id="rangeMax">95,2</span>
-          </div>
-          <div class="range-gap"><strong id="rangeGap">42,7</strong><span>punti percentuali di distanza</span></div>
-          <p class="small-copy">Questo non decide da solo la nuova rete. Dice però dove l'accessibilità attuale lascia più spazio a un ridisegno.</p>
-        </aside>
-      </div>
-
-      <div class="baseline-trust reveal">
-        <span class="trust-mark">44</span>
-        <p><strong>cluster fisici ufficiali ricostruiti.</strong> Tutti hanno identità e coordinate. I 16 senza catchment pedonale certificato sono fuori dai cinque comuni di studio, quindi non vengono usati per inventare copertura.</p>
-      </div>
-    </section>
-
-    <section class="section section-choice" id="scelta" data-section="scelta">
-      <div class="section-intro compact reveal">
-        <p class="eyebrow">02 · La scelta</p>
-        <h2>Non scegliere fra quattro scatole.<br>Scegli su <em>due assi</em>.</h2>
-        <p>Le quattro finaliste combinano una forma di esercizio e un'estensione oraria. Separarle rende visibile il vero compromesso.</p>
-      </div>
-
-      <div class="choice-questions reveal">
-        <article class="choice-question">
-          <div class="question-number">A</div>
-          <p class="micro-label">Forma di esercizio</p>
-          <h3>Come deve funzionare la rete?</h3>
-          <div class="topology-pair">
-            <div class="topology-option">
-              <svg viewBox="0 0 240 120" role="img" aria-label="Schema concettuale di due anelli indipendenti">
-                <path d="M116 60 C92 16 30 22 30 60s62 44 86 0"/>
-                <path d="M124 60 C148 16 210 22 210 60s-62 44-86 0"/>
-                <circle cx="120" cy="60" r="6"/>
-              </svg>
-              <strong>Due anelli</strong>
-              <p>Due servizi distinti condividono il nodo centrale.</p>
+          <div class="route-metrics">
+            <div>
+              <strong>27,124 <small>km</small></strong
+              ><span>per giro completo</span>
             </div>
-            <div class="topology-option">
-              <svg viewBox="0 0 240 120" role="img" aria-label="Schema concettuale di un percorso a otto interconnesso">
-                <path d="M120 60 C92 10 30 22 30 60s62 50 90 0 90-38 90 0-62 50-90 0Z"/>
-                <circle cx="120" cy="60" r="6"/>
-              </svg>
-              <strong>Figure-8 interconnesso</strong>
-              <p>I due rami fanno parte di una struttura operativa interconnessa.</p>
+            <div>
+              <strong>27 <small>siti</small></strong
+              ><span>di fermata, inclusa FS</span>
+            </div>
+            <div>
+              <strong>4 <small>nuovi</small></strong
+              ><span>punti proposti</span>
             </div>
           </div>
-          <p class="evidence-note"><span></span> Le differenze di sequenza, ritorno pubblico, chiusura tecnica e regolarità saranno mostrate solo dopo il diagnostic certificato di A.</p>
-        </article>
-
-        <article class="choice-question choice-time">
-          <div class="question-number">B</div>
-          <p class="micro-label">Estensione del servizio</p>
-          <h3>Quanto a lungo deve funzionare?</h3>
-          <div class="time-pair">
-            <button class="time-option active" data-span="16" type="button">
-              <span class="time-clock">16h</span>
-              <span class="time-name">Più compatta</span>
-              <small>102.916 km/anno</small>
-            </button>
-            <button class="time-option" data-span="18.5" type="button">
-              <span class="time-clock">18h30</span>
-              <span class="time-name">Più estesa</span>
-              <small>108.661 km/anno</small>
-            </button>
+          <div class="route-explorer">
+            <div class="map-panel">
+              <div class="map-toolbar">
+                <span
+                  ><span class="small-dot"></span> TRACCIATO STRADALE DI
+                  PROGETTO</span
+                ><button id="resetMap" type="button">Vista completa ↗</button>
+              </div>
+              <div
+                id="routeMap"
+                role="region"
+                aria-label="Mappa interattiva del percorso e dei siti di fermata"
+                tabindex="0"
+              >
+                <p class="map-loading">Caricamento del tracciato confermato…</p>
+              </div>
+              <div class="map-legend">
+                <span><i class="legend-line east"></i>Ala est</span
+                ><span><i class="legend-line west"></i>Ala ovest</span
+                ><span><i class="legend-stop"></i>Sito da inventario</span
+                ><span><i class="legend-stop new"></i>Sito nuovo proposto</span>
+              </div>
+            </div>
+            <aside class="stop-panel" aria-labelledby="stopTitle">
+              <div class="stop-panel-heading">
+                <h3 id="stopTitle">Dove si fermerebbe</h3>
+                <p>Seleziona un sito sulla mappa o nell’elenco.</p>
+              </div>
+              <div
+                class="segmented"
+                role="group"
+                aria-label="Filtra le fermate"
+              >
+                <button
+                  class="active"
+                  type="button"
+                  data-wing="all"
+                  aria-pressed="true"
+                >
+                  Tutte</button
+                ><button type="button" data-wing="east_A" aria-pressed="false">
+                  Est</button
+                ><button type="button" data-wing="west_B" aria-pressed="false">
+                  Ovest
+                </button>
+              </div>
+              <ol id="stopList" class="stop-list">
+                <li>Elenco disponibile al caricamento dei dati.</li>
+              </ol>
+            </aside>
           </div>
-          <div class="span-explainer" id="spanExplainer" aria-live="polite"></div>
-        </article>
-      </div>
-
-      <div class="matrix-wrap reveal">
-        <div class="matrix-title">
-          <div><p class="micro-label">Le quattro combinazioni</p><h3>È tutto qui.</h3></div>
-          <p class="matrix-instruction" id="selectionHint">Scegline due per vedere soltanto ciò che cambia.</p>
+          <div id="stopDetail" class="stop-detail" aria-live="polite">
+            <p>
+              I siti sono posizioni di progetto: accosti, lati di salita e
+              accessibilità devono essere approvati. Un sito può avere più
+              eventi di passaggio; non sono viaggi equivalenti.
+            </p>
+          </div>
+          <p class="section-note">
+            Il disegno segue il grafo stradale della proposta confermata, non un
+            collegamento in linea retta tra paesi. La geometria non certifica da
+            sola transitabilità del bus o autorizzazione delle fermate.
+            <a
+              href="outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson"
+              download
+              >Scarica il GeoJSON ↗</a
+            >
+          </p>
+          <noscript
+            ><p class="notice">
+              La mappa richiede JavaScript.
+              <a
+                href="docs/RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md"
+                >Leggi la proposta completa</a
+              >
+              o scarica il tracciato dal collegamento sopra.
+            </p></noscript
+          >
         </div>
-        <div class="candidate-matrix" id="candidateMatrix" aria-describedby="selectionHint">
-          <div class="matrix-corner"></div>
-          <div class="matrix-col-label" data-col="loops">Due anelli</div>
-          <div class="matrix-col-label" data-col="fig">Figure-8</div>
-          <div class="matrix-row-label" data-row="16"><b>16h</b><span>più compatta</span></div>
-          <button class="candidate-card" data-candidate="loops16" data-topology="loops" data-span-row="16" aria-pressed="false" type="button"><span>Due anelli</span><b>16h</b><small>Seleziona per confrontare</small></button>
-          <button class="candidate-card" data-candidate="fig16" data-topology="fig" data-span-row="16" aria-pressed="false" type="button"><span>Figure-8</span><b>16h</b><small>Seleziona per confrontare</small></button>
-          <div class="matrix-row-label" data-row="18.5"><b>18h30</b><span>più estesa</span></div>
-          <button class="candidate-card" data-candidate="loops185" data-topology="loops" data-span-row="18.5" aria-pressed="false" type="button"><span>Due anelli</span><b>18h30</b><small>Seleziona per confrontare</small></button>
-          <button class="candidate-card" data-candidate="fig185" data-topology="fig" data-span-row="18.5" aria-pressed="false" type="button"><span>Figure-8</span><b>18h30</b><small>Seleziona per confrontare</small></button>
+      </section>
+      <section
+        class="section-shell story-section"
+        id="orario"
+        aria-labelledby="scheduleTitle"
+      >
+        <div class="section-heading">
+          <p class="eyebrow">03 — SAPERE QUANDO PASSA</p>
+          <h2 id="scheduleTitle">
+            Più corse quando servono.<br /><span
+              >Un orario che si può leggere.</span
+            >
+          </h2>
         </div>
-      </div>
-    </section>
-
-    <section class="section section-compare" id="confronta" data-section="confronta">
-      <div class="compare-heading reveal">
-        <div>
-          <p class="eyebrow">03 · Cosa cambia davvero?</p>
-          <h2>Confronta due alternative.<br><em>Il resto scompare.</em></h2>
+        <div class="schedule-intro">
+          <p class="large-copy">
+            16 giri completi.<br />Lunedì–venerdì.<br />Anche a scuole chiuse.
+          </p>
+          <div>
+            <p>
+              La base 2027 prevede i feriali, esclusi festivi nazionali:
+              <strong>254 giornate</strong> prima di eventuali eccezioni locali.
+              Il sabato resta da valutare separatamente.
+            </p>
+            <p>
+              Le punte est e ovest sono <strong>sfalsate</strong>, perché il bus
+              percorre prima una parte e poi l’altra. Non è H30 simultaneo
+              ovunque, né H30 nei due sensi opposti.
+            </p>
+          </div>
         </div>
-        <p>Puoi scegliere due finaliste nella matrice oppure usare una domanda pronta. Il confronto mostra soltanto le dimensioni che differiscono, senza trasformarle in un punteggio unico.</p>
-      </div>
-
-      <div class="preset-bar reveal" aria-label="Confronti rapidi">
-        <span>Confronta subito</span>
-        <button type="button" data-preset="loops16,fig16">Forma · 16h</button>
-        <button type="button" data-preset="loops185,fig185">Forma · 18h30</button>
-        <button type="button" data-preset="loops16,loops185">Durata · due anelli</button>
-        <button type="button" data-preset="fig16,fig185">Durata · figure-8</button>
-      </div>
-
-      <div class="compare-shell reveal">
-        <div class="compare-selection">
-          <div class="compare-slot" id="slotA"><span>A</span><p>Scegli una finalista</p></div>
-          <button class="swap-button" id="swapComparison" type="button" aria-label="Scambia alternative">↔</button>
-          <div class="compare-slot" id="slotB"><span>B</span><p>Scegli una seconda finalista</p></div>
-          <button class="clear-button" id="clearComparison" type="button">Azzera</button>
+        <div class="peak-banks">
+          <article class="east-bank">
+            <p>ALA EST · PARTENZE DA FS</p>
+            <strong>06:05–08:05<br />16:40–18:40</strong
+            ><span>ogni 30 minuti</span>
+          </article>
+          <article class="west-bank">
+            <p>ALA OVEST · PARTENZE DA FS</p>
+            <strong>07:00–09:00<br />17:35–19:35</strong
+            ><span>ogni 30 minuti</span>
+          </article>
+          <article class="offpeak-bank">
+            <p>NELLA MORBIDA</p>
+            <strong>Più distanziate,<br />sempre dichiarate.</strong
+            ><span>intervalli fino a 120 minuti; vedi tabella</span>
+          </article>
         </div>
-        <div class="comparison-result empty" id="comparisonResult" aria-live="polite">
-          <p>Seleziona due alternative sopra. Ti mostrerò solo ciò che cambia fra loro.</p>
+        <details class="timetable-details" open>
+          <summary>
+            L’orario completo di progetto <span>16 giri ↙</span>
+          </summary>
+          <div class="table-tools">
+            <label for="scheduleFilter">Mostra</label
+            ><select id="scheduleFilter">
+              <option value="all">Tutti i giri</option>
+              <option value="peak">Giri delle banche H30</option>
+              <option value="offpeak">Altri giri</option></select
+            ><span id="scheduleCount" aria-live="polite"></span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <caption>
+                Ogni riga è una corsa completa. I rientri sono nominali, non
+                tempi misurati.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Giro</th>
+                  <th scope="col">FS → est</th>
+                  <th scope="col">FS intermedia → ovest</th>
+                  <th scope="col">Rientro FS ≈</th>
+                </tr>
+              </thead>
+              <tbody id="timetableBody">
+                <tr>
+                  <td colspan="4">Caricamento dell’orario confermato…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <div class="rail-note">
+          <span class="rail-symbol" aria-hidden="true">↔</span>
+          <div>
+            <h3>La ferrovia è un obiettivo, non una coincidenza inventata.</h3>
+            <p>
+              Il progetto considera partenze e arrivi, verso Milano e verso
+              Lecco. Le compatibilità sono state analizzate sul riferimento del
+              1 ottobre 2026, con il sottopasso corretto. Non tutte sono utili o
+              garantite: tempi reali e orario ferroviario 2027 restano da
+              verificare.
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
-
-    <section class="section section-principles" data-section="principi">
-      <div class="section-intro compact reveal">
-        <p class="eyebrow">04 · Come si legge la decisione</p>
-        <h2>Nessun voto finale nascosto.</h2>
-        <p>Accessibilità, durata, connessioni ferroviarie, robustezza, semplicità e chilometri non vengono mescolati in un indice arbitrario. Hanno ruoli diversi.</p>
-      </div>
-      <div class="principle-grid reveal">
-        <article><span>01</span><h3>Accesso</h3><p>È l'obiettivo centrale: quante persone possono raggiungere utilmente la rete.</p></article>
-        <article><span>02</span><h3>Equità</h3><p>È una salvaguardia: una rete buona non può lasciare un comune sistematicamente indietro.</p></article>
-        <article><span>03</span><h3>Robustezza</h3><p>È un filtro forte: una soluzione fragile non viene salvata da un buon numero altrove.</p></article>
-        <article><span>04</span><h3>Semplicità</h3><p>Conta davvero: regolarità e leggibilità devono emergere dalla struttura reale dell'orario.</p></article>
-      </div>
-    </section>
-
-    <section class="section section-method" id="metodo" data-section="metodo">
-      <div class="method-card reveal">
-        <div>
-          <p class="eyebrow">Evidenza</p>
-          <h2>Il sito semplifica la lettura.<br>Non semplifica i dati.</h2>
+        <p class="section-note">
+          Ultima partenza del giro da FS verso est: 19:40. Ultima partenza
+          intermedia verso ovest: 20:30. Rientro nominale finale: circa 21:08.
+          Non significa servizio fino a quell’ora in ogni fermata. La permanenza
+          a bordo a FS è progettata, ancora da autorizzare.
+        </p>
+      </section>
+      <section
+        class="impact-section"
+        id="impatto"
+        aria-labelledby="impactTitle"
+      >
+        <div class="section-shell">
+          <div class="section-heading">
+            <p class="eyebrow">04 — VICINO ALLE PERSONE</p>
+            <h2 id="impactTitle">
+              Cinque comuni.<br /><span>Una misura per ciascuno.</span>
+            </h2>
+          </div>
+          <div class="coverage-layout">
+            <div class="coverage-statement">
+              <strong id="totalCoverage">81,79<span>%</span></strong>
+              <p>
+                copertura pedonale potenziale del bacino entro 10 minuti da un
+                sito di progetto.
+              </p>
+              <div class="coverage-control">
+                <label for="coverageTime">Distanza pedonale di confronto</label
+                ><select id="coverageTime">
+                  <option value="5">Entro 5 minuti</option>
+                  <option value="8">Entro 8 minuti</option>
+                  <option value="10" selected>Entro 10 minuti</option>
+                </select>
+              </div>
+              <p class="small-copy">
+                Stima sul grafo RT028 e sulla popolazione di riferimento. Non è
+                domanda prevista, né una certificazione di percorsi pedonali
+                sicuri o accessibili.
+              </p>
+            </div>
+            <div id="coverageBars" class="coverage-bars" aria-live="polite">
+              <p>Caricamento delle cinque misure territoriali…</p>
+            </div>
+          </div>
+          <p class="section-note">
+            Non promettiamo la copertura di ogni frazione o di tutto Olgiate
+            sud. Non è ancora disponibile un confronto completo con D184/D185
+            sullo stesso metodo: queste percentuali non sono un guadagno
+            certificato rispetto all’attuale.
+          </p>
         </div>
-        <div class="method-copy">
-          <p>La baseline corrente è la V4 certificata. Le quattro finaliste derivano dal Final Policy Dry Run V3. La visualizzazione non inventa geometrie di percorso né probabilità non osservate.</p>
+      </section>
+      <section
+        class="section-shell story-section"
+        id="confronto"
+        aria-labelledby="comparisonTitle"
+      >
+        <div class="section-heading">
+          <p class="eyebrow">05 — IL CAMBIAMENTO, SENZA SCORCIATOIE</p>
+          <h2 id="comparisonTitle">
+            Più servizio locale.<br /><span>Compromessi in chiaro.</span>
+          </h2>
+        </div>
+        <div class="comparison-grid">
+          <article class="comparison-card">
+            <span class="eyebrow">OGGI · D184 / D185</span>
+            <h3>Due linee, funzioni diverse.</h3>
+            <p>
+              Nel feriale scolastico: 8 partenze FS verso ovest e 5 verso est.
+              Intervalli massimi fra partenze: 6 h 17 e 6 h 20. Sono presenti
+              collegamenti mattutini molto precoci e code oltre i cinque comuni.
+            </p>
+            <a
+              class="text-link"
+              href="docs/NODO8_CONFRONTO_D184_D185_E_RECAP_2026_10_07.md"
+              >Fonti e confronto completo ↗</a
+            >
+          </article>
+          <article class="comparison-card proposed">
+            <span class="eyebrow">PROPOSTA · NODO8</span>
+            <h3>Un percorso, più occasioni.</h3>
+            <p>
+              16 passaggi per ala da FS, dentro 16 corse complete. Quattro
+              banche H30, nuovi siti locali e una base feriale non legata al
+              calendario scolastico. Uno stesso nome per muoversi tra i cinque
+              comuni.
+            </p>
+            <span class="comparison-tag"
+              >Più regolarità, non miglioramento universale.</span
+            >
+          </article>
+        </div>
+        <div class="tradeoffs">
           <details>
-            <summary>Stato e provenienza</summary>
-            <dl>
-              <div><dt>Baseline corrente</dt><dd>V4 · PASS</dd></div>
-              <div><dt>Finaliste</dt><dd>4 · decisione non ancora presa</dd></div>
-              <div><dt>Diagnostic strutturale</dt><dd>Workstream A · in certificazione</dd></div>
-              <div><dt>Selezione</dt><dd>PRIMARY / RUNNER-UP non ancora assegnati</dd></div>
-            </dl>
+            <summary>
+              Prima mattina da ovest: una funzione non conservata.
+            </summary>
+            <p>
+              D184 pubblica arrivi FS alle 06:22, 06:42 e 07:20, da origini e
+              corse differenti. Nodo8 ha il primo rientro ovest nominale alle
+              07:38. Quelle opportunità ferroviarie non sono preservate dal
+              progetto attuale.
+            </p>
+          </details>
+          <details>
+            <summary>Un anello non rende diretto ogni viaggio.</summary>
+            <p>
+              Alcune relazioni richiedono il giro lungo o la sosta a FS. Sul
+              corridoio Calco/Via Virgilio, la D185 pubblica circa 5 minuti da
+              FS; Nodo8 raggiunge il proprio sito omonimo dopo circa 32 minuti.
+              L’identità della palina attuale non è certificata: il confronto
+              riguarda il corridoio, non lo stesso accosto.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Le code esterne e il sabato non spariscono dai bisogni.
+            </summary>
+            <p>
+              Ravellino/Colle Brianza e Cisano/Caprino/Celana sono fuori dal
+              percorso Nodo8. Il sabato è separato. La proposta non è una
+              soppressione integrale delle attuali linee né una soluzione già
+              finanziata per tutte le loro funzioni.
+            </p>
           </details>
         </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div><strong>Tra Paesi</strong><span>Uno strumento per rendere leggibile una decisione di rete.</span></div>
-    <p>Dati e metodi tracciati nel repository Phase 2. Ultimo aggiornamento: 4 settembre 2026.</p>
-  </footer>
-
-  <script src="app.js" defer></script>
-</body>
+        <p class="section-note">
+          Confronto degli orari ufficiali invernali 2026/27 su un feriale
+          scolastico lunedì–venerdì. Edizione D184: 14 settembre; D185: 5
+          ottobre. Non è un conteggio annuale o una misura di corse
+          effettivamente svolte.
+          <a
+            href="https://arriva.it/app/uploads/sites/7/2026/08/D184-Olgiate-Molgora-F.S.%E2%80%93Ravellino-inv27.pdf"
+            >D184 ↗</a
+          >
+          ·
+          <a
+            href="https://arriva.it/app/uploads/sites/7/2026/10/D185-Celana%E2%80%93Olgiate-F.S.-Inv27.pdf"
+            >D185 ↗</a
+          >
+        </p>
+      </section>
+      <section
+        class="proposal-section"
+        id="proposta"
+        aria-labelledby="proposalTitle"
+      >
+        <div class="section-shell">
+          <p class="eyebrow">DAL CONCEPT A UNA PROPOSTA VERIFICABILE</p>
+          <h2 id="proposalTitle">
+            Un servizio da costruire.<br />Una base concreta<br /><span
+              >da cui partire.</span
+            >
+          </h2>
+          <div class="proposal-grid">
+            <div>
+              <strong>110.230 <small>km</small></strong>
+              <p>
+                commerciali feriali nel 2027.<br />16 giri × 27,1235 km × 254
+                giorni.
+              </p>
+              <p class="small-copy">
+                Il riferimento PdB D184+D185 è 111.419 km sulle intere linee,
+                comprese code esterne e calendari diversi. La differenza
+                aritmetica non prova costo neutro o risorse trasferibili.
+                Sabato, km a vuoto e costo completo non sono inclusi.
+              </p>
+            </div>
+            <div>
+              <h3>Che cosa è definito</h3>
+              <p>
+                Percorso, siti, sequenza unica, orario e base feriale 2027. Dati
+                e limiti consultabili, senza simulare approvazioni.
+              </p>
+              <h3>Che cosa deve essere validato</h3>
+              <p>
+                Transitabilità e accosti, accessibilità, tempi osservati e treni
+                2027, permanenza a bordo, mezzi e turni, calendario completo e
+                finanziamento. Fino a quattro mezzi contemporanei nei casi di
+                modello: non una flotta acquisita.
+              </p>
+            </div>
+          </div>
+          <div class="proposal-actions">
+            <a
+              class="button button-light"
+              href="docs/RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md"
+              >Leggi la proposta completa ↗</a
+            ><a class="text-link" href="assets/nodo8-proposal.json" download
+              >Scarica i dati della vetrina ↓</a
+            >
+          </div>
+          <p class="proposal-disclaimer">
+            Proposta progettuale, aggiornata al 7 ottobre 2026. Nessun servizio
+            pubblico autorizzato, finanziamento garantito o selezione
+            algoritmica di un vincitore. Nodo8 è un nome di lavoro.
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer section-shell">
+      <a class="wordmark" href="#inizio"
+        >nodo<span>8</span><span class="brand-dot" aria-hidden="true"></span
+      ></a>
+      <p>Cinque comuni, una linea.<br />Un progetto per muoversi insieme.</p>
+      <a href="dietro-l-analisi/">Dietro l’analisi · il racconto ↗</a>
+    </footer>
+  </body>
 </html>

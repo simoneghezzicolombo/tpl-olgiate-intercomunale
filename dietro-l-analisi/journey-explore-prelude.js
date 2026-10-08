@@ -4,7 +4,7 @@
   const mapEl = document.getElementById('map');
   if (mapEl) {
     mapEl.removeAttribute('aria-hidden');
-    mapEl.setAttribute('aria-label', 'Mappa interattiva dei dati territoriali, della rete attuale e delle alternative finali');
+    mapEl.setAttribute('aria-label', 'Mappa del processo storico e della proposta Nodo8, con livelli distinti');
   }
 
   const main = document.querySelector('main');
@@ -16,14 +16,14 @@
     section.dataset.label = 'Esplora';
     section.innerHTML = `
       <div class="copy copy--explore">
-        <p class="eyebrow">12 · Adesso tocca a te</p>
+        <p class="eyebrow">13 · Adesso tocca a te</p>
         <h2>Ora puoi <em>esplorare la mappa liberamente.</em></h2>
-        <p>Qui ritrovi tutto quello che hai visto nello scroll: popolazione, aree ISTAT, edifici, tempi a piedi, strade percorribili dai bus, possibili nuove fermate, rete attuale e alternative finali. Premi il pulsante, accendi quello che ti interessa e clicca direttamente sulla mappa.</p>
+        <p>Esplora Nodo8 e i suoi 27 siti, oppure riaccendi i livelli del processo storico: popolazione, ISTAT, edifici, cammini, grafo, candidate e D184/D185. Le quattro alternative precedenti sono un livello separato, spento all’inizio. I dati storici non certificano guadagni di copertura della nuova proposta.</p>
         <div class="explore-key" aria-label="Legenda mappa esplorabile">
           <span><i class="explore-key__dot explore-key__dot--population"></i>popolazione</span>
           <span><i class="explore-key__dot explore-key__dot--walk"></i>tempi a piedi</span>
           <span><i class="explore-key__line explore-key__line--current"></i>rete attuale</span>
-          <span><i class="explore-key__line explore-key__line--final"></i>alternative finali</span>
+          <span><i class="explore-key__line explore-key__line--final"></i>Nodo8 · proposta attuale</span>
           <span><i class="explore-key__dot explore-key__dot--candidate"></i>possibili fermate</span>
           <span><i class="explore-key__dot explore-key__dot--existing"></i>fermate esistenti</span>
         </div>

@@ -47,6 +47,8 @@
     const b = document.createElement('button');
     b.className = 'rail-dot' + (i === 0 ? ' active' : '');
     b.title = c.dataset.label;
+    b.type = 'button';
+    b.setAttribute('aria-label', c.dataset.label);
     b.addEventListener('click', () => c.scrollIntoView({behavior:'smooth', block:'center'}));
     rail.appendChild(b);
   });
@@ -278,7 +280,13 @@
         const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting) updateActive(chapters.indexOf(e.target));}),{threshold:.5}); chapters.forEach(c=>obs.observe(c));
         addEventListener('scroll',()=>{const max=document.documentElement.scrollHeight-innerHeight;progressFill.style.width=`${(scrollY/max)*100}%`;});
       }
-      setScene('intro');
+      // Honour deep links / restored scroll positions instead of painting intro
+      // over a current-proposal chapter after the evidence has finished loading.
+      const initialIndex = chapters.findIndex(chapter => {
+        const rect = chapter.getBoundingClientRect();
+        return rect.top <= innerHeight * .55 && rect.bottom >= innerHeight * .45;
+      });
+      updateActive(initialIndex >= 0 ? initialIndex : 0);
       setTimeout(()=>loader.classList.add('hidden'),380);
     }catch(err){
       console.error(err); loader.querySelector('p').textContent='Il layer territoriale non si è caricato. Ricarica la pagina.';

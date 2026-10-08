@@ -1,0 +1,55 @@
+name: Publish final Nodo8 only
+
+on:
+  push:
+    branches: [gh-pages]
+    paths:
+      - index.html
+      - styles.css
+      - app.js
+      - assets/nodo8-proposal.json
+      - dietro-l-analisi/**
+      - config/nodo8_publication_allowlist.json
+      - scripts/build_nodo8_publication.py
+      - tests/test_nodo8_publication.py
+      - .github/workflows/nodo8-final-pages.yml
+      - docs/NODO8_CONFRONTO_D184_D185_E_RECAP_2026_10_07.md
+      - docs/RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md
+      - outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nodo8-final-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Verify publication boundary
+        run: python -m unittest discover -s tests -p test_nodo8_publication.py -v
+      - name: Verify current route projection
+        run: node --test tests/test_nodo8_journey.mjs
+      - name: Build only final-site dependencies
+        run: python scripts/build_nodo8_publication.py --output _site --revision "${{ github.sha }}"
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy the allowlisted artifact
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -124,7 +124,7 @@
         const minute=((now-start)/330)%60; // one visible service hour every ~19.8 s
         serviceHud.querySelector('.service-clock__minute b').textContent=String(Math.floor(minute)).padStart(2,'0');
         const features=[];
-        if(document.body.dataset.scene==='time'){
+        if(document.body.dataset.scene==='legacy-time'){
           movers.forEach(m=>{
             const elapsed=(minute-m.route.phase+60)%60;
             if(elapsed<=m.route.runtime){
