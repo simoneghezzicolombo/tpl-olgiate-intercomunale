@@ -597,6 +597,98 @@ main .chapter .insight {
 }
 
 /* Act III has a new visual rhythm: one route, an ordered sequence, a clear calendar. */
+.story-flow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  list-style: none;
+  margin: 27px 0;
+  padding: 0;
+}
+.story-flow li {
+  position: relative;
+  padding: 15px 10px 15px 0;
+  border-block: 1px solid var(--story-rule);
+}
+.story-flow li:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: 4px;
+  top: 15px;
+  color: var(--story-muted);
+}
+.story-flow li > span {
+  display: block;
+  color: var(--story-accent);
+  font-size: 18px;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.story-flow strong, .story-flow small {
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.story-flow small {
+  font-size: 11px;
+  color: var(--story-muted);
+  margin-top: 5px;
+}
+.story-search {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  margin: 26px 0;
+  padding: 22px 0;
+  border-block: 1px solid var(--story-rule);
+}
+.story-search strong {
+  display: block;
+  font: 600 clamp(35px, 4vw, 49px)/1.2 "Manrope", system-ui;
+  letter-spacing: -0.04em;
+}
+.story-search div:last-child strong {
+  color: var(--story-mint);
+}
+.story-search div > span {
+  display: block;
+  color: var(--story-muted);
+  font-size: 12px;
+  margin-top: 8px;
+}
+.story-search > span {
+  color: var(--story-accent);
+  font-size: 30px;
+}
+.story-frequency {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 24px 0;
+  border-block: 1px solid var(--story-rule);
+  padding: 20px 0;
+}
+.story-frequency strong, .story-frequency span {
+  display: block;
+}
+.story-frequency strong {
+  font: 600 40px/1.1 "Manrope", system-ui;
+  letter-spacing: -0.04em;
+}
+.story-frequency small {
+  font: 500 14px var(--sans);
+  letter-spacing: 0;
+}
+.story-frequency span {
+  margin-top: 9px;
+  color: var(--story-muted);
+  font-size: 12px;
+}
+main .chapter .story-context {
+  color: #f0b08b;
+  font-weight: 500;
+}
 .journey-route-order {
   list-style: none;
   margin: 28px 0;
@@ -860,6 +952,121 @@ main .chapter .route-controls > p {
 .scene-hud #sceneIndex {
   color: var(--story-accent);
 }
+/* The map readouts are explanations, not debugging panels. Keep every stage,
+   but give numbers, labels and qualifications a readable hierarchy. */
+.representation-meter.representation-meter,
+.search-compression.search-compression,
+.depth-stack.depth-stack,
+.analysis-lens.analysis-lens {
+  background: #102e27ed;
+  border-color: var(--story-rule);
+  border-radius: 9px;
+}
+.representation-meter.representation-meter {
+  left: auto;
+  right: 58px;
+  width: 340px;
+  padding: 20px;
+}
+.search-compression.search-compression {
+  width: 300px;
+  padding: 20px;
+}
+.representation-meter__kicker.representation-meter__kicker,
+.search-compression__kicker.search-compression__kicker,
+.depth-stack__kicker.depth-stack__kicker,
+.analysis-lens__kicker.analysis-lens__kicker {
+  font: 500 11px/1.5 var(--sans);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--story-muted);
+}
+.representation-meter__steps.representation-meter__steps {
+  gap: 7px;
+}
+.representation-meter .representation-meter__steps span {
+  font: 400 11px/1.5 var(--sans);
+  padding: 10px 7px;
+  border-radius: 5px;
+}
+.representation-meter .representation-meter__steps span b {
+  font: 600 14px/1.4 "Manrope", system-ui;
+  margin-top: 8px;
+}
+.search-compression__number.search-compression__number {
+  font: 600 43px/1.2 "Manrope", system-ui;
+  letter-spacing: -0.04em;
+  margin: 12px 0 5px;
+}
+.search-compression__label.search-compression__label {
+  font: 400 12px/1.5 var(--sans);
+  color: var(--story-muted);
+  min-height: 36px;
+}
+.search-compression__stage.search-compression__stage {
+  font: 500 11px/1.6 var(--sans);
+  padding-block: 6px;
+}
+.representation-meter__note.representation-meter__note,
+.search-compression__note.search-compression__note {
+  font: 400 11px/1.65 var(--sans);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--story-muted);
+  margin-top: 16px;
+}
+.depth-stack__layer.depth-stack__layer {
+  font: 400 11px/1.5 var(--sans);
+}
+.depth-stack .depth-stack__layer b {
+  font: 600 15px/1.5 "Manrope", system-ui;
+}
+.analysis-lens__title.analysis-lens__title {
+  font: 600 21px/1.25 "Manrope", system-ui;
+}
+.analysis-lens .analysis-lens__metric b {
+  font: 600 32px/1.2 "Manrope", system-ui;
+}
+.analysis-lens .analysis-lens__metric span,
+.analysis-lens__row.analysis-lens__row,
+.analysis-lens__note.analysis-lens__note {
+  font: 400 11px/1.6 var(--sans);
+  text-transform: none;
+  color: var(--story-muted);
+}
+.analysis-lens .analysis-lens__row b {
+  font: inherit;
+}
+body .map-card__eyebrow {
+  font: 500 11px/1.5 var(--sans);
+  text-transform: none;
+  letter-spacing: 0;
+}
+body .map-card__title {
+  font: 600 19px/1.3 "Manrope", system-ui;
+}
+body .map-card__body, body .map-card__meta span {
+  font: 400 12px/1.65 var(--sans);
+}
+body .map-card__code {
+  font: 400 10px/1.5 var(--sans);
+}
+#journeyExplorerControls .explore-controls__group > span {
+  font: 600 12px/1.5 var(--sans);
+  text-transform: none;
+  letter-spacing: 0;
+  margin: 17px 0 9px;
+}
+#journeyExplorerControls button[data-layer] {
+  font-size: 12px;
+  padding: 10px 12px;
+  min-height: 44px;
+  border-radius: 6px;
+}
+#journeyExplorerControls button[data-layer].is-active {
+  background: #afd1bc1f;
+  border-color: var(--story-mint);
+}
 .loader {
   background: var(--story-deep);
 }
@@ -1003,6 +1210,21 @@ body.is-map-exploring .vignette {
   }
 }
 @media (max-width: 800px) {
+  .representation-meter.representation-meter,
+  .search-compression.search-compression {
+    /* Duplicate map readouts must not cover the narrative on a phone.
+       The same stages, counts and qualifications remain in each chapter. */
+    display: none;
+  }
+  .story-flow {
+    gap: 7px;
+  }
+  .story-flow strong {
+    font-size: 12px;
+  }
+  .story-flow small {
+    font-size: 11px;
+  }
   html {
     scroll-padding-top: 85px;
   }

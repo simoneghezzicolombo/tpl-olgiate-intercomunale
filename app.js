@@ -1,19 +1,19 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
-import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008i";
+import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008j";
 import {
   renderStopTimes,
   readStopSelection,
   stopLink,
-} from "./nodo8-stop-times.mjs?v=20261008i";
-import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008i";
+} from "./nodo8-stop-times.mjs?v=20261008j";
+import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008j";
 import {
   mountPlayer,
   renderDiagram,
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "./nodo8-experience.mjs?v=20261008i";
+} from "./nodo8-experience.mjs?v=20261008j";
 let activePlayer = null,
   activeMap = null,
   currentLine = null,
@@ -160,9 +160,9 @@ function renderCoverage(data) {
     element("span", "", "%"),
   );
   total.nextElementSibling.textContent =
-    "copertura pedonale potenziale del bacino entro " +
+    "dei residenti del bacino potenzialmente entro " +
     time +
-    " minuti da un sito di progetto.";
+    " minuti a piedi da una fermata prevista.";
   const bars = document.getElementById("coverageBars");
   bars.replaceChildren();
   data.municipalities.forEach((municipality) => {
@@ -566,7 +566,7 @@ function renderStops(data, map) {
     list.append(item);
   });
   document.getElementById("stopSearchCount").textContent =
-    sites.length + " siti mostrati su 27";
+    sites.length + " fermate mostrate su 27";
   if (!sites.length)
     list.append(
       element(

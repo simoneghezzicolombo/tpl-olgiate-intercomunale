@@ -20,8 +20,8 @@
     section.innerHTML = `
       <div class="copy copy--explore">
         <p class="eyebrow">13 · Adesso tocca a te</p>
-        <h2>Ora puoi <em>esplorare la mappa liberamente.</em></h2>
-        <p>Scegli l’ora e segui i quattro bus sul percorso di Nodo8. È l’animazione dell’orario previsto, non una posizione GPS.</p><p>In «Livelli e confronto» trovi i dati sul territorio e la rete attuale. Le alternative precedenti restano separate: non misurano un guadagno di copertura di Nodo8.</p>
+        <h2>La mappa.<br /><em>Nelle tue mani.</em></h2>
+        <p>Segui i quattro bus, scegli una fermata, confronta i dati. Il movimento è simulato, non GPS.</p>
         <div class="explore-key" aria-label="Legenda mappa esplorabile">
           <span><i class="explore-key__dot explore-key__dot--population"></i>popolazione</span>
           <span><i class="explore-key__dot explore-key__dot--walk"></i>tempi a piedi</span>
@@ -34,6 +34,7 @@
           <span>Esplora la mappa</span><b>→</b>
         </button>
         <p class="source-note">Fonti: KML e GTFS ufficiali, WorldPop, ISTAT, DBGT e rete stradale validata.</p>
+        <details class="source-note"><summary>Proposta e ricerca restano separate</summary><p>In «Livelli e confronto» trovi territorio, rete attuale e alternative storiche. Queste ultime non misurano un guadagno di copertura di Nodo8.</p></details>
       </div>`;
     main.appendChild(section);
   }

@@ -25,10 +25,10 @@
   document.body.appendChild(representation);
 
   const funnelStages = [
-    ['01','campioni stradali con accesso pedonale',3858],
-    ['02','seed su gap a 8 minuti',1686],
-    ['03','seed prima del thinning',1074],
-    ['04','candidate prima del pruning finale',292],
+    ['01','punti con accesso a piedi',3858],
+    ['02','zone oltre 8 minuti dalla fermata',1686],
+    ['03','dopo il filtro di distanza',1074],
+    ['04','dopo utilità e sovrapposizioni',292],
     ['05','punti da verificare',155]
   ];
   const search = document.createElement('div');

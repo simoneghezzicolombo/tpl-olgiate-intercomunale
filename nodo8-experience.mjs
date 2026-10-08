@@ -1,4 +1,4 @@
-import { diagramStops } from "./nodo8-line.mjs?v=20261008i";
+import { diagramStops } from "./nodo8-line.mjs?v=20261008j";
 const ns = "http://www.w3.org/2000/svg";
 const displayText = (value) => String(value).replace(/\u2014/g, ", ");
 const node = (tag, cls, text) => {
@@ -76,7 +76,7 @@ export function updateBusMarker(element, state, { showCarrier = false } = {}) {
   element.setAttribute("aria-label", element.title);
 }
 
-export { mountPlayer } from "./nodo8-player.mjs?v=20261008i";
+export { mountPlayer } from "./nodo8-player.mjs?v=20261008j";
 
 export function mountRoadPreview(line) {
   const host = node("div", "n8-road-preview"),
@@ -271,18 +271,27 @@ export function renderDiagram(
     appendCircle(drawing, 600, cy, 360, {
       "data-loop": upper ? "first" : "second",
     });
-    // Seven sites on each side leave room for inward labels at the circle ends.
-    // The ordinal, identity and service order always come from the ledger.
-    part.forEach((e, i) => {
-      const right = i < 7,
-        j = right ? i : i - 7,
+    // Merge only the repeated physical site at this loop's station-side end.
+    // Its two distinct passenger events stay in the ledger and ordered list.
+    const first = part[0], last = part.at(-1);
+    if (first.siteId !== last.siteId)
+      throw new Error("The station-side shared stop must have the same site identity");
+    placed.push({
+      ...first,
+      ordinals: [first.ordinal, last.ordinal],
+      occurrenceIds: [first.occurrenceId, last.occurrenceId],
+      x: 600, y: upper ? 820 : 960, shared: true, upper,
+    });
+    part.slice(1, -1).forEach((e, i) => {
+      const right = i < 6,
+        j = right ? i : i - 6,
         degrees = upper
           ? right
-            ? 55 - (110 * j) / 6
-            : -125 - (110 * j) / 6
+            ? 55 - (110 * j) / 5
+            : -125 - (110 * j) / 5
           : right
-            ? -55 + (110 * j) / 6
-            : 125 + (110 * j) / 6;
+            ? -55 + (110 * j) / 5
+            : 125 + (110 * j) / 5;
       placed.push({ ...e, ...circlePoint(600, cy, 360, degrees), right });
     });
     [-90, 0, 180].forEach((angle) =>
@@ -298,8 +307,11 @@ export function renderDiagram(
   placed.forEach((e) => {
     const isNew = line.sites.get(e.siteId).proposed_new_site;
     const g = svg("g", {
-      class: "n8-diagram-stop",
+      class: "n8-diagram-stop" + (e.shared ? " n8-diagram-stop--shared" : ""),
       "data-occurrence": e.occurrenceId,
+      "data-occurrences": (e.occurrenceIds || [e.occurrenceId]).join(" "),
+      "data-site": e.siteId,
+      "data-ordinals": e.ordinals.join(" "),
     });
     if (onSelect) {
       g.setAttribute("tabindex", "0");
@@ -307,7 +319,7 @@ export function renderDiagram(
       g.setAttribute(
         "aria-label",
         "Fermata " +
-          e.ordinal +
+          e.ordinals.join(" e ") +
           ": " +
           displayText(e.display) +
           (isNew ? ", nuova fermata proposta" : ""),
@@ -320,10 +332,12 @@ export function renderDiagram(
         }
       });
     }
-    const labelX = e.x + (e.right ? -32 : 32),
-      textAnchor = e.right ? "end" : "start",
+    const labelX = e.shared ? e.x : e.x + (e.right ? -32 : 32),
+      textAnchor = e.shared ? "middle" : e.right ? "end" : "start",
       labelLines = wrapLabel(e.display),
-      labelY = e.y + 6 - (labelLines.length - 1) * 10;
+      labelY = e.shared
+        ? e.y + (e.upper ? -65 : 45)
+        : e.y + 6 - (labelLines.length - 1) * 10;
     g.append(
       svg(
         "title",
@@ -333,14 +347,14 @@ export function renderDiagram(
       svg("line", {
         x1: e.x,
         y1: e.y,
-        x2: labelX + (e.right ? 5 : -5),
-        y2: e.y,
+        x2: e.shared ? e.x : labelX + (e.right ? 5 : -5),
+        y2: e.shared ? e.y + (e.upper ? -28 : 28) : e.y,
         class: "n8-diagram-leader",
       }),
       svg("circle", {
         cx: e.x,
         cy: e.y,
-        r: 17,
+        r: e.shared ? 24 : 17,
         class: isNew ? "n8-diagram-new" : "n8-diagram-dot",
       }),
     );
@@ -353,7 +367,7 @@ export function renderDiagram(
           "text-anchor": "middle",
           class: "n8-diagram-number",
         },
-        e.ordinal,
+        e.ordinals.join("·"),
       ),
     );
     const text = svg("text", {
@@ -366,18 +380,13 @@ export function renderDiagram(
       text.append(svg("tspan", { x: labelX, dy: i ? 20 : 0 }, t)),
     );
     g.append(text);
-    const note =
-      e.ordinal === 14 || e.ordinal === 28
-        ? "Proposta · ritorno"
-        : isNew
-          ? "Nuova fermata proposta"
-          : "";
+    const note = e.shared ? "Nuova · due volte nel giro" : isNew ? "Nuova proposta" : "";
     if (note)
       g.append(
         svg(
           "text",
           {
-            x: labelX + (e.right ? -32 : 32),
+            x: e.shared ? labelX : labelX + (e.right ? -32 : 32),
             y: labelY + (labelLines.length - 1) * 20 + 18,
             "text-anchor": textAnchor,
             class: "n8-diagram-sub",
@@ -396,7 +405,7 @@ export function renderDiagram(
         "text-anchor": "middle",
         class: "n8-diagram-loop-title",
       },
-      "PRIMO ANELLO",
+      "VERSO BRIVIO E CALCO",
     ),
     svg(
       "text",
@@ -406,7 +415,7 @@ export function renderDiagram(
         "text-anchor": "middle",
         class: "n8-diagram-loop-note",
       },
-      "fermate 1–14",
+      "Primo anello · stessa linea",
     ),
     svg(
       "text",
@@ -416,7 +425,7 @@ export function renderDiagram(
         "text-anchor": "middle",
         class: "n8-diagram-loop-title",
       },
-      "SECONDO ANELLO",
+      "VERSO LA VALLETTA E SANTA MARIA",
     ),
     svg(
       "text",
@@ -426,7 +435,7 @@ export function renderDiagram(
         "text-anchor": "middle",
         class: "n8-diagram-loop-note",
       },
-      "fermate 15–28",
+      "Secondo anello · stessa linea",
     ),
     svg("rect", {
       x: 410,
@@ -444,12 +453,12 @@ export function renderDiagram(
     svg(
       "text",
       { x: 600, y: 903, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
-      "PARTENZA · SOSTA INTERMEDIA · ARRIVO",
+      "Si parte, si torna e si prosegue da qui.",
     ),
     svg(
       "text",
       { x: 600, y: 922, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
-      "stesso bus, prosecuzione da autorizzare",
+      "Prosecuzione a bordo da autorizzare",
     ),
   );
   drawing.append(
@@ -485,7 +494,7 @@ function finishDiagram(container, drawing, line, { onSelect, localities }) {
     download.disabled = true;
     try {
       const response = await fetch(
-        new URL("./nodo8-experience.css?v=20261008i", import.meta.url),
+        new URL("./nodo8-experience.css?v=20261008j", import.meta.url),
       );
       if (!response.ok) throw new Error("Diagram styles unavailable");
       const copy = drawing.cloneNode(true),

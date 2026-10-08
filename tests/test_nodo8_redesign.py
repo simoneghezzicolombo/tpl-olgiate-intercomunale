@@ -77,6 +77,21 @@ class RedesignRegressionTests(unittest.TestCase):
         bootstrap = (ROOT / "dietro-l-analisi/journey-bootstrap.mjs").read_text(encoding="utf-8")
         self.assertNotIn('favicon.href = "./favicon.svg"', bootstrap)
 
+    def test_glance_views_keep_the_full_experience_and_event_order(self):
+        root = self.pages["index.html"]
+        selected = [attrs["id"] for _, attrs in root.elements if attrs.get("role") == "tab" and attrs.get("aria-selected") == "true"]
+        self.assertIn("localitiesTab", selected)
+        for name in ("routeMap", "routePlayback", "stopRegister", "journeyInspector", "stopsDiagram", "localitiesDiagram", "timetableBody", "coverageBars", "proposta", "confronto"):
+            self.assertIn(name, root.ids)
+        story = self.pages["dietro-l-analisi/index.html"]
+        scenes = [attrs["data-scene"] for _, attrs in story.elements if "data-scene" in attrs]
+        self.assertEqual(scenes, ["intro", "grid", "sections", "buildings", "walk", "roads", "baseline", "candidates", "finalists", "nodo8", "nodo8-time", "end"])
+        html = (ROOT / "dietro-l-analisi/index.html").read_text(encoding="utf-8")
+        for value in ("22.820,84", "93,16", "4.348", "1.686", "1.074", "292", "155", "FIG", "TWO"):
+            self.assertIn(value, html)
+        for cls in ("story-flow", "story-search", "story-frequency"):
+            self.assertIn(cls, html)
+
     def test_local_assets_are_published_and_cross_page_anchors_resolve(self):
         policy = json.loads((ROOT / "config/nodo8_publication_allowlist.json").read_text(encoding="utf-8"))
         included = set(policy["include_files"])

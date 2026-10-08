@@ -5,7 +5,7 @@ import {
   adjacentEvent,
   diagramStops,
   servicePhase,
-} from "./nodo8-line.mjs?v=20261008i";
+} from "./nodo8-line.mjs?v=20261008j";
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -58,14 +58,14 @@ export function mountPlayer(
     subtitle = el(
       "p",
       "n8-player-subtitle",
-      "Stesso mezzo nel progetto. Due anelli, una linea.",
+      "Una linea. Ogni corsa fa tutto il giro.",
     );
   badge.setAttribute("aria-hidden", "true");
   titleWrap.append(heading, subtitle);
   identity.append(badge, titleWrap);
   header.append(
     identity,
-    el("span", "n8-model-label", "Simulazione di progetto"),
+    el("span", "n8-model-label", "Simulazione · non GPS"),
   );
   const modes = el("div", "n8-player-modes");
   modes.setAttribute("role", "group");
@@ -78,7 +78,7 @@ export function mountPlayer(
   const selectWrap = el("div", "n8-trip-select"),
     select = el("select");
   select.id = prefix + "-trip";
-  const label = el("label", "n8-trip-label", "Quale giro vuoi vedere?");
+  const label = el("label", "n8-trip-label", "Scegli la corsa");
   label.htmlFor = select.id;
   line.trips.forEach((t) => {
     const o = el(
@@ -89,7 +89,7 @@ export function mountPlayer(
     o.value = t.number;
     select.append(o);
   });
-  const all = el("option", "", "Intera giornata · tutti i mezzi di modello");
+  const all = el("option", "", "Tutta la giornata · i quattro bus simulati");
   all.value = "all";
   select.append(all);
   select.value = selection;
@@ -115,7 +115,7 @@ export function mountPlayer(
   const rangeLabel = el(
     "label",
     "n8-range-label",
-    "Sposta il bus lungo il giro",
+    "Trascina per scegliere il momento",
   );
   const range = el("input");
   range.type = "range";
@@ -331,14 +331,14 @@ export function mountPlayer(
     text(
       subtitle,
       b.trip
-        ? "Stesso mezzo nel progetto. Due anelli, una linea."
-        : "Quattro mezzi di modello, sullo stesso percorso.",
+        ? "Una linea. Ogni corsa fa tutto il giro."
+        : "Quattro bus simulati, un solo percorso.",
     );
     text(
       rangeLabel,
       b.trip
-        ? "Sposta il bus lungo il giro"
-        : "Sposta l’orologio della giornata",
+        ? "Trascina per scegliere il momento"
+        : "Trascina per scegliere l’ora",
     );
     back.disabled = minute <= b.start;
     forward.disabled = minute >= b.end;
@@ -375,7 +375,7 @@ export function mountPlayer(
         completed
           ? "GIRO CONCLUSO"
           : chosen.status === "fs-hold"
-            ? "PASSAGGIO INTERMEDIO"
+            ? "SOSTA A FS"
             : chosen.status === "stop"
               ? "IN FERMATA"
               : "IN VIAGGIO",
