@@ -1,0 +1,28 @@
+{
+  "contract": "nodo8_presentation_publication_result_v1",
+  "recorded_on": "2026-10-08",
+  "source_commit": "bab3f374afac90f2713bb8454ec59673b4f944f3",
+  "pages_commit": "e2b0e598d2679282bac5856999793a3e0456016b",
+  "workflow_run_id": 37753950979,
+  "workflow_conclusion": "success",
+  "workflow_url": "https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/37753950979",
+  "published_html_pages": ["index.html", "dietro-l-analisi/index.html"],
+  "allowlisted_file_count": 64,
+  "retired_map_http_status": 404,
+  "retired_repository_html_deleted": false,
+  "unselected_repository_paths_preserved": 106,
+  "targeted_python_tests_passed": 26,
+  "targeted_node_tests_passed": 19,
+  "public_browser_checks": {
+    "metro_nonhub_occurrences": 28,
+    "locality_groups": 21,
+    "timetable_complete_trips": 16,
+    "root_stop_state_verified": true,
+    "journey_ready": true,
+    "journey_same_carrier_fs_hold_verified": true,
+    "journey_play_pause_verified": true,
+    "cold_cache_initialisation_race_fixed": true
+  },
+  "geometry_timetable_calendar_or_decision_contract_changed": false,
+  "playback_semantics": "Nominal ledger arrivals/departures, distance-interpolated position along ordered road vertices, model carrier blocks; not live GPS, observed speeds or passenger demand."
+}
