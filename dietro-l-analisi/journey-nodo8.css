@@ -2,6 +2,60 @@
 html {
   scroll-padding-top: 90px;
 }
+.nodo8-stop-link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid #547666;
+  border-radius: 8px;
+  font: 600 12px var(--sans);
+  text-underline-offset: 4px;
+}
+.chapter .route-controls {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  margin: 20px 0 0;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  z-index: auto;
+  box-shadow: none;
+  background: #102820;
+  padding: 15px;
+}
+.chapter .route-controls > p {
+  font: 600 14px/1.5 var(--sans);
+}
+.chapter .route-controls .route-controls__row button {
+  min-height: 42px;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+.chapter .route-controls small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.explore-site-select {
+  margin: 12px 0 18px;
+}
+.explore-site-select label {
+  display: block;
+  margin-bottom: 7px;
+  font: 500 13px var(--sans);
+  color: #d9eee2;
+}
+.explore-site-select select {
+  width: 100%;
+  min-height: 44px;
+  font: 500 13px var(--sans);
+  color: #e4efdf;
+  background: #1f3930;
+  border: 1px solid #486453;
+  border-radius: 8px;
+  padding: 10px;
+}
 .chapter-rail {
   gap: 4px;
 }

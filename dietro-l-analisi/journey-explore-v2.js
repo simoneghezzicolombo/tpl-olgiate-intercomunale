@@ -379,6 +379,7 @@
       <div class="explore-controls__tabs" role="tablist" aria-label="Vista esplorazione"><button id="exploreBusTab" role="tab" aria-selected="true" aria-controls="exploreBusPanel" type="button">Bus in movimento</button><button id="exploreLayersTab" role="tab" aria-selected="false" aria-controls="exploreLayersPanel" tabindex="-1" type="button">Livelli e confronto</button></div>
       <section id="exploreBusPanel" role="tabpanel" aria-labelledby="exploreBusTab"><p class="explore-bus-intro">Segui B1–B4 lungo lo stesso otto. Alle 07:35 sono tutti impegnati nei giri nominali; in altri momenti il numero cambia con l’orario.</p><button type="button" data-action="four-buses">Vedi i 4 bus · 07:35</button><div id="explorePlayback" data-theme="dark" aria-label="Simulazione dei quattro bus Nodo8"><p role="status">Caricamento del registro nominale…</p></div><p id="explorePlaybackUnavailable" hidden role="status">Attiva il livello Nodo8 in «Livelli e confronto» per vedere i bus.</p></section>
       <section id="exploreLayersPanel" role="tabpanel" aria-labelledby="exploreLayersTab" hidden>
+      <div class="explore-site-select"><label for="exploreSiteSelect">Vai a una fermata di Nodo8</label><select id="exploreSiteSelect" disabled><option value="">Caricamento dei siti di progetto…</option></select></div>
       <div class="explore-controls__group"><span>Territorio</span><div class="explore-controls__layers"><button data-layer="worldpop" type="button"><i style="--c:#57d7e8"></i>WorldPop 100 m</button><button data-layer="sections" type="button"><i style="--c:#ffb07f"></i>Sezioni ISTAT</button><button data-layer="buildings" type="button"><i style="--c:#55e1bf"></i>Edifici DBGT</button></div></div>
       <div class="explore-controls__group"><span>Accessibilità e ricerca</span><div class="explore-controls__layers"><button data-layer="walk" type="button"><i style="--c:#55e1bf"></i>Cammino</button><button data-layer="roads" type="button"><i style="--c:#57d7e8"></i>Grafo bus</button><button data-layer="candidates" type="button"><i style="--c:#ffd36d"></i>155 candidate</button></div></div>
       <div class="explore-controls__group"><span>Rete · proposta e storia separate</span><div class="explore-controls__layers"><button data-layer="nodo8" class="is-active" type="button"><i style="--c:#55e1bf"></i>Nodo8</button><button data-layer="current" type="button"><i style="--c:#4ca5ff"></i>D184 / D185 · snapshot</button><button data-layer="proposals" type="button"><i style="--c:#57d7e8"></i>Alternative storiche</button><button data-layer="stops" class="is-active" type="button"><i style="--c:#fff"></i>Siti / fermate</button></div></div>
@@ -605,8 +606,15 @@
     }
   }
   function enter() {
-    if (document.body.dataset.scene !== "explore" || active) return;
+    if (active) return;
+    const chapter = document.querySelector('[data-scene="explore"]');
+    const rect = chapter?.getBoundingClientRect();
+    if (!rect || rect.bottom <= 0 || rect.top >= innerHeight) return;
+    // A freshly laid-out deep link can be visible before the scroll director
+    // updates its scene. The visible entry button must work on the first click.
+    window.ScrollTrigger?.update();
     active = true;
+    document.body.dataset.scene = "explore";
     document.body.classList.add("is-map-exploring");
     document.documentElement.classList.add("is-map-exploring");
     interactions(true);

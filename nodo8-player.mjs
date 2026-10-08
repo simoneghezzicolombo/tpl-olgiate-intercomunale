@@ -4,7 +4,8 @@ import {
   playbackWindow,
   adjacentEvent,
   diagramStops,
-} from "./nodo8-line.mjs?v=20261008d";
+  servicePhase,
+} from "./nodo8-line.mjs?v=20261008e";
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -94,6 +95,15 @@ export function mountPlayer(
   range.step = "any";
   rangeLabel.htmlFor = range.id;
   const limits = el("div", "n8-range-limits");
+  const phases = el("ol", "n8-service-phases");
+  phases.setAttribute("aria-label", "Avanzamento del giro completo");
+  [
+    "FS · partenza",
+    "Primo anello",
+    "FS · sosta",
+    "Secondo anello",
+    "FS · arrivo",
+  ].forEach((text) => phases.append(el("li", "", text)));
   const milestones = el("div", "n8-milestones");
   const first = button("Partenza", "", () => jump(bounds().start));
   const stop = button("Prima fermata", "", () =>
@@ -175,6 +185,7 @@ export function mountPlayer(
     rangeLabel,
     range,
     limits,
+    phases,
     milestones,
     steps,
   );
@@ -234,6 +245,15 @@ export function mountPlayer(
     back.disabled = minute <= b.start;
     forward.disabled = minute >= b.end;
     current.hidden = !b.trip;
+    phases.hidden = !b.trip;
+    if (b.trip) {
+      const phase = servicePhase(line, b.trip.number, minute);
+      [...phases.children].forEach((item, i) => {
+        item.classList.toggle("is-complete", i < phase);
+        if (i === phase) item.setAttribute("aria-current", "step");
+        else item.removeAttribute("aria-current");
+      });
+    }
     fleet.hidden = !!b.trip;
     if (b.trip) {
       const completed = minute >= b.end;

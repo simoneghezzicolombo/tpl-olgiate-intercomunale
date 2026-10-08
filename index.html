@@ -21,16 +21,16 @@
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
-    <link rel="stylesheet" href="styles.css?v=20261008d" />
-    <link rel="stylesheet" href="nodo8-experience.css?v=20261008d" />
-    <link rel="stylesheet" href="nodo8-polish.css?v=20261008d" />
+    <link rel="stylesheet" href="styles.css?v=20261008e" />
+    <link rel="stylesheet" href="nodo8-experience.css?v=20261008e" />
+    <link rel="stylesheet" href="nodo8-polish.css?v=20261008e" />
     <script
       defer
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
-    <script type="module" src="app.js?v=20261008d"></script>
+    <script type="module" src="app.js?v=20261008e"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Salta al contenuto</a>
@@ -360,8 +360,20 @@
                   <h3 id="stopTitle">Dove si fermerebbe</h3>
                   <p>
                     27 siti lungo una sola linea. Seleziona un punto per i
-                    dettagli.
+                    dettagli e gli orari nominali. I numeri indicano i passaggi
+                    nel giro: uno stesso sito può comparire due volte.
                   </p>
+                </div>
+                <div
+                  id="selectedStopSummary"
+                  class="selected-stop-summary"
+                  hidden
+                >
+                  <span>Sito selezionato</span
+                  ><strong aria-live="polite"></strong>
+                  <button id="selectedStopTimes" type="button">
+                    Orari e dettagli ↓
+                  </button>
                 </div>
                 <label class="stop-search-label" for="stopSearch"
                   >Cerca un paese o una fermata</label
@@ -399,7 +411,7 @@
               </section>
             </aside>
           </div>
-          <div id="stopDetail" class="stop-detail" aria-live="polite">
+          <div id="stopDetail" class="stop-detail">
             <p>
               I siti sono posizioni di progetto: accosti, lati di salita e
               accessibilità devono essere approvati. Un sito può avere più
