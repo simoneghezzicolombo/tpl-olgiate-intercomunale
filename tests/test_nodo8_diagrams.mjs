@@ -182,7 +182,7 @@ test("circular stop schema preserves all 28 ordered selections and three FS role
   });
 });
 
-test("conceptual localities have inward labels, one connector each, and only upper counterclockwise arrows", async () => {
+test("conceptual locality names sit inside their dots, with one connector each and upper counterclockwise arrows", async () => {
   await withDOM(async () => {
     const host = container("localities");
     renderDiagram(host, line, { localities: true });
@@ -209,21 +209,26 @@ test("conceptual localities have inward labels, one connector each, and only upp
       .filter((e) => e.tagName === "circle");
     assert.equal(loops.length, 2);
     for (const group of groups) {
-      const loop = loops.find(
-        (e) => e.getAttribute("data-loop") === group.getAttribute("data-loop"),
-      );
+      const dot = group.querySelectorAll(".n8-locality-node")[0];
       const text = group.querySelectorAll(".n8-diagram-name")[0];
+      assert.equal(text.getAttribute("text-anchor"), "middle");
+      assert.equal(text.getAttribute("x"), dot.getAttribute("cx"));
+      assert.equal(Number(dot.getAttribute("r")), 82);
       assert.ok(
-        Math.hypot(
-          Number(text.getAttribute("x")) - Number(loop.getAttribute("cx")),
-          Number(text.getAttribute("y")) - Number(loop.getAttribute("cy")),
-        ) < Number(loop.getAttribute("r")),
+        Math.abs(
+          Number(text.getAttribute("y")) - Number(dot.getAttribute("cy")),
+        ) < 20,
+      );
+      assert.ok(
+        text.children.every(
+          (span) => span.getAttribute("x") === dot.getAttribute("cx"),
+        ),
       );
     }
     assert.equal(image.querySelectorAll(".n8-diagram-connector").length, 1);
     assert.equal(
       image.querySelectorAll(".n8-diagram-connector")[0].getAttribute("d"),
-      "M600 640 V708 M600 798 V870",
+      "M600 590 V692 M600 782 V880",
     );
     const arrows = image.querySelectorAll(".n8-diagram-arrow");
     assert.equal(arrows.length, 3);

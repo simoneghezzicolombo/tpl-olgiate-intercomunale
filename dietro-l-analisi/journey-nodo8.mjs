@@ -1,12 +1,12 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008g";
-import { stopLink } from "../nodo8-stop-times.mjs?v=20261008g";
+import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008i";
+import { stopLink } from "../nodo8-stop-times.mjs?v=20261008i";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "../nodo8-experience.mjs?v=20261008h";
+} from "../nodo8-experience.mjs?v=20261008i";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
@@ -287,7 +287,7 @@ async function installNodo8() {
       site.ordered_occurrences.forEach((event) => {
         const line = document.createElement("p");
         line.textContent =
-          "Passaggio " +
+          "Fermata " +
           event.ordered_nonhub_event_number +
           ": dalla stazione " +
           number(event.nominal_fs_to_occurrence_in_vehicle_min) +

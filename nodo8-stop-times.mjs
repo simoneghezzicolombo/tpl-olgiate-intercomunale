@@ -1,4 +1,4 @@
-import { siteTimetable, clockSeconds } from "./nodo8-line.mjs?v=20261008g";
+import { siteTimetable, clockSeconds } from "./nodo8-line.mjs?v=20261008i";
 
 const labels = {
   FULL_TRIP_START_FS: "Partenza FS",
@@ -70,8 +70,8 @@ export function renderStopTimes(
       "",
       labels[column.role] ||
         (tableData.columns.length > 1
-          ? `Passaggio ${index + 1} · n. ${column.ordinal}`
-          : `Passaggio ${column.ordinal}`),
+          ? `${index === 0 ? "Primo" : "Secondo"} passaggio`
+          : `Fermata n. ${column.ordinal}`),
     );
     cell.scope = "col";
     heading.append(cell);

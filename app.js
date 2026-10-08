@@ -1,19 +1,19 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
-import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008g";
+import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008i";
 import {
   renderStopTimes,
   readStopSelection,
   stopLink,
-} from "./nodo8-stop-times.mjs?v=20261008g";
-import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008g";
+} from "./nodo8-stop-times.mjs?v=20261008i";
+import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008i";
 import {
   mountPlayer,
   renderDiagram,
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "./nodo8-experience.mjs?v=20261008h";
+} from "./nodo8-experience.mjs?v=20261008i";
 let activePlayer = null,
   activeMap = null,
   currentLine = null,
@@ -225,13 +225,13 @@ function showSite(site) {
         element(
           "strong",
           "",
-          "Passaggio " + occurrence.ordered_nonhub_event_number,
+          "Fermata " + occurrence.ordered_nonhub_event_number,
         ),
       );
       const show = element(
         "button",
         "trip-preview",
-        "Guarda questo passaggio nel giro 01",
+        "Vedi il bus qui nel giro 01",
       );
       show.type = "button";
       show.addEventListener("click", () => {

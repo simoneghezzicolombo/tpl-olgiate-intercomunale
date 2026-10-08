@@ -659,7 +659,13 @@
   fill: #153d34;
 }
 .n8-diagram-locality-name {
-  font-size: 34px;
+  font-size: 26px;
+  fill: #fffdf8;
+}
+.n8-locality-node {
+  fill: #153d34;
+  stroke: #fffdf8;
+  stroke-width: 5px;
 }
 .n8-diagram--localities .n8-diagram-caption {
   font-size: 21px;
