@@ -9,6 +9,7 @@ on:
       - app.js
       - nodo8-*.mjs
       - nodo8-experience.css
+      - nodo8-polish.css
       - tests/test_nodo8_playback.mjs
       - assets/nodo8-proposal.json
       - dietro-l-analisi/**

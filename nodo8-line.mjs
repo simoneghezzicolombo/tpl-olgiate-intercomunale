@@ -293,6 +293,24 @@ export const statesAt = (line, minute) => {
   return line.vehicles.map((v) => vehicleState(line, v, minute));
 };
 
+/* Presentation bounds only: a selected passenger trip ends before terminal recovery. */
+export function playbackWindow(line, selection = "1") {
+  if (selection === "all")
+    return { start: line.start, end: line.end, trip: null };
+  const trip = line.trips.find((t) => t.number === Number(selection));
+  if (!trip) fail("unknown displayed trip");
+  return { start: trip.start, end: trip.end, trip };
+}
+export function adjacentEvent(line, selection, minute, direction) {
+  const { trip } = playbackWindow(line, selection);
+  const events = trip
+    ? trip.events
+    : line.trips.flatMap((t) => t.events).sort((a, b) => a.arrival - b.arrival);
+  return direction > 0
+    ? (events.find((e) => e.arrival > minute + 1e-7) ?? events.at(-1))
+    : (events.findLast((e) => e.arrival < minute - 1e-7) ?? events[0]);
+}
+
 /* Editorial labels only; occurrence identity/order always come from the ledger. */
 const names = [
   "San Zeno / Via Cantù",

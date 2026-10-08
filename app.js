@@ -1,12 +1,42 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
-import { buildLine } from "./nodo8-line.mjs";
+import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008d";
 import {
   mountPlayer,
   renderDiagram,
   makeBusMarker,
   updateBusMarker,
-} from "./nodo8-experience.mjs";
+} from "./nodo8-experience.mjs?v=20261008d";
+let activePlayer = null,
+  setExplorer = () => {},
+  siteNames = new Map();
+const displayName = (site) => siteNames.get(site.site_id) || site.name;
+const normalise = (text) =>
+  text
+    .toLocaleLowerCase("it")
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "");
+function initMenu() {
+  const menu = document.getElementById("menuToggle"),
+    nav = document.getElementById("siteNavigation");
+  const close = () => {
+    menu.setAttribute("aria-expanded", "false");
+    nav.classList.remove("is-open");
+  };
+  menu.addEventListener("click", () => {
+    const open = menu.getAttribute("aria-expanded") !== "true";
+    menu.setAttribute("aria-expanded", String(open));
+    nav.classList.toggle("is-open", open);
+  });
+  nav.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && menu.getAttribute("aria-expanded") === "true") {
+      close();
+      menu.focus();
+    }
+  });
+  window.matchMedia("(min-width:851px)").addEventListener("change", close);
+}
 const formatNumber = (value, decimals = 2) =>
   new Intl.NumberFormat("it-IT", {
     minimumFractionDigits: decimals,
@@ -85,7 +115,27 @@ function renderTimetable(data) {
       clock(trip.first_fs_min),
       clock(trip.second_fs_min),
       clock(trip.return_fs_min),
-    ].forEach((value) => row.append(element("td", "", value)));
+    ].forEach((value, i) => {
+      const cell = element("td");
+      if (i === 0) {
+        const b = element("button", "trip-preview", value);
+        b.type = "button";
+        b.setAttribute(
+          "aria-label",
+          "Visualizza il giro " + trip.number + " sulla mappa",
+        );
+        b.addEventListener("click", () => {
+          if (!activePlayer) return;
+          setExplorer("simulation");
+          activePlayer.selectTrip(trip.number);
+          document
+            .querySelector(".route-explorer")
+            .scrollIntoView({ behavior: "instant", block: "center" });
+        });
+        cell.append(b);
+      } else cell.textContent = value;
+      row.append(cell);
+    });
     body.append(row);
   });
   document.getElementById("scheduleCount").textContent =
@@ -122,6 +172,11 @@ function renderCoverage(data) {
   });
 }
 function showSite(site) {
+  setExplorer("stops");
+  if (activePlayer) {
+    activePlayer.pause();
+    activePlayer.render();
+  }
   document.querySelectorAll(".stop-list button").forEach((button) => {
     const selected = button.dataset.site === site.site_id;
     button.classList.toggle("selected", selected);
@@ -129,7 +184,7 @@ function showSite(site) {
   });
   const detail = document.getElementById("stopDetail");
   detail.replaceChildren(
-    element("h3", "", site.name),
+    element("h3", "", displayName(site)),
     element(
       "p",
       "",
@@ -157,6 +212,21 @@ function showSite(site) {
           "Nodo8 · evento " + occurrence.ordered_nonhub_event_number,
         ),
       );
+      const show = element(
+        "button",
+        "trip-preview",
+        "Guarda questo passaggio nel giro 01",
+      );
+      show.type = "button";
+      show.addEventListener("click", () => {
+        activePlayer.selectTrip(1);
+        activePlayer.jump(occurrence.first_alight_event_min);
+        setExplorer("simulation");
+        document
+          .querySelector(".route-explorer")
+          .scrollIntoView({ behavior: "instant", block: "center" });
+      });
+      card.append(show);
       card.append(
         element(
           "p",
@@ -295,7 +365,7 @@ function renderFallbackMap(data, onSelect) {
           g.setAttribute("transform", `translate(${x - 17} ${y - 21})`);
         }
         g.setAttribute("class", "n8-bus");
-        updateBusMarker(g, s);
+        updateBusMarker(g, s, { showCarrier: !followedTrip });
       });
     },
   };
@@ -335,7 +405,7 @@ function createMap(data) {
     ).addTo(map);
     const popup = element("div");
     popup.append(
-      element("strong", "", site.name),
+      element("strong", "", displayName(site)),
       element(
         "p",
         "",
@@ -381,7 +451,7 @@ function createMap(data) {
         if (visible) {
           marker.setLatLng([s.coordinates[1], s.coordinates[0]]);
           if (!map.hasLayer(marker)) marker.addTo(map);
-          updateBusMarker(icon, s);
+          updateBusMarker(icon, s, { showCarrier: !followedTrip });
           icon.classList.toggle("is-followed", followedTrip === s.trip);
         } else if (map.hasLayer(marker)) map.removeLayer(marker);
       });
@@ -400,7 +470,11 @@ function renderStops(data, map) {
   const filter = document.querySelector('[data-stops][aria-pressed="true"]')
     .dataset.stops;
   const sites = data.sites.filter(
-    (site) => filter === "all" || site.proposed_new_site,
+    (site) =>
+      (filter === "all" || site.proposed_new_site) &&
+      normalise(displayName(site) + " " + site.name).includes(
+        normalise(document.getElementById("stopSearch").value),
+      ),
   );
   const list = document.getElementById("stopList");
   list.replaceChildren();
@@ -416,7 +490,7 @@ function renderStops(data, map) {
         "stop-index",
         String(data.sites.indexOf(site) + 1).padStart(2, "0"),
       ),
-      element("span", "stop-name", site.name),
+      element("span", "stop-name", displayName(site)),
     );
     if (site.proposed_new_site)
       button.append(element("span", "new-tag", "NUOVO"));
@@ -424,6 +498,16 @@ function renderStops(data, map) {
     item.append(button);
     list.append(item);
   });
+  document.getElementById("stopSearchCount").textContent =
+    sites.length + " siti mostrati su 27";
+  if (!sites.length)
+    list.append(
+      element(
+        "li",
+        "notice",
+        "Nessun sito corrisponde alla ricerca. Prova una località o un nome diverso.",
+      ),
+    );
 }
 function validatePresentationData(data) {
   if (
@@ -449,10 +533,15 @@ async function initProposal() {
     validatePresentationData(data);
     renderTimetable(data);
     renderCoverage(data);
+    const line = buildLine(data);
+    siteNames = new Map(diagramStops(line).map((e) => [e.siteId, e.display]));
+    siteNames.set(
+      data.sites.find((s) => s.hub_service_roles.length).site_id,
+      "Olgiate FS",
+    );
     const map = createMap(data);
     renderStops(data, map);
-    const line = buildLine(data);
-    mountPlayer(
+    activePlayer = mountPlayer(
       document.getElementById("routePlayback"),
       line,
       (state) => {
@@ -460,7 +549,7 @@ async function initProposal() {
         document.getElementById("mapPlaybackClock").textContent =
           document.querySelector("#routePlayback .n8-clock").textContent;
         const play = document.getElementById("mapPlaybackPlay");
-        play.textContent = state.playing ? "Ⅱ Pausa" : "▶ Riproduci";
+        play.textContent = state.playing ? "Pausa" : "Riproduci";
         play.setAttribute("aria-pressed", String(state.playing));
       },
       {
@@ -468,23 +557,52 @@ async function initProposal() {
         visibilityTarget: document.querySelector(".route-explorer"),
       },
     );
-    document
-      .getElementById("mapPlaybackPlay")
-      .addEventListener("click", () =>
-        document.querySelector("#routePlayback .n8-play").click(),
+    document.getElementById("mapPlaybackPlay").addEventListener("click", () => {
+      setExplorer("simulation");
+      activePlayer.toggle();
+    });
+    document.getElementById("mapPlaybackStop").addEventListener("click", () => {
+      setExplorer("simulation");
+      activePlayer.firstStop();
+    });
+    const explorerTabs = [
+      ...document.querySelectorAll('.explorer-tabs [role="tab"]'),
+    ];
+    setExplorer = (type) => {
+      const isSimulation = type === "simulation";
+      explorerTabs.forEach((t, i) => {
+        const selected = (i === 0) === isSimulation;
+        t.setAttribute("aria-selected", String(selected));
+        t.tabIndex = selected ? 0 : -1;
+        document.getElementById(t.getAttribute("aria-controls")).hidden =
+          !selected;
+      });
+      if (!isSimulation) {
+        activePlayer.pause();
+        activePlayer.render();
+      }
+    };
+    explorerTabs.forEach((t, i) => {
+      t.addEventListener("click", () =>
+        setExplorer(i === 0 ? "simulation" : "stops"),
       );
+      t.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+          e.preventDefault();
+          const n = explorerTabs[1 - i];
+          setExplorer(i === 0 ? "stops" : "simulation");
+          n.focus();
+        }
+      });
+    });
     document
-      .getElementById("mapPlaybackStop")
-      .addEventListener("click", () =>
-        document
-          .querySelector("#routePlayback .n8-presets button:nth-child(2)")
-          .click(),
-      );
+      .getElementById("stopSearch")
+      .addEventListener("input", () => renderStops(data, map));
     renderDiagram(document.getElementById("stopsDiagram"), line, {
       onSelect: (site) => {
         document
-          .getElementById("percorso")
-          .scrollIntoView({ behavior: "instant", block: "start" });
+          .querySelector(".route-explorer")
+          .scrollIntoView({ behavior: "instant", block: "center" });
         map.focus(site);
       },
     });
@@ -575,7 +693,7 @@ async function initProposal() {
       );
     document
       .querySelectorAll(
-        "#coverageTime, #scheduleFilter, #resetMap, [data-stops], .diagram-tabs button, .map-playback-bar button",
+        "#coverageTime, #scheduleFilter, #resetMap, #stopSearch, [data-stops], .diagram-tabs button, .explorer-tabs button, .map-playback-bar button",
       )
       .forEach((control) => {
         control.disabled = true;
@@ -594,4 +712,5 @@ async function initProposal() {
   }
 }
 initScroll();
+initMenu();
 initProposal();

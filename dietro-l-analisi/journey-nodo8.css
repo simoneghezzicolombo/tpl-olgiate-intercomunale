@@ -289,17 +289,364 @@ body[data-scene="nodo8"] .lineage-collapse {
   .journey-playback .n8-player-details[open] {
     padding-bottom: 10px;
   }
-  body.nodo8-playing #orario-nodo8 .copy {
-    opacity: 0;
-    pointer-events: none;
-  }
   [data-scene="nodo8-time"] .copy {
     padding-bottom: 20px;
+  }
+}
+/* Reader-first scrollytelling: text and controls remain in the document flow. */
+.chapter {
+  min-height: 118vh;
+  padding: 12vh clamp(24px, 5vw, 75px);
+}
+.chapter.hero {
+  min-height: 110vh;
+}
+.chapter .copy {
+  border-radius: 16px;
+  padding: 28px;
+}
+.chapter .copy h2 {
+  font-size: clamp(36px, 3.5vw, 52px);
+  line-height: 1.08;
+}
+.chapter .copy > p:not(.eyebrow, .source-note, .insight, .final-line) {
+  font-size: 15px;
+  line-height: 1.75;
+}
+.chapter .source-note {
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #aabcb7;
+}
+.chapter .insight {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.nodo8-stats strong {
+  font-size: 28px;
+}
+.nodo8-stats span,
+.nodo8-peak-grid span,
+.nodo8-peak-grid small {
+  font-size: 12px;
+}
+.nodo8-load-status {
+  font-size: 12px !important;
+}
+.nodo8-secondary-cta {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.journey-playback {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  width: 100%;
+  max-height: none;
+  overflow: visible;
+  box-shadow: none;
+  margin-top: 25px;
+  z-index: auto;
+}
+.journey-runtime-unavailable .journey-playback .n8-road-preview {
+  display: block;
+}
+.journey-playback .n8-player-details summary {
+  font-size: 12px;
+  min-height: 30px;
+}
+.topbar {
+  grid-template-columns: auto 1fr auto auto;
+  gap: 25px;
+  background: #071b17ee;
+}
+.nodo8-journey-nav {
+  justify-content: center;
+  font-size: 12px;
+}
+.brand__sub {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+}
+.journey-contents {
+  position: relative;
+  font: 500 12px var(--sans);
+}
+.journey-contents > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 10px 14px;
+  border: 1px solid #4c6257;
+  border-radius: 8px;
+  min-height: 40px;
+}
+.journey-contents[open] > summary {
+  background: #203c2e;
+}
+.journey-contents nav {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  width: 280px;
+  max-height: 65vh;
+  overflow-y: auto;
+  background: #10241e;
+  border: 1px solid #4c6257;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 15px 40px #0005;
+}
+.journey-contents nav a {
+  display: block;
+  color: #e6eee3;
+  text-decoration: none;
+  font-size: 13px;
+  min-height: 40px;
+  padding: 9px 11px;
+  border-radius: 6px;
+}
+.journey-contents nav a:hover {
+  background: #203c2e;
+}
+@media (max-width: 1000px) {
+  .topbar {
+    gap: 15px;
+  }
+  .brand__sub {
+    display: none;
+  }
+  .nodo8-journey-nav {
+    gap: 14px;
+  }
+  .journey-playback {
+    width: 100%;
+    right: auto;
+    bottom: auto;
+  }
+}
+@media (max-width: 800px) {
+  .topbar {
+    height: 68px;
+    grid-template-columns: auto 1fr auto;
+    padding: 0 16px;
+    gap: 15px;
+  }
+  .nodo8-journey-nav {
+    display: none;
+  }
+  .topbar__cta {
+    font-size: 12px;
+    padding: 9px 12px;
+    justify-self: end;
+  }
+  .topbar__cta span {
+    font-size: 12px;
+  }
+  .brand {
+    flex-direction: row;
+  }
+  .brand__main {
+    font-size: 26px;
+  }
+  .chapter {
+    min-height: 112vh;
+    padding: 105px 16px 70px;
+    align-items: center;
+  }
+  .chapter.hero {
+    min-height: 100vh;
+  }
+  .chapter .copy {
+    width: 100%;
+    padding: 22px;
+  }
+  .chapter .copy h2 {
+    font-size: 38px;
+  }
+  .chapter .copy > p:not(.eyebrow, .source-note, .insight, .final-line) {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .chapter .copy--hero {
+    padding: 0;
+    background: transparent;
+  }
+  .chapter .copy--hero h1 {
+    font-size: clamp(44px, 11vw, 64px);
+  }
+  .nodo8-peak-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .nodo8-peak-grid strong {
+    font-size: 22px;
+  }
+  .nodo8-stats > div {
+    padding: 11px;
+  }
+  .nodo8-stats strong {
+    font-size: 25px;
+  }
+  .journey-playback {
+    width: 100%;
+    margin-top: 23px;
+    max-height: none;
+    right: auto;
+    bottom: auto;
+    position: relative;
+  }
+  .journey-playback .n8-road-preview {
+    display: block;
+  }
+  .journey-playback .n8-player-status {
+    font-size: 11px !important;
+  }
+  .scene-hud {
+    display: none;
+  }
+  .journey-boot-notice {
+    top: 75px;
+  }
+  .journey-contents nav {
+    right: 0;
+    width: min(290px, calc(100vw - 32px));
+  }
+  .nodo8-summary span {
+    font-size: 13px;
+  }
+  .nodo8-animation-cue {
+    font-size: 13px !important;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .nodo8-stats,
   .nodo8-summary {
     transition: none;
+  }
+}
+
+/* Exploration keeps its map free and its bus / layer controls separate. */
+html {
+  scroll-behavior: auto;
+}
+#journeyExplorerControls {
+  width: min(430px, calc(100vw - 28px));
+  max-height: calc(100dvh - 120px);
+  right: 25px;
+  bottom: 25px;
+  padding: 16px;
+  background: #0c231fed;
+  scrollbar-width: thin;
+}
+#journeyExplorerControls [hidden] {
+  display: none !important;
+}
+#journeyExplorerControls .explore-controls__head strong {
+  font-size: 18px;
+}
+#journeyExplorerControls .explore-controls__head small {
+  font: 400 12px/1.5 var(--sans);
+  color: #b4c6b9;
+}
+#journeyExplorerControls button[data-layer],
+#journeyExplorerControls button[data-action] {
+  font: 500 12px var(--sans);
+  min-height: 42px;
+}
+#journeyExplorerControls .explore-controls__group > span {
+  font-size: 11px;
+}
+.explore-controls__tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 10px 0 15px;
+}
+.explore-controls__tabs button {
+  padding: 10px;
+  border: 1px solid #486453;
+  background: transparent;
+  border-radius: 9px;
+  color: #e4efdf;
+  font: 600 13px var(--sans);
+  min-height: 44px;
+  cursor: pointer;
+}
+.explore-controls__tabs button[aria-selected="true"] {
+  background: #d9eee2;
+  color: #102e26;
+}
+.explore-bus-intro {
+  display: none;
+  font: 400 12px/1.6 var(--sans);
+  color: #bfd2c4;
+  margin: 0 0 10px;
+}
+#explorePlayback {
+  padding: 0;
+  border: none;
+  background: transparent;
+  margin-top: 16px;
+}
+#explorePlayback .n8-player-title {
+  display: none;
+}
+#explorePlayback .n8-trip-select {
+  margin-bottom: 12px;
+}
+#explorePlayback .n8-trip-label {
+  font-size: 12px;
+}
+#explorePlayback .n8-vehicle-card {
+  padding: 9px;
+}
+#explorePlayback .n8-player-status {
+  margin-bottom: 7px;
+}
+#explorePlayback .n8-player-details summary {
+  font-size: 12px;
+}
+#explorePlaybackUnavailable {
+  color: #f0c68b;
+  font: 400 13px/1.6 var(--sans);
+}
+#journeyExplorerControls .explore-controls__footer {
+  margin-top: 15px;
+}
+#journeyExplorerControls .explore-controls__hint {
+  font: 400 11px/1.5 var(--sans);
+}
+#journeyExplorerControls button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+@media (max-width: 800px) {
+  #journeyExplorerControls {
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+    width: auto;
+    max-height: 48dvh;
+    padding: 12px;
+  }
+  #journeyExplorerControls .explore-controls__head {
+    margin-bottom: 5px;
+  }
+  #journeyExplorerControls .explore-controls__head strong {
+    font-size: 16px;
+  }
+  #journeyExplorerControls .explore-controls__head small {
+    display: block;
+    font-size: 10px;
+  }
+  #journeyExplorerControls .explore-controls__tabs {
+    margin-bottom: 10px;
+  }
+  #journeyExplorerControls .explore-bus-intro {
+    display: none;
+  }
+  #explorePlayback .n8-clock {
+    font-size: 28px;
   }
 }

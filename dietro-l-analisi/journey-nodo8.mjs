@@ -1,11 +1,22 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine } from "../nodo8-line.mjs";
+import { buildLine } from "../nodo8-line.mjs?v=20261008d";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
-} from "../nodo8-experience.mjs";
+  mountRoadPreview,
+} from "../nodo8-experience.mjs?v=20261008d";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
+
+// Only a visible current-proposal context may paint the shared map markers.
+export function playbackVisible({ scene, exploring, nodo8Visible }, context) {
+  return context === "story"
+    ? scene === "nodo8-time"
+    : context === "explore" &&
+        scene === "explore" &&
+        exploring === true &&
+        nodo8Visible === true;
+}
 
 export function validateNodo8(data) {
   if (
@@ -106,11 +117,23 @@ async function waitForMap() {
 }
 
 async function installNodo8() {
+  let validatedLine = null;
+  const landingHash = location.hash;
+  let landingInterrupted = false;
+  const interruptLanding = () => {
+    landingInterrupted = true;
+  };
+  for (const event of ["wheel", "touchstart", "keydown", "pointerdown"])
+    window.addEventListener(event, interruptLanding, {
+      once: true,
+      passive: true,
+    });
   try {
     const response = await fetch("../assets/nodo8-proposal.json");
     if (!response.ok) throw new Error("Nodo8 data HTTP " + response.status);
     const data = validateNodo8(await response.json());
     const line = buildLine(data);
+    validatedLine = line;
     const features = makeNodo8Features(data);
     const map = await waitForMap();
     map.addSource("nodo8-routes", { type: "geojson", data: features.routes });
@@ -162,6 +185,16 @@ async function installNodo8() {
     });
     let popup = null,
       lastScene = null;
+    let explorerPlayer = null;
+    const contextVisible = (context) =>
+      playbackVisible(
+        {
+          scene: document.body.dataset.scene,
+          exploring: window.__analysisJourneyExplore?.isActive() === true,
+          nodo8Visible: window.__analysisJourneyExplore?.layers.nodo8 === true,
+        },
+        context,
+      );
     const opacity = (id, value) => {
       if (!map.getLayer(id)) return;
       map.setPaintProperty(
@@ -179,22 +212,21 @@ async function installNodo8() {
         padding: document.body.classList.contains("is-map-exploring")
           ? {
               top: 90,
-              right: 35,
+              right: innerWidth < 800 ? 35 : 480,
               bottom: innerWidth < 800 ? Math.min(innerHeight * 0.5, 360) : 180,
-              left: 35,
+              left: innerWidth < 800 ? 35 : 60,
             }
           : innerWidth < 800
             ? {
                 top: 90,
                 right: 30,
-                bottom:
-                  document.body.dataset.scene === "nodo8-time" ? 340 : 100,
+                bottom: 100,
                 left: 30,
               }
             : {
                 top: 100,
                 right: 70,
-                bottom: document.body.dataset.scene === "nodo8-time" ? 300 : 80,
+                bottom: 80,
                 left: Math.min(680, innerWidth * 0.5),
               },
         maxZoom: 13.2,
@@ -221,6 +253,18 @@ async function installNodo8() {
         "circle-stroke-opacity",
         visible && showStops ? 0.95 : 0,
       );
+      const host = document.getElementById("explorePlayback");
+      if (host) host.hidden = !active || !visible;
+      if (explorerPlayer) {
+        if (!contextVisible("explore")) explorerPlayer.pause();
+        explorerPlayer.render();
+      }
+      if (!contextVisible("story") && !contextVisible("explore")) {
+        markers.forEach((entry) => {
+          entry.marker.remove();
+          entry.added = false;
+        });
+      }
     };
     const showSite = (siteId) => {
       const site = data.sites.find((row) => row.site_id === siteId);
@@ -267,16 +311,15 @@ async function installNodo8() {
         .addTo(map);
     };
     const playbackContainer = document.getElementById("journeyPlayback");
+    document.querySelector("#orario-nodo8 .copy").append(playbackContainer);
+    playbackContainer.dataset.theme = "dark";
+    playbackContainer.hidden = false;
+    const roadPreview = mountRoadPreview(line);
     const markers = new Map();
-    const updateBuses = ({ states, followedTrip, playing }) => {
-      const active = playing && document.body.dataset.scene === "nodo8-time";
-      if (document.body.classList.contains("nodo8-playing") !== active)
-        document.body.classList.toggle("nodo8-playing", active);
+    const paintBuses = ({ states, followedTrip }) => {
       states.forEach((s) => {
         const visible =
-          document.body.dataset.scene === "nodo8-time" &&
-          s.coordinates &&
-          (!followedTrip || s.trip === followedTrip);
+          s.coordinates && (!followedTrip || s.trip === followedTrip);
         if (!markers.has(s.id)) {
           const icon = makeBusMarker(s.id);
           const marker = new window.maplibregl.Marker({
@@ -293,20 +336,47 @@ async function installNodo8() {
             marker.addTo(map);
             entry.added = true;
           }
-          updateBusMarker(icon, s);
+          updateBusMarker(icon, s, { showCarrier: !followedTrip });
         } else if (entry.added) {
           marker.remove();
           entry.added = false;
         }
       });
     };
-    const player = mountPlayer(playbackContainer, line, updateBuses, {
-      compact: true,
-      brief: true,
-    });
+    const player = mountPlayer(
+      playbackContainer,
+      line,
+      (state) => {
+        roadPreview.update(state);
+        if (contextVisible("story")) paintBuses(state);
+      },
+      {
+        compact: true,
+        brief: true,
+        inlineMap: roadPreview.node,
+      },
+    );
+    const mountExplorerPlayer = () => {
+      const host = document.getElementById("explorePlayback");
+      if (!host || explorerPlayer) return;
+      explorerPlayer = mountPlayer(
+        host,
+        line,
+        (state) => {
+          if (contextVisible("explore")) paintBuses(state);
+        },
+        {
+          compact: true,
+          brief: true,
+          initialSelection: "all",
+          initialMinute: 455,
+        },
+      );
+      document.documentElement.dataset.nodo8ExplorerPlaybackReady = "true";
+    };
     const renderScene = () => {
       const scene = document.body.dataset.scene;
-      playbackContainer.hidden = scene !== "nodo8-time";
+      mountExplorerPlayer();
       if (scene !== "nodo8-time") player.pause();
       player.render();
       if (scene === "explore") {
@@ -337,6 +407,14 @@ async function installNodo8() {
       fit,
       showSite,
       showRoute,
+      pauseExplorer: () => {
+        explorerPlayer?.pause();
+        explorerPlayer?.render();
+      },
+      showFourBuses: () => {
+        explorerPlayer?.selectTrip("all");
+        explorerPlayer?.jump(455);
+      },
     };
     new MutationObserver(renderScene).observe(document.body, {
       attributes: true,
@@ -350,6 +428,21 @@ async function installNodo8() {
       "Dati Nodo8 caricati · base confermata, non esercizio autorizzato.",
     );
     renderScene();
+    requestAnimationFrame(() => {
+      window.ScrollTrigger?.refresh();
+      // Mounting the in-flow player changes the later chapters' positions.
+      // Honour the landing anchor once, unless the reader has already acted.
+      if (
+        !landingInterrupted &&
+        location.hash === landingHash &&
+        !document.body.classList.contains("is-map-exploring")
+      ) {
+        document
+          .getElementById(landingHash.slice(1))
+          ?.querySelector(".copy")
+          ?.scrollIntoView({ behavior: "instant", block: "center" });
+      }
+    });
   } catch (error) {
     setStatus(
       "Mappa Nodo8 non disponibile. Non vengono usate le vecchie alternative come sostituto: consulta la vetrina e il GeoJSON della proposta.",
@@ -358,6 +451,30 @@ async function installNodo8() {
     document.querySelectorAll('[data-layer="nodo8"]').forEach((button) => {
       button.disabled = true;
     });
+    document
+      .querySelector('[data-action="four-buses"]')
+      ?.setAttribute("disabled", "");
+    const explorerStatus = document.querySelector("#explorePlayback");
+    if (explorerStatus && !explorerStatus.querySelector(".n8-clock")) {
+      explorerStatus.textContent =
+        "Animazione indisponibile: il registro di progetto o la mappa non è stato caricato. Nessun bus sostitutivo viene inventato.";
+    }
+    if (
+      validatedLine &&
+      !document.querySelector("#journeyPlayback .n8-clock")
+    ) {
+      const host = document.getElementById("journeyPlayback"),
+        road = mountRoadPreview(validatedLine);
+      document.querySelector("#orario-nodo8 .copy").append(host);
+      host.hidden = false;
+      host.dataset.theme = "dark";
+      mountPlayer(host, validatedLine, road.update, {
+        compact: true,
+        brief: true,
+        inlineMap: road.node,
+      });
+      document.documentElement.dataset.nodo8PlaybackReady = "fallback";
+    }
     console.error("Nodo8 journey overlay unavailable", error);
   }
 }
