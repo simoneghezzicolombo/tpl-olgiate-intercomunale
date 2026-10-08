@@ -33,6 +33,7 @@ if __name__ == "__main__":
         "tests/test_nodo8_publication.py",
         "tests/test_nodo8_journey.mjs",
         "tests/test_nodo8_playback.mjs",
+        "tests/test_nodo8_map_readiness.mjs",
         "docs/NODO8_PUBBLICAZIONE_FINALE_2026_10_08.md",
     })
     before, source_entries = entries(base), entries(source)

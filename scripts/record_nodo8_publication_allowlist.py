@@ -10,6 +10,7 @@ runtime = [
     "journey-experience-policy.js", "journey-explore-prelude.js", "journey.js",
     "journey-director.js", "journey-lens.js", "journey-lineage.js",
     "journey-current-kml-exact.mjs", "journey-explore-v2.js", "journey-nodo8.mjs",
+    "journey-map-ready.mjs",
 ]
 preserved = json.loads((ROOT / BASE / "upstream-import.json").read_text(encoding="utf-8"))["preserved_assets"]
 files = {

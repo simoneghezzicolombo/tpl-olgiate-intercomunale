@@ -24,8 +24,10 @@ Lo schema sintetico raggruppa solo eventi adiacenti per località/corridoio: 21 
 
 ## Verifica e pubblicazione
 
-Comandi mirati: `node --test tests/test_nodo8_journey.mjs tests/test_nodo8_playback.mjs`; `python -m pytest tests/test_nodo8_website.py tests/test_nodo8_scrollytelling.py tests/test_nodo8_publication.py -q`; `python scripts/build_nodo8_website_data.py --check`.
+Comandi mirati: `node --test tests/test_nodo8_journey.mjs tests/test_nodo8_playback.mjs tests/test_nodo8_map_readiness.mjs`; `python -m pytest tests/test_nodo8_website.py tests/test_nodo8_scrollytelling.py tests/test_nodo8_publication.py -q`; `python scripts/build_nodo8_website_data.py --check`.
 
 Verificati nel browser: sosta esatta, prosecuzione a FS, riproduzione/pausa, selezione di Calco dal diagramma tramite tastiera, export SVG, layout a 390 px senza overflow, geometria e bus senza Leaflet/CDN, fallimento chiuso senza JSON. Le librerie e i 37 asset storici conservati mantengono i digest originali.
 
-La pubblicazione rimane un’allowlist di esattamente due pagine HTML e 63 dipendenze. I prototipi esclusi rimangono in Git; nessun altro sito viene ripubblicato. Nessuna selezione, autorizzazione d’esercizio o approvazione delle fermate viene introdotta da queste modifiche.
+La verifica online a cache fredda ha inoltre individuato e corretto una corsa fra decodifica delle vecchie rotte e caricamento dello stile MapLibre: i livelli storici attendono ora i sentinelli del setup primario, e il KML attende l’installazione completa. Quattro test dedicati verificano attesa, completamento, timeout e ordine delle mutazioni. I marker dei bus restano montati durante il movimento, senza essere rimossi e ricreati a ogni frame.
+
+La pubblicazione rimane un’allowlist di esattamente due pagine HTML e 64 dipendenze. I prototipi esclusi rimangono in Git; nessun altro sito viene ripubblicato. Nessuna selezione, autorizzazione d’esercizio o approvazione delle fermate viene introdotta da queste modifiche.

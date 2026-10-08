@@ -81,6 +81,8 @@
   }
   async function install(){
     [currentData,stopData,finalData,anchorData]=await Promise.all([load(FILES.currentRoutes),load(FILES.currentStops),load(FILES.finalRoutes),load(FILES.finalAnchors)]);
+    const {waitForPreparedMap}=await import('./journey-map-ready.mjs');
+    await waitForPreparedMap(map);
     map.getSource('current-routes')?.setData(currentData);
     if(!map.getSource('current-gtfs-stops'))map.addSource('current-gtfs-stops',{type:'geojson',data:stopData});
     if(!map.getLayer('current-gtfs-stops-halo'))map.addLayer({id:'current-gtfs-stops-halo',type:'circle',source:'current-gtfs-stops',paint:{'circle-radius':['interpolate',['linear'],['zoom'],9,4.2,12,6.2,15,8],'circle-color':'#fff','circle-opacity':0,'circle-blur':.08}});
@@ -96,5 +98,6 @@
     scene();
     window.__analysisJourneyLineage={installed:true,exactRoutes:true,currentData,stopData,finalData,anchorData,apply:scene};
   }
-  install().catch(err=>console.error('Exact route geometry failed',err));
+  window.__analysisJourneyLineageReady=install();
+  window.__analysisJourneyLineageReady.catch(err=>console.error('Exact route geometry failed',err));
 })();
