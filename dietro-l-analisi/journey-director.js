@@ -139,9 +139,9 @@
         if(minute===3 || minute===7) burst('departure-orange');
       }
       previousMinute=minute;
-      requestAnimationFrame(watchClock);
+      if(document.body.dataset.scene==='legacy-time' && !document.hidden) requestAnimationFrame(watchClock);
     }
-    requestAnimationFrame(watchClock);
+    if(serviceClock) requestAnimationFrame(watchClock);
 
     const endSection=document.querySelector('[data-scene="end"]');
     ScrollTrigger.create({

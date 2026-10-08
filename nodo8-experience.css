@@ -1,28 +1,31 @@
-/* Shared, readable controls and line diagrams. */
+/* A single visual language for nominal playback, buses and transit diagrams. */
 .n8-player {
   --n8-bg: #fffdf8;
-  --n8-ink: #163d33;
-  --n8-muted: #52685a;
-  --n8-line: #cbd7cb;
-  --n8-soft: #edf1e7;
-  --n8-accent: #b45f3e;
+  --n8-ink: #153d34;
+  --n8-muted: #586b62;
+  --n8-line: #d7dfd5;
+  --n8-soft: #f0f3eb;
+  --n8-accent: #a6462c;
   color: var(--n8-ink);
   background: var(--n8-bg);
-  padding: 22px;
+  padding: 24px;
   border: 1px solid var(--n8-line);
-  border-radius: 16px;
+  border-radius: 22px;
   font:
-    400 14px/1.6 "DM Sans",
+    400 14px/1.5 "DM Sans",
     system-ui,
     sans-serif;
+  box-shadow: 0 12px 40px #153d3407;
+  min-width: 0;
 }
 .n8-player[data-theme="dark"] {
-  --n8-bg: #112622;
-  --n8-ink: #edf4e7;
-  --n8-muted: #b4c6b9;
-  --n8-line: #3d574a;
-  --n8-soft: #1f3930;
-  --n8-accent: #eba478;
+  --n8-bg: #15332c;
+  --n8-ink: #f5f2e9;
+  --n8-muted: #bbc9bd;
+  --n8-line: #3b584c;
+  --n8-soft: #213f34;
+  --n8-accent: #f0ac87;
+  box-shadow: none;
 }
 .n8-player [hidden] {
   display: none !important;
@@ -31,107 +34,216 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 17px;
+  margin-bottom: 20px;
+}
+.n8-player-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.n8-line-badge {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 14px;
+  background: var(--n8-ink);
+  color: var(--n8-bg);
+  font:
+    800 28px/1 "Manrope",
+    system-ui;
 }
 .n8-player h3 {
   margin: 0;
+  color: var(--n8-ink);
   font:
-    700 22px/1.2 "Manrope",
-    system-ui,
-    sans-serif;
-  letter-spacing: -0.6px;
+    700 22px/1.15 "Manrope",
+    system-ui;
+  letter-spacing: -0.75px;
+}
+.n8-player-subtitle {
+  margin: 5px 0 0 !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  color: var(--n8-muted) !important;
 }
 .n8-model-label {
-  font-size: 9px;
-  letter-spacing: 1px;
+  font-size: 10px;
   color: var(--n8-muted);
-  border: 1px solid var(--n8-line);
-  border-radius: 30px;
-  padding: 5px 8px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
 }
-.n8-trip-label {
-  display: block;
-  font-size: 12px;
-  margin-bottom: 5px;
-}
-.n8-trip-select {
-  margin-bottom: 20px;
+.n8-model-label::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--n8-accent);
 }
 .n8-player button,
 .n8-player select {
   font: inherit;
   border: 1px solid var(--n8-line);
-  border-radius: 8px;
+  border-radius: 11px;
   background: var(--n8-soft);
   color: var(--n8-ink);
-  padding: 8px 11px;
-  min-height: 42px;
+  padding: 9px 12px;
+  min-height: 44px;
   cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+.n8-player button:hover:not(:disabled) {
+  border-color: var(--n8-ink);
+}
+.n8-player button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.n8-player-modes {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--n8-line);
+  border-radius: 14px;
+  background: var(--n8-soft);
+  margin-bottom: 16px;
+}
+.n8-player-modes button {
+  flex: 1;
+  border: 0;
+  min-height: 38px;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  background: transparent;
+}
+.n8-player-modes button[aria-pressed="true"] {
+  background: var(--n8-ink);
+  color: var(--n8-bg);
+  box-shadow: 0 2px 4px #0001;
+}
+.n8-trip-select {
+  margin-bottom: 20px;
+}
+.n8-trip-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--n8-muted);
+  margin-bottom: 6px;
 }
 .n8-trip-select select {
   width: 100%;
   font-size: 13px;
+  background: var(--n8-bg);
 }
 .n8-player-top {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 8px;
+}
+.n8-clock-wrap {
+  margin-right: auto;
+  min-width: 0;
+}
+.n8-clock-caption {
+  display: block;
+  font-size: 10px;
+  color: var(--n8-muted);
+  margin-bottom: 5px;
 }
 .n8-clock {
+  display: block;
   font:
-    700 35px/1.1 "Manrope",
-    system-ui,
-    sans-serif;
+    700 37px/1 "Manrope",
+    system-ui;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -1.4px;
-  margin-right: auto;
+  letter-spacing: -1.5px;
 }
 .n8-player .n8-play {
   background: var(--n8-ink);
   color: var(--n8-bg);
   border-color: var(--n8-ink);
   font-weight: 700;
-  min-width: 95px;
+  min-width: 98px;
 }
 .n8-player .n8-reset {
+  background: transparent;
   font-size: 22px;
   line-height: 1;
-  padding-inline: 12px;
+  width: 44px;
+  padding: 8px;
 }
 .n8-range-label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
+  color: var(--n8-muted);
   margin-top: 18px;
 }
 .n8-player input[type="range"] {
   accent-color: var(--n8-ink);
   width: 100%;
-  margin: 6px 0;
-  min-height: 24px;
+  margin: 3px 0;
+  min-height: 30px;
   cursor: pointer;
 }
 .n8-range-limits {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  font-size: 11px;
+  gap: 14px;
+  font-size: 10px;
   color: var(--n8-muted);
+  font-variant-numeric: tabular-nums;
+}
+.n8-range-limits span:last-child {
+  text-align: right;
+}
+.n8-trip-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+}
+.n8-trip-progress-text {
+  font-size: 11px;
+  font-weight: 600;
+}
+.n8-trip-progress-track {
+  height: 4px;
+  flex: 1;
+  min-width: 35px;
+  max-width: 100px;
+  background: var(--n8-line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.n8-trip-progress-track span {
+  display: block;
+  height: 100%;
+  background: var(--n8-accent);
+  border-radius: inherit;
 }
 .n8-service-phases {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   list-style: none;
   padding: 0;
-  margin: 19px 0 14px;
-  gap: 3px;
+  margin: 14px 0 0;
+  gap: 4px;
 }
 .n8-service-phases li {
   border-top: 3px solid var(--n8-line);
   padding-top: 7px;
   font-size: 10px;
-  line-height: 1.5;
+  line-height: 1.4;
   color: var(--n8-muted);
 }
 .n8-service-phases li.is-complete {
@@ -142,80 +254,103 @@
   color: var(--n8-ink);
   font-weight: 700;
 }
-.n8-milestones {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  margin: 16px 0 10px;
-}
-.n8-milestones button {
-  font-size: 12px;
-  padding-inline: 6px;
-}
-.n8-event-steps {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-.n8-event-steps button {
-  background: transparent;
-  font-size: 12px;
-  flex: 1;
-}
-.n8-player button:disabled {
-  opacity: 0.45;
-  cursor: default;
-}
 .n8-current-event {
-  border-left: 3px solid var(--n8-ink);
-  padding: 13px 15px;
+  position: relative;
+  padding: 16px;
   margin-top: 18px;
   background: var(--n8-soft);
-  border-radius: 0 10px 10px 0;
+  border: 1px solid var(--n8-line);
+  border-radius: 15px;
 }
 .n8-current-event[data-status="stop"],
 .n8-current-event[data-status="fs-hold"] {
   border-color: var(--n8-accent);
 }
 .n8-event-kicker {
-  display: block;
-  font-size: 10px;
-  letter-spacing: 1.4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  letter-spacing: 1.1px;
   color: var(--n8-muted);
-  margin-bottom: 5px;
+  margin-bottom: 7px;
+  font-weight: 600;
+}
+.n8-event-kicker::before {
+  content: "";
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background: var(--n8-ink);
+}
+.n8-current-event[data-status="stop"] .n8-event-kicker::before,
+.n8-current-event[data-status="fs-hold"] .n8-event-kicker::before {
+  background: var(--n8-accent);
 }
 .n8-event-name {
   display: block;
-  font-size: 17px;
-  line-height: 1.45;
+  font:
+    700 18px/1.3 "Manrope",
+    system-ui;
+  letter-spacing: -0.35px;
 }
 .n8-event-detail {
   font-size: 12px !important;
-  line-height: 1.7 !important;
-  margin: 7px 0 0 !important;
+  line-height: 1.6 !important;
+  margin: 8px 0 0 !important;
   color: var(--n8-muted) !important;
 }
-.n8-route-continuity {
-  font-size: 12px !important;
+.n8-route-continuity,
+.n8-playback-note {
+  font-size: 11px !important;
   line-height: 1.7 !important;
   color: var(--n8-muted) !important;
-  margin: 15px 0 0 !important;
+  margin: 14px 0 0 !important;
 }
 .n8-player-status {
-  font-size: 11px !important;
+  font-size: 10px !important;
   line-height: 1.5 !important;
-  margin: 13px 0 0 !important;
+  margin: 14px 0 0 !important;
   color: var(--n8-muted) !important;
 }
 .n8-player-details {
   border-top: 1px solid var(--n8-line);
-  margin-top: 17px;
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.n8-player-details summary,
+.n8-event-navigation summary {
+  font-size: 11px;
+  cursor: pointer;
+  min-height: 30px;
+  color: var(--n8-muted);
+  display: list-item;
+}
+.n8-event-navigation {
+  margin-top: 16px;
+}
+.n8-player-details .n8-event-navigation {
+  border-top: 1px solid var(--n8-line);
   padding-top: 13px;
 }
-.n8-player-details summary {
-  font-size: 12px;
-  cursor: pointer;
-  min-height: 28px;
+.n8-milestones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin: 10px 0;
+}
+.n8-milestones button {
+  font-size: 11px;
+  padding-inline: 5px;
+}
+.n8-event-steps {
+  display: flex;
+  gap: 8px;
+}
+.n8-event-steps button {
+  background: transparent;
+  font-size: 11px;
+  flex: 1;
 }
 .n8-speed {
   display: flex;
@@ -223,68 +358,113 @@
   justify-content: space-between;
   gap: 10px;
   font-size: 12px;
-  margin-top: 13px;
+  margin-top: 10px;
 }
-.n8-playback-note {
-  font-size: 12px !important;
-  line-height: 1.75 !important;
-  margin: 13px 0 0 !important;
-  color: var(--n8-muted) !important;
+.n8-fleet-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 21px;
+  font-size: 11px;
+}
+.n8-fleet-heading span {
+  color: var(--n8-muted);
+  font-size: 10px;
+  text-align: right;
+  max-width: 150px;
 }
 .n8-fleet {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 18px;
+  gap: 8px;
+  margin-top: 12px;
 }
-.n8-vehicle-card {
+.n8-player .n8-vehicle-card {
   display: flex;
   gap: 9px;
   align-items: flex-start;
-  border-top: 2px solid var(--n8-line);
-  padding: 10px 3px;
+  text-align: left;
+  background: var(--n8-bg);
+  border-radius: 14px;
+  padding: 12px;
+  min-width: 0;
+  width: 100%;
 }
 .n8-vehicle-id {
-  font-size: 12px;
-  font-weight: 700;
+  font:
+    700 11px/1 "Manrope",
+    system-ui;
   background: var(--n8-ink);
   color: var(--n8-bg);
-  border-radius: 5px;
-  padding: 4px 6px;
+  border-radius: 8px;
+  padding: 7px 6px;
+  flex: 0 0 auto;
+}
+.n8-vehicle-copy {
+  min-width: 0;
+  width: 100%;
+}
+.n8-vehicle-trip {
+  display: block;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--n8-muted);
+  margin-bottom: 4px;
 }
 .n8-vehicle-state {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  line-height: 1.5;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 .n8-vehicle-card small {
   display: block;
-  font-size: 11px;
-  line-height: 1.6;
+  font-size: 10px;
+  line-height: 1.5;
   color: var(--n8-muted);
   margin-top: 5px;
 }
+.n8-vehicle-progress {
+  display: block;
+  height: 3px;
+  background: var(--n8-line);
+  margin-top: 10px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.n8-vehicle-progress span {
+  display: block;
+  height: 100%;
+  background: var(--n8-ink);
+}
+.n8-vehicle-card[data-status="stop"] .n8-vehicle-id,
+.n8-vehicle-card[data-status="fs-hold"] .n8-vehicle-id {
+  background: var(--n8-accent);
+  color: var(--n8-bg);
+}
 .n8-vehicle-card[data-status="off-service"] {
-  opacity: 0.65;
+  opacity: 0.55;
 }
 .n8-bus {
   width: 34px;
   height: 42px;
-  filter: drop-shadow(0 3px 3px #142b3355);
+  filter: drop-shadow(0 3px 3px #153d3445);
   cursor: default;
 }
 .n8-bus-body {
-  fill: #163d33;
+  fill: #153d34;
   stroke: #fffdf8;
   stroke-width: 2px;
 }
 .n8-bus[data-status="stop"] .n8-bus-body,
 .n8-bus[data-status="fs-hold"] .n8-bus-body {
-  fill: #b45f3e;
+  fill: #a6462c;
 }
 .n8-bus[data-status="recovery"] .n8-bus-body {
-  fill: #758178;
+  fill: #728177;
 }
 .n8-bus-carrier {
   display: none;
@@ -292,11 +472,12 @@
   left: 25px;
   bottom: 8px;
   background: #fffdf8;
-  color: #163d33;
-  padding: 1px 3px;
-  border: 1px solid #163d33;
-  border-radius: 4px;
-  font: 700 10px system-ui;
+  color: #153d34;
+  padding: 3px 4px;
+  border: 1px solid #153d34;
+  border-radius: 5px;
+  font: 700 10px/1 system-ui;
+  box-shadow: 0 2px 4px #153d3420;
 }
 .n8-bus.show-carrier .n8-bus-carrier {
   display: block;
@@ -306,26 +487,44 @@
   border: 0 !important;
 }
 .n8-player :focus-visible,
-.n8-diagram-tools :focus-visible {
-  outline: 3px solid var(--n8-accent, #b45f3e);
-  outline-offset: 3px;
+.n8-diagram-tools :focus-visible,
+.n8-diagram-order :focus-visible {
+  outline: 3px solid var(--n8-accent, #a6462c);
+  outline-offset: 4px;
 }
 .n8-player--compact {
   padding: 19px;
+  border-radius: 18px;
 }
 .n8-player--compact h3 {
   font-size: 20px;
 }
+.n8-player--compact .n8-player-subtitle {
+  font-size: 10px !important;
+}
 .n8-player--compact .n8-clock {
-  font-size: 32px;
+  font-size: 33px;
+}
+.n8-player--compact .n8-player-title {
+  margin-bottom: 16px;
+}
+.n8-player--compact .n8-line-badge {
+  width: 36px;
+  height: 36px;
+  flex-basis: 36px;
+  font-size: 24px;
+  border-radius: 12px;
+}
+.n8-player--compact .n8-model-label {
+  display: none;
 }
 .n8-road-preview {
   display: none;
   margin-top: 17px;
   border: 1px solid var(--n8-line);
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
-  background: #f6f3eb;
+  background: #f5f2e9;
 }
 .n8-road-preview svg {
   width: 100%;
@@ -334,40 +533,51 @@
 }
 .n8-road-line {
   fill: none;
-  stroke: #163d33;
+  stroke: #153d34;
   stroke-width: 3;
   stroke-linejoin: round;
 }
 .n8-road-stop {
   fill: #fffdf8;
-  stroke: #163d33;
+  stroke: #153d34;
   stroke-width: 1;
 }
 .n8-road-new {
-  fill: #b45f3e;
+  fill: #a6462c;
   stroke: #fffdf8;
   stroke-width: 1;
 }
+.n8-road-hub-label rect {
+  fill: #153d34;
+  stroke: #fffdf8;
+  stroke-width: 1.5;
+}
+.n8-road-hub-label text {
+  fill: #fffdf8;
+  font:
+    600 14px "DM Sans",
+    system-ui;
+}
 .n8-road-bus rect {
-  fill: #163d33;
+  fill: #153d34;
   stroke: #fffdf8;
   stroke-width: 2;
 }
 .n8-road-bus[data-status="stop"] rect,
 .n8-road-bus[data-status="fs-hold"] rect {
-  fill: #b45f3e;
+  fill: #a6462c;
 }
 .n8-road-bus text {
   fill: #fffdf8;
   font: 700 16px system-ui;
 }
 .n8-road-caption {
-  color: #52685a !important;
+  color: #586b62 !important;
   font-size: 10px !important;
   line-height: 1.5 !important;
-  padding: 8px 10px !important;
+  padding: 9px 12px !important;
   margin: 0 !important;
-  border-top: 1px solid #cbd7cb;
+  border-top: 1px solid #d7dfd5;
 }
 .n8-diagram {
   display: block;
@@ -377,52 +587,58 @@
   background: #fffdf8;
   font-family: "DM Sans", system-ui, sans-serif;
 }
+.n8-diagram-paper {
+  fill: #fffdf8;
+}
 .n8-diagram-scroll {
   overflow-x: auto;
-  border: 1px solid #cbd7cb;
-  border-radius: 16px;
-  scrollbar-color: #93ad9d #f6f3eb;
+  border: 1px solid #d7dfd5;
+  border-radius: 22px;
+  scrollbar-color: #93ad9d #f5f2e9;
+  box-shadow: 0 15px 40px #153d3405;
 }
 .n8-diagram-scroll.is-zoomed .n8-diagram {
   width: 160%;
   min-width: 850px;
 }
 .n8-diagram-brand {
+  font-family: "Manrope", system-ui, sans-serif;
   font-weight: 800;
-  font-size: 34px;
+  font-size: 39px;
   letter-spacing: -2px;
-  fill: #163d33;
+  fill: #153d34;
 }
 .n8-diagram-caption {
   font-size: 13px;
-  letter-spacing: 0.4px;
-  fill: #597363;
+  letter-spacing: 0.3px;
+  fill: #586b62;
 }
 .n8-diagram-shadow {
   fill: none;
-  stroke: #e7ece3;
-  stroke-width: 23px;
+  stroke: #eef1e8;
+  stroke-width: 28px;
   stroke-linejoin: round;
 }
 .n8-diagram-line {
   fill: none;
-  stroke: #163d33;
+  stroke: #153d34;
   stroke-width: 8px;
   stroke-linejoin: round;
+  stroke-linecap: round;
 }
 .n8-diagram-leader {
-  stroke: #b8c9bb;
+  stroke: #b6c4b7;
   stroke-width: 1.5px;
 }
 .n8-diagram-dot {
-  fill: #163d33;
+  fill: #153d34;
   stroke: #fffdf8;
-  stroke-width: 3px;
+  stroke-width: 4px;
 }
 .n8-diagram-new {
-  fill: #b45f3e;
+  fill: #a6462c;
   stroke: #fffdf8;
-  stroke-width: 3px;
+  stroke-width: 4px;
 }
 .n8-diagram-number {
   font-size: 13px;
@@ -432,30 +648,42 @@
 .n8-diagram-name {
   font-size: 18px;
   font-weight: 600;
-  fill: #163d33;
+  fill: #153d34;
 }
 .n8-diagram-sub {
-  font-size: 11px;
-  fill: #995333;
+  font-size: 12px;
+  fill: #a6462c;
 }
 .n8-diagram-hub {
-  fill: #163d33;
+  fill: #153d34;
   stroke: #fffdf8;
-  stroke-width: 5px;
+  stroke-width: 6px;
 }
 .n8-diagram-hub-name {
   fill: #fffdf8;
-  font-size: 29px;
+  font-family: "Manrope", system-ui;
+  font-size: 30px;
   font-weight: 700;
+  letter-spacing: -0.7px;
 }
 .n8-diagram-hub-sub {
-  fill: #e4e9dd;
-  font-size: 11px;
-  letter-spacing: 0.5px;
+  fill: #e2e9df;
+  font-size: 10px;
+  letter-spacing: 0.3px;
+}
+.n8-diagram-loop-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  fill: #708278;
+}
+.n8-diagram-loop-note {
+  font-size: 14px;
+  fill: #8b9a90;
 }
 .n8-diagram-arrow {
   fill: none;
-  stroke: #d78660;
+  stroke: #dd7655;
   stroke-width: 5px;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -465,56 +693,84 @@
 }
 .n8-diagram-stop[role="button"]:hover .n8-diagram-name,
 .n8-diagram-stop[role="button"]:focus .n8-diagram-name {
-  fill: #995333;
+  fill: #a6462c;
 }
 .n8-diagram-stop:focus {
   outline: none;
 }
 .n8-diagram-stop:focus circle {
-  stroke: #d78660;
+  stroke: #dd7655;
   stroke-width: 6px;
 }
 .n8-locality-number {
   font-size: 15px;
   font-weight: 700;
-  fill: #78917e;
+  fill: #a6462c;
 }
 .n8-locality-heading {
   font-size: 20px;
   font-weight: 700;
-  fill: #163d33;
+  fill: #153d34;
+  letter-spacing: -0.4px;
+}
+.n8-diagram-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 14px;
+  font:
+    500 12px "DM Sans",
+    system-ui;
+  color: #586b62;
+}
+.n8-diagram-legend span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.n8-diagram-legend i {
+  order: -1;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #153d34;
+}
+.n8-diagram-legend .is-new i {
+  background: #a6462c;
 }
 .n8-diagram-tools {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: 16px;
+  margin-top: 14px;
 }
 .n8-diagram-download {
   background: #fffdf8;
-  color: #163d33;
-  border: 1px solid #c3d0c4;
-  border-radius: 8px;
-  padding: 10px 15px;
+  color: #153d34;
+  border: 1px solid #d7dfd5;
+  border-radius: 11px;
+  padding: 11px 15px;
   font:
-    600 13px "DM Sans",
-    system-ui,
-    sans-serif;
-  min-height: 42px;
+    600 12px "DM Sans",
+    system-ui;
+  min-height: 44px;
   cursor: pointer;
 }
+.n8-diagram-download:hover {
+  background: #eef1e8;
+}
 .n8-diagram-order {
-  margin-top: 20px;
-  border-top: 1px solid #d5ddd5;
-  padding-top: 16px;
+  margin-top: 18px;
+  border-top: 1px solid #d7dfd5;
+  padding-top: 15px;
 }
 .n8-diagram-order summary {
   font:
     600 14px/1.6 "DM Sans",
-    system-ui,
-    sans-serif;
+    system-ui;
   cursor: pointer;
   min-height: 35px;
+  color: #153d34;
 }
 .n8-ordered-list {
   list-style: none;
@@ -523,68 +779,88 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0 25px;
   font:
-    400 15px/1.6 "DM Sans",
-    system-ui,
-    sans-serif;
+    400 14px/1.6 "DM Sans",
+    system-ui;
+  color: #153d34;
 }
 .n8-ordered-list li {
-  padding: 8px 10px;
-  border-bottom: 1px solid #e1e6dc;
+  padding: 10px;
+  border-bottom: 1px solid #e0e5db;
 }
 .n8-ordered-list .n8-order-hub {
   grid-column: 1/-1;
   font-weight: 700;
-  background: #e8ede3;
+  background: #eef1e8;
   border: 0;
-  border-radius: 6px;
+  border-radius: 9px;
   margin: 8px 0;
 }
 .n8-ordered-list button {
   text-align: left;
   border: 0;
   background: transparent;
-  color: #163d33;
+  color: #153d34;
   font: inherit;
   width: 100%;
   padding: 0;
-  min-height: 30px;
+  min-height: 34px;
   cursor: pointer;
 }
 @media (max-width: 600px) {
   .n8-player {
     padding: 18px;
+    border-radius: 18px;
   }
   .n8-player h3 {
     font-size: 20px;
+  }
+  .n8-player-title {
+    margin-bottom: 16px;
+  }
+  .n8-model-label {
+    font-size: 9px;
   }
   .n8-clock,
   .n8-player--compact .n8-clock {
     font-size: 31px;
   }
-  .n8-milestones button {
-    font-size: 11px;
-  }
   .n8-current-event {
-    padding: 12px;
+    padding: 14px;
   }
   .n8-event-name {
-    font-size: 16px;
+    font-size: 17px;
   }
   .n8-player .n8-play {
-    min-width: 90px;
+    min-width: 88px;
+    padding-inline: 8px;
+  }
+  .n8-player .n8-vehicle-card {
+    padding: 10px 8px;
+    gap: 7px;
+  }
+  .n8-vehicle-id {
+    font-size: 10px;
+    padding: 6px 5px;
+  }
+  .n8-vehicle-state {
+    font-size: 10px;
+  }
+  .n8-range-limits {
+    font-size: 9px;
   }
   .n8-ordered-list {
     grid-template-columns: 1fr;
     font-size: 14px;
   }
   .n8-diagram-download {
-    font-size: 12px;
+    font-size: 11px;
   }
   .n8-diagram-tools {
     gap: 8px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .n8-player button,
   .n8-bus {
     transition: none;
   }

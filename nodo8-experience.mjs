@@ -1,4 +1,4 @@
-import { diagramStops } from "./nodo8-line.mjs?v=20261008e";
+import { diagramStops } from "./nodo8-line.mjs?v=20261008f";
 const ns = "http://www.w3.org/2000/svg";
 const node = (tag, cls, text) => {
   const e = document.createElement(tag);
@@ -22,6 +22,15 @@ export function makeBusMarker(id) {
     "aria-hidden": "true",
   });
   icon.append(
+    svg("rect", { x: 1, y: 11, width: 4, height: 7, rx: 1.5, fill: "#153d34" }),
+    svg("rect", {
+      x: 29,
+      y: 11,
+      width: 4,
+      height: 7,
+      rx: 1.5,
+      fill: "#153d34",
+    }),
     svg("rect", {
       x: 4,
       y: 2,
@@ -30,7 +39,8 @@ export function makeBusMarker(id) {
       rx: 7,
       class: "n8-bus-body",
     }),
-    svg("rect", { x: 8, y: 7, width: 18, height: 10, rx: 2, fill: "#f6f3eb" }),
+    svg("rect", { x: 8, y: 7, width: 18, height: 10, rx: 2, fill: "#f5f2e9" }),
+    svg("path", { d: "M9 15 L23 9", stroke: "#b7cbc1", "stroke-width": 1.5 }),
     svg(
       "text",
       {
@@ -64,7 +74,7 @@ export function updateBusMarker(element, state, { showCarrier = false } = {}) {
   element.setAttribute("aria-label", element.title);
 }
 
-export { mountPlayer } from "./nodo8-player.mjs?v=20261008e";
+export { mountPlayer } from "./nodo8-player.mjs?v=20261008f";
 
 export function mountRoadPreview(line) {
   const host = node("div", "n8-road-preview"),
@@ -90,6 +100,13 @@ export function mountRoadPreview(line) {
     170 - (p[1] - cy) * scale,
   ];
   drawing.append(
+    svg("rect", {
+      x: 0,
+      y: 0,
+      width: 600,
+      height: 340,
+      class: "n8-diagram-paper",
+    }),
     svg("path", {
       d: points
         .map((p, i) => {
@@ -111,9 +128,21 @@ export function mountRoadPreview(line) {
       }),
     );
   });
+  const hub = [...line.sites.values()].find((s) => s.hub_service_roles.length);
+  const [hx, hy] = project(hub.coordinates_lon_lat);
+  const hubLabel = svg("g", {
+    class: "n8-road-hub-label",
+    transform: `translate(${hx + 12} ${hy - 33})`,
+  });
+  hubLabel.append(
+    svg("rect", { width: 109, height: 28, rx: 9 }),
+    svg("text", { x: 12, y: 19 }, "Olgiate FS"),
+  );
+  drawing.append(hubLabel);
   const buses = new Map(
     line.vehicles.map((v) => {
       const bus = svg("g", { class: "n8-road-bus", "data-vehicle": v.id });
+      bus.style.display = "none";
       bus.append(
         svg("rect", { x: -13, y: -17, width: 26, height: 34, rx: 7 }),
         svg("text", { "text-anchor": "middle", y: 5 }, "8"),
@@ -192,6 +221,13 @@ export function renderDiagram(
     "aria-labelledby": id + "-title " + id + "-description",
   });
   drawing.append(
+    svg("rect", {
+      x: 0,
+      y: 0,
+      width: 1200,
+      height: 1150,
+      class: "n8-diagram-paper",
+    }),
     svg(
       "title",
       { id: id + "-title" },
@@ -214,7 +250,7 @@ export function renderDiagram(
       { x: 1128, y: 43, "text-anchor": "end", class: "n8-diagram-caption" },
       localities
         ? "LE LOCALITÀ, NELL’ORDINE DEL GIRO"
-        : "UN’UNICA LINEA · TUTTE LE FERMATE",
+        : "UN GIRO COMPLETO · 27 SITI · UN’UNICA LINEA",
     ),
   );
   const placed = [],
@@ -315,9 +351,9 @@ export function renderDiagram(
     const note = localities
       ? "passaggi " + e.ordinals.join("–")
       : e.ordinal === 14 || e.ordinal === 28
-        ? "NUOVO · secondo passaggio nello stesso sito"
+        ? "Nuovo sito · secondo passaggio"
         : isNew
-          ? "NUOVO SITO PROPOSTO"
+          ? "Nuovo sito proposto"
           : "";
     if (note)
       g.append(
@@ -335,6 +371,46 @@ export function renderDiagram(
     drawing.append(g);
   });
   drawing.append(
+    svg(
+      "text",
+      {
+        x: 600,
+        y: 280,
+        "text-anchor": "middle",
+        class: "n8-diagram-loop-title",
+      },
+      "PRIMO ANELLO",
+    ),
+    svg(
+      "text",
+      {
+        x: 600,
+        y: 307,
+        "text-anchor": "middle",
+        class: "n8-diagram-loop-note",
+      },
+      "passaggi 1–14",
+    ),
+    svg(
+      "text",
+      {
+        x: 600,
+        y: 832,
+        "text-anchor": "middle",
+        class: "n8-diagram-loop-title",
+      },
+      "SECONDO ANELLO",
+    ),
+    svg(
+      "text",
+      {
+        x: 600,
+        y: 859,
+        "text-anchor": "middle",
+        class: "n8-diagram-loop-note",
+      },
+      "passaggi 15–28",
+    ),
     svg("rect", {
       x: 411,
       y: 527,
@@ -351,12 +427,12 @@ export function renderDiagram(
     svg(
       "text",
       { x: 600, y: 587, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
-      "PARTENZA → PASSAGGIO → ARRIVO",
+      "PARTENZA · SOSTA INTERMEDIA · ARRIVO",
     ),
     svg(
       "text",
       { x: 600, y: 608, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
-      "stesso bus · prosecuzione progettata",
+      "stesso bus, prosecuzione da autorizzare",
     ),
   );
   // Arrowheads indicate service order, not an opposite-direction service.
@@ -436,6 +512,12 @@ function finishDiagram(container, drawing, line, { onSelect, localities }) {
     }
   });
   const tools = node("div", "n8-diagram-tools");
+  const legend = node("div", "n8-diagram-legend"),
+    regular = node("span", "", "Sito di progetto"),
+    proposed = node("span", "is-new", "Nuovo sito proposto");
+  regular.append(node("i"));
+  proposed.append(node("i"));
+  legend.append(regular, proposed);
   const zoom = node("button", "n8-diagram-download", "Ingrandisci lo schema");
   zoom.type = "button";
   zoom.setAttribute("aria-pressed", "false");
@@ -484,7 +566,8 @@ function finishDiagram(container, drawing, line, { onSelect, localities }) {
   narrow.addEventListener("change", (e) => {
     if (e.matches) order.open = true;
   });
-  container.replaceChildren(scroll, tools, order);
+  if (localities) container.replaceChildren(scroll, tools, order);
+  else container.replaceChildren(legend, scroll, tools, order);
 }
 
 function renderLocalityDiagram(container, line) {
@@ -497,6 +580,13 @@ function renderLocalityDiagram(container, line) {
     "aria-labelledby": id + "-title " + id + "-description",
   });
   drawing.append(
+    svg("rect", {
+      x: 0,
+      y: 0,
+      width: 1200,
+      height: 820,
+      class: "n8-diagram-paper",
+    }),
     svg(
       "title",
       { id: id + "-title" },
