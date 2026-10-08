@@ -51,4 +51,18 @@ o numero di passeggeri. Costi, finanziamento e autorizzazioni restano da verific
 - Pubblicazione limitata alle due pagine finali e alle 71 dipendenze autorizzate.
   Prototipi e dati storici restano nel repository.
 
-La conferma del deploy e della verifica pubblica sarà riportata dopo l’esecuzione.
+## Pubblicazione verificata
+
+- Revisione sorgente: `1ac6ea5240c09b76486d65b82fc53d806d442678`.
+- Revisione Pages: `801226f7b61e1fc39362b84403a89ee835d07a98`.
+- Workflow: `37829778589`, concluso con successo.
+- Manifest pubblico e hash SHA-256 dei 71 file verificati via HTTP: tutti conformi.
+- Browser pubblico: 26 punti nonhub, due coppie di eventi condivise, 11 località
+  concettuali; 13 capitoli del racconto, nuovi testi dei readout, nessun errore console.
+- Schermata pubblica conservata in
+  `cache/nodo8-website-preview/nodo8-racconto-immediato-published-20261008k.png`.
+- Sorgenti ritirate preservate: 106 percorsi non selezionati, nessuna cancellazione.
+
+URL: https://simoneghezzicolombo.github.io/tpl-olgiate-intercomunale/?v=20261008k
+
+Racconto: https://simoneghezzicolombo.github.io/tpl-olgiate-intercomunale/dietro-l-analisi/?v=20261008k
