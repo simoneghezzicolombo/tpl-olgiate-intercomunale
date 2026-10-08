@@ -1,0 +1,30 @@
+{
+  "contract": "nodo8_stop_times_publication_result_v1",
+  "ui_release": "20261008e",
+  "source_revision": "96180dabf426c4c4947807b41efdb7d0f59f8853",
+  "pages_revision": "75558b7f8b3cbd37fab6c2deed807c074cece7bd",
+  "workflow_run_id": 37783316472,
+  "workflow_conclusion": "success",
+  "published_html_pages": ["index.html", "dietro-l-analisi/index.html"],
+  "published_dependency_count": 67,
+  "retired_map_http_status": 404,
+  "repository_files_deleted": [],
+  "local_python_tests_passed": 32,
+  "local_node_tests_passed": 26,
+  "proposal_data_changed": false,
+  "public_browser_checks": {
+    "san_zeno_trip_rows": 16,
+    "san_zeno_occurrence_ordinals": [1, 14],
+    "clicked_trip": 4,
+    "clicked_occurrence_ordinal": 14,
+    "displayed_carrier": "B4",
+    "displayed_carrier_status": "stop",
+    "displayed_phase": "Primo anello",
+    "stale_map_popups_after_replay": 0,
+    "explorer_carrier_count_at_0735": 4,
+    "explorer_site_choices": 27,
+    "historical_controls_in_flow": true,
+    "console_errors": []
+  },
+  "semantics": "Every stop-table cell is a validated nominal ledger event, not a synthesized or authorised operating timetable. Repeated occurrences and the three FS passenger-service roles remain distinct. Geometry, calendar, resources and authority flags unchanged."
+}
