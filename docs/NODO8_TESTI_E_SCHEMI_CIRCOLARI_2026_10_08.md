@@ -1,6 +1,6 @@
 # Nodo8: testi brevi e schemi circolari
 
-Release `20261008g`, presentazione soltanto. Percorso, fermate, orari, copertura e autorità del progetto invariati.
+Release `20261008h`, presentazione soltanto. Percorso, fermate, orari, copertura e autorità del progetto invariati.
 
 - Un solo favicon Nodo8 condiviso dalle due pagine, incluso nell’artefatto pubblico. Rimossa la vecchia icona inserita dinamicamente dal racconto.
 - Nessun em dash nel testo delle due pagine. La punteggiatura dei nomi upstream viene pulita solo nella visualizzazione, non modificando i dati.
@@ -16,3 +16,5 @@ Release `20261008g`, presentazione soltanto. Percorso, fermate, orari, copertura
 Proiezione dati confrontata con tutte e quattro le fonti confermate. Asset storici e vendor preservati. Verifiche browser a 1280 px e 390 px: schemi, dettagli apribili, favicon unico, assenza di overflow della pagina ed errori console nei casi controllati. La mappa degli schemi può scorrere orizzontalmente su telefono per mantenere leggibili i nomi.
 
 Pubblicazione finale limitata alle due pagine e 71 file allowlisted. Le pagine ritirate restano nel repository.
+
+Ultima rifinitura visiva: «Santa Maria Hoè» su due righe, separata da «Perego» nello schema concettuale. Verificato un margine di 45 px tra le due etichette nella vista desktop compatta.

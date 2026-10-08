@@ -642,7 +642,12 @@ function renderLocalityDiagram(container, line) {
       central = Math.abs(point.x - 600) < 1,
       right = point.x > 600,
       textAnchor = central ? "middle" : right ? "end" : "start",
-      lines = name === "Canova / Beolco" ? [name] : wrapLabel(name),
+      lines =
+        name === "Santa Maria Hoè"
+          ? ["Santa Maria", "Hoè"]
+          : name === "Canova / Beolco"
+            ? [name]
+            : wrapLabel(name),
       group = svg("g", {
         class: "n8-diagram-locality",
         "data-locality": name,
@@ -655,7 +660,7 @@ function renderLocalityDiagram(container, line) {
         class: "n8-diagram-name n8-diagram-locality-name",
       });
     lines.forEach((value, index) =>
-      text.append(svg("tspan", { x: label.x, dy: index ? 24 : 0 }, value)),
+      text.append(svg("tspan", { x: label.x, dy: index ? 36 : 0 }, value)),
     );
     group.append(
       svg("title", {}, name + " · riferimento territoriale"),
