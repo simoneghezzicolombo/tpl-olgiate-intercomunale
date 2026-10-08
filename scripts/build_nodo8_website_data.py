@@ -14,6 +14,12 @@ SOURCES = {
     "geometry": BASE + "calco_centre_adopted_design.geojson",
 }
 ASSET = ROOT / "assets/nodo8-proposal.json"
+
+
+def source_digest(path: Path) -> str:
+    """Match Git's source bytes across LF and Windows CRLF checkouts."""
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
 MUNICIPALITIES = [
     {"code": "97058", "name": "Olgiate Molgora"},
     {"code": "97012", "name": "Calco"},
@@ -54,7 +60,8 @@ def build_data(root: Path = ROOT) -> dict:
         "contract": "nodo8_showcase_v1",
         "brand": {"name": "Nodo8", "official_name": design["public_route_name"], "working_name": True},
         "as_of": "2026-10-07",
-        "sources": {key: {"path": path, "sha256": hashlib.sha256((root / path).read_bytes()).hexdigest()}
+        "sources": {key: {"path": path, "sha256": source_digest(root / path),
+                          "sha256_semantics": "SOURCE_BYTES_WITH_CRLF_NORMALISED_TO_LF"}
                     for key, path in SOURCES.items()},
         "authority": {**{key: design[key] for key in flags},
                       **{key: design[key] for key in [

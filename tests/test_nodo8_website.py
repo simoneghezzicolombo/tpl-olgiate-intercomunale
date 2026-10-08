@@ -25,7 +25,15 @@ def test_checked_in_asset_is_reproducible():
 
 def test_sources_are_hash_pinned():
     for source in builder.build_data()["sources"].values():
-        assert source["sha256"] == hashlib.sha256((ROOT / source["path"]).read_bytes()).hexdigest()
+        assert source["sha256"] == hashlib.sha256((ROOT / source["path"]).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+        assert source["sha256_semantics"] == "SOURCE_BYTES_WITH_CRLF_NORMALISED_TO_LF"
+
+
+def test_source_digest_is_identical_for_lf_and_crlf_checkouts(tmp_path):
+    lf, crlf = tmp_path / "lf.json", tmp_path / "crlf.json"
+    lf.write_bytes(b'{\n  "value": 16\n}\n')
+    crlf.write_bytes(b'{\r\n  "value": 16\r\n}\r\n')
+    assert builder.source_digest(lf) == builder.source_digest(crlf)
 
 
 def test_map_uses_complete_confirmed_geometries_without_removed_site():
