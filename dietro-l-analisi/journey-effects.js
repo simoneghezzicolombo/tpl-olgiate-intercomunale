@@ -134,9 +134,9 @@
           });
         }
         const src=map.getSource('service-movers'); if(src) src.setData({type:'FeatureCollection',features});
-        requestAnimationFrame(serviceFrame);
+        if(document.body.dataset.scene==='legacy-time') requestAnimationFrame(serviceFrame);
       }
-      requestAnimationFrame(serviceFrame);
+      if(document.body.dataset.scene==='legacy-time') requestAnimationFrame(serviceFrame);
     }
     return true;
   }

@@ -373,14 +373,51 @@
 
   function addControls() {
     controls = document.createElement("div");
+    controls.id = "journeyExplorerControls";
     controls.className = "explore-controls";
-    controls.innerHTML = `<div class="explore-controls__head"><div><strong>Esplora tutto il modello</strong><small>gli stessi layer dello scroll, ora liberi e cliccabili</small></div><button class="explore-controls__exit" data-action="exit" type="button">Torna allo scroll</button></div>
+    controls.innerHTML = `<div class="explore-controls__head"><div><strong>Esplora Nodo8</strong><small>4 mezzi di modello · simulazione non live</small></div><button class="explore-controls__exit" data-action="exit" type="button">Torna al racconto</button></div>
+      <div class="explore-controls__tabs" role="tablist" aria-label="Vista esplorazione"><button id="exploreBusTab" role="tab" aria-selected="true" aria-controls="exploreBusPanel" type="button">Bus in movimento</button><button id="exploreLayersTab" role="tab" aria-selected="false" aria-controls="exploreLayersPanel" tabindex="-1" type="button">Livelli e confronto</button></div>
+      <section id="exploreBusPanel" role="tabpanel" aria-labelledby="exploreBusTab"><p class="explore-bus-intro">Segui B1–B4 lungo lo stesso otto. Alle 07:35 sono tutti impegnati nei giri nominali; in altri momenti il numero cambia con l’orario.</p><button type="button" data-action="four-buses">Vedi i 4 bus · 07:35</button><div id="explorePlayback" data-theme="dark" aria-label="Simulazione dei quattro bus Nodo8"><p role="status">Caricamento del registro nominale…</p></div><p id="explorePlaybackUnavailable" hidden role="status">Attiva il livello Nodo8 in «Livelli e confronto» per vedere i bus.</p></section>
+      <section id="exploreLayersPanel" role="tabpanel" aria-labelledby="exploreLayersTab" hidden>
       <div class="explore-controls__group"><span>Territorio</span><div class="explore-controls__layers"><button data-layer="worldpop" type="button"><i style="--c:#57d7e8"></i>WorldPop 100 m</button><button data-layer="sections" type="button"><i style="--c:#ffb07f"></i>Sezioni ISTAT</button><button data-layer="buildings" type="button"><i style="--c:#55e1bf"></i>Edifici DBGT</button></div></div>
       <div class="explore-controls__group"><span>Accessibilità e ricerca</span><div class="explore-controls__layers"><button data-layer="walk" type="button"><i style="--c:#55e1bf"></i>Cammino</button><button data-layer="roads" type="button"><i style="--c:#57d7e8"></i>Grafo bus</button><button data-layer="candidates" type="button"><i style="--c:#ffd36d"></i>155 candidate</button></div></div>
       <div class="explore-controls__group"><span>Rete · proposta e storia separate</span><div class="explore-controls__layers"><button data-layer="nodo8" class="is-active" type="button"><i style="--c:#55e1bf"></i>Nodo8</button><button data-layer="current" type="button"><i style="--c:#4ca5ff"></i>D184 / D185 · snapshot</button><button data-layer="proposals" type="button"><i style="--c:#57d7e8"></i>Alternative storiche</button><button data-layer="stops" class="is-active" type="button"><i style="--c:#fff"></i>Siti / fermate</button></div></div>
-      <div class="explore-controls__footer"><div class="explore-controls__hint">Trascina, zooma, ruota e clicca su celle, edifici, strade, candidate, linee e fermate.</div><div class="explore-controls__layers"><button data-action="clear" type="button">spegni tutto</button><button data-action="reset" type="button">↺ vista</button></div></div>`;
+      </section><div class="explore-controls__footer"><div class="explore-controls__hint">Trascina, zooma e clicca sulla mappa.</div><div class="explore-controls__layers"><button data-action="clear" type="button">Spegni i livelli</button><button data-action="reset" type="button">↺ Vista</button></div></div>`;
     document.body.appendChild(controls);
+    const tabs = [...controls.querySelectorAll('[role="tab"]')];
+    const chooseTab = (chosen) => {
+      tabs.forEach((tab) => {
+        const selected = tab === chosen;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        document.getElementById(tab.getAttribute("aria-controls")).hidden =
+          !selected;
+      });
+      if (chosen.id !== "exploreBusTab")
+        window.__analysisJourneyNodo8?.pauseExplorer();
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => chooseTab(tab));
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+        event.preventDefault();
+        const next = tabs[1 - index];
+        chooseTab(next);
+        next.focus();
+      });
+    });
+    controls
+      .querySelector('[data-action="four-buses"]')
+      .addEventListener("click", () => {
+        if (!layers.nodo8) {
+          layers.nodo8 = true;
+          render();
+        }
+        window.__analysisJourneyNodo8?.showFourBuses();
+        fit(true);
+      });
     if (document.documentElement.dataset.nodo8Ready === "error") {
+      controls.querySelector('[data-action="four-buses"]').disabled = true;
       controls.querySelector('[data-layer="nodo8"]').disabled = true;
       controls
         .querySelector('[data-layer="nodo8"]')
@@ -492,6 +529,8 @@
       controls.style.pointerEvents = interactive ? "auto" : "none";
       controls.inert = !interactive;
       controls.setAttribute("aria-hidden", String(!interactive));
+      controls.querySelector("#explorePlaybackUnavailable").hidden =
+        layers.nodo8;
       controls.querySelectorAll("[data-layer]").forEach((button) => {
         button.setAttribute(
           "aria-pressed",

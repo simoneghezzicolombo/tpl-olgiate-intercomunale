@@ -5,7 +5,9 @@ import {
   makeNodo8Features,
   validateNodo8,
   NODO8_SCENES,
+  playbackVisible,
 } from "../dietro-l-analisi/journey-nodo8.mjs";
+import { buildLine, statesAt } from "../nodo8-line.mjs";
 
 const data = JSON.parse(
   readFileSync(
@@ -13,6 +15,38 @@ const data = JSON.parse(
     "utf8",
   ),
 );
+
+test("explorer overview has four occupied full-trip carriers at 07:35", () => {
+  const line = buildLine(data);
+  const states = statesAt(line, 455);
+  assert.deepEqual(
+    states.map((s) => s.id),
+    ["B1", "B2", "B3", "B4"],
+  );
+  assert.ok(states.every((s) => s.coordinates && s.trip));
+  states.forEach((s) => {
+    const trip = line.trips.find((t) => t.number === s.trip);
+    assert.equal(trip.events[0].role, "FULL_TRIP_START_FS");
+    assert.equal(trip.events[15].role, "INTERMEDIATE_FS_STAY_ONBOARD_DESIGN");
+    assert.equal(trip.events.at(-1).role, "FULL_TRIP_END_FS");
+  });
+  assert.ok(statesAt(line, line.start).filter((s) => s.coordinates).length < 4);
+});
+
+test("playback hides and pauses outside the active current-proposal context", () => {
+  const state = { scene: "explore", exploring: true, nodo8Visible: true };
+  assert.equal(playbackVisible(state, "explore"), true);
+  for (const changed of [
+    { ...state, scene: "finalists" },
+    { ...state, scene: "nodo8-time" },
+    { ...state, exploring: false },
+    { ...state, nodo8Visible: false },
+    { ...state, nodo8Visible: undefined },
+  ])
+    assert.equal(playbackVisible(changed, "explore"), false);
+  assert.equal(playbackVisible({ scene: "nodo8-time" }, "story"), true);
+  assert.equal(playbackVisible(state, "story"), false);
+});
 test("overlay copies every confirmed road coordinate, not historical anchors", () => {
   const before = JSON.stringify(data);
   const shown = makeNodo8Features(data);

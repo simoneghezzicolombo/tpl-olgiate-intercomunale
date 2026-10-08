@@ -67,6 +67,8 @@
     "nodo8-experience.css",
     "nodo8-experience.mjs",
     "nodo8-line.mjs",
+    "nodo8-player.mjs",
+    "nodo8-polish.css",
     "outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson",
     "styles.css"
   ],

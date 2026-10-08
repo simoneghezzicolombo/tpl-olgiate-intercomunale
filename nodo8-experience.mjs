@@ -1,4 +1,4 @@
-import { statesAt, clockSeconds, diagramStops } from "./nodo8-line.mjs";
+import { diagramStops } from "./nodo8-line.mjs?v=20261008d";
 const ns = "http://www.w3.org/2000/svg";
 const node = (tag, cls, text) => {
   const e = document.createElement(tag);
@@ -41,7 +41,7 @@ export function makeBusMarker(id) {
         "font-size": 11,
         "font-weight": 800,
       },
-      id,
+      "8",
     ),
     svg("circle", { cx: 10, cy: 33, r: 2, fill: "#ffe4a4" }),
     svg("circle", { cx: 24, cy: 33, r: 2, fill: "#ffe4a4" }),
@@ -49,10 +49,13 @@ export function makeBusMarker(id) {
     svg("rect", { x: 22, y: 35, width: 5, height: 5, rx: 2, fill: "#183b32" }),
   );
   e.append(icon);
+  const carrier = node("span", "n8-bus-carrier", id);
+  e.append(carrier);
   return e;
 }
-export function updateBusMarker(element, state) {
+export function updateBusMarker(element, state, { showCarrier = false } = {}) {
   element.dataset.status = state.status;
+  element.classList.toggle("show-carrier", showCarrier);
   element.title =
     state.id +
     " · " +
@@ -61,259 +64,86 @@ export function updateBusMarker(element, state) {
   element.setAttribute("aria-label", element.title);
 }
 
-/* Controls share one nominal event model in both pages. Never advances without Play. */
-export function mountPlayer(
-  container,
-  line,
-  onUpdate,
-  { compact = false, brief = false, visibilityTarget = container } = {},
-) {
-  const prefix = container.id || "n8-player";
-  container.classList.add("n8-player");
-  if (compact) container.classList.add("n8-player--compact");
-  let minute = 455,
-    playing = false,
-    frame = null,
-    previous = null,
-    speed = 30;
-  const title = node("div", "n8-player-title");
-  const heading = node("h3", "", "Una giornata di Nodo8");
-  const badge = node("span", "n8-model-label", "SIMULAZIONE · NON LIVE");
-  title.append(heading, badge);
-  const top = node("div", "n8-player-top"),
-    time = node("output", "n8-clock");
-  time.setAttribute("aria-label", "Ora nel giorno di progetto");
-  const play = node("button", "n8-play", "▶ Riproduci");
-  play.type = "button";
-  const speedLabel = node("label", "n8-speed-label", "Velocità");
-  const speedSelect = node("select");
-  speedSelect.id = prefix + "-speed";
-  speedLabel.htmlFor = speedSelect.id;
-  [30, 120, 300].forEach((s) => {
-    const o = node("option", "", "×" + s);
-    o.value = s;
-    o.selected = s === speed;
-    speedSelect.append(o);
-  });
-  const speedWrap = node("div", "n8-speed");
-  speedWrap.append(speedLabel, speedSelect);
-  top.append(time, play, speedWrap);
-  const rangeLabel = node(
-    "label",
-    "n8-range-label",
-    "Sposta l’orologio del giorno di progetto",
-  );
-  const range = node("input");
-  range.type = "range";
-  range.id = prefix + "-clock";
-  range.min = line.start;
-  range.max = line.end;
-  range.step = "0.001";
-  range.value = minute;
-  rangeLabel.htmlFor = range.id;
-  const limits = node("div", "n8-range-limits");
-  limits.append(
-    node("span", "", "06:05 · prima partenza"),
-    node("span", "", "21:18 · fine recupero nominale"),
-  );
-  const presets = node("div", "n8-presets");
-  const first = line.trips[0];
-  [
-    ["Punta · 07:35", 455],
-    ["Sosta a una fermata", first.events[1].arrival + 0.25],
-    [
-      "Prosecuzione a FS",
-      (first.events[15].arrival + first.events[15].departure) / 2,
-    ],
-  ].forEach(([label, value]) => {
-    const b = node("button", "", label);
-    b.type = "button";
-    b.addEventListener("click", () => {
-      pause();
-      minute = value;
-      render();
+export { mountPlayer } from "./nodo8-player.mjs?v=20261008d";
+
+export function mountRoadPreview(line) {
+  const host = node("div", "n8-road-preview"),
+    drawing = svg("svg", {
+      viewBox: "0 0 600 340",
+      role: "img",
+      "aria-label":
+        "Tracciato stradale reale della proposta, senza sfondo cartografico",
     });
-    presets.append(b);
-  });
-  const tripLabel = node("label", "n8-trip-label", "Segui un giro completo");
-  const select = node("select");
-  select.id = prefix + "-trip";
-  tripLabel.htmlFor = select.id;
-  const any = node("option", "", "Tutti i mezzi in servizio");
-  any.value = "all";
-  select.append(any);
-  line.trips.forEach((t) => {
-    const o = node(
-      "option",
-      "",
-      "Giro " +
-        String(t.number).padStart(2, "0") +
-        " · " +
-        clockSeconds(t.start).slice(0, 5),
-    );
-    o.value = t.number;
-    select.append(o);
-  });
-  const selectWrap = node("div", "n8-trip-select");
-  selectWrap.append(tripLabel, select);
-  const fleet = node("div", "n8-fleet");
-  const cards = new Map(
-    line.vehicles.map((v) => {
-      const card = node("div", "n8-vehicle-card");
-      card.dataset.vehicle = v.id;
-      const id = node("strong", "n8-vehicle-id", v.id),
-        content = node("div"),
-        label = node("span", "n8-vehicle-state"),
-        sub = node("small");
-      content.append(label, sub);
-      card.append(id, content);
-      fleet.append(card);
-      return [v.id, { card, label, sub }];
+  const points = line.coordinates,
+    lat = points.reduce((s, p) => s + p[1], 0) / points.length,
+    factor = Math.cos((lat * Math.PI) / 180);
+  const xs = points.map((p) => p[0] * factor),
+    ys = points.map((p) => p[1]),
+    cx = (Math.min(...xs) + Math.max(...xs)) / 2,
+    cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+  const scale = Math.min(
+    540 / (Math.max(...xs) - Math.min(...xs)),
+    280 / (Math.max(...ys) - Math.min(...ys)),
+  );
+  const project = (p) => [
+    300 + (p[0] * factor - cx) * scale,
+    170 - (p[1] - cy) * scale,
+  ];
+  drawing.append(
+    svg("path", {
+      d: points
+        .map((p, i) => {
+          const [x, y] = project(p);
+          return `${i ? "L" : "M"}${x} ${y}`;
+        })
+        .join(" "),
+      class: "n8-road-line",
     }),
   );
-  const note = node(
-    "p",
-    "n8-playback-note",
-    "Orari nominali e soste dal registro di progetto: 30 s alle fermate, attesa intermedia a FS e 10 min di recupero finale. Tra fermate, posizione interpolata per distanza sul tracciato stradale; velocità, traffico e passeggeri non sono osservati. B1–B4 sono mezzi di modello, non una flotta assegnata.",
-  );
-  const status = node(
-    "p",
-    "n8-player-status",
-    "In pausa. Premi Riproduci oppure sposta l’orologio.",
-  );
-  status.setAttribute("role", "status");
-  container.replaceChildren(
-    title,
-    top,
-    rangeLabel,
-    range,
-    limits,
-    presets,
-    selectWrap,
-    fleet,
-    status,
-    note,
-  );
-  if (brief) {
-    const details = node("details", "n8-player-details"),
-      summary = node(
-        "summary",
-        "",
-        "Mezzi di modello e metodo dell’animazione",
+  line.sites.forEach((s) => {
+    const [x, y] = project(s.coordinates_lon_lat);
+    drawing.append(
+      svg("circle", {
+        cx: x,
+        cy: y,
+        r: s.hub_service_roles.length ? 6 : 3,
+        class: s.proposed_new_site ? "n8-road-new" : "n8-road-stop",
+      }),
+    );
+  });
+  const buses = new Map(
+    line.vehicles.map((v) => {
+      const bus = svg("g", { class: "n8-road-bus", "data-vehicle": v.id });
+      bus.append(
+        svg("rect", { x: -13, y: -17, width: 26, height: 34, rx: 7 }),
+        svg("text", { "text-anchor": "middle", y: 5 }, "8"),
       );
-    details.append(summary, selectWrap, fleet, note);
-    container.append(details);
-  }
-  const pause = () => {
-    playing = false;
-    previous = null;
-    if (frame !== null) cancelAnimationFrame(frame);
-    frame = null;
-    play.textContent = "▶ Riproduci";
-    play.setAttribute("aria-pressed", "false");
-    status.textContent = "In pausa · orario di progetto, non posizione live.";
+      drawing.append(bus);
+      return [v.id, bus];
+    }),
+  );
+  host.append(
+    drawing,
+    node(
+      "p",
+      "n8-road-caption",
+      "Tracciato stradale di progetto · senza basemap · non GPS",
+    ),
+  );
+  return {
+    node: host,
+    update: ({ states, followedTrip }) =>
+      states.forEach((s) => {
+        const bus = buses.get(s.id),
+          visible = s.coordinates && (!followedTrip || s.trip === followedTrip);
+        bus.style.display = visible ? "" : "none";
+        if (visible) {
+          const [x, y] = project(s.coordinates);
+          bus.setAttribute("transform", `translate(${x} ${y})`);
+          bus.dataset.status = s.status;
+        }
+      }),
   };
-  const render = () => {
-    const states = statesAt(line, minute);
-    range.value = minute;
-    range.setAttribute("aria-valuetext", clockSeconds(minute));
-    time.textContent = clockSeconds(minute);
-    container.dataset.playbackTime = minute.toFixed(6);
-    container.dataset.playing = String(playing);
-    states.forEach((s) => {
-      const c = cards.get(s.id);
-      c.card.dataset.status = s.status;
-      c.card.classList.toggle(
-        "is-followed",
-        select.value !== "all" && Number(select.value) === s.trip,
-      );
-      c.label.textContent =
-        (s.status === "stop"
-          ? "Fermata · "
-          : s.status === "fs-hold"
-            ? "Sosta intermedia · "
-            : "") + s.label;
-      c.sub.textContent = s.trip
-        ? "Giro " +
-          s.trip +
-          " · " +
-          (s.status === "moving" ? "arrivo ≈ " : "ripartenza/fine ≈ ") +
-          clockSeconds(s.until)
-        : s.nextTrip
-          ? "Prossimo giro: " +
-            s.nextTrip +
-            " · nessun movimento a vuoto ricostruito"
-          : "Giri assegnati conclusi";
-    });
-    onUpdate({
-      minute,
-      states,
-      followedTrip: select.value === "all" ? null : Number(select.value),
-      playing,
-    });
-  };
-  const tick = (now) => {
-    if (!playing) return;
-    if (previous !== null)
-      minute = Math.min(
-        line.end,
-        minute + (Math.min(now - previous, 1000) / 60000) * speed,
-      );
-    previous = now;
-    if (minute >= line.end) pause();
-    render();
-    if (playing) frame = requestAnimationFrame(tick);
-  };
-  play.setAttribute("aria-pressed", "false");
-  play.addEventListener("click", () => {
-    if (playing) {
-      pause();
-      render();
-      return;
-    }
-    if (minute >= line.end) minute = line.start;
-    playing = true;
-    previous = null;
-    play.textContent = "Ⅱ Pausa";
-    play.setAttribute("aria-pressed", "true");
-    status.textContent =
-      "Riproduzione accelerata ×" + speed + " · nessun dato live.";
-    render();
-    frame = requestAnimationFrame(tick);
-  });
-  range.addEventListener("input", () => {
-    pause();
-    minute = Number(range.value);
-    render();
-  });
-  speedSelect.addEventListener("change", () => {
-    speed = Number(speedSelect.value);
-    previous = null;
-    if (playing)
-      status.textContent =
-        "Riproduzione accelerata ×" + speed + " · nessun dato live.";
-  });
-  select.addEventListener("change", () => {
-    pause();
-    if (select.value !== "all")
-      minute = line.trips[Number(select.value) - 1].start;
-    render();
-  });
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      pause();
-      render();
-    }
-  });
-  if ("IntersectionObserver" in window)
-    new IntersectionObserver((entries) => {
-      if (!entries[0].isIntersecting && playing) {
-        pause();
-        render();
-      }
-    }).observe(visibilityTarget);
-  render();
-  return { pause, render, getMinute: () => minute };
 }
 
 function positions(count, upper) {
@@ -326,11 +156,11 @@ function positions(count, upper) {
     const t = n > 1 ? index / (n - 1) : 0.5;
     const y = upper
       ? outward
-        ? 565 - t * 440
-        : 125 + t * 440
+        ? 460 - t * 345
+        : 115 + t * 345
       : outward
-        ? 785 + t * 440
-        : 1225 - t * 440;
+        ? 685 + t * 345
+        : 1030 - t * 345;
     const inset = Math.abs(t - 0.5) * 160;
     const right = upper ? outward : !outward;
     return { x: right ? 800 - inset : 400 + inset, y, right };
@@ -352,10 +182,11 @@ export function renderDiagram(
   line,
   { localities = false, onSelect } = {},
 ) {
+  if (localities) return renderLocalityDiagram(container, line);
   const entries = diagramStops(line, localities),
     id = container.id;
   const drawing = svg("svg", {
-    viewBox: "0 0 1200 1335",
+    viewBox: "0 0 1200 1150",
     class: "n8-diagram",
     role: onSelect && !localities ? "group" : "img",
     "aria-labelledby": id + "-title " + id + "-description",
@@ -391,7 +222,7 @@ export function renderDiagram(
   [true, false].forEach((upper) => {
     const part = entries.filter((e) => e.ordinal <= 14 === upper),
       points = positions(part.length, upper);
-    const d = [[600, 675], ...points.map((p) => [p.x, p.y]), [600, 675]]
+    const d = [[600, 575], ...points.map((p) => [p.x, p.y]), [600, 575]]
       .map(([x, y], i) => (i ? "L" : "M") + x + " " + y)
       .join(" ");
     drawing.append(
@@ -506,7 +337,7 @@ export function renderDiagram(
   drawing.append(
     svg("rect", {
       x: 411,
-      y: 627,
+      y: 527,
       width: 378,
       height: 95,
       rx: 24,
@@ -514,17 +345,17 @@ export function renderDiagram(
     }),
     svg(
       "text",
-      { x: 600, y: 661, "text-anchor": "middle", class: "n8-diagram-hub-name" },
+      { x: 600, y: 561, "text-anchor": "middle", class: "n8-diagram-hub-name" },
       "Olgiate FS",
     ),
     svg(
       "text",
-      { x: 600, y: 687, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
+      { x: 600, y: 587, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
       "PARTENZA → PASSAGGIO → ARRIVO",
     ),
     svg(
       "text",
-      { x: 600, y: 708, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
+      { x: 600, y: 608, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
       "stesso bus · prosecuzione progettata",
     ),
   );
@@ -541,22 +372,26 @@ export function renderDiagram(
   drawing.append(
     svg(
       "text",
-      { x: 600, y: 1296, "text-anchor": "middle", class: "n8-diagram-caption" },
+      { x: 600, y: 1110, "text-anchor": "middle", class: "n8-diagram-caption" },
       localities
         ? "Raggruppamenti dei siti di progetto · non tutte le frazioni dei cinque comuni"
         : "27 siti distinti · 28 eventi fuori FS · FS ha tre ruoli nel giro",
     ),
     svg(
       "text",
-      { x: 600, y: 1320, "text-anchor": "middle", class: "n8-diagram-caption" },
+      { x: 600, y: 1134, "text-anchor": "middle", class: "n8-diagram-caption" },
       "Schema non geografico · ordine di servizio, non tempi o distanze",
     ),
   );
+  finishDiagram(container, drawing, line, { onSelect, localities: false });
+}
+
+function finishDiagram(container, drawing, line, { onSelect, localities }) {
   const scroll = node("div", "n8-diagram-scroll");
   scroll.tabIndex = 0;
   scroll.setAttribute(
     "aria-label",
-    "Schema scorrevole orizzontalmente su schermi piccoli",
+    "Schema della linea, con ingrandimento disponibile",
   );
   scroll.append(drawing);
   const download = node(
@@ -576,8 +411,9 @@ export function renderDiagram(
         style = svg("style", {}, await response.text());
       copy.insertBefore(style, copy.firstChild);
       copy.setAttribute("xmlns", ns);
-      copy.setAttribute("width", "1200");
-      copy.setAttribute("height", "1335");
+      const [, , width, height] = drawing.getAttribute("viewBox").split(" ");
+      copy.setAttribute("width", width);
+      copy.setAttribute("height", height);
       copy.querySelectorAll("[role=button]").forEach((e) => {
         e.removeAttribute("role");
         e.removeAttribute("tabindex");
@@ -599,5 +435,217 @@ export function renderDiagram(
       download.disabled = false;
     }
   });
-  container.replaceChildren(scroll, download);
+  const tools = node("div", "n8-diagram-tools");
+  const zoom = node("button", "n8-diagram-download", "Ingrandisci lo schema");
+  zoom.type = "button";
+  zoom.setAttribute("aria-pressed", "false");
+  zoom.addEventListener("click", () => {
+    const enlarged = scroll.classList.toggle("is-zoomed");
+    zoom.setAttribute("aria-pressed", String(enlarged));
+    zoom.textContent = enlarged ? "Vista completa" : "Ingrandisci lo schema";
+  });
+  tools.append(zoom, download);
+  const order = node("details", "n8-diagram-order"),
+    summary = node("summary", "", "Leggi la sequenza dei passaggi");
+  order.append(summary);
+  const list = node("ol", "n8-ordered-list");
+  const entries = localities ? diagramStops(line, true) : line.trips[0].events;
+  const addHub = (text) => {
+    const item = node("li", "n8-order-hub", text);
+    list.append(item);
+  };
+  if (localities) addHub("Olgiate FS · partenza");
+  entries.forEach((e, i) => {
+    if (localities && e.ordinal === 15)
+      addHub("Olgiate FS · sosta e prosecuzione, stesso giro");
+    const item = node("li");
+    const label = localities
+      ? `${i + 1}. ${e.display}`
+      : e.ordinal
+        ? `${e.ordinal}. ${diagramStops(line)[e.ordinal - 1].display}`
+        : e.role === "FULL_TRIP_START_FS"
+          ? "Olgiate FS · partenza"
+          : e.role === "FULL_TRIP_END_FS"
+            ? "Olgiate FS · arrivo"
+            : "Olgiate FS · sosta e prosecuzione";
+    if (!e.ordinal) item.className = "n8-order-hub";
+    if (onSelect && e.ordinal) {
+      const b = node("button", "", label);
+      b.type = "button";
+      b.addEventListener("click", () => onSelect(line.sites.get(e.siteId)));
+      item.append(b);
+    } else item.textContent = label;
+    list.append(item);
+  });
+  if (localities) addHub("Olgiate FS · arrivo del giro completo");
+  order.append(list);
+  const narrow = window.matchMedia("(max-width:600px)");
+  order.open = narrow.matches;
+  narrow.addEventListener("change", (e) => {
+    if (e.matches) order.open = true;
+  });
+  container.replaceChildren(scroll, tools, order);
+}
+
+function renderLocalityDiagram(container, line) {
+  const entries = diagramStops(line, true),
+    id = container.id;
+  const drawing = svg("svg", {
+    viewBox: "0 0 1200 820",
+    class: "n8-diagram n8-diagram--localities",
+    role: "img",
+    "aria-labelledby": id + "-title " + id + "-description",
+  });
+  drawing.append(
+    svg(
+      "title",
+      { id: id + "-title" },
+      "Nodo8 · un otto, le località in ordine",
+    ),
+    svg(
+      "desc",
+      { id: id + "-description" },
+      "Un unico giro: Olgiate FS → " +
+        entries
+          .slice(0, 9)
+          .map((e) => e.display)
+          .join(" → ") +
+        " → FS, sosta intermedia → " +
+        entries
+          .slice(9)
+          .map((e) => e.display)
+          .join(" → ") +
+        " → FS. Località e corridoi raggruppati, non tutte le frazioni dei cinque comuni.",
+    ),
+  );
+  drawing.append(
+    svg("text", { x: 62, y: 48, class: "n8-diagram-brand" }, "nodo8"),
+    svg(
+      "text",
+      { x: 1138, y: 44, "text-anchor": "end", class: "n8-diagram-caption" },
+      "LO STESSO GIRO, NELLO STESSO ORDINE",
+    ),
+  );
+  [245, 575].forEach((cy) => {
+    drawing.append(
+      svg("ellipse", {
+        cx: 285,
+        cy,
+        rx: 165,
+        ry: 165,
+        class: "n8-diagram-shadow",
+      }),
+      svg("ellipse", {
+        cx: 285,
+        cy,
+        rx: 165,
+        ry: 165,
+        class: "n8-diagram-line",
+      }),
+    );
+  });
+  entries.forEach((e, i) => {
+    const upper = i < 9,
+      j = upper ? i : i - 9,
+      n = upper ? 9 : 12,
+      t = ((j + 1) / (n + 1)) * Math.PI * 2,
+      x = 285 + (upper ? 1 : -1) * 165 * Math.sin(t),
+      y = (upper ? 245 : 575) + (upper ? 1 : -1) * 165 * Math.cos(t);
+    const g = svg("g", {
+      class: "n8-diagram-stop",
+      "data-occurrence": e.occurrenceId,
+    });
+    g.append(
+      svg(
+        "title",
+        {},
+        `${i + 1}. ${e.display} · eventi ${e.ordinals.join(", ")}`,
+      ),
+      svg("circle", { cx: x, cy: y, r: 16, class: "n8-diagram-dot" }),
+      svg(
+        "text",
+        { x, y: y + 5, "text-anchor": "middle", class: "n8-diagram-number" },
+        i + 1,
+      ),
+    );
+    drawing.append(g);
+    const lx = upper ? 555 : 900,
+      ly = upper ? 160 + j * 58 : 154 + j * 49;
+    drawing.append(
+      svg(
+        "text",
+        { x: lx, y: ly, class: "n8-locality-number" },
+        String(i + 1).padStart(2, "0"),
+      ),
+    );
+    const text = svg("text", { x: lx + 38, y: ly, class: "n8-diagram-name" });
+    wrapLabel(e.display).forEach((s, k) =>
+      text.append(svg("tspan", { x: lx + 38, dy: k ? 20 : 0 }, s)),
+    );
+    drawing.append(text);
+  });
+  drawing.append(
+    svg("rect", {
+      x: 169,
+      y: 366,
+      width: 232,
+      height: 88,
+      rx: 20,
+      class: "n8-diagram-hub",
+    }),
+    svg(
+      "text",
+      { x: 285, y: 402, "text-anchor": "middle", class: "n8-diagram-hub-name" },
+      "Olgiate FS",
+    ),
+    svg(
+      "text",
+      { x: 285, y: 428, "text-anchor": "middle", class: "n8-diagram-hub-sub" },
+      "UN BUS · UN GIRO COMPLETO",
+    ),
+  );
+  drawing.append(
+    svg(
+      "text",
+      { x: 555, y: 107, class: "n8-locality-heading" },
+      "Si parte da FS",
+    ),
+    svg(
+      "text",
+      { x: 900, y: 107, class: "n8-locality-heading" },
+      "Dopo la sosta a FS",
+    ),
+    svg(
+      "text",
+      { x: 555, y: 728, class: "n8-locality-heading" },
+      "→ FS · si prosegue",
+    ),
+    svg(
+      "text",
+      { x: 900, y: 760, class: "n8-locality-heading" },
+      "→ FS · arrivo",
+    ),
+  );
+  [
+    [450, 245, -90],
+    [120, 245, 90],
+    [120, 575, 90],
+    [450, 575, -90],
+  ].forEach(([x, y, a]) =>
+    drawing.append(
+      svg("path", {
+        d: "M-8 -7 L2 0 L-8 7",
+        transform: `translate(${x} ${y}) rotate(${a})`,
+        class: "n8-diagram-arrow",
+      }),
+    ),
+  );
+  drawing.append(
+    svg(
+      "text",
+      { x: 600, y: 795, "text-anchor": "middle", class: "n8-diagram-caption" },
+      "Schema non geografico · 21 passaggi raggruppati · le ripetizioni non sono fermate in più",
+    ),
+  );
+  finishDiagram(container, drawing, line, { localities: true });
 }

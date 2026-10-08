@@ -76,6 +76,41 @@ def test_public_schematics_and_animation_are_one_line_not_wing_services():
     assert "FS → est" not in html and "FS intermedia → ovest" not in html
 
 
+def test_review_adds_complete_mobile_navigation_search_and_explorer_tabs():
+    html=(ROOT / "index.html").read_text(encoding="utf-8")
+    for identifier in ("menuToggle", "siteNavigation", "simulationTab", "registerTab", "stopSearch", "stopSearchCount"):
+        assert f'id="{identifier}"' in html
+    app=(ROOT / "app.js").read_text(encoding="utf-8")
+    assert "Visualizza il giro" in app and "activePlayer.selectTrip" in app
+    assert "window.matchMedia" in app and "Escape" in app
+
+
+def test_single_trip_slider_can_reach_exact_ledger_arrival():
+    player=(ROOT / "nodo8-player.mjs").read_text(encoding="utf-8")
+    assert 'range.step = "any"' in player
+    assert "playbackWindow(line, selection)" in player
+    assert 'initialSelection = "1"' in player
+
+
+def test_story_controls_remain_in_flow_and_have_certified_svg_fallback():
+    module = ROOT / "dietro-l-analisi/journey-nodo8.mjs"
+    js=module.read_text(encoding="utf-8")
+    assert 'querySelector("#orario-nodo8 .copy").append(playbackContainer)' in js
+    assert "mountRoadPreview" in js and "validatedLine" in js
+    assert 'dataset.nodo8PlaybackReady = "fallback"' in js
+    assert 'classList.toggle("nodo8-playing"' not in js
+
+
+def test_explorer_uses_same_ledger_player_with_four_carrier_overview():
+    module = (ROOT / "dietro-l-analisi/journey-nodo8.mjs").read_text(encoding="utf-8")
+    controls = (ROOT / "dietro-l-analisi/journey-explore-v2.js").read_text(encoding="utf-8")
+    assert 'initialSelection: "all"' in module and "initialMinute: 455" in module
+    assert 'contextVisible("explore")' in module and "explorerPlayer.pause()" in module
+    assert 'id="explorePlayback"' in controls and 'role="tablist"' in controls
+    assert "Bus in movimento" in controls and "Livelli e confronto" in controls
+    assert "showFourBuses" in controls
+
+
 def test_timetable_is_copied_not_synthesised():
     data, design = builder.build_data(), read_source("design")
     assert len(data["trips"]) == 16

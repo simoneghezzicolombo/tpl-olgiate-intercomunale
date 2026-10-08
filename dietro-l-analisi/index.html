@@ -15,8 +15,8 @@
     <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin />
     <link rel="stylesheet" href="vendor/maplibre/maplibre-gl.css" />
     <link rel="stylesheet" href="journey.css" />
-    <link rel="stylesheet" href="journey-nodo8.css?v=20261008b" />
-    <link rel="stylesheet" href="../nodo8-experience.css?v=20261008b" />
+    <link rel="stylesheet" href="journey-nodo8.css?v=20261008d" />
+    <link rel="stylesheet" href="../nodo8-experience.css?v=20261008d" />
   </head>
   <body>
     <div id="loader" class="loader" aria-live="polite">
@@ -43,6 +43,10 @@
       <a class="topbar__cta" href="../index.html"
         >La proposta Nodo8 <span>↗</span></a
       >
+      <details id="journeyContents" class="journey-contents">
+        <summary>Capitoli</summary>
+        <nav id="journeyContentsList" aria-label="Indice del racconto"></nav>
+      </details>
     </header>
 
     <div class="progress" aria-hidden="true">
@@ -484,6 +488,6 @@
     <script src="vendor/pako/pako.min.js"></script>
     <script src="legacy-geo-data.js"></script>
     <script src="journey-data.js"></script>
-    <script type="module" src="journey-bootstrap.mjs?v=20261008c"></script>
+    <script type="module" src="journey-bootstrap.mjs?v=20261008d"></script>
   </body>
 </html>

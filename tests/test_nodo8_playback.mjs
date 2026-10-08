@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
+  playbackWindow,
+  adjacentEvent,
   buildLine,
   statesAt,
   vehicleState,
@@ -214,4 +216,28 @@ test("every minute in the complete design day has a well-defined state", () => {
       if (s.coordinates) assert.ok(s.coordinates.every(Number.isFinite));
     });
   }
+});
+test("single-trip view stops at passenger arrival, day view keeps certified recovery", () => {
+  const first = playbackWindow(line, "1"),
+    last = playbackWindow(line, "16"),
+    day = playbackWindow(line, "all");
+  assert.equal(first.start, line.trips[0].start);
+  assert.equal(first.end, line.trips[0].end);
+  assert.equal(last.end, line.trips[15].end);
+  assert.equal(day.end, last.end + 10);
+  assert.equal(day.trip, null);
+  assert.throws(() => playbackWindow(line, "17"));
+});
+test("event stepping preserves FS role and repeated-stop occurrence order", () => {
+  const events = line.trips[0].events;
+  assert.equal(
+    adjacentEvent(line, "1", events[14].arrival, 1).role,
+    "INTERMEDIATE_FS_STAY_ONBOARD_DESIGN",
+  );
+  assert.equal(adjacentEvent(line, "1", events[15].arrival, 1).ordinal, 15);
+  assert.equal(adjacentEvent(line, "1", events[15].arrival, -1).ordinal, 14);
+  assert.equal(
+    adjacentEvent(line, "1", events.at(-1).arrival, 1).role,
+    "FULL_TRIP_END_FS",
+  );
 });

@@ -1,24 +1,27 @@
 (() => {
-  'use strict';
+  "use strict";
 
-  const mapEl = document.getElementById('map');
+  const mapEl = document.getElementById("map");
   if (mapEl) {
-    mapEl.removeAttribute('aria-hidden');
-    mapEl.setAttribute('aria-label', 'Mappa del processo storico e della proposta Nodo8, con livelli distinti');
+    mapEl.removeAttribute("aria-hidden");
+    mapEl.setAttribute(
+      "aria-label",
+      "Mappa del processo storico e della proposta Nodo8, con livelli distinti",
+    );
   }
 
-  const main = document.querySelector('main');
+  const main = document.querySelector("main");
   if (main && !document.querySelector('[data-scene="explore"]')) {
-    const section = document.createElement('section');
-    section.id = 'esplora-mappa';
-    section.className = 'chapter explore-chapter';
-    section.dataset.scene = 'explore';
-    section.dataset.label = 'Esplora';
+    const section = document.createElement("section");
+    section.id = "esplora-mappa";
+    section.className = "chapter explore-chapter";
+    section.dataset.scene = "explore";
+    section.dataset.label = "Esplora";
     section.innerHTML = `
       <div class="copy copy--explore">
         <p class="eyebrow">13 · Adesso tocca a te</p>
         <h2>Ora puoi <em>esplorare la mappa liberamente.</em></h2>
-        <p>Esplora Nodo8 e i suoi 27 siti, oppure riaccendi i livelli del processo storico: popolazione, ISTAT, edifici, cammini, grafo, candidate e D184/D185. Le quattro alternative precedenti sono un livello separato, spento all’inizio. I dati storici non certificano guadagni di copertura della nuova proposta.</p>
+        <p>Segui i quattro bus di modello nell’orario di Nodo8: percorrono lo stesso otto, con le fermate e le soste a FS. Puoi scegliere l’ora, riprodurre la giornata oppure seguire un giro completo. È una simulazione nominale, non GPS live.</p><p>In «Livelli e confronto» puoi riaccendere popolazione, ISTAT, edifici, cammini, grafo, candidate e D184/D185. Le alternative precedenti sono separate e spente all’inizio: i dati storici non certificano guadagni di copertura della nuova proposta.</p>
         <div class="explore-key" aria-label="Legenda mappa esplorabile">
           <span><i class="explore-key__dot explore-key__dot--population"></i>popolazione</span>
           <span><i class="explore-key__dot explore-key__dot--walk"></i>tempi a piedi</span>
@@ -35,8 +38,8 @@
     main.appendChild(section);
   }
 
-  const style = document.createElement('style');
-  style.dataset.journeyExplore = 'prelude';
+  const style = document.createElement("style");
+  style.dataset.journeyExplore = "prelude";
   style.textContent = `
     .explore-chapter{min-height:135vh;align-items:flex-start;padding-top:16vh;padding-bottom:24vh}
     .copy--explore{width:min(500px,40vw);background:linear-gradient(145deg,rgba(6,18,28,.89),rgba(6,18,28,.56));box-shadow:0 28px 90px rgba(0,0,0,.34);transition:opacity .32s,transform .32s,visibility .32s}
