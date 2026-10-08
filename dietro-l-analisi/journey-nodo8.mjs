@@ -1,4 +1,10 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
+import { buildLine } from "../nodo8-line.mjs";
+import {
+  mountPlayer,
+  makeBusMarker,
+  updateBusMarker,
+} from "../nodo8-experience.mjs";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 export function validateNodo8(data) {
@@ -53,7 +59,7 @@ export function makeNodo8Features(data) {
   };
 }
 
-const colour = ["match", ["get", "wing"], "east_A", "#e77652", "#55e1bf"];
+const colour = "#55e1bf";
 const historicalLayers = [
   "final16",
   "final16-glow",
@@ -104,6 +110,7 @@ async function installNodo8() {
     const response = await fetch("../assets/nodo8-proposal.json");
     if (!response.ok) throw new Error("Nodo8 data HTTP " + response.status);
     const data = validateNodo8(await response.json());
+    const line = buildLine(data);
     const features = makeNodo8Features(data);
     const map = await waitForMap();
     map.addSource("nodo8-routes", { type: "geojson", data: features.routes });
@@ -177,12 +184,18 @@ async function installNodo8() {
               left: 35,
             }
           : innerWidth < 800
-            ? { top: 90, right: 30, bottom: 100, left: 30 }
+            ? {
+                top: 90,
+                right: 30,
+                bottom:
+                  document.body.dataset.scene === "nodo8-time" ? 340 : 100,
+                left: 30,
+              }
             : {
                 top: 100,
                 right: 70,
-                bottom: 80,
-              left: Math.min(680, innerWidth * 0.5),
+                bottom: document.body.dataset.scene === "nodo8-time" ? 300 : 80,
+                left: Math.min(680, innerWidth * 0.5),
               },
         maxZoom: 13.2,
         pitch: 35,
@@ -224,8 +237,7 @@ async function installNodo8() {
       site.ordered_occurrences.forEach((event) => {
         const line = document.createElement("p");
         line.textContent =
-          (event.wing === "east_A" ? "Est" : "Ovest") +
-          " · evento " +
+          "Nodo8 · evento " +
           event.ordered_nonhub_event_number +
           ": FS → evento " +
           number(event.nominal_fs_to_occurrence_in_vehicle_min) +
@@ -250,12 +262,45 @@ async function installNodo8() {
       popup = new window.maplibregl.Popup({ maxWidth: "320px" })
         .setLngLat(lngLat)
         .setText(
-          "Nodo8: un unico percorso a otto di 27,124 km, 16 giri completi. Colori diversi per le ali, non due linee. Geometria di progetto, non autorizzazione stradale.",
+          "Nodo8: un unico percorso a otto di 27,124 km, 16 giri completi. Stesso percorso e stesso mezzo di modello per tutta la corsa. Geometria di progetto, non autorizzazione stradale.",
         )
         .addTo(map);
     };
+    const playbackContainer = document.getElementById("journeyPlayback");
+    const markers = new Map();
+    const updateBuses = ({ states, followedTrip, playing }) => {
+      const active = playing && document.body.dataset.scene === "nodo8-time";
+      if (document.body.classList.contains("nodo8-playing") !== active)
+        document.body.classList.toggle("nodo8-playing", active);
+      states.forEach((s) => {
+        const visible =
+          document.body.dataset.scene === "nodo8-time" &&
+          s.coordinates &&
+          (!followedTrip || s.trip === followedTrip);
+        if (!markers.has(s.id)) {
+          const icon = makeBusMarker(s.id);
+          const marker = new window.maplibregl.Marker({
+            element: icon,
+            anchor: "center",
+          });
+          markers.set(s.id, { marker, icon });
+        }
+        const { marker, icon } = markers.get(s.id);
+        if (visible) {
+          marker.setLngLat(s.coordinates).addTo(map);
+          updateBusMarker(icon, s);
+        } else marker.remove();
+      });
+    };
+    const player = mountPlayer(playbackContainer, line, updateBuses, {
+      compact: true,
+      brief: true,
+    });
     const renderScene = () => {
       const scene = document.body.dataset.scene;
+      playbackContainer.hidden = scene !== "nodo8-time";
+      if (scene !== "nodo8-time") player.pause();
+      player.render();
       if (scene === "explore") {
         const explore = window.__analysisJourneyExplore;
         renderExplorer({
@@ -290,6 +335,9 @@ async function installNodo8() {
       attributeFilter: ["data-scene", "class"],
     });
     document.addEventListener("journey-explore-ready", renderScene);
+    window.addEventListener("resize", () => {
+      if (NODO8_SCENES.includes(document.body.dataset.scene)) fit();
+    });
     setStatus(
       "Dati Nodo8 caricati · base confermata, non esercizio autorizzato.",
     );

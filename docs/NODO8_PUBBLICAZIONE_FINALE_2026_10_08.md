@@ -35,3 +35,14 @@ La configurazione segue il [workflow personalizzato di GitHub Pages](https://doc
 Il manifest pubblico elenca i file effettivamente distribuiti e la revisione
 del workflow. La pubblicazione non cambia percorso, fermate, orario, calendario,
 autorità di selezione o stato di autorizzazione del servizio.
+
+## Riscontro della pubblicazione
+
+Deploy [37746851146](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/37746851146)
+riuscito, revisione `c5cd3da2f4416d7c4fa22a87c51e0210dcf8b66c`.
+Vetrina, scrollytelling e manifest pubblico rispondono 200.
+La vecchia mappa e il vecchio `geo-data.js` alla radice rispondono 404.
+La mappa ritirata è ancora nel ramo `gh-pages`, con lo stesso blob Git.
+Verificati anche nel browser 27 siti, 16 giri e 13 capitoli con Nodo8 caricata.
+Il [riscontro macchina](../config/nodo8_pages_publication_result_20261008.json)
+registra controlli, revisioni e assenza di eliminazioni.

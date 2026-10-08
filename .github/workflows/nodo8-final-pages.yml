@@ -7,6 +7,9 @@ on:
       - index.html
       - styles.css
       - app.js
+      - nodo8-*.mjs
+      - nodo8-experience.css
+      - tests/test_nodo8_playback.mjs
       - assets/nodo8-proposal.json
       - dietro-l-analisi/**
       - config/nodo8_publication_allowlist.json
@@ -33,7 +36,7 @@ jobs:
       - name: Verify publication boundary
         run: python -m unittest discover -s tests -p test_nodo8_publication.py -v
       - name: Verify current route projection
-        run: node --test tests/test_nodo8_journey.mjs
+        run: node --test tests/test_nodo8_journey.mjs tests/test_nodo8_playback.mjs
       - name: Build only final-site dependencies
         run: python scripts/build_nodo8_publication.py --output _site --revision "${{ github.sha }}"
       - uses: actions/upload-pages-artifact@v4

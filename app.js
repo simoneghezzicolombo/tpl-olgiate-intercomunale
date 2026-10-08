@@ -1,5 +1,12 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
+import { buildLine } from "./nodo8-line.mjs";
+import {
+  mountPlayer,
+  renderDiagram,
+  makeBusMarker,
+  updateBusMarker,
+} from "./nodo8-experience.mjs";
 const formatNumber = (value, decimals = 2) =>
   new Intl.NumberFormat("it-IT", {
     minimumFractionDigits: decimals,
@@ -13,7 +20,6 @@ const clock = (minutes) => {
     String(whole % 60).padStart(2, "0")
   );
 };
-const wingLabel = (wing) => (wing === "east_A" ? "Ala est" : "Ala ovest");
 const element = (tag, className, text) => {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -148,16 +154,14 @@ function showSite(site) {
         element(
           "strong",
           "",
-          wingLabel(occurrence.wing) +
-            " · evento " +
-            occurrence.ordered_nonhub_event_number,
+          "Nodo8 · evento " + occurrence.ordered_nonhub_event_number,
         ),
       );
       card.append(
         element(
           "p",
           "",
-          "FS → questo evento: " +
+          "Dall’ultima FS → questo evento: " +
             formatNumber(
               occurrence.nominal_fs_to_occurrence_in_vehicle_min,
               1,
@@ -224,7 +228,7 @@ function renderFallbackMap(data, onSelect) {
       svgNode("path", {
         d: path,
         fill: "none",
-        stroke: route.wing === "east_A" ? "#e77652" : "#163d33",
+        stroke: "#163d33",
         "stroke-width": 3,
         "stroke-linejoin": "round",
       }),
@@ -268,7 +272,33 @@ function renderFallbackMap(data, onSelect) {
         "Geometria reale · sfondo cartografico non disponibile",
       ),
     );
-  return { focus: onSelect, reset: () => {} };
+  const buses = new Map();
+  return {
+    focus: onSelect,
+    reset: () => {},
+    updateBuses: ({ states, followedTrip }) => {
+      states.forEach((s) => {
+        let g = buses.get(s.id);
+        if (!g) {
+          g = svgNode("g", {});
+          const icon = makeBusMarker(s.id);
+          g.append(icon.querySelector("svg"));
+          svg.append(g);
+          buses.set(s.id, g);
+        }
+        g.style.display =
+          s.coordinates && (!followedTrip || s.trip === followedTrip)
+            ? ""
+            : "none";
+        if (s.coordinates) {
+          const [x, y] = project(s.coordinates);
+          g.setAttribute("transform", `translate(${x - 17} ${y - 21})`);
+        }
+        g.setAttribute("class", "n8-bus");
+        updateBusMarker(g, s);
+      });
+    },
+  };
 }
 function createMap(data) {
   if (!window.L) return renderFallbackMap(data, showSite);
@@ -284,7 +314,7 @@ function createMap(data) {
     L.polyline(
       route.coordinates.map(([lon, lat]) => [lat, lon]),
       {
-        color: route.wing === "east_A" ? "#c75f3f" : "#163d33",
+        color: "#163d33",
         weight: 4,
         opacity: 0.95,
       },
@@ -321,12 +351,41 @@ function createMap(data) {
   const reset = () =>
     map.fitBounds(bounds, { padding: [25, 25], animate: false });
   reset();
+  const busMarkers = new Map();
   if ("ResizeObserver" in window)
     new ResizeObserver(() => {
       map.invalidateSize();
+      reset();
     }).observe(container);
   return {
     reset,
+    updateBuses: ({ states, followedTrip }) => {
+      states.forEach((s) => {
+        if (!busMarkers.has(s.id)) {
+          const icon = makeBusMarker(s.id);
+          const marker = L.marker([0, 0], {
+            icon: L.divIcon({
+              html: icon,
+              className: "n8-bus-icon",
+              iconSize: [34, 42],
+              iconAnchor: [17, 21],
+            }),
+            keyboard: false,
+            zIndexOffset: 1000,
+          });
+          busMarkers.set(s.id, { marker, icon });
+        }
+        const { marker, icon } = busMarkers.get(s.id);
+        const visible =
+          s.coordinates && (!followedTrip || s.trip === followedTrip);
+        if (visible) {
+          marker.setLatLng([s.coordinates[1], s.coordinates[0]]);
+          if (!map.hasLayer(marker)) marker.addTo(map);
+          updateBusMarker(icon, s);
+          icon.classList.toggle("is-followed", followedTrip === s.trip);
+        } else if (map.hasLayer(marker)) map.removeLayer(marker);
+      });
+    },
     focus: (site) => {
       showSite(site);
       const marker = markers.get(site.site_id);
@@ -338,13 +397,10 @@ function createMap(data) {
   };
 }
 function renderStops(data, map) {
-  const wing = document.querySelector('[data-wing][aria-pressed="true"]')
-    .dataset.wing;
+  const filter = document.querySelector('[data-stops][aria-pressed="true"]')
+    .dataset.stops;
   const sites = data.sites.filter(
-    (site) =>
-      wing === "all" ||
-      site.hub_service_roles.length ||
-      site.ordered_occurrences.some((occurrence) => occurrence.wing === wing),
+    (site) => filter === "all" || site.proposed_new_site,
   );
   const list = document.getElementById("stopList");
   list.replaceChildren();
@@ -395,6 +451,73 @@ async function initProposal() {
     renderCoverage(data);
     const map = createMap(data);
     renderStops(data, map);
+    const line = buildLine(data);
+    mountPlayer(
+      document.getElementById("routePlayback"),
+      line,
+      (state) => {
+        map.updateBuses(state);
+        document.getElementById("mapPlaybackClock").textContent =
+          document.querySelector("#routePlayback .n8-clock").textContent;
+        const play = document.getElementById("mapPlaybackPlay");
+        play.textContent = state.playing ? "Ⅱ Pausa" : "▶ Riproduci";
+        play.setAttribute("aria-pressed", String(state.playing));
+      },
+      {
+        compact: true,
+        visibilityTarget: document.querySelector(".route-explorer"),
+      },
+    );
+    document
+      .getElementById("mapPlaybackPlay")
+      .addEventListener("click", () =>
+        document.querySelector("#routePlayback .n8-play").click(),
+      );
+    document
+      .getElementById("mapPlaybackStop")
+      .addEventListener("click", () =>
+        document
+          .querySelector("#routePlayback .n8-presets button:nth-child(2)")
+          .click(),
+      );
+    renderDiagram(document.getElementById("stopsDiagram"), line, {
+      onSelect: (site) => {
+        document
+          .getElementById("percorso")
+          .scrollIntoView({ behavior: "instant", block: "start" });
+        map.focus(site);
+      },
+    });
+    renderDiagram(document.getElementById("localitiesDiagram"), line, {
+      localities: true,
+    });
+    const tabs = [...document.querySelectorAll('.diagram-tabs [role="tab"]')];
+    const selectTab = (tab) =>
+      tabs.forEach((t) => {
+        const active = t === tab;
+        t.setAttribute("aria-selected", String(active));
+        t.tabIndex = active ? 0 : -1;
+        document.getElementById(t.getAttribute("aria-controls")).hidden =
+          !active;
+      });
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => selectTab(tab));
+      tab.addEventListener("keydown", (e) => {
+        if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) {
+          e.preventDefault();
+          const next =
+            tabs[
+              e.key === "Home"
+                ? 0
+                : e.key === "End"
+                  ? tabs.length - 1
+                  : (i + 1) % tabs.length
+            ];
+          selectTab(next);
+          next.focus();
+        }
+      });
+    });
     document.getElementById("resetMap").addEventListener("click", map.reset);
     document
       .getElementById("scheduleFilter")
@@ -402,9 +525,9 @@ async function initProposal() {
     document
       .getElementById("coverageTime")
       .addEventListener("change", () => renderCoverage(data));
-    document.querySelectorAll("[data-wing]").forEach((button) =>
+    document.querySelectorAll("[data-stops]").forEach((button) =>
       button.addEventListener("click", () => {
-        document.querySelectorAll("[data-wing]").forEach((other) => {
+        document.querySelectorAll("[data-stops]").forEach((other) => {
           const active = button === other;
           other.classList.toggle("active", active);
           other.setAttribute("aria-pressed", String(active));
@@ -452,11 +575,22 @@ async function initProposal() {
       );
     document
       .querySelectorAll(
-        "#coverageTime, #scheduleFilter, #resetMap, [data-wing]",
+        "#coverageTime, #scheduleFilter, #resetMap, [data-stops], .diagram-tabs button, .map-playback-bar button",
       )
       .forEach((control) => {
         control.disabled = true;
       });
+    ["routePlayback", "stopsDiagram", "localitiesDiagram"].forEach((id) => {
+      document
+        .getElementById(id)
+        .replaceChildren(
+          element(
+            "p",
+            "notice",
+            "Visualizzazione non disponibile: nessuna sequenza o simulazione sostitutiva viene inventata.",
+          ),
+        );
+    });
   }
 }
 initScroll();

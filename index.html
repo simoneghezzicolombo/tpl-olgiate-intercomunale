@@ -21,14 +21,15 @@
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
-    <link rel="stylesheet" href="styles.css?v=20261008" />
+    <link rel="stylesheet" href="styles.css?v=20261008b" />
+    <link rel="stylesheet" href="nodo8-experience.css?v=20261008b" />
     <script
       defer
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
-    <script defer src="app.js?v=20261008"></script>
+    <script type="module" src="app.js?v=20261008b"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Salta al contenuto</a>
@@ -38,8 +39,9 @@
       ></a>
       <nav aria-label="Navigazione principale">
         <a href="#idea">L’idea</a><a href="#percorso">Il percorso</a
-        ><a href="#orario">L’orario</a><a href="#impatto">L’impatto</a>
-        <a href="dietro-l-analisi/">Il processo</a>
+        ><a href="#schemi">Gli schemi</a><a href="#orario">L’orario</a
+        ><a href="#impatto">L’impatto</a>
+        <a class="process-link" href="dietro-l-analisi/">Il processo</a>
       </nav>
       <a class="header-cta" href="#proposta"
         >La proposta <span aria-hidden="true">↗</span></a
@@ -79,7 +81,7 @@
         </div>
         <div
           class="hero-art"
-          aria-label="Identità grafica: due ali, un unico percorso a otto"
+          aria-label="Identità grafica: un unico percorso a otto"
         >
           <div class="art-top"><span>IL TERRITORIO, INSIEME.</span></div>
           <svg class="brand-route" viewBox="0 0 540 560" aria-hidden="true">
@@ -146,7 +148,7 @@
           </svg>
           <div class="hub-tag">OLGIATE FS <span>il nodo comune</span></div>
           <div class="art-bottom">
-            <span>Due ali. Stessa linea.</span
+            <span>Un giro. Cinque comuni.</span
             ><span>Schema di identità,<br />non cartografia.</span>
           </div>
         </div>
@@ -202,8 +204,8 @@
             <span class="benefit-number">02</span>
             <h3>Un percorso da ricordare.</h3>
             <p>
-              Ogni corsa percorre tutto l’otto. Est e ovest sono due parti della
-              stessa linea, non due servizi da decifrare.
+              Ogni corsa percorre tutto l’otto, con lo stesso bus e lo stesso
+              ordine di fermate. Un solo percorso da imparare.
             </p>
           </article>
           <article>
@@ -242,7 +244,7 @@
               </h2>
             </div>
             <p>
-              Stazione → ala est → stazione → ala ovest → stazione.
+              Stazione → primo anello → stazione → secondo anello → stazione.
               <strong
                 >Lo stesso percorso completo, per ognuno dei 16 giri.</strong
               >
@@ -279,38 +281,61 @@
                 <p class="map-loading">Caricamento del tracciato confermato…</p>
               </div>
               <div class="map-legend">
-                <span><i class="legend-line east"></i>Ala est</span
-                ><span><i class="legend-line west"></i>Ala ovest</span
+                <span><i class="legend-line west"></i>Nodo8 · linea unica</span
                 ><span><i class="legend-stop"></i>Sito da inventario</span
                 ><span><i class="legend-stop new"></i>Sito nuovo proposto</span>
               </div>
+              <div
+                class="map-playback-bar"
+                aria-label="Comandi rapidi per i bus sulla mappa"
+              >
+                <output id="mapPlaybackClock" aria-label="Ora simulata"
+                  >07:35:00</output
+                >
+                <button id="mapPlaybackPlay" type="button" aria-pressed="false">
+                  ▶ Riproduci
+                </button>
+                <button id="mapPlaybackStop" type="button">Sosta</button>
+                <span>Simulazione, non live</span>
+              </div>
             </div>
             <aside class="stop-panel" aria-labelledby="stopTitle">
-              <div class="stop-panel-heading">
-                <h3 id="stopTitle">Dove si fermerebbe</h3>
-                <p>Seleziona un sito sulla mappa o nell’elenco.</p>
-              </div>
               <div
-                class="segmented"
-                role="group"
-                aria-label="Filtra le fermate"
+                id="routePlayback"
+                class="route-playback"
+                aria-label="Ricostruzione nominale dei bus sul percorso"
               >
-                <button
-                  class="active"
-                  type="button"
-                  data-wing="all"
-                  aria-pressed="true"
-                >
-                  Tutte</button
-                ><button type="button" data-wing="east_A" aria-pressed="false">
-                  Est</button
-                ><button type="button" data-wing="west_B" aria-pressed="false">
-                  Ovest
-                </button>
+                <p>Caricamento del registro orario e dei mezzi di modello…</p>
               </div>
-              <ol id="stopList" class="stop-list">
-                <li>Elenco disponibile al caricamento dei dati.</li>
-              </ol>
+              <details class="stop-register">
+                <summary>Esplora tutti i 27 siti di fermata</summary>
+                <div class="stop-panel-heading">
+                  <h3 id="stopTitle">Dove si fermerebbe</h3>
+                  <p>
+                    27 siti lungo una sola linea. Seleziona un punto per i
+                    dettagli.
+                  </p>
+                </div>
+                <div
+                  class="segmented"
+                  role="group"
+                  aria-label="Filtra le fermate"
+                >
+                  <button
+                    class="active"
+                    type="button"
+                    data-stops="all"
+                    aria-pressed="true"
+                  >
+                    Tutti i siti</button
+                  ><button type="button" data-stops="new" aria-pressed="false">
+                    I 4 nuovi
+                  </button>
+                </div>
+                <ol id="stopList" class="stop-list">
+                  <li>Elenco disponibile al caricamento dei dati.</li>
+                </ol>
+              </details>
             </aside>
           </div>
           <div id="stopDetail" class="stop-detail" aria-live="polite">
@@ -343,6 +368,82 @@
         </div>
       </section>
       <section
+        class="section-shell diagram-section"
+        id="schemi"
+        aria-labelledby="diagramTitle"
+      >
+        <div class="section-heading">
+          <p class="eyebrow">IL PERCORSO, A COLPO D’OCCHIO</p>
+          <h2 id="diagramTitle">
+            Un otto da imparare.<br /><span>Un territorio da collegare.</span>
+          </h2>
+        </div>
+        <div class="diagram-intro">
+          <p>
+            La stessa linea in due letture: tutte le fermate, come su una mappa
+            metropolitana; oppure le località incontrate, nello stesso ordine
+            del giro.
+          </p>
+          <p>
+            Si parte da FS, si percorre il primo anello, si ripassa a FS e si
+            prosegue sul secondo. Non si cambia linea. La permanenza a bordo è
+            prevista dal progetto e deve essere autorizzata.
+          </p>
+        </div>
+        <div
+          class="diagram-tabs"
+          role="tablist"
+          aria-label="Scegli lo schema della linea"
+        >
+          <button
+            id="stopsTab"
+            role="tab"
+            aria-controls="stopsDiagramPanel"
+            aria-selected="true"
+            type="button"
+          >
+            Schema metropolitana · fermate
+          </button>
+          <button
+            id="localitiesTab"
+            role="tab"
+            aria-controls="localitiesDiagramPanel"
+            aria-selected="false"
+            tabindex="-1"
+            type="button"
+          >
+            L’otto delle località
+          </button>
+        </div>
+        <div id="stopsDiagramPanel" role="tabpanel" aria-labelledby="stopsTab">
+          <p class="diagram-hint">
+            28 eventi fuori FS, in ordine; 27 siti distinti inclusa la stazione.
+            Seleziona una fermata per ritrovarla sulla mappa. Su telefono,
+            scorri lo schema lateralmente.
+          </p>
+          <div id="stopsDiagram"><p>Caricamento dello schema…</p></div>
+        </div>
+        <div
+          id="localitiesDiagramPanel"
+          role="tabpanel"
+          aria-labelledby="localitiesTab"
+          hidden
+        >
+          <p class="diagram-hint">
+            Località e corridoi delle fermate di progetto: non è una promessa di
+            servire tutte le frazioni. Le ripetizioni indicano il secondo
+            passaggio, non una seconda linea.
+          </p>
+          <div id="localitiesDiagram"><p>Caricamento dello schema…</p></div>
+        </div>
+        <div class="diagram-next">
+          <a class="text-link" href="#orario">Ora guarda quando passa ↓</a
+          ><a class="text-link" href="dietro-l-analisi/#nodo8"
+            >Come siamo arrivati a questo giro ↗</a
+          >
+        </div>
+      </section>
+      <section
         class="section-shell story-section"
         id="orario"
         aria-labelledby="scheduleTitle"
@@ -366,20 +467,21 @@
               Il sabato resta da valutare separatamente.
             </p>
             <p>
-              Le punte est e ovest sono <strong>sfalsate</strong>, perché il bus
-              percorre prima una parte e poi l’altra. Non è H30 simultaneo
-              ovunque, né H30 nei due sensi opposti.
+              Ogni giro ha <strong>due partenze dalla stessa FS</strong>: quella
+              iniziale e quella dopo il passaggio intermedio. Le banche H30 sono
+              sfalsate lungo il giro. Non è H30 simultaneo ovunque, né H30 nei
+              due sensi opposti.
             </p>
           </div>
         </div>
         <div class="peak-banks">
           <article class="east-bank">
-            <p>ALA EST · PARTENZE DA FS</p>
+            <p>INIZIO DEL GIRO · DA FS</p>
             <strong>06:05–08:05<br />16:40–18:40</strong
             ><span>ogni 30 minuti</span>
           </article>
           <article class="west-bank">
-            <p>ALA OVEST · PARTENZE DA FS</p>
+            <p>STESSO GIRO · PROSECUZIONE DA FS</p>
             <strong>07:00–09:00<br />17:35–19:35</strong
             ><span>ogni 30 minuti</span>
           </article>
@@ -410,8 +512,8 @@
               <thead>
                 <tr>
                   <th scope="col">Giro</th>
-                  <th scope="col">FS → est</th>
-                  <th scope="col">FS intermedia → ovest</th>
+                  <th scope="col">Partenza FS</th>
+                  <th scope="col">Prosecuzione da FS</th>
                   <th scope="col">Rientro FS ≈</th>
                 </tr>
               </thead>
@@ -437,10 +539,10 @@
           </div>
         </div>
         <p class="section-note">
-          Ultima partenza del giro da FS verso est: 19:40. Ultima partenza
-          intermedia verso ovest: 20:30. Rientro nominale finale: circa 21:08.
-          Non significa servizio fino a quell’ora in ogni fermata. La permanenza
-          a bordo a FS è progettata, ancora da autorizzare.
+          Ultimo giro: partenza da FS alle 19:40, prosecuzione dalla stessa
+          stazione alle 20:30. Rientro nominale finale: circa 21:08. Non
+          significa servizio fino a quell’ora in ogni fermata. La permanenza a
+          bordo a FS è progettata, ancora da autorizzare.
         </p>
       </section>
       <section
@@ -518,10 +620,9 @@
             <span class="eyebrow">PROPOSTA · NODO8</span>
             <h3>Un percorso, più occasioni.</h3>
             <p>
-              16 passaggi per ala da FS, dentro 16 corse complete. Quattro
-              banche H30, nuovi siti locali e una base feriale non legata al
-              calendario scolastico. Uno stesso nome per muoversi tra i cinque
-              comuni.
+              16 corse complete, ciascuna con due partenze da FS. Quattro banche
+              H30, nuovi siti locali e una base feriale non legata al calendario
+              scolastico. Uno stesso nome per muoversi tra i cinque comuni.
             </p>
             <span class="comparison-tag"
               >Più regolarità, non miglioramento universale.</span

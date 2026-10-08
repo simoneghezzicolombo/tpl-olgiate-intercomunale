@@ -1,0 +1,397 @@
+/* Shared identity and nominal-day controls, on both final pages. */
+.n8-player {
+  color: #163d33;
+  background: #fffdf8;
+  padding: 24px;
+  border: 1px solid #d5ddd5;
+  border-radius: 18px;
+  font:
+    400 14px/1.5 "DM Sans",
+    system-ui,
+    sans-serif;
+}
+.n8-player-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.n8-player h3 {
+  margin: 0;
+  font-size: 19px;
+  letter-spacing: -0.5px;
+}
+.n8-model-label {
+  font-size: 9px;
+  letter-spacing: 1.4px;
+  color: #52685a;
+  border: 1px solid #c3d0c4;
+  border-radius: 30px;
+  padding: 5px 9px;
+}
+.n8-player-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.n8-clock {
+  font:
+    700 36px/1.1 "Manrope",
+    system-ui,
+    sans-serif;
+  letter-spacing: -1.8px;
+  font-variant-numeric: tabular-nums;
+}
+.n8-player button,
+.n8-player select {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #c9d5c9;
+  border-radius: 7px;
+  background: #f6f3eb;
+  color: #163d33;
+  padding: 7px 10px;
+  min-height: 36px;
+}
+.n8-player .n8-play {
+  background: #163d33;
+  color: #fffdf8;
+  border-color: #163d33;
+  min-width: 114px;
+  font-weight: 700;
+}
+.n8-speed {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.n8-speed-label {
+  font-size: 11px;
+}
+.n8-range-label {
+  display: block;
+  font-size: 11px;
+  margin-top: 14px;
+}
+.n8-player input[type="range"] {
+  accent-color: #163d33;
+  width: 100%;
+  margin: 8px 0;
+  min-height: 24px;
+  cursor: pointer;
+}
+.n8-range-limits {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 10px;
+  color: #52685a;
+}
+.n8-presets {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+.n8-presets button {
+  font-size: 11px;
+  padding: 5px 9px;
+}
+.n8-trip-select {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.n8-trip-label {
+  font-size: 11px;
+}
+.n8-trip-select select {
+  max-width: 100%;
+}
+.n8-fleet {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 9px;
+}
+.n8-vehicle-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  border-top: 2px solid #adc4b3;
+  padding: 10px 4px;
+  background: #f4f5ee;
+  border-radius: 0 0 6px 6px;
+}
+.n8-vehicle-id {
+  background: #163d33;
+  color: #fffdf8;
+  font-size: 11px;
+  line-height: 26px;
+  text-align: center;
+  min-width: 27px;
+  border-radius: 5px;
+}
+.n8-vehicle-state {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.n8-vehicle-card small {
+  display: block;
+  color: #52685a;
+  font-size: 10px;
+  margin-top: 4px;
+}
+.n8-vehicle-card[data-status="off-service"] {
+  opacity: 0.65;
+}
+.n8-vehicle-card[data-status="stop"],
+.n8-vehicle-card[data-status="fs-hold"] {
+  border-color: #e77652;
+  background: #fff2e5;
+}
+.n8-vehicle-card.is-followed {
+  outline: 2px solid #e77652;
+  outline-offset: 2px;
+}
+.n8-player-status {
+  font-size: 11px !important;
+  margin: 12px 0 0 !important;
+}
+.n8-playback-note {
+  font-size: 11px !important;
+  color: #52685a !important;
+  line-height: 1.6 !important;
+  margin: 8px 0 0 !important;
+}
+.n8-bus {
+  width: 34px;
+  height: 42px;
+  filter: drop-shadow(0 3px 3px #142b3355);
+  cursor: default;
+}
+.n8-bus-body {
+  fill: #163d33;
+  stroke: #fffdf8;
+  stroke-width: 2px;
+}
+.n8-bus[data-status="stop"] .n8-bus-body,
+.n8-bus[data-status="fs-hold"] .n8-bus-body {
+  fill: #c8673f;
+}
+.n8-bus[data-status="recovery"] .n8-bus-body {
+  fill: #76827b;
+}
+.n8-bus.is-followed {
+  filter: drop-shadow(0 0 5px #e77652);
+}
+.n8-bus-icon {
+  background: transparent !important;
+  border: 0 !important;
+}
+.n8-player :focus-visible {
+  outline: 3px solid #bd5736;
+  outline-offset: 3px;
+}
+.n8-player--compact {
+  padding: 16px;
+  font-size: 12px;
+}
+.n8-player--compact .n8-clock {
+  font-size: 28px;
+}
+.n8-player--compact .n8-player-top {
+  gap: 9px;
+}
+.n8-player--compact .n8-speed-label {
+  display: none;
+}
+.n8-player--compact .n8-fleet {
+  grid-template-columns: repeat(2, 1fr);
+}
+.n8-player--compact .n8-vehicle-card {
+  padding: 6px 3px;
+}
+.n8-player--compact .n8-model-label {
+  font-size: 8px;
+}
+.n8-player--compact .n8-player-title {
+  gap: 8px;
+}
+.n8-player--compact .n8-playback-note {
+  font-size: 9px !important;
+}
+.n8-player--compact .n8-range-limits,
+.n8-player--compact .n8-trip-label {
+  font-size: 9px;
+}
+.n8-player--compact .n8-trip-select {
+  display: block;
+}
+.n8-player--compact .n8-trip-select label {
+  display: block;
+  margin-bottom: 3px;
+}
+.n8-player--compact .n8-presets {
+  gap: 4px;
+  margin: 10px 0;
+}
+.n8-player--compact .n8-presets button {
+  font-size: 9px;
+  min-height: 30px;
+}
+.n8-diagram {
+  display: block;
+  width: 100%;
+  min-width: 850px;
+  height: auto;
+  background: #fffdf8;
+  font-family: "DM Sans", system-ui, sans-serif;
+}
+.n8-diagram-scroll {
+  overflow-x: auto;
+  border: 1px solid #d5ddd5;
+  border-radius: 16px;
+  scrollbar-color: #93ad9d #f6f3eb;
+}
+.n8-diagram-brand {
+  font-weight: 800;
+  font-size: 34px;
+  letter-spacing: -2px;
+  fill: #163d33;
+}
+.n8-diagram-download {
+  background: transparent;
+  color: #163d33;
+  border: 1px solid #c3d0c4;
+  border-radius: 7px;
+  padding: 10px 16px;
+  margin-top: 15px;
+  font:
+    600 12px "DM Sans",
+    system-ui,
+    sans-serif;
+  cursor: pointer;
+}
+.n8-diagram-download:focus-visible {
+  outline: 3px solid #e77652;
+  outline-offset: 3px;
+}
+.n8-diagram-caption {
+  font-size: 12px;
+  letter-spacing: 0.9px;
+  fill: #597363;
+}
+.n8-diagram-shadow {
+  fill: none;
+  stroke: #e7ece3;
+  stroke-width: 23px;
+  stroke-linejoin: round;
+}
+.n8-diagram-line {
+  fill: none;
+  stroke: #163d33;
+  stroke-width: 8px;
+  stroke-linejoin: round;
+}
+.n8-diagram-leader {
+  stroke: #b8c9bb;
+  stroke-width: 1.5px;
+}
+.n8-diagram-dot {
+  fill: #163d33;
+  stroke: #fffdf8;
+  stroke-width: 3px;
+}
+.n8-diagram-new {
+  fill: #be5836;
+  stroke: #fffdf8;
+  stroke-width: 3px;
+}
+.n8-diagram-number {
+  font-size: 12px;
+  font-weight: 700;
+  fill: #fffdf8;
+}
+.n8-diagram-name {
+  font-size: 18px;
+  font-weight: 600;
+  fill: #163d33;
+}
+.n8-diagram-sub {
+  font-size: 10px;
+  fill: #9d4a2d;
+}
+.n8-diagram-hub {
+  fill: #163d33;
+  stroke: #fffdf8;
+  stroke-width: 5px;
+}
+.n8-diagram-hub-name {
+  fill: #fffdf8;
+  font-size: 29px;
+  font-weight: 700;
+}
+.n8-diagram-hub-sub {
+  fill: #e4e9dd;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+.n8-diagram-arrow {
+  fill: none;
+  stroke: #e77652;
+  stroke-width: 5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.n8-diagram-stop[role="button"] {
+  cursor: pointer;
+}
+.n8-diagram-stop[role="button"]:hover .n8-diagram-name,
+.n8-diagram-stop[role="button"]:focus .n8-diagram-name {
+  fill: #bd5736;
+}
+.n8-diagram-stop:focus {
+  outline: none;
+}
+.n8-diagram-stop:focus circle {
+  stroke: #e77652;
+  stroke-width: 6px;
+}
+@media (max-width: 760px) {
+  .n8-player {
+    padding: 16px;
+  }
+  .n8-fleet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .n8-clock {
+    font-size: 29px;
+  }
+  .n8-speed-label {
+    display: none;
+  }
+  .n8-player-top {
+    gap: 9px;
+  }
+  .n8-trip-select {
+    display: block;
+  }
+  .n8-trip-label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  .n8-player h3 {
+    font-size: 17px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .n8-bus {
+    transition: none;
+  }
+}
