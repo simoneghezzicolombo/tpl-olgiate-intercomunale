@@ -6,6 +6,8 @@ I nomi delle località sono ora centrati dentro i punti circolari stessi, non se
 
 «Fermate» sostituisce «passaggi» nei riepiloghi, negli schemi e nei controlli. Il riepilogo dichiara 27 fermate inclusa FS; San Zeno e Olgiate sud restano due visite allo stesso luogo. «Primo passaggio» e «Secondo passaggio» sono mantenuti nelle sole colonne necessarie a distinguere quelle visite. Numerazione, identità, ordine e dati del registro restano invariati. 40 test Python e 31 test Node verdi.
 
+Pubblicazione i verificata: sorgente `0c828f0acad57ad45d1a9605686c7ca6db095ca8`, Pages `684003d8e6abdbf216e96040408522725450add7`, pipeline [37825380259](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/37825380259) verde. Tutti i 71 file HTTP corrispondono al manifest. Nel browser pubblico: undici nodi con undici nomi al centro, riepilogo 27 fermate, nessun errore console osservato. Anteprima `nodo8-nomi-dentro-punti-published-20261008i.png` salvata nella cache.
+
 Release `20261008h`, presentazione soltanto. Percorso, fermate, orari, copertura e autorità del progetto invariati.
 
 - Un solo favicon Nodo8 condiviso dalle due pagine, incluso nell’artefatto pubblico. Rimossa la vecchia icona inserita dinamicamente dal racconto.
