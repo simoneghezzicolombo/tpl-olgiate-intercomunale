@@ -27,8 +27,8 @@ try {
 
   // Current-service geometry is taken directly from the supplied official agency
   // KML LineStrings. Do not route, snap or repair D184/D185 through Gate D.
-  await import("./journey-lineage.js");
-  await import("./journey-current-kml-exact.mjs");
+  await import("./journey-lineage.js?v=20261008c");
+  await import("./journey-current-kml-exact.mjs?v=20261008c");
   await import("./journey-explore-v2.js?v=20261008");
 } catch (error) {
   window.__analysisJourneyBootError = true;
@@ -42,4 +42,4 @@ try {
   document.body.appendChild(notice);
   console.error("Journey runtime unavailable", error);
 }
-await import("./journey-nodo8.mjs?v=20261008b");
+await import("./journey-nodo8.mjs?v=20261008c");

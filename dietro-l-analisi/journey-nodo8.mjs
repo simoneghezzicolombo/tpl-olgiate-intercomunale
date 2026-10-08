@@ -283,13 +283,21 @@ async function installNodo8() {
             element: icon,
             anchor: "center",
           });
-          markers.set(s.id, { marker, icon });
+          markers.set(s.id, { marker, icon, added: false });
         }
-        const { marker, icon } = markers.get(s.id);
+        const entry = markers.get(s.id),
+          { marker, icon } = entry;
         if (visible) {
-          marker.setLngLat(s.coordinates).addTo(map);
+          marker.setLngLat(s.coordinates);
+          if (!entry.added) {
+            marker.addTo(map);
+            entry.added = true;
+          }
           updateBusMarker(icon, s);
-        } else marker.remove();
+        } else if (entry.added) {
+          marker.remove();
+          entry.added = false;
+        }
       });
     };
     const player = mountPlayer(playbackContainer, line, updateBuses, {

@@ -10,6 +10,7 @@ const FILES = [
 ];
 
 async function waitForLineage(timeoutMs = 30000) {
+  if (window.__analysisJourneyLineageReady) await window.__analysisJourneyLineageReady;
   const started = performance.now();
   while (performance.now() - started < timeoutMs) {
     const lineage = window.__analysisJourneyLineage;
