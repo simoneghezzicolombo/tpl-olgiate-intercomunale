@@ -27,14 +27,13 @@
           <span><i class="explore-key__dot explore-key__dot--walk"></i>tempi a piedi</span>
           <span><i class="explore-key__line explore-key__line--current"></i>rete attuale</span>
           <span><i class="explore-key__line explore-key__line--final"></i>Nodo8 · proposta attuale</span>
-          <span><i class="explore-key__dot explore-key__dot--candidate"></i>possibili fermate</span>
           <span><i class="explore-key__dot explore-key__dot--existing"></i>fermate esistenti</span>
         </div>
         <button class="explore-enter" type="button" data-explore-enter>
           <span>Esplora la mappa</span><b>→</b>
         </button>
-        <p class="source-note">Fonti: KML e GTFS ufficiali, WorldPop, ISTAT, DBGT e rete stradale validata.</p>
-        <details class="source-note"><summary>Proposta e ricerca restano separate</summary><p>In «Livelli e confronto» trovi territorio, rete attuale e alternative storiche. Queste ultime non misurano un guadagno di copertura di Nodo8.</p></details>
+        <p class="source-note">Fonti: KML e GTFS ufficiali, WorldPop, ISTAT, DBGT e rete stradale dello studio.</p>
+        <details class="source-note"><summary>Dati e metodo</summary><p>Accendi Nodo8, D184, D185 e S8. In «Mappa» trovi i livelli del territorio e i minuti a piedi dalle sole reti bus accese. Fonti, date e limiti sono raccolti nel pannello tecnico.</p></details>
       </div>`;
     main.appendChild(section);
   }

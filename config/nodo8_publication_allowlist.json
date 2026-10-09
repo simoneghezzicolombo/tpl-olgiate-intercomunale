@@ -6,6 +6,7 @@
   ],
   "include_files": [
     "app.js",
+    "assets/nodo8-active-walk.json",
     "assets/nodo8-coverage-comparison.json",
     "assets/nodo8-coverage-diagnostic.json",
     "assets/nodo8-current-simulation.json",
@@ -71,6 +72,7 @@
     "docs/RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md",
     "favicon.svg",
     "index.html",
+    "nodo8-active-walk.mjs",
     "nodo8-benefits.css",
     "nodo8-benefits.mjs",
     "nodo8-coverage.mjs",

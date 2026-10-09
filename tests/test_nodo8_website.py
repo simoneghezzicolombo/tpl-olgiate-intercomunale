@@ -108,11 +108,13 @@ def test_explorer_uses_same_ledger_player_with_four_carrier_overview():
     assert 'initialSelection: "all"' in module and "initialMinute: 455" in module
     assert 'contextVisible("explore")' in module and "explorerPlayer.pause()" in module
     assert 'id="explorePlayback"' in controls and 'role="tablist"' in controls
-    assert "Bus in movimento" in controls and "Livelli e confronto" in controls
-    assert "showFourBuses" in controls
-    assert 'id="exploreSiteSelect"' in controls
+    assert ">Orario</button>" in controls and ">Mappa</button>" in controls
+    assert 'overviewOnly: true' in module
+    assert 'id="exploreSiteSelect"' not in controls
+    assert 'data-layer="candidates"' not in controls and 'data-layer="proposals"' not in controls
+    assert 'id="exploreTechnical"' in controls
     assert 'chapter?.getBoundingClientRect()' in controls
-    assert "siteSelect.append(option)" in module
+    assert "siteSelect.append(option)" not in module
 
 
 def test_stop_times_and_story_links_reuse_ledger_without_timetable_synthesis():

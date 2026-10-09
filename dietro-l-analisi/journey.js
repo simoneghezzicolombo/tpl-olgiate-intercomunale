@@ -605,8 +605,10 @@
     });
     const markerEl = document.createElement("div");
     markerEl.className = "hub-marker";
-    markerEl.innerHTML = "<span></span><b>Olgiate-Calco-Brivio FS</b>";
-    new maplibregl.Marker({ element: markerEl, anchor: "bottom" })
+    markerEl.textContent = "FS";
+    markerEl.setAttribute("role", "img");
+    markerEl.setAttribute("aria-label", "Stazione Olgiate-Calco-Brivio FS");
+    new maplibregl.Marker({ element: markerEl, anchor: "center" })
       .setLngLat([G.hub.lon, G.hub.lat])
       .addTo(map);
     layersReady = true;

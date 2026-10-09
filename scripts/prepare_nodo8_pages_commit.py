@@ -33,6 +33,7 @@ if __name__ == "__main__":
         "tests/test_nodo8_publication.py",
         "tests/test_nodo8_journey.mjs",
         "tests/test_nodo8_playback.mjs",
+        "tests/test_nodo8_active_walk.mjs",
         "tests/test_nodo8_diagrams.mjs",
         "tests/test_nodo8_map_readiness.mjs",
         "tests/test_nodo8_redesign.py",

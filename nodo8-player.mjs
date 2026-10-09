@@ -5,7 +5,7 @@ import {
   adjacentEvent,
   diagramStops,
   servicePhase,
-} from "./nodo8-line.mjs?v=20261008t";
+} from "./nodo8-line.mjs?v=20261009b";
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -30,6 +30,8 @@ export function mountPlayer(
   {
     compact = false,
     brief = false,
+    overviewOnly = false,
+    onVehicleFocus = null,
     visibilityTarget = container,
     inlineMap = null,
     initialSelection = "1",
@@ -41,14 +43,17 @@ export function mountPlayer(
   const friendly = (e) => names.get(e?.siteId) || e?.name || "Olgiate FS";
   container.classList.add("n8-player");
   if (compact) container.classList.add("n8-player--compact");
-  let selection = String(initialSelection),
-    minute = initialMinute ?? playbackWindow(line, selection).start,
+  if (overviewOnly) container.classList.add("n8-player--overview");
+  let selection = overviewOnly ? "all" : String(initialSelection),
+    minute = initialMinute ??
+      (overviewOnly ? 455 : playbackWindow(line, selection).start),
     playing = false,
     frame = null,
     previous = null,
     speed = 30,
     previousUiKey = null,
     previousBoundsSelection = null,
+    focusedVehicle = null,
     lastSingleSelection = selection === "all" ? "1" : selection;
   const header = el("div", "n8-player-title");
   const identity = el("div", "n8-player-identity"),
@@ -106,7 +111,9 @@ export function mountPlayer(
   });
   reset.setAttribute(
     "aria-label",
-    "Ricomincia il giro o la giornata selezionata",
+    overviewOnly
+      ? "Ricomincia la giornata"
+      : "Ricomincia il giro o la giornata selezionata",
   );
   const clockWrap = el("div", "n8-clock-wrap"),
     clockCaption = el("span", "n8-clock-caption", "Ora simulata");
@@ -171,7 +178,9 @@ export function mountPlayer(
   const fleet = el("div", "n8-fleet");
   fleet.setAttribute(
     "aria-label",
-    "Quattro bus simulati: scegline uno per seguire il giro",
+    overviewOnly
+      ? "Stato dei quattro bus simulati"
+      : "Quattro bus simulati: scegline uno per seguire il giro",
   );
   const fleetHeading = el("div", "n8-fleet-heading"),
     fleetCount = el("strong"),
@@ -181,6 +190,11 @@ export function mountPlayer(
     line.vehicles.map((v) => {
       const card = button("", "n8-vehicle-card", () => {
         const state = statesAt(line, minute).find((s) => s.id === v.id);
+        if (overviewOnly) {
+          focusVehicle(v.id);
+          onVehicleFocus?.(v.id, state);
+          return;
+        }
         if (state.trip) changeSelection(String(state.trip), minute);
       });
       card.dataset.vehicle = v.id;
@@ -194,6 +208,11 @@ export function mountPlayer(
       track.setAttribute("aria-hidden", "true");
       track.append(fill);
       text.append(trip, state, sub, track);
+      if (overviewOnly) {
+        trip.remove();
+        track.remove();
+        card.setAttribute("aria-pressed", "false");
+      }
       card.append(name, text);
       fleet.append(card);
       return [v.id, { card, trip, state, sub, fill }];
@@ -202,9 +221,15 @@ export function mountPlayer(
   const info = el("details", "n8-player-details"),
     summary = el("summary", "", "Come funziona l’animazione");
   const speedWrap = el("div", "n8-speed"),
-    speedLabel = el("label", "", "Riproduzione accelerata"),
+    speedLabel = el(
+      "label",
+      "",
+      overviewOnly ? "Riproduzione" : "Riproduzione accelerata",
+    ),
     speedSelect = el("select");
   speedSelect.id = prefix + "-speed";
+  if (overviewOnly)
+    speedSelect.setAttribute("aria-label", "Velocità della riproduzione accelerata");
   speedLabel.htmlFor = speedSelect.id;
   [30, 120, 300].forEach((s) => {
     const o = el("option", "", `×${s}`);
@@ -239,25 +264,41 @@ export function mountPlayer(
       "Vai a una fermata o alla sosta in stazione",
     );
   navigation.append(navigationSummary, milestones, steps);
-  container.replaceChildren(
-    header,
-    modes,
-    selectWrap,
-    top,
-    rangeLabel,
-    range,
-    limits,
-    progress,
-    phases,
-  );
+  if (overviewOnly) {
+    rangeLabel.textContent = "Ora della giornata";
+    fleetHint.remove();
+    container.replaceChildren(top, rangeLabel, range, limits, speedWrap);
+  } else {
+    container.replaceChildren(
+      header,
+      modes,
+      selectWrap,
+      top,
+      rangeLabel,
+      range,
+      limits,
+      progress,
+      phases,
+    );
+  }
   if (inlineMap) container.append(inlineMap);
-  container.append(current, fleetHeading, fleet, navigation, status, info);
-  info.append(hint);
-  if (brief) {
-    summary.textContent = "Altri controlli e come funziona";
-    info.append(navigation);
+  if (overviewOnly) {
+    status.textContent = "In pausa";
+    container.append(fleetHeading, fleet, status);
+  } else {
+    container.append(current, fleetHeading, fleet, navigation, status, info);
+    info.append(hint);
+    if (brief) {
+      summary.textContent = "Altri controlli e come funziona";
+      info.append(navigation);
+    }
   }
   function changeSelection(value, at = null) {
+    // Explorer focus must never narrow the shared day clock to one bus trip.
+    if (overviewOnly) {
+      if (at !== null) jump(at);
+      return;
+    }
     selection = String(value);
     if (selection !== "all") lastSingleSelection = selection;
     select.value = selection;
@@ -266,6 +307,19 @@ export function mountPlayer(
   function bounds() {
     return playbackWindow(line, selection);
   }
+  function focusVehicle(value) {
+    if (!overviewOnly) return;
+    const id = value === null ? null : String(value);
+    if (id !== null && !cards.has(id)) return;
+    if (focusedVehicle === id) return;
+    focusedVehicle = id;
+    cards.forEach(({ card }, vehicleId) => {
+      card.setAttribute("aria-pressed", String(vehicleId === id));
+    });
+    if (id === null) delete container.dataset.focusedVehicle;
+    else container.dataset.focusedVehicle = id;
+    render();
+  }
   function pause() {
     playing = false;
     previous = null;
@@ -273,13 +327,13 @@ export function mountPlayer(
     frame = null;
     play.textContent = "Riproduci";
     play.setAttribute("aria-pressed", "false");
-    status.textContent = "In pausa · nessun dato live.";
+    status.textContent = overviewOnly ? "In pausa" : "In pausa · nessun dato live.";
   }
   function jump(value) {
     pause();
     const b = bounds();
     minute = Math.max(b.start, Math.min(b.end, value));
-    status.textContent = "In pausa · orario del progetto.";
+    status.textContent = overviewOnly ? "In pausa" : "In pausa · orario del progetto.";
     render();
   }
   function render(force = true) {
@@ -293,6 +347,7 @@ export function mountPlayer(
       playing,
       completed: minute >= b.end,
       selection,
+      ...(overviewOnly ? { focusedVehicle } : {}),
     };
     // Keep map movement at animation-frame precision. The control surface only
     // needs a new nominal second (or explicit state change), not 60 DOM rewrites.
@@ -312,10 +367,15 @@ export function mountPlayer(
       previousBoundsSelection = selection;
       range.min = b.start;
       range.max = b.end;
-      startLimit.textContent = hhmm(b.start) + " · partenza";
+      startLimit.textContent =
+        hhmm(b.start) + (overviewOnly ? "" : " · partenza");
       endLimit.textContent =
         hhmm(b.end) +
-        (b.trip ? " circa · arrivo FS" : " circa · fine recupero");
+        (overviewOnly
+          ? ""
+          : b.trip
+            ? " circa · arrivo FS"
+            : " circa · fine recupero");
     }
     range.value = minute;
     range.setAttribute("aria-valuetext", clockSeconds(minute));
@@ -336,9 +396,11 @@ export function mountPlayer(
     );
     text(
       rangeLabel,
-      b.trip
-        ? "Trascina per scegliere il momento"
-        : "Trascina per scegliere l’ora",
+      overviewOnly
+        ? "Ora della giornata"
+        : b.trip
+          ? "Trascina per scegliere il momento"
+          : "Trascina per scegliere l’ora",
     );
     back.disabled = minute <= b.start;
     forward.disabled = minute >= b.end;
@@ -403,7 +465,37 @@ export function mountPlayer(
       states.forEach((s) => {
         const c = cards.get(s.id);
         c.card.dataset.status = s.status;
-        c.card.disabled = !s.trip;
+        c.card.disabled = overviewOnly
+          ? !onVehicleFocus || !s.coordinates
+          : !s.trip;
+        if (overviewOnly) {
+          const place = s.status === "moving"
+              ? "→ " + friendly(s.next)
+              : s.status === "stop"
+                ? friendly(s.event)
+                : s.status === "off-service"
+                  ? "Fuori corsa"
+                  : "Olgiate FS",
+            nextTrip = s.nextTrip &&
+              line.trips.find((trip) => trip.number === s.nextTrip),
+            timing = s.status === "moving"
+              ? clockSeconds(s.until)
+              : s.status === "stop"
+                ? "rip. " + clockSeconds(s.until)
+                : s.status === "fs-hold"
+                  ? "sosta · " + hhmm(s.until)
+                  : s.status === "recovery"
+                    ? "recupero · " + hhmm(s.until)
+                    : nextTrip
+                      ? "da " + hhmm(nextTrip.start)
+                      : "concluso";
+          text(c.state, place);
+          text(c.sub, timing);
+          const accessible = `${s.id}, ${place}, ${timing}${s.trip ? `, giro ${s.trip}` : ""}`;
+          c.card.setAttribute("aria-label", accessible);
+          c.card.title = accessible;
+          return;
+        }
         c.card.setAttribute(
           "aria-label",
           s.trip ? `Segui ${s.id}, giro ${s.trip}` : `${s.id}, fuori corsa`,
@@ -451,7 +543,9 @@ export function mountPlayer(
       pause();
       status.textContent =
         selection === "all"
-          ? "Giornata di modello conclusa."
+          ? overviewOnly
+            ? "Giornata conclusa"
+            : "Giornata di modello conclusa."
           : "Giro completo concluso a FS. Premi Riproduci per rivederlo.";
     }
     render(false);
@@ -460,7 +554,7 @@ export function mountPlayer(
   function toggle() {
     if (playing) {
       pause();
-      status.textContent = "In pausa · nessun dato live.";
+      status.textContent = overviewOnly ? "In pausa" : "In pausa · nessun dato live.";
       render();
       return;
     }
@@ -469,7 +563,7 @@ export function mountPlayer(
     previous = null;
     play.textContent = "Pausa";
     play.setAttribute("aria-pressed", "true");
-    status.textContent = `Riproduzione ×${speed} · orario del progetto.`;
+    status.textContent = `Riproduzione ×${speed}${overviewOnly ? "" : " · orario del progetto."}`;
     render();
     frame = requestAnimationFrame(tick);
   }
@@ -481,7 +575,7 @@ export function mountPlayer(
     speed = Number(speedSelect.value);
     previous = null;
     if (playing)
-      status.textContent = `Riproduzione ×${speed} · orario del progetto.`;
+      status.textContent = `Riproduzione ×${speed}${overviewOnly ? "" : " · orario del progetto."}`;
   });
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
@@ -503,6 +597,7 @@ export function mountPlayer(
     toggle,
     jump,
     selectTrip: (value) => changeSelection(value),
+    focusVehicle,
     firstStop: () => jump((bounds().trip ?? line.trips[0]).events[1].arrival),
     getMinute: () => minute,
   };

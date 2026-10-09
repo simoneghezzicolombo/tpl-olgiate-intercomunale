@@ -87,7 +87,8 @@ def test_exploration_defaults_to_nodo8_not_the_old_four_alternatives():
     js = (JOURNEY / "journey-explore-v2.js").read_text(encoding="utf-8")
     assert "proposals: false" in js
     assert "nodo8: true" in js
-    assert "Alternative storiche" in js
+    assert "Alternative storiche" not in js
+    assert 'data-layer="candidates"' not in js
     assert 'showSite(f.properties.site_id)' in js
     assert 'journey-explore-ready' in js
 

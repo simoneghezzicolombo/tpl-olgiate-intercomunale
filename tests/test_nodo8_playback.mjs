@@ -17,6 +17,7 @@ import { readStopSelection, stopLink } from "../nodo8-stop-times.mjs";
 import { inspectJourney, eventKey, journeyDurationLabel } from "../nodo8-journey-inspector.mjs";
 import { buildRail, trainsAt, S8_COLOUR, installS8 } from "../nodo8-s8.mjs";
 import { buildCurrent, currentTripsAt, currentPosition } from "../nodo8-current.mjs";
+import { mountPlayer } from "../nodo8-player.mjs";
 const currentData = JSON.parse(readFileSync(new URL("../assets/nodo8-current-simulation.json", import.meta.url), "utf8"));
 test("existing-service simulation keeps dated stop occurrences, arrival and departure clocks", () => {
   const data = buildCurrent(currentData);
@@ -476,4 +477,273 @@ test("event stepping preserves FS role and repeated-stop occurrence order", () =
     adjacentEvent(line, "1", events.at(-1).arrival, 1).role,
     "FULL_TRIP_END_FS",
   );
+});
+
+// These controls only need element ownership, attributes and event dispatch.
+// Keep the fixture local so no browser library or active animation is required.
+class PlayerElement {
+  constructor(tagName) {
+    this.tagName = tagName;
+    this.children = [];
+    this.parent = null;
+    this.attributes = new Map();
+    this.listeners = new Map();
+    this.dataset = {};
+    this.style = {};
+    this.className = "";
+    this._text = "";
+    this._value = "";
+    this.disabled = false;
+    this.hidden = false;
+    this.classList = {
+      contains: (name) => this.className.split(/\s+/).includes(name),
+      add: (name) => {
+        if (!this.classList.contains(name))
+          this.className = `${this.className} ${name}`.trim();
+      },
+      toggle: (name, enabled) => {
+        const names = this.className.split(/\s+/).filter((n) => n && n !== name);
+        if (enabled) names.push(name);
+        this.className = names.join(" ");
+      },
+    };
+  }
+  append(...children) {
+    children.forEach((child) => {
+      child.remove();
+      child.parent = this;
+      this.children.push(child);
+    });
+  }
+  replaceChildren(...children) {
+    this.children.forEach((child) => { child.parent = null; });
+    this.children = [];
+    this._text = "";
+    this.append(...children);
+  }
+  remove() {
+    if (!this.parent) return;
+    this.parent.children = this.parent.children.filter((child) => child !== this);
+    this.parent = null;
+  }
+  setAttribute(name, value) { this.attributes.set(name, String(value)); }
+  getAttribute(name) { return this.attributes.get(name) ?? null; }
+  removeAttribute(name) { this.attributes.delete(name); }
+  addEventListener(name, listener) {
+    if (!this.listeners.has(name)) this.listeners.set(name, []);
+    this.listeners.get(name).push(listener);
+  }
+  dispatch(name) {
+    this.listeners.get(name)?.forEach((listener) => listener({ target: this }));
+  }
+  click() { if (!this.disabled) this.dispatch("click"); }
+  get value() { return this._value; }
+  set value(value) { this._value = String(value); }
+  get textContent() {
+    return this._text + this.children.map((child) => child.textContent).join("");
+  }
+  set textContent(value) {
+    this.replaceChildren();
+    this._text = String(value);
+  }
+}
+
+const playerElement = (host, className) =>
+  host.classList.contains(className)
+    ? host
+    : host.children.map((child) => playerElement(child, className)).find(Boolean);
+
+function withPlayerDom(check) {
+  const names = ["document", "window", "requestAnimationFrame", "cancelAnimationFrame"];
+  const saved = new Map(names.map((name) => [name, Object.getOwnPropertyDescriptor(globalThis, name)]));
+  const frames = new Map();
+  let nextFrame = 0;
+  try {
+    globalThis.document = {
+      createElement: (tag) => new PlayerElement(tag),
+      addEventListener() {},
+      hidden: false,
+    };
+    globalThis.window = {};
+    globalThis.requestAnimationFrame = (callback) => {
+      const id = ++nextFrame;
+      frames.set(id, callback);
+      return id;
+    };
+    globalThis.cancelAnimationFrame = (id) => frames.delete(id);
+    const host = new PlayerElement("div");
+    host.id = "test-player";
+    check({
+      host,
+      frames,
+      stepFrame: (now) => {
+        const pending = [...frames.values()];
+        frames.clear();
+        pending.forEach((callback) => callback(now));
+      },
+    });
+  } finally {
+    saved.forEach((descriptor, name) => {
+      if (descriptor) Object.defineProperty(globalThis, name, descriptor);
+      else delete globalThis[name];
+    });
+  }
+}
+
+test("overview player forces the four-bus day and omits trip controls and repeated explanations", () => {
+  withPlayerDom(({ host }) => {
+    let state;
+    const player = mountPlayer(host, line, (update) => { state = update; }, {
+      compact: true,
+      brief: true,
+      overviewOnly: true,
+      initialSelection: "16",
+    });
+    assert.equal(state.selection, "all");
+    assert.equal(state.followedTrip, null);
+    assert.equal(player.getMinute(), 455);
+    assert.deepEqual(state.states.map((bus) => bus.id), ["B1", "B2", "B3", "B4"]);
+    assert.ok(state.states.every((bus) => bus.coordinates && bus.trip));
+    assert.equal(playerElement(host, "n8-fleet").children.length, 4);
+    for (const className of [
+      "n8-player-title", "n8-player-modes", "n8-trip-select",
+      "n8-current-event", "n8-event-navigation", "n8-player-details",
+      "n8-route-continuity", "n8-playback-note", "n8-trip-progress",
+      "n8-service-phases", "n8-vehicle-trip", "n8-vehicle-progress",
+    ]) assert.equal(playerElement(host, className), undefined, className);
+    assert.doesNotMatch(host.textContent, /Scegli la corsa|Come funziona|non dati GPS|prosecuzione sullo stesso bus/);
+    assert.equal(playerElement(host, "n8-clock").textContent, "07:35:00");
+    assert.ok(playerElement(host, "n8-play"));
+    assert.ok(playerElement(host, "n8-reset"));
+    const speed = playerElement(host, "n8-speed").children.find((child) => child.tagName === "select");
+    assert.deepEqual(speed.children.map((option) => option.value), ["30", "120", "300"]);
+  });
+});
+
+test("overview bus focus preserves all buses, playback, minute and slider bounds", () => {
+  withPlayerDom(({ host }) => {
+    let state;
+    const focused = [];
+    const player = mountPlayer(host, line, (update) => { state = update; }, {
+      overviewOnly: true,
+      onVehicleFocus: (id, bus) => focused.push({ id, bus }),
+    });
+    const range = host.children.find((child) => child.tagName === "input");
+    const before = { min: range.min, max: range.max, value: range.value };
+    const rows = playerElement(host, "n8-fleet").children;
+    playerElement(host, "n8-play").click();
+    rows[0].click();
+    assert.equal(state.selection, "all");
+    assert.equal(state.followedTrip, null);
+    assert.equal(state.playing, true);
+    assert.equal(player.getMinute(), 455);
+    assert.deepEqual({ min: range.min, max: range.max, value: range.value }, before);
+    assert.deepEqual(state.states, statesAt(line, 455));
+    assert.equal(focused.length, 1);
+    assert.equal(focused[0].id, "B1");
+    assert.deepEqual(focused[0].bus, statesAt(line, 455)[0]);
+    assert.equal(state.focusedVehicle, "B1");
+    assert.equal(rows[0].getAttribute("aria-pressed"), "true");
+    player.selectTrip(1);
+    assert.equal(state.selection, "all");
+    assert.equal(state.playing, true);
+    assert.equal(player.getMinute(), 455);
+    player.focusVehicle("B4");
+    assert.equal(host.dataset.focusedVehicle, "B4");
+    assert.equal(rows[0].getAttribute("aria-pressed"), "false");
+    assert.equal(rows[3].getAttribute("aria-pressed"), "true");
+    assert.equal(focused.length, 1, "programmatic focus does not repeat map callbacks");
+    player.focusVehicle(null);
+    assert.equal(host.dataset.focusedVehicle, undefined);
+    assert.equal(state.focusedVehicle, null);
+    assert.equal(player.getMinute(), 455);
+    player.pause();
+  });
+});
+
+test("overview slider, accelerated speeds, play/pause and reset use the unchanged day clock", () => {
+  withPlayerDom(({ host, frames, stepFrame }) => {
+    let state;
+    const player = mountPlayer(host, line, (update) => { state = update; }, { overviewOnly: true });
+    const range = host.children.find((child) => child.tagName === "input");
+    const play = playerElement(host, "n8-play");
+    const speed = playerElement(host, "n8-speed").children.find((child) => child.tagName === "select");
+    const day = playbackWindow(line, "all");
+    assert.equal(Number(range.min), day.start);
+    assert.equal(Number(range.max), day.end);
+    range.value = 500;
+    range.dispatch("input");
+    assert.equal(player.getMinute(), 500);
+    assert.equal(state.playing, false);
+    play.click();
+    stepFrame(0);
+    stepFrame(1000);
+    assert.equal(player.getMinute(), 500.5, "default ×30 advances thirty simulated seconds");
+    range.value = 500;
+    range.dispatch("input");
+    assert.equal(state.playing, false, "dragging the clock pauses playback");
+    speed.value = 120;
+    speed.dispatch("change");
+    play.click();
+    assert.equal(state.playing, true);
+    assert.equal(play.getAttribute("aria-pressed"), "true");
+    stepFrame(2000);
+    stepFrame(3000);
+    assert.equal(player.getMinute(), 502, "one real second advances two minutes at ×120");
+    assert.equal(playerElement(host, "n8-clock").textContent, clockSeconds(502));
+    speed.value = 300;
+    speed.dispatch("change");
+    stepFrame(4000);
+    stepFrame(5000);
+    assert.equal(player.getMinute(), 507, "speed changes preserve the clock and apply ×300");
+    play.click();
+    assert.equal(state.playing, false);
+    assert.equal(play.getAttribute("aria-pressed"), "false");
+    assert.equal(frames.size, 0);
+    playerElement(host, "n8-reset").click();
+    assert.equal(player.getMinute(), day.start);
+    assert.equal(range.value, String(day.start));
+    assert.equal(state.playing, false);
+    range.value = day.end + 100;
+    range.dispatch("input");
+    assert.equal(player.getMinute(), day.end);
+    assert.equal(state.completed, true);
+    play.click();
+    assert.equal(player.getMinute(), day.start);
+    assert.equal(state.selection, "all");
+    assert.equal(state.playing, true);
+    player.pause();
+  });
+});
+
+test("default and brief root players retain the trip picker, explanations and single-trip following", () => {
+  for (const brief of [false, true]) withPlayerDom(({ host }) => {
+    let state;
+    const player = mountPlayer(host, line, (update) => { state = update; }, { brief });
+    assert.equal(state.selection, "1");
+    assert.equal(state.followedTrip, 1);
+    assert.equal(player.getMinute(), line.trips[0].start);
+    assert.ok(playerElement(host, "n8-player-title"));
+    assert.ok(playerElement(host, "n8-player-modes"));
+    assert.ok(playerElement(host, "n8-trip-select"));
+    assert.ok(playerElement(host, "n8-event-navigation"));
+    const details = playerElement(host, "n8-player-details");
+    assert.ok(playerElement(details, "n8-speed"));
+    assert.ok(playerElement(details, "n8-playback-note"));
+    assert.ok(playerElement(details, "n8-route-continuity"));
+    assert.match(host.textContent, /Scegli la corsa/);
+    assert.match(host.textContent, /non dati GPS/);
+    player.selectTrip("all");
+    player.jump(455);
+    playerElement(host, "n8-fleet").children[0].click();
+    assert.equal(state.selection, "1");
+    assert.equal(state.followedTrip, 1);
+    assert.equal(player.getMinute(), 455);
+    const select = playerElement(host, "n8-trip-select").children.find((child) => child.tagName === "select");
+    select.value = "16";
+    select.dispatch("change");
+    assert.equal(state.selection, "16");
+    assert.equal(state.followedTrip, 16);
+    assert.equal(player.getMinute(), line.trips[15].start);
+  });
 });

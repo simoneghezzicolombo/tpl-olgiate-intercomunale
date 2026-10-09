@@ -10,6 +10,7 @@ import {
 } from "../dietro-l-analisi/journey-nodo8.mjs";
 import { buildLine, statesAt } from "../nodo8-line.mjs";
 import { validateCoverageComparison, coverageChangeLabel } from "../nodo8-coverage.mjs";
+import { buildCurrent, currentTripsAt, currentPositionQuality, installCurrent, CURRENT_DISPLAY_SEGMENT_MEAN_LIMIT_KMH } from "../nodo8-current.mjs";
 
 const data = JSON.parse(
   readFileSync(
@@ -183,5 +184,88 @@ test("changed authority, incomplete sites or calendar fail closed", () => {
     const changed = structuredClone(data);
     change(changed);
     assert.throws(() => validateNodo8(changed));
+  }
+});
+
+const currentData = buildCurrent(JSON.parse(readFileSync(new URL("../assets/nodo8-current-simulation.json", import.meta.url), "utf8")));
+test("existing-service display guard withholds inconsistent source intervals without changing clocks or inventory", () => {
+  const before = JSON.stringify(currentData);
+  const trip = currentData.trips.find(t => t.id === "A2013327-0036-50214");
+  const minute = (trip.calls[0].departure_min + trip.calls[1].arrival_min) / 2;
+  const state = currentTripsAt(currentData, minute).find(t => t.id === trip.id);
+  const quality = currentPositionQuality(currentData, {...state, minute});
+  assert.equal(state.status, "moving");
+  assert.equal(CURRENT_DISPLAY_SEGMENT_MEAN_LIMIT_KMH, 90);
+  assert.equal(quality.displayable, false);
+  assert.equal(quality.reason, "EXCEEDS_ENGINEERING_DISPLAY_GUARD");
+  assert.ok(Math.abs(quality.segment_metres - 1570.0244637006854) < 0.01);
+  assert.ok(Math.abs(quality.segment_mean_kmh - 565.2088069323753) < 0.01);
+  let withheld = 0, legs = 0;
+  for (const t of currentData.trips) for (let i = 1; i < t.calls.length; i++) {
+    const minute = (t.calls[i - 1].departure_min + t.calls[i].arrival_min) / 2;
+    const state = currentTripsAt(currentData, minute).find(s => s.id === t.id);
+    if (!currentPositionQuality(currentData, {...state, minute}).displayable) withheld++;
+    legs++;
+  }
+  assert.equal(legs, 388);
+  assert.equal(withheld, 48);
+  assert.equal(currentData.trips.length, 34);
+  assert.equal(JSON.stringify(currentData), before);
+  assert.equal(currentPositionQuality(currentData, state).displayable, false);
+});
+
+test("stop-to-shape offsets stay diagnostic and do not fabricate a position or dwell", () => {
+  const trip = currentData.trips.find(t => t.id === "A2013327-0019-52778");
+  const call = trip.calls.find(c => c.stop_id === "300407");
+  const minute = call.arrival_min;
+  const state = currentTripsAt(currentData, minute).find(t => t.id === trip.id);
+  const before = [...state.coordinates];
+  const quality = currentPositionQuality(currentData, {...state, minute});
+  assert.equal(quality.displayable, true);
+  assert.equal(quality.reason, "SOURCE_STOP_CALL");
+  assert.ok(Math.abs(quality.stop_shape_offset_metres - 546.5009952605039) < 0.01);
+  assert.deepEqual(state.coordinates, before);
+  assert.notDeepEqual(state.coordinates, call.coordinates);
+  assert.equal(call.arrival_min, call.departure_min);
+});
+
+test("render keeps every active trip counted while withholding unsafe interval markers", async () => {
+  const saved = {fetch:globalThis.fetch, window:globalThis.window, document:globalThis.document};
+  const markers = new Set(), status = {hidden:true, textContent:""}, dataset = {};
+  class Marker {
+    constructor({element}) {this.element = element;}
+    setLngLat(coordinates) {this.coordinates = coordinates;return this;}
+    addTo() {markers.add(this);return this;}
+    remove() {markers.delete(this);}
+  }
+  globalThis.fetch = async () => ({ok:true, json:async () => currentData});
+  globalThis.window = {maplibregl:{Marker}};
+  globalThis.document = {documentElement:{dataset}, getElementById:() => status,
+    createElement:() => ({dataset:{}, attributes:{}, setAttribute(name, value) {this.attributes[name] = value;}})};
+  const map = {addSource() {}, addLayer() {}, setPaintProperty() {}, setFilter() {}};
+  try {
+    const renderer = await installCurrent(map);
+    const trip = currentData.trips.find(t => t.id === "A2013327-0036-50214");
+    const minute = (trip.calls[0].departure_min + trip.calls[1].arrival_min) / 2;
+    renderer.render({minute, visible:true});
+    const active = currentTripsAt(currentData, minute);
+    assert.equal(Number(dataset.currentBusCount), active.length);
+    assert.equal(Number(dataset.currentBusMarkerCount), markers.size);
+    assert.equal(Number(dataset.currentBusUnreliablePositionCount), active.length - markers.size);
+    assert.ok(Number(dataset.currentBusUnreliablePositionCount) > 0);
+    assert.ok(![...markers].some(m => m.element.dataset.trip === trip.id));
+    assert.match(status.textContent, /posizion[ei] non affidabil[ei]/);
+    assert.doesNotMatch(status.textContent, /2026|maggio|06\/05/);
+    renderer.render({minute:trip.calls[1].arrival_min, visible:true});
+    assert.ok([...markers].some(m => m.element.dataset.trip === trip.id));
+    renderer.render({minute, visible:false});
+    assert.equal(markers.size, 0);
+    assert.equal(dataset.currentBusCount, "0");
+    assert.equal(dataset.currentBusMarkerCount, "0");
+    assert.equal(status.hidden, true);
+  } finally {
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete globalThis[key]; else globalThis[key] = value;
+    }
   }
 });

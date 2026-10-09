@@ -81,7 +81,7 @@ export function trainsAt(rail, minute) {
 }
 
 export async function installS8(map) {
-  const response = await fetch("../assets/nodo8-s8-simulation.json?v=20261008t");
+  const response = await fetch("../assets/nodo8-s8-simulation.json?v=20261009b");
   if (!response.ok) throw new Error("S8 data unavailable");
   const rail = buildRail(await response.json());
   map.addSource("s8-local", {type: "geojson", data: {type: "FeatureCollection", features:
