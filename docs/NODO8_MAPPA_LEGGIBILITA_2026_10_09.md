@@ -48,4 +48,20 @@ chilometrico, autorizzazioni, continuità dei passeggeri o finanziamento.
 - Pubblicazione ancora limitata alle due pagine finali e 71 dipendenze.
   Prototipi e dati non pubblicati restano nel repository.
 
-La registrazione della pubblicazione segue dopo il deploy verificato.
+## Pubblicazione verificata
+
+- Sorgente finale: `983236b6b6a1d8328812d21bd031af8146274c87`.
+- Pages finale: `4ae46df87fb106b595f13ea71ab271ac52b9a653`.
+- Workflow `37907082468`, concluso con successo.
+- Manifest pubblico e byte SHA-256 dei 71 file verificati via HTTP: tutti conformi.
+- Desktop e telefono a 390 px: niente overflow orizzontale della pagina;
+  metodi consultabili e tutti i dieci livelli Esplora conservati.
+- Quattro carrier in corsa alle 07:35 nella simulazione Esplora.
+- Browser pubblico: nuovo indicatore alto circa 100 px, scheda candidati circa
+  502 px, nessuna legenda duplicata o errore console. Controlli KML nel loro
+  capitolo anche da collegamento diretto.
+- Sorgenti ritirate preservate: 106 percorsi non selezionati, nessuna cancellazione.
+
+Prova visiva: `cache/nodo8-website-preview/nodo8-map-first-published-20261008m.png`.
+
+Racconto: https://simoneghezzicolombo.github.io/tpl-olgiate-intercomunale/dietro-l-analisi/?v=20261008m
