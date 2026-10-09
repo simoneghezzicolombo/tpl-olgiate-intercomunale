@@ -5,7 +5,7 @@ import {
   adjacentEvent,
   diagramStops,
   servicePhase,
-} from "./nodo8-line.mjs?v=20261008n";
+} from "./nodo8-line.mjs?v=20261008o";
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;

@@ -1,4 +1,4 @@
-import { diagramStops } from "./nodo8-line.mjs?v=20261008n";
+import { diagramStops } from "./nodo8-line.mjs?v=20261008o";
 const ns = "http://www.w3.org/2000/svg";
 const displayText = (value) => String(value).replace(/\u2014/g, ", ");
 const node = (tag, cls, text) => {
@@ -76,7 +76,7 @@ export function updateBusMarker(element, state, { showCarrier = false } = {}) {
   element.setAttribute("aria-label", element.title);
 }
 
-export { mountPlayer } from "./nodo8-player.mjs?v=20261008n";
+export { mountPlayer } from "./nodo8-player.mjs?v=20261008o";
 
 export function mountRoadPreview(line) {
   const host = node("div", "n8-road-preview"),
@@ -494,7 +494,7 @@ function finishDiagram(container, drawing, line, { onSelect, localities }) {
     download.disabled = true;
     try {
       const response = await fetch(
-        new URL("./nodo8-experience.css?v=20261008n", import.meta.url),
+        new URL("./nodo8-experience.css?v=20261008o", import.meta.url),
       );
       if (!response.ok) throw new Error("Diagram styles unavailable");
       const copy = drawing.cloneNode(true),
@@ -609,9 +609,10 @@ function renderLocalityDiagram(container, line) {
       "desc",
       { id: id + "-description" },
       "Olgiate FS al centro, un raccordo verso San Zeno e un raccordo verso " +
-        "Canova / Beolco. Il cerchio superiore dispone Beverate, Vaccarezza, " +
-        "Brivio, Arlate e Calco in senso antiorario. Il cerchio inferiore dispone " +
-        "Monticello, Santa Maria Hoè, Perego e Rovagnate. Riferimenti territoriali, " +
+        "Canova / Beolco. Cinque località equidistanti per anello. Il cerchio " +
+        "superiore dispone Beverate, Brivio, Arlate e Calco in senso antiorario. " +
+        "Il cerchio inferiore dispone Monticello, Santa Maria Hoè, Perego e " +
+        "Rovagnate in senso orario. Le frecce leggono lo schema concettuale. Riferimenti territoriali, " +
         "non siti di fermata o copertura certificata. La disposizione concettuale " +
         "non sostituisce l'ordine effettivo delle fermate nel primo schema e nella sequenza.",
     ),
@@ -629,16 +630,15 @@ function renderLocalityDiagram(container, line) {
   );
   const localities = [
     ["San Zeno", 350, 90],
-    ["Beverate", 350, 30],
-    ["Vaccarezza", 350, -30],
-    ["Brivio", 350, -90],
-    ["Arlate", 350, -150],
-    ["Calco", 350, -210],
+    ["Beverate", 350, 18],
+    ["Brivio", 350, -54],
+    ["Arlate", 350, -126],
+    ["Calco", 350, -198],
     ["Canova / Beolco", 1120, -90],
-    ["Monticello", 1120, -30],
-    ["Santa Maria Hoè", 1120, 30],
-    ["Perego", 1120, 150],
-    ["Rovagnate", 1120, 210],
+    ["Monticello", 1120, -18],
+    ["Santa Maria Hoè", 1120, 54],
+    ["Perego", 1120, 126],
+    ["Rovagnate", 1120, 198],
   ];
   localities.forEach(([name, cy, degrees]) => {
     const point = circlePoint(600, cy, 240, degrees),
@@ -674,8 +674,12 @@ function renderLocalityDiagram(container, line) {
     );
     drawing.append(group);
   });
-  [60, -60, -180].forEach((degrees) =>
+  // Place one arrow halfway between each pair of nodes, clear of every label.
+  [54, -18, -90, -162, -234].forEach((degrees) =>
     appendArrow(drawing, 600, 350, 240, degrees),
+  );
+  [-54, 18, 90, 162, 234].forEach((degrees) =>
+    appendArrow(drawing, 600, 1120, 240, degrees, true),
   );
   drawing.append(
     svg("rect", {
