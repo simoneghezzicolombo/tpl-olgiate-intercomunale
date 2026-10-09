@@ -26,6 +26,10 @@ I selettori dei capitoli potevano catturare il `body[data-scene]` nei collegamen
 diretti. Ora sono limitati a `main .chapter[data-scene]`: controlli e animazioni
 restano nel capitolo corretto anche entrando direttamente dalla sua URL.
 
+Il posizionamento cinematografico usa un offset, senza conservare padding
+globale. Questo evita di contare due volte lo spazio occupato dal testo quando
+si passa alla vista KML con `fitBounds`, soprattutto cambiando lato della scheda.
+
 ## Evidenza preservata
 
 Geometrie KML ufficiali intatte: 18 varianti, 7 D184 e 11 D185;
@@ -39,7 +43,7 @@ chilometrico, autorizzazioni, continuità dei passeggeri o finanziamento.
 ## Verifiche
 
 - 42 test Python e 8 sottotest.
-- 36 test Node, inclusi ownership dei livelli, cornice geografica e deep link.
+- 37 test Node, inclusi ownership dei livelli, cornice geografica e deep link.
 - Controllo browser di tracciati ufficiali, capitoli, dettagli e simulazione.
 - Pubblicazione ancora limitata alle due pagine finali e 71 dipendenze.
   Prototipi e dati non pubblicati restano nel repository.

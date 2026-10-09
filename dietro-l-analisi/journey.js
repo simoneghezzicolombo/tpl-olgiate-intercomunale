@@ -641,7 +641,12 @@
     document.body.dataset.scene = activeScene;
   }
   function camera(opts) {
-    map.easeTo({ duration: 1050, essential: true, padding: window.__analysisJourneyMapFrame?.() || 0, ...opts });
+    const frame = window.__analysisJourneyMapFrame?.() || { left: 0, right: 0, top: 0, bottom: 0 };
+    // A camera offset frames the narrative without persisting global padding.
+    // MapLibre's fitBounds includes its own padding when computing the camera;
+    // retaining the previous chapter's padding counts the exclusion twice.
+    map.easeTo({ duration: 1050, essential: true, padding: 0,
+      offset: [(frame.left - frame.right) / 2, (frame.top - frame.bottom) / 2], ...opts });
   }
 
   function setScene(scene) {
