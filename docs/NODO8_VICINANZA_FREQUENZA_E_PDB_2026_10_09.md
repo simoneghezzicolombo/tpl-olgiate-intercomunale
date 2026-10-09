@@ -70,3 +70,19 @@ URL/pagina e delimitazioni sono in `assets/nodo8-service-comparison.json`.
 
 Nessun cambio di percorso, fermata, orario, calendario, budget o autorità
 decisionale. PRIMARY e RUNNER-UP rimangono non autorizzati.
+
+## Pubblicazione e verifica
+
+- Implementazione `59517b3b97d85204678105f78535c1c2e12a9402`;
+  sorgente pubblicazione `d7f51b4e08b644aabdadb262b1009ac446530279`.
+- Pages `7412ae23bea7d2fe9c97ab0d66c9f0b027e4218e`, CI
+  `37946095491` conclusa `success`, versione cache `20261008t`.
+- 44 test Python, 8 subtest e 52 test Node verdi. Diagnostico
+  riprodotto dal substrato; proposta conforme alle quattro fonti.
+- Verificati SHA256 via HTTP per tutti gli 81 file pubblicati; soltanto
+  due pagine HTML e 106 percorsi storici non selezionati preservati.
+- Browser pubblico: confronto per comune e soglia in entrambe le pagine,
+  Brivio e Santa Maria Hoè a 5 minuti negativi e visibili; fonti e date
+  dichiarate. Controllo locale a 390 px senza overflow orizzontale.
+- Prova della vetrina:
+  `cache/nodo8-website-preview/nodo8-benefits-published-20261008t.png`.
