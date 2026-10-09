@@ -12,10 +12,11 @@ on:
       - nodo8-experience.css
       - nodo8-polish.css
       - nodo8-design.css
+      - nodo8-benefits.css
       - tests/test_nodo8_playback.mjs
       - tests/test_nodo8_diagrams.mjs
       - tests/test_nodo8_redesign.py
-      - assets/nodo8-proposal.json
+      - assets/nodo8-*.json
       - dietro-l-analisi/**
       - config/nodo8_publication_allowlist.json
       - scripts/build_nodo8_publication.py

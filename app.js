@@ -1,13 +1,14 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
-import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008s";
+import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008t";
 import {
   renderStopTimes,
   readStopSelection,
   stopLink,
-} from "./nodo8-stop-times.mjs?v=20261008s";
-import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008s";
-import { validateCoverageComparison, coverageChangeLabel } from "./nodo8-coverage.mjs?v=20261008s";
+} from "./nodo8-stop-times.mjs?v=20261008t";
+import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008t";
+import { validateCoverageComparison, coverageChangeLabel } from "./nodo8-coverage.mjs?v=20261008t";
+import { initBenefits } from "./nodo8-benefits.mjs?v=20261008t";
 let coverageComparison = null;
 import {
   mountPlayer,
@@ -15,7 +16,7 @@ import {
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "./nodo8-experience.mjs?v=20261008s";
+} from "./nodo8-experience.mjs?v=20261008t";
 let activePlayer = null,
   activeMap = null,
   currentLine = null,
@@ -156,6 +157,7 @@ function renderTimetable(data) {
 }
 function renderCoverage(data) {
   const time = document.getElementById("coverageTime").value;
+  document.getElementById("coverageLossHint").hidden = time !== "5" || !coverageComparison;
   const total = document.getElementById("totalCoverage");
   total.replaceChildren(
     document.createTextNode(formatNumber(data.coverage.TOTAL[time])),
@@ -629,6 +631,7 @@ async function initProposal() {
       console.warn("Coverage comparison unavailable", error);
     }
     const line = buildLine(data);
+    initBenefits({proposal:data,coverage:coverageComparison,rootHref:"index.html"});
     currentLine = line;
     renderTimetable(data);
     renderCoverage(data);

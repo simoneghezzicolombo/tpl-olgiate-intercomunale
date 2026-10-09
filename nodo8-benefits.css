@@ -1,0 +1,57 @@
+.benefits-teaser { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; padding: 12px 0; border-top: 1px solid #8fa89d50; border-bottom: 1px solid #8fa89d50; font-size: 13px; }
+.benefits-teaser strong { font-size: 23px; letter-spacing: -.03em; }
+.benefits-teaser span { flex: 1 1 210px; }
+.benefits-teaser a { font-weight: 700; flex-basis: 100%; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+.resident-comparison { margin: 25px 0 35px; }
+.benefits-controls { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-bottom: 18px; }
+.benefits-controls label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+.benefits-controls select { width: 100%; min-width: 0; border: 1px solid #91a69a70; border-radius: 8px; color: #153d34; background: #fffdf8; font: inherit; font-size: 13px; padding: 11px 9px; }
+.benefits-cards { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+.benefits-card { min-width: 0; border: 1px solid #8fa89d55; border-radius: 14px; padding: 22px; background: #fffdf8; color: #153d34; }
+.benefits-card--proposal { background: #153d34; color: #fffdf8; }
+.benefits-card h3 { font-size: 15px; margin: 0 0 16px; }
+.resident-comparison .benefits-card p { font-size: 13px; line-height: 1.5; margin: 4px 0; }
+.benefits-coverage { display: block; font-size: clamp(30px,4vw,52px); line-height: 1.1; letter-spacing: -.05em; }
+.benefits-track { height: 6px; margin: 12px 0 20px; border-radius: 4px; background: #8fa89d40; overflow: hidden; }
+.benefits-track span { display: block; height: 100%; background: #829486; border-radius: inherit; }
+.benefits-card--proposal .benefits-track span { background: #55e1bf; }
+.benefits-frequency { display: block; font-size: clamp(19px,2vw,27px); letter-spacing: -.03em; }
+.benefits-card small { font-size: 12px; opacity: .8; }
+.resident-comparison .benefits-delta { font-size: 14px; font-weight: 700; margin: 18px 0 8px; }
+.resident-comparison .is-loss { color: #b44d35; }
+.resident-comparison .benefits-note { font-size: 12px; line-height: 1.7; opacity: .8; max-width: 880px; margin: 8px 0 18px; }
+.resident-comparison details { border-top: 1px solid #8fa89d55; padding: 11px 0; font-size: 13px; }
+.resident-comparison summary { cursor: pointer; font-weight: 700; }
+.resident-comparison details p, .resident-comparison details li { font-size: 13px; line-height: 1.7; margin: 10px 0; }
+.resident-comparison details ul { padding-left: 20px; }
+.resident-comparison a, .pdb-note a { color: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+.benefits-sources a + a { margin-left: 20px; }
+.pdb-note { padding-top: 25px; padding-bottom: 30px; border-top: 1px solid #8fa89d55; }
+.pdb-note h3 { font-size: 23px; margin: 0 0 12px; }
+.pdb-note p, .pdb-note details { font-size: 14px; line-height: 1.8; max-width: 940px; }
+.pdb-note details { margin-top: 12px; }
+.pdb-note summary { cursor: pointer; }
+.resident-story-panel { border-top: 1px solid #8fa89d55; padding: 12px 0; margin: 16px 0; font-size: 13px; }
+.resident-story-panel > summary { cursor: pointer; font-weight: 700; }
+main .chapter .copy .benefits-teaser { font-size: 12px; line-height: 1.5; margin: 18px 0; }
+main .chapter .copy .benefits-teaser strong { font-size: 25px; }
+main .chapter .copy .resident-comparison p { font-size: 12px; line-height: 1.6; }
+main .chapter .copy .resident-comparison .benefits-card h3 { font-size: 13px; }
+main .chapter .copy .resident-comparison .benefits-card p,
+main .chapter .copy .resident-comparison .benefits-card h3 { color: inherit; }
+main .chapter .copy .resident-comparison .benefits-coverage { font-size: 32px; }
+main .chapter .copy .resident-comparison .benefits-frequency { font-size: 18px; }
+main .chapter .copy .resident-comparison .benefits-card { padding: 13px; }
+main .chapter .copy .resident-comparison .benefits-cards { gap: 10px; }
+main .chapter .copy .resident-comparison .benefits-controls { grid-template-columns: 1fr; gap: 8px; }
+main .chapter .copy .resident-comparison .is-loss { color: #ffb198; }
+@media (max-width:600px) {
+  .benefits-controls { grid-template-columns: 1fr; gap: 10px; }
+  .benefits-cards { gap: 10px; }
+  .benefits-card { padding: 14px; }
+  .benefits-card h3 { font-size: 13px; }
+  .benefits-frequency { font-size: 18px; }
+  .benefits-coverage { font-size: 32px; }
+  .benefits-sources a { display: block; margin: 6px 0; }
+  .benefits-sources a + a { margin-left: 0; }
+}

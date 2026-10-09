@@ -1,4 +1,5 @@
 import test from "node:test";
+import {validateBenefits,benefitsView} from "../nodo8-benefits.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
@@ -17,6 +18,38 @@ const data = JSON.parse(
   ),
 );
 const coverageComparison = JSON.parse(readFileSync(new URL("../assets/nodo8-coverage-comparison.json", import.meta.url), "utf8"));
+const serviceComparison=JSON.parse(readFileSync(new URL("../assets/nodo8-service-comparison.json",import.meta.url),"utf8"));
+const coverageDiagnostic=JSON.parse(readFileSync(new URL("../assets/nodo8-coverage-diagnostic.json",import.meta.url),"utf8"));
+test("resident comparison keeps independent spatial and station metrics, including losses",()=>{
+  const model=validateBenefits(data,coverageComparison,serviceComparison,coverageDiagnostic);
+  for(const code of ["TOTAL",...data.municipalities.map(m=>m.code)]) for(const threshold of ["5","8","10"]) for(const direction of ["west","east"]) {
+    const v=benefitsView(model,code,threshold,direction);
+    assert.equal(v.proposalCount,16);assert.equal(v.proposalGap,120);
+    assert.equal(v.currentCount,direction==="west"?8:5);
+    assert.equal(v.currentGap,direction==="west"?377:380);
+    assert.equal(v.delta,coverageComparison.delta_percentage_points[code][threshold]);
+  }
+  assert.ok(benefitsView(model,"97010","5").delta<0);
+  assert.ok(benefitsView(model,"97074","5").delta<0);
+  assert.ok(benefitsView(model,"TOTAL","5").delta>0);
+  const brivio=coverageDiagnostic.municipality_details["97010"].old_closest_groups_for_lost_units;
+  assert.equal(brivio[0].cluster_id,"EX_036");assert.deepEqual(brivio[0].member_stop_ids,["L00063"]);
+  const smh=coverageDiagnostic.municipality_details["97074"].old_closest_groups_for_lost_units;
+  assert.equal(smh[0].cluster_id,"EX_028");assert.deepEqual(smh[0].member_stop_ids,["300873","L00873"]);
+  assert.equal(serviceComparison.pdb.proposed_terminal,"Cisano Bergamasco FS");
+});
+test("resident comparison rejects invented joint scores, budgets or unreconciled losses",()=>{
+  for(const mutate of [s=>s.annual_service_count_inferred=true,s=>s.combined_frequency_accessibility_score_inferred=true,
+    s=>s.pdb.automatic_km_entitlement_certified=true,s=>s.pdb.automatic_funding_transfer_certified=true,
+    s=>s.east.current_departures_min.pop()]) {
+    const s=structuredClone(serviceComparison);mutate(s);assert.throws(()=>validateBenefits(data,coverageComparison,s,coverageDiagnostic));
+  }
+  for(const mutate of [d=>d.municipality_details["97074"].lost_pp=0,d=>d.sources.pedestrian_osm.sha256="other",
+    d=>d.additional_resident_count_inferred=true]) {
+    const d=structuredClone(coverageDiagnostic);mutate(d);assert.throws(()=>validateBenefits(data,coverageComparison,serviceComparison,d));
+  }
+  assert.throws(()=>benefitsView(validateBenefits(data,coverageComparison,serviceComparison,coverageDiagnostic),"other"));
+});
 test("spatial comparison preserves the confirmed percentages and exposes losses without claiming current service", () => {
   assert.equal(validateCoverageComparison(coverageComparison, data), coverageComparison);
   assert.equal(coverageComparison.additional_resident_count_inferred, false);

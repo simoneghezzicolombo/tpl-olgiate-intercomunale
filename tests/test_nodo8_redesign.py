@@ -43,6 +43,22 @@ class Page(HTMLParser):
 
 
 class RedesignRegressionTests(unittest.TestCase):
+    def test_benefits_and_historical_pdb_evidence_keep_dates_and_scope(self):
+        for name in PAGES:
+            text=(ROOT/name).read_text(encoding='utf-8')
+            self.assertIn('data-resident-comparison',text)
+            self.assertIn('data-hero-coverage',text)
+            self.assertIn('data-pdb-note',text)
+        service=json.loads((ROOT/'assets/nodo8-service-comparison.json').read_text(encoding='utf-8'))
+        for axis,name in [('west','D184'),('east','D185')]:
+            pdf=ROOT/f'cache/current_timetable_audit_20261007/{name}.pdf'
+            if pdf.exists():
+                self.assertEqual(sha256(pdf.read_bytes()).hexdigest(),service[axis]['source_sha256'])
+        pdb=ROOT/'cache/PdB_COLCVA_Allegato2_SchedeInterventoLecco_20180608.pdf'
+        if pdb.exists():
+            self.assertEqual(sha256(pdb.read_bytes()).hexdigest(),service['pdb']['source_sha256'])
+        self.assertFalse(service['pdb']['automatic_km_entitlement_certified'])
+        self.assertFalse(service['pdb']['automatic_funding_transfer_certified'])
     @classmethod
     def setUpClass(cls):
         cls.data = json.loads((ROOT / "assets/nodo8-proposal.json").read_text(encoding="utf-8"))
