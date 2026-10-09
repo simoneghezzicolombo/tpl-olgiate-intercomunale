@@ -1,12 +1,13 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008r";
-import { stopLink } from "../nodo8-stop-times.mjs?v=20261008r";
-import { installS8 } from "../nodo8-s8.mjs?v=20261008r";
+import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008s";
+import { stopLink } from "../nodo8-stop-times.mjs?v=20261008s";
+import { installS8 } from "../nodo8-s8.mjs?v=20261008s";
+import { installCurrent } from "../nodo8-current.mjs?v=20261008s";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
-} from "../nodo8-experience.mjs?v=20261008r";
+} from "../nodo8-experience.mjs?v=20261008s";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
@@ -187,6 +188,21 @@ async function installNodo8() {
       lastScene = null;
     let explorerPlayer = null;
     let rail = null;
+    let current = null;
+    const currentVisible = () => current !== null && document.body.dataset.scene === "explore" &&
+      window.__analysisJourneyExplore?.isActive() === true && window.__analysisJourneyExplore?.layers.current === true;
+    installCurrent(map).then(installed => {
+      current = installed;
+      window.__analysisJourneyCurrent = {installed:true,data:current.data};
+      document.documentElement.dataset.currentSimulationReady = "true";
+      window.__analysisJourneyExplore?.render();
+      explorerPlayer?.render();
+    }).catch(error => {
+      document.documentElement.dataset.currentSimulationReady = "error";
+      const status = document.getElementById("currentBusStatus");
+      if (status) {status.hidden=false;status.textContent="Animazione D184/D185 non disponibile. Resta solo il riferimento geometrico.";}
+      console.warn("Existing-service animation unavailable",error);
+    });
     const railVisible = () => document.body.dataset.scene === "explore" &&
       window.__analysisJourneyExplore?.isActive() === true &&
       window.__analysisJourneyExplore?.layers.s8 === true;
@@ -225,7 +241,6 @@ async function installNodo8() {
       data.routes.forEach((route) =>
         route.coordinates.forEach((coordinate) => bounds.extend(coordinate)),
       );
-      if (railVisible()) rail?.localCoordinates.forEach(coordinate => bounds.extend(coordinate));
       map.fitBounds(bounds, {
         padding: document.body.classList.contains("is-map-exploring")
           ? {
@@ -269,9 +284,9 @@ async function installNodo8() {
         visible && showStops ? 0.95 : 0,
       );
       const host = document.getElementById("explorePlayback");
-      if (host) host.hidden = !active || (!visible && !railVisible());
+      if (host) host.hidden = !active || (!visible && !railVisible() && !currentVisible());
       if (explorerPlayer) {
-        if (!contextVisible("explore") && !railVisible()) explorerPlayer.pause();
+        if (!contextVisible("explore") && !railVisible() && !currentVisible()) explorerPlayer.pause();
         explorerPlayer.render();
       }
       if (!contextVisible("story") && !contextVisible("explore")) {
@@ -369,6 +384,8 @@ async function installNodo8() {
         (state) => {
           if (contextVisible("explore")) paintBuses(state);
           rail?.render({minute: state.minute, visible: railVisible()});
+          current?.render({minute:state.minute,visible:currentVisible(),selection:document.querySelector("#currentRouteChoice")?.value || "ALL",
+            showStops:window.__analysisJourneyExplore?.layers.stops !== false});
         },
         {
           compact: true,

@@ -7,6 +7,7 @@
   "include_files": [
     "app.js",
     "assets/nodo8-coverage-comparison.json",
+    "assets/nodo8-current-simulation.json",
     "assets/nodo8-proposal.json",
     "assets/nodo8-s8-simulation.json",
     "dietro-l-analisi/current-routes-gtfs.geojson.gz.b64.0",
@@ -69,6 +70,7 @@
     "favicon.svg",
     "index.html",
     "nodo8-coverage.mjs",
+    "nodo8-current.mjs",
     "nodo8-design.css",
     "nodo8-experience.css",
     "nodo8-experience.mjs",

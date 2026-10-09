@@ -1,4 +1,4 @@
-import { clockSeconds, diagramStops } from "./nodo8-line.mjs?v=20261008r";
+import { clockSeconds, diagramStops } from "./nodo8-line.mjs?v=20261008s";
 export const eventKey = (event) => event.occurrenceId || event.role;
 export function journeyDurationLabel(minutes) {
   if (!Number.isFinite(minutes) || minutes < 0) throw new Error("Durata non valida.");
