@@ -30,6 +30,40 @@ test("active exploration still owns shared-layer composition and clears narrativ
   assert.ok(writes.some(([id, value]) => id === "current-routes" && value === 0));
   assert.ok(writes.some(([id]) => id === "worldpop-columns"));
 });
+test("D184/D185 are available from simulation and layers, with official route and stop filters", () => {
+  assert.equal((explorerSource.match(/data-layer="current"/g) || []).length, 2);
+  assert.match(explorerSource, /id="currentRouteChoice"/);
+  assert.match(explorerSource, /map\.setFilter\(id, routeFilter\)/);
+  assert.match(explorerSource, /map\.setFilter\(id, stopFilter\)/);
+  assert.match(explorerSource, /GTFS 2025\/26/);
+  assert.match(explorerSource, /Non sono posizioni GPS o corse animate/);
+  const fit = explorerSource.slice(explorerSource.indexOf("  function fit(force = false)"), explorerSource.indexOf("  function interactions(on)"));
+  assert.match(fit, /layers\.current \? lineage\.currentData\.features\.filter/);
+  assert.match(fit, /layers\.proposals \? lineage\.finalData\.features : \[\]/);
+  assert.doesNotMatch(fit, /\.\.\.lineage\.anchorData/);
+});
+test("each current-line selection filters routes and shared stops together", () => {
+  const start = explorerRender.indexOf('    const currentChoice =');
+  const end = explorerRender.indexOf('    opacity("explore-current-hit"');
+  const filterCode = explorerRender.slice(start, end);
+  for (const choice of ["ALL", "D184", "D185"]) {
+    const writes = [];
+    runInNewContext(filterCode, {
+      controls: {querySelector:()=>({value:choice})},
+      map: {getLayer:()=>true,setFilter:(id,filter)=>writes.push([id,JSON.parse(JSON.stringify(filter))])},
+    });
+    assert.equal(writes.length,5);
+    const route = writes.find(([id])=>id === "explore-current-routes")[1];
+    const stop = writes.find(([id])=>id === "explore-current-stops")[1];
+    if (choice === "ALL") {
+      assert.deepEqual(route,["in",["get","route"],["literal",["D184","D185"]]]);
+      assert.equal(stop[0],"any");
+    } else {
+      assert.deepEqual(route,["==",["get","route"],choice]);
+      assert.deepEqual(stop,[">=",["index-of",choice,["get","routes"]],0]);
+    }
+  }
+});
 test("map evidence is framed outside the actual left or right narrative column", () => {
   const dimensions = { width: 1280, height: 720 };
   const left = storyMapPadding({ ...dimensions, copyRect: { left: 64, right: 524, width: 460 } });

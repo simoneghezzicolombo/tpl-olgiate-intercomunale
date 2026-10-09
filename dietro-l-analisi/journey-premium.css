@@ -1663,3 +1663,16 @@ body.is-map-exploring .vignette {
 .s8-source { margin: 8px 0 14px; font-size: 12px; color: #b5c9be; }
 .s8-source summary { cursor: pointer; }
 .s8-source p { font-size: 12px; line-height: 1.6; margin: 8px 0; }
+.current-comparison { border-bottom: 1px solid #b5c9be30; padding: 12px 0; margin-bottom: 12px; }
+.current-comparison[hidden] { display: none; }
+.current-comparison__legend { display: flex; gap: 16px; font-size: 12px; margin-bottom: 8px; }
+.current-comparison__legend span { display: inline-flex; align-items: center; gap: 5px; }
+.current-comparison__legend i { width: 16px; height: 3px; background: var(--c); border-radius: 2px; }
+.current-comparison label { font-size: 12px; display: block; margin-bottom: 5px; }
+.current-comparison__choice { display: flex; gap: 8px; }
+.current-comparison__choice select { min-width: 0; flex: 1; background: #173c33; color: #f5f2e8; border: 1px solid #b5c9be50; border-radius: 8px; padding: 8px; font: inherit; font-size: 13px; }
+.current-comparison__choice button { padding: 8px 12px; font-size: 12px; }
+.current-comparison details { font-size: 12px; margin-top: 8px; color: #b5c9be; }
+.current-comparison summary { cursor: pointer; }
+.current-comparison details p { font-size: 12px; line-height: 1.6; margin: 8px 0; }
+.current-comparison a { color: #f5f2e8; font-size: 12px; }
