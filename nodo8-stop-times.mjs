@@ -1,4 +1,4 @@
-import { siteTimetable, clockSeconds } from "./nodo8-line.mjs?v=20261008p";
+import { siteTimetable, clockSeconds } from "./nodo8-line.mjs?v=20261008q";
 
 const labels = {
   FULL_TRIP_START_FS: "Partenza FS",

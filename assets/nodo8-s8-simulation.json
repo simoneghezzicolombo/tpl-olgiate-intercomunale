@@ -1,0 +1,2283 @@
+{
+  "contract": "nodo8_s8_local_simulation_v1",
+  "colour": "#f8b1b0",
+  "service_date": "2026-10-01",
+  "geometry_retrieved_on": "2026-10-09",
+  "scope": "LOCAL_CERNUSCO_MERATE_OLGIATE_AIRUNO_NOT_FULL_S8",
+  "sources": [
+    {
+      "path": "cache/nodo8-s8-rail-45.688.osm",
+      "sha256": "1f1f8dfd6bc3c2979aac21635984faa95432cd25d40419e9a213540f4f528de1",
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=9.388,45.688,9.432,45.703"
+    },
+    {
+      "path": "cache/nodo8-s8-rail-45.703.osm",
+      "sha256": "408c1a9c1df9a0f1c5e177c1071f7658328c688c47692356c448af682706dfc8",
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=9.388,45.703,9.432,45.718"
+    },
+    {
+      "path": "cache/nodo8-s8-rail-45.718.osm",
+      "sha256": "29c51196e82ae4686c16e44487c132c1046cc3effdbd2ac7d7664aeae88a98ac",
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=9.388,45.718,9.432,45.733"
+    },
+    {
+      "path": "cache/nodo8-s8-rail-45.733.osm",
+      "sha256": "1b62034684dd9f46ea83cb9c6a29983b0dc80981d733658281f4ee0c63efd45e",
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=9.388,45.733,9.432,45.748"
+    },
+    {
+      "path": "cache/nodo8-s8-rail-45.748.osm",
+      "sha256": "13eccf38cbfa56983504641ab39f8ac208f2587a4c586877481e2649d831d228",
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=9.388,45.748,9.432,45.762"
+    },
+    {
+      "path": "cache/rt031-all-rail-20261001/trenord_gtfs.zip",
+      "sha256": "b4296f145b42ccb35c26085470ff4b3fd5dffe533251c0aab312312a73820ad6",
+      "url": "https://dati.lombardia.it/download/3z4k-mxz9/application%2Fzip"
+    },
+    {
+      "path": "outputs/phase2/rt031_line8_local_shortcuts_v3/all_station_rail_20261001.json",
+      "sha256": "570016e59da17f6367b384650d64556fa1b627243b06188933ec567664fb01d8",
+      "url": null
+    }
+  ],
+  "semantics": {
+    "movement": "DISTANCE_INTERPOLATION_BETWEEN_DATED_GTFS_CALLS",
+    "geometry": "SHORTEST_CONNECTED_MAIN_RAIL_PATH_IN_FROZEN_OSM_NOT_TRACK_ASSIGNMENT",
+    "live": false,
+    "timetable_2027_certified": false,
+    "connection_guaranteed": false,
+    "platform_assignment_certified": false
+  },
+  "stations": [
+    {
+      "id": "S01513",
+      "name": "Cernusco-Merate",
+      "coordinates": [
+        9.3967968,
+        45.6950741
+      ],
+      "gtfs_coordinates": [
+        9.396974,
+        45.695045
+      ],
+      "snap_distance_m": 14.137889345299808,
+      "node": "7788585528"
+    },
+    {
+      "id": "S01514",
+      "name": "Olgiate-Calco-Brivio",
+      "coordinates": [
+        9.4038428,
+        45.7291809
+      ],
+      "gtfs_coordinates": [
+        9.403662947256066,
+        45.72918776556806
+      ],
+      "snap_distance_m": 13.980981887138439,
+      "node": "7788578506"
+    },
+    {
+      "id": "S01515",
+      "name": "Airuno",
+      "coordinates": [
+        9.4222009,
+        45.7554928
+      ],
+      "gtfs_coordinates": [
+        9.422322,
+        45.7554905
+      ],
+      "snap_distance_m": 9.398802771273413,
+      "node": "7788605985"
+    }
+  ],
+  "segments": [
+    {
+      "from_id": "S01513",
+      "to_id": "S01514",
+      "coordinates": [
+        [
+          9.3967968,
+          45.6950741
+        ],
+        [
+          9.3980027,
+          45.696493
+        ],
+        [
+          9.3982324,
+          45.6967821
+        ],
+        [
+          9.3983728,
+          45.6969665
+        ],
+        [
+          9.3985301,
+          45.6971807
+        ],
+        [
+          9.3986548,
+          45.6973634
+        ],
+        [
+          9.3987562,
+          45.6975192
+        ],
+        [
+          9.3988587,
+          45.6976851
+        ],
+        [
+          9.3989579,
+          45.6978584
+        ],
+        [
+          9.3990545,
+          45.6980378
+        ],
+        [
+          9.3991618,
+          45.6982523
+        ],
+        [
+          9.3992409,
+          45.6984246
+        ],
+        [
+          9.3993153,
+          45.6985993
+        ],
+        [
+          9.399375,
+          45.6987529
+        ],
+        [
+          9.3994475,
+          45.6989532
+        ],
+        [
+          9.3995024,
+          45.6991192
+        ],
+        [
+          9.3995588,
+          45.6993077
+        ],
+        [
+          9.3996178,
+          45.6995355
+        ],
+        [
+          9.3996607,
+          45.699729
+        ],
+        [
+          9.3996956,
+          45.6999179
+        ],
+        [
+          9.399721,
+          45.7000867
+        ],
+        [
+          9.3997418,
+          45.7002633
+        ],
+        [
+          9.3997579,
+          45.700416
+        ],
+        [
+          9.3997679,
+          45.7005622
+        ],
+        [
+          9.3997753,
+          45.700734
+        ],
+        [
+          9.399776,
+          45.7009484
+        ],
+        [
+          9.3997747,
+          45.7011231
+        ],
+        [
+          9.399764,
+          45.7013168
+        ],
+        [
+          9.399752,
+          45.701486
+        ],
+        [
+          9.399713,
+          45.7018025
+        ],
+        [
+          9.399699,
+          45.7018914
+        ],
+        [
+          9.3996444,
+          45.7022037
+        ],
+        [
+          9.3995986,
+          45.7024326
+        ],
+        [
+          9.3992148,
+          45.7041991
+        ],
+        [
+          9.3991578,
+          45.704478
+        ],
+        [
+          9.3991236,
+          45.7046593
+        ],
+        [
+          9.39909,
+          45.704862
+        ],
+        [
+          9.3990626,
+          45.7050525
+        ],
+        [
+          9.3990385,
+          45.7052247
+        ],
+        [
+          9.3990145,
+          45.7054039
+        ],
+        [
+          9.3989941,
+          45.7055785
+        ],
+        [
+          9.3989811,
+          45.7057184
+        ],
+        [
+          9.3989646,
+          45.7058871
+        ],
+        [
+          9.3989535,
+          45.70606
+        ],
+        [
+          9.3989439,
+          45.7062242
+        ],
+        [
+          9.3989338,
+          45.7064214
+        ],
+        [
+          9.3989271,
+          45.7066569
+        ],
+        [
+          9.3989023,
+          45.7073693
+        ],
+        [
+          9.3988935,
+          45.7076734
+        ],
+        [
+          9.3988795,
+          45.7080692
+        ],
+        [
+          9.3988673,
+          45.708465
+        ],
+        [
+          9.3988647,
+          45.7086578
+        ],
+        [
+          9.3988674,
+          45.7089064
+        ],
+        [
+          9.3988734,
+          45.7091054
+        ],
+        [
+          9.3988797,
+          45.709258
+        ],
+        [
+          9.3988902,
+          45.709414
+        ],
+        [
+          9.398907,
+          45.7095653
+        ],
+        [
+          9.3989264,
+          45.7097338
+        ],
+        [
+          9.3989522,
+          45.7099049
+        ],
+        [
+          9.3989827,
+          45.7100827
+        ],
+        [
+          9.3990226,
+          45.7102834
+        ],
+        [
+          9.3991202,
+          45.7106352
+        ],
+        [
+          9.3992288,
+          45.7109526
+        ],
+        [
+          9.3993522,
+          45.7112888
+        ],
+        [
+          9.399482,
+          45.7116095
+        ],
+        [
+          9.399603,
+          45.7118891
+        ],
+        [
+          9.3997371,
+          45.7121672
+        ],
+        [
+          9.4005142,
+          45.7135216
+        ],
+        [
+          9.4007155,
+          45.7138668
+        ],
+        [
+          9.4010016,
+          45.7143703
+        ],
+        [
+          9.4011639,
+          45.7146775
+        ],
+        [
+          9.4012901,
+          45.7149358
+        ],
+        [
+          9.4013932,
+          45.7151686
+        ],
+        [
+          9.4015034,
+          45.7154447
+        ],
+        [
+          9.401585,
+          45.7156771
+        ],
+        [
+          9.401669,
+          45.7159405
+        ],
+        [
+          9.4017285,
+          45.7161565
+        ],
+        [
+          9.4017803,
+          45.7163778
+        ],
+        [
+          9.4018345,
+          45.716636
+        ],
+        [
+          9.4018789,
+          45.7168722
+        ],
+        [
+          9.4027934,
+          45.7226054
+        ],
+        [
+          9.4032347,
+          45.7253438
+        ],
+        [
+          9.4034761,
+          45.7268834
+        ],
+        [
+          9.4035874,
+          45.727593
+        ],
+        [
+          9.4037227,
+          45.7284296
+        ],
+        [
+          9.4038428,
+          45.7291809
+        ]
+      ],
+      "distance_m": 3892.066007489312,
+      "osm_way_ids": [
+        "1232695771",
+        "1232695778",
+        "1232695779",
+        "1232695785",
+        "1232695786",
+        "1232695800",
+        "194284897",
+        "224162587",
+        "224162588",
+        "224162589",
+        "224162602",
+        "48540255",
+        "48540257"
+      ]
+    },
+    {
+      "from_id": "S01514",
+      "to_id": "S01515",
+      "coordinates": [
+        [
+          9.4038428,
+          45.7291809
+        ],
+        [
+          9.4040836,
+          45.7306954
+        ],
+        [
+          9.4044269,
+          45.7328774
+        ],
+        [
+          9.4045026,
+          45.733319
+        ],
+        [
+          9.4046684,
+          45.7343799
+        ],
+        [
+          9.4048493,
+          45.7354406
+        ],
+        [
+          9.4048963,
+          45.7356736
+        ],
+        [
+          9.4050415,
+          45.7363496
+        ],
+        [
+          9.405123,
+          45.7366574
+        ],
+        [
+          9.4052269,
+          45.7369798
+        ],
+        [
+          9.4053154,
+          45.7372157
+        ],
+        [
+          9.4054113,
+          45.7374492
+        ],
+        [
+          9.4055528,
+          45.7377628
+        ],
+        [
+          9.4056346,
+          45.7379446
+        ],
+        [
+          9.4058026,
+          45.7382859
+        ],
+        [
+          9.4059882,
+          45.7386142
+        ],
+        [
+          9.4061533,
+          45.7388972
+        ],
+        [
+          9.4063418,
+          45.7391605
+        ],
+        [
+          9.4065405,
+          45.7394064
+        ],
+        [
+          9.4068096,
+          45.739705
+        ],
+        [
+          9.4070382,
+          45.739933
+        ],
+        [
+          9.4073224,
+          45.7401749
+        ],
+        [
+          9.4075906,
+          45.7403935
+        ],
+        [
+          9.407872,
+          45.7406167
+        ],
+        [
+          9.4084819,
+          45.741069
+        ],
+        [
+          9.4091439,
+          45.7415183
+        ],
+        [
+          9.409807,
+          45.741923
+        ],
+        [
+          9.4162698,
+          45.7455454
+        ],
+        [
+          9.4173681,
+          45.7462001
+        ],
+        [
+          9.4181202,
+          45.7466989
+        ],
+        [
+          9.4187671,
+          45.7471773
+        ],
+        [
+          9.4194081,
+          45.7477223
+        ],
+        [
+          9.4199017,
+          45.7482138
+        ],
+        [
+          9.4203161,
+          45.7487138
+        ],
+        [
+          9.4206991,
+          45.7492597
+        ],
+        [
+          9.4210513,
+          45.7498905
+        ],
+        [
+          9.421316,
+          45.7505424
+        ],
+        [
+          9.4214984,
+          45.7511315
+        ],
+        [
+          9.4216197,
+          45.7517132
+        ],
+        [
+          9.4218627,
+          45.7530599
+        ],
+        [
+          9.4219473,
+          45.7535798
+        ],
+        [
+          9.4220701,
+          45.7545058
+        ],
+        [
+          9.4222009,
+          45.7554928
+        ]
+      ],
+      "distance_m": 3434.2325466776533,
+      "osm_way_ids": [
+        "1232695768",
+        "1232695771",
+        "1238345206",
+        "1238345220",
+        "196850984",
+        "196850986",
+        "83179311",
+        "83179312"
+      ]
+    }
+  ],
+  "trains": [
+    {
+      "id": "124817-2026-09-15-2026-10-09",
+      "number": "24817",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 321.0,
+          "departure_min": 322.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 325.0,
+          "departure_min": 326.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 330.0,
+          "departure_min": 331.0
+        }
+      ]
+    },
+    {
+      "id": "124819-2026-09-15-2026-10-09",
+      "number": "24819",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 351.0,
+          "departure_min": 352.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 355.0,
+          "departure_min": 356.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 360.0,
+          "departure_min": 361.0
+        }
+      ]
+    },
+    {
+      "id": "124814-2026-09-15-2026-10-09",
+      "number": "24814",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 357.0,
+          "departure_min": 358.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 362.0,
+          "departure_min": 363.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 366.0,
+          "departure_min": 367.0
+        }
+      ]
+    },
+    {
+      "id": "124821-2026-09-15-2026-10-09",
+      "number": "24821",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 381.0,
+          "departure_min": 382.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 385.0,
+          "departure_min": 386.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 390.0,
+          "departure_min": 391.0
+        }
+      ]
+    },
+    {
+      "id": "124816-2026-09-15-2026-10-09",
+      "number": "24816",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 387.0,
+          "departure_min": 388.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 392.0,
+          "departure_min": 393.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 396.0,
+          "departure_min": 397.0
+        }
+      ]
+    },
+    {
+      "id": "124823-2026-09-15-2026-10-09",
+      "number": "24823",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 411.0,
+          "departure_min": 412.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 415.0,
+          "departure_min": 416.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 420.0,
+          "departure_min": 421.0
+        }
+      ]
+    },
+    {
+      "id": "124818-2026-09-15-2026-10-09",
+      "number": "24818",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 417.0,
+          "departure_min": 418.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 422.0,
+          "departure_min": 423.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 426.0,
+          "departure_min": 427.0
+        }
+      ]
+    },
+    {
+      "id": "124825-2026-09-15-2026-10-09",
+      "number": "24825",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 441.0,
+          "departure_min": 442.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 445.0,
+          "departure_min": 446.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 450.0,
+          "departure_min": 451.0
+        }
+      ]
+    },
+    {
+      "id": "124820-2026-09-15-2026-10-09",
+      "number": "24820",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 447.0,
+          "departure_min": 448.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 452.0,
+          "departure_min": 453.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 456.0,
+          "departure_min": 457.0
+        }
+      ]
+    },
+    {
+      "id": "124827-2026-09-15-2026-10-09",
+      "number": "24827",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 471.0,
+          "departure_min": 472.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 475.0,
+          "departure_min": 476.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 480.0,
+          "departure_min": 481.0
+        }
+      ]
+    },
+    {
+      "id": "124822-2026-09-15-2026-10-09",
+      "number": "24822",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 477.0,
+          "departure_min": 478.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 482.0,
+          "departure_min": 483.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 486.0,
+          "departure_min": 487.0
+        }
+      ]
+    },
+    {
+      "id": "124829-2026-09-15-2026-10-09",
+      "number": "24829",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 501.0,
+          "departure_min": 502.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 505.0,
+          "departure_min": 506.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 510.0,
+          "departure_min": 511.0
+        }
+      ]
+    },
+    {
+      "id": "124824-2026-09-15-2026-10-09",
+      "number": "24824",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 507.0,
+          "departure_min": 508.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 512.0,
+          "departure_min": 513.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 516.0,
+          "departure_min": 517.0
+        }
+      ]
+    },
+    {
+      "id": "124831-2026-09-15-2026-10-09",
+      "number": "24831",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 531.0,
+          "departure_min": 532.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 535.0,
+          "departure_min": 536.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 540.0,
+          "departure_min": 541.0
+        }
+      ]
+    },
+    {
+      "id": "124826-2026-09-15-2026-10-09",
+      "number": "24826",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 537.0,
+          "departure_min": 538.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 542.0,
+          "departure_min": 543.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 546.0,
+          "departure_min": 547.0
+        }
+      ]
+    },
+    {
+      "id": "124833-2026-09-15-2026-10-09",
+      "number": "24833",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 561.0,
+          "departure_min": 562.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 565.0,
+          "departure_min": 566.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 570.0,
+          "departure_min": 571.0
+        }
+      ]
+    },
+    {
+      "id": "124828-2026-09-15-2026-10-09",
+      "number": "24828",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 567.0,
+          "departure_min": 568.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 572.0,
+          "departure_min": 573.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 576.0,
+          "departure_min": 577.0
+        }
+      ]
+    },
+    {
+      "id": "124835-2026-09-15-2026-10-09",
+      "number": "24835",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 591.0,
+          "departure_min": 592.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 595.0,
+          "departure_min": 596.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 600.0,
+          "departure_min": 601.0
+        }
+      ]
+    },
+    {
+      "id": "124830-2026-09-15-2026-10-09",
+      "number": "24830",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 597.0,
+          "departure_min": 598.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 602.0,
+          "departure_min": 603.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 606.0,
+          "departure_min": 607.0
+        }
+      ]
+    },
+    {
+      "id": "124837-2026-09-15-2026-10-09",
+      "number": "24837",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 621.0,
+          "departure_min": 622.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 625.0,
+          "departure_min": 626.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 630.0,
+          "departure_min": 631.0
+        }
+      ]
+    },
+    {
+      "id": "124832-2026-09-15-2026-10-09",
+      "number": "24832",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 627.0,
+          "departure_min": 628.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 632.0,
+          "departure_min": 633.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 636.0,
+          "departure_min": 637.0
+        }
+      ]
+    },
+    {
+      "id": "124839-2026-09-15-2026-10-09",
+      "number": "24839",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 651.0,
+          "departure_min": 652.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 655.0,
+          "departure_min": 656.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 660.0,
+          "departure_min": 661.0
+        }
+      ]
+    },
+    {
+      "id": "124834-2026-09-15-2026-10-09",
+      "number": "24834",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 657.0,
+          "departure_min": 658.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 662.0,
+          "departure_min": 663.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 666.0,
+          "departure_min": 667.0
+        }
+      ]
+    },
+    {
+      "id": "124841-2026-09-15-2026-10-09",
+      "number": "24841",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 681.0,
+          "departure_min": 682.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 685.0,
+          "departure_min": 686.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 690.0,
+          "departure_min": 691.0
+        }
+      ]
+    },
+    {
+      "id": "124836-2026-09-15-2026-10-09",
+      "number": "24836",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 687.0,
+          "departure_min": 688.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 692.0,
+          "departure_min": 693.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 696.0,
+          "departure_min": 697.0
+        }
+      ]
+    },
+    {
+      "id": "124843-2026-09-15-2026-10-09",
+      "number": "24843",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 711.0,
+          "departure_min": 712.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 715.0,
+          "departure_min": 716.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 720.0,
+          "departure_min": 721.0
+        }
+      ]
+    },
+    {
+      "id": "124838-2026-09-15-2026-10-09",
+      "number": "24838",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 717.0,
+          "departure_min": 718.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 722.0,
+          "departure_min": 723.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 726.0,
+          "departure_min": 727.0
+        }
+      ]
+    },
+    {
+      "id": "124845-2026-09-15-2026-10-09",
+      "number": "24845",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 741.0,
+          "departure_min": 742.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 745.0,
+          "departure_min": 746.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 750.0,
+          "departure_min": 751.0
+        }
+      ]
+    },
+    {
+      "id": "124840-2026-09-15-2026-10-09",
+      "number": "24840",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 747.0,
+          "departure_min": 748.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 752.0,
+          "departure_min": 753.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 756.0,
+          "departure_min": 757.0
+        }
+      ]
+    },
+    {
+      "id": "124847-2026-09-15-2026-10-09",
+      "number": "24847",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 771.0,
+          "departure_min": 772.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 775.0,
+          "departure_min": 776.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 780.0,
+          "departure_min": 781.0
+        }
+      ]
+    },
+    {
+      "id": "124842-2026-09-15-2026-10-09",
+      "number": "24842",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 777.0,
+          "departure_min": 778.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 782.0,
+          "departure_min": 783.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 786.0,
+          "departure_min": 787.0
+        }
+      ]
+    },
+    {
+      "id": "124849-2026-09-15-2026-10-09",
+      "number": "24849",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 801.0,
+          "departure_min": 802.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 805.0,
+          "departure_min": 806.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 810.0,
+          "departure_min": 811.0
+        }
+      ]
+    },
+    {
+      "id": "124844-2026-09-15-2026-10-09",
+      "number": "24844",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 807.0,
+          "departure_min": 808.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 812.0,
+          "departure_min": 813.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 816.0,
+          "departure_min": 817.0
+        }
+      ]
+    },
+    {
+      "id": "124851-2026-09-15-2026-10-09",
+      "number": "24851",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 831.0,
+          "departure_min": 832.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 835.0,
+          "departure_min": 836.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 840.0,
+          "departure_min": 841.0
+        }
+      ]
+    },
+    {
+      "id": "124846-2026-09-15-2026-10-09",
+      "number": "24846",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 837.0,
+          "departure_min": 838.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 842.0,
+          "departure_min": 843.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 846.0,
+          "departure_min": 847.0
+        }
+      ]
+    },
+    {
+      "id": "124853-2026-09-15-2026-10-09",
+      "number": "24853",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 861.0,
+          "departure_min": 862.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 865.0,
+          "departure_min": 866.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 870.0,
+          "departure_min": 871.0
+        }
+      ]
+    },
+    {
+      "id": "124848-2026-09-15-2026-10-09",
+      "number": "24848",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 867.0,
+          "departure_min": 868.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 872.0,
+          "departure_min": 873.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 876.0,
+          "departure_min": 877.0
+        }
+      ]
+    },
+    {
+      "id": "124855-2026-09-15-2026-10-09",
+      "number": "24855",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 891.0,
+          "departure_min": 892.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 895.0,
+          "departure_min": 896.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 900.0,
+          "departure_min": 901.0
+        }
+      ]
+    },
+    {
+      "id": "124850-2026-09-15-2026-10-09",
+      "number": "24850",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 897.0,
+          "departure_min": 898.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 902.0,
+          "departure_min": 903.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 906.0,
+          "departure_min": 907.0
+        }
+      ]
+    },
+    {
+      "id": "124857-2026-09-15-2026-10-09",
+      "number": "24857",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 921.0,
+          "departure_min": 922.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 925.0,
+          "departure_min": 926.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 930.0,
+          "departure_min": 931.0
+        }
+      ]
+    },
+    {
+      "id": "124852-2026-09-15-2026-10-09",
+      "number": "24852",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 927.0,
+          "departure_min": 928.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 932.0,
+          "departure_min": 933.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 936.0,
+          "departure_min": 937.0
+        }
+      ]
+    },
+    {
+      "id": "124859-2026-09-15-2026-10-09",
+      "number": "24859",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 951.0,
+          "departure_min": 952.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 955.0,
+          "departure_min": 956.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 960.0,
+          "departure_min": 961.0
+        }
+      ]
+    },
+    {
+      "id": "124854-2026-09-15-2026-10-09",
+      "number": "24854",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 957.0,
+          "departure_min": 958.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 962.0,
+          "departure_min": 963.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 966.0,
+          "departure_min": 967.0
+        }
+      ]
+    },
+    {
+      "id": "124861-2026-09-15-2026-10-09",
+      "number": "24861",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 981.0,
+          "departure_min": 982.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 985.0,
+          "departure_min": 986.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 990.0,
+          "departure_min": 991.0
+        }
+      ]
+    },
+    {
+      "id": "124856-2026-09-15-2026-10-09",
+      "number": "24856",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 987.0,
+          "departure_min": 988.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 992.0,
+          "departure_min": 993.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 996.0,
+          "departure_min": 997.0
+        }
+      ]
+    },
+    {
+      "id": "124863-2026-09-15-2026-10-09",
+      "number": "24863",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1011.0,
+          "departure_min": 1012.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1015.0,
+          "departure_min": 1016.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1020.0,
+          "departure_min": 1021.0
+        }
+      ]
+    },
+    {
+      "id": "124858-2026-09-15-2026-10-09",
+      "number": "24858",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1017.0,
+          "departure_min": 1018.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1022.0,
+          "departure_min": 1023.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1026.0,
+          "departure_min": 1027.0
+        }
+      ]
+    },
+    {
+      "id": "124865-2026-09-15-2026-10-09",
+      "number": "24865",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1041.0,
+          "departure_min": 1042.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1045.0,
+          "departure_min": 1046.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1050.0,
+          "departure_min": 1051.0
+        }
+      ]
+    },
+    {
+      "id": "124860-2026-09-15-2026-10-09",
+      "number": "24860",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1047.0,
+          "departure_min": 1048.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1052.0,
+          "departure_min": 1053.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1056.0,
+          "departure_min": 1057.0
+        }
+      ]
+    },
+    {
+      "id": "124867-2026-09-15-2026-10-09",
+      "number": "24867",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1071.0,
+          "departure_min": 1072.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1075.0,
+          "departure_min": 1076.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1080.0,
+          "departure_min": 1081.0
+        }
+      ]
+    },
+    {
+      "id": "124862-2026-09-15-2026-10-09",
+      "number": "24862",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1077.0,
+          "departure_min": 1078.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1082.0,
+          "departure_min": 1083.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1086.0,
+          "departure_min": 1087.0
+        }
+      ]
+    },
+    {
+      "id": "124869-2026-09-15-2026-10-09",
+      "number": "24869",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1101.0,
+          "departure_min": 1102.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1105.0,
+          "departure_min": 1106.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1110.0,
+          "departure_min": 1111.0
+        }
+      ]
+    },
+    {
+      "id": "124864-2026-09-15-2026-10-09",
+      "number": "24864",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1107.0,
+          "departure_min": 1108.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1112.0,
+          "departure_min": 1113.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1116.0,
+          "departure_min": 1117.0
+        }
+      ]
+    },
+    {
+      "id": "124871-2026-09-15-2026-10-09",
+      "number": "24871",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1131.0,
+          "departure_min": 1132.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1135.0,
+          "departure_min": 1136.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1140.0,
+          "departure_min": 1141.0
+        }
+      ]
+    },
+    {
+      "id": "124866-2026-09-15-2026-10-09",
+      "number": "24866",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1137.0,
+          "departure_min": 1138.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1142.0,
+          "departure_min": 1143.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1146.0,
+          "departure_min": 1147.0
+        }
+      ]
+    },
+    {
+      "id": "124873-2026-09-15-2026-10-09",
+      "number": "24873",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1161.0,
+          "departure_min": 1162.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1165.0,
+          "departure_min": 1166.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1170.0,
+          "departure_min": 1171.0
+        }
+      ]
+    },
+    {
+      "id": "124868-2026-09-15-2026-10-09",
+      "number": "24868",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1167.0,
+          "departure_min": 1168.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1172.0,
+          "departure_min": 1173.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1176.0,
+          "departure_min": 1177.0
+        }
+      ]
+    },
+    {
+      "id": "124875-2026-09-15-2026-10-09",
+      "number": "24875",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1190.0,
+          "departure_min": 1192.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1195.0,
+          "departure_min": 1196.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1200.0,
+          "departure_min": 1201.0
+        }
+      ]
+    },
+    {
+      "id": "124870-2026-09-15-2026-10-09",
+      "number": "24870",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1197.0,
+          "departure_min": 1198.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1202.0,
+          "departure_min": 1203.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1206.0,
+          "departure_min": 1207.0
+        }
+      ]
+    },
+    {
+      "id": "124877-2026-09-15-2026-10-09",
+      "number": "24877",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1221.0,
+          "departure_min": 1222.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1225.0,
+          "departure_min": 1226.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1230.0,
+          "departure_min": 1231.0
+        }
+      ]
+    },
+    {
+      "id": "124872-2026-09-15-2026-10-09",
+      "number": "24872",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1227.0,
+          "departure_min": 1228.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1232.0,
+          "departure_min": 1233.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1236.0,
+          "departure_min": 1237.0
+        }
+      ]
+    },
+    {
+      "id": "124879-2026-09-15-2026-10-09",
+      "number": "24879",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1251.0,
+          "departure_min": 1252.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1255.0,
+          "departure_min": 1256.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1260.0,
+          "departure_min": 1261.0
+        }
+      ]
+    },
+    {
+      "id": "124874-2026-09-15-2026-10-09",
+      "number": "24874",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1257.0,
+          "departure_min": 1258.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1262.0,
+          "departure_min": 1263.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1266.0,
+          "departure_min": 1267.0
+        }
+      ]
+    },
+    {
+      "id": "124881-2026-09-15-2026-10-09",
+      "number": "24881",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1281.0,
+          "departure_min": 1282.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1285.0,
+          "departure_min": 1286.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1290.0,
+          "departure_min": 1291.0
+        }
+      ]
+    },
+    {
+      "id": "124876-2026-09-15-2026-10-09",
+      "number": "24876",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1287.0,
+          "departure_min": 1288.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1292.0,
+          "departure_min": 1293.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1296.0,
+          "departure_min": 1297.0
+        }
+      ]
+    },
+    {
+      "id": "124883-2026-09-15-2026-10-09",
+      "number": "24883",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1311.0,
+          "departure_min": 1312.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1315.0,
+          "departure_min": 1316.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1320.0,
+          "departure_min": 1321.0
+        }
+      ]
+    },
+    {
+      "id": "124878-2026-09-15-2026-10-09",
+      "number": "24878",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1317.0,
+          "departure_min": 1318.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1322.0,
+          "departure_min": 1323.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1326.0,
+          "departure_min": 1327.0
+        }
+      ]
+    },
+    {
+      "id": "124885-2026-09-15-2026-10-09",
+      "number": "24885",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1341.0,
+          "departure_min": 1342.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1345.0,
+          "departure_min": 1346.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1350.0,
+          "departure_min": 1351.0
+        }
+      ]
+    },
+    {
+      "id": "124880-2026-09-15-2026-10-09",
+      "number": "24880",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1347.0,
+          "departure_min": 1348.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1352.0,
+          "departure_min": 1353.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1356.0,
+          "departure_min": 1357.0
+        }
+      ]
+    },
+    {
+      "id": "124887-2026-09-15-2026-10-09",
+      "number": "24887",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1371.0,
+          "departure_min": 1372.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1375.0,
+          "departure_min": 1376.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1380.0,
+          "departure_min": 1381.0
+        }
+      ]
+    },
+    {
+      "id": "124882-2026-09-15-2026-10-09",
+      "number": "24882",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1377.0,
+          "departure_min": 1378.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1382.0,
+          "departure_min": 1383.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1386.0,
+          "departure_min": 1387.0
+        }
+      ]
+    },
+    {
+      "id": "124889-2026-09-15-2026-10-09",
+      "number": "24889",
+      "direction": "MILANO",
+      "calls": [
+        {
+          "station_id": "S01515",
+          "arrival_min": 1401.0,
+          "departure_min": 1402.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1405.0,
+          "departure_min": 1406.0
+        },
+        {
+          "station_id": "S01513",
+          "arrival_min": 1410.0,
+          "departure_min": 1411.0
+        }
+      ]
+    },
+    {
+      "id": "124884-2026-09-15-2026-10-09",
+      "number": "24884",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1407.0,
+          "departure_min": 1408.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1412.0,
+          "departure_min": 1413.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1416.0,
+          "departure_min": 1417.0
+        }
+      ]
+    },
+    {
+      "id": "124886-2026-09-15-2026-10-09",
+      "number": "24886",
+      "direction": "LECCO",
+      "calls": [
+        {
+          "station_id": "S01513",
+          "arrival_min": 1437.0,
+          "departure_min": 1438.0
+        },
+        {
+          "station_id": "S01514",
+          "arrival_min": 1442.0,
+          "departure_min": 1443.0
+        },
+        {
+          "station_id": "S01515",
+          "arrival_min": 1446.0,
+          "departure_min": 1447.0
+        }
+      ]
+    }
+  ]
+}

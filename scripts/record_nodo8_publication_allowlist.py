@@ -20,6 +20,7 @@ files = {
     "nodo8-player.mjs", "nodo8-polish.css", "nodo8-stop-times.mjs",
     "nodo8-design.css", "nodo8-journey-inspector.mjs",
     "nodo8-coverage.mjs", "assets/nodo8-coverage-comparison.json",
+    "nodo8-s8.mjs", "assets/nodo8-s8-simulation.json",
     "docs/NODO8_CONFRONTO_D184_D185_E_RECAP_2026_10_07.md",
     "docs/RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md",
     "outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson",

@@ -31,6 +31,7 @@
     proposals: false,
     nodo8: true,
     stops: true,
+    s8: false,
   };
   let lineage = null;
   let popup = null;
@@ -377,14 +378,18 @@
     controls.className = "explore-controls";
     controls.innerHTML = `<div class="explore-controls__head"><div><strong>Esplora Nodo8</strong><small>4 bus simulati · non GPS</small></div><button class="explore-controls__exit" data-action="exit" type="button">Torna al racconto</button></div>
       <div class="explore-controls__tabs" role="tablist" aria-label="Vista esplorazione"><button id="exploreBusTab" role="tab" aria-selected="true" aria-controls="exploreBusPanel" type="button">Bus in movimento</button><button id="exploreLayersTab" role="tab" aria-selected="false" aria-controls="exploreLayersPanel" tabindex="-1" type="button">Livelli e confronto</button></div>
-      <section id="exploreBusPanel" role="tabpanel" aria-labelledby="exploreBusTab"><p class="explore-bus-intro">I quattro bus percorrono la stessa linea. Il numero in movimento cambia con l’orario.</p><button type="button" data-action="four-buses">Vedi i 4 bus · 07:35</button><div id="explorePlayback" data-theme="dark" aria-label="Simulazione dei quattro bus Nodo8"><p role="status">Caricamento dell’orario…</p></div><p id="explorePlaybackUnavailable" hidden role="status">Attiva il livello Nodo8 in «Livelli e confronto» per vedere i bus.</p></section>
+      <section id="exploreBusPanel" role="tabpanel" aria-labelledby="exploreBusTab"><p class="explore-bus-intro">I quattro bus percorrono la stessa linea. Il numero in movimento cambia con l’orario.</p><button type="button" data-action="four-buses">Vedi i 4 bus · 07:35</button><div class="explore-controls__layers s8-toggle"><button data-layer="s8" type="button" disabled><i style="--c:#f8b1b0"></i>S8 · tracciato e treni</button></div><p id="s8SimulationStatus" class="s8-status" hidden></p><details class="s8-source"><summary>S8: quale simulazione?</summary><p id="s8SourceNote">Tratto Cernusco–Olgiate–Airuno su ferrovia OpenStreetMap. 74 corse negli orari Trenord del 1 ottobre 2026, 37 per direzione. Posizioni interpolate fra le stazioni, non GPS. Il calendario Nodo8 è una proposta 2027: nessuna coincidenza o validità futura è garantita.</p></details><div id="explorePlayback" data-theme="dark" aria-label="Orologio condiviso della simulazione Nodo8 e S8"><p role="status">Caricamento dell’orario…</p></div><p id="explorePlaybackUnavailable" hidden role="status">Attiva il livello Nodo8 in «Livelli e confronto» per vedere i bus.</p></section>
       <section id="exploreLayersPanel" role="tabpanel" aria-labelledby="exploreLayersTab" hidden>
       <div class="explore-site-select"><label for="exploreSiteSelect">Vai a una fermata di Nodo8</label><select id="exploreSiteSelect" disabled><option value="">Caricamento delle fermate…</option></select></div>
       <div class="explore-controls__group"><span>01 · Dove viviamo</span><div class="explore-controls__layers"><button data-layer="worldpop" type="button"><i style="--c:#57d7e8"></i>Abitanti stimati</button><button data-layer="sections" type="button"><i style="--c:#ffb07f"></i>Zone ISTAT</button><button data-layer="buildings" type="button"><i style="--c:#55e1bf"></i>Edifici abitati</button></div></div>
       <div class="explore-controls__group"><span>02 · Come arriviamo alla fermata</span><div class="explore-controls__layers"><button data-layer="walk" type="button"><i style="--c:#55e1bf"></i>Minuti a piedi</button><button data-layer="roads" type="button"><i style="--c:#57d7e8"></i>Strade del bus</button><button data-layer="candidates" type="button"><i style="--c:#ffd36d"></i>155 punti da valutare</button></div></div>
       <div class="explore-controls__group"><span>03 · Quale rete guardiamo</span><div class="explore-controls__layers"><button data-layer="nodo8" class="is-active" type="button"><i style="--c:#55e1bf"></i>Nodo8 · proposta</button><button data-layer="current" type="button"><i style="--c:#4ca5ff"></i>D184 / D185</button><button data-layer="proposals" type="button"><i style="--c:#57d7e8"></i>Alternative storiche</button><button data-layer="stops" class="is-active" type="button"><i style="--c:#fff"></i>Fermate</button></div></div>
+      <div class="explore-controls__group"><span>04 · Il collegamento ferroviario</span><div class="explore-controls__layers"><button data-layer="s8" type="button" disabled><i style="--c:#f8b1b0"></i>S8 · tracciato e treni</button></div></div>
       </section><div class="explore-controls__footer"><div class="explore-controls__hint">Trascina, zooma e clicca sulla mappa.</div><div class="explore-controls__layers"><button data-action="clear" type="button">Spegni i livelli</button><button data-action="reset" type="button">↺ Vista</button></div></div>`;
     document.body.appendChild(controls);
+    controls.querySelectorAll('[data-layer="s8"]').forEach(button => {
+      button.disabled = document.documentElement.dataset.s8Ready !== "true";
+    });
     const tabs = [...controls.querySelectorAll('[role="tab"]')];
     const chooseTab = (chosen) => {
       tabs.forEach((tab) => {
@@ -445,6 +450,7 @@
           }
         }
         render();
+        if (k === "s8" && layers.s8) window.__analysisJourneyNodo8?.fit();
       }),
     );
     controls
@@ -554,6 +560,7 @@
       controls.querySelector("#explorePlaybackUnavailable").hidden =
         layers.nodo8;
       controls.querySelectorAll("[data-layer]").forEach((button) => {
+        button.classList.toggle("is-active", layers[button.dataset.layer]);
         button.setAttribute(
           "aria-pressed",
           String(layers[button.dataset.layer]),

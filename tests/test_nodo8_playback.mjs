@@ -15,6 +15,80 @@ import {
 } from "../nodo8-line.mjs";
 import { readStopSelection, stopLink } from "../nodo8-stop-times.mjs";
 import { inspectJourney, eventKey, journeyDurationLabel } from "../nodo8-journey-inspector.mjs";
+import { buildRail, trainsAt, S8_COLOUR, installS8 } from "../nodo8-s8.mjs";
+const s8Data = JSON.parse(readFileSync(new URL("../assets/nodo8-s8-simulation.json", import.meta.url), "utf8"));
+test("S8 preserves all 74 dated calls, both directions, and smaller dedicated icons", () => {
+  const rail = buildRail(s8Data);
+  assert.equal(S8_COLOUR, "#f8b1b0");
+  for (const train of rail.trains) {
+    for (const call of train.calls) {
+      for (const minute of [call.arrival_min, call.departure_min]) {
+        const state = trainsAt(rail, minute).find(t => t.id === train.id);
+        assert.deepEqual(state.coordinates, rail.stations.get(call.station_id).coordinates);
+        assert.equal(state.status, "station");
+      }
+    }
+    assert.ok(!trainsAt(rail, train.calls[0].arrival_min - 0.001).some(t => t.id === train.id));
+    assert.ok(!trainsAt(rail, train.calls.at(-1).departure_min + 0.001).some(t => t.id === train.id));
+  }
+  assert.deepEqual(new Set(trainsAt(rail, 449).map(t => t.direction)), new Set(["MILANO", "LECCO"]));
+  const module = readFileSync(new URL("../nodo8-s8.mjs", import.meta.url), "utf8");
+  assert.match(module, /width="24" height="30"/);
+  assert.doesNotMatch(module, /requestAnimationFrame|setInterval/);
+});
+test("S8 interpolates only along frozen railway vertices, and is reversible on the shared clock", () => {
+  const rail = buildRail(s8Data);
+  for (const train of rail.trains) {
+    const minute = (train.calls[0].departure_min + train.calls[1].arrival_min) / 2;
+    const state = trainsAt(rail, minute).find(t => t.id === train.id);
+    assert.equal(state.status, "moving");
+    const segment = rail.segments.find(s => s.from_id === train.calls[0].station_id || s.to_id === train.calls[0].station_id);
+    assert.ok(segment.coordinates.some((a, i) => {
+      const b = segment.coordinates[i + 1];
+      return b && state.coordinates.every((v, axis) => v >= Math.min(a[axis], b[axis]) - 1e-10 && v <= Math.max(a[axis], b[axis]) + 1e-10);
+    }));
+    const before = trainsAt(rail, minute);
+    trainsAt(rail, minute + 20);
+    assert.deepEqual(trainsAt(rail, minute), before);
+  }
+});
+test("S8 fails closed on invented times, directions, guarantees or railway endpoints", () => {
+  for (const mutate of [d => d.semantics.live = true, d => d.semantics.timetable_2027_certified = true,
+    d => d.semantics.connection_guaranteed = true, d => d.trains.pop(), d => d.trains[0].direction = "UNKNOWN",
+    d => d.trains[0].calls[1].arrival_min = 0, d => d.segments[0].coordinates[0] = [0, 0]]) {
+    const copy = structuredClone(s8Data); mutate(copy); assert.throws(() => buildRail(copy));
+  }
+  assert.throws(() => trainsAt(buildRail(s8Data), NaN));
+  const explorer = readFileSync(new URL("../dietro-l-analisi/journey-explore-v2.js", import.meta.url), "utf8");
+  assert.match(explorer, /s8: false/);
+  const overlay = readFileSync(new URL("../dietro-l-analisi/journey-nodo8.mjs", import.meta.url), "utf8");
+  assert.match(overlay, /rail\?\.render\(\{minute: state\.minute, visible: railVisible\(\)\}\)/);
+});
+test("S8 marker receives coordinates before MapLibre addTo and toggles without residue", async () => {
+  const saved = {fetch:globalThis.fetch, window:globalThis.window, document:globalThis.document};
+  const attached = new Set(), paints = [];
+  const status = {textContent:"",hidden:true};
+  class Marker {
+    constructor({element}) {this.element = element;}
+    setLngLat(coordinates) {this.coordinates = coordinates; return this;}
+    addTo() {assert.ok(this.coordinates); attached.add(this); return this;}
+    remove() {attached.delete(this);}
+  }
+  try {
+    globalThis.fetch = async () => ({ok:true,json:async()=>s8Data});
+    globalThis.window = {maplibregl:{Marker}};
+    globalThis.document = {documentElement:{dataset:{}},getElementById:()=>status,
+      createElement:()=>({setAttribute(){},querySelector:()=>({textContent:""})})};
+    const rail = await installS8({addSource(){},addLayer(){},setPaintProperty:(...args)=>paints.push(args)});
+    rail.render({minute:449,visible:true});
+    assert.equal(attached.size,2);
+    assert.equal(document.documentElement.dataset.s8TrainCount,"2");
+    rail.render({minute:455,visible:false});
+    assert.equal(attached.size,0);
+    assert.equal(paints.at(-1)[2],0);
+    assert.equal(status.hidden,true);
+  } finally {Object.assign(globalThis,saved);}
+});
 test("journey durations show minutes and seconds from the unrounded ledger value", () => {
   assert.equal(journeyDurationLabel(14.2), "14 min 12 s");
   assert.equal(journeyDurationLabel(14.161), "14 min 10 s");

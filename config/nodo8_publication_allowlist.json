@@ -8,6 +8,7 @@
     "app.js",
     "assets/nodo8-coverage-comparison.json",
     "assets/nodo8-proposal.json",
+    "assets/nodo8-s8-simulation.json",
     "dietro-l-analisi/current-routes-gtfs.geojson.gz.b64.0",
     "dietro-l-analisi/current-routes-gtfs.geojson.gz.b64.1",
     "dietro-l-analisi/current-routes-kml-exact-provenance.json",
@@ -75,6 +76,7 @@
     "nodo8-line.mjs",
     "nodo8-player.mjs",
     "nodo8-polish.css",
+    "nodo8-s8.mjs",
     "nodo8-stop-times.mjs",
     "outputs/phase2/rt031_line8_local_shortcuts_v3/calco_centre_adopted_design.geojson",
     "styles.css"
