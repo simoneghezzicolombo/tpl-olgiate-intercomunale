@@ -37,6 +37,17 @@ collegato: questa animazione storica non lo sostituisce.
 
 ## Prima iterazione: solo geometria, storico
 
+Pubblicazione animata verificata: implementazione
+`3311a9246c4ca7bdea3896de32a5d16a13dfc32f`, Pages
+`1bb85fae171c3d1e3d124d448eda4fc3313415a0`, CI `37940822281` verde,
+versione `20261008s`. 43 test Python, 8 subtest e 50 test Node passati.
+Entrambi i builder riproducono gli asset congelati. Verificati per SHA256
+via HTTP tutti i 77 file pubblicati, soltanto due pagine HTML e nessuna
+cancellazione di fonti storiche. Browser pubblico: alle 06:55 compaiono
+D184 e D185, filtro per linea, riproduzione e uscita verificati.
+Prova salvata in
+`cache/nodo8-website-preview/nodo8-d184-d185-s8-published-20261008s.png`.
+
 Il livello è disponibile sia accanto alla simulazione sia nella scheda
 «Livelli e confronto». Può sovrapporsi a Nodo8 e S8 senza cambiare i loro
 orari. È spento all'apertura e non dipende dall'orologio animato.

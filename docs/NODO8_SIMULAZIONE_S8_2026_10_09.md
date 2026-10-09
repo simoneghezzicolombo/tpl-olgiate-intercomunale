@@ -26,6 +26,13 @@ relazione completa congelata, non dai cinque riquadri iniziali.
 
 ## Prima pubblicazione V1, storico
 
+La V2 è stata pubblicata come versione `20261008s`, Pages
+`1bb85fae171c3d1e3d124d448eda4fc3313415a0`, CI `37940822281` verde.
+SHA256 dei 77 file pubblicati verificati via HTTP. La verifica browser
+mostra la ferrovia proseguire ai due bordi della mappa di confronto senza
+imporre lo zoom sull'intero itinerario Milano–Lecco. Treni e corse
+D184/D185 usano il medesimo orologio dei bus Nodo8.
+
 Il livello «S8 · tracciato e treni» è facoltativo e spento all'apertura.
 Usa la stessa mappa e lo stesso orologio dei bus. Non crea una seconda
 mappa o un secondo ciclo di animazione. È disponibile nella scheda dei bus
