@@ -47,3 +47,20 @@ assenza di un timer indipendente e rifiuto di dati incompatibili.
 
 Il registro della proposta, le fermate Nodo8, le 16 corse e tutti i flag
 di autorizzazione restano invariati.
+
+## Pubblicazione verificata
+
+- Implementazione: `e3207c112d579b937bb1e6dc94aaeb25befd65c6`.
+- Pages: `879c96d2c7b4ae0c3e6aaa8d22ed7acd4a686a32`.
+- CI: `37915397006`, conclusione `success`.
+- Versione cache: `20261008q`.
+- 43 test Python, 8 subtest e 45 test Node passati. Asset ferroviario
+  riprodotto byte per byte dal builder; registro Nodo8 ancora conforme
+  alle quattro fonti confermate.
+- SHA256 verificati via HTTP per tutti i 75 file pubblicati, soltanto due
+  pagine HTML. Nessun file storico eliminato, 106 percorsi non selezionati
+  preservati nel ramo Pages.
+- Verifica browser pubblico: livello spento all'ingresso; alle 07:29:30
+  compaiono le due corse verso Milano e Lecco; pausa, avanzamento,
+  cambio livello e uscita rispettano l'orologio unico. Controllo locale
+  a larghezza 390 px senza overflow orizzontale.
