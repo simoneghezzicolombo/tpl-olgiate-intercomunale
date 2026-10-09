@@ -1,4 +1,4 @@
-import { clockSeconds, diagramStops } from "./nodo8-line.mjs?v=20261008l";
+import { clockSeconds, diagramStops } from "./nodo8-line.mjs?v=20261008m";
 export const eventKey = (event) => event.occurrenceId || event.role;
 
 /* A specific ordered event pair within one certified nominal ledger.

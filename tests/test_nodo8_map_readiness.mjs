@@ -51,6 +51,20 @@ test("deep links bind chapter controls and scroll triggers to sections, never th
     assert.doesNotMatch(source, /querySelector\(["'`]\[data-scene=/, name);
   }
 });
+test("changing story column uses a camera offset, not padding retained into fitBounds", () => {
+  const source = readFileSync(new URL("../dietro-l-analisi/journey.js", import.meta.url), "utf8");
+  const camera = source.slice(source.indexOf("  function camera(opts)"), source.indexOf("  function setScene(scene)"));
+  for (const [left, right] of [[544, 58], [40, 544]]) {
+    const calls = [];
+    runInNewContext(camera + "\ncamera({zoom:12});", {
+      map: { easeTo: options => calls.push(options) },
+      window: { __analysisJourneyMapFrame: () => ({ left, right, top: 100, bottom: 70 }) },
+    });
+    assert.equal(calls[0].padding, 0);
+    assert.equal(calls[0].offset[0], (left - right) / 2);
+    assert.equal(calls[0].offset[1], 15);
+  }
+});
 test("cached route data cannot overtake the primary style/route setup", async () => {
   let hub = false,
     routes = false,
