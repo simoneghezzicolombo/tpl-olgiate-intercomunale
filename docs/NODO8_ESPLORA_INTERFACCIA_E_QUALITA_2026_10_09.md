@@ -79,3 +79,28 @@ Nessuna modifica a percorso, fermate, corse, calendario, chilometri o autorità
 della proposta. Nessun peso accessibilità-frequenza, passeggero stimato,
 probabilità empirica di coincidenza o budget normativo nuovo.
 Due sole pagine HTML pubblicate; prototipi e fonti ritirati restano in Git.
+
+## Riscontro del rilascio 20261009b
+
+Implementazione: `1593446951142dd83ca0bace51899aa6f54182f1`.
+Pages: `946f2a0f504b46dbbd14ec91ed4007aa2662ad2e`.
+[Workflow 37977750305](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/37977750305)
+riuscito. Il manifest pubblico identifica questa revisione; tutti gli 83 file
+pubblicati sono stati riscaricati e confrontati byte per byte via SHA-256.
+Esattamente due pagine HTML; 106 percorsi Git non selezionati conservati.
+
+66 test Node, 44 test Python e 8 subtest passati. Il builder pedonale in modalità
+check riproduce l'asset. La proposta originale riproduce ancora tutte le fonti
+certificate, senza modifiche di orario, siti, geometria o autorità.
+
+Nel browser pubblico verificati: quattro righe bus e selezione all a 07:35,
+assenza del selettore di corsa, dettagli tecnici chiusi, pannello interamente
+visibile senza scorrimento a 1280x720, selezioni indipendenti, vettore pedonale
+D184 da solo (4.283 punti), riproduzione x300 e pausa, nessun errore console.
+Le verifiche locali coprono anche unione delle tre reti, D185 da sola, assenza
+di reti bus (zero punti), focus del bus che conserva orologio e selezione.
+
+Riscontro visivo locale:
+`cache/nodo8-website-preview/nodo8-explorer-compact-published-20261009b.png`.
+Questo riscontro documenta la pubblicazione, non aumenta il grado di precisione
+fisica del GTFS o autorizza il servizio.
