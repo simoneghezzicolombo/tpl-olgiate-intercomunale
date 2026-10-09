@@ -1,19 +1,16 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008m";
-import { stopLink } from "../nodo8-stop-times.mjs?v=20261008m";
+import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008n";
+import { stopLink } from "../nodo8-stop-times.mjs?v=20261008n";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
-  mountRoadPreview,
-} from "../nodo8-experience.mjs?v=20261008m";
+} from "../nodo8-experience.mjs?v=20261008n";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
 export function playbackVisible({ scene, exploring, nodo8Visible }, context) {
-  return context === "story"
-    ? scene === "nodo8-time"
-    : context === "explore" &&
+  return context === "explore" &&
         scene === "explore" &&
         exploring === true &&
         nodo8Visible === true;
@@ -118,7 +115,6 @@ async function waitForMap() {
 }
 
 async function installNodo8() {
-  let validatedLine = null;
   const landingHash = location.hash;
   let landingInterrupted = false;
   const interruptLanding = () => {
@@ -137,7 +133,6 @@ async function installNodo8() {
     const siteNames = new Map(
       diagramStops(line).map((e) => [e.siteId, e.display]),
     );
-    validatedLine = line;
     const features = makeNodo8Features(data);
     const map = await waitForMap();
     map.addSource("nodo8-routes", { type: "geojson", data: features.routes });
@@ -318,11 +313,6 @@ async function installNodo8() {
         )
         .addTo(map);
     };
-    const playbackContainer = document.getElementById("journeyPlayback");
-    document.querySelector("#orario-nodo8 .copy").append(playbackContainer);
-    playbackContainer.dataset.theme = "dark";
-    playbackContainer.hidden = false;
-    const roadPreview = mountRoadPreview(line);
     const markers = new Map();
     const paintBuses = ({ states, followedTrip }) => {
       states.forEach((s) => {
@@ -351,19 +341,6 @@ async function installNodo8() {
         }
       });
     };
-    const player = mountPlayer(
-      playbackContainer,
-      line,
-      (state) => {
-        roadPreview.update(state);
-        if (contextVisible("story")) paintBuses(state);
-      },
-      {
-        compact: true,
-        brief: true,
-        inlineMap: roadPreview.node,
-      },
-    );
     const mountExplorerPlayer = () => {
       const host = document.getElementById("explorePlayback");
       if (!host || explorerPlayer) return;
@@ -435,8 +412,6 @@ async function installNodo8() {
           showSite(site.site_id);
         });
       }
-      if (scene !== "nodo8-time") player.pause();
-      player.render();
       if (scene === "explore") {
         const explore = window.__analysisJourneyExplore;
         renderExplorer({
@@ -488,8 +463,8 @@ async function installNodo8() {
     renderScene();
     requestAnimationFrame(() => {
       window.ScrollTrigger?.refresh();
-      // Mounting the in-flow player changes the later chapters' positions.
-      // Honour the landing anchor once, unless the reader has already acted.
+      // Honour the landing anchor after asynchronous setup, unless the reader
+      // has already acted.
       if (
         !landingInterrupted &&
         location.hash === landingHash &&
@@ -516,22 +491,6 @@ async function installNodo8() {
     if (explorerStatus && !explorerStatus.querySelector(".n8-clock")) {
       explorerStatus.textContent =
         "Animazione indisponibile: il registro di progetto o la mappa non è stato caricato. Nessun bus sostitutivo viene inventato.";
-    }
-    if (
-      validatedLine &&
-      !document.querySelector("#journeyPlayback .n8-clock")
-    ) {
-      const host = document.getElementById("journeyPlayback"),
-        road = mountRoadPreview(validatedLine);
-      document.querySelector("#orario-nodo8 .copy").append(host);
-      host.hidden = false;
-      host.dataset.theme = "dark";
-      mountPlayer(host, validatedLine, road.update, {
-        compact: true,
-        brief: true,
-        inlineMap: road.node,
-      });
-      document.documentElement.dataset.nodo8PlaybackReady = "fallback";
     }
     console.error("Nodo8 journey overlay unavailable", error);
   }

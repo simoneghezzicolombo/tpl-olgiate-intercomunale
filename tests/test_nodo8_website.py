@@ -92,12 +92,13 @@ def test_single_trip_slider_can_reach_exact_ledger_arrival():
     assert 'initialSelection = "1"' in player
 
 
-def test_story_controls_remain_in_flow_and_have_certified_svg_fallback():
+def test_story_has_no_nested_map_or_inline_player_after_caller_removal():
     module = ROOT / "dietro-l-analisi/journey-nodo8.mjs"
     js=module.read_text(encoding="utf-8")
-    assert 'querySelector("#orario-nodo8 .copy").append(playbackContainer)' in js
-    assert "mountRoadPreview" in js and "validatedLine" in js
-    assert 'dataset.nodo8PlaybackReady = "fallback"' in js
+    assert 'id="journeyPlayback"' not in (ROOT / "dietro-l-analisi/index.html").read_text(encoding="utf-8")
+    assert "mountRoadPreview" not in js and "inlineMap:" not in js
+    assert 'dataset.nodo8PlaybackReady = "fallback"' not in js
+    assert 'document.getElementById("explorePlayback")' in js
     assert 'classList.toggle("nodo8-playing"' not in js
 
 

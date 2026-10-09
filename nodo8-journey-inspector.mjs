@@ -1,5 +1,10 @@
-import { clockSeconds, diagramStops } from "./nodo8-line.mjs?v=20261008m";
+import { clockSeconds, diagramStops } from "./nodo8-line.mjs?v=20261008n";
 export const eventKey = (event) => event.occurrenceId || event.role;
+export function journeyDurationLabel(minutes) {
+  if (!Number.isFinite(minutes) || minutes < 0) throw new Error("Durata non valida.");
+  const seconds = Math.round(minutes * 60);
+  return `${Math.floor(seconds / 60)} min ${String(seconds % 60).padStart(2, "0")} s`;
+}
 
 /* A specific ordered event pair within one certified nominal ledger.
  * No identity-level merging, optimal-journey choice, transfers or actual-service guarantee. */
@@ -103,13 +108,10 @@ export function mountJourneyInspector(container, line, onInspect) {
         fromSelect.value,
         toSelect.value,
       );
-      const minutes = new Intl.NumberFormat("it-IT", {
-        maximumFractionDigits: 1,
-      }).format(journey.minutes);
       const headline = make("div", "journey-time");
       headline.append(
-        make("strong", "", minutes),
-        make("span", "", "minuti a bordo previsti"),
+        make("strong", "", journeyDurationLabel(journey.minutes)),
+        make("span", "", "tempo a bordo previsto · circa"),
       );
       const endpoints = make("div", "journey-endpoints");
       [
@@ -134,7 +136,7 @@ export function mountJourneyInspector(container, line, onInspect) {
         "p",
         "journey-explanation",
         journey.crossesFS
-          ? `Compresi ${new Intl.NumberFormat("it-IT", { maximumFractionDigits: 1 }).format(journey.intermediateHoldMinutes)} minuti di sosta a FS. Il progetto prevede lo stesso bus ${journey.carrier}; restare a bordo deve essere autorizzato.`
+          ? `Compresi ${journeyDurationLabel(journey.intermediateHoldMinutes)} di sosta a FS. Il progetto prevede lo stesso bus ${journey.carrier}; restare a bordo deve essere autorizzato.`
           : `Un tratto del giro scelto, sul bus ${journey.carrier} del modello.`,
       );
       const actions = make("div", "journey-inspect-actions");
