@@ -138,6 +138,26 @@ class RedesignRegressionTests(unittest.TestCase):
         self.assertIn("non le posizioni dei punti scartati", html)
         self.assertIn('class="journey-final-actions"', html)
 
+    def test_spatial_comparison_preserves_denominators_and_does_not_infer_passengers(self):
+        comparison = json.loads((ROOT / "assets/nodo8-coverage-comparison.json").read_text(encoding="utf-8"))
+        self.assertIs(comparison["proposal_coverage_reproduced"], True)
+        self.assertIs(comparison["baseline_trip_level_current_activation_certified"], False)
+        self.assertIs(comparison["additional_resident_count_inferred"], False)
+        self.assertIs(comparison["temporary_bridge_disruption_included"], False)
+        self.assertEqual(comparison["official_physical_cluster_count"], 44)
+        self.assertEqual(comparison["thresholds_min"], [5, 8, 10])
+        for code, row in comparison["baseline_percent"].items():
+            for time, before in row.items():
+                after = comparison["proposal_percent"][code][time]
+                self.assertAlmostEqual(after, self.data["coverage"][code][time], places=7)
+                self.assertAlmostEqual(comparison["delta_percentage_points"][code][time], after - before, places=7)
+        for point in comparison["distant_unattached_points"]:
+            self.assertGreater(point["minimum_core_distance_lower_bound_m"], 800)
+        for source in comparison["sources"].values():
+            path = ROOT / source["path"]
+            if path.is_file():
+                self.assertEqual(sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest(), source["sha256"])
+
     def test_certification_and_caller_declared_inputs_are_not_manufactured(self):
         authority = self.data["authority"]
         for key in ("public_operating_timetable_authorised", "network_selected", "primary_selection_authorised", "runner_up_selection_authorised", "physical_boarding_authorised", "funding_secured"):
