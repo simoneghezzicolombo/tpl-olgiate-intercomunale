@@ -45,8 +45,8 @@
       .route-controls i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:var(--c,#fff)}
       @media(max-width:800px){.route-controls{right:14px;bottom:14px;width:min(310px,calc(100vw - 28px));padding:10px}.route-controls small{display:none}}
     `;document.head.appendChild(style);
-    const c=document.createElement('div');c.className='route-controls current';c.innerHTML='<p>D184 e D185 · fonti ufficiali</p><div class="route-controls__row"><button data-r="ALL" class="is-active">Entrambe</button><button data-r="D184"><i style="--c:#4ca5ff"></i>D184</button><button data-r="D185"><i style="--c:#ff9b61"></i>D185</button></div><small>Tracciati e fermate dal GTFS ufficiale.</small>';document.querySelector('[data-scene="baseline"] .copy').appendChild(c);
-    const f=document.createElement('div');f.className='route-controls final';f.innerHTML='<p>Alternative della fase storica · non Nodo8</p><div class="route-controls__row"><button data-f="ALL" class="is-active">Tutte</button>'+Object.entries(LABELS).map(([id,l])=>`<button data-f="${id}"><i style="--c:${COLORS[id]}"></i>${l}</button>`).join('')+'</div><small>Geometrie di una fase precedente, conservate per leggere il processo.</small>';document.querySelector('[data-scene="finalists"] .copy').appendChild(f);
+    const c=document.createElement('div');c.className='route-controls current';c.innerHTML='<p>D184 e D185 · fonti ufficiali</p><div class="route-controls__row"><button data-r="ALL" class="is-active">Entrambe</button><button data-r="D184"><i style="--c:#4ca5ff"></i>D184</button><button data-r="D185"><i style="--c:#ff9b61"></i>D185</button></div><small>Tracciati e fermate dal GTFS ufficiale.</small>';document.querySelector('main .chapter[data-scene="baseline"] .copy').appendChild(c);
+    const f=document.createElement('div');f.className='route-controls final';f.innerHTML='<p>Alternative della fase storica · non Nodo8</p><div class="route-controls__row"><button data-f="ALL" class="is-active">Tutte</button>'+Object.entries(LABELS).map(([id,l])=>`<button data-f="${id}"><i style="--c:${COLORS[id]}"></i>${l}</button>`).join('')+'</div><small>Geometrie di una fase precedente, conservate per leggere il processo.</small>';document.querySelector('main .chapter[data-scene="finalists"] .copy').appendChild(f);
     c.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{currentSelection=btn.dataset.r;c.querySelectorAll('button').forEach(x=>x.classList.toggle('is-active',x===btn));applyCurrent();});
     f.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{finalSelection=btn.dataset.f;f.querySelectorAll('button').forEach(x=>x.classList.toggle('is-active',x===btn));applyFinal();});
   }
@@ -76,8 +76,8 @@
     opacity('current-routes',baseline?.92:0);opacity('current-route-glow',baseline?.22:0);opacity('current-gtfs-stops',baseline?.98:0);opacity('current-gtfs-stops-halo',baseline?.82:0);
     opacity('final16',0);opacity('final16-glow',0);opacity('final185',0);opacity('final185-glow',0);
     opacity('final-routes-exact',finals?(s==='finalists'?.96:.62):0);opacity('final-routes-exact-glow',finals?(s==='finalists'?.20:.10):0);opacity('final-anchors-exact',finals?(s==='finalists'?.96:.60):0);
-    if(baseline) map.fitBounds(bounds(currentData),{padding:innerWidth<800?35:70,maxZoom:12,duration:window.__analysisJourneyReduceMotion?0:850,pitch:40,bearing:-8});
-    if(s==='finalists') map.fitBounds(bounds(finalData),{padding:innerWidth<800?45:80,maxZoom:12.7,duration:window.__analysisJourneyReduceMotion?0:850,pitch:54,bearing:8});
+    if(baseline) map.fitBounds(bounds(window.__analysisJourneyCurrentKmlExact?.currentData || currentData),{padding:window.__analysisJourneyMapFrame?.() || (innerWidth<800?35:70),maxZoom:12,duration:window.__analysisJourneyReduceMotion?0:850,pitch:40,bearing:-8});
+    if(s==='finalists') map.fitBounds(bounds(finalData),{padding:window.__analysisJourneyMapFrame?.() || (innerWidth<800?45:80),maxZoom:12.7,duration:window.__analysisJourneyReduceMotion?0:850,pitch:54,bearing:8});
   }
   async function install(){
     [currentData,stopData,finalData,anchorData]=await Promise.all([load(FILES.currentRoutes),load(FILES.currentStops),load(FILES.finalRoutes),load(FILES.finalAnchors)]);

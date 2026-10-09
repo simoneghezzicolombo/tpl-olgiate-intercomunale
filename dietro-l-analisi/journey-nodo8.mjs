@@ -1,12 +1,12 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008k";
-import { stopLink } from "../nodo8-stop-times.mjs?v=20261008k";
+import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008l";
+import { stopLink } from "../nodo8-stop-times.mjs?v=20261008l";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "../nodo8-experience.mjs?v=20261008k";
+} from "../nodo8-experience.mjs?v=20261008l";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
@@ -227,11 +227,8 @@ async function installNodo8() {
                 bottom: 100,
                 left: 30,
               }
-            : {
-                top: 100,
-                right: 70,
-                bottom: 80,
-                left: Math.min(680, innerWidth * 0.5),
+            : window.__analysisJourneyMapFrame?.() || {
+                top: 100, right: 70, bottom: 80, left: Math.min(680, innerWidth * 0.5),
               },
         maxZoom: 13.2,
         pitch: 35,

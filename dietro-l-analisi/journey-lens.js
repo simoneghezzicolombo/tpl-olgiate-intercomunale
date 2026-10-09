@@ -12,21 +12,11 @@
 
   const style = document.createElement('style');
   style.textContent = `
-    .depth-stack{position:fixed;z-index:22;right:58px;top:104px;width:194px;padding:13px 14px 14px;border-radius:17px;border:1px solid rgba(255,255,255,.13);background:rgba(5,17,27,.61);backdrop-filter:blur(18px);box-shadow:0 20px 60px rgba(0,0,0,.25);opacity:0;transform:translateY(8px);transition:opacity .28s,transform .28s;pointer-events:none}
-    .depth-stack__kicker{font:500 7px "DM Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:#7f949f}.depth-stack__axis{position:relative;height:112px;margin-top:10px;border-left:1px solid rgba(255,255,255,.14);margin-left:8px}.depth-stack__axis:after{content:"z";position:absolute;left:-4px;top:-9px;font:500 7px "DM Mono",monospace;color:#5f7784}
-    .depth-stack__layer{position:absolute;left:13px;right:0;display:grid;grid-template-columns:12px 1fr;align-items:center;gap:7px;font:500 7px/1.25 "DM Mono",monospace;color:#758b96;transition:color .2s,transform .2s}.depth-stack__layer i{height:2px;border-radius:8px;background:currentColor;box-shadow:0 0 13px currentColor}.depth-stack__layer b{display:block;font:400 14px "Newsreader",serif;color:#c5d4db}.depth-stack__layer[data-layer="grid"]{top:7px;color:#57d7e8}.depth-stack__layer[data-layer="sections"]{top:46px;color:#ffb07f}.depth-stack__layer[data-layer="buildings"]{top:84px;color:#55e1bf}.depth-stack__layer.is-active{color:#fff;transform:translateX(4px)}.depth-stack__layer.is-active i{box-shadow:0 0 18px currentColor}
-    body[data-scene="grid"] .depth-stack,body[data-scene="sections"] .depth-stack,body[data-scene="buildings"] .depth-stack{opacity:1;transform:none}
     .analysis-lens{position:fixed;z-index:45;width:270px;left:0;top:0;padding:14px 15px 13px;border:1px solid rgba(255,255,255,.17);border-radius:17px;background:linear-gradient(145deg,rgba(5,17,27,.92),rgba(8,26,39,.82));backdrop-filter:blur(22px) saturate(1.12);box-shadow:0 24px 80px rgba(0,0,0,.38);opacity:0;transform:translateY(7px) scale(.985);transition:opacity .15s,transform .15s;pointer-events:none;color:#eafcff}.analysis-lens.is-visible{opacity:1;transform:none}.analysis-lens__kicker{font:500 7px "DM Mono",monospace;text-transform:uppercase;letter-spacing:.11em;color:#78dce8}.analysis-lens__title{font:400 23px/1.05 "Newsreader",serif;margin:7px 0 10px;color:#fff}.analysis-lens__metric{display:flex;align-items:baseline;gap:7px;padding:10px 0;border-top:1px solid rgba(255,255,255,.09);border-bottom:1px solid rgba(255,255,255,.09)}.analysis-lens__metric b{font:400 31px/1 "Newsreader",serif;color:#dffbff}.analysis-lens__metric span{font:500 7px/1.35 "DM Mono",monospace;text-transform:uppercase;color:#91a5af}.analysis-lens__rows{display:grid;gap:5px;margin-top:9px}.analysis-lens__row{display:flex;justify-content:space-between;gap:12px;font:500 7px/1.35 "DM Mono",monospace;color:#788e99}.analysis-lens__row b{font-weight:500;color:#c8d7de;text-align:right;max-width:155px;overflow:hidden;text-overflow:ellipsis}.analysis-lens__note{margin:9px 0 0;font:400 7px/1.4 "DM Mono",monospace;color:#617985}.analysis-lens__status{color:#ffbd91!important}
-    @media(max-width:800px){.depth-stack{display:none}.analysis-lens{left:12px!important;right:12px!important;top:auto!important;bottom:12px;width:auto;transform:translateY(14px)}.analysis-lens.is-visible{transform:none}.analysis-lens__title{font-size:20px}.analysis-lens__metric b{font-size:27px}}
-    @media(prefers-reduced-motion:reduce){.depth-stack,.depth-stack__layer,.analysis-lens{transition:none}}
+    @media(max-width:800px){.analysis-lens{left:12px!important;right:12px!important;top:auto!important;bottom:12px;width:auto;transform:translateY(14px)}.analysis-lens.is-visible{transform:none}.analysis-lens__title{font-size:20px}.analysis-lens__metric b{font-size:27px}}
+    @media(prefers-reduced-motion:reduce){.analysis-lens{transition:none}}
   `;
   document.head.appendChild(style);
-
-  const depth = document.createElement('div');
-  depth.className = 'depth-stack';
-  depth.setAttribute('aria-hidden', 'true');
-  depth.innerHTML = '<span class="depth-stack__kicker">Le fonti, una sopra l’altra</span><div class="depth-stack__axis"><span class="depth-stack__layer" data-layer="grid"><i></i><span>WorldPop 100 m<b>4.283 celle</b></span></span><span class="depth-stack__layer" data-layer="sections"><i></i><span>Sezioni ISTAT<b>229 sezioni</b></span></span><span class="depth-stack__layer" data-layer="buildings"><i></i><span>DBGT edifici<b>4.226 sagome</b></span></span></div>';
-  document.body.appendChild(depth);
 
   const lens = document.createElement('div');
   lens.className = 'analysis-lens';
@@ -80,7 +70,12 @@
     });
   }
   function activeDepth(scene) {
-    depth.querySelectorAll('[data-layer]').forEach(el => el.classList.toggle('is-active', el.dataset.layer === scene));
+    document.querySelectorAll('.representation-meter [data-stage]').forEach(el => {
+      const active = el.dataset.stage === scene;
+      el.classList.toggle('is-on', active);
+      if (active) el.setAttribute('aria-current', 'step');
+      else el.removeAttribute('aria-current');
+    });
   }
 
   function addStackLayers() {
@@ -131,8 +126,8 @@
   function installStackDirector() {
     if (reduceMotion || !window.gsap || !window.ScrollTrigger) return;
     gsap.registerPlugin(ScrollTrigger);
-    const sections = document.querySelector('[data-scene="sections"]');
-    const buildings = document.querySelector('[data-scene="buildings"]');
+    const sections = document.querySelector('main .chapter[data-scene="sections"]');
+    const buildings = document.querySelector('main .chapter[data-scene="buildings"]');
     ScrollTrigger.create({
       trigger:sections, start:'top 78%', end:'bottom 22%', scrub:true,
       onUpdate:self => {

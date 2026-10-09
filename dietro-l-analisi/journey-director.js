@@ -13,7 +13,6 @@
     .search-compression{right:58px;bottom:30px;width:278px;padding:14px 16px;border-radius:18px}.search-compression__number{font:400 45px/1 "Newsreader",serif;color:#e9ffff;margin:6px 0 3px}.search-compression__label{font:500 8px/1.35 "DM Mono",monospace;color:#9db0ba;min-height:22px}.search-compression__stages{display:grid;gap:5px;margin-top:10px}.search-compression__stage{display:grid;grid-template-columns:32px 1fr 46px;align-items:center;gap:7px;padding:5px 7px;border-radius:8px;color:#667d89;font:500 7px "DM Mono",monospace;transition:.2s}.search-compression__stage i{height:2px;background:rgba(255,255,255,.08);position:relative;overflow:hidden}.search-compression__stage i:after{content:"";position:absolute;inset:0;background:#57d7e8;transform:scaleX(0);transform-origin:left;transition:transform .22s}.search-compression__stage b{font-weight:500;text-align:right}.search-compression__stage.is-done,.search-compression__stage.is-current{color:#dffbff;background:rgba(87,215,232,.05)}.search-compression__stage.is-done i:after,.search-compression__stage.is-current i:after{transform:scaleX(1)}.search-compression__stage.is-current{outline:1px solid rgba(87,215,232,.28)}
     .search-compression__note{margin-top:9px;font:400 7px/1.4 "DM Mono",monospace;color:#637985;text-transform:uppercase;letter-spacing:.035em}
     .departure-strip{display:flex;align-items:center;gap:7px;margin-top:9px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)}.departure-strip span{font:500 8px "DM Mono",monospace;color:#758b96}.departure-strip b{position:relative;padding:4px 7px;border-radius:999px;font:500 8px "DM Mono",monospace;border:1px solid rgba(255,255,255,.12);color:#b8c7ce}.departure-strip b.cyan{border-color:rgba(87,215,232,.35);color:#8defff}.departure-strip b.orange{border-color:rgba(255,155,97,.35);color:#ffb07f}.departure-strip b.is-live{background:currentColor;box-shadow:0 0 20px currentColor;color:#07131f}
-    .evidence-stack{position:fixed;z-index:22;right:30px;top:50%;transform:translateY(-50%);pointer-events:none;display:grid;gap:7px;opacity:0;transition:opacity .35s}.evidence-stack span{padding:7px 9px;border-left:2px solid rgba(255,255,255,.14);background:rgba(6,18,28,.48);backdrop-filter:blur(10px);font:500 7px/1.35 "DM Mono",monospace;color:#81949e}.evidence-stack b{display:block;font:400 18px "Newsreader",serif;color:#dffbff}.evidence-stack .human{border-color:#ff9b61;color:#c7a992}.evidence-stack .human b{color:#ffbd91}body[data-scene="end"] .evidence-stack{opacity:1}
     @media(max-width:800px){.representation-meter{left:14px;right:14px;bottom:12px;width:auto}.representation-meter__note{display:none}.search-compression{right:14px;top:82px;bottom:auto;width:224px}.search-compression__stage{grid-template-columns:24px 1fr 40px}.evidence-stack{display:none}}
     @media(prefers-reduced-motion:reduce){.representation-meter,.search-compression,.evidence-stack{transition:none}}
   `;
@@ -21,7 +20,11 @@
 
   const representation = document.createElement('div');
   representation.className = 'representation-meter';
-  representation.innerHTML = '<span class="representation-meter__kicker">una popolazione · tre rappresentazioni successive</span><div class="representation-meter__line"><i></i></div><div class="representation-meter__steps"><span data-stage="grid">01 · griglia<b>4.283 celle</b></span><span data-stage="sections">02 · sezioni<b>229 sezioni</b></span><span data-stage="buildings">03 · edifici<b>4.226 sagome</b></span></div><div class="representation-meter__note">Non è un tracciamento cella→edificio. Sono rappresentazioni successive dello stesso problema, con geometrie e vincoli diversi.</div>';
+  representation.setAttribute('role', 'group');
+  representation.setAttribute('aria-label', 'Le tre fonti del modello di popolazione');
+  // One small legend replaces two overlapping panels. Qualifications live in
+  // the chapter's disclosure; the underlying 3D layers remain unchanged.
+  representation.innerHTML = '<div class="representation-meter__steps"><span data-stage="grid"><i></i>WorldPop<b>4.283 celle</b></span><span data-stage="sections"><i></i>ISTAT<b>229 zone</b></span><span data-stage="buildings"><i></i>DBGT<b>4.226 edifici</b></span></div><div class="representation-meter__line" aria-hidden="true"><i></i></div>';
   document.body.appendChild(representation);
 
   const funnelStages = [
@@ -33,13 +36,10 @@
   ];
   const search = document.createElement('div');
   search.className = 'search-compression';
-  search.innerHTML = `<span class="search-compression__kicker">Dai punti possibili alle fermate da valutare</span><div class="search-compression__number">3.858</div><div class="search-compression__label">${funnelStages[0][1]}</div><div class="search-compression__stages">${funnelStages.map((s,i)=>`<div class="search-compression__stage${i===0?' is-current':''}" data-i="${i}"><span>${s[0]}</span><i></i><b>${s[2].toLocaleString('it-IT')}</b></div>`).join('')}</div><div class="search-compression__note">La mappa mostra i 155 punti da verificare. Per i passaggi precedenti conosciamo i conteggi, non le posizioni dei punti scartati.</div>`;
+  search.setAttribute('role', 'group');
+  search.setAttribute('aria-label', 'Il filtro dei punti possibili, in cinque fasi');
+  search.innerHTML = `<div class="search-compression__current"><strong class="search-compression__number">3.858</strong><span class="search-compression__label">${funnelStages[0][1]}</span></div><div class="search-compression__stages">${funnelStages.map((s,i)=>`<div class="search-compression__stage${i===0?' is-current':''}" data-i="${i}" aria-label="${s[1]}: ${s[2].toLocaleString('it-IT')}"><span>${s[0]}</span><i></i></div>`).join('')}</div>`;
   document.body.appendChild(search);
-
-  const evidence = document.createElement('div');
-  evidence.className = 'evidence-stack';
-    evidence.innerHTML = '<span><b>5</b>comuni</span><span><b>27</b>fermate proposte</span><span><b>16</b>giri completi</span><span><b>254</b>feriali 2027</span><span class="human"><b>0</b>vincitori automatici</span>';
-  document.body.appendChild(evidence);
 
   function install() {
     const map = window.__analysisJourneyMap;
@@ -61,12 +61,16 @@
       ['grid',0],['sections',1],['buildings',2]
     ];
     repScenes.forEach(([scene,index]) => {
-      const section = document.querySelector(`[data-scene="${scene}"]`);
+      const section = document.querySelector(`main .chapter[data-scene="${scene}"]`);
       ScrollTrigger.create({
         trigger:section,start:'top 82%',end:'bottom 18%',scrub:true,
         onUpdate:self=>{
           if(document.body.dataset.scene!==scene) return;
-          repSteps.forEach((el,i)=>el.classList.toggle('is-on',i<=index));
+          repSteps.forEach((el,i)=>{
+            el.classList.toggle('is-on',i===index);
+            if(i===index) el.setAttribute('aria-current','step');
+            else el.removeAttribute('aria-current');
+          });
           repLine.style.width=`${((index+self.progress)/3)*100}%`;
           if(scene==='grid'){
             if(map.getLayer('worldpop-columns')) map.setPaintProperty('worldpop-columns','fill-extrusion-opacity',.45+.4*self.progress);
@@ -94,7 +98,7 @@
       });
     });
 
-    const candidatesSection = document.querySelector('[data-scene="candidates"]');
+    const candidatesSection = document.querySelector('main .chapter[data-scene="candidates"]');
     const stageEls = [...search.querySelectorAll('.search-compression__stage')];
     const bigNumber = search.querySelector('.search-compression__number');
     const stageLabel = search.querySelector('.search-compression__label');
@@ -143,7 +147,7 @@
     }
     if(serviceClock) requestAnimationFrame(watchClock);
 
-    const endSection=document.querySelector('[data-scene="end"]');
+    const endSection=document.querySelector('main .chapter[data-scene="end"]');
     ScrollTrigger.create({
       trigger:endSection,start:'top 80%',end:'bottom 20%',scrub:true,
       onUpdate:self=>{

@@ -7,22 +7,34 @@ try {
   // Effects first captures the eventual Map instance. Runtime policy then fixes
   // contextual basemap behaviour. Experience policy applies responsive and OS
   // reduced-motion preferences before journey.js constructs the persistent map.
-  await import("./journey-effects.js?v=20261008k");
+  await import("./journey-effects.js?v=20261008l");
   await import("./journey-runtime-policy.js");
   await import("./journey-experience-policy.js");
 
+  const { storyMapPadding } = await import("./journey-map-ready.mjs?v=20261008l");
+  window.__analysisJourneyMapFrame = () => {
+    const scene = document.body.dataset.scene;
+    const copy = document.querySelector(`main .chapter[data-scene="${scene}"] .copy`);
+    return storyMapPadding({
+      width: innerWidth,
+      height: innerHeight,
+      copyRect: scene === "intro" ? null : copy?.getBoundingClientRect(),
+      side: copy?.classList.contains("copy--right") ? "right" : "left",
+    });
+  };
+
   // The exploration epilogue must exist before journey.js snapshots the chapter
   // list, otherwise it would not participate in the scroll director.
-  await import("./journey-explore-prelude.js?v=20261008k");
-  await import("./journey.js?v=20261008k");
-  await import("./journey-director.js?v=20261008k");
-  await import("./journey-lens.js?v=20261008k");
+  await import("./journey-explore-prelude.js?v=20261008l");
+  await import("./journey.js?v=20261008l");
+  await import("./journey-director.js?v=20261008l");
+  await import("./journey-lens.js?v=20261008l");
 
   // Current-service geometry is taken directly from the supplied official agency
   // KML LineStrings. Do not route, snap or repair D184/D185 through Gate D.
-  await import("./journey-lineage.js?v=20261008k");
-  await import("./journey-current-kml-exact.mjs?v=20261008k");
-  await import("./journey-explore-v2.js?v=20261008k");
+  await import("./journey-lineage.js?v=20261008l");
+  await import("./journey-current-kml-exact.mjs?v=20261008l");
+  await import("./journey-explore-v2.js?v=20261008l");
 } catch (error) {
   window.__analysisJourneyBootError = true;
   document.body.classList.add("journey-runtime-unavailable");
@@ -35,4 +47,4 @@ try {
   document.body.appendChild(notice);
   console.error("Journey runtime unavailable", error);
 }
-await import("./journey-nodo8.mjs?v=20261008k");
+await import("./journey-nodo8.mjs?v=20261008l");

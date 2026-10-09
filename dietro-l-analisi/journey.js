@@ -641,7 +641,7 @@
     document.body.dataset.scene = activeScene;
   }
   function camera(opts) {
-    map.easeTo({ duration: 1050, essential: true, ...opts });
+    map.easeTo({ duration: 1050, essential: true, padding: window.__analysisJourneyMapFrame?.() || 0, ...opts });
   }
 
   function setScene(scene) {

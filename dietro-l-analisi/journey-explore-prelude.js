@@ -11,7 +11,7 @@
   }
 
   const main = document.querySelector("main");
-  if (main && !document.querySelector('[data-scene="explore"]')) {
+  if (main && !document.querySelector('main .chapter[data-scene="explore"]')) {
     const section = document.createElement("section");
     section.id = "esplora-mappa";
     section.className = "chapter explore-chapter";
