@@ -471,6 +471,27 @@
     const scene = document.body.dataset.scene === "explore",
       interactive = scene && active,
       preview = scene && !active;
+    // Outside Esplora, only clear layers owned by this controller. Previously
+    // this observer ran last and erased the story's KML lines and population
+    // layers immediately after their own scene controller had made them visible.
+    if (!scene) {
+      [
+        "explore-current-glow", "explore-current-routes", "explore-current-hit",
+        "explore-current-stops-halo", "explore-current-stops",
+        "explore-final-glow", "explore-final-routes", "explore-final-hit",
+        "explore-final-anchors",
+      ].forEach((id) => opacity(id, 0));
+      if (controls) {
+        controls.style.pointerEvents = "none";
+        controls.inert = true;
+        controls.setAttribute("aria-hidden", "true");
+      }
+      if (popup) {
+        popup.remove();
+        popup = null;
+      }
+      return;
+    }
     [
       "current-route-glow",
       "current-routes",
@@ -607,7 +628,7 @@
   }
   function enter() {
     if (active) return;
-    const chapter = document.querySelector('[data-scene="explore"]');
+    const chapter = document.querySelector('main .chapter[data-scene="explore"]');
     const rect = chapter?.getBoundingClientRect();
     if (!rect || rect.bottom <= 0 || rect.top >= innerHeight) return;
     // A freshly laid-out deep link can be visible before the scroll director

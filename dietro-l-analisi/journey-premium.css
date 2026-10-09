@@ -31,14 +31,14 @@ body[data-scene="intro"] .hub-marker {
   visibility: hidden;
 }
 .chapter details.source-note {
-  padding: 10px 0;
+  padding: 0;
   border-top: 1px solid var(--story-rule);
-  margin-top: 18px;
+  margin-top: 14px;
 }
 .chapter details.source-note > summary {
   cursor: pointer;
   min-height: 44px;
-  padding: 12px 0;
+  padding: 11px 0;
   color: var(--story-mint);
   font-weight: 600;
 }
@@ -214,18 +214,18 @@ body .topbar {
   opacity: 0.018;
 }
 main .chapter {
-  min-height: 104svh;
-  padding: 12vh clamp(24px, 5vw, 76px);
+  min-height: 100svh;
+  padding: 10vh clamp(24px, 5vw, 76px);
   align-items: center;
 }
 main .chapter .copy {
-  width: min(560px, 44vw);
-  padding: clamp(25px, 3vw, 42px);
-  border: 1px solid #d5ded028;
+  width: min(460px, 40vw);
+  padding: 26px;
+  border: 1px solid #d5ded01a;
   border-radius: 8px;
   background: #102e27f0;
   backdrop-filter: blur(12px);
-  box-shadow: 0 12px 40px #051e1925;
+  box-shadow: none;
   opacity: 0.88;
   transform: none;
   transition:
@@ -234,7 +234,7 @@ main .chapter .copy {
 }
 main .chapter.is-active .copy {
   opacity: 1;
-  border-color: #d5ded054;
+  border-color: #d5ded030;
 }
 main .chapter .copy--right {
   margin-left: auto;
@@ -247,7 +247,7 @@ main .chapter .eyebrow {
   color: var(--story-mint);
   font: 600 10px/1.6 var(--sans);
   letter-spacing: 0.11em;
-  margin: 0 0 27px;
+  margin: 0 0 18px;
 }
 main .chapter .eyebrow > span {
   color: #f5f2e962;
@@ -265,8 +265,8 @@ main h2 {
   text-wrap: balance;
 }
 main .chapter h2 {
-  font-size: clamp(36px, 3.6vw, 53px);
-  line-height: 1.08;
+  font-size: clamp(32px, 3vw, 44px);
+  line-height: 1.12;
 }
 main h1 em,
 main h2 em {
@@ -275,18 +275,36 @@ main h2 em {
   color: var(--story-mint);
 }
 main .chapter .copy > p:not(.eyebrow, .source-note, .insight, .final-line) {
-  font: 400 16px/1.75 var(--sans);
+  font: 400 16px/1.65 var(--sans);
   color: #d1dacf;
-  margin-top: 23px;
+  margin: 18px 0 0;
 }
 main .chapter .source-note {
   color: #acbdb1;
   font: 400 12px/1.7 var(--sans);
   text-transform: none;
   letter-spacing: 0;
+  border: 0;
+  padding: 0;
+  margin: 12px 0 0;
+}
+main .chapter details.source-note {
   border-top: 1px solid var(--story-rule);
-  padding-top: 17px;
-  margin-top: 24px;
+  margin-top: 14px;
+  padding: 0;
+}
+main .chapter details.source-note > summary {
+  font-size: 13px;
+  line-height: 1.6;
+}
+main .chapter details.source-note p {
+  margin: 10px 0 12px;
+}
+main .chapter details.source-note + p.source-note {
+  margin-top: 6px;
+}
+main .chapter .copy > :last-child {
+  margin-bottom: 0;
 }
 main .chapter .source-note a {
   color: var(--story-paper);
@@ -433,10 +451,12 @@ main .hero .source-note {
 .fact {
   gap: 17px;
   border-top-color: var(--story-rule);
+  margin-top: 18px;
+  padding-top: 14px;
 }
 .fact strong {
   font:
-    600 43px/1.2 "Manrope",
+    600 35px/1.2 "Manrope",
     system-ui,
     sans-serif;
   color: var(--story-paper);
@@ -456,13 +476,14 @@ main .hero .source-note {
   flex: 0 0 28px;
 }
 .split-stats {
-  gap: 16px;
+  gap: 18px;
+  margin-top: 20px;
 }
 .split-stats > div {
-  background: #f5f2e907;
-  border-color: var(--story-rule);
-  border-radius: 5px;
-  padding: 17px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
 }
 .split-stats strong {
   font:
@@ -562,10 +583,11 @@ main .hero .source-note {
   color: var(--story-mint);
 }
 main .chapter .copy--wide {
-  width: min(850px, 75vw);
+  width: min(560px, 45vw);
 }
 .finalist-grid {
   gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
 }
 .finalist-grid article {
   border-radius: 5px;
@@ -639,9 +661,9 @@ main .chapter .insight {
   align-items: center;
   justify-content: space-between;
   gap: 22px;
-  margin: 26px 0;
-  padding: 22px 0;
-  border-block: 1px solid var(--story-rule);
+  margin: 20px 0 0;
+  padding: 18px 0;
+  border-top: 1px solid var(--story-rule);
 }
 .story-search strong {
   display: block;
@@ -854,27 +876,35 @@ main .chapter .nodo8-animation-cue {
 }
 main .chapter.finale {
   text-align: left;
-  justify-content: center;
+  justify-content: flex-start;
 }
 main .chapter .copy--final {
-  width: min(880px, 76vw);
+  width: min(740px, 76vw);
+}
+main .chapter .copy--final h2 {
+  font-size: clamp(32px, 2.7vw, 38px);
+}
+main .chapter .copy--final > p:not(.eyebrow, .source-note) {
+  font-size: 15px;
+  line-height: 1.6;
 }
 .nodo8-summary {
   gap: 18px;
+  margin: 18px 0 0;
 }
 .nodo8-summary > span {
   border: 0;
   border-top: 1px solid var(--story-rule);
-  border-bottom: 1px solid var(--story-rule);
+  border-bottom: 0;
   border-radius: 0;
   background: none;
-  padding: 22px 0;
+  padding: 14px 0;
   color: var(--story-muted);
   font-size: 12px;
 }
 .nodo8-summary strong {
   font:
-    600 36px/1.2 "Manrope",
+    600 28px/1.2 "Manrope",
     system-ui,
     sans-serif;
   letter-spacing: -0.05em;
@@ -883,12 +913,12 @@ main .chapter .copy--final {
 .journey-validation {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 26px;
-  margin-top: 28px;
+  gap: 22px;
+  margin-top: 20px;
 }
 .journey-validation > div {
   border-top: 2px solid var(--story-mint);
-  padding-top: 16px;
+  padding-top: 10px;
 }
 .journey-validation > div:last-child {
   border-top-color: var(--story-accent);
@@ -899,11 +929,11 @@ main .chapter .copy--final {
     system-ui,
     sans-serif;
   letter-spacing: -0.025em;
-  margin: 0 0 10px;
+  margin: 0 0 6px;
 }
 .journey-validation p {
   margin: 0;
-  font: 400 13px/1.8 var(--sans);
+  font: 400 13px/1.65 var(--sans);
   color: var(--story-muted);
 }
 .restart {
@@ -913,16 +943,40 @@ main .chapter .copy--final {
   font: 500 12px var(--sans);
   color: var(--story-muted);
 }
+.journey-final-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-top: 20px;
+}
+.journey-final-actions .decision-cta,
+.journey-final-actions .restart,
+.journey-final-actions .nodo8-secondary-cta {
+  margin: 0;
+  min-height: 44px;
+}
+.journey-final-actions .nodo8-secondary-cta {
+  display: inline-flex;
+  align-items: center;
+}
 
 /* Runtime-injected controls inherit the same palette without changing their behavior. */
 main .chapter .route-controls {
-  background: #173b32;
-  border: 1px solid var(--story-rule);
-  border-radius: 5px;
-  padding: 17px;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--story-rule);
+  border-radius: 0;
+  padding: 14px 0 0;
+  box-shadow: none;
 }
 main .chapter .route-controls > p {
-  font-size: 14px;
+  font-size: 12px;
+}
+main .chapter .route-controls button {
+  border-radius: 4px;
+  min-height: 40px;
+  padding: 9px 12px;
 }
 .walk-clock.walk-clock,
 .lineage-collapse.lineage-collapse {
@@ -956,7 +1010,6 @@ main .chapter .route-controls > p {
    but give numbers, labels and qualifications a readable hierarchy. */
 .representation-meter.representation-meter,
 .search-compression.search-compression,
-.depth-stack.depth-stack,
 .analysis-lens.analysis-lens {
   background: #102e27ed;
   border-color: var(--story-rule);
@@ -965,16 +1018,25 @@ main .chapter .route-controls > p {
 .representation-meter.representation-meter {
   left: auto;
   right: 58px;
-  width: 340px;
-  padding: 20px;
+  bottom: 58px;
+  width: 318px;
+  padding: 14px;
+  box-shadow: none;
+  backdrop-filter: blur(8px);
+}
+body[data-scene="sections"] .representation-meter.representation-meter {
+  left: clamp(24px, 5vw, 76px);
+  right: auto;
 }
 .search-compression.search-compression {
   width: 300px;
-  padding: 20px;
+  padding: 14px;
+  bottom: 58px;
+  box-shadow: none;
+  backdrop-filter: blur(8px);
 }
 .representation-meter__kicker.representation-meter__kicker,
 .search-compression__kicker.search-compression__kicker,
-.depth-stack__kicker.depth-stack__kicker,
 .analysis-lens__kicker.analysis-lens__kicker {
   font: 500 11px/1.5 var(--sans);
   text-transform: none;
@@ -982,30 +1044,78 @@ main .chapter .route-controls > p {
   color: var(--story-muted);
 }
 .representation-meter__steps.representation-meter__steps {
-  gap: 7px;
+  gap: 12px;
 }
-.representation-meter .representation-meter__steps span {
+.representation-meter.representation-meter .representation-meter__steps span {
   font: 400 11px/1.5 var(--sans);
-  padding: 10px 7px;
-  border-radius: 5px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--story-muted);
 }
 .representation-meter .representation-meter__steps span b {
-  font: 600 14px/1.4 "Manrope", system-ui;
-  margin-top: 8px;
+  font: 600 13px/1.4 "Manrope", system-ui;
+  margin-top: 4px;
+  color: var(--story-muted);
+}
+.representation-meter .representation-meter__steps span > i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #57d7e8;
+}
+.representation-meter .representation-meter__steps [data-stage="sections"] > i {
+  background: #ff9b61;
+}
+.representation-meter .representation-meter__steps [data-stage="buildings"] > i {
+  background: #55e1bf;
+}
+.representation-meter .representation-meter__steps span.is-on,
+.representation-meter .representation-meter__steps span.is-on b {
+  color: var(--story-paper);
+}
+.representation-meter .representation-meter__line {
+  margin: 12px 0 0;
+  height: 2px;
+}
+.search-compression .search-compression__current {
+  display: flex;
+  gap: 14px;
+  align-items: center;
 }
 .search-compression__number.search-compression__number {
-  font: 600 43px/1.2 "Manrope", system-ui;
+  font: 600 28px/1.2 "Manrope", system-ui;
   letter-spacing: -0.04em;
-  margin: 12px 0 5px;
+  margin: 0;
 }
 .search-compression__label.search-compression__label {
   font: 400 12px/1.5 var(--sans);
   color: var(--story-muted);
-  min-height: 36px;
+  min-height: 0;
+}
+.search-compression .search-compression__stages {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 12px;
 }
 .search-compression__stage.search-compression__stage {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   font: 500 11px/1.6 var(--sans);
-  padding-block: 6px;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+.search-compression .search-compression__stage i {
+  width: 100%;
+}
+.search-compression .search-compression__stage.is-current {
+  outline: 0;
+  color: var(--story-mint);
 }
 .representation-meter__note.representation-meter__note,
 .search-compression__note.search-compression__note {
@@ -1014,12 +1124,6 @@ main .chapter .route-controls > p {
   letter-spacing: 0;
   color: var(--story-muted);
   margin-top: 16px;
-}
-.depth-stack__layer.depth-stack__layer {
-  font: 400 11px/1.5 var(--sans);
-}
-.depth-stack .depth-stack__layer b {
-  font: 600 15px/1.5 "Manrope", system-ui;
 }
 .analysis-lens__title.analysis-lens__title {
   font: 600 21px/1.25 "Manrope", system-ui;
@@ -1114,7 +1218,7 @@ main .explore-chapter {
   padding-bottom: 120px;
 }
 main .chapter .copy--explore {
-  width: min(560px, 44vw);
+  width: min(460px, 40vw);
   background: #102e27f0;
 }
 main .explore-chapter .explore-key span {
@@ -1149,15 +1253,15 @@ body.is-map-exploring .vignette {
   z-index: 5;
   background: var(--story-paper);
   color: var(--story-forest);
-  padding: 50px clamp(24px, 5vw, 76px);
+  padding: 26px clamp(24px, 5vw, 76px);
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 22px;
+  gap: 12px 22px;
   border-top: 1px solid #153d3420;
 }
 .journey-footer .brand__main {
   font:
-    800 36px "Manrope",
+    800 28px "Manrope",
     system-ui,
     sans-serif;
   letter-spacing: -2px;
@@ -1199,7 +1303,7 @@ body.is-map-exploring .vignette {
     padding-inline: 24px;
   }
   main .chapter .copy {
-    width: min(560px, 49vw);
+    width: min(460px, 49vw);
   }
   main .chapter .copy--hero {
     width: 72vw;
@@ -1268,7 +1372,7 @@ body.is-map-exploring .vignette {
   }
   main .chapter {
     min-height: auto;
-    padding: 140px 17px 110px;
+    padding: 115px 17px 75px;
   }
   main .chapter .copy,
   main .chapter .copy--right,
@@ -1277,7 +1381,7 @@ body.is-map-exploring .vignette {
   main .chapter .copy--explore {
     width: 100%;
     margin: 0;
-    padding: 25px;
+    padding: 20px;
     opacity: 1;
     background: #102e27f5;
     border-radius: 7px;
@@ -1285,15 +1389,15 @@ body.is-map-exploring .vignette {
   main .chapter .copy .eyebrow {
     font-size: 9px;
     gap: 10px;
-    margin-bottom: 23px;
+    margin-bottom: 18px;
   }
   main .chapter .copy h2 {
-    font-size: clamp(34px, 8.4vw, 47px);
+    font-size: clamp(32px, 8vw, 40px);
     letter-spacing: -0.055em;
   }
   main .chapter .copy > p:not(.eyebrow, .source-note, .insight, .final-line) {
     font-size: 15px;
-    line-height: 1.75;
+    line-height: 1.65;
   }
   main .chapter .source-note {
     font-size: 11px;
@@ -1391,7 +1495,7 @@ body.is-map-exploring .vignette {
     gap: 9px;
   }
   .split-stats > div {
-    padding: 13px;
+    padding: 0;
   }
   .split-stats strong {
     font-size: 25px;
@@ -1453,7 +1557,7 @@ body.is-map-exploring .vignette {
   }
   .journey-validation {
     grid-template-columns: 1fr;
-    gap: 23px;
+    gap: 16px;
   }
   .nodo8-summary {
     grid-template-columns: 1fr;
@@ -1466,7 +1570,7 @@ body.is-map-exploring .vignette {
     border-bottom: 1px solid var(--story-rule);
   }
   .nodo8-summary strong {
-    font-size: 33px;
+    font-size: 28px;
   }
   .restart {
     display: block;
@@ -1504,8 +1608,8 @@ body.is-map-exploring .vignette {
   }
   .journey-footer {
     grid-template-columns: 1fr;
-    padding: 35px 24px;
-    gap: 18px;
+    padding: 24px;
+    gap: 12px;
   }
   .journey-footer > p,
   .journey-footer small {

@@ -118,6 +118,26 @@ class RedesignRegressionTests(unittest.TestCase):
                         known |= runtime_ids
                     self.assertIn(unquote(url.fragment), known, (name, reference))
 
+    def test_story_uses_one_population_legend_without_losing_its_evidence(self):
+        director = (ROOT / "dietro-l-analisi/journey-director.js").read_text(encoding="utf-8")
+        lens = (ROOT / "dietro-l-analisi/journey-lens.js").read_text(encoding="utf-8")
+        html = (ROOT / "dietro-l-analisi/index.html").read_text(encoding="utf-8")
+        self.assertEqual(director.count("representation.className = 'representation-meter'"), 1)
+        self.assertNotIn("depth.className = 'depth-stack'", lens)
+        self.assertNotIn("document.body.appendChild(evidence)", director)
+        for source in ("WorldPop", "ISTAT", "DBGT"):
+            self.assertIn(source, director)
+        self.assertIn("el.setAttribute('aria-current','step')", director)
+        for layer in ("worldpop-stack", "sections-stack", "buildings-stack"):
+            self.assertIn(layer, lens)
+        self.assertIn(".representation-meter [data-stage]", lens)
+        # Explanations formerly repeated over the map are still reachable in
+        # the native disclosures, rather than silently discarded or falsified.
+        self.assertIn("con geometrie e vincoli diversi", html)
+        self.assertIn("fino a una casa", html)
+        self.assertIn("non le posizioni dei punti scartati", html)
+        self.assertIn('class="journey-final-actions"', html)
+
     def test_certification_and_caller_declared_inputs_are_not_manufactured(self):
         authority = self.data["authority"]
         for key in ("public_operating_timetable_authorised", "network_selected", "primary_selection_authorised", "runner_up_selection_authorised", "physical_boarding_authorised", "funding_secured"):

@@ -77,7 +77,7 @@
     window.clearInterval(waiter);
     gsap.registerPlugin(ScrollTrigger);
 
-    const walkSection = document.querySelector('[data-scene="walk"]');
+    const walkSection = document.querySelector('main .chapter[data-scene="walk"]');
     const thresholdEls = [...document.querySelectorAll('.thresholds [data-min]')];
     ScrollTrigger.create({
       trigger: walkSection, start:'top 82%', end:'bottom 18%', scrub:true,
@@ -92,7 +92,7 @@
       }
     });
 
-    const finalists = document.querySelector('[data-scene="finalists"]');
+    const finalists = document.querySelector('main .chapter[data-scene="finalists"]');
     ScrollTrigger.create({
       trigger: finalists, start:'top 75%', end:'bottom 25%', scrub:true,
       onUpdate:self => {

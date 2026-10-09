@@ -8,7 +8,7 @@
     />
     <meta name="theme-color" content="#153d34" />
     <title>Nodo8 · Dietro l’analisi</title>
-    <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=20261008k" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=20261008l" />
     <meta
       name="description"
       content="Come nasce Nodo8: persone, strade e idee per collegare cinque comuni. Il racconto della ricerca e della proposta attuale di Tra Paesi."
@@ -16,9 +16,9 @@
     <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin />
     <link rel="stylesheet" href="vendor/maplibre/maplibre-gl.css" />
     <link rel="stylesheet" href="journey.css" />
-    <link rel="stylesheet" href="journey-nodo8.css?v=20261008k" />
-    <link rel="stylesheet" href="../nodo8-experience.css?v=20261008k" />
-    <link rel="stylesheet" href="journey-premium.css?v=20261008k" />
+    <link rel="stylesheet" href="journey-nodo8.css?v=20261008l" />
+    <link rel="stylesheet" href="../nodo8-experience.css?v=20261008l" />
+    <link rel="stylesheet" href="journey-premium.css?v=20261008l" />
   </head>
   <body>
     <a class="journey-skip" href="#nodo8">Salta alla proposta attuale</a>
@@ -153,6 +153,9 @@
           <details class="source-note">
             <summary>Fonte e metodo</summary>
             <p>WorldPop 100 m e POSAS ISTAT 2025. I totali seguono quelli ufficiali di ogni comune.</p>
+            <p>Griglia, zone ISTAT ed edifici sono tre rappresentazioni successive,
+            con geometrie e vincoli diversi. Non tracciamo il singolo quadrato
+            fino a una casa.</p>
           </details>
         </div>
       </section>
@@ -205,7 +208,7 @@
             </div>
           </div>
           <details class="source-note">
-            <summary>Come passiamo dalle zone alle case</summary>
+            <summary>Dalle zone alle case: il metodo</summary>
             <p>Usiamo gli edifici della Regione Lombardia e la loro dimensione.
             Fonti: DBGT Lombardia, sezioni ISTAT e POSAS 2025.</p>
           <div class="residual">
@@ -360,6 +363,8 @@
                 <span>possibili nuove fermate da verificare</span><b>155</b>
               </div>
             </div>
+            <p>La mappa mostra i 155 punti da verificare. Per le fasi precedenti
+            conosciamo i conteggi, non le posizioni dei punti scartati.</p>
           </details>
           <p class="source-note">
             Ricerca storica: i 155 punti non sono fermate decise. I quattro
@@ -602,15 +607,17 @@
               </p>
             </div>
           </div>
-          <a class="decision-cta" href="../index.html#proposta"
-            >Scopri la proposta Nodo8 <span>→</span></a
-          >
-          <button id="restartBtn" class="restart" type="button">
-            ↺ Torna all’inizio del racconto
-          </button>
-          <a class="nodo8-secondary-cta" href="index.html#esplora-mappa"
-            >Esplora la mappa ↓</a
-          >
+          <div class="journey-final-actions">
+            <a class="decision-cta" href="../index.html#proposta"
+              >Scopri la proposta Nodo8 <span>→</span></a
+            >
+            <a class="nodo8-secondary-cta" href="index.html#esplora-mappa"
+              >Esplora la mappa ↓</a
+            >
+            <button id="restartBtn" class="restart" type="button">
+              ↺ Torna all’inizio
+            </button>
+          </div>
         </div>
       </section>
     </main>
@@ -646,6 +653,6 @@
     <script src="vendor/pako/pako.min.js"></script>
     <script src="legacy-geo-data.js"></script>
     <script src="journey-data.js"></script>
-    <script type="module" src="journey-bootstrap.mjs?v=20261008k"></script>
+    <script type="module" src="journey-bootstrap.mjs?v=20261008l"></script>
   </body>
 </html>

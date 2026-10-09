@@ -72,7 +72,7 @@ function exactBounds() {
 function applyExactBaselineView() {
   if (document.body.dataset.scene !== 'baseline') return;
   map.fitBounds(exactBounds(), {
-    padding: innerWidth < 800 ? 35 : 70,
+    padding: window.__analysisJourneyMapFrame?.() || (innerWidth < 800 ? 35 : 70),
     maxZoom: 12,
     duration: window.__analysisJourneyReduceMotion ? 0 : 850,
     pitch: 40,
