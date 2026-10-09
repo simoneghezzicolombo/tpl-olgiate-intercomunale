@@ -14,7 +14,15 @@ import {
   servicePhase,
 } from "../nodo8-line.mjs";
 import { readStopSelection, stopLink } from "../nodo8-stop-times.mjs";
-import { inspectJourney, eventKey } from "../nodo8-journey-inspector.mjs";
+import { inspectJourney, eventKey, journeyDurationLabel } from "../nodo8-journey-inspector.mjs";
+test("journey durations show minutes and seconds from the unrounded ledger value", () => {
+  assert.equal(journeyDurationLabel(14.2), "14 min 12 s");
+  assert.equal(journeyDurationLabel(14.161), "14 min 10 s");
+  assert.equal(journeyDurationLabel(1.999), "2 min 00 s");
+  assert.equal(journeyDurationLabel(0), "0 min 00 s");
+  assert.throws(() => journeyDurationLabel(NaN));
+  assert.throws(() => journeyDurationLabel(-1));
+});
 const data = JSON.parse(
   readFileSync(
     new URL("../assets/nodo8-proposal.json", import.meta.url),

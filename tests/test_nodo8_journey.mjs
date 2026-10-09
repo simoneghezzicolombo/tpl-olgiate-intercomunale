@@ -44,8 +44,16 @@ test("playback hides and pauses outside the active current-proposal context", ()
     { ...state, nodo8Visible: undefined },
   ])
     assert.equal(playbackVisible(changed, "explore"), false);
-  assert.equal(playbackVisible({ scene: "nodo8-time" }, "story"), true);
+  assert.equal(playbackVisible({ scene: "nodo8-time" }, "story"), false);
   assert.equal(playbackVisible(state, "story"), false);
+});
+test("story does not embed another map or inline playback, but keeps the explorer", () => {
+  const module = readFileSync(new URL("../dietro-l-analisi/journey-nodo8.mjs", import.meta.url), "utf8");
+  const html = readFileSync(new URL("../dietro-l-analisi/index.html", import.meta.url), "utf8");
+  assert.ok(!module.includes("mountRoadPreview"));
+  assert.ok(!module.includes("inlineMap:"));
+  assert.ok(!html.includes('id="journeyPlayback"'));
+  assert.ok(module.includes('document.getElementById("explorePlayback")'));
 });
 test("overlay copies every confirmed road coordinate, not historical anchors", () => {
   const before = JSON.stringify(data);

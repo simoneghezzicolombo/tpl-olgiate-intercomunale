@@ -926,6 +926,10 @@ select {
   letter-spacing: -4px;
   color: #e5eabe;
 }
+.journey-inspector .journey-time strong {
+  font-size: clamp(30px, 3.8vw, 48px);
+  letter-spacing: -1.5px;
+}
 .journey-time span {
   display: block;
   font-size: 11px;

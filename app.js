@@ -1,19 +1,19 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
-import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008m";
+import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008n";
 import {
   renderStopTimes,
   readStopSelection,
   stopLink,
-} from "./nodo8-stop-times.mjs?v=20261008m";
-import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008m";
+} from "./nodo8-stop-times.mjs?v=20261008n";
+import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008n";
 import {
   mountPlayer,
   renderDiagram,
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "./nodo8-experience.mjs?v=20261008m";
+} from "./nodo8-experience.mjs?v=20261008n";
 let activePlayer = null,
   activeMap = null,
   currentLine = null,
