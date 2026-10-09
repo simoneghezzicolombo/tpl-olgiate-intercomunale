@@ -58,8 +58,54 @@ export function currentTripsAt(data, minute, selection="ALL") {
   });
 }
 
+// Engineering display guard only: this is not a road speed limit or evidence
+// of a bus's real speed. Source clocks and trip inventory remain unchanged.
+export const CURRENT_DISPLAY_SEGMENT_MEAN_LIMIT_KMH = 90;
+
+function geodesicMetres(a, b) {
+  const rad = Math.PI / 180;
+  const lat = (b[1] - a[1]) * rad, lon = (b[0] - a[0]) * rad;
+  const h = Math.sin(lat / 2) ** 2 + Math.cos(a[1] * rad) * Math.cos(b[1] * rad) * Math.sin(lon / 2) ** 2;
+  return 12742000 * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+
+function shapeDistanceIndex(shape, distance) {
+  let lo = 0, hi = shape.distances.length - 1;
+  while (lo < hi) {const mid = (lo + hi) >>> 1; if (shape.distances[mid] < distance) lo = mid + 1; else hi = mid;}
+  return lo;
+}
+
+function segmentMetres(shape, from, to) {
+  let previous = currentPosition(shape, from), total = 0;
+  const first = shapeDistanceIndex(shape, from), last = shapeDistanceIndex(shape, to);
+  for (let i = first; i < last; i++) {
+    total += geodesicMetres(previous, shape.coordinates[i]);
+    previous = shape.coordinates[i];
+  }
+  return total + geodesicMetres(previous, currentPosition(shape, to));
+}
+
+// `state.minute` is the shared playback clock. Stop/shape coordinate offsets
+// are diagnostic evidence only: no spatial snapping or inferred dwell is added.
+export function currentPositionQuality(data, state) {
+  const trip = data.trips.find(t => t.id === state.id), shape = trip && data.shapes[trip.shape_id];
+  if (!shape || !Number.isFinite(state.minute)) return {displayable:false,reason:"UNKNOWN_PLAYBACK_POSITION"};
+  const call = trip.calls.find(c => state.minute >= c.arrival_min && state.minute <= c.departure_min);
+  if (call && state.status === "stop") return {displayable:true,reason:"SOURCE_STOP_CALL",
+    stop_shape_offset_metres:geodesicMetres(call.coordinates, currentPosition(shape, call.distance))};
+  const index = trip.calls.findIndex((c, i) => trip.calls[i + 1] && state.minute > c.departure_min && state.minute < trip.calls[i + 1].arrival_min);
+  if (index < 0 || state.status !== "moving") return {displayable:false,reason:"UNKNOWN_PLAYBACK_POSITION"};
+  const from = trip.calls[index], to = trip.calls[index + 1];
+  const metres = segmentMetres(shape, from.distance, to.distance);
+  const meanKmh = metres / (to.arrival_min - from.departure_min) * 0.06;
+  const displayable = Number.isFinite(meanKmh) && meanKmh <= CURRENT_DISPLAY_SEGMENT_MEAN_LIMIT_KMH;
+  return {displayable,reason:displayable?"WITHIN_ENGINEERING_DISPLAY_GUARD":"EXCEEDS_ENGINEERING_DISPLAY_GUARD",
+    segment_metres:metres,segment_mean_kmh:meanKmh,display_guard_kmh:CURRENT_DISPLAY_SEGMENT_MEAN_LIMIT_KMH,
+    departure_min:from.departure_min,arrival_min:to.arrival_min,from_stop_id:from.stop_id,to_stop_id:to.stop_id};
+}
+
 export async function installCurrent(map) {
-  const response=await fetch("../assets/nodo8-current-simulation.json?v=20261008t");
+  const response=await fetch("../assets/nodo8-current-simulation.json?v=20261009b");
   if (!response.ok) throw new Error("Dated existing-service data unavailable");
   const data=buildCurrent(await response.json());
   const pairs=[...new Map(data.trips.map(t=>[`${t.route}:${t.shape_id}`,t])).values()];
@@ -83,9 +129,11 @@ export async function installCurrent(map) {
       map.setPaintProperty("current-dated-stops","circle-opacity",visible && showStops?0.95:0);
       map.setFilter("current-dated-stops",selection==="ALL"?null:["==",["get","route"],selection]);
       const states=visible?currentTripsAt(data,minute,selection):[];
-      const present=new Set(states.map(t=>t.id));
+      const displayed=states.filter(state=>currentPositionQuality(data,{...state,minute}).displayable);
+      const withheld=states.length-displayed.length;
+      const present=new Set(displayed.map(t=>t.id));
       for (const [id,e] of markers) if (!present.has(id)) {e.marker.remove();markers.delete(id);}
-      for (const state of states) {
+      for (const state of displayed) {
         if (!markers.has(state.id)) {
           const icon=document.createElement("div"); icon.className="current-bus-marker";icon.setAttribute("role","img");
           icon.innerHTML=`<svg viewBox="0 0 34 42" width="34" height="42" aria-hidden="true"><rect x="4" y="2" width="26" height="34" rx="7" fill="${CURRENT_COLOURS[state.route]}" stroke="#fffdf8" stroke-width="2"/><rect x="8" y="7" width="18" height="10" rx="2" fill="#173c33"/><text x="17" y="29" text-anchor="middle" fill="#07131f" font-size="8" font-weight="800">${state.route}</text><circle cx="10" cy="33" r="2" fill="#ffe4a4"/><circle cx="24" cy="33" r="2" fill="#ffe4a4"/><path d="M9 37v3m16-3v3" stroke="#173c33" stroke-width="4"/></svg>`;
@@ -93,14 +141,16 @@ export async function installCurrent(map) {
           markers.set(state.id,{marker,icon});
         }
         const e=markers.get(state.id);
-        const label=`${state.route} · ${state.label} · corsa GTFS del 6 maggio 2026, non identità del mezzo`;
+        const label=`${state.route} · ${state.label} · corsa GTFS, movimento interpolato dagli orari`;
         e.icon.setAttribute("aria-label",label);e.icon.title=label;e.icon.dataset.trip=state.id;
         e.marker.setLngLat(state.coordinates);
       }
       document.documentElement.dataset.currentBusCount=String(states.length);
+      document.documentElement.dataset.currentBusMarkerCount=String(displayed.length);
+      document.documentElement.dataset.currentBusUnreliablePositionCount=String(withheld);
       document.documentElement.dataset.currentBusVisible=String(visible);
       const status=document.getElementById("currentBusStatus");
-      if (status) {status.hidden=!visible;const label=`${states.length} corse in viaggio · riferimento 06/05/2026`;if(status.textContent!==label)status.textContent=label;}
+      if (status) {status.hidden=!visible;const label=`${states.length} ${states.length===1?"corsa attiva":"corse attive"}${withheld?` · ${withheld} ${withheld===1?"posizione non affidabile":"posizioni non affidabili"}`:""}`;if(status.textContent!==label)status.textContent=label;}
     },
   };
 }

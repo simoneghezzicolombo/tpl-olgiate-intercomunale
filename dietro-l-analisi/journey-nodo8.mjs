@@ -1,13 +1,13 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008t";
-import { stopLink } from "../nodo8-stop-times.mjs?v=20261008t";
-import { installS8 } from "../nodo8-s8.mjs?v=20261008t";
-import { installCurrent } from "../nodo8-current.mjs?v=20261008t";
+import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261009b";
+import { stopLink } from "../nodo8-stop-times.mjs?v=20261009b";
+import { installS8 } from "../nodo8-s8.mjs?v=20261009b";
+import { installCurrent } from "../nodo8-current.mjs?v=20261009b";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
-} from "../nodo8-experience.mjs?v=20261008t";
+} from "../nodo8-experience.mjs?v=20261009b";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
@@ -195,6 +195,7 @@ async function installNodo8() {
       current = installed;
       window.__analysisJourneyCurrent = {installed:true,data:current.data};
       document.documentElement.dataset.currentSimulationReady = "true";
+      document.querySelectorAll('[data-layer="d184"], [data-layer="d185"]').forEach(button => {button.disabled = false;});
       window.__analysisJourneyExplore?.render();
       explorerPlayer?.render();
     }).catch(error => {
@@ -284,7 +285,10 @@ async function installNodo8() {
         visible && showStops ? 0.95 : 0,
       );
       const host = document.getElementById("explorePlayback");
-      if (host) host.hidden = !active || (!visible && !railVisible() && !currentVisible());
+      if (host) {
+        host.hidden = !active || (!visible && !railVisible() && !currentVisible());
+        host.dataset.nodo8Enabled = String(visible);
+      }
       if (explorerPlayer) {
         if (!contextVisible("explore") && !railVisible() && !currentVisible()) explorerPlayer.pause();
         explorerPlayer.render();
@@ -390,8 +394,15 @@ async function installNodo8() {
         {
           compact: true,
           brief: true,
+          overviewOnly: true,
           initialSelection: "all",
           initialMinute: 455,
+          onVehicleFocus: (_id, state) => {
+            if (!state.coordinates || !contextVisible("explore")) return;
+            map.flyTo({center:state.coordinates,zoom:Math.max(map.getZoom(),13.2),
+              padding:innerWidth < 800 ? {top:85,right:25,bottom:Math.min(innerHeight*0.5,360),left:25} : {top:90,right:460,bottom:80,left:45},
+              duration:window.__analysisJourneyReduceMotion ? 0 : 550});
+          },
         },
       );
       document.documentElement.dataset.nodo8ExplorerPlaybackReady = "true";
@@ -399,56 +410,6 @@ async function installNodo8() {
     const renderScene = () => {
       const scene = document.body.dataset.scene;
       mountExplorerPlayer();
-      const siteSelect = document.getElementById("exploreSiteSelect");
-      if (siteSelect && !siteSelect.dataset.ready) {
-        siteSelect.replaceChildren();
-        const placeholder = document.createElement("option");
-        placeholder.value = "";
-        placeholder.textContent = "Scegli una delle 27 fermate proposte";
-        siteSelect.append(placeholder);
-        [...line.sites.values()]
-          .sort(
-            (a, b) =>
-              (a.hub_service_roles.length
-                ? 0
-                : Math.min(
-                    ...a.ordered_occurrences.map(
-                      (e) => e.ordered_nonhub_event_number,
-                    ),
-                  )) -
-              (b.hub_service_roles.length
-                ? 0
-                : Math.min(
-                    ...b.ordered_occurrences.map(
-                      (e) => e.ordered_nonhub_event_number,
-                    ),
-                  )),
-          )
-          .forEach((site) => {
-            const option = document.createElement("option");
-            option.value = site.site_id;
-            option.textContent = site.hub_service_roles.length
-              ? "Olgiate FS"
-              : siteNames.get(site.site_id) || site.name;
-            siteSelect.append(option);
-          });
-        siteSelect.disabled = false;
-        siteSelect.dataset.ready = "true";
-        siteSelect.addEventListener("change", () => {
-          const site = line.sites.get(siteSelect.value),
-            explore = window.__analysisJourneyExplore;
-          if (!site || !explore?.isActive()) return;
-          explore.layers.nodo8 = true;
-          explore.layers.stops = true;
-          explore.render();
-          map.flyTo({
-            center: site.coordinates_lon_lat,
-            zoom: 14.5,
-            duration: window.__analysisJourneyReduceMotion ? 0 : 600,
-          });
-          showSite(site.site_id);
-        });
-      }
       if (scene === "explore") {
         const explore = window.__analysisJourneyExplore;
         renderExplorer({

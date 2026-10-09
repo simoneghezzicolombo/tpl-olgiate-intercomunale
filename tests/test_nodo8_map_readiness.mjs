@@ -30,8 +30,10 @@ test("active exploration still owns shared-layer composition and clears narrativ
   assert.ok(writes.some(([id, value]) => id === "current-routes" && value === 0));
   assert.ok(writes.some(([id]) => id === "worldpop-columns"));
 });
-test("D184/D185 are available from simulation and layers, with official route and stop filters", () => {
-  assert.equal((explorerSource.match(/data-layer="current"/g) || []).length, 2);
+test("independent network switches share simulation and map views, with official route and stop filters", () => {
+  const markup = explorerSource.slice(explorerSource.indexOf("    controls.innerHTML ="), explorerSource.indexOf("    document.body.appendChild(controls)"));
+  for (const network of ["nodo8", "s8", "d184", "d185"])
+    assert.equal((markup.match(new RegExp(`data-layer="${network}"`, "g")) || []).length, 1);
   assert.match(explorerSource, /id="currentRouteChoice"/);
   assert.match(explorerSource, /map\.setFilter\(id, routeFilter\)/);
   assert.match(explorerSource, /map\.setFilter\(id, stopFilter\)/);
@@ -41,6 +43,26 @@ test("D184/D185 are available from simulation and layers, with official route an
   assert.match(fit, /layers\.current \? currentFeatures\.filter/);
   assert.match(fit, /layers\.proposals \? lineage\.finalData\.features : \[\]/);
   assert.doesNotMatch(fit, /\.\.\.lineage\.anchorData/);
+});
+test("explorer walking access never uses the static narrative baseline or implicit current stops", () => {
+  assert.match(explorerRender, /opacity\("piece-halo", 0\)/);
+  assert.match(explorerSource, /activeWalkFeatureCollection\(model, networks\)/);
+  assert.match(explorerRender, /layers\.nodo8 \? \["NODO8"\]/);
+  assert.match(explorerRender, /cur && currentChoice !== "D185" \? \["D184"\]/);
+  assert.match(explorerRender, /cur && currentChoice !== "D184" \? \["D185"\]/);
+  assert.doesNotMatch(explorerRender, /\|\| layers\.walk/);
+  assert.doesNotMatch(explorerSource, /data-layer="(?:candidates|proposals)"/);
+  assert.doesNotMatch(explorerSource, /id="exploreSiteSelect"/);
+});
+test("independent D switches keep the hidden dated-player selection synchronized, including neither", () => {
+  const code = explorerSource.slice(explorerSource.indexOf("  function syncCurrentSelection()"),explorerSource.indexOf("  async function ensureActiveWalk()"));
+  for (const [d184,d185,expected] of [[true,true,"ALL"],[true,false,"D184"],[false,true,"D185"],[false,false,"ALL"]]) {
+    const layers = {d184,d185,current:false}, compatibilityState = {}, choice = {value:null};
+    runInNewContext(code + "\nsyncCurrentSelection();",{layers,compatibilityState,controls:{querySelector:()=>choice}});
+    assert.equal(layers.current,d184||d185);
+    assert.equal(compatibilityState.current,d184||d185);
+    assert.equal(choice.value,expected);
+  }
 });
 test("each current-line selection filters routes and shared stops together", () => {
   const start = explorerRender.indexOf('    const currentChoice =');

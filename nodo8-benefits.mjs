@@ -1,4 +1,4 @@
-import { validateCoverageComparison, coverageChangeLabel } from "./nodo8-coverage.mjs?v=20261008t";
+import { validateCoverageComparison, coverageChangeLabel } from "./nodo8-coverage.mjs?v=20261009b";
 const fmt = n => new Intl.NumberFormat("it-IT",{maximumFractionDigits:2}).format(n);
 const maxGap = times => Math.max(...times.slice(1).map((t,i)=>t-times[i]));
 const duration = m => m >= 60 ? `${Math.floor(m/60)} h${m%60 ? ` ${m%60} min` : ""}` : `${m} min`;
@@ -98,7 +98,7 @@ export function mountPdbNote(host,service) {
 
 export async function initBenefits({base="",rootHref="index.html",proposal=null,coverage=null}={}) {
   try {
-    const load=async name=>{const r=await fetch(base+"assets/"+name+"?v=20261008t");if(!r.ok)throw new Error(name+" unavailable");return r.json();};
+    const load=async name=>{const r=await fetch(base+"assets/"+name+"?v=20261009b");if(!r.ok)throw new Error(name+" unavailable");return r.json();};
     const [p,c,s,d]=await Promise.all([proposal||load("nodo8-proposal.json"),coverage||load("nodo8-coverage-comparison.json"),load("nodo8-service-comparison.json"),load("nodo8-coverage-diagnostic.json")]);
     const model=validateBenefits(p,c,s,d);
     document.querySelectorAll("[data-resident-comparison]").forEach((host,i)=>mountBenefits(host,model,{prefix:`resident-${base?"story":"home"}-${i}`,rootHref}));

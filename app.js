@@ -1,14 +1,14 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
-import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008t";
+import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261009b";
 import {
   renderStopTimes,
   readStopSelection,
   stopLink,
-} from "./nodo8-stop-times.mjs?v=20261008t";
-import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008t";
-import { validateCoverageComparison, coverageChangeLabel } from "./nodo8-coverage.mjs?v=20261008t";
-import { initBenefits } from "./nodo8-benefits.mjs?v=20261008t";
+} from "./nodo8-stop-times.mjs?v=20261009b";
+import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261009b";
+import { validateCoverageComparison, coverageChangeLabel } from "./nodo8-coverage.mjs?v=20261009b";
+import { initBenefits } from "./nodo8-benefits.mjs?v=20261009b";
 let coverageComparison = null;
 import {
   mountPlayer,
@@ -16,7 +16,7 @@ import {
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "./nodo8-experience.mjs?v=20261008t";
+} from "./nodo8-experience.mjs?v=20261009b";
 let activePlayer = null,
   activeMap = null,
   currentLine = null,

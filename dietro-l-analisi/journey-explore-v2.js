@@ -28,6 +28,8 @@
     roads: false,
     candidates: false,
     current: false,
+    d184: false,
+    d185: false,
     proposals: false,
     nodo8: true,
     stops: true,
@@ -39,6 +41,48 @@
   let fitted = false;
   let roadPromise = null;
   let controls = null;
+  let walkPromise = null;
+
+  // The hidden selection is a compatibility bridge to the shared dated player.
+  // Visible network switches are independent and never select a different day.
+  function syncCurrentSelection() {
+    layers.current = layers.d184 || layers.d185;
+    compatibilityState.current = layers.current;
+    const choice = controls?.querySelector("#currentRouteChoice");
+    if (choice) choice.value = layers.d184 && layers.d185 ? "ALL" : layers.d184 ? "D184" : layers.d185 ? "D185" : "ALL";
+  }
+
+  async function ensureActiveWalk() {
+    if (window.__analysisJourneyActiveWalk) return;
+    if (walkPromise) return walkPromise;
+    walkPromise = (async () => {
+      const { validateActiveWalkAsset, activeWalkFeatureCollection } = await import("../nodo8-active-walk.mjs?v=20261009b");
+      const response = await fetch("../assets/nodo8-active-walk.json?v=20261009b");
+      if (!response.ok) throw new Error("Active-network walk data unavailable");
+      const model = validateActiveWalkAsset(await response.json());
+      map.addSource("explore-active-walk", {type:"geojson",data:{type:"FeatureCollection",features:[]}});
+      map.addLayer({id:"explore-active-walk",type:"circle",source:"explore-active-walk",paint:{
+        "circle-radius":["interpolate",["linear"],["zoom"],10,2,14,4],
+        "circle-color":["match",["get","walk_band"],"5","#55e1bf","8","#99d5aa","10","#e7d69a","over10","#e99b71","#8a9494"],
+        "circle-opacity":0,"circle-stroke-width":0.4,"circle-stroke-color":"#102e27"
+      }}, "hub-glow");
+      let previousKey = null;
+      window.__analysisJourneyActiveWalk = {render({visible,networks}) {
+        const key = networks.join("|");
+        if (key !== previousKey) {
+          const features = activeWalkFeatureCollection(model, networks);
+          map.getSource("explore-active-walk").setData(features);
+          document.documentElement.dataset.activeWalkPointCount = String(features.features.length);
+          previousKey = key;
+        }
+        map.setPaintProperty("explore-active-walk","circle-opacity",visible && networks.length ? 0.82 : 0);
+        document.documentElement.dataset.activeWalkNetworks = key;
+        document.documentElement.dataset.activeWalkVisible = String(visible && networks.length > 0);
+      }};
+      document.documentElement.dataset.activeWalkReady = "true";
+    })().finally(() => {walkPromise = null;});
+    return walkPromise;
+  }
 
   const esc = (v) =>
     String(v ?? "")
@@ -376,22 +420,39 @@
     controls = document.createElement("div");
     controls.id = "journeyExplorerControls";
     controls.className = "explore-controls";
-    controls.innerHTML = `<div class="explore-controls__head"><div><strong>Esplora Nodo8</strong><small>4 bus simulati · non GPS</small></div><button class="explore-controls__exit" data-action="exit" type="button">Torna al racconto</button></div>
-      <div class="explore-controls__tabs" role="tablist" aria-label="Vista esplorazione"><button id="exploreBusTab" role="tab" aria-selected="true" aria-controls="exploreBusPanel" type="button">Bus in movimento</button><button id="exploreLayersTab" role="tab" aria-selected="false" aria-controls="exploreLayersPanel" tabindex="-1" type="button">Livelli e confronto</button></div>
-      <section id="exploreBusPanel" role="tabpanel" aria-labelledby="exploreBusTab"><p class="explore-bus-intro">I quattro bus percorrono la stessa linea. Il numero in movimento cambia con l’orario.</p><button type="button" data-action="four-buses">Vedi i 4 bus · 07:35</button><div class="explore-controls__layers s8-toggle"><button data-layer="s8" type="button" disabled><i style="--c:#f8b1b0"></i>S8 · tracciato e treni</button><button data-layer="current" type="button"><i style="--c:#4ca5ff"></i><i style="--c:#ff9b61"></i>D184 / D185 · confronto</button></div><p id="s8SimulationStatus" class="s8-status" hidden></p><details class="s8-source"><summary>S8: quale simulazione?</summary><p id="s8SourceNote">Intera S8 Milano Porta Garibaldi–Lecco, sul percorso ferroviario OpenStreetMap. Il livello attraversa tutta l’area visibile senza allontanare la vista da Nodo8. 74 corse negli orari Trenord del 1 ottobre 2026, 37 per direzione; le corse parziali non vengono estese oltre le proprie chiamate. Posizioni interpolate fra le stazioni, non GPS. Il calendario Nodo8 è una proposta 2027: nessuna coincidenza o validità futura è garantita.</p></details><div id="explorePlayback" data-theme="dark" aria-label="Orologio condiviso della simulazione Nodo8, D184, D185 e S8"><p role="status">Caricamento dell’orario…</p></div><p id="explorePlaybackUnavailable" hidden role="status">Attiva il livello Nodo8 in «Livelli e confronto» per vedere i bus.</p></section>
+    controls.innerHTML = `<div class="explore-controls__head"><div><strong>Esplora Nodo8</strong><small>Simulazione</small></div><button class="explore-controls__exit" data-action="exit" type="button">Torna al racconto</button></div>
+      <div class="explore-networks" aria-label="Linee sulla mappa">
+        <button data-layer="nodo8" class="is-active" type="button"><i style="--c:#55e1bf"></i><span>Nodo8<small>La proposta</small></span><b aria-hidden="true">✓</b></button>
+        <button data-layer="s8" type="button" disabled><i style="--c:#f8b1b0"></i><span>S8<small>Treni</small></span><b aria-hidden="true">✓</b></button>
+        <button data-layer="d184" type="button" disabled><i style="--c:#4ca5ff"></i><span>D184<small>Situazione attuale</small></span><b aria-hidden="true">✓</b></button>
+        <button data-layer="d185" type="button" disabled><i style="--c:#ff9b61"></i><span>D185<small>Situazione attuale</small></span><b aria-hidden="true">✓</b></button>
+      </div>
+      <select id="currentRouteChoice" hidden aria-hidden="true" tabindex="-1"><option value="ALL">D184 e D185</option><option value="D184">D184</option><option value="D185">D185</option></select>
+      <div class="explore-controls__tabs" role="tablist" aria-label="Controlli"><button id="exploreBusTab" role="tab" aria-selected="true" aria-controls="exploreBusPanel" type="button">Orario</button><button id="exploreLayersTab" role="tab" aria-selected="false" aria-controls="exploreLayersPanel" tabindex="-1" type="button">Mappa</button></div>
+      <section id="exploreBusPanel" role="tabpanel" aria-labelledby="exploreBusTab">
+        <div id="explorePlayback" data-theme="dark" aria-label="Orologio condiviso Nodo8, D184, D185 e S8"><p role="status">Caricamento dell’orario…</p></div>
+        <p id="explorePlaybackUnavailable" hidden role="status">Accendi una linea per vedere la simulazione.</p>
+        <section id="currentComparisonPanel" hidden aria-label="Corse D184 e D185"><p id="currentBusStatus" class="current-bus-status" hidden></p></section>
+        <p id="s8SimulationStatus" class="s8-status" hidden></p>
+      </section>
       <section id="exploreLayersPanel" role="tabpanel" aria-labelledby="exploreLayersTab" hidden>
-      <div class="explore-site-select"><label for="exploreSiteSelect">Vai a una fermata di Nodo8</label><select id="exploreSiteSelect" disabled><option value="">Caricamento delle fermate…</option></select></div>
-      <div class="explore-controls__group"><span>01 · Dove viviamo</span><div class="explore-controls__layers"><button data-layer="worldpop" type="button"><i style="--c:#57d7e8"></i>Abitanti stimati</button><button data-layer="sections" type="button"><i style="--c:#ffb07f"></i>Zone ISTAT</button><button data-layer="buildings" type="button"><i style="--c:#55e1bf"></i>Edifici abitati</button></div></div>
-      <div class="explore-controls__group"><span>02 · Come arriviamo alla fermata</span><div class="explore-controls__layers"><button data-layer="walk" type="button"><i style="--c:#55e1bf"></i>Minuti a piedi</button><button data-layer="roads" type="button"><i style="--c:#57d7e8"></i>Strade del bus</button><button data-layer="candidates" type="button"><i style="--c:#ffd36d"></i>155 punti da valutare</button></div></div>
-      <div class="explore-controls__group"><span>03 · Quale rete guardiamo</span><div class="explore-controls__layers"><button data-layer="nodo8" class="is-active" type="button"><i style="--c:#55e1bf"></i>Nodo8 · proposta</button><button data-layer="current" type="button"><i style="--c:#4ca5ff"></i>D184 / D185</button><button data-layer="proposals" type="button"><i style="--c:#57d7e8"></i>Alternative storiche</button><button data-layer="stops" class="is-active" type="button"><i style="--c:#fff"></i>Fermate</button></div></div>
-      <div class="explore-controls__group"><span>04 · Il collegamento ferroviario</span><div class="explore-controls__layers"><button data-layer="s8" type="button" disabled><i style="--c:#f8b1b0"></i>S8 · tracciato e treni</button></div></div>
-      </section><section id="currentComparisonPanel" class="current-comparison" hidden aria-label="Confronto D184 e D185"><div class="current-comparison__legend"><span><i style="--c:#4ca5ff"></i>D184</span><span><i style="--c:#ff9b61"></i>D185</span><span><i style="--c:#55e1bf"></i>Nodo8</span></div><label for="currentRouteChoice">Linee da confrontare</label><div class="current-comparison__choice"><select id="currentRouteChoice"><option value="ALL">D184 e D185</option><option value="D184">Solo D184</option><option value="D185">Solo D185</option></select><button type="button" data-action="fit-current">Inquadra</button></div><p id="currentBusStatus" class="current-bus-status" hidden></p><details><summary>Giorno di riferimento e fonti</summary><p>Mercoledì 6 maggio 2026: 15 corse D184 e 19 D185, selezionate con il calendario del GTFS ufficiale 2025/26. Ogni corsa segue il proprio tracciato e i suoi orari nello stesso feed. Sono posizioni interpolate fra fermate, non GPS; le icone sono corse, non identità di mezzi o turni. Nessuna animazione fuori servizio o velocità reale viene dedotta. Questa fotografia storica non è l’orario più recente 2026/27, né il calendario futuro di Nodo8. Se l’animazione non carica, resta il riferimento KML strutturale.</p><a href="../index.html#confronto">Confronta gli orari più recenti 2026/27 ↗</a></details></section><div class="explore-controls__footer"><div class="explore-controls__hint">Trascina, zooma e clicca sulla mappa.</div><div class="explore-controls__layers"><button data-action="clear" type="button">Spegni i livelli</button><button data-action="reset" type="button">↺ Vista</button></div></div>`;
+        <div class="explore-controls__group"><span>Fermate e accessibilità</span><div class="explore-controls__layers"><button data-layer="stops" class="is-active" type="button">Fermate</button><button data-layer="walk" type="button">Minuti a piedi</button></div></div>
+        <div id="activeWalkLegend" hidden><small id="activeWalkStatus"></small><div class="explore-walk-key"><span><i style="--c:#55e1bf"></i>≤ 5 min</span><span><i style="--c:#99d5aa"></i>5–8</span><span><i style="--c:#e7d69a"></i>8–10</span><span><i style="--c:#e99b71"></i>&gt; 10</span><span><i style="--c:#8a9494"></i>n.d.</span></div></div>
+        <div class="explore-controls__group"><span>Territorio</span><div class="explore-controls__layers"><button data-layer="worldpop" type="button">Abitanti stimati</button><button data-layer="sections" type="button">Zone ISTAT</button><button data-layer="buildings" type="button">Edifici abitati</button><button data-layer="roads" type="button">Rete stradale</button></div></div>
+      </section>
+      <details id="exploreTechnical" class="explore-technical"><summary>Dati e metodo</summary>
+        <h4>Nodo8</h4><p>Orario di progetto 2027, 16 giri completi sullo stesso percorso. B1–B4 sono quattro mezzi di modello, non turni assegnati. Sosta prevista di 30 secondi alle fermate, attesa a FS e recupero di 10 minuti dopo il rientro. Movimento interpolato lungo il tracciato; non GPS, velocità osservata o traffico reale. La prosecuzione passeggeri sullo stesso bus a FS resta da autorizzare.</p>
+        <h4>D184 e D185</h4><p>GTFS ufficiale 2025/26: tutte le 34 corse attive mercoledì 6 maggio 2026, 15 D184 e 19 D185. Tracciati e orari dello stesso feed. Questa fotografia storica non è l’orario più recente 2026/27. Le icone rappresentano corse, non mezzi fisici; i tempi intermedi sono interpolati. Il feed contiene anche tempi e distanze incoerenti: 48 dei 388 intervalli implicano oltre 90 km/h medi lungo la shape. In questi intervalli l’icona non viene disegnata; la corsa resta nel conteggio. È un filtro prudenziale della visualizzazione, non un limite stradale o una certificazione delle altre velocità. Le posizioni della shape alle fermate possono discostarsi dalle coordinate GTFS fino a circa 547 metri. Arrivo e partenza coincidono nel feed: non inventiamo soste o tempi corretti.</p><a href="../index.html#confronto">Confronto con gli orari 2026/27 ↗</a>
+        <h4>Fonti ferroviarie</h4><p id="s8SourceNote">S8: orari Trenord del 1 ottobre 2026, 74 corse, percorso ferroviario OpenStreetMap Milano Porta Garibaldi–Lecco. Posizioni interpolate, non GPS. Nessuna validità futura o coincidenza garantita.</p>
+        <h4>Accessibilità e territorio</h4><p>I minuti a piedi usano solo le fermate delle linee bus accese. Con più linee, si considera la fermata più vicina nella loro unione; S8 non contribuisce. Modello pedonale RT028 congelato, 80 m/min e connettori, su 4.283 unità di popolazione stimate RT016. Grigio significa cammino non calcolabile nel modello; 12 fermate esterne D185 non si collegano al grafo congelato. Non una verifica di accessibilità universale, frequenza, direzione di viaggio o domanda. La rete stradale è quella dello studio, non una certificazione di percorribilità con bus.</p>
+      </details>
+      <div class="explore-controls__footer"><div class="explore-controls__hint">Clicca le fermate sulla mappa.</div><div class="explore-controls__layers"><button data-action="clear" type="button">Spegni tutto</button><button data-action="reset" type="button">↺ Inquadra</button></div></div>`;
     document.body.appendChild(controls);
-    controls.querySelector("#exploreBusPanel").before(controls.querySelector("#currentComparisonPanel"));
-    controls.querySelector("#currentRouteChoice").addEventListener("change", render);
-    controls.querySelector('[data-action="fit-current"]').addEventListener("click", () => fit(true));
     controls.querySelectorAll('[data-layer="s8"]').forEach(button => {
       button.disabled = document.documentElement.dataset.s8Ready !== "true";
+    });
+    controls.querySelectorAll('[data-layer="d184"], [data-layer="d185"]').forEach(button => {
+      button.disabled = document.documentElement.dataset.currentSimulationReady !== "true";
     });
     const tabs = [...controls.querySelectorAll('[role="tab"]')];
     const chooseTab = (chosen) => {
@@ -415,18 +476,7 @@
         next.focus();
       });
     });
-    controls
-      .querySelector('[data-action="four-buses"]')
-      .addEventListener("click", () => {
-        if (!layers.nodo8) {
-          layers.nodo8 = true;
-          render();
-        }
-        window.__analysisJourneyNodo8?.showFourBuses();
-        fit(true);
-      });
     if (document.documentElement.dataset.nodo8Ready === "error") {
-      controls.querySelector('[data-action="four-buses"]').disabled = true;
       controls.querySelector('[data-layer="nodo8"]').disabled = true;
       controls
         .querySelector('[data-layer="nodo8"]')
@@ -437,9 +487,19 @@
       btn.addEventListener("click", async () => {
         const k = btn.dataset.layer;
         layers[k] = !layers[k];
+        if (k === "d184" || k === "d185") syncCurrentSelection();
         if (k in compatibilityState) compatibilityState[k] = layers[k];
         btn.classList.toggle("is-active", layers[k]);
         btn.setAttribute("aria-pressed", String(layers[k]));
+        if (k === "walk" && layers.walk) {
+          btn.disabled = true;
+          try { await ensureActiveWalk(); }
+          catch (error) {
+            layers.walk = false;
+            document.documentElement.dataset.activeWalkReady = "error";
+            console.warn("Active-network walk layer unavailable",error);
+          } finally {btn.disabled = false;}
+        }
         if (k === "roads" && layers.roads) {
           btn.disabled = true;
           try {
@@ -465,6 +525,7 @@
         Object.keys(compatibilityState).forEach(
           (k) => (compatibilityState[k] = false),
         );
+        syncCurrentSelection();
         controls
           .querySelectorAll("[data-layer]")
           .forEach((b) => b.classList.remove("is-active"));
@@ -487,8 +548,9 @@
         "explore-current-glow", "explore-current-routes", "explore-current-hit",
         "explore-current-stops-halo", "explore-current-stops",
         "explore-final-glow", "explore-final-routes", "explore-final-hit",
-        "explore-final-anchors",
+        "explore-final-anchors", "explore-active-walk",
       ].forEach((id) => opacity(id, 0));
+      window.__analysisJourneyActiveWalk?.render({visible:false,networks:[]});
       if (map.getLayer("explore-current-stops")) map.setPaintProperty("explore-current-stops", "circle-stroke-opacity", 0);
       if (controls) {
         controls.style.pointerEvents = "none";
@@ -521,7 +583,8 @@
     opacity("sections-outline", interactive && layers.sections ? 0.52 : 0);
     opacity("buildings-extrude", interactive && layers.buildings ? 0.82 : 0);
     opacity("buildings-outline", interactive && layers.buildings ? 0.26 : 0);
-    opacity("piece-halo", interactive && layers.walk ? 0.76 : 0);
+    // The narrative walk model is never reused as a selected-network result.
+    opacity("piece-halo", 0);
     opacity("candidate-halo", interactive && layers.candidates ? 0.12 : 0);
     opacity("candidates", interactive && layers.candidates ? 0.9 : 0);
     opacity("road-shadow", interactive && layers.roads ? 0.3 : 0);
@@ -542,13 +605,13 @@
     opacity("explore-current-hit", cur && !datedCurrent ? 0.001 : 0);
     opacity(
       "explore-current-stops-halo",
-      showStops && ((cur && !datedCurrent) || layers.walk) ? 0.72 : 0,
+      showStops && cur && !datedCurrent ? 0.72 : 0,
     );
     opacity(
       "explore-current-stops",
-      showStops && ((cur && !datedCurrent) || layers.walk) ? 0.96 : 0,
+      showStops && cur && !datedCurrent ? 0.96 : 0,
     );
-    if (map.getLayer("explore-current-stops")) map.setPaintProperty("explore-current-stops", "circle-stroke-opacity", showStops && ((cur && !datedCurrent) || layers.walk) ? 0.75 : 0);
+    if (map.getLayer("explore-current-stops")) map.setPaintProperty("explore-current-stops", "circle-stroke-opacity", showStops && cur && !datedCurrent ? 0.75 : 0);
     opacity("explore-final-glow", fin ? (preview ? 0.16 : 0.22) : 0);
     opacity("explore-final-routes", fin ? (preview ? 0.96 : 0.96) : 0);
     opacity("explore-final-hit", interactive && layers.proposals ? 0.001 : 0);
@@ -565,13 +628,23 @@
     opacity("hub-glow", scene ? 0.24 : 0.1);
     if (map.getLayer("carto"))
       map.setPaintProperty("carto", "raster-opacity", scene ? 0.24 : 0.42);
+    const walkNetworks = [
+      ...(layers.nodo8 ? ["NODO8"] : []),
+      ...(cur && currentChoice !== "D185" ? ["D184"] : []),
+      ...(cur && currentChoice !== "D184" ? ["D185"] : []),
+    ];
+    window.__analysisJourneyActiveWalk?.render({visible:interactive && layers.walk,networks:walkNetworks});
     if (controls) {
       controls.querySelector("#currentComparisonPanel").hidden = !cur;
       controls.style.pointerEvents = interactive ? "auto" : "none";
       controls.inert = !interactive;
       controls.setAttribute("aria-hidden", String(!interactive));
       controls.querySelector("#explorePlaybackUnavailable").hidden =
-        layers.nodo8;
+        layers.nodo8 || layers.current || layers.s8;
+      controls.querySelector("#activeWalkLegend").hidden = !layers.walk;
+      controls.querySelector("#activeWalkStatus").textContent = walkNetworks.length
+        ? "Fermate: " + walkNetworks.map(n => n === "NODO8" ? "Nodo8" : n).join(" + ")
+        : "Accendi Nodo8, D184 o D185.";
       controls.querySelectorAll("[data-layer]").forEach((button) => {
         button.classList.toggle("is-active", layers[button.dataset.layer]);
         button.setAttribute(
@@ -847,10 +920,18 @@
       if ((f = find("explore-current-stops")))
         return inspect("stop", f, e.lngLat);
       if ((f = find("current-dated-stops")))
-        return show(e.lngLat,card("D184 / D185 · riferimento 06/05/2026", f.properties.name,
-          "Fermata presente nelle corse GTFS del giorno simulato. Non è una conferma dell’orario 2026/27 o di un bus GPS.",[f.properties.route],f.properties.stop_id));
+        return show(e.lngLat,card("Fermata D184 / D185", f.properties.name,
+          "",[f.properties.route]));
       if ((f = find("candidates"))) return inspect("candidate", f, e.lngLat);
-      if ((f = find("piece-halo"))) return inspect("walk", f, e.lngLat);
+      if ((f = find("explore-active-walk"))) {
+        const minutes = f.properties.walk_min;
+        const seconds = Math.round(Number(minutes) * 60);
+        const label = minutes !== null && minutes !== undefined && Number.isFinite(Number(minutes))
+          ? `${Math.floor(seconds / 60)} min ${seconds % 60} s a piedi`
+          : "Cammino non calcolabile";
+        return show(e.lngLat,card("Alla fermata più vicina",label,"Stima del modello.",
+          [String(f.properties.active_networks || "").replaceAll("NODO8","Nodo8")]));
+      }
       if ((f = find("buildings-extrude")))
         return inspect("building", f, e.lngLat);
       if ((f = find("sections-fill"))) return inspect("section", f, e.lngLat);
@@ -885,7 +966,7 @@
           ...new Set(current.map((x) => x.properties.route).filter(Boolean)),
         ];
         if (current[0].layer.id === "current-dated-hit") return show(e.lngLat,
-          card("Corse del 6 maggio 2026",rs.join(" + "),"Tracciato GTFS abbinato alle corse del giorno di riferimento. Posizioni interpolate, non esercizio osservato o servizio 2026/27.",rs));
+          card("Percorso della situazione attuale",rs.join(" + "),"Tracciato ufficiale GTFS.",[]));
         return show(
           e.lngLat,
           card(
@@ -906,11 +987,11 @@
       a.push("nodo8-hit");
     }
     if (layers.proposals) a.push("explore-final-anchors", "explore-final-hit");
-    if (layers.stops && (layers.current || layers.walk))
+    if (layers.stops && layers.current)
       a.push(layers.current && window.__analysisJourneyCurrent?.installed ? "current-dated-stops" : "explore-current-stops");
     if (layers.current) a.push(window.__analysisJourneyCurrent?.installed ? "current-dated-hit" : "explore-current-hit");
     if (layers.candidates) a.push("candidates");
-    if (layers.walk) a.push("piece-halo");
+    if (layers.walk) a.push("explore-active-walk");
     if (layers.buildings) a.push("buildings-extrude");
     if (layers.sections) a.push("sections-fill");
     if (layers.worldpop) a.push("worldpop-columns");
