@@ -44,3 +44,17 @@ frequenze, coincidenze o un miglioramento complessivo del servizio.
 Artefatto: `assets/nodo8-coverage-comparison.json`.
 Riproduzione: `python scripts/build_nodo8_coverage_comparison.py --check`.
 Richiede lo snapshot originale in `cache/rt028-certified-34039162932`.
+
+## Pubblicazione verificata
+
+- Sorgente: `0ed84d723b721c896f9dff492a8534ecaf1a8919`.
+- Pages: `5a24562e1a3b8bfcd68046077991bf6a471f86b8`.
+- Workflow `37912527136`, concluso con successo.
+- 43 test Python e 8 sottotest; 41 test Node.
+- Hash HTTP dei 73 file pubblicati verificati; soltanto due pagine HTML.
+- Browser: due barre per ogni comune, selector 5/8/10 minuti, cali a 5 minuti
+  conservati e nessun overflow a 390 px. Nessun errore console.
+- Fonte confermata Nodo8 intatta; nessun prototipo cancellato.
+- Prova visiva: `cache/nodo8-website-preview/nodo8-coverage-comparison-published-20261008p.png`.
+
+https://simoneghezzicolombo.github.io/tpl-olgiate-intercomunale/?v=20261008p#impatto
