@@ -1,11 +1,12 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008p";
-import { stopLink } from "../nodo8-stop-times.mjs?v=20261008p";
+import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261008q";
+import { stopLink } from "../nodo8-stop-times.mjs?v=20261008q";
+import { installS8 } from "../nodo8-s8.mjs?v=20261008q";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
-} from "../nodo8-experience.mjs?v=20261008p";
+} from "../nodo8-experience.mjs?v=20261008q";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
@@ -185,6 +186,23 @@ async function installNodo8() {
     let popup = null,
       lastScene = null;
     let explorerPlayer = null;
+    let rail = null;
+    const railVisible = () => document.body.dataset.scene === "explore" &&
+      window.__analysisJourneyExplore?.isActive() === true &&
+      window.__analysisJourneyExplore?.layers.s8 === true;
+    // Rail failure cannot replace or invalidate the confirmed bus proposal.
+    installS8(map).then(installed => {
+      rail = installed;
+      document.documentElement.dataset.s8Ready = "true";
+      document.querySelectorAll('[data-layer="s8"]').forEach(b => { b.disabled = false; });
+      explorerPlayer?.render();
+    }).catch(error => {
+      document.documentElement.dataset.s8Ready = "error";
+      document.querySelectorAll('[data-layer="s8"]').forEach(b => { b.disabled = true; });
+      const note = document.getElementById("s8SourceNote");
+      if (note) note.textContent = "S8 non disponibile: nessun tracciato o treno sostitutivo viene inventato.";
+      console.warn("S8 overlay unavailable", error);
+    });
     const contextVisible = (context) =>
       playbackVisible(
         {
@@ -207,6 +225,7 @@ async function installNodo8() {
       data.routes.forEach((route) =>
         route.coordinates.forEach((coordinate) => bounds.extend(coordinate)),
       );
+      if (railVisible()) rail?.localCoordinates.forEach(coordinate => bounds.extend(coordinate));
       map.fitBounds(bounds, {
         padding: document.body.classList.contains("is-map-exploring")
           ? {
@@ -250,9 +269,9 @@ async function installNodo8() {
         visible && showStops ? 0.95 : 0,
       );
       const host = document.getElementById("explorePlayback");
-      if (host) host.hidden = !active || !visible;
+      if (host) host.hidden = !active || (!visible && !railVisible());
       if (explorerPlayer) {
-        if (!contextVisible("explore")) explorerPlayer.pause();
+        if (!contextVisible("explore") && !railVisible()) explorerPlayer.pause();
         explorerPlayer.render();
       }
       if (!contextVisible("story") && !contextVisible("explore")) {
@@ -349,6 +368,7 @@ async function installNodo8() {
         line,
         (state) => {
           if (contextVisible("explore")) paintBuses(state);
+          rail?.render({minute: state.minute, visible: railVisible()});
         },
         {
           compact: true,
