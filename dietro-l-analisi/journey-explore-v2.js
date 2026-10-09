@@ -378,14 +378,14 @@
     controls.className = "explore-controls";
     controls.innerHTML = `<div class="explore-controls__head"><div><strong>Esplora Nodo8</strong><small>4 bus simulati · non GPS</small></div><button class="explore-controls__exit" data-action="exit" type="button">Torna al racconto</button></div>
       <div class="explore-controls__tabs" role="tablist" aria-label="Vista esplorazione"><button id="exploreBusTab" role="tab" aria-selected="true" aria-controls="exploreBusPanel" type="button">Bus in movimento</button><button id="exploreLayersTab" role="tab" aria-selected="false" aria-controls="exploreLayersPanel" tabindex="-1" type="button">Livelli e confronto</button></div>
-      <section id="exploreBusPanel" role="tabpanel" aria-labelledby="exploreBusTab"><p class="explore-bus-intro">I quattro bus percorrono la stessa linea. Il numero in movimento cambia con l’orario.</p><button type="button" data-action="four-buses">Vedi i 4 bus · 07:35</button><div class="explore-controls__layers s8-toggle"><button data-layer="s8" type="button" disabled><i style="--c:#f8b1b0"></i>S8 · tracciato e treni</button><button data-layer="current" type="button"><i style="--c:#4ca5ff"></i><i style="--c:#ff9b61"></i>D184 / D185 · confronto</button></div><p id="s8SimulationStatus" class="s8-status" hidden></p><details class="s8-source"><summary>S8: quale simulazione?</summary><p id="s8SourceNote">Tratto Cernusco–Olgiate–Airuno su ferrovia OpenStreetMap. 74 corse negli orari Trenord del 1 ottobre 2026, 37 per direzione. Posizioni interpolate fra le stazioni, non GPS. Il calendario Nodo8 è una proposta 2027: nessuna coincidenza o validità futura è garantita.</p></details><div id="explorePlayback" data-theme="dark" aria-label="Orologio condiviso della simulazione Nodo8 e S8"><p role="status">Caricamento dell’orario…</p></div><p id="explorePlaybackUnavailable" hidden role="status">Attiva il livello Nodo8 in «Livelli e confronto» per vedere i bus.</p></section>
+      <section id="exploreBusPanel" role="tabpanel" aria-labelledby="exploreBusTab"><p class="explore-bus-intro">I quattro bus percorrono la stessa linea. Il numero in movimento cambia con l’orario.</p><button type="button" data-action="four-buses">Vedi i 4 bus · 07:35</button><div class="explore-controls__layers s8-toggle"><button data-layer="s8" type="button" disabled><i style="--c:#f8b1b0"></i>S8 · tracciato e treni</button><button data-layer="current" type="button"><i style="--c:#4ca5ff"></i><i style="--c:#ff9b61"></i>D184 / D185 · confronto</button></div><p id="s8SimulationStatus" class="s8-status" hidden></p><details class="s8-source"><summary>S8: quale simulazione?</summary><p id="s8SourceNote">Intera S8 Milano Porta Garibaldi–Lecco, sul percorso ferroviario OpenStreetMap. Il livello attraversa tutta l’area visibile senza allontanare la vista da Nodo8. 74 corse negli orari Trenord del 1 ottobre 2026, 37 per direzione; le corse parziali non vengono estese oltre le proprie chiamate. Posizioni interpolate fra le stazioni, non GPS. Il calendario Nodo8 è una proposta 2027: nessuna coincidenza o validità futura è garantita.</p></details><div id="explorePlayback" data-theme="dark" aria-label="Orologio condiviso della simulazione Nodo8, D184, D185 e S8"><p role="status">Caricamento dell’orario…</p></div><p id="explorePlaybackUnavailable" hidden role="status">Attiva il livello Nodo8 in «Livelli e confronto» per vedere i bus.</p></section>
       <section id="exploreLayersPanel" role="tabpanel" aria-labelledby="exploreLayersTab" hidden>
       <div class="explore-site-select"><label for="exploreSiteSelect">Vai a una fermata di Nodo8</label><select id="exploreSiteSelect" disabled><option value="">Caricamento delle fermate…</option></select></div>
       <div class="explore-controls__group"><span>01 · Dove viviamo</span><div class="explore-controls__layers"><button data-layer="worldpop" type="button"><i style="--c:#57d7e8"></i>Abitanti stimati</button><button data-layer="sections" type="button"><i style="--c:#ffb07f"></i>Zone ISTAT</button><button data-layer="buildings" type="button"><i style="--c:#55e1bf"></i>Edifici abitati</button></div></div>
       <div class="explore-controls__group"><span>02 · Come arriviamo alla fermata</span><div class="explore-controls__layers"><button data-layer="walk" type="button"><i style="--c:#55e1bf"></i>Minuti a piedi</button><button data-layer="roads" type="button"><i style="--c:#57d7e8"></i>Strade del bus</button><button data-layer="candidates" type="button"><i style="--c:#ffd36d"></i>155 punti da valutare</button></div></div>
       <div class="explore-controls__group"><span>03 · Quale rete guardiamo</span><div class="explore-controls__layers"><button data-layer="nodo8" class="is-active" type="button"><i style="--c:#55e1bf"></i>Nodo8 · proposta</button><button data-layer="current" type="button"><i style="--c:#4ca5ff"></i>D184 / D185</button><button data-layer="proposals" type="button"><i style="--c:#57d7e8"></i>Alternative storiche</button><button data-layer="stops" class="is-active" type="button"><i style="--c:#fff"></i>Fermate</button></div></div>
       <div class="explore-controls__group"><span>04 · Il collegamento ferroviario</span><div class="explore-controls__layers"><button data-layer="s8" type="button" disabled><i style="--c:#f8b1b0"></i>S8 · tracciato e treni</button></div></div>
-      </section><section id="currentComparisonPanel" class="current-comparison" hidden aria-label="Confronto D184 e D185"><div class="current-comparison__legend"><span><i style="--c:#4ca5ff"></i>D184</span><span><i style="--c:#ff9b61"></i>D185</span><span><i style="--c:#55e1bf"></i>Nodo8</span></div><label for="currentRouteChoice">Linee da confrontare</label><div class="current-comparison__choice"><select id="currentRouteChoice"><option value="ALL">D184 e D185</option><option value="D184">Solo D184</option><option value="D185">Solo D185</option></select><button type="button" data-action="fit-current">Inquadra</button></div><details><summary>Fonti e orari attuali</summary><p>Percorsi ufficiali KML e fermate strutturali dal GTFS 2025/26. Tutte le varianti, non tutte attive nella stessa ora. La deviazione temporanea del Ponte di Brivio è esclusa. Non sono posizioni GPS o corse animate: gli orari 2026/27 non certificano ancora l’abbinamento di ogni corsa al tracciato.</p><a href="../index.html#confronto">Confronta il servizio invernale 2026/27 ↗</a></details></section><div class="explore-controls__footer"><div class="explore-controls__hint">Trascina, zooma e clicca sulla mappa.</div><div class="explore-controls__layers"><button data-action="clear" type="button">Spegni i livelli</button><button data-action="reset" type="button">↺ Vista</button></div></div>`;
+      </section><section id="currentComparisonPanel" class="current-comparison" hidden aria-label="Confronto D184 e D185"><div class="current-comparison__legend"><span><i style="--c:#4ca5ff"></i>D184</span><span><i style="--c:#ff9b61"></i>D185</span><span><i style="--c:#55e1bf"></i>Nodo8</span></div><label for="currentRouteChoice">Linee da confrontare</label><div class="current-comparison__choice"><select id="currentRouteChoice"><option value="ALL">D184 e D185</option><option value="D184">Solo D184</option><option value="D185">Solo D185</option></select><button type="button" data-action="fit-current">Inquadra</button></div><p id="currentBusStatus" class="current-bus-status" hidden></p><details><summary>Giorno di riferimento e fonti</summary><p>Mercoledì 6 maggio 2026: 15 corse D184 e 19 D185, selezionate con il calendario del GTFS ufficiale 2025/26. Ogni corsa segue il proprio tracciato e i suoi orari nello stesso feed. Sono posizioni interpolate fra fermate, non GPS; le icone sono corse, non identità di mezzi o turni. Nessuna animazione fuori servizio o velocità reale viene dedotta. Questa fotografia storica non è l’orario più recente 2026/27, né il calendario futuro di Nodo8. Se l’animazione non carica, resta il riferimento KML strutturale.</p><a href="../index.html#confronto">Confronta gli orari più recenti 2026/27 ↗</a></details></section><div class="explore-controls__footer"><div class="explore-controls__hint">Trascina, zooma e clicca sulla mappa.</div><div class="explore-controls__layers"><button data-action="clear" type="button">Spegni i livelli</button><button data-action="reset" type="button">↺ Vista</button></div></div>`;
     document.body.appendChild(controls);
     controls.querySelector("#exploreBusPanel").before(controls.querySelector("#currentComparisonPanel"));
     controls.querySelector("#currentRouteChoice").addEventListener("change", render);
@@ -453,7 +453,6 @@
           }
         }
         render();
-        if (k === "s8" && layers.s8) window.__analysisJourneyNodo8?.fit();
       }),
     );
     controls
@@ -530,8 +529,9 @@
     const cur = interactive && layers.current,
       fin = (preview || interactive) && layers.proposals,
       showStops = (preview || interactive) && layers.stops;
-    opacity("explore-current-glow", cur ? 0.12 : 0);
-    opacity("explore-current-routes", cur ? 0.9 : 0);
+    const datedCurrent = window.__analysisJourneyCurrent?.installed === true;
+    opacity("explore-current-glow", cur && !datedCurrent ? 0.12 : 0);
+    opacity("explore-current-routes", cur && !datedCurrent ? 0.9 : 0);
     const currentChoice = controls?.querySelector("#currentRouteChoice")?.value || "ALL";
     const routeFilter = currentChoice === "ALL" ? ["in", ["get", "route"], ["literal", ["D184", "D185"]]] : ["==", ["get", "route"], currentChoice];
     const stopFilter = currentChoice === "ALL" ? ["any", [">=", ["index-of", "D184", ["get", "routes"]], 0], [">=", ["index-of", "D185", ["get", "routes"]], 0]] : [">=", ["index-of", currentChoice, ["get", "routes"]], 0];
@@ -539,16 +539,16 @@
       if (map.getLayer(id)) map.setFilter(id, routeFilter);
     for (const id of ["explore-current-stops", "explore-current-stops-halo"])
       if (map.getLayer(id)) map.setFilter(id, stopFilter);
-    opacity("explore-current-hit", cur ? 0.001 : 0);
+    opacity("explore-current-hit", cur && !datedCurrent ? 0.001 : 0);
     opacity(
       "explore-current-stops-halo",
-      showStops && (cur || layers.walk) ? 0.72 : 0,
+      showStops && ((cur && !datedCurrent) || layers.walk) ? 0.72 : 0,
     );
     opacity(
       "explore-current-stops",
-      showStops && (cur || layers.walk) ? 0.96 : 0,
+      showStops && ((cur && !datedCurrent) || layers.walk) ? 0.96 : 0,
     );
-    if (map.getLayer("explore-current-stops")) map.setPaintProperty("explore-current-stops", "circle-stroke-opacity", showStops && (cur || layers.walk) ? 0.75 : 0);
+    if (map.getLayer("explore-current-stops")) map.setPaintProperty("explore-current-stops", "circle-stroke-opacity", showStops && ((cur && !datedCurrent) || layers.walk) ? 0.75 : 0);
     opacity("explore-final-glow", fin ? (preview ? 0.16 : 0.22) : 0);
     opacity("explore-final-routes", fin ? (preview ? 0.96 : 0.96) : 0);
     opacity("explore-final-hit", interactive && layers.proposals ? 0.001 : 0);
@@ -581,8 +581,10 @@
       });
       document.documentElement.dataset.currentComparisonVisible = String(cur);
       document.documentElement.dataset.currentComparisonSelection = currentChoice;
-      document.documentElement.dataset.currentComparisonRouteCount = String(cur ? lineage.currentData.features.filter(f => currentChoice === "ALL" || f.properties.route === currentChoice).length : 0);
-      document.documentElement.dataset.currentComparisonStopCount = String(cur && showStops ? lineage.stopData.features.filter(f => currentChoice === "ALL" || toArray(f.properties.routes).includes(currentChoice)).length : 0);
+      const currentModel = window.__analysisJourneyCurrent?.data;
+      const datedTrips = currentModel?.trips.filter(t => currentChoice === "ALL" || t.route === currentChoice);
+      document.documentElement.dataset.currentComparisonRouteCount = String(cur ? (datedTrips ? new Set(datedTrips.map(t=>`${t.route}:${t.shape_id}`)).size : lineage.currentData.features.filter(f => currentChoice === "ALL" || f.properties.route === currentChoice).length) : 0);
+      document.documentElement.dataset.currentComparisonStopCount = String(cur && showStops ? (datedTrips ? new Set(datedTrips.flatMap(t=>t.calls.map(c=>c.stop_id))).size : lineage.stopData.features.filter(f => currentChoice === "ALL" || toArray(f.properties.routes).includes(currentChoice)).length) : 0);
     }
     if (scene)
       window.__analysisJourneyNodo8?.renderExplorer({
@@ -610,8 +612,10 @@
     }
     const b = new maplibregl.LngLatBounds();
     const currentChoice = controls?.querySelector("#currentRouteChoice")?.value || "ALL";
+    const dated = window.__analysisJourneyCurrent?.data;
+    const currentFeatures = dated ? dated.trips.map(t => ({properties:{route:t.route},geometry:{type:"LineString",coordinates:dated.shapes[t.shape_id].coordinates}})) : lineage.currentData.features;
     const features = [
-      ...(layers.current ? lineage.currentData.features.filter(f => currentChoice === "ALL" || f.properties.route === currentChoice) : []),
+      ...(layers.current ? currentFeatures.filter(f => currentChoice === "ALL" || f.properties.route === currentChoice) : []),
       ...(layers.proposals ? lineage.finalData.features : []),
       ...(layers.nodo8 ? (window.__analysisJourneyNodo8?.data.routes || []).map(route => ({geometry:{type:"LineString",coordinates:route.coordinates}})) : []),
     ];
@@ -842,6 +846,9 @@
         return inspect("anchor", f, e.lngLat);
       if ((f = find("explore-current-stops")))
         return inspect("stop", f, e.lngLat);
+      if ((f = find("current-dated-stops")))
+        return show(e.lngLat,card("D184 / D185 · riferimento 06/05/2026", f.properties.name,
+          "Fermata presente nelle corse GTFS del giorno simulato. Non è una conferma dell’orario 2026/27 o di un bus GPS.",[f.properties.route],f.properties.stop_id));
       if ((f = find("candidates"))) return inspect("candidate", f, e.lngLat);
       if ((f = find("piece-halo"))) return inspect("walk", f, e.lngLat);
       if ((f = find("buildings-extrude")))
@@ -872,11 +879,13 @@
           ),
         );
       }
-      const current = hits.filter((x) => x.layer.id === "explore-current-hit");
+      const current = hits.filter((x) => ["explore-current-hit","current-dated-hit"].includes(x.layer.id));
       if (current.length) {
         const rs = [
           ...new Set(current.map((x) => x.properties.route).filter(Boolean)),
         ];
+        if (current[0].layer.id === "current-dated-hit") return show(e.lngLat,
+          card("Corse del 6 maggio 2026",rs.join(" + "),"Tracciato GTFS abbinato alle corse del giorno di riferimento. Posizioni interpolate, non esercizio osservato o servizio 2026/27.",rs));
         return show(
           e.lngLat,
           card(
@@ -898,8 +907,8 @@
     }
     if (layers.proposals) a.push("explore-final-anchors", "explore-final-hit");
     if (layers.stops && (layers.current || layers.walk))
-      a.push("explore-current-stops");
-    if (layers.current) a.push("explore-current-hit");
+      a.push(layers.current && window.__analysisJourneyCurrent?.installed ? "current-dated-stops" : "explore-current-stops");
+    if (layers.current) a.push(window.__analysisJourneyCurrent?.installed ? "current-dated-hit" : "explore-current-hit");
     if (layers.candidates) a.push("candidates");
     if (layers.walk) a.push("piece-halo");
     if (layers.buildings) a.push("buildings-extrude");

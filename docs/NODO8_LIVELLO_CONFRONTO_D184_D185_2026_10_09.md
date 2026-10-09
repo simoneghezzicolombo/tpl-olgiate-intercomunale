@@ -1,5 +1,42 @@
 # Confronto D184/D185 nella mappa
 
+## Seconda iterazione: corse animate su richiesta del committente
+
+Il committente ha richiesto bus in movimento su un giorno a scelta.
+Il riferimento adottato per la simulazione è **mercoledì 6 maggio 2026**,
+un giorno feriale già verificato dalla baseline GTFS. La data è dichiarata
+nel pannello e non viene presentata come il servizio più recente 2026/27.
+Il feed ufficiale completo pubblicato dall'Agenzia è quello 2025/26:
+https://www.tplcomoleccovarese.it/atpcolc/zf/index.php/servizi-aggiuntivi/index/index/idtesto/172
+
+- 15 corse D184 e 19 D185 selezionate tramite `calendar.txt` e
+  `calendar_dates.txt` dello stesso archivio, non tutte le colonne o tutti
+  i giorni aggregati.
+- Associazione di ogni corsa al proprio `shape_id` ufficiale. 17 tracciati
+  distinti nel giorno, senza abbinamento euristico di PDF aggiornati ai
+  vecchi percorsi.
+- Ogni occorrenza mantiene ordine, nome, coordinate, arrivo, partenza,
+  regole di salita/discesa e distanza sulla shape. Posizioni interpolate
+  fra chiamate sui vertici GTFS; nessuna sosta Nodo8 di 30 secondi viene
+  copiata sulle linee attuali.
+- Le icone sono **corse**, non un conteggio o un'identità di mezzi reali.
+  Nessun blocco veicolo, turno, posizionamento fuori servizio o GPS è
+  ricostruito.
+- Stesso orologio, cursore, pausa e Riproduci di Nodo8/S8. Nessun timer
+  indipendente. Filtri D184/D185 applicati a tracciati datati, fermate e
+  icone; uscita o spegnimento rimuovono tutto il livello animato.
+- La simulazione datata usa i propri tracciati e fermate GTFS, non le
+  geometrie KML strutturali come sostituti. Se l'asset manca, resta soltanto
+  il confronto geografico con avviso, senza bus inventati.
+
+Archivio congelato SHA256:
+`f890c393b909a40ae9500ab5acba71166cdfc5af3d42be92f55a92d92927553b`.
+Riproduzione: `python scripts/build_nodo8_current_simulation.py --check`.
+Il confronto pubblico degli orari invernali 2026/27 resta separato e
+collegato: questa animazione storica non lo sostituisce.
+
+## Prima iterazione: solo geometria, storico
+
 Il livello è disponibile sia accanto alla simulazione sia nella scheda
 «Livelli e confronto». Può sovrapporsi a Nodo8 e S8 senza cambiare i loro
 orari. È spento all'apertura e non dipende dall'orologio animato.

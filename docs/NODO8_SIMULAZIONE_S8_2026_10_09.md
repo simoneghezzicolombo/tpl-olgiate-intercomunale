@@ -1,5 +1,31 @@
 # S8 nella mappa di Nodo8
 
+## Estensione V2 richiesta dal committente
+
+La versione attuale mostra **l'intera S8 Milano Porta Garibaldi–Lecco**,
+non più il solo tratto Cernusco–Airuno descritto nella prima pubblicazione
+sotto. Il livello viene ritagliato naturalmente dalla vista della mappa:
+attivarlo non impone uno zoom regionale e non aggiunge prolungamenti
+fittizi oltre i capolinea.
+
+Geometria: relazione OSM S8 `1020457`, scaricata dall'API ufficiale il
+9 ottobre 2026 (`relation/1020457/full`), 844 vertici e 12 segmenti
+fra 13 stazioni, circa 49,464 km. URL e SHA256 sono nell'asset.
+Il corridoio connesso usa i binari appartenenti alla relazione e non
+certifica l'assegnazione del singolo binario per ogni senso di marcia.
+
+Gli orari restano le 74 corse del 1 ottobre 2026. La corsa 24886 ha
+12 chiamate lungo il corridoio: non viene inventata una chiamata a Porta
+Garibaldi per trasformarla in una corsa completa. Le altre ne hanno 13.
+L'icona di ciascun treno compare solo entro le proprie chiamate GTFS.
+Le qualificazioni non-GPS, non-garanzia 2027 e non-assegnazione di binario
+rimangono valide.
+
+`build_nodo8_s8_simulation.py --check` ora riproduce la versione V2 dalla
+relazione completa congelata, non dai cinque riquadri iniziali.
+
+## Prima pubblicazione V1, storico
+
 Il livello «S8 · tracciato e treni» è facoltativo e spento all'apertura.
 Usa la stessa mappa e lo stesso orologio dei bus. Non crea una seconda
 mappa o un secondo ciclo di animazione. È disponibile nella scheda dei bus

@@ -3,14 +3,16 @@ export const S8_COLOUR = "#f8b1b0";
 const metres = (a, b) => Math.hypot((a[0] - b[0]) * Math.cos((a[1] + b[1]) * Math.PI / 360), a[1] - b[1]) * 111195;
 
 export function buildRail(data) {
-  if (data.contract !== "nodo8_s8_local_simulation_v1" || data.colour !== S8_COLOUR ||
-      data.scope !== "LOCAL_CERNUSCO_MERATE_OLGIATE_AIRUNO_NOT_FULL_S8" ||
+  if (data.contract !== "nodo8_s8_full_simulation_v2" || data.colour !== S8_COLOUR ||
+      data.scope !== "FULL_MILANO_PORTA_GARIBALDI_LECCO" ||
       data.service_date !== "2026-10-01" || data.trains?.length !== 74 ||
       data.semantics?.live !== false || data.semantics?.timetable_2027_certified !== false ||
       data.semantics?.connection_guaranteed !== false || data.semantics?.platform_assignment_certified !== false)
     throw new Error("Unsupported S8 simulation contract");
   const stations = new Map(data.stations.map(s => [s.id, s]));
-  if (stations.size !== 3 || data.segments.length !== 2) throw new Error("Incomplete local railway");
+  const stationOrder=["S01645","S01326","S01325","S01322","S01510","S01511","S01512","S01513","S01514","S01515","S01524","S01522","S01520"];
+  if (stations.size !== 13 || data.segments.length !== 12 || stationOrder.some(id=>!stations.has(id))) throw new Error("Incomplete full S8 railway");
+  if (data.segments.some((s,i)=>s.from_id!==stationOrder[i] || s.to_id!==stationOrder[i+1])) throw new Error("Disconnected S8 corridor order");
   const segments = data.segments.map(segment => {
     const coordinates = segment.coordinates;
     if (coordinates.length < 3 || !stations.has(segment.from_id) || !stations.has(segment.to_id) ||
@@ -24,10 +26,11 @@ export function buildRail(data) {
   });
   const ids = new Set();
   for (const t of data.trains) {
-    const expected = t.direction === "LECCO" ? ["S01513", "S01514", "S01515"] :
-      t.direction === "MILANO" ? ["S01515", "S01514", "S01513"] : [];
-    if (ids.has(t.id) || expected.length !== 3 || t.calls.length !== 3 ||
-        t.calls.some((c, i) => c.station_id !== expected[i] || !Number.isFinite(c.arrival_min) ||
+    const expected = t.direction === "LECCO" ? stationOrder :
+      t.direction === "MILANO" ? [...stationOrder].reverse() : [];
+    const actualOrder=t.calls.map(c=>expected.indexOf(c.station_id));
+    if (ids.has(t.id) || expected.length !== 13 || t.calls.length < 2 || !t.calls.some(c=>c.station_id==="S01514") ||
+        t.calls.some((c, i) => actualOrder[i] < 0 || (i && actualOrder[i] <= actualOrder[i-1]) || !Number.isFinite(c.arrival_min) ||
           !Number.isFinite(c.departure_min) || c.departure_min < c.arrival_min ||
           (i > 0 && c.arrival_min <= t.calls[i - 1].departure_min)))
       throw new Error("Invalid dated S8 call sequence");
@@ -51,7 +54,7 @@ export function trainsAt(rail, minute) {
   const states = [];
   for (const train of rail.trains) {
     const calls = train.calls;
-    // No extension beyond the three supported station calls.
+    // Partial trains are only shown between their own supported calls.
     if (minute < calls[0].arrival_min || minute > calls.at(-1).departure_min) continue;
     let coordinates, status;
     for (let i = 0; i < calls.length; i++) {
@@ -78,7 +81,7 @@ export function trainsAt(rail, minute) {
 }
 
 export async function installS8(map) {
-  const response = await fetch("../assets/nodo8-s8-simulation.json?v=20261008r");
+  const response = await fetch("../assets/nodo8-s8-simulation.json?v=20261008s");
   if (!response.ok) throw new Error("S8 data unavailable");
   const rail = buildRail(await response.json());
   map.addSource("s8-local", {type: "geojson", data: {type: "FeatureCollection", features:
@@ -117,7 +120,7 @@ export async function installS8(map) {
       const status = document.getElementById("s8SimulationStatus");
       if (status) {
         status.hidden = !visible;
-        const label = `${states.length} ${states.length === 1 ? "treno nel tratto locale" : "treni nel tratto locale"} · verso Milano e Lecco`;
+        const label = `${states.length} corse S8 attive sull’intera linea · Milano ↔ Lecco`;
         if (status.textContent !== label) status.textContent = label;
       }
     },

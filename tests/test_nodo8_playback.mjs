@@ -16,6 +16,46 @@ import {
 import { readStopSelection, stopLink } from "../nodo8-stop-times.mjs";
 import { inspectJourney, eventKey, journeyDurationLabel } from "../nodo8-journey-inspector.mjs";
 import { buildRail, trainsAt, S8_COLOUR, installS8 } from "../nodo8-s8.mjs";
+import { buildCurrent, currentTripsAt, currentPosition } from "../nodo8-current.mjs";
+const currentData = JSON.parse(readFileSync(new URL("../assets/nodo8-current-simulation.json", import.meta.url), "utf8"));
+test("existing-service simulation keeps dated stop occurrences, arrival and departure clocks", () => {
+  const data = buildCurrent(currentData);
+  assert.equal(data.service_date,"2026-05-06");
+  for (const trip of data.trips) {
+    for (const call of trip.calls) for (const minute of [call.arrival_min,call.departure_min]) {
+      const state = currentTripsAt(data,minute).find(t=>t.id===trip.id);
+      assert.equal(state.status,"stop");
+      assert.deepEqual(state.coordinates,currentPosition(data.shapes[trip.shape_id],call.distance));
+    }
+    assert.ok(!currentTripsAt(data,trip.calls[0].arrival_min-0.001).some(t=>t.id===trip.id));
+    assert.ok(!currentTripsAt(data,trip.calls.at(-1).departure_min+0.001).some(t=>t.id===trip.id));
+  }
+});
+test("existing-service movement follows exact GTFS shapes, filters and reverses on the bus clock", () => {
+  const data = buildCurrent(currentData);
+  for (const trip of data.trips) {
+    const a=trip.calls[0],b=trip.calls[1],minute=(a.departure_min+b.arrival_min)/2;
+    const state=currentTripsAt(data,minute).find(t=>t.id===trip.id);
+    assert.equal(state.status,"moving");
+    const expected=currentPosition(data.shapes[trip.shape_id],(a.distance+b.distance)/2);
+    state.coordinates.forEach((value,axis)=>assert.ok(Math.abs(value-expected[axis])<1e-10));
+    for (const route of ["D184","D185"]) assert.ok(currentTripsAt(data,minute,route).every(t=>t.route===route));
+  }
+  const expected=currentTripsAt(data,415);currentTripsAt(data,900);assert.deepEqual(currentTripsAt(data,415),expected);
+  const source=readFileSync(new URL("../nodo8-current.mjs",import.meta.url),"utf8");
+  assert.doesNotMatch(source,/setInterval|requestAnimationFrame/);
+  const overlay=readFileSync(new URL("../dietro-l-analisi/journey-nodo8.mjs",import.meta.url),"utf8");
+  assert.match(overlay,/current\?\.render\(\{minute:state\.minute/);
+});
+test("current service cannot be relabelled latest, GPS, a fleet or unjoined shape", () => {
+  for (const mutate of [d=>d.service_date="2026-10-09",d=>d.semantics.latest_2026_27_timetable=true,
+    d=>d.semantics.live=true,d=>d.semantics.vehicle_identity_certified=true,d=>d.trips.pop(),
+    d=>d.trips[0].shape_id="invented",d=>d.trips[0].calls[1].arrival_min=0]) {
+    const copy=structuredClone(currentData);mutate(copy);assert.throws(()=>buildCurrent(copy));
+  }
+  assert.throws(()=>currentTripsAt(buildCurrent(currentData),NaN));
+  assert.throws(()=>currentTripsAt(buildCurrent(currentData),455,"unknown"));
+});
 const s8Data = JSON.parse(readFileSync(new URL("../assets/nodo8-s8-simulation.json", import.meta.url), "utf8"));
 test("S8 preserves all 74 dated calls, both directions, and smaller dedicated icons", () => {
   const rail = buildRail(s8Data);
@@ -42,7 +82,9 @@ test("S8 interpolates only along frozen railway vertices, and is reversible on t
     const minute = (train.calls[0].departure_min + train.calls[1].arrival_min) / 2;
     const state = trainsAt(rail, minute).find(t => t.id === train.id);
     assert.equal(state.status, "moving");
-    const segment = rail.segments.find(s => s.from_id === train.calls[0].station_id || s.to_id === train.calls[0].station_id);
+    const segment = rail.segments.find(s =>
+      (s.from_id === train.calls[0].station_id && s.to_id === train.calls[1].station_id) ||
+      (s.to_id === train.calls[0].station_id && s.from_id === train.calls[1].station_id));
     assert.ok(segment.coordinates.some((a, i) => {
       const b = segment.coordinates[i + 1];
       return b && state.coordinates.every((v, axis) => v >= Math.min(a[axis], b[axis]) - 1e-10 && v <= Math.max(a[axis], b[axis]) + 1e-10);
@@ -81,8 +123,8 @@ test("S8 marker receives coordinates before MapLibre addTo and toggles without r
       createElement:()=>({setAttribute(){},querySelector:()=>({textContent:""})})};
     const rail = await installS8({addSource(){},addLayer(){},setPaintProperty:(...args)=>paints.push(args)});
     rail.render({minute:449,visible:true});
-    assert.equal(attached.size,2);
-    assert.equal(document.documentElement.dataset.s8TrainCount,"2");
+  assert.equal(attached.size,trainsAt(buildRail(s8Data),449).length);
+    assert.equal(document.documentElement.dataset.s8TrainCount,String(attached.size));
     rail.render({minute:455,visible:false});
     assert.equal(attached.size,0);
     assert.equal(paints.at(-1)[2],0);

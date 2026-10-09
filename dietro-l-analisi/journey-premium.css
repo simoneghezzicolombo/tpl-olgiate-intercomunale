@@ -1676,3 +1676,6 @@ body.is-map-exploring .vignette {
 .current-comparison summary { cursor: pointer; }
 .current-comparison details p { font-size: 12px; line-height: 1.6; margin: 8px 0; }
 .current-comparison a { color: #f5f2e8; font-size: 12px; }
+.current-bus-marker { width: 34px; height: 42px; filter: drop-shadow(0 3px 3px #07131f80); cursor: help; }
+.current-bus-marker svg { display: block; }
+.current-bus-status { font-size: 12px; margin: 8px 0 0; color: #b5c9be; }

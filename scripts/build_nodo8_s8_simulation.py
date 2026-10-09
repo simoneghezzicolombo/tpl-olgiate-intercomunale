@@ -1,4 +1,4 @@
-"""Frozen local S8 visualisation. No new timetable or straight-line rail repairs."""
+"""Frozen full-corridor S8 visualisation. No new timetable or rail repairs."""
 import csv
 import hashlib
 import heapq
@@ -10,10 +10,8 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OSM_TILES = [(ROOT / f'cache/nodo8-s8-rail-{south}.osm',
-              f'https://api.openstreetmap.org/api/0.6/map?bbox=9.388,{south},9.432,{north}')
-             for south, north in [('45.688', '45.703'), ('45.703', '45.718'),
-                                  ('45.718', '45.733'), ('45.733', '45.748'), ('45.748', '45.762')]]
+OSM_TILES = [(ROOT / 'cache/nodo8-s8-full-relation-20261009.osm',
+              'https://api.openstreetmap.org/api/0.6/relation/1020457/full')]
 GTFS = ROOT / 'cache/rt031-all-rail-20261001/trenord_gtfs.zip'
 INVENTORY = ROOT / 'outputs/phase2/rt031_line8_local_shortcuts_v3/all_station_rail_20261001.json'
 OUT = ROOT / 'assets/nodo8-s8-simulation.json'
@@ -41,7 +39,7 @@ def build():
                 el.clear()
             elif el.tag == 'way':
                 tags = {t.attrib['k']: t.attrib['v'] for t in el.findall('tag')}
-                if tags.get('railway') == 'rail' and not tags.get('service'):
+                if tags.get('railway') == 'rail':
                     ways[el.attrib['id']] = [n.attrib['ref'] for n in el.findall('nd')]
                 el.clear()
     for way, refs in ways.items():
@@ -61,9 +59,10 @@ def build():
         for row in rows('stop_times.txt'):
             if row['trip_id'] in stop_times:
                 stop_times[row['trip_id']][row['stop_id']] = row
-    station_ids = ['S01513', 'S01514', 'S01515']
+    station_ids = ['S01645', 'S01326', 'S01325', 'S01322', 'S01510', 'S01511',
+                   'S01512', 'S01513', 'S01514', 'S01515', 'S01524', 'S01522', 'S01520']
     # Parallel main tracks need not connect within this local snapshot. Select
-    # one connected corridor near all three stations, not per-station tracks
+    # one connected corridor near every station, not per-station tracks
     # that would require inventing a crossover. This is not a track assignment.
     coordinates = {sid: [float(stops[sid]['stop_lon']), float(stops[sid]['stop_lat'])] for sid in station_ids}
     remaining, candidates = set(graph), []
@@ -81,7 +80,7 @@ def build():
         if max(distances) <= 150:
             candidates.append((sum(distances), closest))
     if not candidates:
-        raise ValueError('No connected main rail corridor near all three stations')
+        raise ValueError('No connected S8 corridor near all stations: ' + str({sid: round(min(distance(nodes[n], coord) for n in graph)) for sid,coord in coordinates.items()}))
     snapped = min(candidates, key=lambda item: item[0])[1]
     stations = []
     for sid in station_ids:
@@ -116,8 +115,8 @@ def build():
             ids.append(parent)
         ids.reverse()
         coordinates = [nodes[n] for n in ids]
-        if not 2000 < seen[end['node']] < 7000:
-            raise ValueError('Unexpected local rail path length')
+        if not 500 < seen[end['node']] < 15000:
+            raise ValueError('Unexpected S8 station-to-station path length')
         segments.append(dict(from_id=start['id'], to_id=end['id'],
                              coordinates=coordinates, distance_m=seen[end['node']],
                              osm_way_ids=sorted(set(ways))))
@@ -126,10 +125,16 @@ def build():
         seq = station_ids if event['direction'] == 'LECCO' else station_ids[::-1]
         calls = []
         for sid in seq:
+            # Some certified S8 trips are partial. Do not fabricate an endpoint
+            # call merely because the displayed corridor includes that station.
+            if sid not in stop_times[trip]:
+                continue
             row = stop_times[trip][sid]
             calls.append(dict(station_id=sid, arrival_min=minutes(row['arrival_time']),
                               departure_min=minutes(row['departure_time'])))
         hub = next(c for c in calls if c['station_id'] == 'S01514')
+        if len(calls) < 2:
+            raise ValueError('Insufficient calls to animate the dated S8 trip')
         if hub['arrival_min'] != event['arrival_min'] or hub['departure_min'] != event['departure_min']:
             raise ValueError('GTFS and certified station inventory disagree')
         if any(a['departure_min'] >= b['arrival_min'] for a, b in zip(calls, calls[1:])):
@@ -140,10 +145,10 @@ def build():
     sources = []
     for path, url in [*OSM_TILES, (GTFS, inventory['source_urls']['gtfs']), (INVENTORY, None)]:
         sources.append(dict(path=path.relative_to(ROOT).as_posix(), sha256=hashlib.sha256(path.read_bytes()).hexdigest(), url=url))
-    return dict(contract='nodo8_s8_local_simulation_v1', colour='#f8b1b0', service_date='2026-10-01', geometry_retrieved_on='2026-10-09',
-                scope='LOCAL_CERNUSCO_MERATE_OLGIATE_AIRUNO_NOT_FULL_S8', sources=sources,
+    return dict(contract='nodo8_s8_full_simulation_v2', colour='#f8b1b0', service_date='2026-10-01', geometry_retrieved_on='2026-10-09',
+                scope='FULL_MILANO_PORTA_GARIBALDI_LECCO', sources=sources,
                 semantics=dict(movement='DISTANCE_INTERPOLATION_BETWEEN_DATED_GTFS_CALLS',
-                               geometry='SHORTEST_CONNECTED_MAIN_RAIL_PATH_IN_FROZEN_OSM_NOT_TRACK_ASSIGNMENT',
+                               geometry='CONNECTED_PATH_WITHIN_OSM_S8_RELATION_NOT_TRACK_ASSIGNMENT',
                                live=False, timetable_2027_certified=False, connection_guaranteed=False,
                                platform_assignment_certified=False),
                 stations=stations, segments=segments, trains=trains)

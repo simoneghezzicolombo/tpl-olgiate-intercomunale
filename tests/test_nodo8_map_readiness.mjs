@@ -35,10 +35,10 @@ test("D184/D185 are available from simulation and layers, with official route an
   assert.match(explorerSource, /id="currentRouteChoice"/);
   assert.match(explorerSource, /map\.setFilter\(id, routeFilter\)/);
   assert.match(explorerSource, /map\.setFilter\(id, stopFilter\)/);
-  assert.match(explorerSource, /GTFS 2025\/26/);
-  assert.match(explorerSource, /Non sono posizioni GPS o corse animate/);
+  assert.match(explorerSource, /GTFS ufficiale 2025\/26/);
+  assert.match(explorerSource, /fotografia storica non è l’orario più recente 2026\/27/);
   const fit = explorerSource.slice(explorerSource.indexOf("  function fit(force = false)"), explorerSource.indexOf("  function interactions(on)"));
-  assert.match(fit, /layers\.current \? lineage\.currentData\.features\.filter/);
+  assert.match(fit, /layers\.current \? currentFeatures\.filter/);
   assert.match(fit, /layers\.proposals \? lineage\.finalData\.features : \[\]/);
   assert.doesNotMatch(fit, /\.\.\.lineage\.anchorData/);
 });
