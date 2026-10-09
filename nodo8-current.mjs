@@ -59,7 +59,7 @@ export function currentTripsAt(data, minute, selection="ALL") {
 }
 
 export async function installCurrent(map) {
-  const response=await fetch("../assets/nodo8-current-simulation.json?v=20261008s");
+  const response=await fetch("../assets/nodo8-current-simulation.json?v=20261008t");
   if (!response.ok) throw new Error("Dated existing-service data unavailable");
   const data=buildCurrent(await response.json());
   const pairs=[...new Map(data.trips.map(t=>[`${t.route}:${t.shape_id}`,t])).values()];

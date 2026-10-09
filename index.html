@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#153d34" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20261008s" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20261008t" />
     <title>Nodo8: da paese a paese</title>
     <meta
       name="description"
@@ -22,15 +22,16 @@
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
-    <link rel="stylesheet" href="nodo8-experience.css?v=20261008s" />
-    <link rel="stylesheet" href="nodo8-design.css?v=20261008s" />
+    <link rel="stylesheet" href="nodo8-experience.css?v=20261008t" />
+    <link rel="stylesheet" href="nodo8-design.css?v=20261008t" />
+    <link rel="stylesheet" href="nodo8-benefits.css?v=20261008t" />
     <script
       defer
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
-    <script type="module" src="app.js?v=20261008s"></script>
+    <script type="module" src="app.js?v=20261008t"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Salta al contenuto</a>
@@ -71,8 +72,10 @@
             Da paese<br />a paese.<br /><span>Con Nodo8.</span>
           </h1>
           <p class="hero-intro">
-            Cinque comuni, una proposta di bus. Olgiate FS collega i due anelli.
+            Oggi D184 e D185. Con Nodo8, un servizio locale per i cinque comuni:
+            fermate più vicine e più occasioni per partire.
           </p>
+          <p class="benefits-teaser"><strong data-hero-coverage>Confronto in caricamento</strong><span>potenzialmente entro 10 minuti a piedi dalle fermate, nel modello</span><a href="#residentComparison" data-benefits-link>Confronta oggi e Nodo8 →</a></p>
           <div class="hero-actions">
             <a class="button button-dark" href="#percorso"
               >Guarda dove passa ↘</a
@@ -120,9 +123,10 @@
         <div class="section-heading">
           <p class="eyebrow">01 / UN’IDEA LOCALE</p>
           <h2 id="ideaTitle">
-            Una linea comune.<br /><span>Per muoversi tra i paesi.</span>
+            Una fermata vicina.<br /><span>Un bus più presente.</span>
           </h2>
         </div>
+        <div id="residentComparison" data-resident-comparison class="resident-comparison" aria-label="Confronto di vicinanza e corse fra situazione attuale e Nodo8"><p>Caricamento del confronto verificato…</p></div>
         <div class="benefit-grid">
           <article>
             <span class="benefit-number" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="12" r="9"/><circle cx="20" cy="28" r="9"/><circle class="benefit-icon-dot" cx="20" cy="20" r="3"/></svg></span>
@@ -567,7 +571,7 @@
               Quanto è vicina<br /><span>la fermata?</span>
             </h2>
             <p>
-              Nodo8 a confronto con le fermate di riferimento D184/D185.
+              Nodo8 a confronto con le linee attuali D184/D185, usando le fermate del riferimento strutturale.
               Stesso modello a piedi, non una stima dei passeggeri.
             </p>
           </div>
@@ -595,6 +599,7 @@
             </div>
             </div>
           </div>
+          <p id="coverageLossHint" class="benefits-note" hidden>Il totale cresce anche a 5 minuti. I cali di Brivio e Santa Maria Hoè dipendono soprattutto dalla palina storica L00063, da Hoè e da Alpino, oltre a piccoli scarti di posizione. <a href="#residentComparison" data-benefits-link data-benefits-threshold="5">Vedi quali punti cambiano →</a></p>
           <details class="section-note">
             <summary>Metodo e limiti della stima</summary>
             <p>
@@ -653,7 +658,7 @@
           <details>
             <summary>Le prime coincidenze da ovest si perdono.</summary>
             <p>
-              D184 pubblica arrivi FS alle 06:22, 06:42 e 07:20, da origini e
+              La linea attuale D184 pubblica arrivi FS alle 06:22, 06:42 e 07:20, da origini e
               corse differenti. Nodo8 ha il primo rientro del secondo anello
               previsto alle 07:38.
             </p>
@@ -698,6 +703,7 @@
           </details>
         </div>
       </section>
+      <aside class="pdb-note section-shell" aria-labelledby="pdbTitle"><h3 id="pdbTitle">Più servizio locale: un tema già aperto nel 2018.</h3><div data-pdb-note><p>Verifica della fonte del Piano di Bacino…</p></div></aside>
       <aside
         class="journey-teaser section-shell"
         aria-labelledby="journeyTitle"

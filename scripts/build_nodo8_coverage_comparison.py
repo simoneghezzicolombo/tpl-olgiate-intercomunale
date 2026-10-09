@@ -39,7 +39,7 @@ PINNED_SOURCES = {
 def digest(path):
     return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
-def build_data():
+def build_data(include_diagnostics=False):
     for path, expected in PINNED_SOURCES.items():
         if digest(path) != expected:
             raise ValueError("Pinned comparison source drift: " + str(path))
@@ -90,6 +90,7 @@ def build_data():
             vectors[key] = pedestrian_time(graph, snap_map, units, lat, lon)[0]
         return vectors[key]
     proposed_time = np.full(len(units), math.inf)
+    proposed_vectors = []
     for site in proposal["sites"]:
         key = site["site_id"]
         if key in substrate.stop_index:
@@ -99,6 +100,7 @@ def build_data():
                 raise ValueError("Existing proposal site missing in pinned matrix: " + key)
             vector = point_time(*site["coordinates_lon_lat"])
         proposed_time = np.minimum(proposed_time, vector)
+        proposed_vectors.append(vector)
     domains = {"TOTAL": core, **{m["code"]: core & (codes == m["code"]) for m in proposal["municipalities"]}}
     def percentages(times):
         return {code: {str(limit): 100 * float(weighted_ratio(times <= limit, weights, eligible))
@@ -114,7 +116,9 @@ def build_data():
         clusters = list(csv.DictReader(stream))
     if len(clusters) != 44:
         raise ValueError("Official stop cluster universe drift")
+    cluster_vectors = []
     for row in clusters:
+        cluster_time = np.full(len(units), math.inf)
         ids = row["member_stop_ids"].split(";")
         coordinates = row["member_coordinates"].split(";")
         if len(ids) != len(coordinates):
@@ -131,9 +135,12 @@ def build_data():
                     "snap_reason": snap.reason, "minimum_core_distance_lower_bound_m": bound,
                     "cannot_affect_thresholds_min": list(LIMITS)})
                 continue
-            baseline_time = np.minimum(baseline_time, point_time(lon, lat))
+            vector = point_time(lon, lat)
+            baseline_time = np.minimum(baseline_time, vector)
+            cluster_time = np.minimum(cluster_time, vector)
+        cluster_vectors.append(cluster_time)
     baseline = percentages(baseline_time)
-    return {
+    result = {
         "contract": "nodo8_same_substrate_spatial_coverage_comparison_v1",
         "semantics": "Potential walk to official structural D184/D185 stop coordinates versus confirmed Nodo8 sites, same frozen RT028 graph, population, weights, connectors and thresholds. Not ridership, frequency, useful-direction access, stop-level current activation or a certified service improvement.",
         "baseline_label": "D184 / D185 · fermate del riferimento ufficiale",
@@ -154,6 +161,48 @@ def build_data():
         "proposal_percent": reproduced,
         "delta_percentage_points": {code: {limit: reproduced[code][limit] - baseline[code][limit] for limit in baseline[code]} for code in domains},
     }
+    if not include_diagnostics:
+        return result
+    weights = np.asarray(weights, dtype=float)
+    cluster_matrix = np.column_stack(cluster_vectors)
+    closest_before = np.argmin(cluster_matrix, axis=1)
+    after_matrix = np.column_stack(proposed_vectors)
+    closest_after = np.argmin(after_matrix, axis=1)
+    details = {}
+    for code, eligible in domains.items():
+        denominator = float(np.sum(weights[eligible]))
+        losses = eligible & (baseline_time <= 5) & (proposed_time > 5)
+        gains = eligible & (baseline_time > 5) & (proposed_time <= 5)
+        rows = []
+        for index, row in enumerate(clusters):
+            selected = losses & (closest_before == index)
+            if not selected.any():
+                continue
+            members = row['member_stop_ids'].split(';')
+            retained = [s['site_id'] for s in proposal['sites'] if s['site_id'].removeprefix('FROZEN::') in members]
+            nearest_after_indexes = sorted(set(closest_after[selected].tolist()))
+            # Disjoint attribution to the closest old group is descriptive, not
+            # an additive causal effect of deleting that stop. Counterfactual
+            # add-back overlaps and must never be summed across rows.
+            recoverable = eligible & (proposed_time > 5) & (cluster_vectors[index] <= 5)
+            rows.append(dict(cluster_id=row['physical_stop_cluster_id'], name=row['representative_stop_name'],
+                member_stop_ids=members, exact_frozen_id_retained=retained,
+                member_coordinates_lon_lat=[[float(c.split(',')[1]),float(c.split(',')[0])] for c in row['member_coordinates'].split(';')],
+                loss_share_pp=100 * float(np.sum(weights[selected])) / denominator,
+                recoverable_if_group_added_pp=100 * float(np.sum(weights[recoverable])) / denominator,
+                proposal_nearest_sites=[dict(id=proposal['sites'][i]['site_id'], name=proposal['sites'][i]['name']) for i in nearest_after_indexes],
+                post_walk_min_min=float(np.min(proposed_time[selected])), post_walk_min_max=float(np.max(proposed_time[selected]))))
+        rows.sort(key=lambda r:(-r['loss_share_pp'],r['cluster_id']))
+        loss_pp=100*float(np.sum(weights[losses]))/denominator
+        gain_pp=100*float(np.sum(weights[gains]))/denominator
+        if abs(gain_pp-loss_pp-result['delta_percentage_points'][code]['5'])>1e-7 or abs(sum(r['loss_share_pp'] for r in rows)-loss_pp)>1e-7:
+            raise ValueError('Loss/gain attribution failed to reconcile')
+        details[code]=dict(lost_pp=loss_pp,gained_pp=gain_pp,net_delta_pp=gain_pp-loss_pp,old_closest_groups_for_lost_units=rows)
+    diagnostic=dict(contract='nodo8_five_minute_loss_diagnostic_v1',threshold_min=5,
+        semantics='Disjoint nearest-old-stop attribution of gross model losses on pinned RT028. Not causal deletion effects, passengers, headcounts or useful-service guarantees. Add-back recoveries overlap and are not additive.',
+        sources=result['sources'],proposal_coverage_reproduced=True,additional_resident_count_inferred=False,
+        municipality_details=details)
+    return result,diagnostic
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)

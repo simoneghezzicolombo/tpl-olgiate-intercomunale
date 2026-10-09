@@ -1,0 +1,1090 @@
+{
+  "contract": "nodo8_five_minute_loss_diagnostic_v1",
+  "threshold_min": 5,
+  "semantics": "Disjoint nearest-old-stop attribution of gross model losses on pinned RT028. Not causal deletion effects, passengers, headcounts or useful-service guarantees. Add-back recoveries overlap and are not additive.",
+  "sources": {
+    "proposal": {
+      "path": "assets/nodo8-proposal.json",
+      "sha256": "dd9b8bda3f5dc0bc039d0ab5874f8a64ff9f76db860f625657997fb7af34a8c9",
+      "sha256_semantics": "SOURCE_BYTES_WITH_CRLF_NORMALISED_TO_LF"
+    },
+    "walk_matrix": {
+      "path": "cache/rt028-certified-34039162932/output/rt028_population_unit_stop_walk_matrix_v3.csv",
+      "sha256": "a47bbce413d056db185180173ab2f05dce0463cb626a2c81f4aff64de91b50c1",
+      "sha256_semantics": "SOURCE_BYTES_WITH_CRLF_NORMALISED_TO_LF"
+    },
+    "pedestrian_osm": {
+      "path": "cache/rt028-certified-34039162932/input/rt028_osm_pedestrian_snapshot_v3.osm",
+      "sha256": "896f192bbb481f0c07cdc5d695424bf29de85f89ac33ea72986a06e521b424cd",
+      "sha256_semantics": "SOURCE_BYTES_WITH_CRLF_NORMALISED_TO_LF"
+    },
+    "population_coordinates": {
+      "path": "cache/rt028-certified-34039162932/input/rt016_border_neutral_population_units_v3.csv",
+      "sha256": "edba328d0214bec3a17357d2f21aba316b7ce4596b8ef47dad0c0ac92e45cd54",
+      "sha256_semantics": "SOURCE_BYTES_WITH_CRLF_NORMALISED_TO_LF"
+    },
+    "official_clusters": {
+      "path": "outputs/phase2/current_service_access_baseline_v4/current_service_physical_stop_clusters_v4.csv",
+      "sha256": "b9690e2814d93c62f26b104cd5713cb097ac64898b8d0c53bfbf64afff0404c9",
+      "sha256_semantics": "SOURCE_BYTES_WITH_CRLF_NORMALISED_TO_LF"
+    },
+    "official_validation": {
+      "path": "outputs/phase2/current_service_access_baseline_v4/current_service_access_baseline_v4_validation.json",
+      "sha256": "4308b5c5dcce7f58d598c891442f877b60aee09f9eac62fcf56b29ede1208306",
+      "sha256_semantics": "SOURCE_BYTES_WITH_CRLF_NORMALISED_TO_LF"
+    }
+  },
+  "proposal_coverage_reproduced": true,
+  "additional_resident_count_inferred": false,
+  "municipality_details": {
+    "TOTAL": {
+      "lost_pp": 4.503738870805848,
+      "gained_pp": 11.610950957145622,
+      "net_delta_pp": 7.107212086339774,
+      "old_closest_groups_for_lost_units": [
+        {
+          "cluster_id": "EX_016",
+          "name": "Calco - via Nazionale",
+          "member_stop_ids": [
+            "300634"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.417783,
+              45.7296
+            ]
+          ],
+          "loss_share_pp": 0.8923695044586063,
+          "recoverable_if_group_added_pp": 0.8923695044586063,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::ARLATE_B_VIO_BRIVIO_MADONNINA",
+              "name": "Arlate - B.vio Brivio - Madonnina"
+            }
+          ],
+          "post_walk_min_min": 5.813751220703125,
+          "post_walk_min_max": 9.057005882263184
+        },
+        {
+          "cluster_id": "EX_036",
+          "name": "Brivio - capolinea",
+          "member_stop_ids": [
+            "L00063"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.44585,
+              45.74245
+            ]
+          ],
+          "loss_share_pp": 0.8823617768124994,
+          "recoverable_if_group_added_pp": 0.8823617768124994,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300063",
+              "name": "Brivio - Via Bergamo (Scuola Materna)"
+            }
+          ],
+          "post_walk_min_min": 5.176914215087891,
+          "post_walk_min_max": 6.2471513748168945
+        },
+        {
+          "cluster_id": "EX_028",
+          "name": "Hoe'",
+          "member_stop_ids": [
+            "300873",
+            "L00873"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.367717,
+              45.748667
+            ],
+            [
+              9.368017,
+              45.7486
+            ]
+          ],
+          "loss_share_pp": 0.7978228561588978,
+          "recoverable_if_group_added_pp": 0.7978228561588978,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300782",
+              "name": "S.Maria Hoe'"
+            }
+          ],
+          "post_walk_min_min": 5.711784362792969,
+          "post_walk_min_max": 11.786176681518555
+        },
+        {
+          "cluster_id": "EX_007",
+          "name": "Calco - via virgilio",
+          "member_stop_ids": [
+            "300397"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.41495,
+              45.72495
+            ]
+          ],
+          "loss_share_pp": 0.5577398813991151,
+          "recoverable_if_group_added_pp": 0.5577398813991151,
+          "proposal_nearest_sites": [
+            {
+              "id": "RT031::CALCO_CENTRE::n:532529.50:5063589.46",
+              "name": "Calco Centro – Municipio"
+            },
+            {
+              "id": "ASF::CALCO_VIA_GARIBALDI",
+              "name": "Calco - Via Virgilio"
+            }
+          ],
+          "post_walk_min_min": 5.139004749336458,
+          "post_walk_min_max": 5.7219719886779785
+        },
+        {
+          "cluster_id": "EX_032",
+          "name": "S.Maria Hoe' - alpino",
+          "member_stop_ids": [
+            "300902",
+            "L00902"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.374617,
+              45.743617
+            ],
+            [
+              9.374367,
+              45.743567
+            ]
+          ],
+          "loss_share_pp": 0.3913478032468153,
+          "recoverable_if_group_added_pp": 0.3913478032468153,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300782",
+              "name": "S.Maria Hoe'"
+            }
+          ],
+          "post_walk_min_min": 5.035311222076416,
+          "post_walk_min_max": 6.657545566558838
+        },
+        {
+          "cluster_id": "EX_008",
+          "name": "Brivio - beverate (paese)",
+          "member_stop_ids": [
+            "300398",
+            "L00398"
+          ],
+          "exact_frozen_id_retained": [
+            "FROZEN::300398"
+          ],
+          "member_coordinates_lon_lat": [
+            [
+              9.427967,
+              45.73735
+            ],
+            [
+              9.42815,
+              45.737317
+            ]
+          ],
+          "loss_share_pp": 0.27703350519651954,
+          "recoverable_if_group_added_pp": 0.27703350519651954,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300086",
+              "name": "Brivio - beverate (cariplo)"
+            },
+            {
+              "id": "FROZEN::300398",
+              "name": "Brivio - beverate (paese)"
+            }
+          ],
+          "post_walk_min_min": 5.035614967346191,
+          "post_walk_min_max": 5.164872646331787
+        },
+        {
+          "cluster_id": "EX_011",
+          "name": "Olgiate Molgora - stazione f.s.",
+          "member_stop_ids": [
+            "300407"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.40576,
+              45.73371
+            ]
+          ],
+          "loss_share_pp": 0.19153126249389701,
+          "recoverable_if_group_added_pp": 0.19153126249389701,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::L00407",
+              "name": "Olgiate-Calco-Brivio FS"
+            },
+            {
+              "id": "PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+              "name": "San Zeno/Via Cantu"
+            }
+          ],
+          "post_walk_min_min": 5.222767564152902,
+          "post_walk_min_max": 6.026948904445858
+        },
+        {
+          "cluster_id": "EX_035",
+          "name": "Calco - via nazionale, 85",
+          "member_stop_ids": [
+            "300956"
+          ],
+          "exact_frozen_id_retained": [
+            "FROZEN::300956"
+          ],
+          "member_coordinates_lon_lat": [
+            [
+              9.41967,
+              45.7366
+            ]
+          ],
+          "loss_share_pp": 0.1667286617621523,
+          "recoverable_if_group_added_pp": 0.1667286617621523,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300956",
+              "name": "Calco - via nazionale (peugeot)"
+            }
+          ],
+          "post_walk_min_min": 5.125927448272705,
+          "post_walk_min_max": 5.144715309143066
+        },
+        {
+          "cluster_id": "EX_033",
+          "name": "S.Maria Hoe' - tremonte/via leopardi",
+          "member_stop_ids": [
+            "300903"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.38096,
+              45.74118
+            ]
+          ],
+          "loss_share_pp": 0.10457771815725848,
+          "recoverable_if_group_added_pp": 0.10457771815725848,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII",
+              "name": "Santa Maria Hoè - Via Giovanni XXIII / Tremonte-Via Leopardi"
+            }
+          ],
+          "post_walk_min_min": 5.0899248123168945,
+          "post_walk_min_max": 5.228766918182373
+        },
+        {
+          "cluster_id": "EX_003",
+          "name": "Brivio - beverate (cariplo)",
+          "member_stop_ids": [
+            "300086",
+            "L00086"
+          ],
+          "exact_frozen_id_retained": [
+            "FROZEN::300086"
+          ],
+          "member_coordinates_lon_lat": [
+            [
+              9.423083,
+              45.7404
+            ],
+            [
+              9.423083,
+              45.740517
+            ]
+          ],
+          "loss_share_pp": 0.08039761963484988,
+          "recoverable_if_group_added_pp": 0.08039761963484988,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300086",
+              "name": "Brivio - beverate (cariplo)"
+            }
+          ],
+          "post_walk_min_min": 5.034972190856934,
+          "post_walk_min_max": 5.034972190856934
+        },
+        {
+          "cluster_id": "EX_024",
+          "name": "Rovagnate - la pesa",
+          "member_stop_ids": [
+            "300804",
+            "L00804"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.374517,
+              45.73725
+            ],
+            [
+              9.374867,
+              45.737217
+            ]
+          ],
+          "loss_share_pp": 0.06743987634890924,
+          "recoverable_if_group_added_pp": 0.06743987634890924,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::ROVAGNATE_STRADA_STATALE_AGIP",
+              "name": "Rovagnate - Statale / AGIP"
+            }
+          ],
+          "post_walk_min_min": 5.101644992828369,
+          "post_walk_min_max": 5.413754463195801
+        },
+        {
+          "cluster_id": "EX_004",
+          "name": "Brivio - vaccarezza",
+          "member_stop_ids": [
+            "300087",
+            "L00087"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.436083,
+              45.73685
+            ],
+            [
+              9.4362,
+              45.737017
+            ]
+          ],
+          "loss_share_pp": 0.03867873515024156,
+          "recoverable_if_group_added_pp": 0.03867873515024156,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::VACCAREZZA_CARTELLO_PAESE",
+              "name": "Brivio - Vaccarezza"
+            },
+            {
+              "id": "ASF::BRIVIO_BAR_CRISTALLO",
+              "name": "Brivio - Via Como (pizzeria / Bar Cristallo)"
+            }
+          ],
+          "post_walk_min_min": 5.107392311096191,
+          "post_walk_min_max": 5.2124247550964355
+        },
+        {
+          "cluster_id": "EX_019",
+          "name": "Calco - via virgilio (pensilina asf)",
+          "member_stop_ids": [
+            "300729",
+            "L00729"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.40995,
+              45.725017
+            ],
+            [
+              9.410183,
+              45.72495
+            ]
+          ],
+          "loss_share_pp": 0.032566867334272775,
+          "recoverable_if_group_added_pp": 0.032566867334272775,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::CALCO_VIA_GARIBALDI",
+              "name": "Calco - Via Virgilio"
+            }
+          ],
+          "post_walk_min_min": 5.137059211730957,
+          "post_walk_min_max": 5.137059211730957
+        },
+        {
+          "cluster_id": "EX_009",
+          "name": "Cisano - sosta",
+          "member_stop_ids": [
+            "300405",
+            "L00405"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.451267,
+              45.739883
+            ],
+            [
+              9.451383,
+              45.739967
+            ]
+          ],
+          "loss_share_pp": 0.02146294664255989,
+          "recoverable_if_group_added_pp": 0.02146294664255989,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300086",
+              "name": "Brivio - beverate (cariplo)"
+            }
+          ],
+          "post_walk_min_min": 157.58688354492188,
+          "post_walk_min_max": 157.58688354492188
+        },
+        {
+          "cluster_id": "EX_012",
+          "name": "Brivio - beverate (tre strade)",
+          "member_stop_ids": [
+            "300487",
+            "L00487"
+          ],
+          "exact_frozen_id_retained": [
+            "FROZEN::300487"
+          ],
+          "member_coordinates_lon_lat": [
+            [
+              9.42685,
+              45.73465
+            ],
+            [
+              9.426933,
+              45.734767
+            ]
+          ],
+          "loss_share_pp": 0.0010577143918308507,
+          "recoverable_if_group_added_pp": 0.0010577143918308507,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::ARLATE_B_VIO_BRIVIO_MADONNINA",
+              "name": "Arlate - B.vio Brivio - Madonnina"
+            }
+          ],
+          "post_walk_min_min": 5.034782886505127,
+          "post_walk_min_max": 5.034782886505127
+        },
+        {
+          "cluster_id": "EX_023",
+          "name": "Olgiate Molgora - monticello scarpone",
+          "member_stop_ids": [
+            "300803",
+            "L00803"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.39027,
+              45.73133
+            ],
+            [
+              9.39015,
+              45.7313
+            ]
+          ],
+          "loss_share_pp": 0.0004013390655086449,
+          "recoverable_if_group_added_pp": 0.0004013390655086449,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::OLGIATE_MOLGORA_SCARPONE",
+              "name": "Olgiate Molgora - Scarpone"
+            }
+          ],
+          "post_walk_min_min": 5.1666388511657715,
+          "post_walk_min_max": 5.1666388511657715
+        },
+        {
+          "cluster_id": "EX_025",
+          "name": "S.Maria Hoe' - tremonte",
+          "member_stop_ids": [
+            "300805",
+            "L00904"
+          ],
+          "exact_frozen_id_retained": [
+            "FROZEN::300805"
+          ],
+          "member_coordinates_lon_lat": [
+            [
+              9.37837,
+              45.7428
+            ],
+            [
+              9.3784,
+              45.7426
+            ]
+          ],
+          "loss_share_pp": 0.00022080255191308064,
+          "recoverable_if_group_added_pp": 0.00022080255191308064,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300805",
+              "name": "Santa Maria Hoè - Tremonte / Via Trento"
+            }
+          ],
+          "post_walk_min_min": 5.097223281860352,
+          "post_walk_min_max": 5.097223281860352
+        }
+      ]
+    },
+    "97058": {
+      "lost_pp": 1.5888495331748467,
+      "gained_pp": 20.197203468326155,
+      "net_delta_pp": 18.608353935151307,
+      "old_closest_groups_for_lost_units": [
+        {
+          "cluster_id": "EX_011",
+          "name": "Olgiate Molgora - stazione f.s.",
+          "member_stop_ids": [
+            "300407"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.40576,
+              45.73371
+            ]
+          ],
+          "loss_share_pp": 0.6931060247607638,
+          "recoverable_if_group_added_pp": 0.6931060247607638,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::L00407",
+              "name": "Olgiate-Calco-Brivio FS"
+            },
+            {
+              "id": "PROXY::SAN_ZENO_VIA_CANTU_ROAD_NODE",
+              "name": "San Zeno/Via Cantu"
+            }
+          ],
+          "post_walk_min_min": 5.222767564152902,
+          "post_walk_min_max": 6.026948904445858
+        },
+        {
+          "cluster_id": "EX_035",
+          "name": "Calco - via nazionale, 85",
+          "member_stop_ids": [
+            "300956"
+          ],
+          "exact_frozen_id_retained": [
+            "FROZEN::300956"
+          ],
+          "member_coordinates_lon_lat": [
+            [
+              9.41967,
+              45.7366
+            ]
+          ],
+          "loss_share_pp": 0.6033513195859063,
+          "recoverable_if_group_added_pp": 0.6033513195859063,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300956",
+              "name": "Calco - via nazionale (peugeot)"
+            }
+          ],
+          "post_walk_min_min": 5.125927448272705,
+          "post_walk_min_max": 5.144715309143066
+        },
+        {
+          "cluster_id": "EX_003",
+          "name": "Brivio - beverate (cariplo)",
+          "member_stop_ids": [
+            "300086",
+            "L00086"
+          ],
+          "exact_frozen_id_retained": [
+            "FROZEN::300086"
+          ],
+          "member_coordinates_lon_lat": [
+            [
+              9.423083,
+              45.7404
+            ],
+            [
+              9.423083,
+              45.740517
+            ]
+          ],
+          "loss_share_pp": 0.29093983833116716,
+          "recoverable_if_group_added_pp": 0.29093983833116716,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300086",
+              "name": "Brivio - beverate (cariplo)"
+            }
+          ],
+          "post_walk_min_min": 5.034972190856934,
+          "post_walk_min_max": 5.034972190856934
+        },
+        {
+          "cluster_id": "EX_023",
+          "name": "Olgiate Molgora - monticello scarpone",
+          "member_stop_ids": [
+            "300803",
+            "L00803"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.39027,
+              45.73133
+            ],
+            [
+              9.39015,
+              45.7313
+            ]
+          ],
+          "loss_share_pp": 0.0014523504970096477,
+          "recoverable_if_group_added_pp": 0.0014523504970096477,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::OLGIATE_MOLGORA_SCARPONE",
+              "name": "Olgiate Molgora - Scarpone"
+            }
+          ],
+          "post_walk_min_min": 5.1666388511657715,
+          "post_walk_min_max": 5.1666388511657715
+        }
+      ]
+    },
+    "97012": {
+      "lost_pp": 6.222352319714532,
+      "gained_pp": 20.78385947402991,
+      "net_delta_pp": 14.561507154315379,
+      "old_closest_groups_for_lost_units": [
+        {
+          "cluster_id": "EX_016",
+          "name": "Calco - via Nazionale",
+          "member_stop_ids": [
+            "300634"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.417783,
+              45.7296
+            ]
+          ],
+          "loss_share_pp": 3.7450100412389205,
+          "recoverable_if_group_added_pp": 3.7450100412389205,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::ARLATE_B_VIO_BRIVIO_MADONNINA",
+              "name": "Arlate - B.vio Brivio - Madonnina"
+            }
+          ],
+          "post_walk_min_min": 5.813751220703125,
+          "post_walk_min_max": 9.057005882263184
+        },
+        {
+          "cluster_id": "EX_007",
+          "name": "Calco - via virgilio",
+          "member_stop_ids": [
+            "300397"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.41495,
+              45.72495
+            ]
+          ],
+          "loss_share_pp": 2.3406687989705723,
+          "recoverable_if_group_added_pp": 2.3406687989705723,
+          "proposal_nearest_sites": [
+            {
+              "id": "RT031::CALCO_CENTRE::n:532529.50:5063589.46",
+              "name": "Calco Centro – Municipio"
+            },
+            {
+              "id": "ASF::CALCO_VIA_GARIBALDI",
+              "name": "Calco - Via Virgilio"
+            }
+          ],
+          "post_walk_min_min": 5.139004749336458,
+          "post_walk_min_max": 5.7219719886779785
+        },
+        {
+          "cluster_id": "EX_019",
+          "name": "Calco - via virgilio (pensilina asf)",
+          "member_stop_ids": [
+            "300729",
+            "L00729"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.40995,
+              45.725017
+            ],
+            [
+              9.410183,
+              45.72495
+            ]
+          ],
+          "loss_share_pp": 0.13667347950504147,
+          "recoverable_if_group_added_pp": 0.13667347950504147,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::CALCO_VIA_GARIBALDI",
+              "name": "Calco - Via Virgilio"
+            }
+          ],
+          "post_walk_min_min": 5.137059211730957,
+          "post_walk_min_max": 5.137059211730957
+        }
+      ]
+    },
+    "97010": {
+      "lost_pp": 6.4192578508444615,
+      "gained_pp": 0.02712712984567024,
+      "net_delta_pp": -6.392130720998791,
+      "old_closest_groups_for_lost_units": [
+        {
+          "cluster_id": "EX_036",
+          "name": "Brivio - capolinea",
+          "member_stop_ids": [
+            "L00063"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.44585,
+              45.74245
+            ]
+          ],
+          "loss_share_pp": 4.640449335295298,
+          "recoverable_if_group_added_pp": 4.640449335295298,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300063",
+              "name": "Brivio - Via Bergamo (Scuola Materna)"
+            }
+          ],
+          "post_walk_min_min": 5.176914215087891,
+          "post_walk_min_max": 6.2471513748168945
+        },
+        {
+          "cluster_id": "EX_008",
+          "name": "Brivio - beverate (paese)",
+          "member_stop_ids": [
+            "300398",
+            "L00398"
+          ],
+          "exact_frozen_id_retained": [
+            "FROZEN::300398"
+          ],
+          "member_coordinates_lon_lat": [
+            [
+              9.427967,
+              45.73735
+            ],
+            [
+              9.42815,
+              45.737317
+            ]
+          ],
+          "loss_share_pp": 1.4569533481921157,
+          "recoverable_if_group_added_pp": 1.4569533481921157,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300086",
+              "name": "Brivio - beverate (cariplo)"
+            },
+            {
+              "id": "FROZEN::300398",
+              "name": "Brivio - beverate (paese)"
+            }
+          ],
+          "post_walk_min_min": 5.035614967346191,
+          "post_walk_min_max": 5.164872646331787
+        },
+        {
+          "cluster_id": "EX_004",
+          "name": "Brivio - vaccarezza",
+          "member_stop_ids": [
+            "300087",
+            "L00087"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.436083,
+              45.73685
+            ],
+            [
+              9.4362,
+              45.737017
+            ]
+          ],
+          "loss_share_pp": 0.2034162353070083,
+          "recoverable_if_group_added_pp": 0.2034162353070083,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::VACCAREZZA_CARTELLO_PAESE",
+              "name": "Brivio - Vaccarezza"
+            },
+            {
+              "id": "ASF::BRIVIO_BAR_CRISTALLO",
+              "name": "Brivio - Via Como (pizzeria / Bar Cristallo)"
+            }
+          ],
+          "post_walk_min_min": 5.107392311096191,
+          "post_walk_min_max": 5.2124247550964355
+        },
+        {
+          "cluster_id": "EX_009",
+          "name": "Cisano - sosta",
+          "member_stop_ids": [
+            "300405",
+            "L00405"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.451267,
+              45.739883
+            ],
+            [
+              9.451383,
+              45.739967
+            ]
+          ],
+          "loss_share_pp": 0.11287628170016464,
+          "recoverable_if_group_added_pp": 0.11287628170016464,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300086",
+              "name": "Brivio - beverate (cariplo)"
+            }
+          ],
+          "post_walk_min_min": 157.58688354492188,
+          "post_walk_min_max": 157.58688354492188
+        },
+        {
+          "cluster_id": "EX_012",
+          "name": "Brivio - beverate (tre strade)",
+          "member_stop_ids": [
+            "300487",
+            "L00487"
+          ],
+          "exact_frozen_id_retained": [
+            "FROZEN::300487"
+          ],
+          "member_coordinates_lon_lat": [
+            [
+              9.42685,
+              45.73465
+            ],
+            [
+              9.426933,
+              45.734767
+            ]
+          ],
+          "loss_share_pp": 0.005562650349876547,
+          "recoverable_if_group_added_pp": 0.005562650349876547,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::ARLATE_B_VIO_BRIVIO_MADONNINA",
+              "name": "Arlate - B.vio Brivio - Madonnina"
+            }
+          ],
+          "post_walk_min_min": 5.034782886505127,
+          "post_walk_min_max": 5.034782886505127
+        }
+      ]
+    },
+    "97074": {
+      "lost_pp": 13.602663239995486,
+      "gained_pp": 7.225010799438906,
+      "net_delta_pp": -6.37765244055658,
+      "old_closest_groups_for_lost_units": [
+        {
+          "cluster_id": "EX_028",
+          "name": "Hoe'",
+          "member_stop_ids": [
+            "300873",
+            "L00873"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.367717,
+              45.748667
+            ],
+            [
+              9.368017,
+              45.7486
+            ]
+          ],
+          "loss_share_pp": 8.668237518266944,
+          "recoverable_if_group_added_pp": 8.668237518266944,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300782",
+              "name": "S.Maria Hoe'"
+            }
+          ],
+          "post_walk_min_min": 5.711784362792969,
+          "post_walk_min_max": 11.786176681518555
+        },
+        {
+          "cluster_id": "EX_032",
+          "name": "S.Maria Hoe' - alpino",
+          "member_stop_ids": [
+            "300902",
+            "L00902"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.374617,
+              45.743617
+            ],
+            [
+              9.374367,
+              45.743567
+            ]
+          ],
+          "loss_share_pp": 3.795803956185652,
+          "recoverable_if_group_added_pp": 3.795803956185652,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300782",
+              "name": "S.Maria Hoe'"
+            }
+          ],
+          "post_walk_min_min": 5.478504180908203,
+          "post_walk_min_max": 6.657545566558838
+        },
+        {
+          "cluster_id": "EX_033",
+          "name": "S.Maria Hoe' - tremonte/via leopardi",
+          "member_stop_ids": [
+            "300903"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.38096,
+              45.74118
+            ]
+          ],
+          "loss_share_pp": 1.136222775654538,
+          "recoverable_if_group_added_pp": 1.136222775654538,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::SANTA_MARIA_HOE_VIA_GIOVANNI_XXIII",
+              "name": "Santa Maria Hoè - Via Giovanni XXIII / Tremonte-Via Leopardi"
+            }
+          ],
+          "post_walk_min_min": 5.0899248123168945,
+          "post_walk_min_max": 5.228766918182373
+        },
+        {
+          "cluster_id": "EX_025",
+          "name": "S.Maria Hoe' - tremonte",
+          "member_stop_ids": [
+            "300805",
+            "L00904"
+          ],
+          "exact_frozen_id_retained": [
+            "FROZEN::300805"
+          ],
+          "member_coordinates_lon_lat": [
+            [
+              9.37837,
+              45.7428
+            ],
+            [
+              9.3784,
+              45.7426
+            ]
+          ],
+          "loss_share_pp": 0.00239898988835293,
+          "recoverable_if_group_added_pp": 0.00239898988835293,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300805",
+              "name": "Santa Maria Hoè - Tremonte / Via Trento"
+            }
+          ],
+          "post_walk_min_min": 5.097223281860352,
+          "post_walk_min_max": 5.097223281860352
+        }
+      ]
+    },
+    "97092": {
+      "lost_pp": 0.5385116723928036,
+      "gained_pp": 2.0036564565369517,
+      "net_delta_pp": 1.465144784144148,
+      "old_closest_groups_for_lost_units": [
+        {
+          "cluster_id": "EX_024",
+          "name": "Rovagnate - la pesa",
+          "member_stop_ids": [
+            "300804",
+            "L00804"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.374517,
+              45.73725
+            ],
+            [
+              9.374867,
+              45.737217
+            ]
+          ],
+          "loss_share_pp": 0.33189805125835614,
+          "recoverable_if_group_added_pp": 0.33189805125835614,
+          "proposal_nearest_sites": [
+            {
+              "id": "ASF::ROVAGNATE_STRADA_STATALE_AGIP",
+              "name": "Rovagnate - Statale / AGIP"
+            }
+          ],
+          "post_walk_min_min": 5.101644992828369,
+          "post_walk_min_max": 5.413754463195801
+        },
+        {
+          "cluster_id": "EX_032",
+          "name": "S.Maria Hoe' - alpino",
+          "member_stop_ids": [
+            "300902",
+            "L00902"
+          ],
+          "exact_frozen_id_retained": [],
+          "member_coordinates_lon_lat": [
+            [
+              9.374617,
+              45.743617
+            ],
+            [
+              9.374367,
+              45.743567
+            ]
+          ],
+          "loss_share_pp": 0.2066136211344475,
+          "recoverable_if_group_added_pp": 0.2066136211344475,
+          "proposal_nearest_sites": [
+            {
+              "id": "FROZEN::300782",
+              "name": "S.Maria Hoe'"
+            }
+          ],
+          "post_walk_min_min": 5.035311222076416,
+          "post_walk_min_max": 6.2158660888671875
+        }
+      ]
+    }
+  }
+}

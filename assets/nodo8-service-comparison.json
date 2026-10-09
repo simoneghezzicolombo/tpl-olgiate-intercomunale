@@ -1,0 +1,33 @@
+{
+  "contract": "nodo8_station_service_comparison_v1",
+  "current_label": "Situazione attuale · D184/D185",
+  "reference_day": "Lunedì–venerdì scolastico, orario invernale 2026/27",
+  "scope": "DEPARTURES_FROM_OLGIATE_FS_NOT_EVERY_STOP_OR_RESIDENT",
+  "annual_service_count_inferred": false,
+  "combined_frequency_accessibility_score_inferred": false,
+  "west": {
+    "route": "D184",
+    "current_departures_min": [382,402,440,817,877,1057,1117,1177],
+    "source_url": "https://arriva.it/app/uploads/sites/7/2026/08/D184-Olgiate-Molgora-F.S.%E2%80%93Ravellino-inv27.pdf",
+    "source_sha256": "a6dcee15654b84f2434ce4631ab3f53c7671cea2d87933f50af97b6f044418a1",
+    "source_page": 1
+  },
+  "east": {
+    "route": "D185",
+    "current_departures_min": [435,815,880,1085,1175],
+    "source_url": "https://arriva.it/app/uploads/sites/7/2026/10/D185-Celana%E2%80%93Olgiate-F.S.-Inv27.pdf",
+    "source_sha256": "92d53932a2d108092ac6dbfcf760f685f61ad97f79afe032bb6dfb2da76bf4ef",
+    "source_page": 2
+  },
+  "pdb": {
+    "year": 2018,
+    "intervention": "LC-INT-008",
+    "source_page": 10,
+    "source_url": "https://www.hlservizicloud.it/pgt/sites/default/files/users/tplcomoleccovarese/ATTI/PROGRAMMA%20DI%20BACINO/PdB_COLCVA_Allegato2_SchedeInterventoLecco_20180608.pdf#page=10",
+    "source_sha256": "1184a6f4d661027cb23f83cac69f630c34ee92292755696ebcffd4bead859ba6",
+    "automatic_km_entitlement_certified": false,
+    "automatic_funding_transfer_certified": false,
+    "proposed_terminal": "Cisano Bergamasco FS",
+    "celana_continuation": "Linee del bacino di Bergamo"
+  }
+}
