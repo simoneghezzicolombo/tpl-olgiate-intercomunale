@@ -195,7 +195,7 @@ test("circular stop schema shows 26 unique nonhub sites while preserving 28 orde
   });
 });
 
-test("conceptual locality names sit inside their dots, with one connector each and upper counterclockwise arrows", async () => {
+test("conceptual localities form two mirrored regular pentagons, with arrows on both loops", async () => {
   await withDOM(async () => {
     const host = container("localities");
     renderDiagram(host, line, { localities: true });
@@ -206,7 +206,6 @@ test("conceptual locality names sit inside their dots, with one connector each a
       [
         "San Zeno",
         "Beverate",
-        "Vaccarezza",
         "Brivio",
         "Arlate",
         "Calco",
@@ -221,6 +220,23 @@ test("conceptual locality names sit inside their dots, with one connector each a
       .querySelectorAll(".n8-diagram-line")
       .filter((e) => e.tagName === "circle");
     assert.equal(loops.length, 2);
+    const points = groups.map(group => {
+      const dot = group.querySelectorAll(".n8-locality-node")[0];
+      return {x: Number(dot.getAttribute("cx")), y: Number(dot.getAttribute("cy"))};
+    });
+    for (const [index, cy] of [[0, 350], [1, 1120]]) {
+      const pentagon = points.slice(index * 5, index * 5 + 5);
+      assert.ok(Math.abs(pentagon.reduce((sum, p) => sum + p.x, 0) / 5 - 600) < 1e-9);
+      assert.ok(Math.abs(pentagon.reduce((sum, p) => sum + p.y, 0) / 5 - cy) < 1e-9);
+      const expectedChord = 480 * Math.sin(Math.PI / 5);
+      pentagon.forEach((p, i) => {
+        const next = pentagon[(i + 1) % 5];
+        assert.ok(Math.abs(Math.hypot(p.x - 600, p.y - cy) - 240) < 1e-9);
+        assert.ok(Math.abs(Math.hypot(p.x - next.x, p.y - next.y) - expectedChord) < 1e-9);
+        assert.ok(Math.abs(p.x - points[5 + i].x) < 1e-9);
+      });
+    }
+    for (let i = 0; i < 5; i++) assert.ok(Math.abs(points[i].y + points[i + 5].y - 1470) < 1e-9);
     for (const group of groups) {
       const dot = group.querySelectorAll(".n8-locality-node")[0];
       const text = group.querySelectorAll(".n8-diagram-name")[0];
@@ -244,20 +260,23 @@ test("conceptual locality names sit inside their dots, with one connector each a
       "M600 590 V692 M600 782 V880",
     );
     const arrows = image.querySelectorAll(".n8-diagram-arrow");
-    assert.equal(arrows.length, 3);
+    assert.equal(arrows.length, 10);
     assert.ok(
-      arrows.every(
+      arrows.slice(0, 5).every(
         (e) => e.getAttribute("data-direction") === "counterclockwise",
       ),
     );
     assert.ok(
-      arrows.every(
+      arrows.slice(0, 5).every(
         (e) =>
           Number(
             e.getAttribute("transform").match(/translate\([^ ]+ ([^)]+)\)/)[1],
           ) < 640,
       ),
     );
+    assert.ok(arrows.slice(5).every(e => e.getAttribute("data-direction") === "clockwise"));
+    assert.ok(arrows.slice(5).every(e => Number(e.getAttribute("transform").match(/translate\([^ ]+ ([^)]+)\)/)[1]) > 800));
+    assert.ok(!image.querySelectorAll(".n8-diagram-locality").some(e => e.getAttribute("data-locality") === "Vaccarezza"));
     assert.match(image.textContent, /Riferimenti territoriali, non fermate/);
     assert.equal(image.querySelectorAll(".n8-diagram-number").length, 0);
     assert.equal(image.textContent.includes("ALA EST"), false);
