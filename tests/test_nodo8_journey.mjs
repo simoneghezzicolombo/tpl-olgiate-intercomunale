@@ -8,6 +8,7 @@ import {
   playbackVisible,
 } from "../dietro-l-analisi/journey-nodo8.mjs";
 import { buildLine, statesAt } from "../nodo8-line.mjs";
+import { validateCoverageComparison, coverageChangeLabel } from "../nodo8-coverage.mjs";
 
 const data = JSON.parse(
   readFileSync(
@@ -15,6 +16,31 @@ const data = JSON.parse(
     "utf8",
   ),
 );
+const coverageComparison = JSON.parse(readFileSync(new URL("../assets/nodo8-coverage-comparison.json", import.meta.url), "utf8"));
+test("spatial comparison preserves the confirmed percentages and exposes losses without claiming current service", () => {
+  assert.equal(validateCoverageComparison(coverageComparison, data), coverageComparison);
+  assert.equal(coverageComparison.additional_resident_count_inferred, false);
+  assert.equal(coverageComparison.baseline_trip_level_current_activation_certified, false);
+  assert.ok(coverageComparison.delta_percentage_points["97010"]["5"] < 0);
+  assert.ok(coverageComparison.delta_percentage_points["97074"]["5"] < 0);
+  assert.equal(coverageChangeLabel(13.437652483858656), "+13,44 p.p.");
+  assert.equal(coverageChangeLabel(-6.3921307209988), "−6,39 p.p.");
+  assert.throws(() => coverageChangeLabel(NaN));
+});
+test("incomplete, mismatched or near-core unresolved coverage comparison fails closed", () => {
+  for (const mutate of [
+    d => { d.proposal_coverage_reproduced = false; },
+    d => { d.proposal_percent.TOTAL["10"] += 1; },
+    d => { d.baseline_percent.TOTAL["10"] = null; },
+    d => { d.delta_percentage_points.TOTAL["10"] = 1; },
+    d => { d.additional_resident_count_inferred = true; },
+    d => { d.distant_unattached_points[0].minimum_core_distance_lower_bound_m = 500; },
+  ]) {
+    const changed = structuredClone(coverageComparison);
+    mutate(changed);
+    assert.throws(() => validateCoverageComparison(changed, data));
+  }
+});
 
 test("explorer overview has four occupied full-trip carriers at 07:35", () => {
   const line = buildLine(data);

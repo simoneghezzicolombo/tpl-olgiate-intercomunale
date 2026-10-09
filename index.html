@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#153d34" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20261008o" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20261008p" />
     <title>Nodo8: da paese a paese</title>
     <meta
       name="description"
@@ -22,15 +22,15 @@
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
-    <link rel="stylesheet" href="nodo8-experience.css?v=20261008o" />
-    <link rel="stylesheet" href="nodo8-design.css?v=20261008o" />
+    <link rel="stylesheet" href="nodo8-experience.css?v=20261008p" />
+    <link rel="stylesheet" href="nodo8-design.css?v=20261008p" />
     <script
       defer
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
-    <script type="module" src="app.js?v=20261008o"></script>
+    <script type="module" src="app.js?v=20261008p"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Salta al contenuto</a>
@@ -567,8 +567,8 @@
               Quanto è vicina<br /><span>la fermata?</span>
             </h2>
             <p>
-              Residenti potenzialmente vicini alle fermate previste, secondo il
-              modello. Non è una stima dei passeggeri.
+              Nodo8 a confronto con le fermate di riferimento D184/D185.
+              Stesso modello a piedi, non una stima dei passeggeri.
             </p>
           </div>
           <div class="coverage-layout">
@@ -578,6 +578,7 @@
                 della popolazione del bacino entro 10 minuti a piedi da un sito,
                 secondo il modello.
               </p>
+              <div id="coverageChange" class="coverage-change" aria-live="polite">Caricamento del confronto…</div>
               <div class="coverage-control">
                 <label for="coverageTime">Tempo a piedi</label
                 ><select id="coverageTime">
@@ -587,19 +588,27 @@
                 </select>
               </div>
             </div>
+            <div class="coverage-comparison-column">
+              <div class="coverage-legend"><span><i></i>D184/D185 · riferimento</span><span><i></i>Nodo8 · proposta</span></div>
             <div id="coverageBars" class="coverage-bars" aria-live="polite">
               <p>Caricamento della copertura…</p>
+            </div>
             </div>
           </div>
           <details class="section-note">
             <summary>Metodo e limiti della stima</summary>
             <p>
               Il calcolo usa la rete pedonale RT028 e la popolazione di
-              riferimento. Non certifica sicurezza o accessibilità dei cammini e
-              non copre ogni frazione o tutto Olgiate sud. Manca un confronto
-              completo con D184/D185 fatto nello stesso modo: le percentuali non
-              dimostrano un aumento rispetto al servizio attuale.
+              riferimento, con le stesse soglie e gli stessi pesi per entrambe
+              le reti. Le differenze sono punti percentuali, non passeggeri in più.
+              Il riferimento D184/D185 usa le coordinate delle fermate strutturali
+              del GTFS ufficiale 2025/26, non certifica il servizio a ogni fermata oggi e non include
+              la deviazione temporanea del Ponte di Brivio. Il modello non certifica
+              sicurezza, accessibilità dei cammini, frequenza o coincidenze.
+              Non copre ogni frazione o tutto Olgiate sud.
             </p>
+            <p>Il confronto è spaziale e condizionale: le nuove fermate Nodo8
+              restano da autorizzare. <a href="assets/nodo8-coverage-comparison.json">Dati e fonti del confronto</a>.</p>
           </details>
         </div>
       </section>

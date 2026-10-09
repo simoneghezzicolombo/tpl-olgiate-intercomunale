@@ -6,6 +6,7 @@
   ],
   "include_files": [
     "app.js",
+    "assets/nodo8-coverage-comparison.json",
     "assets/nodo8-proposal.json",
     "dietro-l-analisi/current-routes-gtfs.geojson.gz.b64.0",
     "dietro-l-analisi/current-routes-gtfs.geojson.gz.b64.1",
@@ -66,6 +67,7 @@
     "docs/RT031_LINEA8_PROPOSTA_UNICA_CONSOLIDATA_2026_10_01.md",
     "favicon.svg",
     "index.html",
+    "nodo8-coverage.mjs",
     "nodo8-design.css",
     "nodo8-experience.css",
     "nodo8-experience.mjs",

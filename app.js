@@ -1,19 +1,21 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
-import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008o";
+import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261008p";
 import {
   renderStopTimes,
   readStopSelection,
   stopLink,
-} from "./nodo8-stop-times.mjs?v=20261008o";
-import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008o";
+} from "./nodo8-stop-times.mjs?v=20261008p";
+import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261008p";
+import { validateCoverageComparison, coverageChangeLabel } from "./nodo8-coverage.mjs?v=20261008p";
+let coverageComparison = null;
 import {
   mountPlayer,
   renderDiagram,
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "./nodo8-experience.mjs?v=20261008o";
+} from "./nodo8-experience.mjs?v=20261008p";
 let activePlayer = null,
   activeMap = null,
   currentLine = null,
@@ -163,6 +165,14 @@ function renderCoverage(data) {
     "dei residenti del bacino potenzialmente entro " +
     time +
     " minuti a piedi da una fermata prevista.";
+  const change = document.getElementById("coverageChange");
+  change.replaceChildren();
+  if (coverageComparison) {
+    const delta = coverageComparison.delta_percentage_points.TOTAL[time];
+    change.append(element("span", "", "D184/D185: " + formatNumber(coverageComparison.baseline_percent.TOTAL[time]) + "%"),
+      element("strong", delta < 0 ? "is-loss" : "", coverageChangeLabel(delta)));
+    change.append(element("small", "", "Differenza nel modello, in punti percentuali"));
+  } else change.textContent = "Confronto D184/D185 non disponibile: nessuna differenza stimata.";
   const bars = document.getElementById("coverageBars");
   bars.replaceChildren();
   data.municipalities.forEach((municipality) => {
@@ -175,10 +185,22 @@ function renderCoverage(data) {
     );
     const track = element("div", "coverage-track");
     track.setAttribute("aria-hidden", "true");
+    if (coverageComparison) {
+      const before = coverageComparison.baseline_percent[municipality.code][time];
+      const delta = coverageComparison.delta_percentage_points[municipality.code][time];
+      const changes = element("div", "coverage-row-comparison");
+      changes.append(element("span", "", "D184/D185: " + formatNumber(before) + "%"),
+        element("strong", delta < 0 ? "is-loss" : "", coverageChangeLabel(delta)));
+      row.append(label, changes);
+      track.classList.add("coverage-track--comparison");
+      const old = element("span", "coverage-before-fill");
+      old.style.width = before + "%";
+      track.append(old);
+    } else row.append(label);
     const fill = element("span");
     fill.style.width = value + "%";
     track.append(fill);
-    row.append(label, track);
+    row.append(track);
     bars.append(row);
   });
 }
@@ -598,6 +620,14 @@ async function initProposal() {
     if (!response.ok) throw new Error("HTTP " + response.status);
     const data = await response.json();
     validatePresentationData(data);
+    try {
+      const comparisonResponse = await fetch("assets/nodo8-coverage-comparison.json");
+      if (!comparisonResponse.ok) throw new Error("Coverage comparison unavailable");
+      coverageComparison = validateCoverageComparison(await comparisonResponse.json(), data);
+    } catch (error) {
+      coverageComparison = null;
+      console.warn("Coverage comparison unavailable", error);
+    }
     const line = buildLine(data);
     currentLine = line;
     renderTimetable(data);
