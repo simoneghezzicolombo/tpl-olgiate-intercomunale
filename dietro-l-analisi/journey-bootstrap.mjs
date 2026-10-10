@@ -34,7 +34,7 @@ try {
   // KML LineStrings. Do not route, snap or repair D184/D185 through Gate D.
   await import("./journey-lineage.js?v=20261010b");
   await import("./journey-current-kml-exact.mjs?v=20261010b");
-  await import("./journey-explore-v2.js?v=20261010b");
+  await import("./journey-explore-v2.js?v=20261010c");
 } catch (error) {
   window.__analysisJourneyBootError = true;
   document.body.classList.add("journey-runtime-unavailable");

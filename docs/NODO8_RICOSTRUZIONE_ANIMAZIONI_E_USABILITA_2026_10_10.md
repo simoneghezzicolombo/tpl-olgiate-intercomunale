@@ -59,6 +59,8 @@ Il tetto non è un limite stradale, una certificazione fisica o una prova di pun
 
 ## Verifiche
 
-Prima della pubblicazione: 91 test Node, 44 test Python e 8 sottotest verdi. Il builder del sito conferma le quattro fonti della proposta; il nuovo builder riproduce esattamente il modello derivato e verifica il calendario nell'archivio fissato per hash. La pubblicazione continua a contenere soltanto due pagine HTML e le dipendenze ammesse, preservando nel repository i siti ritirati.
+Prima della pubblicazione: 92 test Node, 44 test Python e 8 sottotest verdi. Il builder del sito conferma le quattro fonti della proposta; il nuovo builder riproduce esattamente il modello derivato e verifica il calendario nell'archivio fissato per hash. La pubblicazione continua a contenere soltanto due pagine HTML e le dipendenze ammesse, preservando nel repository i siti ritirati.
 
 Controllati in browser: scheda fermata e chiusura con Escape, focus bus senza cambio della corsa, riduzione dei controlli con riproduzione ancora attiva e pausa sullo stesso orologio. Controllate larghezze 320, 375 e 768 px senza overflow orizzontale della pagina principale. Proposta e proiezione GTFS raw restano immutate.
+
+Il controllo finale online ha rilevato un difetto aggiuntivo: spegnendo il livello pedonale, l'opacità del riempimento diventava zero ma i bordi restavano visibili. La revisione `20261010c` nasconde l'intero layer e azzera anche i bordi, con un test di regressione per spegnimento e assenza di reti attive.
