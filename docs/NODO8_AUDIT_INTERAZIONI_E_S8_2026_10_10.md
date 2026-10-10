@@ -25,3 +25,12 @@
 - `touch-action:none` e accessibilità del contenitore verificati nel browser. Il backend non supporta l'iniezione di gesti touch: non si dichiara prova su telefono fisico.
 - S8: accensione allarga i limiti da 365–1278,3027 a 306–1466 minuti, senza spostare le 07:35 selezionate. Alle 00:26 risulta ancora una corsa S8, i quattro bus Nodo8 sono fuori corsa; spegnere S8 mantiene orario e fascia.
 - Nessun errore console osservato nelle prove locali.
+
+## Pubblicazione verificata
+
+- Sorgente: `ec542ca7508c10766fc2c336072a14663eb59ce1`.
+- Pages: `11408c8aa67ead1558279b5cc6ac30d7953ac656`, senza eliminazioni delle sorgenti precedenti.
+- CI `Publish final Nodo8 only`, esecuzione `38063492766`: successo.
+- Verificati via HTTP tutti gli 88 file pubblicati, con zero differenze rispetto agli hash del manifest; solo due pagine HTML.
+- Browser pubblico: S8 raggiungibile alle 00:26 del giorno successivo, una corsa ancora attiva, quattro bus Nodo8 fuori corsa. Popup D185 / via Virgilio leggibile; Esc lascia Esplora attiva e chiude il popup. Ritorno al racconto: nessun popup residuo, contenitore della mappa di nuovo escluso dalle tecnologie assistive.
+- Prova visiva locale esclusa dalla pubblicazione: `cache/nodo8-website-preview/nodo8-d185-readable-20261010g-public.png`.
