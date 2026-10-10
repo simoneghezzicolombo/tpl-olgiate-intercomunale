@@ -56,8 +56,8 @@
     if (window.__analysisJourneyActiveWalk) return;
     if (walkPromise) return walkPromise;
     walkPromise = (async () => {
-      const { validateActiveWalkAsset, activeWalkFeatureCollection } = await import("../nodo8-active-walk.mjs?v=20261009b");
-      const response = await fetch("../assets/nodo8-active-walk.json?v=20261009b");
+      const { validateActiveWalkAsset, activeWalkFeatureCollection } = await import("../nodo8-active-walk.mjs?v=20261010b");
+      const response = await fetch("../assets/nodo8-active-walk.json?v=20261010b");
       if (!response.ok) throw new Error("Active-network walk data unavailable");
       const model = validateActiveWalkAsset(await response.json());
       map.addSource("explore-active-walk", {type:"geojson",data:{type:"FeatureCollection",features:[]}});
@@ -420,12 +420,14 @@
     controls = document.createElement("div");
     controls.id = "journeyExplorerControls";
     controls.className = "explore-controls";
-    controls.innerHTML = `<div class="explore-controls__head"><div><strong>Esplora Nodo8</strong><small>Simulazione</small></div><button class="explore-controls__exit" data-action="exit" type="button">Torna al racconto</button></div>
+    controls.innerHTML = `<div class="explore-controls__head"><div><strong>Esplora Nodo8</strong><small>Simulazione</small></div><div class="explore-head-actions"><button type="button" data-action="collapse" aria-expanded="true" aria-controls="exploreControlsBody" aria-label="Riduci i controlli per vedere la mappa">−</button><button class="explore-controls__exit" data-action="exit" type="button">Racconto</button></div></div>
+      <div class="explore-mini" hidden><div><output id="exploreMiniClock" aria-label="Ora simulata">07:35:00</output><small id="exploreMiniNetworks">Nodo8</small></div><button type="button" data-action="mini-play" aria-label="Riproduci simulazione">▶</button></div>
+      <div id="exploreControlsBody">
       <div class="explore-networks" aria-label="Linee sulla mappa">
         <button data-layer="nodo8" class="is-active" type="button"><i style="--c:#55e1bf"></i><span>Nodo8<small>La proposta</small></span><b aria-hidden="true">✓</b></button>
         <button data-layer="s8" type="button" disabled><i style="--c:#f8b1b0"></i><span>S8<small>Treni</small></span><b aria-hidden="true">✓</b></button>
-        <button data-layer="d184" type="button" disabled><i style="--c:#4ca5ff"></i><span>D184<small>Situazione attuale</small></span><b aria-hidden="true">✓</b></button>
-        <button data-layer="d185" type="button" disabled><i style="--c:#ff9b61"></i><span>D185<small>Situazione attuale</small></span><b aria-hidden="true">✓</b></button>
+        <button data-layer="d184" type="button" disabled><i style="--c:#4ca5ff"></i><span>D184<small>Linee esistenti</small></span><b aria-hidden="true">✓</b></button>
+        <button data-layer="d185" type="button" disabled><i style="--c:#ff9b61"></i><span>D185<small>Linee esistenti</small></span><b aria-hidden="true">✓</b></button>
       </div>
       <select id="currentRouteChoice" hidden aria-hidden="true" tabindex="-1"><option value="ALL">D184 e D185</option><option value="D184">D184</option><option value="D185">D185</option></select>
       <div class="explore-controls__tabs" role="tablist" aria-label="Controlli"><button id="exploreBusTab" role="tab" aria-selected="true" aria-controls="exploreBusPanel" type="button">Orario</button><button id="exploreLayersTab" role="tab" aria-selected="false" aria-controls="exploreLayersPanel" tabindex="-1" type="button">Mappa</button></div>
@@ -442,12 +444,24 @@
       </section>
       <details id="exploreTechnical" class="explore-technical"><summary>Dati e metodo</summary>
         <h4>Nodo8</h4><p>Orario di progetto 2027, 16 giri completi sullo stesso percorso. B1–B4 sono quattro mezzi di modello, non turni assegnati. Sosta prevista di 30 secondi alle fermate, attesa a FS e recupero di 10 minuti dopo il rientro. Movimento interpolato lungo il tracciato; non GPS, velocità osservata o traffico reale. La prosecuzione passeggeri sullo stesso bus a FS resta da autorizzare.</p>
-        <h4>D184 e D185</h4><p>GTFS ufficiale 2025/26: tutte le 34 corse attive mercoledì 6 maggio 2026, 15 D184 e 19 D185. Tracciati e orari dello stesso feed. Questa fotografia storica non è l’orario più recente 2026/27. Le icone rappresentano corse, non mezzi fisici; i tempi intermedi sono interpolati. Il feed contiene anche tempi e distanze incoerenti: 48 dei 388 intervalli implicano oltre 90 km/h medi lungo la shape. In questi intervalli l’icona non viene disegnata; la corsa resta nel conteggio. È un filtro prudenziale della visualizzazione, non un limite stradale o una certificazione delle altre velocità. Le posizioni della shape alle fermate possono discostarsi dalle coordinate GTFS fino a circa 547 metri. Arrivo e partenza coincidono nel feed: non inventiamo soste o tempi corretti.</p><a href="../index.html#confronto">Confronto con gli orari 2026/27 ↗</a>
+        <h4>D184 e D185</h4><p>GTFS ufficiale 2025/26: tutte le 34 corse del feriale 28 aprile 2026, prima della deviazione per la chiusura del ponte di Brivio. È una fotografia storica, non l’orario più recente 2026/27. Le icone rappresentano corse, non mezzi fisici. La ricostruzione allinea le fermate al loro tracciato rispettando l’ordine; 374 orari della fonte sono conservati e 48 tempi intermedi incoerenti sono stimati per l’animazione, fra gli orari conservati. Partenze e arrivi finali restano invariati. Nessun orario ufficiale viene riscritto, né vengono aggiunte soste. Il modello non supera 90 km/h medi per intervallo: è un controllo grafico, non una certificazione stradale o della velocità reale. Ai ritorni, FS usa il termine del tracciato in stazione; le partenze da FS via Statale restano sulla Statale. Questi riferimenti di animazione non certificano o spostano le paline GTFS usate dal livello pedonale.</p><a href="../index.html#confronto">Confronto con gli orari 2026/27 ↗</a>
         <h4>Fonti ferroviarie</h4><p id="s8SourceNote">S8: orari Trenord del 1 ottobre 2026, 74 corse, percorso ferroviario OpenStreetMap Milano Porta Garibaldi–Lecco. Posizioni interpolate, non GPS. Nessuna validità futura o coincidenza garantita.</p>
         <h4>Accessibilità e territorio</h4><p>I minuti a piedi usano solo le fermate delle linee bus accese. Con più linee, si considera la fermata più vicina nella loro unione; S8 non contribuisce. Modello pedonale RT028 congelato, 80 m/min e connettori, su 4.283 unità di popolazione stimate RT016. Grigio significa cammino non calcolabile nel modello; 12 fermate esterne D185 non si collegano al grafo congelato. Non una verifica di accessibilità universale, frequenza, direzione di viaggio o domanda. La rete stradale è quella dello studio, non una certificazione di percorribilità con bus.</p>
       </details>
-      <div class="explore-controls__footer"><div class="explore-controls__hint">Clicca le fermate sulla mappa.</div><div class="explore-controls__layers"><button data-action="clear" type="button">Spegni tutto</button><button data-action="reset" type="button">↺ Inquadra</button></div></div>`;
+      <div class="explore-controls__footer"><div class="explore-controls__hint">Clicca le fermate sulla mappa.</div><div class="explore-controls__layers"><button data-action="clear" type="button">Spegni tutto</button><button data-action="reset" type="button">↺ Inquadra</button></div></div></div>`;
     document.body.appendChild(controls);
+    controls.querySelector('[data-action="collapse"]').addEventListener("click", () => {
+      const collapsed = controls.classList.toggle("explore-is-collapsed");
+      controls.querySelector("#exploreControlsBody").hidden = collapsed;
+      controls.querySelector(".explore-mini").hidden = !collapsed;
+      const button = controls.querySelector('[data-action="collapse"]');
+      button.setAttribute("aria-expanded",String(!collapsed));
+      button.setAttribute("aria-label",collapsed ? "Mostra tutti i controlli" : "Riduci i controlli per vedere la mappa");
+      button.textContent = collapsed ? "+" : "−";
+      // Hide only the control surface, never the running shared clock or layers.
+      controls.dataset.collapsed = String(collapsed);
+    });
+    controls.querySelector('[data-action="mini-play"]').addEventListener("click", () => window.__analysisJourneyNodo8?.toggleExplorer());
     controls.querySelectorAll('[data-layer="s8"]').forEach(button => {
       button.disabled = document.documentElement.dataset.s8Ready !== "true";
     });
@@ -626,8 +640,10 @@
     opacity("municipality-outline", scene ? 0.3 : 0.45);
     opacity("hub", 1);
     opacity("hub-glow", scene ? 0.24 : 0.1);
-    if (map.getLayer("carto"))
-      map.setPaintProperty("carto", "raster-opacity", scene ? 0.24 : 0.42);
+    if (map.getLayer("carto")) {
+      map.setPaintProperty("carto", "raster-opacity", interactive ? 0.55 : 0.34);
+      map.setPaintProperty("carto", "raster-brightness-max",interactive ? 0.95 : 0.56);
+    }
     const walkNetworks = [
       ...(layers.nodo8 ? ["NODO8"] : []),
       ...(cur && currentChoice !== "D185" ? ["D184"] : []),
@@ -635,6 +651,11 @@
     ];
     window.__analysisJourneyActiveWalk?.render({visible:interactive && layers.walk,networks:walkNetworks});
     if (controls) {
+      controls.querySelector("#exploreMiniNetworks").textContent = [
+        ...(layers.nodo8 ? ["Nodo8"] : []), ...(layers.d184 ? ["D184"] : []),
+        ...(layers.d185 ? ["D185"] : []), ...(layers.s8 ? ["S8"] : []),
+      ].join(" · ") || "Nessuna linea accesa";
+      controls.querySelector('[data-action="mini-play"]').disabled = !layers.nodo8 && !layers.current && !layers.s8;
       controls.querySelector("#currentComparisonPanel").hidden = !cur;
       controls.style.pointerEvents = interactive ? "auto" : "none";
       controls.inert = !interactive;
@@ -705,8 +726,8 @@
           : { top: 100, right: 460, bottom: 75, left: 60 },
       maxZoom: 12.5,
       duration: window.__analysisJourneyReduceMotion ? 0 : 900,
-      pitch: 50,
-      bearing: 3,
+      pitch: active ? 0 : 35,
+      bearing: 0,
     });
     fitted = true;
   }
@@ -1055,6 +1076,16 @@
       enter,
       exit,
       isActive: () => active,
+      updateClock: ({playing}) => {
+        const text = controls.querySelector("#explorePlayback .n8-clock")?.textContent;
+        const output = controls.querySelector("#exploreMiniClock");
+        if (text && output.textContent !== text) output.textContent = text;
+        const button = controls.querySelector('[data-action="mini-play"]');
+        const icon = playing ? "Ⅱ" : "▶";
+        if (button.textContent !== icon) button.textContent = icon;
+        button.setAttribute("aria-label",playing ? "Pausa simulazione" : "Riproduci simulazione");
+        button.setAttribute("aria-pressed",String(playing));
+      },
       ensureRoadGraph: ensureRoads,
       showAnchor: (id) => {
         const f = lineage.anchorData.features.find(

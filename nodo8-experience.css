@@ -461,7 +461,8 @@
 }
 .n8-bus[data-status="stop"] .n8-bus-body,
 .n8-bus[data-status="fs-hold"] .n8-bus-body {
-  fill: #a6462c;
+  fill: #153d34;
+  stroke: #ffe4a4;
 }
 .n8-bus[data-status="recovery"] .n8-bus-body {
   fill: #728177;

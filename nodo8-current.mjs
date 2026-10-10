@@ -1,5 +1,6 @@
 // Existing-service trips are not physical vehicles. The dated calendar and
 // exact trip.shape_id come from the same immutable official GTFS archive.
+import { buildCurrentPlayback, currentPlaybackTripsAt } from "./nodo8-current-playback.mjs?v=20261010b";
 export const CURRENT_COLOURS = {D184:"#4ca5ff",D185:"#ff9b61"};
 
 export function currentPosition(shape, distance) {
@@ -105,9 +106,13 @@ export function currentPositionQuality(data, state) {
 }
 
 export async function installCurrent(map) {
-  const response=await fetch("../assets/nodo8-current-simulation.json?v=20261009b");
-  if (!response.ok) throw new Error("Dated existing-service data unavailable");
-  const data=buildCurrent(await response.json());
+  const responses=await Promise.all([
+    fetch("../assets/nodo8-current-simulation.json?v=20261010b"),
+    fetch("../assets/nodo8-current-playback.json?v=20261010b"),
+    fetch("../assets/nodo8-proposal.json?v=20261010b")]);
+  if (responses.some(response=>!response.ok)) throw new Error("Reconciled existing-service data unavailable");
+  const [source,display,proposal]=await Promise.all(responses.map(response=>response.json()));
+  const data=buildCurrent(source), playback=buildCurrentPlayback(data,display,proposal);
   const pairs=[...new Map(data.trips.map(t=>[`${t.route}:${t.shape_id}`,t])).values()];
   map.addSource("current-dated-routes",{type:"geojson",data:{type:"FeatureCollection",features:pairs.map(t=>({type:"Feature",properties:{route:t.route},geometry:{type:"LineString",coordinates:data.shapes[t.shape_id].coordinates}}))}});
   map.addLayer({id:"current-dated-routes",type:"line",source:"current-dated-routes",paint:{"line-color":["match",["get","route"],"D184",CURRENT_COLOURS.D184,CURRENT_COLOURS.D185],"line-width":3,"line-dasharray":[3,1],"line-opacity":0}},"nodo8-glow");
@@ -120,7 +125,7 @@ export async function installCurrent(map) {
   map.addSource("current-dated-stops",{type:"geojson",data:{type:"FeatureCollection",features:[...stops.values()]}});
   map.addLayer({id:"current-dated-stops",type:"circle",source:"current-dated-stops",paint:{"circle-color":["match",["get","route"],"D184",CURRENT_COLOURS.D184,CURRENT_COLOURS.D185],"circle-radius":3,"circle-opacity":0}},"nodo8-sites");
   const markers=new Map();
-  return {data,
+  return {data,playback,
     render({minute,visible,selection="ALL",showStops=true}) {
       map.setPaintProperty("current-dated-routes","line-opacity",visible?0.9:0);
       map.setFilter("current-dated-routes",selection==="ALL"?null:["==",["get","route"],selection]);
@@ -128,9 +133,9 @@ export async function installCurrent(map) {
       map.setFilter("current-dated-hit",selection==="ALL"?null:["==",["get","route"],selection]);
       map.setPaintProperty("current-dated-stops","circle-opacity",visible && showStops?0.95:0);
       map.setFilter("current-dated-stops",selection==="ALL"?null:["==",["get","route"],selection]);
-      const states=visible?currentTripsAt(data,minute,selection):[];
-      const displayed=states.filter(state=>currentPositionQuality(data,{...state,minute}).displayable);
-      const withheld=states.length-displayed.length;
+      const states=visible?currentPlaybackTripsAt(playback,minute,selection):[];
+      const displayed=states;
+      const withheld=0;
       const present=new Set(displayed.map(t=>t.id));
       for (const [id,e] of markers) if (!present.has(id)) {e.marker.remove();markers.delete(id);}
       for (const state of displayed) {
@@ -141,14 +146,18 @@ export async function installCurrent(map) {
           markers.set(state.id,{marker,icon});
         }
         const e=markers.get(state.id);
-        const label=`${state.route} · ${state.label} · corsa GTFS, movimento interpolato dagli orari`;
+        const label=`${state.route} · ${state.label} · posizione stimata sul tracciato ufficiale`;
         e.icon.setAttribute("aria-label",label);e.icon.title=label;e.icon.dataset.trip=state.id;
         e.marker.setLngLat(state.coordinates);
       }
       document.documentElement.dataset.currentBusCount=String(states.length);
       document.documentElement.dataset.currentBusMarkerCount=String(displayed.length);
-      document.documentElement.dataset.currentBusUnreliablePositionCount=String(withheld);
+      delete document.documentElement.dataset.currentBusUnreliablePositionCount;
+      document.documentElement.dataset.currentBusWithheldPositionCount=String(withheld);
+      document.documentElement.dataset.currentBusEstimatedPositionCount=String(states.length);
       document.documentElement.dataset.currentBusVisible=String(visible);
+      document.documentElement.dataset.currentPlaybackDate=display.display_service_date;
+      document.documentElement.dataset.currentPlaybackModel="reconciled-v2";
       const status=document.getElementById("currentBusStatus");
       if (status) {status.hidden=!visible;const label=`${states.length} ${states.length===1?"corsa attiva":"corse attive"}${withheld?` · ${withheld} ${withheld===1?"posizione non affidabile":"posizioni non affidabili"}`:""}`;if(status.textContent!==label)status.textContent=label;}
     },

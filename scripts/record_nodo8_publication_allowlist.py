@@ -12,6 +12,7 @@ runtime = [
     "journey-current-kml-exact.mjs", "journey-explore-v2.js", "journey-nodo8.mjs",
     "journey-map-ready.mjs",
     "journey-premium.css",
+    "journey-usability.css",
 ]
 preserved = json.loads((ROOT / BASE / "upstream-import.json").read_text(encoding="utf-8"))["preserved_assets"]
 files = {
@@ -22,6 +23,7 @@ files = {
     "nodo8-coverage.mjs", "assets/nodo8-coverage-comparison.json",
     "nodo8-s8.mjs", "assets/nodo8-s8-simulation.json",
     "nodo8-current.mjs", "assets/nodo8-current-simulation.json",
+    "nodo8-current-geometry.mjs", "nodo8-current-profile.mjs", "nodo8-current-playback.mjs", "assets/nodo8-current-playback.json",
     "nodo8-active-walk.mjs", "assets/nodo8-active-walk.json",
     "nodo8-benefits.mjs", "nodo8-benefits.css", "assets/nodo8-service-comparison.json", "assets/nodo8-coverage-diagnostic.json",
     "docs/NODO8_CONFRONTO_D184_D185_E_RECAP_2026_10_07.md",

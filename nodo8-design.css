@@ -209,7 +209,7 @@ select {
   gap: 25px;
 }
 .site-header nav a {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   text-decoration: none;
   padding-block: 14px;
@@ -283,19 +283,20 @@ select {
   text-decoration: underline;
 }
 .hero {
-  padding-block: 70px 65px;
+  padding-block: 52px 48px;
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
-  gap: 65px;
+  gap: 52px;
   align-items: center;
 }
 .hero h1 {
-  font-size: clamp(60px, 6.1vw, 90px);
+  font-size: clamp(58px, 5.8vw, 82px);
 }
 .hero h1 > span {
   white-space: nowrap;
 }
 .hero-copy {
+  min-width: 0;
   padding-block: 10px;
 }
 .hero .eyebrow {
@@ -303,9 +304,9 @@ select {
 }
 .hero-intro {
   font-size: 17px;
-  line-height: 1.8;
+  line-height: 1.7;
   max-width: 450px;
-  margin-top: 28px;
+  margin-top: 24px;
   color: #496657;
 }
 .hero-actions {
@@ -313,7 +314,44 @@ select {
   gap: 20px;
   align-items: center;
   flex-wrap: wrap;
-  margin: 32px 0 21px;
+  margin: 25px 0 18px;
+}
+.hero .hero-comparison {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+  margin: 24px 0 0;
+  padding: 18px 20px;
+  border: 1px solid #c6d2c3;
+  border-radius: 14px;
+  background: #fffdf7a8;
+}
+.hero-comparison .hero-comparison-label {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.035em;
+  line-height: 1.6;
+  color: #536b59;
+}
+.hero-comparison .hero-comparison-label span {
+  margin-inline: 5px;
+  color: var(--ink);
+}
+.hero .hero-comparison > strong {
+  font: 800 clamp(24px, 2.5vw, 34px)/1.2 var(--display);
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+}
+.hero .hero-comparison > span {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #496657;
+}
+.hero .hero-comparison > a {
+  font-size: 13px;
+  padding-block: 4px;
+  text-underline-offset: 4px;
 }
 .proposal-label {
   font-size: 11px;
@@ -434,6 +472,114 @@ select {
   font-weight: 600;
   color: var(--muted);
 }
+.quick-guide {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  padding-block: 8px 15px;
+}
+.quick-guide a {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  min-height: 92px;
+  padding: 17px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.quick-guide a:hover {
+  background: #e9eee1;
+  border-color: #91a58e;
+}
+.quick-guide a > span:last-child {
+  min-width: 0;
+}
+.quick-guide-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 35px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: var(--soft);
+  font-size: 22px;
+  line-height: 1;
+}
+.quick-guide strong,
+.quick-guide small {
+  display: block;
+}
+.quick-guide strong {
+  font-size: 14px;
+  line-height: 1.4;
+}
+.quick-guide small {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.resident-comparison .benefits-controls {
+  padding: 18px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.resident-comparison .benefits-controls label {
+  font-size: 13px;
+}
+.resident-comparison .benefits-controls select {
+  min-height: 46px;
+  font-size: 15px;
+}
+.idea-section .resident-comparison {
+  scroll-margin-top: 110px;
+}
+.idea-section .benefits-card h3 {
+  font-size: 17px;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+.idea-section .benefits-coverage,
+.idea-section .benefits-frequency {
+  font-family: var(--display);
+  font-variant-numeric: tabular-nums;
+}
+.idea-section .benefits-card small {
+  display: block;
+  line-height: 1.6;
+}
+.idea-section .resident-comparison summary {
+  min-height: 44px;
+  padding-block: 10px;
+}
+.comparison-caution {
+  margin: 0 0 32px;
+  padding: 16px 20px;
+  border-left: 3px solid #ba6949;
+  border-radius: 0 9px 9px 0;
+  background: #ede8de;
+  color: #4c5b50;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.comparison-caution a {
+  display: inline-block;
+  margin-left: 4px;
+  color: var(--ink);
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+.section-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-top: 30px;
+}
 .idea-section,
 .diagram-section,
 .schedule-section,
@@ -512,6 +658,13 @@ select {
   font-size: 15px;
   margin-right: 5px;
 }
+.route-metrics a {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  text-underline-offset: 4px;
+}
 .map-guide {
   display: flex;
   gap: 28px;
@@ -550,8 +703,8 @@ select {
   align-items: center;
   gap: 10px;
   padding: 17px 18px;
-  font-size: 9px;
-  letter-spacing: 0.07em;
+  font-size: 11px;
+  letter-spacing: 0.035em;
   font-weight: 700;
 }
 .map-toolbar > div {
@@ -562,9 +715,9 @@ select {
   background: transparent;
   border: 1px solid #d3dccc;
   border-radius: 6px;
-  min-height: 36px;
-  padding: 6px 8px;
-  font-size: 10px;
+  min-height: 44px;
+  padding: 8px 10px;
+  font-size: 12px;
   color: var(--ink);
 }
 #routeMap {
@@ -582,7 +735,7 @@ select {
   display: flex;
   gap: 15px;
   flex-wrap: wrap;
-  font-size: 10px;
+  font-size: 12px;
   padding: 16px;
   color: #49614f;
 }
@@ -649,11 +802,11 @@ select {
 .diagram-tabs button {
   border: 1px solid var(--line);
   border-radius: 7px;
-  min-height: 43px;
+  min-height: 46px;
   padding: 10px 14px;
   background: transparent;
   color: var(--ink);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
 }
 .explorer-tabs button {
@@ -697,11 +850,11 @@ select {
   margin: 14px 0;
 }
 .segmented button {
-  font-size: 11px;
+  font-size: 12px;
   border: 1px solid var(--line);
   border-radius: 6px;
   padding: 8px 11px;
-  min-height: 40px;
+  min-height: 44px;
   color: var(--ink);
   background: transparent;
 }
@@ -777,8 +930,8 @@ select {
   grid-column: 2;
   grid-row: 1/3;
   align-self: center;
-  font-size: 11px;
-  min-height: 40px;
+  font-size: 12px;
+  min-height: 44px;
   border: 0;
   border-radius: 6px;
   background: var(--ink);
@@ -1495,6 +1648,8 @@ tbody tr:nth-child(even) {
   display: flex;
   gap: 20px;
   font-size: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 .site-footer > div a {
   text-decoration: none;
@@ -1546,6 +1701,9 @@ tbody tr:nth-child(even) {
   }
   .hero h1 {
     font-size: 74px;
+  }
+  .quick-guide {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (max-width: 850px) {
@@ -1603,6 +1761,12 @@ tbody tr:nth-child(even) {
   }
   .hero-intro {
     font-size: 15px;
+  }
+  .hero .hero-comparison {
+    padding: 16px;
+  }
+  .hero .hero-comparison > strong {
+    font-size: 27px;
   }
   .hero-actions {
     gap: 12px;
@@ -1717,6 +1881,7 @@ tbody tr:nth-child(even) {
   }
   .site-footer > div {
     flex-direction: column;
+    align-items: flex-start;
     gap: 8px;
   }
 }
@@ -1733,7 +1898,7 @@ tbody tr:nth-child(even) {
     gap: 30px;
   }
   .hero h1 {
-    font-size: clamp(59px, 15vw, 76px);
+    font-size: clamp(46px, 15vw, 76px);
   }
   .hero .eyebrow {
     font-size: 10px;
@@ -1746,6 +1911,9 @@ tbody tr:nth-child(even) {
   }
   .hero-actions {
     margin: 25px 0 18px;
+  }
+  .hero .hero-comparison > strong {
+    font-size: clamp(24px, 7.2vw, 34px);
   }
   .button {
     font-size: 13px;
@@ -1800,6 +1968,48 @@ tbody tr:nth-child(even) {
     gap: 10px 20px;
     font-size: 10px;
     padding: 22px 20px;
+  }
+  .quick-guide {
+    gap: 10px;
+    padding-block: 0 8px;
+  }
+  .quick-guide a {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9px;
+    min-height: 124px;
+    padding: 14px;
+  }
+  .quick-guide-icon {
+    flex-basis: 30px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+  }
+  .quick-guide strong {
+    font-size: 13px;
+  }
+  .quick-guide small {
+    font-size: 11px;
+  }
+  .resident-comparison .benefits-controls {
+    padding: 15px;
+  }
+  .resident-comparison .benefits-controls select {
+    font-size: 16px;
+  }
+  .idea-section .benefits-card h3 {
+    font-size: 14px;
+  }
+  .idea-section .benefits-frequency {
+    font-size: 18px;
+    line-height: 1.3;
+  }
+  .comparison-caution {
+    padding: 14px 16px;
+  }
+  .comparison-caution a {
+    margin-left: 0;
   }
   .idea-section,
   .diagram-section,
@@ -1858,6 +2068,11 @@ tbody tr:nth-child(even) {
   .route-metrics strong {
     font-size: 13px;
   }
+  .route-metrics a {
+    flex-basis: 100%;
+    margin-left: 0;
+    padding-block: 6px;
+  }
   .map-guide {
     gap: 8px;
     justify-content: space-between;
@@ -1872,22 +2087,29 @@ tbody tr:nth-child(even) {
     margin-bottom: 7px;
   }
   .map-toolbar {
-    font-size: 9px;
+    flex-wrap: wrap;
+    font-size: 11px;
     padding: 12px;
   }
   .map-toolbar > span {
-    max-width: 110px;
+    max-width: none;
+  }
+  .map-toolbar > div {
+    width: 100%;
+  }
+  .map-toolbar > div button {
+    flex: 1;
   }
   .map-toolbar button {
-    font-size: 9px;
-    padding: 6px;
-    min-height: 38px;
+    font-size: 12px;
+    padding: 8px;
+    min-height: 44px;
   }
   #routeMap {
     height: 360px;
   }
   .map-legend {
-    font-size: 9px;
+    font-size: 11px;
     gap: 10px;
     padding: 13px;
   }
@@ -1901,7 +2123,8 @@ tbody tr:nth-child(even) {
     font-size: 19px;
   }
   .map-playback-bar button {
-    font-size: 10px;
+    min-height: 44px;
+    font-size: 12px;
     padding: 7px 8px;
   }
   .stop-detail {
@@ -1932,10 +2155,10 @@ tbody tr:nth-child(even) {
     grid-column: auto;
   }
   .journey-fields label {
-    font-size: 11px;
+    font-size: 13px;
   }
   .journey-fields select {
-    font-size: 12px;
+    font-size: 16px;
   }
   .journey-result {
     grid-template-columns: 1fr;
@@ -1959,13 +2182,13 @@ tbody tr:nth-child(even) {
   }
   .journey-inspect-actions button {
     width: 100%;
-    font-size: 11px;
+    font-size: 13px;
   }
   .journey-explanation {
     font-size: 12px;
   }
   .diagram-tabs button {
-    font-size: 11px;
+    font-size: 13px;
     padding: 10px 11px;
   }
   .diagram-hint {
@@ -2007,7 +2230,7 @@ tbody tr:nth-child(even) {
     gap: 10px;
   }
   .table-tools select {
-    font-size: 11px;
+    font-size: 14px;
     max-width: 175px;
   }
   .table-scroll,
@@ -2064,6 +2287,14 @@ tbody tr:nth-child(even) {
   }
   .coverage-statement > p {
     font-size: 14px;
+  }
+  .coverage-control label {
+    font-size: 13px;
+  }
+  .coverage-control select {
+    width: 100%;
+    max-width: none;
+    font-size: 16px;
   }
   .coverage-row > div:first-child {
     font-size: 13px;
@@ -2140,7 +2371,8 @@ tbody tr:nth-child(even) {
     font-size: 11px;
   }
   .site-footer > div {
-    font-size: 11px;
+    grid-column: 1/-1;
+    font-size: 12px;
     gap: 12px;
   }
 }
