@@ -8,6 +8,7 @@ import {
   NODO8_SCENES,
   playbackVisible,
   popupSiteRows,
+  stationMapFeature,
 } from "../dietro-l-analisi/journey-nodo8.mjs";
 import { buildLine, statesAt } from "../nodo8-line.mjs";
 import { validateCoverageComparison, coverageChangeLabel } from "../nodo8-coverage.mjs";
@@ -22,6 +23,17 @@ const data = JSON.parse(
 const coverageComparison = JSON.parse(readFileSync(new URL("../assets/nodo8-coverage-comparison.json", import.meta.url), "utf8"));
 const serviceComparison=JSON.parse(readFileSync(new URL("../assets/nodo8-service-comparison.json",import.meta.url),"utf8"));
 const coverageDiagnostic=JSON.parse(readFileSync(new URL("../assets/nodo8-coverage-diagnostic.json",import.meta.url),"utf8"));
+test("station point uses the single confirmed hub site without moving or mutating source coordinates",()=>{
+  const before=JSON.stringify(data),feature=stationMapFeature(data);
+  const site=data.sites.find(s=>s.hub_service_roles.length);
+  assert.deepEqual(feature.features[0].geometry.coordinates,site.coordinates_lon_lat);
+  assert.equal(feature.features[0].properties.site_id,site.site_id);
+  assert.equal(JSON.stringify(data),before);
+  const duplicate=structuredClone(data);duplicate.sites.find(s=>!s.hub_service_roles.length).hub_service_roles=["invented"];
+  assert.throws(()=>stationMapFeature(duplicate));
+  const invalid=structuredClone(data);invalid.sites.find(s=>s.hub_service_roles.length).coordinates_lon_lat=[NaN,45];
+  assert.throws(()=>stationMapFeature(invalid));
+});
 test("compact stop popups preserve all ordered occurrences and express durations in minutes and seconds",()=>{
   const line=buildLine(data);
   for(const site of data.sites) {

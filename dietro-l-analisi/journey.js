@@ -596,21 +596,37 @@
       type: "circle",
       source: "hub",
       paint: {
-        "circle-radius": 5.5,
+        "circle-radius": 12,
         "circle-color": "#ffffff",
         "circle-opacity": 1,
         "circle-stroke-width": 2,
         "circle-stroke-color": "#07131f",
       },
     });
-    const markerEl = document.createElement("div");
-    markerEl.className = "hub-marker";
-    markerEl.textContent = "FS";
-    markerEl.setAttribute("role", "img");
-    markerEl.setAttribute("aria-label", "Stazione Olgiate-Calco-Brivio FS");
-    new maplibregl.Marker({ element: markerEl, anchor: "center" })
-      .setLngLat([G.hub.lon, G.hub.lat])
-      .addTo(map);
+    // FS belongs to the geographic point itself, never a separately animated
+    // DOM marker. A local glyph sprite avoids a remote font/glyph dependency.
+    const stationGlyph = document.createElement("canvas");
+    stationGlyph.width = stationGlyph.height = 64;
+    const stationContext = stationGlyph.getContext("2d");
+    stationContext.fillStyle = "#153d34";
+    stationContext.font = "700 22px Arial, sans-serif";
+    stationContext.textAlign = "center";
+    stationContext.textBaseline = "middle";
+    stationContext.fillText("FS", 32, 33);
+    map.addImage("station-fs-text", stationContext.getImageData(0, 0, 64, 64), {pixelRatio:2});
+    addLayer({
+      id: "hub-fs-label",
+      type: "symbol",
+      source: "hub",
+      layout: {
+        "icon-image": "station-fs-text",
+        "icon-anchor": "center",
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "icon-pitch-alignment": "viewport",
+        "icon-rotation-alignment": "viewport",
+      },
+    });
     layersReady = true;
   }
 

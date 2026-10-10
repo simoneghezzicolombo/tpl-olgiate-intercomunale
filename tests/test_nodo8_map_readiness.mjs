@@ -6,6 +6,47 @@ import { waitForPreparedMap, storyMapPadding } from "../dietro-l-analisi/journey
 
 const explorerSource = readFileSync(new URL("../dietro-l-analisi/journey-explore-v2.js", import.meta.url), "utf8");
 const explorerRender = explorerSource.slice(explorerSource.indexOf("  function render() {"), explorerSource.indexOf("  function fit(force = false)"));
+test("FS is a centered glyph in the station map layer, never a separately moving DOM marker",()=>{
+  const source=readFileSync(new URL("../dietro-l-analisi/journey.js",import.meta.url),"utf8");
+  const block=source.slice(source.indexOf('    addLayer({\n      id: "hub",'),source.indexOf('    layersReady = true;'));
+  const layers=[],images=[],text=[];
+  const ctx={fillText:(...args)=>text.push(args),getImageData:()=>({width:64,height:64})};
+  const canvas={getContext:()=>ctx};
+  runInNewContext(block,{
+    document:{createElement:tag=>{assert.equal(tag,"canvas");return canvas;}},
+    map:{addImage:(...args)=>images.push(args)},addLayer:layer=>layers.push(layer),
+  });
+  assert.equal(layers[0].paint["circle-radius"],12);
+  assert.equal(layers[0].source,"hub");
+  assert.equal(layers[1].source,"hub");
+  assert.equal(layers[1].layout["icon-anchor"],"center");
+  assert.equal(layers[1].layout["icon-pitch-alignment"],"viewport");
+  assert.equal(images[0][0],"station-fs-text");assert.equal(images[0][2].pixelRatio,2);
+  assert.deepEqual(text,[["FS",32,33]]);
+  assert.doesNotMatch(source,/hub-marker|new maplibregl\.Marker/);
+  assert.match(explorerSource,/const a = \["nodo8-station-point"\]/);
+  assert.match(explorerSource,/find\("nodo8-station-point"\) \|\| find\("nodo8-sites"\)/);
+});
+test("exploration basemap stays faint in both preview and interactive mode",()=>{
+  const block=explorerRender.slice(explorerRender.indexOf('    if (map.getLayer("carto"))'),explorerRender.indexOf('    const walkNetworks ='));
+  for(const interactive of [false,true]) {
+    const writes=[];
+    runInNewContext(block,{interactive,map:{getLayer:()=>true,setPaintProperty:(...args)=>writes.push(args)}});
+    assert.equal(writes.find(([,p])=>p==="raster-opacity")[2],.16);
+    assert.equal(writes.find(([,p])=>p==="raster-brightness-max")[2],.38);
+  }
+});
+test("changing explorer control tabs preserves the running shared clock",()=>{
+  const block=explorerSource.slice(explorerSource.indexOf('    const chooseTab ='),explorerSource.indexOf('    tabs.forEach((tab, index) =>'));
+  const panels={orario:{hidden:false},mappa:{hidden:true}},selected={};
+  const tabs=["orario","mappa"].map(id=>({id,setAttribute:(key,v)=>selected[id+key]=v,getAttribute:()=>id}));
+  runInNewContext(block+'\nchooseTab(tabs[1]);chooseTab(tabs[0]);',{
+    tabs,document:{getElementById:id=>panels[id]},
+    window:{__analysisJourneyNodo8:{pauseExplorer(){throw new Error("Must not stop clock");}}},
+  });
+  assert.equal(panels.orario.hidden,false);assert.equal(panels.mappa.hidden,true);
+  assert.doesNotMatch(block,/pauseExplorer|setInterval|requestAnimationFrame/);
+});
 function renderWrites(scene) {
   const writes = [];
   runInNewContext(explorerRender + "\nrender();", {
