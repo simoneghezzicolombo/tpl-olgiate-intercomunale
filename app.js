@@ -16,7 +16,7 @@ import {
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "./nodo8-experience.mjs?v=20261010f";
+} from "./nodo8-experience.mjs?v=20261010g";
 let activePlayer = null,
   activeMap = null,
   currentLine = null,

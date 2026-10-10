@@ -3,13 +3,13 @@ import { buildLine, diagramStops, siteTimetable, siteDisplayName } from "../nodo
 import { nextCurrentPresentationStop } from "../nodo8-current-playback.mjs?v=20261010f";
 import { stopLink } from "../nodo8-stop-times.mjs?v=20261010f";
 import { journeyDurationLabel } from "../nodo8-journey-inspector.mjs?v=20261010f";
-import { installS8 } from "../nodo8-s8.mjs?v=20261010b";
+import { installS8 } from "../nodo8-s8.mjs?v=20261010g";
 import { installCurrent } from "../nodo8-current.mjs?v=20261010f";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
-} from "../nodo8-experience.mjs?v=20261010f";
+} from "../nodo8-experience.mjs?v=20261010g";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
@@ -256,6 +256,9 @@ async function installNodo8() {
       lastScene = null;
     let explorerPlayer = null;
     let rail = null;
+    // Keep the requested comparison extent when switching layers, so hiding
+    // S8 cannot jump the clock back into the bus operating window.
+    let railComparisonWindow = null;
     let current = null;
     const currentVisible = () => current !== null && document.body.dataset.scene === "explore" &&
       window.__analysisJourneyExplore?.isActive() === true && window.__analysisJourneyExplore?.layers.current === true;
@@ -335,7 +338,7 @@ async function installNodo8() {
       });
     };
     const renderExplorer = ({ visible, showStops, active }) => {
-      if (!visible && popup) {
+      if ((!visible || !active) && popup) {
         popup.remove();
         popup = null;
       }
@@ -388,13 +391,18 @@ async function installNodo8() {
       element.querySelector(".maplibregl-popup-close-button")
         ?.setAttribute("aria-label", "Chiudi informazioni sulla mappa");
       const openedPopup = popup;
+      openedPopup.on("close", () => {
+        if (popup === openedPopup) popup = null;
+        if (document.body.classList.contains("is-map-exploring") &&
+            (document.activeElement === document.body || element.contains(document.activeElement)) &&
+            previousFocus?.isConnected && !element.contains(previousFocus))
+          previousFocus.focus({ preventScroll: true });
+      });
       element.addEventListener("keydown", (event) => {
         if (event.key !== "Escape") return;
         event.preventDefault();
         event.stopPropagation();
         openedPopup.remove();
-        if (previousFocus?.isConnected && !element.contains(previousFocus))
-          previousFocus.focus({ preventScroll: true });
       });
       heading.focus({ preventScroll: true });
     };
@@ -535,6 +543,10 @@ async function installNodo8() {
           nextPresentationStop: (from, to) => currentVisible()
             ? nextCurrentPresentationStop(current.playback, from, to,
                 document.querySelector("#currentRouteChoice")?.value || "ALL") : null,
+          getComparisonWindow: () => {
+            if (railVisible()) railComparisonWindow = rail.playbackWindow;
+            return railComparisonWindow;
+          },
         },
       );
       document.documentElement.dataset.nodo8ExplorerPlaybackReady = "true";

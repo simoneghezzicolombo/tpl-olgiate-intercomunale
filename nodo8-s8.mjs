@@ -90,6 +90,10 @@ export async function installS8(map) {
     paint: {"line-color": S8_COLOUR, "line-width": 3, "line-opacity": 0}}, "nodo8-glow");
   const markers = new Map();
   return {
+    playbackWindow: {
+      start: Math.min(...rail.trains.map(t => t.calls[0].arrival_min)),
+      end: Math.max(...rail.trains.map(t => t.calls.at(-1).departure_min)),
+    },
     localCoordinates: rail.segments.flatMap(s => s.coordinates),
     render({minute, visible}) {
       map.setPaintProperty("s8-local-route", "line-opacity", visible ? 0.9 : 0);

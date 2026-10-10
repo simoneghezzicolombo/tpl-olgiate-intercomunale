@@ -26,7 +26,7 @@ try {
   // The exploration epilogue must exist before journey.js snapshots the chapter
   // list, otherwise it would not participate in the scroll director.
   await import("./journey-explore-prelude.js?v=20261010b");
-  await import("./journey.js?v=20261010d");
+  await import("./journey.js?v=20261010g");
   await import("./journey-director.js?v=20261010b");
   await import("./journey-lens.js?v=20261010b");
 
@@ -34,7 +34,7 @@ try {
   // KML LineStrings. Do not route, snap or repair D184/D185 through Gate D.
   await import("./journey-lineage.js?v=20261010b");
   await import("./journey-current-kml-exact.mjs?v=20261010b");
-  await import("./journey-explore-v2.js?v=20261010f");
+  await import("./journey-explore-v2.js?v=20261010g");
 } catch (error) {
   window.__analysisJourneyBootError = true;
   document.body.classList.add("journey-runtime-unavailable");
@@ -47,7 +47,7 @@ try {
   document.body.appendChild(notice);
   console.error("Journey runtime unavailable", error);
 }
-await import("./journey-nodo8.mjs?v=20261010f");
+await import("./journey-nodo8.mjs?v=20261010g");
 const { initBenefits } = await import("../nodo8-benefits.mjs?v=20261010b");
 await initBenefits({base:"../",rootHref:"../index.html"});
 window.ScrollTrigger?.refresh();

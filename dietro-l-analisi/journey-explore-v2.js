@@ -147,7 +147,9 @@
   }
   function show(lngLat, html) {
     if (popup) popup.remove();
+    const previousFocus = document.activeElement;
     popup = new maplibregl.Popup({
+      className: "journey-map-popup",
       closeButton: true,
       closeOnClick: false,
       maxWidth: "320px",
@@ -156,6 +158,27 @@
       .setLngLat(lngLat)
       .setHTML(html)
       .addTo(map);
+    const openedPopup = popup, element = popup.getElement();
+    const heading = element.querySelector(".map-card__title");
+    heading.id = "journey-map-popup-heading";
+    heading.tabIndex = -1;
+    element.setAttribute("role", "dialog");
+    element.setAttribute("aria-labelledby", heading.id);
+    element.querySelector(".maplibregl-popup-close-button")
+      ?.setAttribute("aria-label", "Chiudi informazioni sulla mappa");
+    openedPopup.on("close", () => {
+      if (popup === openedPopup) popup = null;
+      if (active && (document.activeElement === document.body || element.contains(document.activeElement)) &&
+          previousFocus?.isConnected && !element.contains(previousFocus))
+        previousFocus.focus({ preventScroll: true });
+    });
+    element.addEventListener("keydown", event => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      event.stopPropagation();
+      openedPopup.remove();
+    });
+    heading.focus({ preventScroll: true });
   }
 
   function buildRouteLayers() {
@@ -424,7 +447,7 @@
     controls.id = "journeyExplorerControls";
     controls.className = "explore-controls";
     controls.innerHTML = `<div class="explore-controls__head"><div><strong>Esplora Nodo8</strong><small>Simulazione</small></div><div class="explore-head-actions"><button type="button" data-action="collapse" aria-expanded="true" aria-controls="exploreControlsBody" aria-label="Riduci i controlli per vedere la mappa">−</button><button class="explore-controls__exit" data-action="exit" type="button">Racconto</button></div></div>
-      <div class="explore-mini" hidden><div><output id="exploreMiniClock" aria-label="Ora simulata">07:35:00</output><small id="exploreMiniNetworks">Nodo8</small></div><button type="button" data-action="mini-play" aria-label="Riproduci simulazione">▶</button></div>
+      <div class="explore-mini" hidden><div><output id="exploreMiniClock" aria-label="Ora simulata">07:35:00</output><small id="exploreMiniDay" hidden></small><small id="exploreMiniNetworks">Nodo8</small></div><button type="button" data-action="mini-play" aria-label="Riproduci simulazione">▶</button></div>
       <div id="exploreControlsBody">
       <div class="explore-networks" aria-label="Linee sulla mappa">
         <button data-layer="nodo8" class="is-active" type="button"><i style="--c:#55e1bf"></i><span>Nodo8<small>La proposta</small></span><b aria-hidden="true">✓</b></button>
@@ -448,7 +471,7 @@
       <details id="exploreTechnical" class="explore-technical"><summary>Dati e metodo</summary>
         <h4>Nodo8</h4><p>Orario di progetto 2027, 16 giri completi sullo stesso percorso. B1–B4 sono quattro mezzi di modello, non turni assegnati. Sosta prevista di 30 secondi alle fermate, attesa a FS e recupero di 10 minuti dopo il rientro. Movimento interpolato lungo il tracciato; non GPS, velocità osservata o traffico reale. La prosecuzione passeggeri sullo stesso bus a FS resta da autorizzare.</p>
         <h4>D184 e D185</h4><p>GTFS ufficiale 2025/26: tutte le 34 corse del feriale 28 aprile 2026, prima della deviazione per la chiusura del ponte di Brivio. È una fotografia storica, non l’orario più recente 2026/27. Le icone rappresentano corse, non mezzi fisici. La ricostruzione allinea le fermate al loro tracciato rispettando l’ordine; 374 orari della fonte sono conservati e 48 tempi intermedi incoerenti sono stimati per l’animazione, fra gli orari conservati. Non riproduce quindi esattamente tutti gli orari alle fermate: nei 48 eventi stimati lo scarto massimo è 3 min 33 s. Anche tra orari conservati la posizione è interpolata lungo la strada, non una posizione certificata al secondo. Partenze e arrivi finali restano invariati. Nessun orario ufficiale viene riscritto, né vengono aggiunte soste agli orari. Per rendere visibili le fermate, la riproduzione fa una breve pausa di 0,6 secondi sullo schermo: anche il tempo e gli altri veicoli si fermano. Non è una durata di sosta del bus. Il modello non supera 90 km/h medi per intervallo: è un controllo grafico, non una certificazione stradale o della velocità reale. Ai ritorni, FS usa il termine del tracciato in stazione; le partenze da FS via Statale restano sulla Statale. Questi riferimenti di animazione non certificano o spostano le paline GTFS usate dal livello pedonale.</p><a href="../index.html#confronto">Confronto con gli orari 2026/27 ↗</a>
-        <h4>Fonti ferroviarie</h4><p id="s8SourceNote">S8: orari Trenord del 1 ottobre 2026, 74 corse, percorso ferroviario OpenStreetMap Milano Porta Garibaldi–Lecco. Posizioni interpolate, non GPS. Nessuna validità futura o coincidenza garantita.</p>
+        <h4>Fonti ferroviarie</h4><p id="s8SourceNote">S8: orari Trenord del 1 ottobre 2026, 74 corse, percorso ferroviario OpenStreetMap Milano Porta Garibaldi–Lecco. Posizioni interpolate, non GPS. Nessuna validità futura o coincidenza garantita. Accendendo S8, lo slider comprende tutte le sue corse: dalle 05:06 alle 00:26 del giorno successivo. La fascia resta disponibile finché la pagina è aperta, anche se poi nascondi S8; non estende il servizio Nodo8.</p>
         <h4>Accessibilità e territorio</h4><p>I minuti a piedi usano solo le fermate delle linee bus accese. Con più linee, si considera la fermata più vicina nella loro unione; S8 non contribuisce. Modello pedonale RT028 congelato, 80 m/min e connettori, su 4.283 unità di popolazione stimate RT016. Grigio significa cammino non calcolabile nel modello; 12 fermate esterne D185 non si collegano al grafo congelato. Non una verifica di accessibilità universale, frequenza, direzione di viaggio o domanda. La rete stradale è quella dello studio, non una certificazione di percorribilità con bus.</p>
       </details>
       <div class="explore-controls__footer"><div class="explore-controls__hint">Clicca le fermate sulla mappa.</div><div class="explore-controls__layers"><button data-action="clear" type="button">Spegni tutto</button><button data-action="reset" type="button">↺ Inquadra</button></div></div></div>`;
@@ -736,6 +759,7 @@
     fitted = true;
   }
   function interactions(on) {
+    document.getElementById("map")?.setAttribute("aria-hidden", String(!on));
     if (on) {
       map.dragPan?.enable();
       map.scrollZoom?.enable();
@@ -781,6 +805,7 @@
       popup.remove();
       popup = null;
     }
+    document.dispatchEvent(new Event("journey-story-resume"));
     render();
   }
 
@@ -933,19 +958,12 @@
         }
         return window.__analysisJourneyNodo8?.showSite(f.properties.site_id);
       }
-      if ((f = find("nodo8-hit"))) {
-        if (popup) {
-          popup.remove();
-          popup = null;
-        }
-        return window.__analysisJourneyNodo8?.showRoute(e.lngLat);
-      }
       if ((f = find("explore-final-anchors")))
         return inspect("anchor", f, e.lngLat);
       if ((f = find("explore-current-stops")))
         return inspect("stop", f, e.lngLat);
       if ((f = find("current-dated-stops")))
-        return show(e.lngLat,card("Fermata D184 / D185", f.properties.name,
+        return show(e.lngLat,card("Fermata " + f.properties.route, f.properties.name,
           "",[f.properties.route]));
       if ((f = find("candidates"))) return inspect("candidate", f, e.lngLat);
       if ((f = find("explore-active-walk"))) {
@@ -963,6 +981,14 @@
       if ((f = find("worldpop-columns")))
         return inspect("worldpop", f, e.lngLat);
       if ((f = find("road-network"))) return inspect("road", f, e.lngLat);
+      // A stop or data point must win over an overlapping route hit area.
+      if ((f = find("nodo8-hit"))) {
+        if (popup) {
+          popup.remove();
+          popup = null;
+        }
+        return window.__analysisJourneyNodo8?.showRoute(e.lngLat);
+      }
       const finals = hits.filter((x) => x.layer.id === "explore-final-hit");
       if (finals.length) {
         const uniq = [
@@ -1066,6 +1092,22 @@
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && active) exit();
     });
+    // Explicit navigation leaves exploration; layout refreshes do not.
+    document.addEventListener("click", event => {
+      const link = event.target.closest?.('a[href^="#"]');
+      if (active && link && link.getAttribute("href") !== "#esplora-mappa") exit();
+    }, true);
+    window.addEventListener("hashchange", () => {
+      if (active && location.hash !== "#esplora-mappa") {
+        exit();
+        window.ScrollTrigger?.update();
+      }
+    });
+    window.addEventListener("resize", () => requestAnimationFrame(() => {
+      if (!active) return;
+      map.resize?.();
+      fit(true);
+    }));
     new MutationObserver(sceneChanged).observe(document.body, {
       attributes: true,
       attributeFilter: ["data-scene"],
@@ -1080,10 +1122,15 @@
       enter,
       exit,
       isActive: () => active,
-      updateClock: ({playing}) => {
+      updateClock: ({playing,minute}) => {
         const text = controls.querySelector("#explorePlayback .n8-clock")?.textContent;
         const output = controls.querySelector("#exploreMiniClock");
         if (text && output.textContent !== text) output.textContent = text;
+        const day = Math.floor(minute / 1440);
+        output.setAttribute("aria-label", "Ora simulata" + (day ? ` · +${day} giorno` : ""));
+        const dayLabel = controls.querySelector("#exploreMiniDay");
+        dayLabel.hidden = day === 0;
+        if (day) dayLabel.textContent = `+${day} giorno`;
         const button = controls.querySelector('[data-action="mini-play"]');
         const icon = playing ? "Ⅱ" : "▶";
         if (button.textContent !== icon) button.textContent = icon;

@@ -76,7 +76,7 @@ export function updateBusMarker(element, state, { showCarrier = false } = {}) {
   element.setAttribute("aria-label", element.title);
 }
 
-export { mountPlayer } from "./nodo8-player.mjs?v=20261010f";
+export { mountPlayer } from "./nodo8-player.mjs?v=20261010g";
 
 export function mountRoadPreview(line) {
   const host = node("div", "n8-road-preview"),

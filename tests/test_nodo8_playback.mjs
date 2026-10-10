@@ -626,6 +626,33 @@ test("public stop rename keeps source identities, coordinates and data unchanged
   assert.equal(JSON.stringify(data),before);
 });
 
+test("rail comparison exposes every supported S8 call, including next day, without changing the bus day or clock",()=>{
+  withPlayerDom(({host})=>{
+    const before=JSON.stringify(data), rail=buildRail(s8Data);
+    const window={start:Math.min(...rail.trains.map(t=>t.calls[0].arrival_min)),end:Math.max(...rail.trains.map(t=>t.calls.at(-1).departure_min))};
+    assert.deepEqual(window,{start:306,end:1466});
+    let comparison=null,state;
+    const player=mountPlayer(host,line,update=>{state=update;},{overviewOnly:true,getComparisonWindow:()=>comparison});
+    const range=host.children.find(c=>c.tagName==="input");
+    assert.equal(Number(range.min),365);assert.equal(player.getMinute(),455);
+    comparison=window;player.render();
+    assert.equal(Number(range.min),306);assert.equal(Number(range.max),1466);
+    assert.equal(player.getMinute(),455,"enabling rail changes extent, not selected clock");
+    for(const train of rail.trains) for(const call of train.calls) {
+      assert.ok(call.arrival_min>=Number(range.min));assert.ok(call.departure_min<=Number(range.max));
+    }
+    player.jump(306);
+    assert.ok(state.states.every(s=>s.status==="off-service"&&s.coordinates===null));
+    player.jump(1465);
+    assert.equal(state.minute,1465);assert.ok(state.states.every(s=>s.status==="off-service"));
+    assert.equal(playerElement(host,"n8-clock").textContent,"00:25:00");
+    assert.equal(playerElement(host,"n8-clock-caption").textContent,"Ora simulata · +1 giorno");
+    assert.equal(range.getAttribute("aria-valuetext"),"00:25:00 · +1 giorno");
+    assert.equal(JSON.stringify(data),before);
+    comparison={start:500,end:499};assert.throws(()=>player.render(),/comparison clock extent/);
+  });
+});
+
 test("overview player forces the four-bus day and omits trip controls and repeated explanations", () => {
   withPlayerDom(({ host }) => {
     let state;

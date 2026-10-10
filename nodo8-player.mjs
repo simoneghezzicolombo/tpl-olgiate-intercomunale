@@ -1,5 +1,6 @@
 import {
   statesAt,
+  vehicleState,
   clockSeconds,
   playbackWindow,
   adjacentEvent,
@@ -19,6 +20,10 @@ const button = (text, cls, action) => {
   return b;
 };
 const hhmm = (m) => clockSeconds(m).slice(0, 5);
+const displayClock = (minute, seconds = true) => {
+  const day = Math.floor(minute / 1440), clock = clockSeconds(minute % 1440);
+  return (seconds ? clock : clock.slice(0, 5)) + (day ? ` · +${day} giorno` : "");
+};
 const text = (node, value) => {
   if (node.textContent !== value) node.textContent = value;
 };
@@ -37,6 +42,7 @@ export function mountPlayer(
     initialSelection = "1",
     initialMinute = null,
     nextPresentationStop = null,
+    getComparisonWindow = null,
   } = {},
 ) {
   const prefix = container.id || "n8-player";
@@ -307,7 +313,13 @@ export function mountPlayer(
     jump(at ?? bounds().start);
   }
   function bounds() {
-    return playbackWindow(line, selection);
+    const base = playbackWindow(line, selection);
+    const comparison = overviewOnly ? getComparisonWindow?.() : null;
+    if (!comparison) return base;
+    if (!Number.isFinite(comparison.start) || !Number.isFinite(comparison.end) ||
+        comparison.start < 0 || comparison.end < comparison.start)
+      throw new Error("Invalid comparison clock extent");
+    return {...base, start: Math.min(base.start, comparison.start), end: Math.max(base.end, comparison.end)};
   }
   function focusVehicle(value) {
     if (!overviewOnly) return;
@@ -341,7 +353,12 @@ export function mountPlayer(
   }
   function render(force = true) {
     const b = bounds(),
-      states = statesAt(line, minute),
+      // A wider comparison clock does not extend Nodo8 service. Its existing
+      // vehicle blocks yield off-service states with no invented position.
+      states = overviewOnly && getComparisonWindow && minute >= b.start && minute <= b.end &&
+          (minute < line.start || minute > line.end)
+        ? line.vehicles.map(vehicle => vehicleState(line, vehicle, minute))
+        : statesAt(line, minute),
       chosen = b.trip && states.find((s) => s.trip === b.trip.number);
     const update = {
       minute,
@@ -367,14 +384,15 @@ export function mountPlayer(
       return;
     }
     previousUiKey = uiKey;
-    if (previousBoundsSelection !== selection) {
-      previousBoundsSelection = selection;
+    const boundsKey = `${selection}:${b.start}:${b.end}`;
+    if (previousBoundsSelection !== boundsKey) {
+      previousBoundsSelection = boundsKey;
       range.min = b.start;
       range.max = b.end;
       startLimit.textContent =
-        hhmm(b.start) + (overviewOnly ? "" : " · partenza");
+        displayClock(b.start, false) + (overviewOnly ? "" : " · partenza");
       endLimit.textContent =
-        hhmm(b.end) +
+        displayClock(b.end, false) +
         (overviewOnly
           ? ""
           : b.trip
@@ -382,8 +400,11 @@ export function mountPlayer(
             : " circa · fine recupero");
     }
     range.value = minute;
-    range.setAttribute("aria-valuetext", clockSeconds(minute));
-    text(time, clockSeconds(minute));
+    range.setAttribute("aria-valuetext", displayClock(minute));
+    text(time, clockSeconds(minute % 1440));
+    const day = Math.floor(minute / 1440);
+    text(clockCaption, "Ora simulata" + (day ? ` · +${day} giorno` : ""));
+    time.title = displayClock(minute);
     tripMode.setAttribute("aria-pressed", String(!!b.trip));
     dayMode.setAttribute("aria-pressed", String(!b.trip));
     container.dataset.view = b.trip ? "trip" : "day";
