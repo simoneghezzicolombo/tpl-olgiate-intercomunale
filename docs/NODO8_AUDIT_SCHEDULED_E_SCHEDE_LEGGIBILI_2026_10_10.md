@@ -41,3 +41,12 @@ Browser a 375 px: scheda di San Zeno interamente contenuta nella finestra (x 61â
 Verificata anche Olgiate sud a 375 px: entrambe le occorrenze 15/28 presenti, fondo chiaro e nessun overflow. Su smartphone, mentre una scheda Nodo8 Ã¨ aperta, i controlli dell'esplorazione vengono temporaneamente nascosti per non coprirne la parte inferiore. Chiudere la scheda restituisce gli stessi controlli e non cambia orologio, linee o selezione.
 
 FS nel livello cartografico e OSM tenue della precedente revisione sono mantenuti. Nessuna modifica a fonti, percorso, fermate, chilometri, calendario, autorizzazioni o risultati della proposta. I file non tracciati estranei restano esclusi.
+
+## Riscontro pubblico
+
+- Implementazione `e6d775eded87097bf78cdc624e733a22910d0e57`; revisione Pages `4f88dcef7f84c8209efdf635eb81562bf751675d`.
+- [CI e pubblicazione](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/38060131798): successo sulla revisione indicata.
+- Tutti gli 88 file pubblicati verificati via HTTP contro il manifest SHA-256: zero differenze, due pagine HTML.
+- Browser pubblico: sfondo crema effettivo della scheda San Zeno, due righe conservate, metodo chiuso, nessun errore o avviso in console. Nella pagina principale, le durate corrispondenti sono 2 min 33 s / 37 min 44 s e 37 min 22 s / 2 min 54 s.
+- Zero vecchi `.hub-marker`; FS usa il livello della stazione della proposta. Footer nascosto in Esplora, dati e fonti immutati.
+- Prova visiva: `cache/nodo8-website-preview/nodo8-popup-20261010e-public.png`. Le dimensioni temporanee di verifica sono state ripristinate al desktop.
