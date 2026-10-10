@@ -6,6 +6,97 @@ import { waitForPreparedMap, storyMapPadding } from "../dietro-l-analisi/journey
 
 const explorerSource = readFileSync(new URL("../dietro-l-analisi/journey-explore-v2.js", import.meta.url), "utf8");
 const explorerRender = explorerSource.slice(explorerSource.indexOf("  function render() {"), explorerSource.indexOf("  function fit(force = false)"));
+
+test("story refresh cannot replace an active exploration scene or its running clock",()=>{
+  const source=readFileSync(new URL("../dietro-l-analisi/journey.js",import.meta.url),"utf8");
+  const code=source.slice(source.indexOf("  function updateActive(index)"),source.indexOf('  function restoreStoryChapter()'));
+  for(const exploring of [false,true]) {
+    const writes=[],node={classList:{toggle:(...args)=>writes.push(args)}};
+    runInNewContext(code+'\nupdateActive(0);',{
+      document:{body:{classList:{contains:name=>name==="is-map-exploring"&&exploring}}},
+      chapters:[{...node,dataset:{scene:"grid",label:"Dove viviamo"}}],railDots:[node],
+      hudIndex:{},hudName:{},setScene:scene=>writes.push(scene),
+    });
+    assert.equal(writes.length,exploring?0:3);
+  }
+  assert.match(explorerSource,/Explicit navigation leaves exploration/);
+  const resize=explorerSource.slice(explorerSource.indexOf('    window.addEventListener("resize"'),explorerSource.indexOf('    new MutationObserver(sceneChanged)'));
+  assert.match(resize,/fit\(true\)/);
+  assert.doesNotMatch(resize,/exit\(|pauseExplorer|jump\(|layers\[/);
+});
+
+test("leaving exploration restores the actual visible chapter after responsive layout changes",()=>{
+  const source=readFileSync(new URL("../dietro-l-analisi/journey.js",import.meta.url),"utf8");
+  const code=source.slice(source.indexOf("  function restoreStoryChapter()"),source.indexOf('  map.on("load"'));
+  const writes=[],events={};
+  runInNewContext(code,{innerHeight:800,
+    chapters:[{getBoundingClientRect:()=>({top:-700,bottom:-100})},{getBoundingClientRect:()=>({top:100,bottom:900})}],
+    updateActive:index=>writes.push(index),document:{addEventListener:(name,fn)=>events[name]=fn}});
+  events["journey-story-resume"]();assert.deepEqual(writes,[1]);
+  const exit=explorerSource.slice(explorerSource.indexOf("  function exit()"),explorerSource.indexOf("  function inspect("));
+  assert.ok(exit.indexOf('classList.remove("is-map-exploring")')<exit.indexOf('new Event("journey-story-resume")'));
+});
+
+test("proposal popup closes when leaving exploration even if the proposal layer stays enabled",()=>{
+  const source=readFileSync(new URL("../dietro-l-analisi/journey-nodo8.mjs",import.meta.url),"utf8");
+  const prefix=source.slice(source.indexOf("    const renderExplorer ="),source.indexOf('      document.documentElement.dataset.nodo8Visible'));
+  for(const [visible,active,shouldClose] of [[true,true,false],[true,false,true],[false,true,true],[false,false,true]]) {
+    const result={removed:0};
+    runInNewContext('let popup={remove:()=>result.removed++};\n'+prefix+'};\nrenderExplorer({visible,active});result.cleared=popup===null;',
+      {result,visible,active});
+    assert.equal(result.removed,Number(shouldClose));
+    assert.equal(result.cleared,shouldClose);
+  }
+});
+
+test("data and current-stop popups close with Escape and restore keyboard focus without exiting the map",()=>{
+  const code=explorerSource.slice(explorerSource.indexOf("  function show(lngLat, html)"),explorerSource.indexOf("  function buildRouteLayers()"));
+  const attributes={},events={},result={focusRestored:0,prevented:0,stopped:0};
+  const previousFocus={isConnected:true,focus(){document.activeElement=this;result.focusRestored++;}};
+  const document={body:{},activeElement:previousFocus};
+  const heading={focus(){document.activeElement=this;}};
+  const close={setAttribute:(name,value)=>attributes[name]=value};
+  const element={querySelector:s=>s===".map-card__title"?heading:close,
+    setAttribute:(name,value)=>attributes[name]=value,contains:n=>n===heading||n===close,
+    addEventListener:(name,listener)=>events[name]=listener};
+  class Popup {
+    constructor(options){result.options=options;this.events={};}
+    setLngLat(){return this;}setHTML(){return this;}addTo(){return this;}getElement(){return element;}
+    on(name,listener){this.events[name]=listener;return this;}
+    remove(){document.activeElement=document.body;this.events.close?.();}
+  }
+  const context={maplibregl:{Popup},map:{},document,active:true,popup:null};
+  runInNewContext(code+'\nshow([9,45],"<h3>Test</h3>");',context);
+  assert.equal(result.options.className,"journey-map-popup");
+  assert.equal(attributes.role,"dialog");assert.equal(attributes["aria-labelledby"],heading.id);
+  assert.equal(attributes["aria-label"],"Chiudi informazioni sulla mappa");
+  assert.equal(document.activeElement,heading);
+  events.keydown({key:"Escape",preventDefault:()=>result.prevented++,stopPropagation:()=>result.stopped++});
+  assert.equal(context.popup,null);assert.equal(result.focusRestored,1);
+  assert.equal(result.prevented,1);assert.equal(result.stopped,1);
+  assert.equal(document.activeElement,previousFocus);
+});
+
+test("interactive map allows touch panning and is exposed to assistive technology only in exploration",()=>{
+  const css=readFileSync(new URL("../dietro-l-analisi/journey-usability.css",import.meta.url),"utf8");
+  assert.match(css,/body\.is-map-exploring \.maplibregl-canvas\s*\{[^}]*touch-action:\s*none\s*!important/);
+  assert.match(css,/body\.is-map-exploring main > \.chapter\s*\{[^}]*visibility:\s*hidden/);
+  assert.match(css,/body\.is-map-exploring:has\(\.journey-map-popup\) #journeyExplorerControls/);
+  assert.match(css,/\.journey-map-popup \.maplibregl-popup-content\s*\{[^}]*background:\s*#f5f2e9\s*!important/);
+  const code=explorerSource.slice(explorerSource.indexOf("  function interactions(on)"),explorerSource.indexOf("  function enter()"));
+  const writes=[],handler={enable(){},disable(){},disableRotation(){}};
+  const map=Object.fromEntries(["dragPan","scrollZoom","doubleClickZoom","boxZoom","keyboard","touchZoomRotate","dragRotate"].map(name=>[name,handler]));
+  runInNewContext(code+'\ninteractions(true);interactions(false);',{
+    map,document:{getElementById:()=>({setAttribute:(...args)=>writes.push(args)})},
+  });
+  assert.deepEqual(writes,[["aria-hidden","false"],["aria-hidden","true"]]);
+});
+
+test("stop and walking points take precedence over an overlapping proposed-route hit area",()=>{
+  const click=explorerSource.slice(explorerSource.indexOf('      const find = (id) => hits.find'));
+  assert.ok(click.indexOf('find("current-dated-stops")')<click.indexOf('find("nodo8-hit")'));
+  assert.ok(click.indexOf('find("explore-active-walk")')<click.indexOf('find("nodo8-hit")'));
+});
 test("FS is a centered glyph in the station map layer, never a separately moving DOM marker",()=>{
   const source=readFileSync(new URL("../dietro-l-analisi/journey.js",import.meta.url),"utf8");
   const block=source.slice(source.indexOf('    addLayer({\n      id: "hub",'),source.indexOf('    layersReady = true;'));

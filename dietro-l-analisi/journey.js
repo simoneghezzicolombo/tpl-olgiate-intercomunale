@@ -873,12 +873,24 @@
   }
 
   function updateActive(index) {
+    // ScrollTrigger refreshes on resize and disclosure layout changes. They
+    // must not take over the map or pause its clock while the user explores.
+    if (document.body.classList.contains("is-map-exploring")) return;
     chapters.forEach((c, i) => c.classList.toggle("is-active", i === index));
     railDots.forEach((d, i) => d.classList.toggle("active", i === index));
     hudIndex.textContent = String(index + 1).padStart(2, "0");
     hudName.textContent = chapters[index].dataset.label;
     setScene(chapters[index].dataset.scene);
   }
+
+  function restoreStoryChapter() {
+    const index = chapters.findIndex(chapter => {
+      const rect = chapter.getBoundingClientRect();
+      return rect.top <= innerHeight * 0.55 && rect.bottom >= innerHeight * 0.45;
+    });
+    if (index >= 0) updateActive(index);
+  }
+  document.addEventListener("journey-story-resume", restoreStoryChapter);
 
   map.on("load", async () => {
     try {
