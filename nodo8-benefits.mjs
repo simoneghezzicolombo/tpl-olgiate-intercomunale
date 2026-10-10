@@ -1,4 +1,4 @@
-import { validateCoverageComparison, coverageChangeLabel } from "./nodo8-coverage.mjs?v=20261009b";
+import { validateCoverageComparison, coverageChangeLabel } from "./nodo8-coverage.mjs?v=20261010b";
 const fmt = n => new Intl.NumberFormat("it-IT",{maximumFractionDigits:2}).format(n);
 const maxGap = times => Math.max(...times.slice(1).map((t,i)=>t-times[i]));
 const duration = m => m >= 60 ? `${Math.floor(m/60)} h${m%60 ? ` ${m%60} min` : ""}` : `${m} min`;
@@ -71,7 +71,7 @@ export function mountBenefits(host,model,{prefix="benefits",rootHref="index.html
     "Vicinanza nel modello delle fermate, non passeggeri. Corse da FS nel feriale scolastico 2026/27 contro la proposta 2027, non corse sotto casa. Sono due misure affiancate, non un indice. Nodo8: banche di punta ogni 30 minuti, sfalsate; fuori punta fino a 120 minuti.");
   host.replaceChildren(controls,cards,delta,note,loss);
   const sources=node("details","benefits-sources"),s=node("summary","","Fonti, date e limiti");
-  sources.append(s,node("p","","Vicinanza: stesso modello pedonale RT028, fermate strutturali D184/D185 dal GTFS 2025/26 e siti di progetto Nodo8. Non sono passeggeri o percorsi accessibili certificati. Frequenza a FS: feriale scolastico degli orari ufficiali 2026/27 contro un feriale della proposta 2027, non un confronto annuale. 16 giri completi producono 16 ripartenze per ciascun anello, non 32 corse distinte. La simulazione dei vecchi bus usa invece il 6 maggio 2026."));
+  sources.append(s,node("p","","Vicinanza: stesso modello pedonale RT028, fermate strutturali D184/D185 dal GTFS 2025/26 e siti di progetto Nodo8. Non sono passeggeri o percorsi accessibili certificati. Frequenza a FS: feriale scolastico degli orari ufficiali 2026/27 contro un feriale della proposta 2027, non un confronto annuale. 16 giri completi producono 16 ripartenze per ciascun anello, non 32 corse distinte. In mappa, D184 e D185 rappresentano il 28 aprile 2026, prima della deviazione di Brivio, con i tempi intermedi stimati descritti in Dati e metodo."));
   for(const key of ["west","east"]){const a=node("a","",`Orario attuale ${model.service[key].route} ↗`);a.href=model.service[key].source_url;sources.append(a);}
   host.append(sources);
   const update=()=>{const v=benefitsView(model,municipality.value,threshold.value,direction.value);cards.replaceChildren();
@@ -98,7 +98,7 @@ export function mountPdbNote(host,service) {
 
 export async function initBenefits({base="",rootHref="index.html",proposal=null,coverage=null}={}) {
   try {
-    const load=async name=>{const r=await fetch(base+"assets/"+name+"?v=20261009b");if(!r.ok)throw new Error(name+" unavailable");return r.json();};
+    const load=async name=>{const r=await fetch(base+"assets/"+name+"?v=20261010b");if(!r.ok)throw new Error(name+" unavailable");return r.json();};
     const [p,c,s,d]=await Promise.all([proposal||load("nodo8-proposal.json"),coverage||load("nodo8-coverage-comparison.json"),load("nodo8-service-comparison.json"),load("nodo8-coverage-diagnostic.json")]);
     const model=validateBenefits(p,c,s,d);
     document.querySelectorAll("[data-resident-comparison]").forEach((host,i)=>mountBenefits(host,model,{prefix:`resident-${base?"story":"home"}-${i}`,rootHref}));

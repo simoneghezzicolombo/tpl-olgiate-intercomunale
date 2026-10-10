@@ -15,6 +15,9 @@ on:
       - nodo8-benefits.css
       - tests/test_nodo8_playback.mjs
       - tests/test_nodo8_active_walk.mjs
+      - tests/test_nodo8_current_geometry.mjs
+      - tests/test_nodo8_current_profile.mjs
+      - tests/test_nodo8_current_playback.mjs
       - tests/test_nodo8_diagrams.mjs
       - tests/test_nodo8_redesign.py
       - assets/nodo8-*.json
@@ -45,7 +48,7 @@ jobs:
       - name: Verify accessible presentation and immutable evidence
         run: python -m unittest discover -s tests -p test_nodo8_redesign.py -v
       - name: Verify current route projection
-        run: node --test tests/test_nodo8_journey.mjs tests/test_nodo8_playback.mjs tests/test_nodo8_map_readiness.mjs tests/test_nodo8_diagrams.mjs tests/test_nodo8_active_walk.mjs
+        run: node --test tests/test_nodo8_journey.mjs tests/test_nodo8_playback.mjs tests/test_nodo8_map_readiness.mjs tests/test_nodo8_diagrams.mjs tests/test_nodo8_active_walk.mjs tests/test_nodo8_current_geometry.mjs tests/test_nodo8_current_profile.mjs tests/test_nodo8_current_playback.mjs
       - name: Build only final-site dependencies
         run: python scripts/build_nodo8_publication.py --output _site --revision "${{ github.sha }}"
       - uses: actions/upload-pages-artifact@v4

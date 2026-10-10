@@ -7,6 +7,7 @@ import {
   validateNodo8,
   NODO8_SCENES,
   playbackVisible,
+  popupSiteRows,
 } from "../dietro-l-analisi/journey-nodo8.mjs";
 import { buildLine, statesAt } from "../nodo8-line.mjs";
 import { validateCoverageComparison, coverageChangeLabel } from "../nodo8-coverage.mjs";
@@ -21,6 +22,17 @@ const data = JSON.parse(
 const coverageComparison = JSON.parse(readFileSync(new URL("../assets/nodo8-coverage-comparison.json", import.meta.url), "utf8"));
 const serviceComparison=JSON.parse(readFileSync(new URL("../assets/nodo8-service-comparison.json",import.meta.url),"utf8"));
 const coverageDiagnostic=JSON.parse(readFileSync(new URL("../assets/nodo8-coverage-diagnostic.json",import.meta.url),"utf8"));
+test("compact stop popups preserve all ordered occurrences and express durations in minutes and seconds",()=>{
+  const line=buildLine(data);
+  for(const site of data.sites) {
+    const rows=popupSiteRows(line,site.site_id);
+    if(site.hub_service_roles.length) assert.deepEqual(rows.map(r=>r.role),["FULL_TRIP_START_FS","INTERMEDIATE_FS_STAY_ONBOARD_DESIGN","FULL_TRIP_END_FS"]);
+    else {
+      assert.deepEqual(rows.map(r=>r.ordinal),site.ordered_occurrences.map(e=>e.ordered_nonhub_event_number));
+      rows.forEach(r=>{assert.match(r.fromFs,/^\d+ min \d{2} s$/);assert.match(r.toFs,/^\d+ min \d{2} s$/);});
+    }
+  }
+});
 test("resident comparison keeps independent spatial and station metrics, including losses",()=>{
   const model=validateBenefits(data,coverageComparison,serviceComparison,coverageDiagnostic);
   for(const code of ["TOTAL",...data.municipalities.map(m=>m.code)]) for(const threshold of ["5","8","10"]) for(const direction of ["west","east"]) {
@@ -229,7 +241,7 @@ test("stop-to-shape offsets stay diagnostic and do not fabricate a position or d
   assert.equal(call.arrival_min, call.departure_min);
 });
 
-test("render keeps every active trip counted while withholding unsafe interval markers", async () => {
+test("reconciled renderer keeps every active trip visible without rewriting the raw clocks", async () => {
   const saved = {fetch:globalThis.fetch, window:globalThis.window, document:globalThis.document};
   const markers = new Set(), status = {hidden:true, textContent:""}, dataset = {};
   class Marker {
@@ -238,7 +250,9 @@ test("render keeps every active trip counted while withholding unsafe interval m
     addTo() {markers.add(this);return this;}
     remove() {markers.delete(this);}
   }
-  globalThis.fetch = async () => ({ok:true, json:async () => currentData});
+  const display = JSON.parse(readFileSync(new URL("../assets/nodo8-current-playback.json",import.meta.url),"utf8"));
+  const proposal = JSON.parse(readFileSync(new URL("../assets/nodo8-proposal.json",import.meta.url),"utf8"));
+  globalThis.fetch = async url => ({ok:true, json:async () => url.includes("current-playback") ? display : url.includes("proposal") ? proposal : currentData});
   globalThis.window = {maplibregl:{Marker}};
   globalThis.document = {documentElement:{dataset}, getElementById:() => status,
     createElement:() => ({dataset:{}, attributes:{}, setAttribute(name, value) {this.attributes[name] = value;}})};
@@ -251,10 +265,11 @@ test("render keeps every active trip counted while withholding unsafe interval m
     const active = currentTripsAt(currentData, minute);
     assert.equal(Number(dataset.currentBusCount), active.length);
     assert.equal(Number(dataset.currentBusMarkerCount), markers.size);
-    assert.equal(Number(dataset.currentBusUnreliablePositionCount), active.length - markers.size);
-    assert.ok(Number(dataset.currentBusUnreliablePositionCount) > 0);
-    assert.ok(![...markers].some(m => m.element.dataset.trip === trip.id));
-    assert.match(status.textContent, /posizion[ei] non affidabil[ei]/);
+    assert.equal(markers.size,active.length);
+    assert.equal(Number(dataset.currentBusWithheldPositionCount),0);
+    assert.equal(Number(dataset.currentBusEstimatedPositionCount),active.length);
+    assert.ok([...markers].some(m => m.element.dataset.trip === trip.id));
+    assert.doesNotMatch(status.textContent, /non affidabil/);
     assert.doesNotMatch(status.textContent, /2026|maggio|06\/05/);
     renderer.render({minute:trip.calls[1].arrival_min, visible:true});
     assert.ok([...markers].some(m => m.element.dataset.trip === trip.id));
@@ -262,6 +277,8 @@ test("render keeps every active trip counted while withholding unsafe interval m
     assert.equal(markers.size, 0);
     assert.equal(dataset.currentBusCount, "0");
     assert.equal(dataset.currentBusMarkerCount, "0");
+    assert.equal(dataset.currentPlaybackModel,"reconciled-v2");
+    assert.equal(dataset.currentPlaybackDate,"2026-04-28");
     assert.equal(status.hidden, true);
   } finally {
     for (const [key, value] of Object.entries(saved)) {

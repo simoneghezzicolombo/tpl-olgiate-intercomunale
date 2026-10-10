@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#153d34" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20261009b" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20261010b" />
     <title>Nodo8: da paese a paese</title>
     <meta
       name="description"
@@ -22,16 +22,16 @@
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
-    <link rel="stylesheet" href="nodo8-experience.css?v=20261009b" />
-    <link rel="stylesheet" href="nodo8-design.css?v=20261009b" />
-    <link rel="stylesheet" href="nodo8-benefits.css?v=20261009b" />
+    <link rel="stylesheet" href="nodo8-experience.css?v=20261010b" />
+    <link rel="stylesheet" href="nodo8-design.css?v=20261010b" />
+    <link rel="stylesheet" href="nodo8-benefits.css?v=20261010b" />
     <script
       defer
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
-    <script type="module" src="app.js?v=20261009b"></script>
+    <script type="module" src="app.js?v=20261010b"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Salta al contenuto</a>
@@ -49,7 +49,8 @@
         Menu <span aria-hidden="true">☰</span>
       </button>
       <nav id="siteNavigation" aria-label="Navigazione principale">
-        <a href="#percorso">Percorso</a><a href="#orario">Orari</a
+        <a href="#percorso">Percorso</a><a href="#viaggio">Viaggio</a
+        ><a href="#orario">Orari</a
         ><a href="#impatto">Copertura</a
         ><a class="process-link" href="dietro-l-analisi/">Il racconto ↗</a>
       </nav>
@@ -72,14 +73,19 @@
             Da paese<br />a paese.<br /><span>Con Nodo8.</span>
           </h1>
           <p class="hero-intro">
-            Oggi D184 e D185. Con Nodo8, un servizio locale per i cinque comuni:
-            fermate più vicine e più occasioni per partire.
+            Oggi D184 e D185. Con Nodo8, una proposta locale per i cinque comuni:
+            un solo giro, Olgiate FS al centro e quattro nuove fermate.
           </p>
-          <p class="benefits-teaser"><strong data-hero-coverage>Confronto in caricamento</strong><span>potenzialmente entro 10 minuti a piedi dalle fermate, nel modello</span><a href="#residentComparison" data-benefits-link>Confronta oggi e Nodo8 →</a></p>
+          <div class="benefits-teaser hero-comparison" aria-label="Vicinanza delle fermate: oggi e proposta">
+            <p class="hero-comparison-label">OGGI D184/D185 <span aria-hidden="true">→</span> PROPOSTA NODO8</p>
+            <strong data-hero-coverage>Confronto in caricamento</strong>
+            <span>popolazione potenzialmente entro 10 minuti a piedi dalle fermate, nel modello</span>
+            <a href="#residentComparison" data-benefits-link>Confronta il tuo comune →</a>
+          </div>
           <div class="hero-actions">
             <a class="button button-dark" href="#percorso"
               >Guarda dove passa ↘</a
-            ><a class="text-link" href="#viaggio">Esplora un viaggio →</a>
+            ><a class="text-link" href="#orario">Guarda gli orari →</a>
           </div>
           <p class="proposal-label">
             Nome di lavoro della Linea 8. Servizio da approvare.
@@ -115,18 +121,44 @@
         <span>Olgiate Molgora</span><span>Calco</span><span>Brivio</span
         ><span>Santa Maria Hoè</span><span>La Valletta Brianza</span>
       </div>
+      <nav class="quick-guide section-shell" aria-label="Esplora la proposta">
+        <a href="#percorso">
+          <span class="quick-guide-icon" aria-hidden="true">↗</span>
+          <span><strong>Dove passa?</strong><small>Percorso e fermate</small></span>
+        </a>
+        <a href="#orario">
+          <span class="quick-guide-icon" aria-hidden="true">◷</span>
+          <span><strong>Quando passa?</strong><small>Orario dei 16 giri</small></span>
+        </a>
+        <a href="#impatto">
+          <span class="quick-guide-icon" aria-hidden="true">◎</span>
+          <span><strong>Quanto è vicina?</strong><small>Copertura a piedi</small></span>
+        </a>
+        <a href="dietro-l-analisi/">
+          <span class="quick-guide-icon" aria-hidden="true">↳</span>
+          <span><strong>Perché questo giro?</strong><small>Il racconto delle scelte</small></span>
+        </a>
+      </nav>
       <section
         class="section-shell idea-section"
         id="idea"
         aria-labelledby="ideaTitle"
       >
         <div class="section-heading">
-          <p class="eyebrow">01 / UN’IDEA LOCALE</p>
+          <p class="eyebrow">01 / OGGI E CON NODO8</p>
           <h2 id="ideaTitle">
-            Una fermata vicina.<br /><span>Un bus più presente.</span>
+            Il confronto.<br /><span>A partire da te.</span>
           </h2>
+          <p>
+            Scegli il comune, quanto cammini e la direzione da Olgiate FS.
+            Confronta la vicinanza delle fermate e le partenze dalla stazione.
+          </p>
         </div>
         <div id="residentComparison" data-resident-comparison class="resident-comparison" aria-label="Confronto di vicinanza e corse fra situazione attuale e Nodo8"><p>Caricamento del confronto verificato…</p></div>
+        <p class="comparison-caution">
+          A 5 minuti, Brivio e Santa Maria Hoè perdono copertura nel modello.
+          <a href="#residentComparison" data-benefits-link data-benefits-threshold="5">Confronta a 5 minuti →</a>
+        </p>
         <div class="benefit-grid">
           <article>
             <span class="benefit-number" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="12" r="9"/><circle cx="20" cy="28" r="9"/><circle class="benefit-icon-dot" cx="20" cy="20" r="3"/></svg></span>
@@ -146,7 +178,7 @@
           </article>
           <article>
             <span class="benefit-number" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 36 C14 28 7 22 7 15 A13 13 0 0 1 33 15 C33 22 26 28 20 36Z"/><circle cx="20" cy="15" r="5"/></svg></span>
-            <h3>Più vicino a casa.</h3>
+            <h3>Quattro nuove fermate.</h3>
             <p>
               Quattro nuove fermate proposte: Olgiate sud, San Zeno, Arlate e
               Calco Centro. Da verificare sul posto.
@@ -169,6 +201,7 @@
           <div class="route-metrics">
             <span><strong>27,124 km</strong> per giro</span
             ><span><strong>27 fermate</strong> inclusa FS</span>
+            <a href="#viaggio">Calcola un viaggio →</a>
           </div>
           <div class="map-guide" aria-label="Come usare la mappa">
             <span><b>1</b> Scegli una fermata</span
@@ -600,6 +633,10 @@
             </div>
           </div>
           <p id="coverageLossHint" class="benefits-note" hidden>Il totale cresce anche a 5 minuti. I cali di Brivio e Santa Maria Hoè dipendono soprattutto dalla palina storica L00063, da Hoè e da Alpino, oltre a piccoli scarti di posizione. <a href="#residentComparison" data-benefits-link data-benefits-threshold="5">Vedi quali punti cambiano →</a></p>
+          <nav class="section-links" aria-label="Approfondisci la copertura">
+            <a class="text-link" href="#residentComparison">Confronta il tuo comune →</a>
+            <a class="text-link" href="#confronto">Cosa cambia nei viaggi →</a>
+          </nav>
           <details class="section-note">
             <summary>Metodo e limiti della stima</summary>
             <p>
@@ -799,6 +836,7 @@
       <p>Da paese a paese.<br />Un progetto per muoversi insieme.</p>
       <div>
         <a href="#percorso">Esplora il percorso</a
+        ><a href="#orario">Consulta gli orari</a
         ><a href="dietro-l-analisi/">Dietro l’analisi ↗</a
         ><a href="#proposta">Dati e limiti</a>
       </div>

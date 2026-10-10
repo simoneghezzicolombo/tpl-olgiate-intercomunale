@@ -1,13 +1,14 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine, diagramStops } from "../nodo8-line.mjs?v=20261009b";
-import { stopLink } from "../nodo8-stop-times.mjs?v=20261009b";
-import { installS8 } from "../nodo8-s8.mjs?v=20261009b";
-import { installCurrent } from "../nodo8-current.mjs?v=20261009b";
+import { buildLine, diagramStops, siteTimetable } from "../nodo8-line.mjs?v=20261010b";
+import { stopLink } from "../nodo8-stop-times.mjs?v=20261010b";
+import { journeyDurationLabel } from "../nodo8-journey-inspector.mjs?v=20261010b";
+import { installS8 } from "../nodo8-s8.mjs?v=20261010b";
+import { installCurrent } from "../nodo8-current.mjs?v=20261010b";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
-} from "../nodo8-experience.mjs?v=20261009b";
+} from "../nodo8-experience.mjs?v=20261010b";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
@@ -70,6 +71,32 @@ export function makeNodo8Features(data) {
   };
 }
 
+/* Popup rows follow the ledger's occurrence order. Duration fields remain the
+ * confirmed site-level values, rather than a journey inferred from one trip. */
+export function popupSiteRows(line, siteId) {
+  const { columns } = siteTimetable(line, siteId);
+  const site = line.sites.get(siteId);
+  const hubLabels = {
+    FULL_TRIP_START_FS: "Partenza del giro",
+    INTERMEDIATE_FS_STAY_ONBOARD_DESIGN: "Sosta intermedia",
+    FULL_TRIP_END_FS: "Arrivo finale",
+  };
+  return columns.map((column) => {
+    if (!column.ordinal)
+      return { key: column.key, role: column.role, label: hubLabels[column.role] };
+    const occurrence = site.ordered_occurrences.find(
+      (event) => event.occurrence_id === column.key,
+    );
+    return {
+      key: column.key,
+      role: column.role,
+      ordinal: column.ordinal,
+      fromFs: journeyDurationLabel(occurrence.nominal_fs_to_occurrence_in_vehicle_min),
+      toFs: journeyDurationLabel(occurrence.nominal_occurrence_to_next_fs_in_vehicle_min),
+    };
+  });
+}
+
 const colour = "#55e1bf";
 const historicalLayers = [
   "final16",
@@ -84,8 +111,17 @@ const historicalLayers = [
   "explore-final-hit",
   "explore-final-anchors",
 ];
-const number = (value) =>
-  Number(value).toLocaleString("it-IT", { maximumFractionDigits: 1 });
+const popupNode = (tag, className, text) => {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+};
+const popupDetails = (summary, text) => {
+  const details = popupNode("details", "nodo8-popup-method");
+  details.append(popupNode("summary", "", summary), popupNode("p", "", text));
+  return details;
+};
 
 function setStatus(message, failed = false) {
   document.querySelectorAll(".nodo8-load-status").forEach((node) => {
@@ -193,7 +229,7 @@ async function installNodo8() {
       window.__analysisJourneyExplore?.isActive() === true && window.__analysisJourneyExplore?.layers.current === true;
     installCurrent(map).then(installed => {
       current = installed;
-      window.__analysisJourneyCurrent = {installed:true,data:current.data};
+      window.__analysisJourneyCurrent = {installed:true,data:current.data,playback:current.playback.asset};
       document.documentElement.dataset.currentSimulationReady = "true";
       document.querySelectorAll('[data-layer="d184"], [data-layer="d185"]').forEach(button => {button.disabled = false;});
       window.__analysisJourneyExplore?.render();
@@ -261,7 +297,7 @@ async function installNodo8() {
                 top: 100, right: 70, bottom: 80, left: Math.min(680, innerWidth * 0.5),
               },
         maxZoom: 13.2,
-        pitch: 35,
+        pitch: document.body.classList.contains("is-map-exploring") ? 0 : 35,
         bearing: 0,
         duration: window.__analysisJourneyReduceMotion ? 0 : 650,
       });
@@ -300,64 +336,127 @@ async function installNodo8() {
         });
       }
     };
+    const openPopup = (card, lngLat) => {
+      if (popup) popup.remove();
+      const previousFocus = document.activeElement;
+      const heading = card.querySelector("h3");
+      heading.id = "nodo8-popup-heading";
+      heading.tabIndex = -1;
+      popup = new window.maplibregl.Popup({
+        className: "nodo8-map-popup",
+        maxWidth: "340px",
+        offset: 12,
+      })
+        .setLngLat(lngLat)
+        .setDOMContent(card)
+        .addTo(map);
+      const element = popup.getElement();
+      element.setAttribute("role", "dialog");
+      element.setAttribute("aria-labelledby", heading.id);
+      element.querySelector(".maplibregl-popup-close-button")
+        ?.setAttribute("aria-label", "Chiudi informazioni sulla mappa");
+      const openedPopup = popup;
+      element.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        event.preventDefault();
+        event.stopPropagation();
+        openedPopup.remove();
+        if (previousFocus?.isConnected && !element.contains(previousFocus))
+          previousFocus.focus({ preventScroll: true });
+      });
+      heading.focus({ preventScroll: true });
+    };
     const showSite = (siteId) => {
       const site = data.sites.find((row) => row.site_id === siteId);
       if (!site) return false;
-      if (popup) popup.remove();
-      const card = document.createElement("div");
-      const heading = document.createElement("h3");
-      heading.textContent = site.hub_service_roles.length
+      const isHub = site.hub_service_roles.length > 0;
+      const card = popupNode("div", "nodo8-popup-card");
+      const header = popupNode("div", "nodo8-popup-header");
+      header.append(popupNode("span", "nodo8-popup-eyebrow", "Nodo8 · proposta"));
+      if (site.proposed_new_site)
+        header.append(popupNode("span", "nodo8-popup-badge", "Nuova fermata"));
+      const heading = popupNode("h3", "", isHub
         ? "Olgiate FS"
-        : siteNames.get(site.site_id) || site.name;
-      const note = document.createElement("p");
-      note.textContent = site.proposed_new_site
-        ? "Nuova fermata proposta, da approvare."
-        : "Fermata censita. Punto di salita da verificare per Nodo8.";
-      card.append(heading, note);
-      site.ordered_occurrences.forEach((event) => {
-        const line = document.createElement("p");
-        line.textContent =
-          "Fermata " +
-          event.ordered_nonhub_event_number +
-          ": dalla stazione " +
-          number(event.nominal_fs_to_occurrence_in_vehicle_min) +
-          " min; alla stazione " +
-          number(event.nominal_occurrence_to_next_fs_in_vehicle_min) +
-          " min.";
-        card.append(line);
-      });
-      const limit = document.createElement("p");
-      limit.textContent = site.hub_service_roles.length
-        ? "Partenza, sosta intermedia e arrivo dello stesso giro; permanenza a bordo progettata, non autorizzata."
-        : "Tempi previsti sul bus, senza cammino o attesa. Passaggi diversi non sono viaggi intercambiabili.";
-      card.append(limit);
-      const times = document.createElement("a");
+        : siteNames.get(site.site_id) || site.name);
+      card.append(header, heading);
+      const rows = popupSiteRows(line, site.site_id);
+      if (isHub) {
+        const roles = popupNode("ol", "nodo8-popup-hub-roles");
+        rows.forEach((row) => roles.append(popupNode("li", "", row.label)));
+        card.append(roles);
+      } else {
+        const table = popupNode("table", "nodo8-popup-times");
+        const caption = popupNode("caption", "", "Tempi nominali sul bus");
+        const head = document.createElement("thead");
+        const headings = document.createElement("tr");
+        ["Nel giro", "Da FS", "Verso FS"].forEach((label) => {
+          const cell = popupNode("th", "", label);
+          cell.scope = "col";
+          headings.append(cell);
+        });
+        head.append(headings);
+        const body = document.createElement("tbody");
+        rows.forEach((row, index) => {
+          const record = document.createElement("tr");
+          const label = document.createElement("th");
+          label.scope = "row";
+          label.append(popupNode("span", "nodo8-popup-ordinal", String(row.ordinal).padStart(2, "0")));
+          if (rows.length > 1)
+            label.append(popupNode("small", "", index === 0 ? "Prima volta" : "Ritorno"));
+          record.append(label, popupNode("td", "", row.fromFs), popupNode("td", "", row.toFs));
+          body.append(record);
+        });
+        table.append(caption, head, body);
+        card.append(table);
+      }
+      card.append(popupNode("p", "nodo8-popup-authority", "Fermata di progetto, da verificare."));
+      const times = popupNode("a", "nodo8-stop-link", "Orari della fermata →");
       times.href = stopLink(site.site_id, "../");
-      times.className = "nodo8-stop-link";
-      times.textContent = "Vedi gli orari di questa fermata →";
       card.append(times);
-      popup = new window.maplibregl.Popup({ maxWidth: "340px", offset: 12 })
-        .setLngLat(site.coordinates_lon_lat)
-        .setDOMContent(card)
-        .addTo(map);
+      card.append(popupDetails(isHub ? "I tre momenti in stazione" : "Come leggere i tempi", isHub
+        ? "Partenza, sosta intermedia e arrivo appartengono allo stesso giro. La permanenza a bordo è prevista dal progetto; la continuità fisica del mezzo e dei passeggeri non è certificata."
+        : "FS è la stazione di Olgiate: partenza precedente e arrivo successivo di quel passaggio. Tempi a bordo, esclusi cammino e attesa. Passaggi diversi della stessa fermata non sono intercambiabili."));
+      openPopup(card, site.coordinates_lon_lat);
       return true;
     };
     const showRoute = (lngLat) => {
-      if (popup) popup.remove();
-      popup = new window.maplibregl.Popup({ maxWidth: "320px" })
-        .setLngLat(lngLat)
-        .setText(
-          "Nodo8: un unico percorso a otto di 27,124 km, 16 giri completi. Stesso percorso e stesso mezzo di modello per tutta la corsa. Geometria di progetto, non autorizzazione stradale.",
-        )
-        .addTo(map);
+      const card = popupNode("div", "nodo8-popup-card");
+      card.append(popupNode("span", "nodo8-popup-eyebrow", "Nodo8 · proposta"),
+        popupNode("h3", "", "Un percorso a otto"));
+      const metrics = popupNode("dl", "nodo8-popup-metrics");
+      const distance = popupNode("div", "");
+      distance.append(popupNode("dt", "", "Percorso completo"),
+        popupNode("dd", "", (data.complete_path_distance_m / 1000).toLocaleString("it-IT", { maximumFractionDigits: 3 }) + " km"));
+      const trips = popupNode("div", "");
+      trips.append(popupNode("dt", "", "Giorno di progetto"), popupNode("dd", "", data.trips.length + " giri"));
+      metrics.append(distance, trips);
+      card.append(metrics, popupDetails("Base di progetto",
+        "Stesso percorso e stesso mezzo di modello per tutta la corsa. La geometria è di progetto e non costituisce autorizzazione stradale."));
+      openPopup(card, lngLat);
     };
     const markers = new Map();
+    const focusBus = (id, state) => {
+      if (!state?.coordinates || !contextVisible("explore")) return;
+      explorerPlayer?.focusVehicle(id);
+      map.flyTo({center:state.coordinates,zoom:Math.max(map.getZoom(),13.2),
+        padding:innerWidth < 800 ? {top:85,right:25,bottom:Math.min(innerHeight*0.5,360),left:25} : {top:90,right:460,bottom:80,left:45},
+        duration:window.__analysisJourneyReduceMotion ? 0 : 550});
+    };
     const paintBuses = ({ states, followedTrip }) => {
       states.forEach((s) => {
         const visible =
           s.coordinates && (!followedTrip || s.trip === followedTrip);
         if (!markers.has(s.id)) {
           const icon = makeBusMarker(s.id);
+          icon.tabIndex = 0;
+          icon.setAttribute("role", "button");
+          const selectBus = () => focusBus(s.id,markers.get(s.id)?.state);
+          icon.addEventListener("click",selectBus);
+          icon.addEventListener("keydown",event => {
+            if (!["Enter"," "].includes(event.key)) return;
+            event.preventDefault();
+            selectBus();
+          });
           const marker = new window.maplibregl.Marker({
             element: icon,
             anchor: "center",
@@ -366,6 +465,7 @@ async function installNodo8() {
         }
         const entry = markers.get(s.id),
           { marker, icon } = entry;
+        entry.state = s;
         if (visible) {
           marker.setLngLat(s.coordinates);
           if (!entry.added) {
@@ -386,6 +486,7 @@ async function installNodo8() {
         host,
         line,
         (state) => {
+          window.__analysisJourneyExplore?.updateClock(state);
           if (contextVisible("explore")) paintBuses(state);
           rail?.render({minute: state.minute, visible: railVisible()});
           current?.render({minute:state.minute,visible:currentVisible(),selection:document.querySelector("#currentRouteChoice")?.value || "ALL",
@@ -397,12 +498,8 @@ async function installNodo8() {
           overviewOnly: true,
           initialSelection: "all",
           initialMinute: 455,
-          onVehicleFocus: (_id, state) => {
-            if (!state.coordinates || !contextVisible("explore")) return;
-            map.flyTo({center:state.coordinates,zoom:Math.max(map.getZoom(),13.2),
-              padding:innerWidth < 800 ? {top:85,right:25,bottom:Math.min(innerHeight*0.5,360),left:25} : {top:90,right:460,bottom:80,left:45},
-              duration:window.__analysisJourneyReduceMotion ? 0 : 550});
-          },
+          visibilityTarget: document.getElementById("map"),
+          onVehicleFocus: focusBus,
         },
       );
       document.documentElement.dataset.nodo8ExplorerPlaybackReady = "true";
@@ -442,6 +539,7 @@ async function installNodo8() {
         explorerPlayer?.pause();
         explorerPlayer?.render();
       },
+      toggleExplorer: () => explorerPlayer?.toggle(),
       showFourBuses: () => {
         explorerPlayer?.selectTrip("all");
         explorerPlayer?.jump(455);

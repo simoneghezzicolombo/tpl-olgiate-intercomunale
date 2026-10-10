@@ -38,7 +38,7 @@ test("independent network switches share simulation and map views, with official
   assert.match(explorerSource, /map\.setFilter\(id, routeFilter\)/);
   assert.match(explorerSource, /map\.setFilter\(id, stopFilter\)/);
   assert.match(explorerSource, /GTFS ufficiale 2025\/26/);
-  assert.match(explorerSource, /fotografia storica non è l’orario più recente 2026\/27/);
+  assert.match(explorerSource, /fotografia storica, non l’orario più recente 2026\/27/);
   const fit = explorerSource.slice(explorerSource.indexOf("  function fit(force = false)"), explorerSource.indexOf("  function interactions(on)"));
   assert.match(fit, /layers\.current \? currentFeatures\.filter/);
   assert.match(fit, /layers\.proposals \? lineage\.finalData\.features : \[\]/);
@@ -53,6 +53,15 @@ test("explorer walking access never uses the static narrative baseline or implic
   assert.doesNotMatch(explorerRender, /\|\| layers\.walk/);
   assert.doesNotMatch(explorerSource, /data-layer="(?:candidates|proposals)"/);
   assert.doesNotMatch(explorerSource, /id="exploreSiteSelect"/);
+});
+test("compact controls mirror the shared clock and cannot create a second simulation or narrow to one trip",()=>{
+  const collapse=explorerSource.slice(explorerSource.indexOf('    controls.querySelector(\'[data-action="collapse"]\')'),explorerSource.indexOf('    controls.querySelectorAll(\'[data-layer="s8"]\')'));
+  assert.match(collapse,/exploreControlsBody/);assert.match(collapse,/aria-expanded/);
+  assert.doesNotMatch(collapse,/pauseExplorer|selectTrip|setInterval|requestAnimationFrame|layers\[/);
+  assert.match(explorerSource,/\.n8-clock/);assert.match(explorerSource,/toggleExplorer\(\)/);
+  const overlay=readFileSync(new URL("../dietro-l-analisi/journey-nodo8.mjs",import.meta.url),"utf8");
+  assert.match(overlay,/updateClock\(state\)/);
+  assert.match(overlay,/visibilityTarget: document\.getElementById\("map"\)/);
 });
 test("independent D switches keep the hidden dated-player selection synchronized, including neither", () => {
   const code = explorerSource.slice(explorerSource.indexOf("  function syncCurrentSelection()"),explorerSource.indexOf("  async function ensureActiveWalk()"));
