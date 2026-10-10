@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {createHash} from "node:crypto";
-import {buildCurrentPlayback,currentPlaybackTripsAt} from "../nodo8-current-playback.mjs";
+import {buildCurrentPlayback,currentPlaybackTripsAt,nextCurrentPresentationStop} from "../nodo8-current-playback.mjs";
 import {buildCurrent,currentPositionQuality,currentTripsAt} from "../nodo8-current.mjs";
 import {positionOnCurrentShape} from "../nodo8-current-geometry.mjs";
 
@@ -10,6 +10,31 @@ const read = path => JSON.parse(readFileSync(new URL("../"+path,import.meta.url)
 const source = buildCurrent(read("assets/nodo8-current-simulation.json"));
 const asset = read("assets/nodo8-current-playback.json"), proposal = read("assets/nodo8-proposal.json");
 const model = buildCurrentPlayback(source,asset,proposal);
+
+test("presentation holds visit every selected stop instant without modifying clocks, including simultaneous calls",()=>{
+  const before=JSON.stringify(model);
+  for(const selection of ["ALL","D184","D185"]) {
+    const trips=model.trips.filter(t=>selection==="ALL"||t.route===selection);
+    const expected=[...new Set(trips.flatMap(t=>t.displayCalls.map(c=>c.display_arrival_min)))].sort((a,b)=>a-b);
+    const visited=[];
+    let from=expected[0]-1;
+    for(let stop;(stop=nextCurrentPresentationStop(model,from,expected.at(-1),selection))!==null;) {
+      assert.ok(stop>from);
+      visited.push(stop);
+      const states=currentPlaybackTripsAt(model,stop,selection);
+      for(const trip of trips) for(const call of trip.displayCalls) if(call.display_arrival_min===stop) {
+        const state=states.find(s=>s.id===trip.id);
+        assert.equal(state.status,"stop");
+        assert.deepEqual(state.coordinates,call.geometry.display_coordinates);
+      }
+      from=stop;
+    }
+    assert.deepEqual(visited,expected);
+    assert.equal(nextCurrentPresentationStop(model,500,500,selection),null);
+  }
+  assert.equal(JSON.stringify(model),before);
+  assert.throws(()=>nextCurrentPresentationStop(model,501,500));
+});
 
 test("playback reproduces immutable evidence and a calendar-checked ordinary day before the diversion",()=>{
   const before=JSON.stringify(source), proposalBefore=JSON.stringify(proposal);

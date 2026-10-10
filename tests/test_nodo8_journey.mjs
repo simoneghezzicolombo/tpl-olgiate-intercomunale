@@ -166,7 +166,7 @@ test("27 distinct sites, four new sites, and two-event sites remain explicit", (
     28,
   );
   assert.equal(
-    shown.find((site) => site.properties.name === "Olgiate sud").properties
+    shown.find((site) => site.properties.name === "Olgiate Aldo Moro").properties
       .occurrence_count,
     2,
   );

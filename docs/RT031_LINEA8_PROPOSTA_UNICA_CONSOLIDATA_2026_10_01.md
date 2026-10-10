@@ -12,7 +12,7 @@ Disponibile la [distinta per chiudere sopralluogo e preventivo](RT031_LINEA8_CHI
 
 Una Linea 8, **16 giri completi/giorno**, stesso percorso a otto di **27,124 km** a ogni corsa. FS → est → FS intermedia → ovest → FS finale. Est/ovest sono sequenze della stessa corsa, non due linee. Permanenza a bordo a FS progettata, ancora da autorizzare.
 
-**27 siti di progetto inclusa FS: 23 derivati dall’inventario e 4 proposti nuovi.** Le occorrenze non-FS sono 28: Olgiate sud e San Zeno ricorrono due volte, in eventi distinti. Il numero di paline fisiche non è ancora certificato. Una corrispondenza con l’inventario non autorizza automaticamente l’accosto scelto.
+**27 siti di progetto inclusa FS: 23 derivati dall’inventario e 4 proposti nuovi.** Le occorrenze non-FS sono 28: Olgiate Aldo Moro e San Zeno ricorrono due volte, in eventi distinti. Il numero di paline fisiche non è ancora certificato. Una corrispondenza con l’inventario non autorizza automaticamente l’accosto scelto.
 
 Confermati: niente Via Mirasole/Cartiglio/Tessitura nel modello, Piazza San Zenone mantenuta, Santa Maria Hoè mantenuta, Via Como/Alpino esclusa e Calco Centro–Municipio aggiunta in Via Italia senza nuovo percorso di marcia. H30 anche nel senso inverso resta rinviato.
 
@@ -61,7 +61,7 @@ Secondi di rientro e tempi di fermata sono risultati nominali ingegneristici, no
 | 12 | Arlate - B.vio Brivio - Madonnina | Inventario, accosto da validare | 1 |
 | 13 | Calco Centro – Municipio | Nuovo, da validare | 1 |
 | 14 | Calco - Via Virgilio | Inventario, accosto da validare | 1 |
-| 15 | Olgiate sud | Nuovo, da validare | 2 |
+| 15 | Olgiate Aldo Moro | Nuovo, da validare | 2 |
 | 16 | Olgiate Molgora - Scarpone | Inventario, accosto da validare | 1 |
 | 17 | Santa Maria Hoè - Alduno | Inventario, accosto da validare | 1 |
 | 18 | Rovagnate - Statale / AGIP | Inventario, accosto da validare | 1 |
@@ -90,7 +90,7 @@ FS ha tre ruoli di servizio — partenza, passaggio intermedio e arrivo finale �
 
 Popolazione potenzialmente raggiunta sul substrato pedonale congelato: non passeggeri previsti, non domanda OD downscalata, non certificazione di percorsi sicuri/accessibili. Rispetto al riferimento precedente allo scambio, Calco guadagna circa 14,15/15,17/8,92 punti percentuali; Santa Maria perde 2,84 punti a 5 minuti e La Valletta 0,21, senza perdite a 8/10 minuti. Brivio e Olgiate invariati nello scambio.
 
-Monticello/Mondonico, Calco alta/Cornello, Cassina, Crescenzaga, oratorio/Casa di Comunità e l’intero quartiere Olgiate sud **non sono dichiarati tutti serviti**: manca la certificazione località→fermata/accesso. Olgiate sud e San Zeno sono esigenze distinte e hanno eventi separati, non una garanzia estesa ai rispettivi quartieri.
+Monticello/Mondonico, Calco alta/Cornello, Cassina, Crescenzaga, oratorio/Casa di Comunità e l’intero quartiere Olgiate Aldo Moro **non sono dichiarati tutti serviti**: manca la certificazione località→fermata/accesso. Olgiate Aldo Moro e San Zeno sono esigenze distinte e hanno eventi separati, non una garanzia estesa ai rispettivi quartieri.
 
 L’[audit dei quattro punti OSM](RT031_LINEA8_LOCALITA_PUNTI_2026_10_01.md) misura ora il cammino verso i 27 siti effettivi: minimo dal punto di Mondonico 11,27 min, Monticello 7,20, Calco Superiore 11,42 e Crescenzaga 13,71. Tre punti non sono entro 10 minuti dalla fermata più vicina nel modello. Sono punti di località, non confini o abitanti: nessuna copertura dell’intera frazione è certificata. I tempi bus restano distinti per evento e verso, senza attesa iniziale inclusa.
 
@@ -122,7 +122,7 @@ Sosta FS nominale **9,22–14,22 min**, fino a 27,36 min negli stress. I viaggi 
 | 12 | Calco Centro – Municipio | east_A | 30,56 | 9,71 |
 | 13 | Calco - Via Virgilio | east_A | 32,31 | 7,96 |
 | 14 | San Zeno/Via Cantu | east_A | 37,37 | 2,91 |
-| 15 | Olgiate sud | west_B | 4,32 | 33,49 |
+| 15 | Olgiate Aldo Moro | west_B | 4,32 | 33,49 |
 | 16 | Olgiate Molgora - Scarpone | west_B | 8,44 | 29,36 |
 | 17 | Santa Maria Hoè - Alduno | west_B | 10,25 | 27,55 |
 | 18 | Rovagnate - Statale / AGIP | west_B | 11,90 | 25,90 |
@@ -135,7 +135,7 @@ Sosta FS nominale **9,22–14,22 min**, fino a 27,36 min negli stress. I viaggi 
 | 25 | S. Maria Hoè - S.P. 58 ang. Via Cenisio | west_B | 24,24 | 13,56 |
 | 26 | Olgiate Molgora - Via Della Salute | west_B | 26,84 | 10,96 |
 | 27 | Olgiate Molgora - Via Statale | west_B | 28,85 | 8,95 |
-| 28 | Olgiate sud | west_B | 33,19 | 4,61 |
+| 28 | Olgiate Aldo Moro | west_B | 33,19 | 4,61 |
 
 Tempi a bordo nominali, senza cammino/attesa iniziale o treno. Ogni riga riguarda una precisa occorrenza; un evento veloce non garantisce viaggi veloci da un altro evento dello stesso sito. Prosecuzioni intercomunali possono includere la sosta FS: ledger completo disponibile, senza utilità OD inventata.
 

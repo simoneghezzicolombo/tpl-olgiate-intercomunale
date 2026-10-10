@@ -1,12 +1,12 @@
 /* Nodo8 showcase. Presentation only: no routing, ranking or timetable synthesis. */
 "use strict";
-import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261010b";
+import { buildLine, diagramStops } from "./nodo8-line.mjs?v=20261010f";
 import {
   renderStopTimes,
   readStopSelection,
   stopLink,
-} from "./nodo8-stop-times.mjs?v=20261010b";
-import { mountJourneyInspector, journeyDurationLabel } from "./nodo8-journey-inspector.mjs?v=20261010b";
+} from "./nodo8-stop-times.mjs?v=20261010f";
+import { mountJourneyInspector, journeyDurationLabel } from "./nodo8-journey-inspector.mjs?v=20261010f";
 import { validateCoverageComparison, coverageChangeLabel } from "./nodo8-coverage.mjs?v=20261010b";
 import { initBenefits } from "./nodo8-benefits.mjs?v=20261010b";
 let coverageComparison = null;
@@ -16,7 +16,7 @@ import {
   makeBusMarker,
   updateBusMarker,
   mountRoadPreview,
-} from "./nodo8-experience.mjs?v=20261010b";
+} from "./nodo8-experience.mjs?v=20261010f";
 let activePlayer = null,
   activeMap = null,
   currentLine = null,
@@ -366,10 +366,10 @@ function renderFallbackMap(data, onSelect) {
       "stroke-width": 1.5,
       tabindex: 0,
       role: "button",
-      "aria-label": site.name,
+      "aria-label": displayName(site),
     });
     const title = svgNode("title", {});
-    title.textContent = site.name;
+    title.textContent = displayName(site);
     circle.append(title);
     circle.addEventListener("click", () => onSelect(site));
     circle.addEventListener("keydown", (event) => {

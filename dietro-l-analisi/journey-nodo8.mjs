@@ -1,14 +1,15 @@
 /* Current proposal overlay. Historical datasets and route sources stay separate. */
-import { buildLine, diagramStops, siteTimetable } from "../nodo8-line.mjs?v=20261010b";
-import { stopLink } from "../nodo8-stop-times.mjs?v=20261010b";
-import { journeyDurationLabel } from "../nodo8-journey-inspector.mjs?v=20261010b";
+import { buildLine, diagramStops, siteTimetable, siteDisplayName } from "../nodo8-line.mjs?v=20261010f";
+import { nextCurrentPresentationStop } from "../nodo8-current-playback.mjs?v=20261010f";
+import { stopLink } from "../nodo8-stop-times.mjs?v=20261010f";
+import { journeyDurationLabel } from "../nodo8-journey-inspector.mjs?v=20261010f";
 import { installS8 } from "../nodo8-s8.mjs?v=20261010b";
-import { installCurrent } from "../nodo8-current.mjs?v=20261010b";
+import { installCurrent } from "../nodo8-current.mjs?v=20261010f";
 import {
   mountPlayer,
   makeBusMarker,
   updateBusMarker,
-} from "../nodo8-experience.mjs?v=20261010b";
+} from "../nodo8-experience.mjs?v=20261010f";
 export const NODO8_SCENES = ["nodo8", "nodo8-time", "end"];
 
 // Only a visible current-proposal context may paint the shared map markers.
@@ -60,7 +61,7 @@ export function makeNodo8Features(data) {
         id: site.site_id,
         properties: {
           site_id: site.site_id,
-          name: site.name,
+          name: siteDisplayName(site),
           proposed_new_site: site.proposed_new_site,
           boarding_authorised: false,
           occurrence_count: site.ordered_occurrences.length,
@@ -531,6 +532,9 @@ async function installNodo8() {
           initialMinute: 455,
           visibilityTarget: document.getElementById("map"),
           onVehicleFocus: focusBus,
+          nextPresentationStop: (from, to) => currentVisible()
+            ? nextCurrentPresentationStop(current.playback, from, to,
+                document.querySelector("#currentRouteChoice")?.value || "ALL") : null,
         },
       );
       document.documentElement.dataset.nodo8ExplorerPlaybackReady = "true";

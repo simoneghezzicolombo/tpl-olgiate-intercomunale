@@ -71,6 +71,21 @@ export function buildCurrentPlayback(source, asset, proposal) {
 const callLabel = call => call.geometry.display_role === "FS_RAIL_RETURN_SHAPE_ENDPOINT" ? "Olgiate FS · arrivo" :
   call.geometry.display_role === "FS_VIA_STATALE_SHAPE_START" ? "Olgiate · FS via Statale" : call.sourceCall.name;
 
+// Playback punctuation, not inferred operating dwell. Same clock for every network.
+export function nextCurrentPresentationStop(model, from, to, selection = "ALL") {
+  if (!Number.isFinite(from) || !Number.isFinite(to) || to < from ||
+      !["ALL", "D184", "D185"].includes(selection)) throw new Error("Invalid presentation interval");
+  let next = null;
+  for (const trip of model.trips) {
+    if (selection !== "ALL" && selection !== trip.route) continue;
+    for (const call of trip.displayCalls) {
+      const minute = call.display_arrival_min;
+      if (minute > from && minute <= to && (next === null || minute < next)) next = minute;
+    }
+  }
+  return next;
+}
+
 export function currentPlaybackTripsAt(model, minute, selection = "ALL") {
   if (!Number.isFinite(minute) || !["ALL","D184","D185"].includes(selection)) throw new Error("Invalid display clock or line");
   const states = [];

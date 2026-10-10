@@ -1,4 +1,4 @@
-import { diagramStops } from "./nodo8-line.mjs?v=20261010b";
+import { diagramStops } from "./nodo8-line.mjs?v=20261010f";
 const ns = "http://www.w3.org/2000/svg";
 const displayText = (value) => String(value).replace(/\u2014/g, ", ");
 const node = (tag, cls, text) => {
@@ -76,7 +76,7 @@ export function updateBusMarker(element, state, { showCarrier = false } = {}) {
   element.setAttribute("aria-label", element.title);
 }
 
-export { mountPlayer } from "./nodo8-player.mjs?v=20261010b";
+export { mountPlayer } from "./nodo8-player.mjs?v=20261010f";
 
 export function mountRoadPreview(line) {
   const host = node("div", "n8-road-preview"),
@@ -465,7 +465,7 @@ export function renderDiagram(
     svg(
       "text",
       { x: 600, y: 1715, "text-anchor": "middle", class: "n8-diagram-caption" },
-      "27 fermate · San Zeno e Olgiate sud si incontrano due volte",
+      "27 fermate · San Zeno e Olgiate Aldo Moro si incontrano due volte",
     ),
     svg(
       "text",

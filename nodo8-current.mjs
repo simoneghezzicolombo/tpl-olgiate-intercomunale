@@ -1,6 +1,6 @@
 // Existing-service trips are not physical vehicles. The dated calendar and
 // exact trip.shape_id come from the same immutable official GTFS archive.
-import { buildCurrentPlayback, currentPlaybackTripsAt } from "./nodo8-current-playback.mjs?v=20261010b";
+import { buildCurrentPlayback, currentPlaybackTripsAt } from "./nodo8-current-playback.mjs?v=20261010f";
 export const CURRENT_COLOURS = {D184:"#4ca5ff",D185:"#ff9b61"};
 
 export function currentPosition(shape, distance) {
@@ -148,10 +148,12 @@ export async function installCurrent(map) {
         const e=markers.get(state.id);
         const label=`${state.route} · ${state.label} · posizione stimata sul tracciato ufficiale`;
         e.icon.setAttribute("aria-label",label);e.icon.title=label;e.icon.dataset.trip=state.id;
+        e.icon.dataset.status=state.status;
         e.marker.setLngLat(state.coordinates);
       }
       document.documentElement.dataset.currentBusCount=String(states.length);
       document.documentElement.dataset.currentBusMarkerCount=String(displayed.length);
+      document.documentElement.dataset.currentBusStoppedCount=String(states.filter(state=>state.status==="stop").length);
       delete document.documentElement.dataset.currentBusUnreliablePositionCount;
       document.documentElement.dataset.currentBusWithheldPositionCount=String(withheld);
       document.documentElement.dataset.currentBusEstimatedPositionCount=String(states.length);

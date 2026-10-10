@@ -6,6 +6,10 @@ const samePoint = (a, b) =>
   a?.length === 2 && b?.length === 2 && a.every((v, i) => v === b[i]);
 const near = (a, b) =>
   Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) < 1e-7;
+// Public label only: stable identity, frozen source names and coordinates stay intact.
+export const siteDisplayName = (site) =>
+  site.site_id === "RT031::P2V2S_0031_PROJECTED_ROAD_POINT"
+    ? "Olgiate Aldo Moro" : site.name;
 export const clockSeconds = (minute) => {
   const s = Math.floor(minute * 60 + 1e-7);
   return [Math.floor(s / 3600), Math.floor(s / 60) % 60, s % 60]
@@ -98,7 +102,7 @@ export function buildLine(data) {
           fail("occurrence/road vertex mismatch");
         arrival = event.alight_event_min;
         departure = event.board_event_min;
-        name = entry.site.name;
+        name = siteDisplayName(entry.site);
         siteId = event.site_id;
         occurrenceId = event.occurrence_id;
         ordinal = entry.event.ordered_nonhub_event_number;
@@ -365,7 +369,7 @@ const names = [
   "Calco Centro / Municipio",
   "Calco / Via Virgilio",
   "San Zeno / Via Cantù",
-  "Olgiate sud",
+  "Olgiate Aldo Moro",
   "Scarpone",
   "Alduno",
   "Rovagnate / Statale–AGIP",
@@ -378,7 +382,7 @@ const names = [
   "SP58 / Via Cenisio",
   "Olgiate / Via della Salute",
   "Olgiate / Via Statale",
-  "Olgiate sud",
+  "Olgiate Aldo Moro",
 ];
 const groups = [
   [1, "San Zeno / Via Cantù"],
@@ -390,7 +394,7 @@ const groups = [
   [12, "Calco Centro"],
   [13, "Calco / Via Virgilio"],
   [14, "San Zeno / Via Cantù"],
-  [15, "Olgiate sud"],
+  [15, "Olgiate Aldo Moro"],
   [16, "Scarpone"],
   [17, "Alduno"],
   [18, "Rovagnate / Statale", 19],
@@ -401,7 +405,7 @@ const groups = [
   [25, "SP58 / Via Cenisio"],
   [26, "Olgiate / Via della Salute"],
   [27, "Olgiate / Via Statale"],
-  [28, "Olgiate sud"],
+  [28, "Olgiate Aldo Moro"],
 ];
 export function diagramStops(line, localities = false) {
   const events = line.trips[0].events.filter((e) => e.occurrenceId);
