@@ -71,10 +71,14 @@ export function buildCurrentPlayback(source, asset, proposal) {
 const callLabel = call => call.geometry.display_role === "FS_RAIL_RETURN_SHAPE_ENDPOINT" ? "Olgiate FS · arrivo" :
   call.geometry.display_role === "FS_VIA_STATALE_SHAPE_START" ? "Olgiate · FS via Statale" : call.sourceCall.name;
 
-// Playback punctuation, not inferred operating dwell. Same clock for every network.
+// Playback punctuation for non-shared presentation contexts only. In the Explore
+// view D184/D185 must never pause the common clock, otherwise S8 and every other
+// visible network would freeze whenever a bus reaches a stop.
 export function nextCurrentPresentationStop(model, from, to, selection = "ALL") {
   if (!Number.isFinite(from) || !Number.isFinite(to) || to < from ||
       !["ALL", "D184", "D185"].includes(selection)) throw new Error("Invalid presentation interval");
+  if (typeof window !== "undefined" && typeof document !== "undefined" &&
+      document.body?.dataset?.scene === "explore") return null;
   let next = null;
   for (const trip of model.trips) {
     if (selection !== "ALL" && selection !== trip.route) continue;
