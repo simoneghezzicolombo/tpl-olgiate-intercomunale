@@ -28,7 +28,7 @@
     }
   });
 
-  const css=document.createElement('style');css.textContent='.maplibregl-canvas{touch-action:pan-y!important}.vignette{background:linear-gradient(90deg,rgba(3,10,17,.42) 0%,rgba(3,10,17,.12) 35%,transparent 62%,rgba(3,10,17,.08) 100%)!important}.hub-marker{filter:none!important}.hub-marker span{display:none!important}.service-clock,.lineage-collapse{display:none!important}';document.head.appendChild(css);
+  const css=document.createElement('style');css.textContent='.maplibregl-canvas{touch-action:pan-y!important}.vignette{background:linear-gradient(90deg,rgba(3,10,17,.42) 0%,rgba(3,10,17,.12) 35%,transparent 62%,rgba(3,10,17,.08) 100%)!important}.service-clock,.lineage-collapse{display:none!important}';document.head.appendChild(css);
 
   function paint(map,id,prop,value){
     if(!map?.getLayer(id)) return;

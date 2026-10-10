@@ -71,6 +71,18 @@ export function makeNodo8Features(data) {
   };
 }
 
+export function stationMapFeature(data) {
+  validateNodo8(data);
+  const stations = data.sites.filter(site => site.hub_service_roles.length > 0);
+  if (stations.length !== 1 || stations[0].coordinates_lon_lat?.length !== 2 ||
+      !stations[0].coordinates_lon_lat.every(Number.isFinite))
+    throw new Error("A single confirmed station coordinate is required");
+  return {type:"FeatureCollection",features:[{
+    type:"Feature",properties:{name:"Olgiate-Calco-Brivio FS",site_id:stations[0].site_id},
+    geometry:{type:"Point",coordinates:[...stations[0].coordinates_lon_lat]},
+  }]};
+}
+
 /* Popup rows follow the ledger's occurrence order. Duration fields remain the
  * confirmed site-level values, rather than a journey inferred from one trip. */
 export function popupSiteRows(line, siteId) {
@@ -173,6 +185,13 @@ async function installNodo8() {
     );
     const features = makeNodo8Features(data);
     const map = await waitForMap();
+    // Keep the current station display separate from the historical rail
+    // anchor. Circle and glyph share one point; only one context is visible.
+    const station = stationMapFeature(data);
+    map.addSource("nodo8-station", {type:"geojson",data:station});
+    document.documentElement.dataset.stationMapCoordinates = station.features[0].geometry.coordinates.join(",");
+    document.documentElement.dataset.stationMapLabel = "map-layer";
+    document.getElementById("map")?.setAttribute("aria-description", "FS, dentro il punto bianco, indica la stazione Olgiate-Calco-Brivio.");
     map.addSource("nodo8-routes", { type: "geojson", data: features.routes });
     map.addSource("nodo8-sites", { type: "geojson", data: features.sites });
     map.addLayer({
@@ -219,6 +238,18 @@ async function installNodo8() {
         "circle-stroke-opacity": 0,
         "circle-opacity": 0,
       },
+    });
+    map.addLayer({
+      id:"nodo8-station-point",type:"circle",source:"nodo8-station",
+      layout:{visibility:"none"},
+      paint:{"circle-radius":12,"circle-color":"#fff","circle-opacity":1,
+        "circle-stroke-width":2,"circle-stroke-color":"#153d34"},
+    });
+    map.addLayer({
+      id:"nodo8-station-label",type:"symbol",source:"nodo8-station",
+      layout:{visibility:"none","icon-image":"station-fs-text","icon-anchor":"center",
+        "icon-allow-overlap":true,"icon-ignore-placement":true,
+        "icon-pitch-alignment":"viewport","icon-rotation-alignment":"viewport"},
     });
     let popup = null,
       lastScene = null;
@@ -506,6 +537,14 @@ async function installNodo8() {
     };
     const renderScene = () => {
       const scene = document.body.dataset.scene;
+      const currentStation = scene === "explore" || NODO8_SCENES.includes(scene);
+      for (const id of ["hub","hub-glow","hub-fs-label"])
+        if (map.getLayer(id)) map.setLayoutProperty(id,"visibility",currentStation ? "none" : "visible");
+      for (const id of ["nodo8-station-point","nodo8-station-label"]) {
+        map.setLayoutProperty(id,"visibility",currentStation ? "visible" : "none");
+        if (currentStation) map.moveLayer(id);
+      }
+      document.documentElement.dataset.stationMapSource = currentStation ? "confirmed-proposal" : "historical-anchor";
       mountExplorerPlayer();
       if (scene === "explore") {
         const explore = window.__analysisJourneyExplore;

@@ -480,8 +480,7 @@
         document.getElementById(tab.getAttribute("aria-controls")).hidden =
           !selected;
       });
-      if (chosen.id !== "exploreBusTab")
-        window.__analysisJourneyNodo8?.pauseExplorer();
+      // Switching control panels does not change the shared simulation clock.
     };
     tabs.forEach((tab, index) => {
       tab.addEventListener("click", () => chooseTab(tab));
@@ -643,9 +642,11 @@
     opacity("municipality-outline", scene ? 0.3 : 0.45);
     opacity("hub", 1);
     opacity("hub-glow", scene ? 0.24 : 0.1);
+    for (const id of ["nodo8-station-point","nodo8-station-label"])
+      if (map.getLayer(id)) map.moveLayer?.(id);
     if (map.getLayer("carto")) {
-      map.setPaintProperty("carto", "raster-opacity", interactive ? 0.55 : 0.34);
-      map.setPaintProperty("carto", "raster-brightness-max",interactive ? 0.95 : 0.56);
+      map.setPaintProperty("carto", "raster-opacity", 0.16);
+      map.setPaintProperty("carto", "raster-brightness-max", 0.38);
     }
     const walkNetworks = [
       ...(layers.nodo8 ? ["NODO8"] : []),
@@ -925,7 +926,7 @@
       }
       const find = (id) => hits.find((x) => x.layer.id === id);
       let f;
-      if ((f = find("nodo8-sites"))) {
+      if ((f = find("nodo8-station-point") || find("nodo8-sites"))) {
         if (popup) {
           popup.remove();
           popup = null;
@@ -1005,7 +1006,7 @@
     });
   }
   function interactiveIds() {
-    const a = [];
+    const a = ["nodo8-station-point"];
     if (layers.nodo8) {
       if (layers.stops) a.push("nodo8-sites");
       a.push("nodo8-hit");

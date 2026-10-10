@@ -1,7 +1,7 @@
 /* Map-first usability. Presentation only, no operating assumptions. */
 .explore-head-actions { display: flex; gap: 6px; align-items: center; }
 #journeyExplorerControls .explore-head-actions button[data-action="collapse"] {
-  width: 36px; height: 36px; min-height: 36px; padding: 0; border-radius: 5px;
+  width: 44px; height: 44px; min-height: 44px; padding: 0; border-radius: 5px;
   font-size: 20px; line-height: 1;
 }
 #journeyExplorerControls .explore-mini { display: flex; align-items: center; gap: 16px; padding-top: 4px; }
@@ -21,7 +21,7 @@
   box-shadow: 0 10px 35px #0005; border: 1px solid #153d3426;
 }
 .nodo8-map-popup .maplibregl-popup-tip { border-top-color: #f5f2e9; border-bottom-color: #f5f2e9; }
-.nodo8-map-popup .maplibregl-popup-close-button { color: #153d34; width: 36px; height: 36px; border-radius: 0 12px 0 8px; font-size: 24px; }
+.nodo8-map-popup .maplibregl-popup-close-button { color: #153d34; width: 44px; height: 44px; border-radius: 0 12px 0 8px; font-size: 24px; }
 .nodo8-popup-header { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; padding-right: 16px; }
 .nodo8-popup-eyebrow { color: #577366; font-size: 11px; font-weight: 600; }
 .nodo8-popup-badge { padding: 3px 6px; border-radius: 4px; font-size: 10px; background: #eed9bf; }
@@ -49,8 +49,8 @@
 @media (max-width: 800px) {
   #journeyExplorerControls.explore-is-collapsed { width: auto; }
   #journeyExplorerControls { border-radius: 12px; padding-bottom: max(12px,env(safe-area-inset-bottom)); }
-  #journeyExplorerControls .explore-head-actions button { min-height: 40px; }
-  #journeyExplorerControls .explore-head-actions button[data-action="collapse"] { width: 40px; height: 40px; }
+  #journeyExplorerControls .explore-head-actions button { min-height: 44px; }
+  #journeyExplorerControls .explore-head-actions button[data-action="collapse"] { width: 44px; height: 44px; }
   #journeyExplorerControls select { font-size: 16px; }
   .nodo8-map-popup .maplibregl-popup-content { padding: 16px; }
 }
