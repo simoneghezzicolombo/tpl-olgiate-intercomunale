@@ -54,6 +54,22 @@ test("explorer walking access never uses the static narrative baseline or implic
   assert.doesNotMatch(explorerSource, /data-layer="(?:candidates|proposals)"/);
   assert.doesNotMatch(explorerSource, /id="exploreSiteSelect"/);
 });
+test("disabling walking access hides both fills and outlines, including when no network is active",()=>{
+  const code=explorerSource.slice(explorerSource.indexOf("      let previousKey = null;"),explorerSource.indexOf('      document.documentElement.dataset.activeWalkReady = "true"'));
+  const writes=[],window={},document={documentElement:{dataset:{}}};
+  const map={getSource:()=>({setData(){}}),setLayoutProperty:(...args)=>writes.push(args),setPaintProperty:(...args)=>writes.push(args)};
+  runInNewContext(code,{window,document,map,model:{},activeWalkFeatureCollection:()=>({type:"FeatureCollection",features:[]})});
+  for(const [visible,networks,shown] of [[true,["NODO8"],true],[false,["NODO8"],false],[true,[],false]]) {
+    writes.length=0;
+    window.__analysisJourneyActiveWalk.render({visible,networks});
+    assert.deepEqual(writes,[
+      ["explore-active-walk","visibility",shown?"visible":"none"],
+      ["explore-active-walk","circle-opacity",shown?0.82:0],
+      ["explore-active-walk","circle-stroke-opacity",shown?1:0],
+    ]);
+    assert.equal(document.documentElement.dataset.activeWalkVisible,String(shown));
+  }
+});
 test("compact controls mirror the shared clock and cannot create a second simulation or narrow to one trip",()=>{
   const collapse=explorerSource.slice(explorerSource.indexOf('    controls.querySelector(\'[data-action="collapse"]\')'),explorerSource.indexOf('    controls.querySelectorAll(\'[data-layer="s8"]\')'));
   assert.match(collapse,/exploreControlsBody/);assert.match(collapse,/aria-expanded/);

@@ -64,7 +64,7 @@
       map.addLayer({id:"explore-active-walk",type:"circle",source:"explore-active-walk",paint:{
         "circle-radius":["interpolate",["linear"],["zoom"],10,2,14,4],
         "circle-color":["match",["get","walk_band"],"5","#55e1bf","8","#99d5aa","10","#e7d69a","over10","#e99b71","#8a9494"],
-        "circle-opacity":0,"circle-stroke-width":0.4,"circle-stroke-color":"#102e27"
+        "circle-opacity":0,"circle-stroke-width":0.4,"circle-stroke-color":"#102e27","circle-stroke-opacity":0
       }}, "hub-glow");
       let previousKey = null;
       window.__analysisJourneyActiveWalk = {render({visible,networks}) {
@@ -75,7 +75,10 @@
           document.documentElement.dataset.activeWalkPointCount = String(features.features.length);
           previousKey = key;
         }
-        map.setPaintProperty("explore-active-walk","circle-opacity",visible && networks.length ? 0.82 : 0);
+        const shown = visible && networks.length > 0;
+        map.setLayoutProperty("explore-active-walk","visibility",shown ? "visible" : "none");
+        map.setPaintProperty("explore-active-walk","circle-opacity",shown ? 0.82 : 0);
+        map.setPaintProperty("explore-active-walk","circle-stroke-opacity",shown ? 1 : 0);
         document.documentElement.dataset.activeWalkNetworks = key;
         document.documentElement.dataset.activeWalkVisible = String(visible && networks.length > 0);
       }};
