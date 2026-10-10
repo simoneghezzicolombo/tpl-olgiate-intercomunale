@@ -19,3 +19,12 @@
 - Popup Olgiate Aldo Moro: entrambe le occorrenze presenti, sfondo `rgb(245,242,233)`, testo `rgb(21,61,52)`; verificato anche il fondo cartografico tenue.
 
 La proposta e le autorizzazioni operative non sono modificate da questa revisione.
+
+## Pubblicazione verificata
+
+- Sorgente: `d0892a940ca229bf7a3662f61036e7bd44b7ed30`.
+- Commit Pages: `35d4c6f569a75d8440dd6cec0a9d0e2314668469`, aggiornamento fast-forward senza eliminazioni di sorgenti storiche.
+- CI `Publish final Nodo8 only`, esecuzione `38061270849`: successo.
+- Tutti gli 88 file dell'allowlist verificati via HTTP con hash corrispondenti al manifest pubblico.
+- Browser pubblico: fermata D185 alle 07:36:00 osservata ferma per circa 550 ms della finestra campionata; posizione stabile durante la pausa. Popup e dettaglio della proposta entrambi denominati Olgiate Aldo Moro, con due eventi conservati. FS verificato dentro il punto bianco alle 07:36:19, senza etichetta HTML separata. Nessun errore console osservato.
+- Prove locali, escluse dalla pubblicazione: `cache/nodo8-website-preview/nodo8-fs-faint-20261010f-public.png` e `cache/nodo8-website-preview/nodo8-aldo-moro-20261010f-public.png`.
