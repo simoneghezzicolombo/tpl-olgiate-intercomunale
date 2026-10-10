@@ -47,6 +47,23 @@ test("changing explorer control tabs preserves the running shared clock",()=>{
   assert.equal(panels.orario.hidden,false);assert.equal(panels.mappa.hidden,true);
   assert.doesNotMatch(block,/pauseExplorer|setInterval|requestAnimationFrame/);
 });
+test("proposal popup surface overrides injected dark styles with opaque accessible contrast",()=>{
+  const css=readFileSync(new URL("../dietro-l-analisi/journey-usability.css",import.meta.url),"utf8");
+  assert.match(css,/\.nodo8-map-popup \.maplibregl-popup-content\s*\{[^}]*background:\s*#f5f2e9\s*!important/);
+  assert.match(css,/\.nodo8-popup-card h3\s*\{[^}]*color:\s*#153d34/);
+  assert.match(css,/\.nodo8-popup-times td\s*\{[^}]*color:\s*#153d34/);
+  assert.match(css,/\.nodo8-popup-card \.nodo8-stop-link\s*\{[^}]*min-height:\s*44px/);
+  assert.match(css,/body\.is-map-exploring footer/);
+  assert.match(css,/body\.is-map-exploring:has\(\.nodo8-map-popup\) #journeyExplorerControls/);
+  const luminance=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255)
+    .map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4)
+    .reduce((n,v,i)=>n+v*[.2126,.7152,.0722][i],0);
+  const contrast=(a,b)=>(Math.max(luminance(a),luminance(b))+.05)/(Math.min(luminance(a),luminance(b))+.05);
+  assert.ok(contrast("#153d34","#f5f2e9")>=7);
+  assert.ok(contrast("#4c6258","#f5f2e9")>=4.5);
+  assert.match(explorerSource,/non riproduce|Non riproduce/);
+  assert.match(explorerSource,/3 min 33 s/);
+});
 function renderWrites(scene) {
   const writes = [];
   runInNewContext(explorerRender + "\nrender();", {

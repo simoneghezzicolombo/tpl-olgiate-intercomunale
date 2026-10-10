@@ -6,7 +6,7 @@ import {
   readStopSelection,
   stopLink,
 } from "./nodo8-stop-times.mjs?v=20261010b";
-import { mountJourneyInspector } from "./nodo8-journey-inspector.mjs?v=20261010b";
+import { mountJourneyInspector, journeyDurationLabel } from "./nodo8-journey-inspector.mjs?v=20261010b";
 import { validateCoverageComparison, coverageChangeLabel } from "./nodo8-coverage.mjs?v=20261010b";
 import { initBenefits } from "./nodo8-benefits.mjs?v=20261010b";
 let coverageComparison = null;
@@ -273,16 +273,10 @@ function showSite(site) {
           "p",
           "",
           "Dalla stazione: " +
-            formatNumber(
-              occurrence.nominal_fs_to_occurrence_in_vehicle_min,
-              1,
-            ) +
-            " min. Da qui alla prossima FS: " +
-            formatNumber(
-              occurrence.nominal_occurrence_to_next_fs_in_vehicle_min,
-              1,
-            ) +
-            " min.",
+            journeyDurationLabel(occurrence.nominal_fs_to_occurrence_in_vehicle_min) +
+            ". Da qui alla prossima FS: " +
+            journeyDurationLabel(occurrence.nominal_occurrence_to_next_fs_in_vehicle_min) +
+            ".",
         ),
       );
       cards.append(card);
