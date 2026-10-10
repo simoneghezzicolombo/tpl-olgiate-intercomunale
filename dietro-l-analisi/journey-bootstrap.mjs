@@ -34,7 +34,7 @@ try {
   // KML LineStrings. Do not route, snap or repair D184/D185 through Gate D.
   await import("./journey-lineage.js?v=20261010b");
   await import("./journey-current-kml-exact.mjs?v=20261010b");
-  await import("./journey-explore-v2.js?v=20261010e");
+  await import("./journey-explore-v2.js?v=20261010f");
 } catch (error) {
   window.__analysisJourneyBootError = true;
   document.body.classList.add("journey-runtime-unavailable");
@@ -47,7 +47,7 @@ try {
   document.body.appendChild(notice);
   console.error("Journey runtime unavailable", error);
 }
-await import("./journey-nodo8.mjs?v=20261010d");
+await import("./journey-nodo8.mjs?v=20261010f");
 const { initBenefits } = await import("../nodo8-benefits.mjs?v=20261010b");
 await initBenefits({base:"../",rootHref:"../index.html"});
 window.ScrollTrigger?.refresh();

@@ -5,7 +5,7 @@ import {
   adjacentEvent,
   diagramStops,
   servicePhase,
-} from "./nodo8-line.mjs?v=20261010b";
+} from "./nodo8-line.mjs?v=20261010f";
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -36,6 +36,7 @@ export function mountPlayer(
     inlineMap = null,
     initialSelection = "1",
     initialMinute = null,
+    nextPresentationStop = null,
   } = {},
 ) {
   const prefix = container.id || "n8-player";
@@ -50,6 +51,7 @@ export function mountPlayer(
     playing = false,
     frame = null,
     previous = null,
+    presentationUntil = null,
     speed = 30,
     previousUiKey = null,
     previousBoundsSelection = null,
@@ -323,6 +325,7 @@ export function mountPlayer(
   function pause() {
     playing = false;
     previous = null;
+    presentationUntil = null;
     if (frame !== null) cancelAnimationFrame(frame);
     frame = null;
     play.textContent = "Riproduci";
@@ -345,6 +348,7 @@ export function mountPlayer(
       states,
       followedTrip: b.trip?.number ?? null,
       playing,
+      presentationStop: presentationUntil !== null,
       completed: minute >= b.end,
       selection,
       ...(overviewOnly ? { focusedVehicle } : {}),
@@ -533,11 +537,28 @@ export function mountPlayer(
   }
   function tick(now) {
     if (!playing) return;
-    if (previous !== null)
-      minute = Math.min(
+    if (presentationUntil !== null) {
+      // A wall-clock hold at an existing event; never add timetable seconds.
+      if (now < presentationUntil && nextPresentationStop?.(minute - 1e-9, minute) === minute) {
+        previous = now;
+        render(false);
+        frame = requestAnimationFrame(tick);
+        return;
+      }
+      presentationUntil = null;
+      previous = now;
+    }
+    if (previous !== null) {
+      const target = Math.min(
         bounds().end,
         minute + (Math.min(now - previous, 1000) / 60000) * speed,
       );
+      const stop = nextPresentationStop?.(minute, target);
+      if (Number.isFinite(stop) && stop > minute && stop <= target) {
+        minute = stop;
+        presentationUntil = now + 600;
+      } else minute = target;
+    }
     previous = now;
     if (minute >= bounds().end) {
       pause();
@@ -574,6 +595,7 @@ export function mountPlayer(
   speedSelect.addEventListener("change", () => {
     speed = Number(speedSelect.value);
     previous = null;
+    presentationUntil = null;
     if (playing)
       status.textContent = `Riproduzione ×${speed}${overviewOnly ? "" : " · orario del progetto."}`;
   });

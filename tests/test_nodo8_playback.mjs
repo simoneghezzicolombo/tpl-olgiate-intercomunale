@@ -381,7 +381,7 @@ test("metro/locality diagrams preserve repeated events and cover every ordinal e
       entries.flatMap((e) => e.ordinals),
       Array.from({ length: 28 }, (_, i) => i + 1),
     );
-    assert.equal(entries.filter((e) => e.display === "Olgiate sud").length, 2);
+    assert.equal(entries.filter((e) => e.display === "Olgiate Aldo Moro").length, 2);
     assert.equal(
       entries.filter((e) => e.display === "San Zeno / Via Cantù").length,
       2,
@@ -589,6 +589,42 @@ function withPlayerDom(check) {
     });
   }
 }
+
+test("presentation stop holds the shared clock for 600ms, never adds dwell or skips crossed events",()=>{
+  withPlayerDom(({host,stepFrame,frames})=>{
+    let active=true,state;
+    const stops=[500.1,500.2,500.3];
+    const player=mountPlayer(host,line,update=>{state=update;},{overviewOnly:true,initialMinute:500,
+      nextPresentationStop:(from,to)=>active ? stops.find(m=>m>from&&m<=to)??null : null});
+    const speed=playerElement(host,"n8-speed").children.find(c=>c.tagName==="select");
+    speed.value=300;speed.dispatch("change");
+    player.toggle();stepFrame(0);stepFrame(1000);
+    assert.equal(state.minute,500.1);assert.equal(state.presentationStop,true);
+    assert.deepEqual(state.states,statesAt(line,500.1));
+    stepFrame(1500);assert.equal(state.minute,500.1);
+    stepFrame(1600);assert.equal(state.presentationStop,false);assert.equal(state.minute,500.1);
+    stepFrame(1700);assert.equal(state.minute,500.2);assert.equal(state.presentationStop,true);
+    active=false;stepFrame(1750);assert.equal(state.presentationStop,false);
+    stepFrame(1850);assert.equal(state.minute,500.7,"hidden network does not cause holds");
+    player.jump(500);assert.equal(state.playing,false);assert.equal(state.presentationStop,false);
+    assert.equal(frames.size,0);assert.equal(player.getMinute(),500);
+    active=true;player.toggle();stepFrame(2000);stepFrame(2100);
+    assert.equal(state.minute,500.1);
+    player.pause();assert.equal(frames.size,0);
+    player.toggle();assert.equal(state.presentationStop,false);
+    stepFrame(2200);stepFrame(2300);assert.equal(state.minute,500.2);
+    player.pause();
+  });
+});
+
+test("public stop rename keeps source identities, coordinates and data unchanged",()=>{
+  const before=JSON.stringify(data);
+  const renamed=buildLine(data);
+  const events=renamed.trips[0].events.filter(e=>e.siteId==="RT031::P2V2S_0031_PROJECTED_ROAD_POINT");
+  assert.equal(events.length,2);
+  assert.ok(events.every(e=>e.name==="Olgiate Aldo Moro"));
+  assert.equal(JSON.stringify(data),before);
+});
 
 test("overview player forces the four-bus day and omits trip controls and repeated explanations", () => {
   withPlayerDom(({ host }) => {

@@ -44,7 +44,7 @@ Censimento e suoi limiti: [baseline strutturale V4](PHASE2_CURRENT_SERVICE_BASEL
 
 - **Regolarità:** dalle grandi finestre prive di passaggi FS a una cadenza riconoscibile nelle punte e intervalli dichiarati nella morbida.
 - **Continuità durante l’anno:** la base Nodo8 non dipende dall’apertura delle scuole; il quadro invernale D184 pubblica invece soltanto colonne SCO. Non si deduce da questo il calendario estivo o l’intera produzione attuale.
-- **Nuovi ambiti espliciti:** Olgiate sud, San Zeno/Via Cantù, Arlate N1212, Calco Centro–Municipio. Sono quattro siti di progetto, non quattro accosti autorizzati.
+- **Nuovi ambiti espliciti:** Olgiate Aldo Moro, San Zeno/Via Cantù, Arlate N1212, Calco Centro–Municipio. Sono quattro siti di progetto, non quattro accosti autorizzati.
 - **Una sola identità e uno stesso percorso:** gli spostamenti tra i cinque comuni possono proseguire attraverso FS senza cambio progettato. Autorizzazione a restare a bordo e utilità concreta dei viaggi restano da verificare.
 - **Ore serali:** ultime partenze FS Nodo8 19:40 verso est e 20:30 verso ovest; ultimo rientro nominale 21:08. Non significa che ogni fermata abbia servizio fino a quell’ora.
 
@@ -54,7 +54,7 @@ Censimento e suoi limiti: [baseline strutturale V4](PHASE2_CURRENT_SERVICE_BASEL
 2. **Direttezza sul corridoio Via Virgilio.** La D185 pubblica 5 minuti FS → “Calco Via Virgilio” e 5 minuti nel verso opposto. Nodo8 raggiunge il proprio sito chiamato Via Virgilio in circa 32,3 minuti dal nodo e torna a FS da quel sito in circa 8 minuti. Il join alla palina attuale non è certificato: il nome storico identifica più ubicazioni, e il sito di progetto deriva dall’inventario ASF. È un confronto del corridoio, non un ritardo calcolato sulla stessa palina. Mostra comunque che un anello migliora cadenza/estensione ma non rende diretta ogni relazione.
 3. **Territorio e sabato fuori dal perimetro.** Nodo8 non raggiunge Ravellino/Colle Brianza o Cisano/Caprino/Celana e non ha un sabato selezionato. Quindi non va presentata come soppressione integrale delle attuali D184/D185 senza una soluzione distinta per le funzioni non coperte.
 
-Le soste FS nominali di 9,22–14,22 minuti possono pesare sulle prosecuzioni intercomunali. La loro accettabilità non si ricava dal solo numero di fermate. Gli eventi veloci di San Zeno e Olgiate sud sono distinti dai passaggi che richiedono completare il giro; la palina e il verso giusti sono parte della verifica operativa.
+Le soste FS nominali di 9,22–14,22 minuti possono pesare sulle prosecuzioni intercomunali. La loro accettabilità non si ricava dal solo numero di fermate. Gli eventi veloci di San Zeno e Olgiate Aldo Moro sono distinti dai passaggi che richiedono completare il giro; la palina e il verso giusti sono parte della verifica operativa.
 
 ## Copertura: quanto sappiamo davvero
 
@@ -69,7 +69,7 @@ La proposta ha questa **copertura pedonale potenziale entro 10 minuti**, sul sub
 | La Valletta Brianza | 67,85% |
 | Totale del bacino | 81,79% |
 
-Non sono passeggeri previsti o accessi fisicamente sicuri/accessibili certificati. Non attestano che tutte le frazioni, l’oratorio, Casa di Comunità o tutto Olgiate sud siano serviti.
+Non sono passeggeri previsti o accessi fisicamente sicuri/accessibili certificati. Non attestano che tutte le frazioni, l’oratorio, Casa di Comunità o tutto Olgiate Aldo Moro siano serviti.
 
 **Non è disponibile un unico confronto percentuale completo e certificato con le linee attuali.** Le percentuali V4 precedenti riusano popolazione/catchment diversi (denominatore 22.820,84, contro 22.914 nel nuovo substrato); non si sottraggono per inventare guadagni. Sullo stesso RT028 esiste un confronto per soli 11 gruppi attuali mappati con identità esatta: è un sottoinsieme, non tutta D184/D185. Il valore 81,79% della proposta non dimostra da solo superiorità geografica rispetto all’intero servizio attuale.
 
@@ -94,7 +94,7 @@ Fonte primaria e discrepanze di arrotondamento: [evidenza PdB](../config/rt031_p
 1. **Intuizione iniziale:** usare FS come nodo di un otto intercomunale, con un servizio riconoscibile al posto di passaggi rarefatti. Il primo concept era circa 19,7–19,8 km e ipotizzava un ibrido H30/H60, due bus in punta e uno in morbida. Non era ancora un tracciato pubblico e un esercizio certificati.
 2. **Passaggio alle fonti vere:** orari ufficiali, inventario fermate, popolazione, grafo stradale e accesso pedonale. Gli audit hanno ritirato vincitori e precisioni non sostenuti: righe d’orario ≠ fermate; waypoint ≠ accosto; stress ≠ probabilità osservata.
 3. **Ricerca di alternative senza pesi nascosti:** la Phase 2 ha effettivamente trovato profili compatti da circa 15–17 km con H30/12 ore e 260 giorni dentro il riferimento. Non erano la grande linea unica desiderata: due movimenti non certificavano un unico servizio passeggeri, e due mezzi non bastavano in tutti gli scenari.
-4. **Allargamento guidato dalle esigenze locali:** attenzione a tutti i cinque comuni, alle frazioni, a Olgiate sud e a San Zeno come esigenze distinte. Conservare fermate è diventato una preferenza, non un obbligo che impedisse ogni alternativa. La geometria più estesa ha reso evidente il trade-off km/frequenza/durata.
+4. **Allargamento guidato dalle esigenze locali:** attenzione a tutti i cinque comuni, alle frazioni, a Olgiate Aldo Moro e a San Zeno come esigenze distinte. Conservare fermate è diventato una preferenza, non un obbligo che impedisse ogni alternativa. La geometria più estesa ha reso evidente il trade-off km/frequenza/durata.
 5. **Chiarimento decisivo sulla linea unica:** tutte le corse devono percorrere entrambe le ali, stesso percorso e continuità progettata a FS. Le 31 corse d’ala non erano 31 giri completi; la base è stata fissata a 16 giri interi, con punte H30 sfalsate e maggiore rarefazione centrale.
 6. **Correzioni concrete del percorso e delle fermate:** evitare Mirasole/Cartiglio/Tessitura, mantenere Piazza San Zenone, conservare Santa Maria Hoè, rinunciare a Via Como/Alpino e aggiungere Calco Centro–Municipio su Via Italia. Il risultato è 27,124 km e 27 siti, non le precedenti geometrie con 29 siti o i vecchi 19,8 km.
 7. **Calendario e ferrovia espliciti:** 254 feriali datati nel 2027, non 260 ideali o 303 giorni identici; sabato separato. Verificate tutte le chiamate ferroviarie del riferimento, senza promettere ogni coincidenza o attribuire domanda pendolare comunale alle singole corse.
