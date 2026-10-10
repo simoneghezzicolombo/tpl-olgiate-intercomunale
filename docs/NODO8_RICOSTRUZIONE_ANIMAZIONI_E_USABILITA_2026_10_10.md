@@ -64,3 +64,15 @@ Prima della pubblicazione: 92 test Node, 44 test Python e 8 sottotest verdi. Il 
 Controllati in browser: scheda fermata e chiusura con Escape, focus bus senza cambio della corsa, riduzione dei controlli con riproduzione ancora attiva e pausa sullo stesso orologio. Controllate larghezze 320, 375 e 768 px senza overflow orizzontale della pagina principale. Proposta e proiezione GTFS raw restano immutate.
 
 Il controllo finale online ha rilevato un difetto aggiuntivo: spegnendo il livello pedonale, l'opacità del riempimento diventava zero ma i bordi restavano visibili. La revisione `20261010c` nasconde l'intero layer e azzera anche i bordi, con un test di regressione per spegnimento e assenza di reti attive.
+
+## Pubblicazione verificata
+
+- Implementazione: `bd93cddfe3fea802e29e4a375e5ec9837ee413e6`; correzione finale: `60d77b909d84d9f8660a0389d14ec60fed7700fb`.
+- Revisione Pages pubblicata: `9c1258b7a8470c48c478baf592122f322346644b`, rilascio `20261010c`.
+- [CI e pubblicazione](https://github.com/simoneghezzicolombo/tpl-olgiate-intercomunale/actions/runs/38043850309): completate con successo sulla revisione indicata.
+- Verificati via HTTP tutti gli 88 file contro il manifest SHA-256: zero differenze, esattamente due pagine HTML.
+- Browser pubblico: modello `reconciled-v2`, giorno `2026-04-28`, zero icone sospese; livelli S8/D184/D185 attivabili; riduzione dei controlli e riproduzione condivisa funzionanti.
+- Livello pedonale: con tutte le reti attive usa `NODO8|D184|D185`; spegnendo le D usa soltanto `NODO8`, anche con S8 attiva. Spegnendo i minuti a piedi spariscono riempimenti e bordi.
+- Nessun errore o avviso nella console durante questa verifica. Anteprima finale: `cache/nodo8-website-preview/nodo8-esplora-20261010c-public.png`.
+
+I sei file non tracciati relativi alle alternative di percorso, già presenti nella cartella, non sono stati modificati né inclusi nei commit. Nessun sito precedente è stato cancellato dal repository.
